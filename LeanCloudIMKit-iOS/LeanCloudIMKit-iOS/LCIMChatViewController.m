@@ -25,12 +25,6 @@
     return self;
 }
 
-+ (instancetype)chatViewControllerWithConversationId:(NSString *)conversationId {
-    LCIMChatViewController *chatViewController = [[LCIMChatViewController alloc] init];
-    chatViewController = [chatViewController initWithConversationId:conversationId];
-    return chatViewController;
-}
-
 - (instancetype)initWithMemberId:(NSString *)memberId {
     self = [super init];
     if (!self) {
@@ -38,12 +32,6 @@
     }
     _memberId = memberId;
     return self;
-}
-
-+ (instancetype)chatViewControllerWithMemberId:(NSString *)memberId {
-    LCIMChatViewController *chatViewController = [[LCIMChatViewController alloc] init];
-    chatViewController = [chatViewController initWithMemberId:memberId];
-    return chatViewController;
 }
 
 #pragma mark -

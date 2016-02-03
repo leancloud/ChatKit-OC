@@ -20,19 +20,19 @@
  3. Invoke `-openWithClientId:callback` to log in LeanCloud IM service and begin chatting.
  4. Invoke `-closeWithCallback` to log out LeanCloud IM service and end chatting.
  5. Bound a delegate object to the property named `profileDataSource`, let the delegate object implement the method `-[LCIMProfileDataSource getProfilesWithUserIds:callback]`. The delegate is
- invoked for getting the user information by the user id. 
- 6. Invoke `-getProfilesInBackgroundWithUserIds:callback` or `-getProfilesWithUserIds:error` to get users' information by users' ids.
+ invoked for getting user information by user id.
+ 6. Invoke `-getProfilesInBackgroundWithUserIds:callback` or `-getProfilesWithUserIds:error` to get user information by user id.
  7. Bound a delegate object to the property named `signatureDataSource`, let the delegate object implement the method `-[LCIMSignatureDataSource signatureWithClientId:conversationId:action:actionOnClientIds:]`. The delegate is
  invoked for pinning signature to these actions: open, start(create conversation), kick, invite.
  
  */
 
-typedef void (^LCIMBoolCallBack)(NSArray *users, NSError *error);
+typedef void (^LCIMBoolCallBack)(BOOL succeed, NSError *error);
 
 @interface LCIMChatManager : NSObject
 
 /*!
- * @brief Implement the method `-[LCIMProfileDataSource getProfilesWithUserIds:callback]`, so LeanCloudIMKit can get the user information by the user id.
+ * @brief Implement the method `-[LCIMProfileDataSource getProfilesWithUserIds:callback]`, so LeanCloudIMKit can get user information by user id.
  */
 @property (nonatomic, weak) id<LCIMProfileDataSource> profileDataSource;
 
@@ -67,17 +67,17 @@ typedef void (^LCIMBoolCallBack)(NSArray *users, NSError *error);
 - (void)closeWithCallback:(LCIMBoolCallBack)callback;
 
 /*!
- * @brief get user information by ids with an asynchronous implementation.
+ * @brief get user information by user id with an asynchronous implementation.
  * @attention Using this method means that the action to get every user's information is asynchronous.
- * @remark You must implement this method `[LCIMProfileDataSource getProfilesInBackgroundWithUserIds:callback]`, so LeanCloudIMKit can get the user information by the user id.
+ * @remark You must implement this method `[LCIMProfileDataSource getProfilesInBackgroundWithUserIds:callback]`, so LeanCloudIMKit can get user information by user id.
  */
 - (void)getProfilesInBackgroundWithUserIds:(NSArray<NSString *> *)userIds callback:(LCIMResultCallBack)callback;
 
 /*!
- * @brief get users' information by ids with a synchronous implementation.
+ * @brief get user information by user id with a synchronous implementation.
  * @attention Using this method means that the action to get every user's information is synchronous.
- * @remark You must implement this method `[LCIMProfileDataSource getProfilesInBackgroundWithUserIds:callback]`, so LeanCloudIMKit can get the user information by the user id.
- * @return users' information.
+ * @remark You must implement this method `[LCIMProfileDataSource getProfilesInBackgroundWithUserIds:callback]`, so LeanCloudIMKit can get user information by user id.
+ * @return user information.
  */
 - (NSArray<id<LCIMUserModelDelegate>> *)getProfilesWithUserIds:(NSArray<NSString *> *)userIds error:(NSError * __autoreleasing *)error;
 
