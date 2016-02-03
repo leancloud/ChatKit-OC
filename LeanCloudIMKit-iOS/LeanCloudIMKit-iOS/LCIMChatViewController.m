@@ -8,6 +8,8 @@
 
 #import "LCIMChatViewController.h"
 #import "LCIMChatManager.h"
+#import <AVOSCloud/AVOSCloud.h>
+#import "LCIMUserModelDelegate.h"
 
 @implementation LCIMChatViewController
 
@@ -23,7 +25,7 @@
     return self;
 }
 
-+ (instancetype)chatWithConversationId:(NSString *)conversationId {
++ (instancetype)chatViewControllerWithConversationId:(NSString *)conversationId {
     LCIMChatViewController *chatViewController = [[LCIMChatViewController alloc] init];
     chatViewController = [chatViewController initWithConversationId:conversationId];
     return chatViewController;
@@ -38,7 +40,7 @@
     return self;
 }
 
-+ (instancetype)chatWithMemberId:(NSString *)memberId {
++ (instancetype)chatViewControllerWithMemberId:(NSString *)memberId {
     LCIMChatViewController *chatViewController = [[LCIMChatViewController alloc] init];
     chatViewController = [chatViewController initWithMemberId:memberId];
     return chatViewController;
@@ -49,27 +51,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-}
-
-- (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-}
-
-- (void)viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
-}
-
-- (void)viewWillDisappear:(BOOL)animated {
-    [super viewWillDisappear:animated];
-}
-
-- (void)viewDidDisappear:(BOOL)animated {
-    [super viewDidDisappear:animated];
-}
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
+    //TODO: query chat history i.e.
 }
 
 @end

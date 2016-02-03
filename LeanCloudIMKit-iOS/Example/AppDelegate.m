@@ -7,12 +7,12 @@
 //
 
 #import "AppDelegate.h"
-#import <AVOSCloud/AVOSCloud.h>
+#import "LCIMChatManager.h"
 
-//========================================================================================================================================
-//======If you want to see the storage of this demo, log in plublic account of leancloud.cn, search for the app named `LeanCloudIMKit-iOS`.
-//======================================== username : leancloud@163.com , password : Public123 ============================================
-//=========================================================================================================================================
+//==================================================================================================================================
+//If you want to see the storage of this demo, log in plublic account of leancloud.cn, search for the app named `LeanCloudIMKit-iOS`.
+//======================================== username : leancloud@163.com , password : Public123 =====================================
+//==================================================================================================================================
 
 static NSString *const LCIMAPPID = @"ykFkmeXIYRPiK2UfvGWXMWqV-gzGzoHsz";
 static NSString *const LCIMAPPKEY = @"QgVhp43j6puGNQ0sAqNW64uH";
@@ -26,7 +26,7 @@ static NSString *const LCIMAPPKEY = @"QgVhp43j6puGNQ0sAqNW64uH";
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
-    [AVOSCloud setApplicationId:LCIMAPPID clientKey:LCIMAPPKEY];
+    [LCIMChatManager setAppId:LCIMAPPID appKey:LCIMAPPKEY];
     return YES;
 }
 

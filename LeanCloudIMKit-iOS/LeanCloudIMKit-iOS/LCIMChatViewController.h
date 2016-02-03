@@ -8,43 +8,81 @@
 
 @import Foundation;
 @import UIKit;
+#import "LCIMUserModelDelegate.h"
+
+typedef NS_ENUM(NSInteger, LCIMConversationType) {
+    LCIMConversationTypeSingle = 0,
+    LCIMConversationTypeGroup,
+};
+
+/*
+ 
+ LCIMChatViewController give a base ViewController for chat.
+ 
+ To use LCIMChatViewController, follow these steps:
+ 
+ 1. Subclass LCIMChatViewController
+ 2. Initialize the subclass by one of these methods: `-initWithConversationId:`, `-initWithMemberId:`, `+ chatViewControllerWithConversationId:`, `+chatViewControllerWithMemberId:`.
+
+ */
+
 
 @interface LCIMChatViewController : UIViewController
 
 /*!
- *  @brief Id of the group conversation, group conversation shoud be initialized with this property.
- *  @details Initialization mehods are `-initWithConversationId:` and `+chatWithConversationId:`.
+ *  @brief id of the group conversation, group conversation should be initialized with this property.
+ *  @details initialization methods are `-initWithConversationId:` and `+chatViewControllerWithConversationId:`.
  */
 @property (nonatomic, copy, readonly) NSString *conversationId;
 
 /*!
- *  @brief Id of the peer, single conversation shoud be initialized with this property.
- *  @details Initialization mehods are `-initWithMemberId:` and `+chatWithMemberId`.
+ *  @brief id of the peer, single conversation should be initialized with this property.
+ *  @details initialization methods are `-initWithMemberId:` and `+chatViewControllerWithMemberId`.
  */
 @property (nonatomic, copy, readonly) NSString *memberId;
 
-/*!
- *  @param conversationId Id of the group conversation, group conversation shoud be initialized with this property.
- *  @return Initialized object of LCIMChatViewController
- */
-- (instancetype)initWithConversationId:(NSString *)conversationId;
+///-----------------------------------------------------------------------
+///---- initialize a single chat type object of LCIMChatViewController ---
+///-----------------------------------------------------------------------
 
 /*!
- *  @param conversationId Id of the group conversation, group conversation shoud be initialized with this property.
- *  @return Initialized object of LCIMChatViewController
- */
-+ (instancetype)chatWithConversationId:(NSString *)conversationId;
-
-/*!
- * @param memberId Id of the peer, single conversation shoud be initialized with this property.
- * @return Initialized object of LCIMChatViewController
+ * @param memberId id of the peer, single conversation should be initialized with this property.
+ * @attention memberId can not be equal to current user id, if yes, LeanCloudKit will throw an exception to notice you.
+ *            if LCIMChatViewController is initialized with this method, the property named `conversationId` will be set automatically.
+ * @return initialized single chat type object of LCIMChatViewController
  */
 - (instancetype)initWithMemberId:(NSString *)memberId;
 
 /*!
- * @param memberId Id of the peer, single conversation shoud be initialized with this property.
- * @return Initialized object of LCIMChatViewController
+ * @param memberId id of the peer, single conversation should be initialized with this property.
+ * @attention memberId can not be equal to current user id, if yes, LeanCloudKit will throw an exception to notice you.
+ *            if LCIMChatViewController is initialized with this method, the property named `conversationId` will be set automatically.
+ * @return initialized single chat type odject of LCIMChatViewController
  */
-+ (instancetype)chatWithMemberId:(NSString *)memberId;
++ (instancetype)chatViewControllerWithMemberId:(NSString *)memberId;
+
+///---------------------------------------------------------------------------
+///- initialize a single or group chat type object of LCIMChatViewController -
+///---------------------------------------------------------------------------
+
+/*!
+ * @param conversationId id of the conversation, group conversation should be initialized with this property.
+ * @attention conversationId can not be nil, if yes, LeanCloudKit will throw an exception to notice you.
+ *            if LCIMChatViewController is initialized with this method, the property named `memberId` will be nil.
+ * @return initialized single or group chat type odject of LCIMChatViewController
+ */
+- (instancetype)initWithConversationId:(NSString *)conversationId;
+
+/*!
+ * @param conversationId id of the conversation, group conversation should be initialized with this property.
+ * @attention conversationId can not be nil, if yes, LeanCloudKit will throw an exception to notice you.
+ *            if LCIMChatViewController is initialized with this method, the property named `memberId` will be nil.
+ * @return initialized single or group chat type odject of LCIMChatViewController
+ */
++ (instancetype)chatViewControllerWithConversationId:(NSString *)conversationId;
+
+//- (void)didSelectAvatarOnMessage:(id<LCIMMessageModel>)message indexPath:(NSIndexPath *)indexPath;
+//
+//- (void)didSelectMember:(id<LCIMUserModelDelegate>)member;
 
 @end
