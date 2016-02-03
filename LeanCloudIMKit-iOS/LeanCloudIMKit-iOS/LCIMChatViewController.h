@@ -10,11 +10,6 @@
 @import UIKit;
 #import "LCIMUserModelDelegate.h"
 
-typedef NS_ENUM(NSInteger, LCIMConversationType) {
-    LCIMConversationTypeSingle = 0,
-    LCIMConversationTypeGroup,
-};
-
 /*
  
  LCIMChatViewController give a base ViewController for chat.
@@ -22,7 +17,7 @@ typedef NS_ENUM(NSInteger, LCIMConversationType) {
  To use LCIMChatViewController, follow these steps:
  
  1. Subclass LCIMChatViewController
- 2. Initialize the subclass by one of these methods: `-initWithConversationId:`, `-initWithMemberId:`, `+ chatViewControllerWithConversationId:`, `+chatViewControllerWithMemberId:`.
+ 2. Initialize the subclass by one of these methods: `-initWithConversationId:`, `-initWithMemberId:`, `+chatViewControllerWithConversationId:`, `+chatViewControllerWithMemberId:`.
 
  */
 
