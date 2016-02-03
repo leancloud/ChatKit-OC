@@ -30,4 +30,5 @@
                           conversationId:(NSString *)conversationId
                                   action:(NSString *)action
                        actionOnClientIds:(NSArray *)clientIds;
+
 @end
