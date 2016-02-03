@@ -86,7 +86,7 @@ static LCIMChatManager *_sharedLCIMChatManager = nil;
 
 - (void)getProfilesInBackgroundWithUserIds:(NSArray<NSString *> *)userIds callback:(LCIMResultCallBack)callback {
     if (![self.profileDataSource respondsToSelector:@selector(getProfilesWithUserIds:callback:)]) {
-        NSString *reason = [NSString stringWithFormat:@"You must implement this method `-[LCIMProfileDataSource getProfilesWithUserIds:callback]`, so LeanCloudIMKit can get the user information by the user id."];
+        NSString *reason = [NSString stringWithFormat:@"You must implement this method `-[LCIMProfileDataSource getProfilesWithUserIds:callback]`, so LeanCloudIMKit can get user information by user id."];
         @throw [NSException exceptionWithName:NSGenericException
                                        reason:reason
                                      userInfo:nil];

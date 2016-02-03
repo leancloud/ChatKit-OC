@@ -10,7 +10,7 @@
 #import "LCIMChatManager.h"
 
 //==================================================================================================================================
-//If you want to see the storage of this demo, log in plublic account of leancloud.cn, search for the app named `LeanCloudIMKit-iOS`.
+//If you want to see the storage of this demo, log in public account of leancloud.cn, search for the app named `LeanCloudIMKit-iOS`.
 //======================================== username : leancloud@163.com , password : Public123 =====================================
 //==================================================================================================================================
 

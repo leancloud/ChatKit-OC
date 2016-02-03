@@ -8,10 +8,10 @@
 #import "LCIMUserModelDelegate.h"
 
 /**
- * Developers can implement `-profilesWithUserIds:callback` to allow LeanCloudIMKit to get user informations by ids.
+ * Developers can implement `-profilesWithUserIds:callback` to allow LeanCloudIMKit to get user information by user id.
  * The following example shows how to use AVUser as the user system:
 
- - (void)getProfilesInBackgroundWithUserIds:(NSArray<NSString *> *)userIds callback:(LCIMResultCallBack)callback {
+ - (void)getProfilesWithUserIds:(NSArray<NSString *> *)userIds callback:(LCIMResultCallBack)callback {
     NSMutableArray<id<LCIMUserModelDelegate>> *userList = [NSMutableArray array];
     for (NSString *userId in userIds) {
         //MyUser is a subclass of AVUser, conforming to the LCIMUserModelDelegate protocol.
@@ -31,8 +31,9 @@
         callback(userList, nil);
     }
 }
- 
+
 */
+
 typedef void (^LCIMResultCallBack)(NSArray<id<LCIMUserModelDelegate>> *users, NSError *error);
 
 @protocol LCIMProfileDataSource <NSObject>
@@ -40,9 +41,9 @@ typedef void (^LCIMResultCallBack)(NSArray<id<LCIMUserModelDelegate>> *users, NS
 @required
 
 /*!
- * @brief get user informations by ids.
- * @attention  It is all ok to get user informations with a synchronous or a asynchronous implementation.
- * @remark You must implement this method `-[LCIMProfileDataSource getProfilesWithUserIds:callback]`, so LeanCloudIMKit can get the user information by the user id.
+ * @brief get user information by user id.
+ * @attention  You could get user information by user id with either a synchronous or an asynchronous implementation.
+ * @remark You must implement this method `-[LCIMProfileDataSource getProfilesWithUserIds:callback]`, so LeanCloudIMKit can get user information by user id.
  */
 - (void)getProfilesWithUserIds:(NSArray<NSString *> *)userIds callback:(LCIMResultCallBack)callback;
 
