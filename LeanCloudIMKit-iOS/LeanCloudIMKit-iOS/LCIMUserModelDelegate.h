@@ -7,6 +7,8 @@
 //  Copyright © 2016年 LeanCloud. All rights reserved.
 //
 
+@import UIKit;
+
 @protocol LCIMUserModelDelegate <NSObject>
 
 @required
@@ -17,9 +19,9 @@
 @property (nonatomic, copy) NSString *userId;
 
 /*!
- * @brief the user's avatar image
+ * @brief the user's name
  */
-@property (nonatomic, strong) UIImage *avatar;
+@property (nonatomic, copy) NSString *name;
 
 /*!
  * @brief string of the user's avatar URL
