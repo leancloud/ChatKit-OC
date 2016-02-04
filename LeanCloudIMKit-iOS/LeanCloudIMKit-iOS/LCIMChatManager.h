@@ -33,51 +33,55 @@ typedef void (^LCIMBoolCallBack)(BOOL succeed, NSError *error);
 
 /*!
  * @brief Implement the method `-[LCIMProfileDataSource getProfilesWithUserIds:callback]`, so LeanCloudIMKit can get user information by user id.
+ * @attention As LCIMChatManager will be used as a singleton instance, it is necessary to make the property named `profileDataSource` available all the time.
+ *            So LeanCloudIMKit set `profileDataSource` as a strong propery.
  */
-@property (nonatomic, weak) id<LCIMProfileDataSource> profileDataSource;
+@property (nonatomic, strong) id<LCIMProfileDataSource> profileDataSource;
 
 /*!
- * @brief if you need to pin the signature to your open client action, you should implement the method of signatureDataSource.
- * @attention if not implemented, LeanCloudIMKit will not pin the signature to these actions: open, start(create conversation), kick, invite.
+ * @brief If you need to pin the signature to your open client action, you should implement the method of signatureDataSource.
+ * @attention If not implemented, LeanCloudIMKit will not pin the signature to these actions: open, start(create conversation), kick, invite.
+ *            As LCIMChatManager will be used as a singleton instance, it is necessary to make the property named `signatureDataSource` available all the time.
+ *            So LeanCloudIMKit set `signatureDataSource` as a strong propery.
  */
-@property (nonatomic, weak) id<LCIMSignatureDataSource> signatureDataSource;
+@property (nonatomic, strong) id<LCIMSignatureDataSource> signatureDataSource;
 
 /*!
- * @brief set up application id(appId) and client key(appKey) to start LeanCloud service.
- * @attention must be called before `+[LCIMChatManager sharedInstance]`
+ * @brief Set up application id(appId) and client key(appKey) to start LeanCloud service.
+ * @attention This must be called before `+[LCIMChatManager sharedInstance]`
  */
 + (instancetype)setAppId:(NSString *)appId appKey:(NSString *)appKey;
 
 /*!
- * @brief create a singleton instance of LCIMChatManager
- * @attention sharedInstance must be called after `+[LCIMChatManager setAppId:appKey]`
+ * @brief Create a singleton instance of LCIMChatManager
+ * @attention `sharedInstance` must be called after `+[LCIMChatManager setAppId:appKey]`
  */
 + (instancetype)sharedInstance;
 
 /*!
  * @param clientId The user id in your user system, LeanCloudIMKit will get the current user's information by both this id and the method `-[LCIMProfileDataSource getProfilesWithUserIds:callback:]`.
- * @param callback callback
+ * @param callback Callback
  */
 - (void)openWithClientId:(NSString *)clientId callback:(LCIMBoolCallBack)callback;
 
 /*!
- * @brief close the client
- * @param callback callback
+ * @brief Close the client
+ * @param callback Callback
  */
 - (void)closeWithCallback:(LCIMBoolCallBack)callback;
 
 /*!
- * @brief get user information by user id with an asynchronous implementation.
+ * @brief Get user information by user id with an asynchronous implementation.
  * @attention Using this method means that the action to get every user's information is asynchronous.
  * @remark You must implement this method `[LCIMProfileDataSource getProfilesInBackgroundWithUserIds:callback]`, so LeanCloudIMKit can get user information by user id.
  */
 - (void)getProfilesInBackgroundWithUserIds:(NSArray<NSString *> *)userIds callback:(LCIMResultCallBack)callback;
 
 /*!
- * @brief get user information by user id with a synchronous implementation.
+ * @brief Get user information by user id with a synchronous implementation.
  * @attention Using this method means that the action to get every user's information is synchronous.
  * @remark You must implement this method `[LCIMProfileDataSource getProfilesInBackgroundWithUserIds:callback]`, so LeanCloudIMKit can get user information by user id.
- * @return user information.
+ * @return User information.
  */
 - (NSArray<id<LCIMUserModelDelegate>> *)getProfilesWithUserIds:(NSArray<NSString *> *)userIds error:(NSError * __autoreleasing *)error;
 
