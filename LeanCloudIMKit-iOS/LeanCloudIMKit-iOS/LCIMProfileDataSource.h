@@ -8,7 +8,7 @@
 #import "LCIMUserModelDelegate.h"
 
 /**
- * Developers can implement `-profilesWithUserIds:callback` to allow LeanCloudIMKit to get user information by user id.
+ * You can implement `-profilesWithUserIds:callback` to allow LeanCloudIMKit to get user information by user id.
  * The following example shows how to use AVUser as the user system:
 
  - (void)getProfilesWithUserIds:(NSArray<NSString *> *)userIds callback:(LCIMResultCallBack)callback {
@@ -30,7 +30,7 @@
     if (callback) {
         callback(userList, nil);
     }
-}
+ }
 
 */
 
@@ -41,7 +41,7 @@ typedef void (^LCIMResultCallBack)(NSArray<id<LCIMUserModelDelegate>> *users, NS
 @required
 
 /*!
- * @brief get user information by user id.
+ * @brief Get user information by user id.
  * @attention  You could get user information by user id with either a synchronous or an asynchronous implementation.
  * @remark You must implement this method `-[LCIMProfileDataSource getProfilesWithUserIds:callback]`, so LeanCloudIMKit can get user information by user id.
  */

@@ -14,18 +14,18 @@
 @required
 
 /*!
- * @brief the user's id
+ * @brief The user's id
  */
 @property (nonatomic, copy) NSString *userId;
 
 /*!
- * @brief the user's name
+ * @brief The user's name
  */
 @property (nonatomic, copy) NSString *name;
 
 /*!
- * @brief string of the user's avatar URL
- * @attention its type is NSString, not NSURL
+ * @brief String of the user's avatar URL
+ * @attention Its type is NSString, not NSURL
  */
 @property (nonatomic, copy) NSString *avatarURL;
 
