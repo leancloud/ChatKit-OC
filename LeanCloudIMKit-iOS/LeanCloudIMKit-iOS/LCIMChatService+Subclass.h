@@ -13,14 +13,14 @@
 /*!
  * @brief Get user information by user id with an asynchronous implementation.
  * @attention Using this method means that the action to get every user's information is asynchronous.
- * @remark You must implement `[id<LCIMChatService> getProfilesInBackgroundWithUserIds:callback]` in the subclass LCIMChatService, so LeanCloudIMKit can get user information by user id with this method.
+ * @remark You must implement `[id<LCIMChatService> getProfilesInBackgroundWithUserIds:callback]` in the subclass of LCIMChatService, so LeanCloudIMKit can get user information by user id with this method.
  */
 - (void)lc_getProfilesInBackgroundWithUserIds:(NSArray<NSString *> *)userIds callback:(LCIMUserResultCallBack)callback;
 
 /*!
  * @brief Get user information by user id with a synchronous implementation.
  * @attention Using this method means that the action to get every user's information is synchronous.
- * @remark You must implement `[id<LCIMChatService> getProfilesInBackgroundWithUserIds:callback]` in the subclass LCIMChatService, so LeanCloudIMKit can get user information by user id with this method.
+ * @remark You must implement `[id<LCIMChatService> getProfilesInBackgroundWithUserIds:callback]` in the subclass of LCIMChatService, so LeanCloudIMKit can get user information by user id with this method.
  * @return User information.
  */
 - (NSArray<id<LCIMUserModelDelegate>> *)lc_getProfilesWithUserIds:(NSArray<NSString *> *)userIds error:(NSError * __autoreleasing *)error;

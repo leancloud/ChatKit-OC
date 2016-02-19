@@ -65,7 +65,7 @@ static LCIMChatService *_sharedLCIMChatService = nil;
 
 - (void)getProfilesWithUserIds:(NSArray<NSString *> *)userIds callback:(LCIMUserResultCallBack)callback {
     // This enforces implementing this method in subclasses
-    NSString *reason = [NSString stringWithFormat:@"You must implement this method `-[id<LCIMChatService> getProfilesWithUserIds:callback]`, so LeanCloudIMKit can get user information by user id."];
+    NSString *reason = [NSString stringWithFormat:@"You must implement `-[id<LCIMChatService> getProfilesWithUserIds:callback]` in the subclass of LCIMChatService, so LeanCloudIMKit can get user information by user id."];
     @throw [NSException exceptionWithName:NSGenericException
                                    reason:reason
                                  userInfo:nil];

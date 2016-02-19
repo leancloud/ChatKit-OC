@@ -11,6 +11,7 @@
 #import "LCIMChatService_internal.h"
 
 /*
+ 
  LCIMChatService manage the main service of the LeanCloudIMKit-iOS, such as, open, close and set up appid and appkey.
 
  To use LCIMChatService, steps are as follows:
@@ -19,8 +20,8 @@
  3. Subclass of LCIMChatService invoke `-sharedInstance` to get a singleton instance.
  4. Subclass of LCIMChatService invoke `-openWithClientId:callback` to log in LeanCloud IM service and begin chatting.
  5. Subclass of LCIMChatService invoke `-closeWithCallback` to log out LeanCloud IM service and end chatting.
- 6. Implement `[id<LCIMChatService> getProfilesInBackgroundWithUserIds:callback]` in the subclass LCIMChatService, so LeanCloudIMKit can get user information by user id. Inculding `#import "LCIMChatService+Subclass.h"` or `#import "LeanCloudIMKit.h"` in the subclass interface file provides both asynchronous and asynchronous implementations automatically. `LCIMChatService_internal.h` file gives an example showing how to use AVUser as the user system.
- 7. Implement `-[id<LCIMChatService> signatureWithClientId:conversationId:action:actionOnClientIds:]` in the subclass LCIMChatService.If implemeted, this method will be invoked automatically for pinning signature to these actions: open, start(create conversation), kick, invite.
+ 6. Implement `[id<LCIMChatService> getProfilesInBackgroundWithUserIds:callback]` in the subclass of LCIMChatService, so LeanCloudIMKit can get user information by user id. Inculding `#import "LCIMChatService+Subclass.h"` or `#import "LeanCloudIMKit.h"` in the subclass interface file provides both asynchronous and asynchronous implementations automatically. `LCIMChatService_internal.h` file gives an example showing how to use AVUser as the user system.
+ 7. Implement `-[id<LCIMChatService> signatureWithClientId:conversationId:action:actionOnClientIds:]` in the subclass of LCIMChatService.If implemeted, this method will be invoked automatically for pinning signature to these actions: open, start(create conversation), kick, invite.
 
  */
 
