@@ -12,7 +12,7 @@
 
 /*
  
- LCIMChatViewController give a base ViewController for chatting.
+ LCIMChatViewController gives a base ViewController for chatting.
  
  To use LCIMChatViewController, follow these steps:
  
