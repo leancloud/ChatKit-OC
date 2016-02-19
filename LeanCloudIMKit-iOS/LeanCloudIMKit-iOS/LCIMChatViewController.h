@@ -35,9 +35,9 @@
  */
 @property (nonatomic, copy, readonly) NSString *memberId;
 
-///----------------------------------------------------------------------------------
-///---- Initialize a unique single chat type object of LCIMChatViewController ---
-///----------------------------------------------------------------------------------
+///--------------------------------------------------------------------------------
+///---- Initialize a unique single chat type object of LCIMChatViewController -----
+///--------------------------------------------------------------------------------
 
 /*!
  * @param MemberId id of the peer, a unique single conversation should be initialized with this property.
@@ -49,9 +49,9 @@
  */
 - (instancetype)initWithMemberId:(NSString *)memberId;
 
-///---------------------------------------------------------------------------
-///- Initialize a single or group chat type object of LCIMChatViewController -
-///---------------------------------------------------------------------------
+///---------------------------------------------------------------------------------
+///---- Initialize a single or group chat type object of LCIMChatViewController ----
+///---------------------------------------------------------------------------------
 
 /*!
  * @param conversationId Id of the conversation, group conversation should be initialized with this property.

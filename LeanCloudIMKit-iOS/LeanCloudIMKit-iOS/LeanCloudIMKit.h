@@ -6,8 +6,7 @@
 //  Copyright © 2016年 LeanCloud. All rights reserved.
 //
 
-#import "LCIMChatManager.h"
+#import "LCIMChatService.h"
 #import "LCIMChatViewController.h"
-#import "LCIMProfileDataSource.h"
-#import "LCIMSignatureDataSource.h"
 #import "LCIMUserModelDelegate.h"
+#import "LCIMChatService+Subclass.h"

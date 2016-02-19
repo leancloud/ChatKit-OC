@@ -14,7 +14,7 @@
 		9ADC54A91C609F2E004A1A8C /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9ADC54991C609F2E004A1A8C /* Info.plist */; };
 		9ADC54AA1C609F2E004A1A8C /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 9ADC549A1C609F2E004A1A8C /* main.m */; };
 		9ADC54AB1C609F2E004A1A8C /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9ADC549C1C609F2E004A1A8C /* ViewController.m */; };
-		9ADC54B61C609F5A004A1A8C /* LCIMChatManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 9ADC54B01C609F5A004A1A8C /* LCIMChatManager.m */; };
+		9ADC54B61C609F5A004A1A8C /* LCIMChatService.m in Sources */ = {isa = PBXBuildFile; fileRef = 9ADC54B01C609F5A004A1A8C /* LCIMChatService.m */; };
 		9ADC54B71C609F5A004A1A8C /* LCIMChatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9ADC54B21C609F5A004A1A8C /* LCIMChatViewController.m */; };
 		B03B4DCA304BD2FA73DD23A3 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F0ADEBDA5E2071F72D14147 /* libPods.a */; };
 /* End PBXBuildFile section */
@@ -22,6 +22,9 @@
 /* Begin PBXFileReference section */
 		19D15C89E9A800BC9D6889DF /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		5F0ADEBDA5E2071F72D14147 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		9AC4D7871C76DFF7005ABA56 /* LCIMConstants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LCIMConstants.h; sourceTree = "<group>"; };
+		9AC4D7881C76E281005ABA56 /* LCIMChatService_internal.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LCIMChatService_internal.h; sourceTree = "<group>"; };
+		9AD824391C76C62B00DB27CA /* LCIMChatService+Subclass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "LCIMChatService+Subclass.h"; sourceTree = "<group>"; };
 		9ADC54921C609F2E004A1A8C /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		9ADC54931C609F2E004A1A8C /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		9ADC54941C609F2E004A1A8C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -31,12 +34,10 @@
 		9ADC549A1C609F2E004A1A8C /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		9ADC549B1C609F2E004A1A8C /* ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
 		9ADC549C1C609F2E004A1A8C /* ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
-		9ADC54AF1C609F5A004A1A8C /* LCIMChatManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMChatManager.h; sourceTree = "<group>"; };
-		9ADC54B01C609F5A004A1A8C /* LCIMChatManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCIMChatManager.m; sourceTree = "<group>"; };
+		9ADC54AF1C609F5A004A1A8C /* LCIMChatService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMChatService.h; sourceTree = "<group>"; };
+		9ADC54B01C609F5A004A1A8C /* LCIMChatService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCIMChatService.m; sourceTree = "<group>"; };
 		9ADC54B11C609F5A004A1A8C /* LCIMChatViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMChatViewController.h; sourceTree = "<group>"; };
 		9ADC54B21C609F5A004A1A8C /* LCIMChatViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCIMChatViewController.m; sourceTree = "<group>"; };
-		9ADC54B31C609F5A004A1A8C /* LCIMProfileDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMProfileDataSource.h; sourceTree = "<group>"; };
-		9ADC54B41C609F5A004A1A8C /* LCIMSignatureDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMSignatureDataSource.h; sourceTree = "<group>"; };
 		9ADC54B51C609F5A004A1A8C /* LCIMUserModelDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMUserModelDelegate.h; sourceTree = "<group>"; };
 		9AEB9A7C1C619C0D009F169C /* LeanCloudIMKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LeanCloudIMKit.h; sourceTree = "<group>"; };
 		9AEE61C01C607B150049335C /* LeanCloudIMKit-iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "LeanCloudIMKit-iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -74,14 +75,15 @@
 		9ADC54AE1C609F5A004A1A8C /* LeanCloudIMKit-iOS */ = {
 			isa = PBXGroup;
 			children = (
-				9ADC54AF1C609F5A004A1A8C /* LCIMChatManager.h */,
-				9ADC54B01C609F5A004A1A8C /* LCIMChatManager.m */,
+				9AEB9A7C1C619C0D009F169C /* LeanCloudIMKit.h */,
+				9ADC54AF1C609F5A004A1A8C /* LCIMChatService.h */,
+				9ADC54B01C609F5A004A1A8C /* LCIMChatService.m */,
+				9AD824391C76C62B00DB27CA /* LCIMChatService+Subclass.h */,
 				9ADC54B11C609F5A004A1A8C /* LCIMChatViewController.h */,
 				9ADC54B21C609F5A004A1A8C /* LCIMChatViewController.m */,
-				9ADC54B31C609F5A004A1A8C /* LCIMProfileDataSource.h */,
-				9ADC54B41C609F5A004A1A8C /* LCIMSignatureDataSource.h */,
 				9ADC54B51C609F5A004A1A8C /* LCIMUserModelDelegate.h */,
-				9AEB9A7C1C619C0D009F169C /* LeanCloudIMKit.h */,
+				9AC4D7871C76DFF7005ABA56 /* LCIMConstants.h */,
+				9AC4D7881C76E281005ABA56 /* LCIMChatService_internal.h */,
 			);
 			path = "LeanCloudIMKit-iOS";
 			sourceTree = "<group>";
@@ -245,7 +247,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9ADC54B71C609F5A004A1A8C /* LCIMChatViewController.m in Sources */,
-				9ADC54B61C609F5A004A1A8C /* LCIMChatManager.m in Sources */,
+				9ADC54B61C609F5A004A1A8C /* LCIMChatService.m in Sources */,
 				9ADC54AB1C609F2E004A1A8C /* ViewController.m in Sources */,
 				9ADC54AA1C609F2E004A1A8C /* main.m in Sources */,
 				9ADC54A51C609F2E004A1A8C /* AppDelegate.m in Sources */,

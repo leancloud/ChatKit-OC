@@ -7,7 +7,7 @@
 //
 
 #import "AppDelegate.h"
-#import "LCIMChatManager.h"
+#import "LCIMChatService.h"
 
 //==================================================================================================================================
 //If you want to see the storage of this demo, log in public account of leancloud.cn, search for the app named `LeanCloudIMKit-iOS`.
@@ -26,7 +26,7 @@ static NSString *const LCIMAPPKEY = @"QgVhp43j6puGNQ0sAqNW64uH";
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
-    [LCIMChatManager setAppId:LCIMAPPID appKey:LCIMAPPKEY];
+    [LCIMChatService setAppId:LCIMAPPID appKey:LCIMAPPKEY];
     return YES;
 }
 
