@@ -11,7 +11,8 @@
 #import <AVOSCloud/AVOSCloud.h>
 #import "LCIMConstants.h"
 
-static LCIMChatService *_sharedLCIMChatService = nil;
+// Dictionary that holds all instances of DOSingleton subclasses
+static NSMutableDictionary *_sharedInstances = nil;
 
 @interface LCIMChatService ()
 
@@ -20,9 +21,6 @@ static LCIMChatService *_sharedLCIMChatService = nil;
 @end
 
 @implementation LCIMChatService
-
-// Dictionary that holds all instances of DOSingleton subclasses
-static NSMutableDictionary *_sharedInstances = nil;
 
 #pragma mark -
 

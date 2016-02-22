@@ -48,7 +48,7 @@
  */
 + (instancetype)instance;
 
-/**
+/*!
  *  A Boolean value that indicates whether the receiver has been initialized.
  *
  *  This property is usefull if you make you own initializer or override `-init` method.
@@ -73,7 +73,7 @@
 */
 @property (assign, readonly) BOOL isInitialized;
 
-/**
+/*!
  *  Destroys shared instance of singleton class (if there are no other references to that instance).
  *
  *  @warning *Note:* calling `+sharedInstance` after calling this method will create new singleton instance.
