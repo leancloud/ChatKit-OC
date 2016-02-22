@@ -40,6 +40,15 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     //TODO: query chat history i.e.
+
+    //TODO:
+    /*!
+     * 这里要说明的有几点：
+     1. conversationId／memberId 是二选一使用的（这是最普通的情况）；
+     2. 万一用户把 conversationId／memberId 都填了，会怎样？
+     3. 万一用户只填了 memberId，但是 memberId 是 currentUserId，会怎样？
+     4. 万一用户只填了 conversationId，但是对应的 conversation 不存在，会怎样？
+     */
 }
 
 @end
