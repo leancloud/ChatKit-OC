@@ -29,15 +29,56 @@
 
 /*!
  * @brief Set up application id(appId) and client key(appKey) to start LeanCloud service.
- * @attention This must be called before `+[LCIMChatService sharedInstance]`
  */
-+ (instancetype)setAppId:(NSString *)appId appKey:(NSString *)appKey;
++ (void)setAppId:(NSString *)appId appKey:(NSString *)appKey;
 
 /*!
- * @brief Create a singleton instance of LCIMChatManager
- * @attention `sharedInstance` must be called after `+[LCIMChatManager setAppId:appKey]`
+ *  Returns the shared instance of the receiver class, creating it if necessary.
+ *
+ *  You shoudn't override this method in your subclasses.
+ 
+ *  @return Shared instance of the receiver class.
  */
 + (instancetype)sharedInstance;
+
+/*!
+ *  `sharedInstance` alias.
+ 
+ *  @return Shared instance of the receiver class.
+ */
++ (instancetype)instance;
+
+/**
+ *  A Boolean value that indicates whether the receiver has been initialized.
+ *
+ *  This property is usefull if you make you own initializer or override `-init` method.
+ *  You should check if your singleton object has already been initialized to prevent repeated initialization in your custom initializer.
+ 
+ *  @warning *Important:* you should check whether your instance already initialized before calling `[super init]`.
+
+ ```
+	- (id)init
+	{
+        if (!self.isInitialized) {
+            self = [super init];
+		
+            if (self) {
+                // Initialize self.
+            }
+        }
+ 
+		return self;
+	}
+ ```
+*/
+@property (assign, readonly) BOOL isInitialized;
+
+/**
+ *  Destroys shared instance of singleton class (if there are no other references to that instance).
+ *
+ *  @warning *Note:* calling `+sharedInstance` after calling this method will create new singleton instance.
+ */
++ (void)destroyInstance;
 
 /*!
  * @param clientId The user id in your user system, LeanCloudIMKit will get the current user's information by both this id and the method `-[LCIMChatService getProfilesWithUserIds:callback:]`.

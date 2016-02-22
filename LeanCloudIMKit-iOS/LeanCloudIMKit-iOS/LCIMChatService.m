@@ -21,35 +21,73 @@ static LCIMChatService *_sharedLCIMChatService = nil;
 
 @implementation LCIMChatService
 
-+ (instancetype)setAppId:(NSString *)appId appKey:(NSString *)appKey {
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        [AVOSCloud setApplicationId:appId clientKey:appKey];
-        _sharedLCIMChatService = [[self alloc] init];
-    });
-    return _sharedLCIMChatService;
+// Dictionary that holds all instances of DOSingleton subclasses
+static NSMutableDictionary *_sharedInstances = nil;
+
+#pragma mark -
+
++ (void)initialize {
+    if (_sharedInstances == nil) {
+        _sharedInstances = [NSMutableDictionary dictionary];
+    }
 }
 
-/**
- * create a singleton instance of LCIMChatService
- */
++ (id)allocWithZone:(NSZone *)zone {
+    // Not allow allocating memory in a different zone
+    return [self sharedInstance];
+}
+
++ (id)copyWithZone:(NSZone *)zone {
+    // Not allow copying to a different zone
+    return [self sharedInstance];
+}
+
+#pragma mark -
+
 + (instancetype)sharedInstance {
-    if (!_sharedLCIMChatService) {
-        NSString *reason = @"sharedInstance called before `+[LCIMChatService setAppId:appKey:]`";
-        @throw [NSException exceptionWithName:NSGenericException
-                                       reason:reason
-                                     userInfo:nil];
+    id sharedInstance = nil;
+    
+    @synchronized(self) {
+        NSString *instanceClass = NSStringFromClass(self);
+        
+        // Looking for existing instance
+        sharedInstance = [_sharedInstances objectForKey:instanceClass];
+        
+        // If there's no instance – create one and add it to the dictionary
+        if (sharedInstance == nil) {
+            sharedInstance = [[super allocWithZone:nil] init];
+            [_sharedInstances setObject:sharedInstance forKey:instanceClass];
+        }
     }
-    return _sharedLCIMChatService;
+    
+    return sharedInstance;
 }
 
-- (instancetype)init
-{
++ (instancetype)instance {
+    return [self sharedInstance];
+}
+
+#pragma mark -
+
++ (void)destroyInstance {
+    [_sharedInstances removeObjectForKey:NSStringFromClass(self)];
+}
+
+#pragma mark -
+
+- (id)init {
     self = [super init];
-    if (self) {
-        [self doesNotRecognizeSelector:_cmd];
+    
+    if (self && !self.isInitialized) {
+        // Thread-safe because it called from +sharedInstance
+        _isInitialized = YES;
     }
+    
     return self;
+}
+
++ (void)setAppId:(NSString *)appId appKey:(NSString *)appKey {
+    [AVOSCloud setApplicationId:appId clientKey:appKey];
 }
 
 - (void)openWithClientId:(NSString *)clientId callback:(LCIMBoolCallBack)callback {
@@ -61,7 +99,7 @@ static LCIMChatService *_sharedLCIMChatService = nil;
 }
 
 #pragma mark -
-#pragma mark - LCIMChatService Method
+#pragma mark - LCIMChatService Delegate Method
 
 - (void)getProfilesWithUserIds:(NSArray<NSString *> *)userIds callback:(LCIMUserResultCallBack)callback {
     // This enforces implementing this method in subclasses
