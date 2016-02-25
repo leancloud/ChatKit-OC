@@ -4,10 +4,8 @@
 //
 //  Created by ElonChan on 16/2/2.
 //  Copyright © 2016年 LeanCloud. All rights reserved.
-//
+//  Base ViewController for chatting.
 
-@import Foundation;
-@import UIKit;
 #import "LCIMUserModelDelegate.h"
 
 /*
@@ -60,9 +58,5 @@
  * @return Initialized single or group chat type odject of LCIMChatViewController
  */
 - (instancetype)initWithConversationId:(NSString *)conversationId;
-
-//- (void)didSelectAvatarOnMessage:(id<LCIMMessageModel>)message indexPath:(NSIndexPath *)indexPath;
-//
-//- (void)didSelectMember:(id<LCIMUserModelDelegate>)member;
 
 @end

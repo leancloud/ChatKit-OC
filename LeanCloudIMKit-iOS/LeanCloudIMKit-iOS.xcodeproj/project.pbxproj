@@ -7,14 +7,24 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		9ADC54A51C609F2E004A1A8C /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 9ADC54931C609F2E004A1A8C /* AppDelegate.m */; };
-		9ADC54A61C609F2E004A1A8C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9ADC54941C609F2E004A1A8C /* Assets.xcassets */; };
-		9ADC54A71C609F2E004A1A8C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9ADC54951C609F2E004A1A8C /* LaunchScreen.storyboard */; };
-		9ADC54A81C609F2E004A1A8C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9ADC54971C609F2E004A1A8C /* Main.storyboard */; };
-		9ADC54A91C609F2E004A1A8C /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9ADC54991C609F2E004A1A8C /* Info.plist */; };
-		9ADC54AA1C609F2E004A1A8C /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 9ADC549A1C609F2E004A1A8C /* main.m */; };
-		9ADC54AB1C609F2E004A1A8C /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9ADC549C1C609F2E004A1A8C /* ViewController.m */; };
-		9ADC54B61C609F5A004A1A8C /* LCIMChatService.m in Sources */ = {isa = PBXBuildFile; fileRef = 9ADC54B01C609F5A004A1A8C /* LCIMChatService.m */; };
+		9A3B56931C7ECA7600106880 /* LCIMContactListController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A3B56641C7ECA7600106880 /* LCIMContactListController.m */; };
+		9A3B56941C7ECA7600106880 /* LCIMUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A3B56671C7ECA7600106880 /* LCIMUser.m */; };
+		9A3B56951C7ECA7600106880 /* LCIMConversationListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A3B566D1C7ECA7600106880 /* LCIMConversationListViewController.m */; };
+		9A3B56961C7ECA7600106880 /* LCIMBaseNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A3B56741C7ECA7600106880 /* LCIMBaseNavigationController.m */; };
+		9A3B56971C7ECA7600106880 /* LCIMKitExample.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A3B56771C7ECA7600106880 /* LCIMKitExample.m */; };
+		9A3B56981C7ECA7600106880 /* CYLTabBarControllerConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A3B567B1C7ECA7600106880 /* CYLTabBarControllerConfig.m */; };
+		9A3B56991C7ECA7600106880 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A3B56801C7ECA7600106880 /* AppDelegate.m */; };
+		9A3B569A1C7ECA7600106880 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9A3B56811C7ECA7600106880 /* Assets.xcassets */; };
+		9A3B569B1C7ECA7600106880 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9A3B56821C7ECA7600106880 /* LaunchScreen.storyboard */; };
+		9A3B569C1C7ECA7600106880 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9A3B56851C7ECA7600106880 /* Info.plist */; };
+		9A3B569D1C7ECA7600106880 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A3B56861C7ECA7600106880 /* main.m */; };
+		9A3B569E1C7ECA7600106880 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A3B568B1C7ECA7600106880 /* ViewController.m */; };
+		9A3B569F1C7ECA7600106880 /* LCIMProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A3B568F1C7ECA7600106880 /* LCIMProfileViewController.m */; };
+		9A44933C1C7B49B70018DD52 /* LCIMKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A44933B1C7B49B70018DD52 /* LCIMKit.m */; };
+		9A44933F1C7B4A100018DD52 /* LCIMUserSystemService.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A44933E1C7B4A100018DD52 /* LCIMUserSystemService.m */; };
+		9A4493491C7B5AED0018DD52 /* LCIMSignatureService.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A4493481C7B5AED0018DD52 /* LCIMSignatureService.m */; };
+		9A44934C1C7B6F6D0018DD52 /* LCIMLoginService.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A44934B1C7B6F6D0018DD52 /* LCIMLoginService.m */; };
+		9A81BCFD1C7C0A5A00739B89 /* LCIMSettingService.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A81BCFC1C7C0A5A00739B89 /* LCIMSettingService.m */; };
 		9ADC54B71C609F5A004A1A8C /* LCIMChatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9ADC54B21C609F5A004A1A8C /* LCIMChatViewController.m */; };
 		B03B4DCA304BD2FA73DD23A3 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F0ADEBDA5E2071F72D14147 /* libPods.a */; };
 /* End PBXBuildFile section */
@@ -22,20 +32,41 @@
 /* Begin PBXFileReference section */
 		19D15C89E9A800BC9D6889DF /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		5F0ADEBDA5E2071F72D14147 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		9A3B56631C7ECA7600106880 /* LCIMContactListController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMContactListController.h; sourceTree = "<group>"; };
+		9A3B56641C7ECA7600106880 /* LCIMContactListController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCIMContactListController.m; sourceTree = "<group>"; };
+		9A3B56661C7ECA7600106880 /* LCIMUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMUser.h; sourceTree = "<group>"; };
+		9A3B56671C7ECA7600106880 /* LCIMUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCIMUser.m; sourceTree = "<group>"; };
+		9A3B566C1C7ECA7600106880 /* LCIMConversationListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMConversationListViewController.h; sourceTree = "<group>"; };
+		9A3B566D1C7ECA7600106880 /* LCIMConversationListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCIMConversationListViewController.m; sourceTree = "<group>"; };
+		9A3B56731C7ECA7600106880 /* LCIMBaseNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMBaseNavigationController.h; sourceTree = "<group>"; };
+		9A3B56741C7ECA7600106880 /* LCIMBaseNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCIMBaseNavigationController.m; sourceTree = "<group>"; };
+		9A3B56761C7ECA7600106880 /* LCIMKitExample.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMKitExample.h; sourceTree = "<group>"; };
+		9A3B56771C7ECA7600106880 /* LCIMKitExample.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCIMKitExample.m; sourceTree = "<group>"; };
+		9A3B567A1C7ECA7600106880 /* CYLTabBarControllerConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CYLTabBarControllerConfig.h; sourceTree = "<group>"; };
+		9A3B567B1C7ECA7600106880 /* CYLTabBarControllerConfig.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CYLTabBarControllerConfig.m; sourceTree = "<group>"; };
+		9A3B567C1C7ECA7600106880 /* LCIMConstantsDefine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMConstantsDefine.h; sourceTree = "<group>"; };
+		9A3B567F1C7ECA7600106880 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		9A3B56801C7ECA7600106880 /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		9A3B56811C7ECA7600106880 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		9A3B56831C7ECA7600106880 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		9A3B56851C7ECA7600106880 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		9A3B56861C7ECA7600106880 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		9A3B568A1C7ECA7600106880 /* ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
+		9A3B568B1C7ECA7600106880 /* ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		9A3B568E1C7ECA7600106880 /* LCIMProfileViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMProfileViewController.h; sourceTree = "<group>"; };
+		9A3B568F1C7ECA7600106880 /* LCIMProfileViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCIMProfileViewController.m; sourceTree = "<group>"; };
+		9A44933A1C7B49B70018DD52 /* LCIMKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMKit.h; sourceTree = "<group>"; };
+		9A44933B1C7B49B70018DD52 /* LCIMKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCIMKit.m; sourceTree = "<group>"; };
+		9A44933D1C7B4A100018DD52 /* LCIMUserSystemService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMUserSystemService.h; sourceTree = "<group>"; };
+		9A44933E1C7B4A100018DD52 /* LCIMUserSystemService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCIMUserSystemService.m; sourceTree = "<group>"; };
+		9A4493461C7B4DBD0018DD52 /* LCIMServiceDefinition.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LCIMServiceDefinition.h; sourceTree = "<group>"; };
+		9A4493471C7B5AED0018DD52 /* LCIMSignatureService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMSignatureService.h; sourceTree = "<group>"; };
+		9A4493481C7B5AED0018DD52 /* LCIMSignatureService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCIMSignatureService.m; sourceTree = "<group>"; };
+		9A44934A1C7B6F6D0018DD52 /* LCIMLoginService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMLoginService.h; sourceTree = "<group>"; };
+		9A44934B1C7B6F6D0018DD52 /* LCIMLoginService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCIMLoginService.m; sourceTree = "<group>"; };
+		9A81BCFB1C7C0A5A00739B89 /* LCIMSettingService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMSettingService.h; sourceTree = "<group>"; };
+		9A81BCFC1C7C0A5A00739B89 /* LCIMSettingService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCIMSettingService.m; sourceTree = "<group>"; };
 		9AC4D7871C76DFF7005ABA56 /* LCIMConstants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LCIMConstants.h; sourceTree = "<group>"; };
-		9AC4D7881C76E281005ABA56 /* LCIMChatService_internal.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LCIMChatService_internal.h; sourceTree = "<group>"; };
-		9AD824391C76C62B00DB27CA /* LCIMChatService+Subclass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "LCIMChatService+Subclass.h"; sourceTree = "<group>"; };
-		9ADC54921C609F2E004A1A8C /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
-		9ADC54931C609F2E004A1A8C /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		9ADC54941C609F2E004A1A8C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		9ADC54961C609F2E004A1A8C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		9ADC54981C609F2E004A1A8C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		9ADC54991C609F2E004A1A8C /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		9ADC549A1C609F2E004A1A8C /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		9ADC549B1C609F2E004A1A8C /* ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
-		9ADC549C1C609F2E004A1A8C /* ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
-		9ADC54AF1C609F5A004A1A8C /* LCIMChatService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMChatService.h; sourceTree = "<group>"; };
-		9ADC54B01C609F5A004A1A8C /* LCIMChatService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCIMChatService.m; sourceTree = "<group>"; };
 		9ADC54B11C609F5A004A1A8C /* LCIMChatViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMChatViewController.h; sourceTree = "<group>"; };
 		9ADC54B21C609F5A004A1A8C /* LCIMChatViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCIMChatViewController.m; sourceTree = "<group>"; };
 		9ADC54B51C609F5A004A1A8C /* LCIMUserModelDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMUserModelDelegate.h; sourceTree = "<group>"; };
@@ -56,18 +87,248 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		9A3B56601C7ECA7600106880 /* Class */ = {
+			isa = PBXGroup;
+			children = (
+				9A3B56711C7ECA7600106880 /* Main */,
+				9A3B56611C7ECA7600106880 /* ContactList */,
+				9A3B566A1C7ECA7600106880 /* ConversationList */,
+				9A3B568C1C7ECA7600106880 /* Profile */,
+				9A3B567E1C7ECA7600106880 /* Other */,
+			);
+			path = Class;
+			sourceTree = "<group>";
+		};
+		9A3B56611C7ECA7600106880 /* ContactList */ = {
+			isa = PBXGroup;
+			children = (
+				9A3B56621C7ECA7600106880 /* Controller */,
+				9A3B56651C7ECA7600106880 /* Model */,
+				9A3B56681C7ECA7600106880 /* Other */,
+				9A3B56691C7ECA7600106880 /* View */,
+			);
+			path = ContactList;
+			sourceTree = "<group>";
+		};
+		9A3B56621C7ECA7600106880 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				9A3B56631C7ECA7600106880 /* LCIMContactListController.h */,
+				9A3B56641C7ECA7600106880 /* LCIMContactListController.m */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		9A3B56651C7ECA7600106880 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				9A3B56661C7ECA7600106880 /* LCIMUser.h */,
+				9A3B56671C7ECA7600106880 /* LCIMUser.m */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		9A3B56681C7ECA7600106880 /* Other */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Other;
+			sourceTree = "<group>";
+		};
+		9A3B56691C7ECA7600106880 /* View */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		9A3B566A1C7ECA7600106880 /* ConversationList */ = {
+			isa = PBXGroup;
+			children = (
+				9A3B566B1C7ECA7600106880 /* Controller */,
+				9A3B566E1C7ECA7600106880 /* Model */,
+				9A3B566F1C7ECA7600106880 /* Other */,
+				9A3B56701C7ECA7600106880 /* View */,
+			);
+			path = ConversationList;
+			sourceTree = "<group>";
+		};
+		9A3B566B1C7ECA7600106880 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				9A3B566C1C7ECA7600106880 /* LCIMConversationListViewController.h */,
+				9A3B566D1C7ECA7600106880 /* LCIMConversationListViewController.m */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		9A3B566E1C7ECA7600106880 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		9A3B566F1C7ECA7600106880 /* Other */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Other;
+			sourceTree = "<group>";
+		};
+		9A3B56701C7ECA7600106880 /* View */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		9A3B56711C7ECA7600106880 /* Main */ = {
+			isa = PBXGroup;
+			children = (
+				9A3B56751C7ECA7600106880 /* Core */,
+				9A3B56721C7ECA7600106880 /* Controller */,
+				9A3B56781C7ECA7600106880 /* Model */,
+				9A3B56791C7ECA7600106880 /* Other */,
+				9A3B567D1C7ECA7600106880 /* View */,
+			);
+			path = Main;
+			sourceTree = "<group>";
+		};
+		9A3B56721C7ECA7600106880 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				9A3B56731C7ECA7600106880 /* LCIMBaseNavigationController.h */,
+				9A3B56741C7ECA7600106880 /* LCIMBaseNavigationController.m */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		9A3B56751C7ECA7600106880 /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				9A3B56761C7ECA7600106880 /* LCIMKitExample.h */,
+				9A3B56771C7ECA7600106880 /* LCIMKitExample.m */,
+			);
+			path = Core;
+			sourceTree = "<group>";
+		};
+		9A3B56781C7ECA7600106880 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		9A3B56791C7ECA7600106880 /* Other */ = {
+			isa = PBXGroup;
+			children = (
+				9A3B567A1C7ECA7600106880 /* CYLTabBarControllerConfig.h */,
+				9A3B567B1C7ECA7600106880 /* CYLTabBarControllerConfig.m */,
+				9A3B567C1C7ECA7600106880 /* LCIMConstantsDefine.h */,
+			);
+			path = Other;
+			sourceTree = "<group>";
+		};
+		9A3B567D1C7ECA7600106880 /* View */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		9A3B567E1C7ECA7600106880 /* Other */ = {
+			isa = PBXGroup;
+			children = (
+				9A3B567F1C7ECA7600106880 /* AppDelegate.h */,
+				9A3B56801C7ECA7600106880 /* AppDelegate.m */,
+				9A3B56811C7ECA7600106880 /* Assets.xcassets */,
+				9A3B56821C7ECA7600106880 /* LaunchScreen.storyboard */,
+				9A3B56841C7ECA7600106880 /* Controller */,
+				9A3B56851C7ECA7600106880 /* Info.plist */,
+				9A3B56861C7ECA7600106880 /* main.m */,
+				9A3B56871C7ECA7600106880 /* Model */,
+				9A3B56881C7ECA7600106880 /* Other */,
+				9A3B56891C7ECA7600106880 /* View */,
+				9A3B568A1C7ECA7600106880 /* ViewController.h */,
+				9A3B568B1C7ECA7600106880 /* ViewController.m */,
+			);
+			path = Other;
+			sourceTree = "<group>";
+		};
+		9A3B56841C7ECA7600106880 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		9A3B56871C7ECA7600106880 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		9A3B56881C7ECA7600106880 /* Other */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Other;
+			sourceTree = "<group>";
+		};
+		9A3B56891C7ECA7600106880 /* View */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		9A3B568C1C7ECA7600106880 /* Profile */ = {
+			isa = PBXGroup;
+			children = (
+				9A3B568D1C7ECA7600106880 /* Controller */,
+				9A3B56901C7ECA7600106880 /* Model */,
+				9A3B56911C7ECA7600106880 /* Other */,
+				9A3B56921C7ECA7600106880 /* View */,
+			);
+			path = Profile;
+			sourceTree = "<group>";
+		};
+		9A3B568D1C7ECA7600106880 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				9A3B568E1C7ECA7600106880 /* LCIMProfileViewController.h */,
+				9A3B568F1C7ECA7600106880 /* LCIMProfileViewController.m */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		9A3B56901C7ECA7600106880 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		9A3B56911C7ECA7600106880 /* Other */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Other;
+			sourceTree = "<group>";
+		};
+		9A3B56921C7ECA7600106880 /* View */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
 		9ADC54911C609F2E004A1A8C /* Example */ = {
 			isa = PBXGroup;
 			children = (
-				9ADC54921C609F2E004A1A8C /* AppDelegate.h */,
-				9ADC54931C609F2E004A1A8C /* AppDelegate.m */,
-				9ADC54941C609F2E004A1A8C /* Assets.xcassets */,
-				9ADC54951C609F2E004A1A8C /* LaunchScreen.storyboard */,
-				9ADC54971C609F2E004A1A8C /* Main.storyboard */,
-				9ADC54991C609F2E004A1A8C /* Info.plist */,
-				9ADC549A1C609F2E004A1A8C /* main.m */,
-				9ADC549B1C609F2E004A1A8C /* ViewController.h */,
-				9ADC549C1C609F2E004A1A8C /* ViewController.m */,
+				9A3B56601C7ECA7600106880 /* Class */,
 			);
 			path = Example;
 			sourceTree = "<group>";
@@ -76,14 +337,21 @@
 			isa = PBXGroup;
 			children = (
 				9AEB9A7C1C619C0D009F169C /* LeanCloudIMKit.h */,
-				9ADC54AF1C609F5A004A1A8C /* LCIMChatService.h */,
-				9ADC54B01C609F5A004A1A8C /* LCIMChatService.m */,
-				9AD824391C76C62B00DB27CA /* LCIMChatService+Subclass.h */,
+				9A44933A1C7B49B70018DD52 /* LCIMKit.h */,
+				9A44933B1C7B49B70018DD52 /* LCIMKit.m */,
+				9A4493461C7B4DBD0018DD52 /* LCIMServiceDefinition.h */,
+				9A44934A1C7B6F6D0018DD52 /* LCIMLoginService.h */,
+				9A44934B1C7B6F6D0018DD52 /* LCIMLoginService.m */,
+				9A44933D1C7B4A100018DD52 /* LCIMUserSystemService.h */,
+				9A44933E1C7B4A100018DD52 /* LCIMUserSystemService.m */,
+				9A4493471C7B5AED0018DD52 /* LCIMSignatureService.h */,
+				9A4493481C7B5AED0018DD52 /* LCIMSignatureService.m */,
+				9A81BCFB1C7C0A5A00739B89 /* LCIMSettingService.h */,
+				9A81BCFC1C7C0A5A00739B89 /* LCIMSettingService.m */,
 				9ADC54B11C609F5A004A1A8C /* LCIMChatViewController.h */,
 				9ADC54B21C609F5A004A1A8C /* LCIMChatViewController.m */,
 				9ADC54B51C609F5A004A1A8C /* LCIMUserModelDelegate.h */,
 				9AC4D7871C76DFF7005ABA56 /* LCIMConstants.h */,
-				9AC4D7881C76E281005ABA56 /* LCIMChatService_internal.h */,
 			);
 			path = "LeanCloudIMKit-iOS";
 			sourceTree = "<group>";
@@ -184,10 +452,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9ADC54A91C609F2E004A1A8C /* Info.plist in Resources */,
-				9ADC54A81C609F2E004A1A8C /* Main.storyboard in Resources */,
-				9ADC54A61C609F2E004A1A8C /* Assets.xcassets in Resources */,
-				9ADC54A71C609F2E004A1A8C /* LaunchScreen.storyboard in Resources */,
+				9A3B569A1C7ECA7600106880 /* Assets.xcassets in Resources */,
+				9A3B569B1C7ECA7600106880 /* LaunchScreen.storyboard in Resources */,
+				9A3B569C1C7ECA7600106880 /* Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -246,31 +513,34 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9A3B56981C7ECA7600106880 /* CYLTabBarControllerConfig.m in Sources */,
+				9A3B56931C7ECA7600106880 /* LCIMContactListController.m in Sources */,
+				9A3B56961C7ECA7600106880 /* LCIMBaseNavigationController.m in Sources */,
+				9A3B56941C7ECA7600106880 /* LCIMUser.m in Sources */,
+				9A44934C1C7B6F6D0018DD52 /* LCIMLoginService.m in Sources */,
+				9A3B56971C7ECA7600106880 /* LCIMKitExample.m in Sources */,
+				9A44933C1C7B49B70018DD52 /* LCIMKit.m in Sources */,
+				9A3B56991C7ECA7600106880 /* AppDelegate.m in Sources */,
 				9ADC54B71C609F5A004A1A8C /* LCIMChatViewController.m in Sources */,
-				9ADC54B61C609F5A004A1A8C /* LCIMChatService.m in Sources */,
-				9ADC54AB1C609F2E004A1A8C /* ViewController.m in Sources */,
-				9ADC54AA1C609F2E004A1A8C /* main.m in Sources */,
-				9ADC54A51C609F2E004A1A8C /* AppDelegate.m in Sources */,
+				9A3B569E1C7ECA7600106880 /* ViewController.m in Sources */,
+				9A3B56951C7ECA7600106880 /* LCIMConversationListViewController.m in Sources */,
+				9A3B569F1C7ECA7600106880 /* LCIMProfileViewController.m in Sources */,
+				9A81BCFD1C7C0A5A00739B89 /* LCIMSettingService.m in Sources */,
+				9A4493491C7B5AED0018DD52 /* LCIMSignatureService.m in Sources */,
+				9A3B569D1C7ECA7600106880 /* main.m in Sources */,
+				9A44933F1C7B4A100018DD52 /* LCIMUserSystemService.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		9ADC54951C609F2E004A1A8C /* LaunchScreen.storyboard */ = {
+		9A3B56821C7ECA7600106880 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
-				9ADC54961C609F2E004A1A8C /* Base */,
+				9A3B56831C7ECA7600106880 /* Base */,
 			);
 			name = LaunchScreen.storyboard;
-			sourceTree = "<group>";
-		};
-		9ADC54971C609F2E004A1A8C /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				9ADC54981C609F2E004A1A8C /* Base */,
-			);
-			name = Main.storyboard;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -312,7 +582,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -350,7 +620,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -363,7 +633,8 @@
 			baseConfigurationReference = ECBE0565469B5C113C407217 /* Pods.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				INFOPLIST_FILE = "$(SRCROOT)/Example/Info.plist";
+				INFOPLIST_FILE = "$(SRCROOT)/Example/Class/Other/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "ElonChan.LeanCloudIMKit-iOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -375,7 +646,8 @@
 			baseConfigurationReference = 19D15C89E9A800BC9D6889DF /* Pods.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				INFOPLIST_FILE = "$(SRCROOT)/Example/Info.plist";
+				INFOPLIST_FILE = "$(SRCROOT)/Example/Class/Other/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "ElonChan.LeanCloudIMKit-iOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";

@@ -7,7 +7,6 @@
 //
 
 #import "LCIMChatViewController.h"
-#import "LCIMChatService.h"
 #import <AVOSCloud/AVOSCloud.h>
 #import "LCIMUserModelDelegate.h"
 

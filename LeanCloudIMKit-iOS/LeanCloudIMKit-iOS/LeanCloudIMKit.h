@@ -4,9 +4,8 @@
 //
 //  Created by ElonChan on 16/2/3.
 //  Copyright © 2016年 LeanCloud. All rights reserved.
-//
+//  All the .h file you need.
 
-#import "LCIMChatService.h"
+#import "LCIMKit.h"
 #import "LCIMChatViewController.h"
 #import "LCIMUserModelDelegate.h"
-#import "LCIMChatService+Subclass.h"

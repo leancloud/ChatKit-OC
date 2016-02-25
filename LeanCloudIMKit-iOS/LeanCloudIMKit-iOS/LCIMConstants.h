@@ -4,20 +4,26 @@
 //
 //  Created by EloncChan on 16/2/19.
 //  Copyright © 2016年 LeanCloud. All rights reserved.
-//  common typdef and constants, and so on.
+//  Common typdef and constants, and so on.
 
-typedef void (^LCIMBoolCallBack)(BOOL succeed, NSError *error);
+#import "LCIMUserModelDelegate.h"
 
-#define safeBlock(first_param)\
-if (callback) {\
-    if ([NSThread isMainThread]) {\
-        callback(first_param, error);\
-    } else {\
-        dispatch_async(dispatch_get_main_queue(), ^{\
-            callback(first_param, error);\
-        }); \
-    } \
-}
+//Callback with Custom type
+typedef void (^LCIMUserResultCallBack)(NSArray<id<LCIMUserModelDelegate>> *users, NSError *error);
+//Callback with Foundation type
+typedef void (^LCIMBooleanResultBlock)(BOOL succeeded, NSError *error);
+typedef void (^LCIMIntegerResultBlock)(NSInteger number, NSError *error);
+typedef void (^LCIMStringResultBlock)(NSString *string, NSError *error);
+typedef void (^LCIMDictionaryResultBlock)(NSDictionary * dict, NSError *error);
+typedef void (^LCIMArrayResultBlock)(NSArray *objects, NSError *error);
+typedef void (^LCIMSetResultBlock)(NSSet *channels, NSError *error);
+typedef void (^LCIMDataResultBlock)(NSData *data, NSError *error);
+typedef void (^LCIMIdResultBlock)(id object, NSError *error);
+//Callback with Function object
+typedef void (^LCIMImageResultBlock)(UIImage * image, NSError *error);
+typedef void (^LCIMProgressBlock)(NSInteger percentDone);
+
+#define LCIM_DEPRECATED(explain) __attribute__((deprecated(explain)))
 
 #define LCIM_WAIT_TIL_TRUE(signal, interval) \
 do {                                       \
