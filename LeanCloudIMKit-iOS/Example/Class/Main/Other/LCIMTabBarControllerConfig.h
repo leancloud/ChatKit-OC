@@ -1,5 +1,5 @@
 //
-//  CYLTabBarControllerConfig.h
+//  LCIMTabBarControllerConfig.h
 //  CYLTabBarController
 //
 //  Created by ElonChan on 15/11/3.
@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "CYLTabBarController.h"
 
-@interface CYLTabBarControllerConfig : NSObject
+@interface LCIMTabBarControllerConfig : NSObject
 
 @property (nonatomic, readonly, strong) CYLTabBarController *tabBarController;
 

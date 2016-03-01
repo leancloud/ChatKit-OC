@@ -1,12 +1,12 @@
 //
-//  CYLTabBarControllerConfig.m
+//  LCIMTabBarControllerConfig.m
 //  CYLTabBarController
 //
 //  Created by 微博@iOS程序犭袁 ( http://weibo.com/luohanchenyilong/ ) on 10/20/15.
 //  Copyright © 2015 https://github.com/ChenYilong . All rights reserved.
 //
 
-#import "CYLTabBarControllerConfig.h"
+#import "LCIMTabBarControllerConfig.h"
 
 // Base Class
 #import "LCIMBaseNavigationController.h"
@@ -15,13 +15,13 @@
 #import "LCIMContactListController.h"
 #import "LCIMProfileViewController.h"
 
-@interface CYLTabBarControllerConfig ()
+@interface LCIMTabBarControllerConfig ()
 
 @property (nonatomic, readwrite, strong) CYLTabBarController *tabBarController;
 
 @end
 
-@implementation CYLTabBarControllerConfig
+@implementation LCIMTabBarControllerConfig
 
 /**
  *  lazy load tabBarController
