@@ -1,6 +1,6 @@
 platform :ios , 7.0 
 link_with 'LeanCloudIMKit-iOS', 'LeanCloudIMKit-iOSTests' 
-#pod 'AVOSCloud'
-#pod 'AVOSCloudIM'
-pod 'LeanChatLib'
+pod 'AVOSCloud'
+pod 'AVOSCloudIM'
+pod 'MJRefresh'
 pod 'CYLTabBarController'

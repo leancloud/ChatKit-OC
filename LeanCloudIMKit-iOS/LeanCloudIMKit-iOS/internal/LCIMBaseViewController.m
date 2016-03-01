@@ -25,6 +25,11 @@
 #pragma mark -
 #pragma mark - UIViewController Life
 
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    !self.viewDidLoadBlock ?: self.viewDidLoadBlock();
+}
+
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     !self.viewWillAppearBlock ?: self.viewWillAppearBlock(animated);

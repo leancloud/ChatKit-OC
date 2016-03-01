@@ -44,7 +44,6 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    !self.viewDidLoadBlock ?: self.viewDidLoadBlock();
     //TODO: query chat history i.e.
 
     //TODO:
