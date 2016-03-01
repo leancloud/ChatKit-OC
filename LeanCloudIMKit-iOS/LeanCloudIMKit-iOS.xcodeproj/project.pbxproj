@@ -339,18 +339,18 @@
 		9A738DB91C855DB600D8A961 /* internal */ = {
 			isa = PBXGroup;
 			children = (
-				9A738DBA1C855DB600D8A961 /* LCIMConversationService.h */,
-				9A738DBB1C855DB600D8A961 /* LCIMConversationService.m */,
 				9A738DBC1C855DB600D8A961 /* LCIMSessionService.h */,
 				9A738DBD1C855DB600D8A961 /* LCIMSessionService.m */,
-				9A738DBE1C855DB600D8A961 /* LCIMSettingService.h */,
-				9A738DBF1C855DB600D8A961 /* LCIMSettingService.m */,
+				9A738DC41C855DB600D8A961 /* LCIMUserSystemService.h */,
+				9A738DC51C855DB600D8A961 /* LCIMUserSystemService.m */,
+				9A738DBA1C855DB600D8A961 /* LCIMConversationService.h */,
+				9A738DBB1C855DB600D8A961 /* LCIMConversationService.m */,
 				9A738DC01C855DB600D8A961 /* LCIMSignatureService.h */,
 				9A738DC11C855DB600D8A961 /* LCIMSignatureService.m */,
 				9A738DC21C855DB600D8A961 /* LCIMUIService.h */,
 				9A738DC31C855DB600D8A961 /* LCIMUIService.m */,
-				9A738DC41C855DB600D8A961 /* LCIMUserSystemService.h */,
-				9A738DC51C855DB600D8A961 /* LCIMUserSystemService.m */,
+				9A738DBE1C855DB600D8A961 /* LCIMSettingService.h */,
+				9A738DBF1C855DB600D8A961 /* LCIMSettingService.m */,
 			);
 			path = internal;
 			sourceTree = "<group>";

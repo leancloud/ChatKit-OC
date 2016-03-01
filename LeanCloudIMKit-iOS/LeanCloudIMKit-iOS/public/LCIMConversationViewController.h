@@ -39,11 +39,6 @@
  */
 @property (nonatomic, copy, readonly) NSString *peerId;
 
-/*!
- *  @brief conversation It will be set automaticly when initialized with `-initWithConversationId:` or `-initWithPeerId:`.
- */
-@property (nonatomic, copy, readonly) AVIMConversation *conversation;
-
 ///---------------------------------------------------------------------------------------------
 ///---- Initialize a unique single chat type object of LCIMConversationViewController ----------
 ///---------------------------------------------------------------------------------------------
