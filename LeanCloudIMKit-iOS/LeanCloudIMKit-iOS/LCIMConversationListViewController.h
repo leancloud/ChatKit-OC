@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "LCIMBaseViewController.h"
 
-@interface LCIMConversationListViewController : UIViewController
-
+@interface LCIMConversationListViewController : LCIMBaseViewController
 @end

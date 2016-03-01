@@ -8,9 +8,51 @@
 
 #import "LCIMKit.h"
 #import <AVOSCloud/AVOSCloud.h>
+#import "LCIMSessionService.h"
+#import "LCIMUserSystemService.h"
+#import "LCIMSignatureService.h"
+#import "LCIMSettingService.h"
+#import "LCIMUIService.h"
+#import "LCIMConversationService.h"
 
-// Dictionary that holds all instances of DOSingleton subclasses
+// Dictionary that holds all instances of Singleton include subclasses
 static NSMutableDictionary *_sharedInstances = nil;
+
+@interface LCIMKit ()
+
+@property (nonatomic, copy, readwrite) LCIMOpenProfileBlock openProfileBlock;
+
+/*!
+ * open or close client Service
+ */
+@property (nonatomic, strong, readwrite) id<LCIMSessionService> sessionService;
+
+/*!
+ * User-System Service
+ */
+@property (nonatomic, strong, readwrite) id<LCIMUserSystemService> userSystemService;
+
+/*!
+ * Signature Service
+ */
+@property (nonatomic, strong, readwrite) id<LCIMSignatureService> signatureService;
+
+/*!
+ * Setting Service
+ */
+@property (nonatomic, strong, readwrite) id<LCIMSettingService> settingService;
+
+/*!
+ * UI Service
+ */
+@property (nonatomic, strong, readwrite) id<LCIMUIService> UIService;
+
+/*!
+ * Conversation Service
+ */
+@property (nonatomic, strong, readwrite) id<LCIMConversationService> conversationService;
+
+@end
 
 @implementation LCIMKit
 
@@ -51,16 +93,54 @@ static NSMutableDictionary *_sharedInstances = nil;
     return sharedInstance;
 }
 
-+ (instancetype)instance {
-    return [self sharedInstance];
-}
-
-+ (void)destroyInstance {
-    [_sharedInstances removeObjectForKey:NSStringFromClass(self)];
-}
+#pragma mark -
+#pragma mark - LCIMKit Method
 
 + (void)setAppId:(NSString *)appId appKey:(NSString *)appKey {
     [AVOSCloud setApplicationId:appId clientKey:appKey];
+    if ([LCIMSettingService allLogsEnabled]) {
+        NSLog(@"LeanCloudKit Version is %@", [LCIMSettingService IMKitVersion]);
+    }
+}
+
+#pragma mark -
+#pragma mark - Service Delegate Method
+
+- (id<LCIMSessionService>)sessionService {
+    return [[LCIMSessionService alloc] init];
+}
+
+- (id<LCIMUserSystemService>)userSystemService {
+    return [[LCIMUserSystemService alloc] init];
+}
+
+- (id<LCIMSignatureService>)signatureService {
+    return [[LCIMSignatureService alloc] init];
+}
+
+- (id<LCIMSettingService>)settingService {
+    return [[LCIMSettingService alloc] init];
+}
+
+- (id<LCIMUIService>)UIService {
+    return [[LCIMUIService alloc] init];
+}
+
+- (id<LCIMConversationService>)conversationService {
+    return [[LCIMConversationService alloc] init];
+}
+
++ (void)setAllLogsEnabled:(BOOL)enabled {
+    [LCIMSettingService setAllLogsEnabled:YES];
+}
+
+#pragma mark - -
+#pragma mark - - LCIMUIService Method
+
+- (void)setOpenProfileBlock:(LCIMOpenProfileBlock)openProfileBlock {
+    //TODO:
 }
 
 @end
+
+

@@ -14,7 +14,7 @@
  *   The following example shows how to use AVUser as the user system:
 
  ```
-    [[[LCIMKit sharedInstance] userSystemService] setFetchProfilesBlock:^(NSArray<NSString *> *userIds, LCIMFetchProfilesCallBack callback) {
+    [[LCIMKit sharedInstance] setFetchProfilesBlock:^(NSArray<NSString *> *userIds, LCIMFetchProfilesCallBack callback) {
         NSMutableArray<id<LCIMUserModelDelegate>> *userList = [NSMutableArray array];
         for (NSString *userId in userIds) {
             //MyUser is a subclass of AVUser, conforming to the LCIMUserModelDelegate protocol.
@@ -40,32 +40,6 @@
  
 */
 
-@interface LCIMUserSystemService : NSObject
-
-@property (nonatomic, copy, readonly) LCIMFetchProfilesBlock fetchProfilesBlock;
-
-/**
- *  @brief Add the ablitity to fetch profiles.
- *  @attention  You could get user information by user id with either a synchronous or an asynchronous implementation.
- *              If implemeted, this block will be invoked automatically by LeanCloudIMKit for fetching user profile.
- */
-- (void)setFetchProfilesBlock:(LCIMFetchProfilesBlock)fetchProfilesBlock;
-
-/*!
- * @brief Get user information by user id with a synchronous implementation.
- * @attention Using this method means that the action to get every user's information is synchronous.
- *            You must implement `-setFetchProfilesBlock:` to allow LeanCloudIMKit to get user information by user id.
- *            Otherwise, LeanCloudIMKit will throw an exception to draw your attention.
- * @return User information.
- */
-- (NSArray<id<LCIMUserModelDelegate>> *)getProfilesForUserIds:(NSArray<NSString *> *)userIds error:(NSError * __autoreleasing *)error;
-
-/*!
- * @brief Get user information by user id with an asynchronous implementation.
- * @attention Using this method means that the action to get every user's information is asynchronous.
- *            You must implement `-setFetchProfilesBlock:` to allow LeanCloudIMKit to get user information by user id.
- *            Otherwise, LeanCloudIMKit will throw an exception to draw your attention.
- */
-- (void)getProfilesInBackgroundForUserIds:(NSArray<NSString *> *)userIds callback:(LCIMUserResultCallBack)callback;
+@interface LCIMUserSystemService : NSObject <LCIMUserSystemService>
 
 @end

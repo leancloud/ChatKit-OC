@@ -10,14 +10,14 @@
 
 @interface LCIMSignatureService ()
 
-@property (nonatomic, copy, readwrite) LCIMSignatureInfoBlock signatureInfoBlock;
+@property (nonatomic, copy, readwrite) LCIMGenerateSignatureBlock generateSignatureBlock;
 
 @end
 
 @implementation LCIMSignatureService
 
-- (void)setSignatureInfoBlock:(LCIMSignatureInfoBlock)signatureInfoBlock {
-    _signatureInfoBlock = signatureInfoBlock;
+- (void)setGenerateSignatureBlock:(LCIMGenerateSignatureBlock)generateSignatureBlock {
+    _generateSignatureBlock = generateSignatureBlock;
 }
 
 @end

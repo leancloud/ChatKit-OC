@@ -1,14 +1,20 @@
 //
-//  LCIMLoginService.m
+//  LCIMSessionService.m
 //  LeanCloudIMKit-iOS
 //
-//  Created by ElonChan on 16/2/23.
+//  Created by ElonChan on 16/3/1.
 //  Copyright © 2016年 LeanCloud. All rights reserved.
 //
 
-#import "LCIMLoginService.h"
+#import "LCIMSessionService.h"
+#import "LCIMServiceDefinition.h"
 
-@implementation LCIMLoginService
+@interface LCIMSessionService()
+
+@property (nonatomic, copy, readwrite) NSString *clientId;
+
+@end
+@implementation LCIMSessionService
 
 - (void)openWithClientId:(NSString *)clientId callback:(LCIMBooleanResultBlock)callback {
     //TODO:
@@ -17,5 +23,4 @@
 - (void)closeWithCallback:(LCIMBooleanResultBlock)callback {
     //TODO:
 }
-
 @end

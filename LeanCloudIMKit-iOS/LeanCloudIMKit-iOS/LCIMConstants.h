@@ -20,6 +20,8 @@ typedef void (^LCIMSetResultBlock)(NSSet *channels, NSError *error);
 typedef void (^LCIMDataResultBlock)(NSData *data, NSError *error);
 typedef void (^LCIMIdResultBlock)(id object, NSError *error);
 //Callback with Function object
+typedef void (^LCIMVoidBlock)(void);
+typedef void (^LCIMErrorBlock)(NSError *error);
 typedef void (^LCIMImageResultBlock)(UIImage * image, NSError *error);
 typedef void (^LCIMProgressBlock)(NSInteger percentDone);
 
