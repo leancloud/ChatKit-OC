@@ -7,7 +7,7 @@
 //  Core class of LeanCloudIMKit
 
 @import Foundation;
-#import "LCIMServiceDefinition.h"
+#import "IMKitHeaders.h"
 
 /*
  

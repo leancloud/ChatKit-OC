@@ -15,17 +15,19 @@
 /*!
  * @brief The user's id
  */
-@property (nonatomic, copy) NSString *userId;
+@property (nonatomic, copy, readonly) NSString *userId;
 
 /*!
  * @brief The user's name
  */
-@property (nonatomic, copy) NSString *name;
+@property (nonatomic, copy, readonly) NSString *name;
 
 /*!
- * @brief String of the user's avatar URL
- * @attention Its type is NSString, not NSURL
+ * @brief User's avator URL
  */
-@property (nonatomic, copy) NSString *avatarURL;
+@property (nonatomic, copy, readonly) NSURL *avatorURL;
+
+- (instancetype)initWithUserId:(NSString *)userId name:(NSString *)name avatorURL:(NSURL *)avatorURL;
++ (instancetype)initWithUserId:(NSString *)userId name:(NSString *)name avatorURL:(NSURL *)avatorURL;
 
 @end

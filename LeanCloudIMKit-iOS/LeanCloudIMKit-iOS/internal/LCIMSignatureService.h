@@ -9,5 +9,13 @@
 #import <Foundation/Foundation.h>
 #import "LCIMServiceDefinition.h"
 
+/*!
+ * LCIMSignatureService Error Domain
+ */
+FOUNDATION_EXTERN NSString *const LCIMSignatureServiceErrorDomain;
+
 @interface LCIMSignatureService : NSObject <LCIMSignatureService>
+
++ (instancetype)sharedInstance;
+
 @end

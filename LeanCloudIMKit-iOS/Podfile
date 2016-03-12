@@ -1,6 +1,25 @@
 platform :ios , 7.0 
 link_with 'LeanCloudIMKit-iOS', 'LeanCloudIMKit-iOSTests' 
-pod 'AVOSCloud'
-pod 'AVOSCloudIM'
+
 pod 'MJRefresh'
 pod 'CYLTabBarController'
+pod 'MBProgressHUD'
+pod 'TWMessageBarManager'
+#pod 'XHImageViewer'
+
+#=========================================================
+#====== s.dependency ======
+#=========================================================
+
+pod "LKBadgeView", :git => 'https://github.com/lakesoft/LKBadgeView.git'
+pod 'SECoreTextView'
+pod 'SDWebImage'
+pod 'CYLDeallocBlockExecutor'
+pod 'FLAnimatedImage'
+pod 'AVOSCloud'
+pod 'AVOSCloudIM'
+pod 'YYKit'
+pod "Emoji", :git => 'https://github.com/jcccn/Emoji.git'
+pod 'FMDB'
+pod 'JSBadgeView'
+pod 'DateTools'

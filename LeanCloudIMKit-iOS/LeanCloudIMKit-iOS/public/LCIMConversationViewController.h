@@ -6,9 +6,8 @@
 //  Copyright © 2016年 LeanCloud. All rights reserved.
 //  Base ViewController for chatting.
 
-#import "LCIMUserModelDelegate.h"
-#import "LCIMBaseViewController.h"
-#import "LCIMServiceDefinition.h"
+#import "XHMessageTableViewController.h"
+#import "LCIMKit.h"
 
 @class AVIMConversation;
 
@@ -23,7 +22,7 @@
 
  */
 
-@interface LCIMConversationViewController : LCIMBaseViewController <LCIMConversationService>
+@interface LCIMConversationViewController : XHMessageTableViewController <LCIMConversationService>
 
 //TODO:对于 conversationId 的得来，也就是说用户该如何事先创建好 conversation，可以加点示例代码。
 
@@ -67,3 +66,55 @@
 
 @end
 
+@interface LCIMConversationViewController (LCIMSendMessage)
+
+#pragma mark - 消息发送
+
+/*!
+ * 文本发送
+ */
+- (void)sendTextMessage:(NSString *)text;
+
+/* 图片发送 包含图片上传交互
+ * @param image, 要发送的图片
+ * @param useOriginImage, 是否强制发送原图
+ */
+- (void)sendImageMessage:(UIImage *)image useOriginImage:(BOOL)useOriginImage;
+- (void)sendImageMessageData:(NSData *)ImageData useOriginImage:(BOOL)useOriginImage;
+
+/*!
+ * 语音发送
+ */
+- (void)sendVoiceMessage:(NSData*)wavData andTime:(NSTimeInterval)nRecordingTime;
+
+@end
+
+@interface LCIMConversationViewController (LCIMBackgroundImage)
+
+/*!
+ * 通过接口设置背景图片
+ */
+@property (nonatomic, strong) UIImage *backgroundImage;
+
+/*!
+ *  在没有数据时显示该view，占据Controller的View整个页面
+ */
+@property (nonatomic, strong) UIView *placeHolder;
+
+@end
+
+@interface LCIMConversationViewController(LCIMSetting)
+
+/*!
+ *  是否禁止导航栏标题的自动设置，默认为NO;
+ *  默认情况下在单聊界面导航栏显示在线状态和输入状态，如果您想自定义聊天界面的标题，请置为YES，
+ *  注意这里只是UI显示控制，如果需要真实在线状态，请将IMCore层中LCIMContactService中的enableContactOnlineStatus置为YES。
+ */
+@property (nonatomic, assign) BOOL disableTitleAutoConfig;
+
+/*!
+ *  是否禁用文字的双击放大功能，默认为NO
+ */
+@property (nonatomic, assign) BOOL disableTextShowInFullScreen;
+
+@end

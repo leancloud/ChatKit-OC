@@ -145,9 +145,26 @@ typedef void(^LCIMOpenProfileBlock)(NSString *userId, UIViewController *parentCo
 
 @protocol LCIMSettingService <NSObject>
 
+/*!
+ * You should always use like this, never forgive to cancel log before publishing.
+ 
+ ```
+ #ifndef __OPTIMIZE__
+ [[LCIMKit sharedInstance] setAllLogsEnabled:YES];
+ #endif
+ ```
+ 
+ */
 + (void)setAllLogsEnabled:(BOOL)enabled;
 + (BOOL)allLogsEnabled;
 + (NSString *)IMKitVersion;
+- (void)syncBadge;
+
+/**
+ *  是否使用开发证书去推送，默认为 NO。如果设为 YES 的话每条消息会带上这个参数，云代码利用 Hook 设置证书
+ *  参考 https://github.com/leancloud/leanchat-cloudcode/blob/master/cloud/mchat.js
+ */
+@property (nonatomic, assign) BOOL useDevPushCerticate;
 
 @end
 
@@ -158,22 +175,31 @@ typedef void(^LCIMOpenProfileBlock)(NSString *userId, UIViewController *parentCo
 #pragma mark -
 #pragma mark - LCIMConversationService
 
+typedef void (^LCIMConversationResultBlock)(AVIMConversation *conversation, NSError *error);
+
 @protocol LCIMConversationService <NSObject>
 
-/*!
- *  根据 conversationId 获取对话
- *  @param conversationId   对话的 id
- *  @param callback
- */
-- (void)fecthConversationWithConversationId:(NSString *)conversationId callback:(AVIMConversationResultBlock)callback;
+- (void)didReceiveRemoteNotification:(NSDictionary *)userInfo;
 
-/*!
- *  根据 peerId 获取对话
- *  @param peerId   对方的 id
- *  @param callback
+/**
+ *  通过会话Id构建聊天页面
+ *  @param conversationId 会话Id
+ *  @return 聊天页面
  */
-- (void)fecthConversationWithPeerId:(NSString *)peerId callback:(AVIMConversationResultBlock)callback;
-    
+- (LCIMConversationViewController *)createConversationViewControllerWithConversationId:(NSString *)conversationId;
+
+/**
+ *  构建单聊页面
+ *  @param peedId 聊天对象
+ */
+- (LCIMConversationViewController *)createConversationViewControllerWithPeerId:(NSString *)peerId;
+
+/**
+ *  创建会话列表页面
+ *  @return 所创建的会话列表页面
+ */
+- (LCIMConversationListViewController *)createConversationListViewController;
+
 @end
 
 //TODO:CacheService;

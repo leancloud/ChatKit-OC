@@ -7,13 +7,6 @@
 //
 
 #import "LCIMKit.h"
-#import <AVOSCloud/AVOSCloud.h>
-#import "LCIMSessionService.h"
-#import "LCIMUserSystemService.h"
-#import "LCIMSignatureService.h"
-#import "LCIMSettingService.h"
-#import "LCIMUIService.h"
-#import "LCIMConversationService.h"
 
 // Dictionary that holds all instances of Singleton include subclasses
 static NSMutableDictionary *_sharedInstances = nil;
@@ -25,32 +18,32 @@ static NSMutableDictionary *_sharedInstances = nil;
 /*!
  * open or close client Service
  */
-@property (nonatomic, strong, readwrite) id<LCIMSessionService> sessionService;
+@property (nonatomic, strong, readwrite) LCIMSessionService *sessionService;
 
 /*!
  * User-System Service
  */
-@property (nonatomic, strong, readwrite) id<LCIMUserSystemService> userSystemService;
+@property (nonatomic, strong, readwrite) LCIMUserSystemService *userSystemService;
 
 /*!
  * Signature Service
  */
-@property (nonatomic, strong, readwrite) id<LCIMSignatureService> signatureService;
+@property (nonatomic, strong, readwrite) LCIMSignatureService *signatureService;
 
 /*!
  * Setting Service
  */
-@property (nonatomic, strong, readwrite) id<LCIMSettingService> settingService;
+@property (nonatomic, strong, readwrite) LCIMSettingService *settingService;
 
 /*!
  * UI Service
  */
-@property (nonatomic, strong, readwrite) id<LCIMUIService> UIService;
+@property (nonatomic, strong, readwrite) LCIMUIService *UIService;
 
 /*!
  * Conversation Service
  */
-@property (nonatomic, strong, readwrite) id<LCIMConversationService> conversationService;
+@property (nonatomic, strong, readwrite) LCIMConversationService *conversationService;
 
 @end
 
@@ -106,40 +99,144 @@ static NSMutableDictionary *_sharedInstances = nil;
 #pragma mark -
 #pragma mark - Service Delegate Method
 
-- (id<LCIMSessionService>)sessionService {
-    return [[LCIMSessionService alloc] init];
+- (LCIMSessionService *)sessionService {
+    return [LCIMSessionService sharedInstance];
 }
 
-- (id<LCIMUserSystemService>)userSystemService {
-    return [[LCIMUserSystemService alloc] init];
+- (LCIMUserSystemService *)userSystemService {
+    return [LCIMUserSystemService sharedInstance];
 }
 
-- (id<LCIMSignatureService>)signatureService {
-    return [[LCIMSignatureService alloc] init];
+- (LCIMSignatureService *)signatureService {
+    return [LCIMSignatureService sharedInstance];
 }
 
-- (id<LCIMSettingService>)settingService {
-    return [[LCIMSettingService alloc] init];
+- (LCIMSettingService *)settingService {
+    return [LCIMSettingService sharedInstance];
 }
 
-- (id<LCIMUIService>)UIService {
-    return [[LCIMUIService alloc] init];
+- (LCIMUIService *)UIService {
+    return [LCIMUIService sharedInstance];
 }
 
-- (id<LCIMConversationService>)conversationService {
-    return [[LCIMConversationService alloc] init];
+- (LCIMConversationService *)conversationService {
+    return [LCIMConversationService sharedInstance];
 }
+
+///---------------------------------------------------------------------
+///---------------------LCIMSessionService------------------------------
+///---------------------------------------------------------------------
+
+- (void)openWithClientId:(NSString *)clientId callback:(LCIMBooleanResultBlock)callback {
+    [[[LCIMKit sharedInstance] sessionService] openWithClientId:clientId callback:callback];
+}
+
+- (void)closeWithCallback:(LCIMBooleanResultBlock)callback {
+    [[[LCIMKit sharedInstance] sessionService] closeWithCallback:callback];
+}
+
+///--------------------------------------------------------------------
+///----------------------LCIMUserSystemService-------------------------
+///--------------------------------------------------------------------
+
+#pragma mark -
+#pragma mark - LCIMUserSystemService
+
+- (void)setFetchProfilesBlock:(LCIMFetchProfilesBlock)fetchProfilesBlock {
+    [[[LCIMKit sharedInstance] userSystemService] setFetchProfilesBlock:fetchProfilesBlock];
+}
+
+///--------------------------------------------------------------------
+///----------------------LCIMSignatureService--------------------------
+///--------------------------------------------------------------------
+
+#pragma mark -
+#pragma mark - LCIMSignatureService
+
+- (void)setGenerateSignatureBlock:(LCIMGenerateSignatureBlock)generateSignatureBlock {
+    [[[LCIMKit sharedInstance] signatureService] setGenerateSignatureBlock:generateSignatureBlock];
+}
+
+- (LCIMGenerateSignatureBlock)generateSignatureBlock {
+    return [[[LCIMKit sharedInstance] signatureService] generateSignatureBlock];
+}
+
+///--------------------------------------------------------------------
+///----------------------------LCIMUIService---------------------------
+///--------------------------------------------------------------------
+
+#pragma mark -
+#pragma mark - LCIMUIService
+
+#pragma mark - - Open Profile
+
+- (void)setOpenProfileBlock:(LCIMOpenProfileBlock)openProfileBlock {
+    [[[LCIMKit sharedInstance] UIService] setOpenProfileBlock:openProfileBlock];
+}
+
+///---------------------------------------------------------------------
+///------------------LCIMSettingService---------------------------------
+///---------------------------------------------------------------------
+
+#pragma mark -
+#pragma mark - LCIMSettingService
 
 + (void)setAllLogsEnabled:(BOOL)enabled {
     [LCIMSettingService setAllLogsEnabled:YES];
 }
 
-#pragma mark - -
-#pragma mark - - LCIMUIService Method
-
-- (void)setOpenProfileBlock:(LCIMOpenProfileBlock)openProfileBlock {
-    //TODO:
++ (BOOL)allLogsEnabled {
+   return [LCIMSettingService allLogsEnabled];
 }
+
++ (NSString *)IMKitVersion {
+    return [LCIMSettingService IMKitVersion];
+}
+
+- (void)syncBadge {
+    [[LCIMSettingService sharedInstance] syncBadge];
+}
+
+- (BOOL)useDevPushCerticate {
+    return [[LCIMSettingService sharedInstance] useDevPushCerticate];
+}
+
+- (void)setUseDevPushCerticate:(BOOL)useDevPushCerticate {
+    [LCIMSettingService sharedInstance].useDevPushCerticate = useDevPushCerticate;
+}
+
+///---------------------------------------------------------------------
+///---------------------LCIMConversationService-------------------------
+///---------------------------------------------------------------------
+
+#pragma mark -
+#pragma mark - LCIMConversationService
+
+- (void)fecthConversationWithConversationId:(NSString *)conversationId callback:(AVIMConversationResultBlock)callback {
+    [[[LCIMKit sharedInstance] conversationService] fecthConversationWithConversationId:conversationId callback:callback];
+}
+
+- (void)fecthConversationWithPeerId:(NSString *)peerId callback:(AVIMConversationResultBlock)callback {
+    [[[LCIMKit sharedInstance] conversationService] fecthConversationWithPeerId:peerId callback:callback];
+}
+
+- (void)didReceiveRemoteNotification:(NSDictionary *)userInfo {
+    [[LCIMKit sharedInstance] didReceiveRemoteNotification:userInfo];
+}
+
+- (LCIMConversationViewController *)createConversationViewControllerWithConversationId:(NSString *)conversationId {
+    return [[LCIMConversationService sharedInstance] createConversationViewControllerWithConversationId:conversationId];
+}
+
+- (LCIMConversationViewController *)createConversationViewControllerWithPeerId:(NSString *)peerId {
+    return [[LCIMConversationService sharedInstance] createConversationViewControllerWithPeerId:peerId];
+}
+
+- (LCIMConversationListViewController *)createConversationListViewController {
+    return [[LCIMConversationService sharedInstance] createConversationListViewController];
+}
+
+//TODO:CacheService;
 
 @end
 

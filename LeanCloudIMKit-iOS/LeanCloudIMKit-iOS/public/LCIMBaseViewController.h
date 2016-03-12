@@ -42,5 +42,26 @@ typedef void(^LCIMViewDidReceiveMemoryWarningBlock)(void);
 
 @end
 
+typedef void(^LCIMBarButtonItemActionBlock)(void);
+
+typedef NS_ENUM(NSInteger, LCIMBarbuttonItemStyle) {
+    LCIMBarbuttonItemStyleSetting = 0,
+    LCIMBarbuttonItemStyleMore,
+    LCIMBarbuttonItemStyleAdd,
+    LCIMBarbuttonItemStyleAddFriends,
+    LCIMBarbuttonItemStyleShare,
+    LCIMBarbuttonItemStyleSingleProfile,
+    LCIMBarbuttonItemStyleGroupProfile,
+};
+
 @interface LCIMBaseViewController : UIViewController <LCIMBaseViewController>
+/**
+ *  统一设置背景图片
+ *
+ *  @param backgroundImage 目标背景图片
+ */
+- (void)setupBackgroundImage:(UIImage *)backgroundImage;
+
+- (void)configureBarbuttonItemStyle:(LCIMBarbuttonItemStyle)style action:(LCIMBarButtonItemActionBlock)action;
+
 @end

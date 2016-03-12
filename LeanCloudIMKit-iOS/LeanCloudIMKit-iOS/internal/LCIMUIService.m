@@ -8,6 +8,20 @@
 
 #import "LCIMUIService.h"
 
+NSString *const LCIMUIServiceErrorDomain = @"LCIMUIServiceErrorDomain";
+
 @implementation LCIMUIService
+
+/**
+ * create a singleton instance of LCIMUIService
+ */
++ (instancetype)sharedInstance {
+    static LCIMUIService *_sharedLCIMUIService = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        _sharedLCIMUIService = [[self alloc] init];
+    });
+    return _sharedLCIMUIService;
+}
 
 @end
