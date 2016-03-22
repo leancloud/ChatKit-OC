@@ -7,6 +7,7 @@
 //
 
 #import "LCIMBaseViewController.h"
+#import <AVOSCloudIM/AVOSCloudIM.h>
 
 @interface LCIMBaseViewController ()
 
@@ -99,31 +100,31 @@
 
 #pragma mark - Public Method
 
-- (void)configureBarbuttonItemStyle:(LCIMBarbuttonItemStyle)style action:(LCIMBarButtonItemActionBlock)action {
+- (void)configureBarButtonItemStyle:(LCIMBarButtonItemStyle)style action:(LCIMBarButtonItemActionBlock)action {
     NSString *icon;
     switch (style) {
-        case LCIMBarbuttonItemStyleSetting: {
+        case LCIMBarButtonItemStyleSetting: {
             icon = @"barbuttonicon_set";
             break;
         }
-        case LCIMBarbuttonItemStyleMore: {
+        case LCIMBarButtonItemStyleMore: {
             icon = @"barbuttonicon_more";
             break;
         }
-        case LCIMBarbuttonItemStyleAdd: {
+        case LCIMBarButtonItemStyleAdd: {
             icon = @"barbuttonicon_add";
             break;
         }
-        case LCIMBarbuttonItemStyleAddFriends:
+        case LCIMBarButtonItemStyleAddFriends:
             icon = @"barbuttonicon_addfriends";
             break;
-        case LCIMBarbuttonItemStyleSingleProfile:
+        case LCIMBarButtonItemStyleSingleProfile:
             icon = @"barbuttonicon_InfoSingle";
             break;
-        case LCIMBarbuttonItemStyleGroupProfile:
+        case LCIMBarButtonItemStyleGroupProfile:
             icon = @"barbuttonicon_InfoMulti";
             break;
-        case LCIMBarbuttonItemStyleShare:
+        case LCIMBarButtonItemStyleShare:
             icon = @"barbuttonicon_Operate";
             break;
     }
@@ -136,6 +137,36 @@
     UIImageView *backgroundImageView = [[UIImageView alloc] initWithFrame:self.view.bounds];
     backgroundImageView.image = backgroundImage;
     [self.view insertSubview:backgroundImageView atIndex:0];
+}
+
+#pragma mark - alert and async utils
+
+- (void)alert:(NSString *)message {
+    UIAlertView *alertView = [[UIAlertView alloc]
+                              initWithTitle:nil
+                              message:message
+                              delegate:nil
+                              cancelButtonTitle:@"确定"
+                              otherButtonTitles:nil];
+    [alertView show];
+}
+
+- (BOOL)alertAVIMError:(NSError *)error {
+    if (error) {
+        if (error.code == kAVIMErrorConnectionLost) {
+            [self alert:@"未能连接聊天服务"];
+        } else if ([error.domain isEqualToString:NSURLErrorDomain]) {
+            [self alert:@"网络连接发生错误"];
+        } else {
+            [self alert:[NSString stringWithFormat:@"%@", error]];
+        }
+        return YES;
+    }
+    return NO;
+}
+
+- (BOOL)filterAVIMError:(NSError *)error {
+    return [self alertAVIMError:error] == NO;
 }
 
 @end

@@ -15,29 +15,23 @@
                               style:(XHBubbleImageViewStyle)style
                           meidaType:(XHBubbleMessageMediaType)mediaType {
     NSString *messageTypeString;
-    
     switch (style) {
         case XHBubbleImageViewStyleWeChat:
-            // 类似微信的
-            messageTypeString = @"MessageBubble";
+            messageTypeString = @"WC_";
             break;
-        default:
-            break;
+            case XHBubbleImageViewStyleCustome:
+            messageTypeString = @"";
     }
-    
     switch (type) {
         case XHBubbleMessageTypeSending:
-            // 发送 ==> @"weChatBubble_Sending_LeanChat"
-            messageTypeString = [messageTypeString stringByAppendingString:@"_Sender"];
+            // 发送 ==> @"MessageBubble_Sender"
+            messageTypeString = [messageTypeString stringByAppendingString:@"MessageBubble_Sender"];
             break;
         case XHBubbleMessageTypeReceiving:
             // 接收
-            messageTypeString = [messageTypeString stringByAppendingString:@"_Receiver"];
-            break;
-        default:
+            messageTypeString = [messageTypeString stringByAppendingString:@"MessageBubble_Receiver"];
             break;
     }
-    
     switch (mediaType) {
         case XHBubbleMessageMediaTypePhoto:
         case XHBubbleMessageMediaTypeVideo:
@@ -45,15 +39,13 @@
             break;
         case XHBubbleMessageMediaTypeText:
         case XHBubbleMessageMediaTypeVoice:
+        case XHBubbleMessageMediaTypeEmotion:
+        case XHBubbleMessageMediaTypeLocalPosition:
             messageTypeString = [messageTypeString stringByAppendingString:@""];
             break;
-        default:
-            break;
     }
-    
     NSString *imageNameWithBundlePath = [NSString stringWithFormat:@"MessageBubble.bundle/%@", messageTypeString];
     UIImage *bublleImage = [UIImage imageNamed:imageNameWithBundlePath];
-    
     UIEdgeInsets bubbleImageEdgeInsets = [self bubbleImageEdgeInsetsWithStyle:style];
     return XH_STRETCH_IMAGE(bublleImage, bubbleImageEdgeInsets);
 }
@@ -62,10 +54,10 @@
     UIEdgeInsets edgeInsets;
     switch (style) {
         case XHBubbleImageViewStyleWeChat:
-            // 类似微信的
-            edgeInsets = UIEdgeInsetsMake(30, 28, 85, 28);
+            edgeInsets = UIEdgeInsetsMake(30, 16, 16, 24);
             break;
-        default:
+        case XHBubbleImageViewStyleCustome:
+            edgeInsets = UIEdgeInsetsMake(30, 28, 85, 28);
             break;
     }
     return edgeInsets;

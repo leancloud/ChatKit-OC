@@ -58,12 +58,21 @@ FOUNDATION_EXTERN NSString *const LCIMUserSystemServiceErrorDomain;
 
 - (void)getProfileInBackgroundForUserId:(NSString *)userId callback:(LCIMUserResultCallBack)callback;
 
+/*!
+ * Firstly try memory cache, then fetch.
+ */
 - (id<LCIMUserModelDelegate>)fetchCurrentUser;
+
+/*!
+ * Firstly try memory cache, then fetch.
+ */
 - (void)fetchCurrentUserInBackground:(LCIMUserResultCallBack)callback;
 
 - (void)getCachedProfileIfExists:(NSString *)userId name:(NSString **)name avatorURL:(NSURL **)avatorURL error:(NSError * __autoreleasing *)theError;
 
-- (id<LCIMUserModelDelegate>)getCachedProfileIfExists:(NSString *)userId error:(NSError * __autoreleasing *)theError;
+- (void)cacheUsersWithIds:(NSSet<id<LCIMUserModelDelegate>> *)userIds callback:(LCIMBooleanResultBlock)callback;
+
+- (void)cacheUsers:(NSArray<id<LCIMUserModelDelegate>> *)users;
 
 /**
  *  清除对指定 person 的 profile 缓存
@@ -72,8 +81,6 @@ FOUNDATION_EXTERN NSString *const LCIMUserSystemServiceErrorDomain;
  */
 - (void)removeCachedProfileForPeerId:(NSString *)peerId;
 
-- (void)cacheUsersWithIds:(NSSet<id<LCIMUserModelDelegate>> *)userIds callback:(LCIMBooleanResultBlock)callback;
-
-- (void)cacheUsers:(NSArray<id<LCIMUserModelDelegate>> *)users;
+- (void)removeAllCachedProfiles;
 
 @end

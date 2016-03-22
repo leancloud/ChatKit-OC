@@ -33,15 +33,18 @@
 - (UITableView *)tableView {
     if (!_tableView) {
         CGRect tableViewFrame = self.view.bounds;
-        tableViewFrame.size.height -= (self.navigationController.viewControllers.count > 1 ? 0 : (CGRectGetHeight(self.tabBarController.tabBar.bounds)));
-        _tableView = [[UITableView alloc] initWithFrame:tableViewFrame style:self.tableViewStyle];
-        _tableView.delegate = self;
-        _tableView.dataSource = self;
-            if (self.tableViewStyle == UITableViewStyleGrouped) {
-                UIView *backgroundView = [[UIView alloc] initWithFrame:_tableView.bounds];
-                backgroundView.backgroundColor = _tableView.backgroundColor;
-                _tableView.backgroundView = backgroundView;
+        UITableView *tableView = [[UITableView alloc] initWithFrame:tableViewFrame style:self.tableViewStyle];;
+        tableView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+        tableView.backgroundColor = self.view.backgroundColor;
+        tableView.contentInset = UIEdgeInsetsMake(0, 0, 0, 0);
+        if (self.tableViewStyle == UITableViewStyleGrouped) {
+            UIView *backgroundView = [[UIView alloc] initWithFrame:tableView.bounds];
+            backgroundView.backgroundColor = tableView.backgroundColor;
+            tableView.backgroundView = backgroundView;
         }
+        tableView.delegate = self;
+        tableView.dataSource = self;
+        [self.view addSubview:_tableView = tableView];
     }
     return _tableView;
 }
@@ -58,7 +61,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    [self.view addSubview:self.tableView];
 }
 
 - (void)dealloc {

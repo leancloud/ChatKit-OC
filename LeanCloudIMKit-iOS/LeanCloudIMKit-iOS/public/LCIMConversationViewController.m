@@ -23,8 +23,7 @@
 #import <SDWebImage/UIImageView+WebCache.h>
 #import "LCIMSettingService.h"
 #import "LCIMConversationService.h"
-
-static NSInteger const kOnePageSize = 10;
+#import "LCIMConstants.h"
 
 typedef void (^LCIMSendMessageSuccessBlock)(NSString *messageUUID);
 typedef void (^LCIMSendMessageSuccessFailedBlock)(NSString *messageUUID, NSError *error);
@@ -165,10 +164,7 @@ typedef void (^LCIMSendMessageSuccessFailedBlock)(NSString *messageUUID, NSError
 }
 
 - (void)dealloc {
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:LCIMNotificationMessageReceived object:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:LCIMNotificationMessageDelivered object:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:LCIMNotificationConversationUpdated object:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:LCIMNotificationConnectivityUpdated object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
     [[XHAudioPlayerHelper shareInstance] setDelegate:nil];
 }
 
@@ -230,7 +226,12 @@ typedef void (^LCIMSendMessageSuccessFailedBlock)(NSString *messageUUID, NSError
         if (message_.messageMediaType == XHBubbleMessageMediaTypePhoto) {
             UIImageView *imageView = [[UIImageView alloc] initWithImage:message_.photo];
             if (message.thumbnailUrl) {
-                [imageView sd_setImageWithURL:[NSURL URLWithString:[message thumbnailUrl]] placeholderImage:[UIImage imageNamed:@"placeholderImage"]];
+                [imageView sd_setImageWithURL:[NSURL URLWithString:[message thumbnailUrl]] placeholderImage:({
+                    NSString *imageName = @"Placeholder_Image";
+                    NSString *imageNameWithBundlePath = [NSString stringWithFormat:@"Placeholder.bundle/%@", imageName];
+                    UIImage *image = [UIImage imageNamed:imageNameWithBundlePath];
+                    image;})
+                 ];
             }
             [allImageMessageViews_ addObject:imageView];
             if (message == message_ && *selectedMessageView == nil) {
@@ -494,7 +495,7 @@ typedef void (^LCIMSendMessageSuccessFailedBlock)(NSString *messageUUID, NSError
     [alertView show];
 }
 
-- (BOOL)alertError:(NSError *)error {
+- (BOOL)alertAVIMError:(NSError *)error {
     if (error) {
         if (error.code == kAVIMErrorConnectionLost) {
             [self alert:@"未能连接聊天服务"];
@@ -508,8 +509,8 @@ typedef void (^LCIMSendMessageSuccessFailedBlock)(NSString *messageUUID, NSError
     return NO;
 }
 
-- (BOOL)filterError:(NSError *)error {
-    return [self alertError:error] == NO;
+- (BOOL)filterAVIMError:(NSError *)error {
+    return [self alertAVIMError:error] == NO;
 }
 
 
@@ -606,7 +607,8 @@ typedef void (^LCIMSendMessageSuccessFailedBlock)(NSString *messageUUID, NSError
         [[LCIMSoundManager defaultManager] playSendSoundIfNeed];
     } failed:^(NSString *messageUUID, NSError *error) {
         message.messageId = messageUUID;
-        [[LCIMConversationService sharedInstance] insertFailedXHMessage:message];
+        //TODO:
+//        [[LCIMConversationService sharedInstance] insertFailedXHMessage:message];
     }];
 }
 
@@ -735,7 +737,7 @@ typedef void (^LCIMSendMessageSuccessFailedBlock)(NSString *messageUUID, NSError
     }
     
     xhMessage.avator = nil;
-    xhMessage.avatorUrl = [[fromUser avatorURL] absoluteString];
+    xhMessage.avatorUrl = [fromUser avatorURL];
     
     if ([[LCIMSessionService sharedInstance].clientId isEqualToString:message.clientId]) {
         xhMessage.bubbleMessageType = XHBubbleMessageTypeSending;
@@ -786,7 +788,7 @@ typedef void (^LCIMSendMessageSuccessFailedBlock)(NSString *messageUUID, NSError
 #pragma mark - query messages
 
 - (void)queryAndCacheMessagesWithTimestamp:(int64_t)timestamp block:(AVIMArrayResultBlock)block {
-    [[LCIMConversationService sharedInstance] queryTypedMessagesWithConversation:self.conversation timestamp:timestamp limit:kOnePageSize block:^(NSArray *avimTypedMessage, NSError *error) {
+    [[LCIMConversationService sharedInstance] queryTypedMessagesWithConversation:self.conversation timestamp:timestamp limit:kLCIMOnePageSize block:^(NSArray *avimTypedMessage, NSError *error) {
         if (error) {
             !block ?: block(avimTypedMessage, error);
         } else {
@@ -803,7 +805,7 @@ typedef void (^LCIMSendMessageSuccessFailedBlock)(NSString *messageUUID, NSError
     } else {
         self.loadingMoreMessage = YES;
         [self queryAndCacheMessagesWithTimestamp:0 block:^(NSArray *avimTypedMessage, NSError *error) {
-            BOOL succeed = [self filterError:error];
+            BOOL succeed = [self filterAVIMError:error];
             if (succeed) {
                 // 失败消息加到末尾，因为 SDK 缓存不保存它们
                 //TODO: why only when the net is ok, can the failed messages load fast
@@ -843,7 +845,7 @@ typedef void (^LCIMSendMessageSuccessFailedBlock)(NSString *messageUUID, NSError
     int64_t timestamp = msg.sendTimestamp;
     [self queryAndCacheMessagesWithTimestamp:timestamp block:^(NSArray *avimTypedMessage, NSError *error) {
         self.shouldLoadMoreMessagesScrollToTop = YES;
-        if ([self filterError:error]) {
+        if ([self filterAVIMError:error]) {
             if (avimTypedMessage.count == 0) {
                 self.shouldLoadMoreMessagesScrollToTop = NO;
                 self.loadingMoreMessage = NO;
@@ -912,7 +914,7 @@ typedef void (^LCIMSendMessageSuccessFailedBlock)(NSString *messageUUID, NSError
     }
     self.loadingMoreMessage = YES;
     [self cacheMessages:@[message] callback:^(BOOL succeeded, NSError *error) {
-        if ([self filterError:error]) {
+        if ([self filterAVIMError:error]) {
             XHMessage *xhMessage = [self getXHMessageByMsg:message];
             [self.avimTypedMessage addObject:message];
             [self.messages addObject:xhMessage];

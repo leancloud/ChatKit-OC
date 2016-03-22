@@ -9,12 +9,16 @@
 #import <UIKit/UIKit.h>
 #import "LCIMBaseTableViewController.h"
 #import <AVOSCloudIM/AVOSCloudIM.h>
+#import "LCIMConstants.h"
+@class LCIMConversatonListViewModel;
 
 /**
  *  选中某个会话后的回调
  *  @param conversation 被选中的会话
  */
 typedef void(^LCIMConversationsListDidSelectItemBlock)(AVIMConversation *conversation);
+typedef void(^LCIMMarkBadgeWithTotalUnreadCountBlock)(NSInteger totalUnreadCount);
+typedef void(^LCIMPrepareConversationsWhenLoadBlock)(NSArray<AVIMConversation *> *conversations, LCIMBooleanResultBlock callback);
 
 @interface LCIMConversationListViewController : LCIMBaseTableViewController
 
@@ -27,6 +31,14 @@ typedef void(^LCIMConversationsListDidSelectItemBlock)(AVIMConversation *convers
  *  设置选中某个会话后的回调
  */
 - (void)setDidSelectItemBlock:(LCIMConversationsListDidSelectItemBlock)didSelectItemBlock;
+
+@property (nonatomic, copy, readonly) LCIMMarkBadgeWithTotalUnreadCountBlock markBadgeWithTotalUnreadCountBlock;
+
+- (void)setMarkBadgeWithTotalUnreadCountBlock:(LCIMMarkBadgeWithTotalUnreadCountBlock)markBadgeWithTotalUnreadCountBlock;
+
+@property (nonatomic, copy, readonly) LCIMPrepareConversationsWhenLoadBlock prepareConversationsWhenLoadBlock;
+
+- (void)setPrepareConversationsWhenLoadBlock:(LCIMPrepareConversationsWhenLoadBlock)prepareConversationsWhenLoadBlock;
 
 /**
  *  删除某个会话后的回调
@@ -86,7 +98,7 @@ typedef NSArray *(^LCIMConversationEditActionsBlock)(AVIMConversation *conversat
 /**
  *  提供自定义行高的 Block，其中 tableView 和 indexPath 可能为搜索列表的对象
  */
-@property (nonatomic, copy) CGFloat (^heightForRowBlock) (UITableView *tableView, NSIndexPath *indexPath, AVIMConversation *conversation);
+@property (nonatomic, copy) CGFloat (^LCIMHeightForRowBlock) (UITableView *tableView, NSIndexPath *indexPath, AVIMConversation *conversation);
 
 /**
  *  会话列表 Cell 的默认高度
@@ -97,12 +109,12 @@ FOUNDATION_EXTERN const CGFloat LCIMConversationListCellDefaultHeight;
  *  提供自定义 Cell 的 Block，如果返回为 nil 则使用默认 Cell
  *  当使用自定义的 Cell 时，内部将不会处理 Cell，需要使用 configureCellBlock 自行配制 Cell
  */
-@property (nonatomic, copy) UITableViewCell* (^cellForRowBlock)(UITableView *tableView, NSIndexPath *indexPath, AVIMConversation *conversation);
+@property (nonatomic, copy) UITableViewCell* (^LCIMCellForRowBlock)(UITableView *tableView, NSIndexPath *indexPath, AVIMConversation *conversation);
 
 /**
  *  配置 Cell 的 Block，当默认的 Cell 或自定义的 Cell 需要配置时，该 block 将被调用
  */
-@property (nonatomic, copy) void (^configureCellBlock) (UITableViewCell *cell, UITableView *tableView, NSIndexPath *indexPath, AVIMConversation *conversation);
+@property (nonatomic, copy) void (^LCIMConfigureCellBlock) (UITableViewCell *cell, UITableView *tableView, NSIndexPath *indexPath, AVIMConversation *conversation);
 
 @end
 

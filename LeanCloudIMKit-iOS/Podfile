@@ -6,6 +6,7 @@ pod 'CYLTabBarController'
 pod 'MBProgressHUD'
 pod 'TWMessageBarManager'
 #pod 'XHImageViewer'
+pod 'Masonry'
 
 #=========================================================
 #====== s.dependency ======
@@ -23,3 +24,8 @@ pod "Emoji", :git => 'https://github.com/jcccn/Emoji.git'
 pod 'FMDB'
 pod 'JSBadgeView'
 pod 'DateTools'
+pod 'UITableView+FDTemplateLayoutCell'
+pod 'NSData+MD5Digest'
+pod 'SwipeView'
+pod 'StitchingImage', :git => 'https://github.com/zhengjinghua/StitchingImage.git'
+pod 'HJCornerRadius', :git => "https://github.com/panghaijiao/HJCornerRadius.git"

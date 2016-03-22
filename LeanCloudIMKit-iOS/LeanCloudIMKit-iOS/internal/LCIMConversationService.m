@@ -12,6 +12,8 @@
 #import "AVIMConversation+LCIMAddition.h"
 #import "LCIMConversationViewController.h"
 #import "LCIMConversationListViewController.h"
+#import "LCIMMessage.h"
+#import "LCIMConversationListService.h"
 
 ///-------------------------------------------------------------------------
 ///---------------------Succeed Message Store-------------------------------
@@ -145,7 +147,7 @@ NSString *const LCIMConversationServiceErrorDomain = @"LCIMConversationServiceEr
 - (void)fecthConversationWithConversationId:(NSString *)conversationId callback:(LCIMConversationResultBlock)callback {
     NSAssert(conversationId.length > 0, @"Conversation id is nil");
     NSSet *conversationSet = [NSSet setWithObject:conversationId];
-    [self fetchConversationsWithConversationIds:conversationSet callback:^(NSArray *objects, NSError *error) {
+    [[LCIMConversationListService sharedInstance] fetchConversationsWithConversationIds:conversationSet callback:^(NSArray *objects, NSError *error) {
         if (error) {
             !callback ?: callback(nil, error);
         } else {
@@ -167,34 +169,6 @@ NSString *const LCIMConversationServiceErrorDomain = @"LCIMConversationServiceEr
     }];
 }
 
-- (void)fetchConversationsWithConversationIds:(NSSet *)conversationIds callback:(LCIMArrayResultBlock)callback {
-    if (conversationIds.count > 0) {
-        AVIMConversationQuery *query = [self.client conversationQuery];
-        [query whereKey:@"objectId" containedIn:[conversationIds allObjects]];
-        query.cachePolicy = kAVCachePolicyNetworkElseCache;
-        query.limit = 1000;  // default limit:10
-        [query findConversationsWithCallback: ^(NSArray *objects, NSError *error) {
-            if (error) {
-                !callback ?: callback(nil, error);
-            } else {
-                if (objects.count == 0) {
-                    NSString *errorReasonText = [NSString stringWithFormat:@"conversations in %@  are not exists", conversationIds];
-                    NSInteger code = 0;
-                    NSDictionary *errorInfo = @{
-                                                @"code":@(code),
-                                                NSLocalizedDescriptionKey : errorReasonText,
-                                                };
-                    NSError *error = [NSError errorWithDomain:LCIMConversationServiceErrorDomain
-                                                         code:code
-                                                     userInfo:errorInfo];
-                    !callback ?: callback(nil, error);
-                } else {
-                    !callback ?: callback(objects, error);
-                }
-            }
-        }];
-    }
-}
 
 - (void)fecthConversationWithPeerId:(NSString *)peerId callback:(AVIMConversationResultBlock)callback {
     if ([peerId isEqualToString:[[LCIMSessionService sharedInstance] clientId]]) {
@@ -458,7 +432,7 @@ NSString *const LCIMConversationServiceErrorDomain = @"LCIMConversationServiceEr
     return result;
 }
 
-- (void)insertFailedXHMessage:(XHMessage *)message {
+- (void)insertFailedLCIMMessage:(LCIMMessage *)message {
     if (message.conversationId == nil) {
         @throw [NSException exceptionWithName:NSGenericException
                                        reason:@"conversationId is nil"
@@ -516,7 +490,7 @@ NSString *const LCIMConversationServiceErrorDomain = @"LCIMConversationServiceEr
 - (void)sendWelcomeMessageToPeerId:(NSString *)peerId text:(NSString *)text block:(LCIMBooleanResultBlock)block {
     [self fecthConversationWithPeerId:peerId callback:^(AVIMConversation *conversation, NSError *error) {
         if (error) {
-            block(NO, error);
+            !block ?: block(NO, error);
         } else {
             AVIMTextMessage *textMessage = [AVIMTextMessage messageWithText:text attributes:nil];
             [self sendMessage:textMessage conversation:conversation callback:block];
@@ -545,61 +519,7 @@ NSString *const LCIMConversationServiceErrorDomain = @"LCIMConversationServiceEr
     }
 }
 
-- (void)findRecentConversationsWithBlock:(LCIMRecentConversationsCallback)block {
-    [self selectOrRefreshConversationsWithBlock:^(NSArray *conversations, NSError *error) {
-        NSMutableSet *userIds = [NSMutableSet set];
-        NSUInteger totalUnreadCount = 0;
-        for (AVIMConversation *conversation in conversations) {
-            NSArray *lastestMessages = [conversation queryMessagesFromCacheWithLimit:1];
-            if (lastestMessages.count > 0) {
-                conversation.lcim_lastMessage = lastestMessages[0];
-            }
-            if (conversation.lcim_type == LCIMConversationTypeSingle) {
-                [userIds addObject:conversation.lcim_peerId];
-            } else {
-                if (conversation.lastMessageAt) {
-                    [userIds addObject:conversation.lcim_lastMessage.clientId];
-                }
-            }
-            if (conversation.muted == NO) {
-                totalUnreadCount += conversation.lcim_unreadCount;
-            }
-        }
-        NSArray *sortedRooms = [conversations sortedArrayUsingComparator:^NSComparisonResult(AVIMConversation *conv1, AVIMConversation *conv2) {
-            return (NSComparisonResult)(conv2.lcim_lastMessage.sendTimestamp - conv1.lcim_lastMessage.sendTimestamp);
-        }];
-        
-        [[LCIMUserSystemService sharedInstance] cacheUsersWithIds:userIds callback:^(BOOL succeeded, NSError *error) {
-            if (error) {
-                block(nil,0, error);
-            } else {
-                block(sortedRooms, totalUnreadCount, error);
-            }
-        }];
-    }];
-}
 
-- (void)selectOrRefreshConversationsWithBlock:(AVIMArrayResultBlock)block {
-    static BOOL refreshedFromServer = NO;
-    NSArray *conversations = [[LCIMConversationService sharedInstance] selectAllConversations];
-    if (refreshedFromServer == NO && [LCIMSessionService sharedInstance].connect) {
-        NSMutableSet *conversationIds = [NSMutableSet set];
-        for (AVIMConversation *conversation in conversations) {
-            [conversationIds addObject:conversation.conversationId];
-        }
-        [self fetchConversationsWithConversationIds:conversationIds callback:^(NSArray *objects, NSError *error) {
-            if (error) {
-                block(conversations, nil);
-            } else {
-                refreshedFromServer = YES;
-                [[LCIMConversationService sharedInstance] updateConversations:objects];
-                block([[LCIMConversationService sharedInstance] selectAllConversations], nil);
-            }
-        }];
-    } else {
-        block(conversations, nil);
-    }
-}
 
 - (void)openChatWithPeerId:(NSString *)peerId fromController:(UIViewController *)controller {
 //    id<UIApplicationDelegate> delegate = ((id<UIApplicationDelegate>)[[UIApplication sharedApplication] delegate]);
@@ -635,6 +555,43 @@ NSString *const LCIMConversationServiceErrorDomain = @"LCIMConversationServiceEr
         _client = [[LCIMSessionService sharedInstance] client];
     }
     return _client;
+}
+
++ (void)cacheMessages:(NSArray<AVIMTypedMessage *> *)messages callback:(AVBooleanResultBlock)callback {
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
+        NSMutableSet *userIds = [[NSMutableSet alloc] init];
+        for (AVIMTypedMessage *message in messages) {
+            [userIds addObject:message.clientId];
+            if (message.mediaType == kAVIMMessageMediaTypeImage || message.mediaType == kAVIMMessageMediaTypeAudio) {
+                AVFile *file = message.file;
+                if (file && file.isDataAvailable == NO) {
+                    NSError *error;
+                    // 下载到本地
+                    NSData *data = [file getData:&error];
+                    if (error || data == nil) {
+                        DLog(@"download file error : %@", error);
+                    }
+                }
+            } else if (message.mediaType == kAVIMMessageMediaTypeVideo) {
+                NSString *path = [[LCIMSettingService sharedInstance] videoPathOfMessage:(AVIMVideoMessage *)message];
+                if (![[NSFileManager defaultManager] fileExistsAtPath:path]) {
+                    NSError *error;
+                    NSData *data = [message.file getData:&error];
+                    if (error) {
+                        DLog(@"download file error : %@", error);
+                    } else {
+                        [data writeToFile:path atomically:YES];
+                    }
+                }
+            }
+        }
+        
+        [[LCIMUserSystemService sharedInstance] cacheUsersWithIds:userIds callback:^(BOOL succeeded, NSError *error) {
+            dispatch_async(dispatch_get_main_queue(),^{
+                !callback ?: callback(succeeded, error);
+            });
+        }];
+    });
 }
 
 @end

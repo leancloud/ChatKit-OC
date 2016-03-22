@@ -262,8 +262,6 @@ static const CGFloat kXHBubbleMessageViewBottomPadding = 8;
             [self.messageBubbleView.bubbleImageView addGestureRecognizer:tapGestureRecognizer];
             break;
         }
-        default:
-            break;
     }
     [self.messageBubbleView configureCellWithMessage:message];
 }

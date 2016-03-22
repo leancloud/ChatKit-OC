@@ -31,7 +31,6 @@ static NSString *const LCIMContactListControllerIdentifier = @"LCIMContactListCo
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.navigationItem.title = @"联系人";
-    
     [self.tableView registerNib:[UINib nibWithNibName:@"LCIMContactCell" bundle:nil]
          forCellReuseIdentifier:LCIMContactListControllerIdentifier];
     self.tableView.separatorColor =[UIColor colorWithWhite:1.f*0xdf/0xff alpha:1.f];

@@ -8,7 +8,9 @@
 
 #import <Foundation/Foundation.h>
 #import "LCIMServiceDefinition.h"
-@class XHMessage;
+#import <AVOSCloud/AVOSCloud.h>
+
+@class LCIMMessage;
 
 @class LCIMConversationViewController;
 
@@ -16,8 +18,6 @@
  * LCIMConversationService Error Domain
  */
 FOUNDATION_EXTERN NSString *const LCIMConversationServiceErrorDomain;
-
-typedef void (^LCIMRecentConversationsCallback)(NSArray *conversations, NSInteger totalUnreadCount,  NSError *error);
 
 @interface LCIMConversationService : NSObject <LCIMConversationService>
 
@@ -176,7 +176,7 @@ typedef void (^LCIMRecentConversationsCallback)(NSArray *conversations, NSIntege
  *  @param message 相应的消息
  */
 - (void)insertFailedMessage:(AVIMTypedMessage *)message;
-- (void)insertFailedXHMessage:(XHMessage *)message;
+- (void)insertFailedLCIMMessage:(LCIMMessage *)message;
 /**
  *  重发成功的时候调用
  *  @param recordId 记录的 id
@@ -190,5 +190,6 @@ typedef void (^LCIMRecentConversationsCallback)(NSArray *conversations, NSIntege
  *  @return 消息数组
  */
 - (NSArray *)selectFailedMessagesByConversationId:(NSString *)conversationId;
++ (void)cacheMessages:(NSArray<AVIMTypedMessage *> *)messages callback:(AVBooleanResultBlock)callback;
 
 @end

@@ -50,19 +50,24 @@ typedef void(^LCIMFetchProfilesCallBack)(NSArray<id<LCIMUserModelDelegate>> *use
 
 /*!
  *  @brief When LeanCloudIMKit wants to fetch profiles, this block will be invoked.
- *  @param userId peer Id
+ *  @param userIds User ids
  *  @param callback When fetching profiles completes, this callback will be invoked on main thread to notice LeanCloudIMKit.
  */
 typedef void(^LCIMFetchProfilesBlock)(NSArray<NSString *> *userIds, LCIMFetchProfilesCallBack callback);
 
 @property (nonatomic, copy, readonly) LCIMFetchProfilesBlock fetchProfilesBlock;
 
-/**
+/*!
  *  @brief Add the ablitity to fetch profiles.
  *  @attention  You could get peer information by peer id with either a synchronous or an asynchronous implementation.
  *              If implemeted, this block will be invoked automatically by LeanCloudIMKit for fetching peer profile.
  */
 - (void)setFetchProfilesBlock:(LCIMFetchProfilesBlock)fetchProfilesBlock;
+
+/*!
+ * Remove all cached profiles.
+ */
+- (void)removeAllCachedProfiles;
 
 @end
 

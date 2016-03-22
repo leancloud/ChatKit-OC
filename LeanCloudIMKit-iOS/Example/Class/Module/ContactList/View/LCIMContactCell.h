@@ -11,6 +11,7 @@
 @interface LCIMContactCell : UITableViewCell
 
 - (void)configureWithAvatorURL:(NSURL *)avatorURL title:(NSString *)title subtitle:(NSString *)subtitle;
+
 @property (nonatomic, copy) NSString *identifier;
 
 @end

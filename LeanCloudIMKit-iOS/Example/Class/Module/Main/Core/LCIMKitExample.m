@@ -11,6 +11,7 @@
 #import "MBProgressHUD+LCIMAddition.h"
 #import "LCIMTabBarControllerConfig.h"
 #import "LCIMUser.h"
+#import "LCIMChatController.h"
 
 //==================================================================================================================================
 //If you want to see the storage of this demo, log in public account of leancloud.cn, search for the app named `LeanCloudIMKit-iOS`.
@@ -87,6 +88,7 @@ static NSMutableDictionary *_sharedInstances = nil;
 
 + (void)invokeThisMethodBeforeLogout {
     [AVOSCloudIM handleRemoteNotificationsWithDeviceToken:nil];
+    [[LCIMKit sharedInstance] removeAllCachedProfiles];
 }
 
 + (void)invokeThisMethodAfterLoginSuccessWithClientId:(NSString *)clientId success:(LCIMVoidBlock)success failed:(LCIMErrorBlock)failed  {
@@ -145,7 +147,7 @@ static NSMutableDictionary *_sharedInstances = nil;
                                         @"code":@(code),
                                         NSLocalizedDescriptionKey : errorReasonText,
                                         };
-            NSError *error = [NSError errorWithDomain:@"kAVErrorDomain"
+            NSError *error = [NSError errorWithDomain:@"LCIMKit"
                                                  code:code
                                              userInfo:errorInfo];
             
@@ -196,13 +198,17 @@ static NSMutableDictionary *_sharedInstances = nil;
 //    }];
     //    AVIMConversation *conversation = [AVIMConversation fetchConversationByPerson:aPerson creatIfNotExist:YES];
 //    LCIMConversationViewController *conversaionViewController = [[LCIMConversationViewController alloc] initWithPeerId:peerId];
-   LCIMConversationViewController *conversationController = [[LCIMKit sharedInstance] createConversationViewControllerWithPeerId:peerId];
-        id<UIApplicationDelegate> delegate = ((id<UIApplicationDelegate>)[[UIApplication sharedApplication] delegate]);
-        UIWindow *window = delegate.window;
-        UITabBarController *tabBarController = (UITabBarController *)window.rootViewController;
-        UINavigationController *navigationController_ = tabBarController.selectedViewController;
-    [navigationController_ pushViewController:conversationController animated:YES];
-//    [[LCIMConversationService sharedInstance] openChatWithPeerId:peerId fromController:aNavigationController];
+//    LCIMConversationViewController *conversationController = [[LCIMKit sharedInstance] createConversationViewControllerWithPeerId:peerId];
+    LCIMChatController *chatC =[[LCIMChatController alloc] initWithPeerId:peerId];
+//    [self.navigationController pushViewController:chatC animated:YES];
+    chatC.hidesBottomBarWhenPushed = NO;
+    
+    id<UIApplicationDelegate> delegate = ((id<UIApplicationDelegate>)[[UIApplication sharedApplication] delegate]);
+    UIWindow *window = delegate.window;
+    UITabBarController *tabBarController = (UITabBarController *)window.rootViewController;
+    UINavigationController *navigationController_ = tabBarController.selectedViewController;
+    [navigationController_ pushViewController:chatC animated:YES];
+    //    [[LCIMConversationService sharedInstance] openChatWithPeerId:peerId fromController:aNavigationController];
     //    [self exampleOpenConversationViewControllerWithConversation:conversation fromNavigationController:aNavigationController];
 }
 

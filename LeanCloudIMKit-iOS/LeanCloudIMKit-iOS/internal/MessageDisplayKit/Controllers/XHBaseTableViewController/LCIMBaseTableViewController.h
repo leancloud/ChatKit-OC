@@ -14,7 +14,7 @@
 /**
  *  显示大量数据的控件
  */
-@property (nonatomic, strong) UITableView *tableView;
+@property (nonatomic, weak) UITableView *tableView;
 
 /**
  *  初始化init的时候设置tableView的样式才有效

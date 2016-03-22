@@ -15,7 +15,8 @@ typedef NS_ENUM(NSInteger, XHBubbleMessageType) {
 };
 
 typedef NS_ENUM(NSUInteger, XHBubbleImageViewStyle) {
-    XHBubbleImageViewStyleWeChat = 0
+    XHBubbleImageViewStyleWeChat = 0,
+    XHBubbleImageViewStyleCustome = 1
 };
 
 typedef NS_ENUM(NSInteger, XHBubbleMessageMediaType) {

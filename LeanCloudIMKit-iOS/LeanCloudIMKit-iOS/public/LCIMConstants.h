@@ -66,7 +66,6 @@ static NSString *const LCIMNotificationConnectivityUpdated = @"LCIMNotificationC
 
 static NSString *const LCIM_KEY_USERNAME = @"LCIM_KEY_USERNAME";
 
-
 ///-----------------------------------------------------------------------------------
 ///---------------------用以产生Demo中的联系人数据的宏定义-------------------------------
 ///-----------------------------------------------------------------------------------
@@ -106,7 +105,6 @@ static NSString *const LCIM_KEY_USERNAME = @"LCIM_KEY_USERNAME";
 #define LCIMTryPeerIds \
     [LCIMTryPersonProfiles valueForKeyPath:LCIMProfileKeyPeerId]
 
-
 #define localize(key, default) NSLocalizedStringWithDefaultValue(key, nil, [NSBundle mainBundle], default, nil)
 
 #pragma mark - Message Bars
@@ -133,3 +131,50 @@ typedef enum : NSUInteger {
 } LCIMConversationType;
 
 static NSString *const LCIMInstallationKeyChannels = @"channels";
+
+// image STRETCH
+#define LCIM_STRETCH_IMAGE(image, edgeInsets) [image resizableImageWithCapInsets:edgeInsets resizingMode:UIImageResizingModeStretch]
+
+typedef NS_ENUM(NSInteger, LCIMBubbleMessageMediaType) {
+    LCIMBubbleMessageMediaTypeText = 0,
+    LCIMBubbleMessageMediaTypePhoto = 1,
+    LCIMBubbleMessageMediaTypeVideo = 2,
+    LCIMBubbleMessageMediaTypeVoice = 3,
+    LCIMBubbleMessageMediaTypeEmotion = 4,
+    LCIMBubbleMessageMediaTypeLocalPosition = 5,
+};
+
+typedef NS_ENUM(NSInteger, LCIMBubbleMessageMenuSelectedType) {
+    LCIMBubbleMessageMenuSelectedTypeTextCopy = 0,
+    LCIMBubbleMessageMenuSelectedTypeTextTranspond = 1,
+    LCIMBubbleMessageMenuSelectedTypeTextFavorites = 2,
+    LCIMBubbleMessageMenuSelectedTypeTextMore = 3,
+    
+    LCIMBubbleMessageMenuSelectedTypePhotoCopy = 4,
+    LCIMBubbleMessageMenuSelectedTypePhotoTranspond = 5,
+    LCIMBubbleMessageMenuSelectedTypePhotoFavorites = 6,
+    LCIMBubbleMessageMenuSelectedTypePhotoMore = 7,
+    
+    LCIMBubbleMessageMenuSelectedTypeVideoTranspond = 8,
+    LCIMBubbleMessageMenuSelectedTypeVideoFavorites = 9,
+    LCIMBubbleMessageMenuSelectedTypeVideoMore = 10,
+    
+    LCIMBubbleMessageMenuSelectedTypeVoicePlay = 11,
+    LCIMBubbleMessageMenuSelectedTypeVoiceFavorites = 12,
+    LCIMBubbleMessageMenuSelectedTypeVoiceTurnToText = 13,
+    LCIMBubbleMessageMenuSelectedTypeVoiceMore = 14,
+};
+
+typedef NS_ENUM(NSInteger, LCIMMessageStatus){
+    LCIMMessageStatusSending,
+    LCIMMessageStatusSent,
+    LCIMMessageStatusReceived,
+    LCIMMessageStatusFailed,
+};
+
+typedef NS_ENUM(NSInteger, LCIMBubbleMessageType) {
+    LCIMBubbleMessageTypeSending = 0,
+    LCIMBubbleMessageTypeReceiving
+};
+
+static NSInteger const kLCIMOnePageSize = 10;

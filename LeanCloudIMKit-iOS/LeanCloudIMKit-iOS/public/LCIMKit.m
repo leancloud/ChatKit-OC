@@ -127,6 +127,10 @@ static NSMutableDictionary *_sharedInstances = nil;
 ///---------------------LCIMSessionService------------------------------
 ///---------------------------------------------------------------------
 
+- (NSString *)clientId {
+    return [[LCIMKit sharedInstance] sessionService].clientId;
+}
+
 - (void)openWithClientId:(NSString *)clientId callback:(LCIMBooleanResultBlock)callback {
     [[[LCIMKit sharedInstance] sessionService] openWithClientId:clientId callback:callback];
 }
@@ -144,6 +148,10 @@ static NSMutableDictionary *_sharedInstances = nil;
 
 - (void)setFetchProfilesBlock:(LCIMFetchProfilesBlock)fetchProfilesBlock {
     [[[LCIMKit sharedInstance] userSystemService] setFetchProfilesBlock:fetchProfilesBlock];
+}
+
+- (void)removeAllCachedProfiles {
+    [[[LCIMKit sharedInstance] userSystemService] removeAllCachedProfiles];
 }
 
 ///--------------------------------------------------------------------

@@ -95,6 +95,38 @@
 		9A738DD91C855DB600D8A961 /* LCIMConversationListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A738DCB1C855DB600D8A961 /* LCIMConversationListViewController.m */; };
 		9A738DDA1C855DB600D8A961 /* LCIMConversationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A738DCD1C855DB600D8A961 /* LCIMConversationViewController.m */; };
 		9A738DDB1C855DB600D8A961 /* LCIMKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A738DCF1C855DB600D8A961 /* LCIMKit.m */; };
+		9A77E1101C9F9CAD002DE037 /* LCIMBaseConversationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A77E10F1C9F9CAD002DE037 /* LCIMBaseConversationViewController.m */; };
+		9A77E1131C9FA43C002DE037 /* LCIMMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A77E1121C9FA43C002DE037 /* LCIMMessage.m */; };
+		9A8453551C9EEB4300BDBBA4 /* Emoji.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 9A8453541C9EEB4300BDBBA4 /* Emoji.bundle */; };
+		9A8453DD1C9EF02100BDBBA4 /* NSString+MD5.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A8453981C9EF02100BDBBA4 /* NSString+MD5.m */; };
+		9A8453DE1C9EF02100BDBBA4 /* UIImageView+LCIMWebImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A84539A1C9EF02100BDBBA4 /* UIImageView+LCIMWebImage.m */; };
+		9A8453DF1C9EF02100BDBBA4 /* LCIMCellRegisterController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A84539C1C9EF02100BDBBA4 /* LCIMCellRegisterController.m */; };
+		9A8453E01C9EF02100BDBBA4 /* LCIMCellIdentifierFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A84539E1C9EF02100BDBBA4 /* LCIMCellIdentifierFactory.m */; };
+		9A8453E21C9EF02100BDBBA4 /* LCIMLocationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A8453A21C9EF02100BDBBA4 /* LCIMLocationController.m */; };
+		9A8453E31C9EF02100BDBBA4 /* LCIMChatController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A8453A41C9EF02100BDBBA4 /* LCIMChatController.m */; };
+		9A8453E61C9EF02100BDBBA4 /* LCIMFaceManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A8453A91C9EF02100BDBBA4 /* LCIMFaceManager.m */; };
+		9A8453E71C9EF02100BDBBA4 /* LCIMAVAudioPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A8453AB1C9EF02100BDBBA4 /* LCIMAVAudioPlayer.m */; };
+		9A8453E81C9EF02100BDBBA4 /* LCIMMessageStateManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A8453AE1C9EF02100BDBBA4 /* LCIMMessageStateManager.m */; };
+		9A8453EB1C9EF02100BDBBA4 /* Mp3Recorder.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A8453B71C9EF02100BDBBA4 /* Mp3Recorder.m */; };
+		9A8453EC1C9EF02100BDBBA4 /* LCIMLocationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A8453BA1C9EF02100BDBBA4 /* LCIMLocationManager.m */; };
+		9A8453ED1C9EF02100BDBBA4 /* LCIMChatBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A8453BD1C9EF02100BDBBA4 /* LCIMChatBar.m */; };
+		9A8453EE1C9EF02100BDBBA4 /* LCIMChatFaceView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A8453BF1C9EF02100BDBBA4 /* LCIMChatFaceView.m */; };
+		9A8453EF1C9EF02100BDBBA4 /* LCIMChatMoreItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A8453C11C9EF02100BDBBA4 /* LCIMChatMoreItem.m */; };
+		9A8453F01C9EF02100BDBBA4 /* LCIMChatMoreView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A8453C31C9EF02100BDBBA4 /* LCIMChatMoreView.m */; };
+		9A8453F11C9EF02100BDBBA4 /* LCIMChatImageMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A8453C61C9EF02100BDBBA4 /* LCIMChatImageMessageCell.m */; };
+		9A8453F21C9EF02100BDBBA4 /* LCIMChatLocationMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A8453C81C9EF02100BDBBA4 /* LCIMChatLocationMessageCell.m */; };
+		9A8453F31C9EF02100BDBBA4 /* LCIMChatMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A8453CA1C9EF02100BDBBA4 /* LCIMChatMessageCell.m */; };
+		9A8453F41C9EF02100BDBBA4 /* LCIMChatSystemMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A8453CC1C9EF02100BDBBA4 /* LCIMChatSystemMessageCell.m */; };
+		9A8453F51C9EF02100BDBBA4 /* LCIMChatTextMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A8453CE1C9EF02100BDBBA4 /* LCIMChatTextMessageCell.m */; };
+		9A8453F61C9EF02100BDBBA4 /* LCIMChatVoiceMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A8453D01C9EF02100BDBBA4 /* LCIMChatVoiceMessageCell.m */; };
+		9A8453F71C9EF02100BDBBA4 /* LCIMContentView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A8453D21C9EF02100BDBBA4 /* LCIMContentView.m */; };
+		9A8453F81C9EF02100BDBBA4 /* LCIMSendImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A8453D41C9EF02100BDBBA4 /* LCIMSendImageView.m */; };
+		9A8453F91C9EF02100BDBBA4 /* LCIMFacePageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A8453D61C9EF02100BDBBA4 /* LCIMFacePageView.m */; };
+		9A8453FA1C9EF02100BDBBA4 /* LCIMProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A8453D81C9EF02100BDBBA4 /* LCIMProgressHUD.m */; };
+		9A8453FB1C9EF02100BDBBA4 /* LCIMChatViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A8453DC1C9EF02100BDBBA4 /* LCIMChatViewModel.m */; };
+		9A8453FE1C9F061A00BDBBA4 /* LCIMBubbleImageFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A8453FD1C9F061A00BDBBA4 /* LCIMBubbleImageFactory.m */; };
+		9A8454011C9F0B8100BDBBA4 /* LCIMMessageVoiceFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A8454001C9F0B8100BDBBA4 /* LCIMMessageVoiceFactory.m */; };
+		9A8454031C9F122D00BDBBA4 /* lame.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A8454021C9F122D00BDBBA4 /* lame.framework */; };
 		9AD664F21C91273900885170 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AD664F11C91273900885170 /* AppDelegate.m */; };
 		9AD6652B1C912ADE00885170 /* LCIMUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AD664F61C912ADE00885170 /* LCIMUser.m */; };
 		9AD6652C1C912ADE00885170 /* LCIMContactListController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AD664FB1C912ADE00885170 /* LCIMContactListController.m */; };
@@ -110,6 +142,11 @@
 		9AD665391C912ADE00885170 /* MBProgressHUD+LCIMAddition.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AD665291C912ADE00885170 /* MBProgressHUD+LCIMAddition.m */; };
 		9AD6653A1C912ADE00885170 /* MBProgressHUD.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 9AD6652A1C912ADE00885170 /* MBProgressHUD.bundle */; };
 		9AD6653D1C9130C400885170 /* LCIMContactManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AD6653C1C9130C400885170 /* LCIMContactManager.m */; };
+		9AD83A171CA0605700A068D1 /* LCIMConversationRefreshHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AD83A161CA0605700A068D1 /* LCIMConversationRefreshHeader.m */; };
+		9AD83A1B1CA129E200A068D1 /* LCIMConversationListService.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AD83A1A1CA129E200A068D1 /* LCIMConversationListService.m */; };
+		9AD83A1E1CA1407A00A068D1 /* LCIMConversatonListViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AD83A1D1CA1407A00A068D1 /* LCIMConversatonListViewModel.m */; };
+		9AD83A211CA149AE00A068D1 /* LCIMConversatonListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AD83A201CA149AE00A068D1 /* LCIMConversatonListCell.m */; };
+		9AD83A241CA1649600A068D1 /* LCIMLastMessageTypeManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AD83A231CA1649600A068D1 /* LCIMLastMessageTypeManager.m */; };
 		B03B4DCA304BD2FA73DD23A3 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F0ADEBDA5E2071F72D14147 /* libPods.a */; };
 /* End PBXBuildFile section */
 
@@ -294,6 +331,70 @@
 		9A738DCF1C855DB600D8A961 /* LCIMKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCIMKit.m; sourceTree = "<group>"; };
 		9A738DD01C855DB600D8A961 /* LCIMServiceDefinition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMServiceDefinition.h; sourceTree = "<group>"; };
 		9A738DD11C855DB600D8A961 /* LCIMUserModelDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMUserModelDelegate.h; sourceTree = "<group>"; };
+		9A77E10E1C9F9CAD002DE037 /* LCIMBaseConversationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMBaseConversationViewController.h; sourceTree = "<group>"; };
+		9A77E10F1C9F9CAD002DE037 /* LCIMBaseConversationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCIMBaseConversationViewController.m; sourceTree = "<group>"; };
+		9A77E1111C9FA43C002DE037 /* LCIMMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMMessage.h; sourceTree = "<group>"; };
+		9A77E1121C9FA43C002DE037 /* LCIMMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCIMMessage.m; sourceTree = "<group>"; };
+		9A8453541C9EEB4300BDBBA4 /* Emoji.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Emoji.bundle; sourceTree = "<group>"; };
+		9A8453971C9EF02100BDBBA4 /* NSString+MD5.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+MD5.h"; sourceTree = "<group>"; };
+		9A8453981C9EF02100BDBBA4 /* NSString+MD5.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+MD5.m"; sourceTree = "<group>"; };
+		9A8453991C9EF02100BDBBA4 /* UIImageView+LCIMWebImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImageView+LCIMWebImage.h"; sourceTree = "<group>"; };
+		9A84539A1C9EF02100BDBBA4 /* UIImageView+LCIMWebImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImageView+LCIMWebImage.m"; sourceTree = "<group>"; };
+		9A84539B1C9EF02100BDBBA4 /* LCIMCellRegisterController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMCellRegisterController.h; sourceTree = "<group>"; };
+		9A84539C1C9EF02100BDBBA4 /* LCIMCellRegisterController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCIMCellRegisterController.m; sourceTree = "<group>"; };
+		9A84539D1C9EF02100BDBBA4 /* LCIMCellIdentifierFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMCellIdentifierFactory.h; sourceTree = "<group>"; };
+		9A84539E1C9EF02100BDBBA4 /* LCIMCellIdentifierFactory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCIMCellIdentifierFactory.m; sourceTree = "<group>"; };
+		9A8453A11C9EF02100BDBBA4 /* LCIMLocationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMLocationController.h; sourceTree = "<group>"; };
+		9A8453A21C9EF02100BDBBA4 /* LCIMLocationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCIMLocationController.m; sourceTree = "<group>"; };
+		9A8453A31C9EF02100BDBBA4 /* LCIMChatController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMChatController.h; sourceTree = "<group>"; };
+		9A8453A41C9EF02100BDBBA4 /* LCIMChatController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCIMChatController.m; sourceTree = "<group>"; };
+		9A8453A81C9EF02100BDBBA4 /* LCIMFaceManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMFaceManager.h; sourceTree = "<group>"; };
+		9A8453A91C9EF02100BDBBA4 /* LCIMFaceManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCIMFaceManager.m; sourceTree = "<group>"; };
+		9A8453AA1C9EF02100BDBBA4 /* LCIMAVAudioPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMAVAudioPlayer.h; sourceTree = "<group>"; };
+		9A8453AB1C9EF02100BDBBA4 /* LCIMAVAudioPlayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCIMAVAudioPlayer.m; sourceTree = "<group>"; };
+		9A8453AD1C9EF02100BDBBA4 /* LCIMMessageStateManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMMessageStateManager.h; sourceTree = "<group>"; };
+		9A8453AE1C9EF02100BDBBA4 /* LCIMMessageStateManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCIMMessageStateManager.m; sourceTree = "<group>"; };
+		9A8453B61C9EF02100BDBBA4 /* Mp3Recorder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Mp3Recorder.h; sourceTree = "<group>"; };
+		9A8453B71C9EF02100BDBBA4 /* Mp3Recorder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Mp3Recorder.m; sourceTree = "<group>"; };
+		9A8453B91C9EF02100BDBBA4 /* LCIMLocationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMLocationManager.h; sourceTree = "<group>"; };
+		9A8453BA1C9EF02100BDBBA4 /* LCIMLocationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCIMLocationManager.m; sourceTree = "<group>"; };
+		9A8453BC1C9EF02100BDBBA4 /* LCIMChatBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMChatBar.h; sourceTree = "<group>"; };
+		9A8453BD1C9EF02100BDBBA4 /* LCIMChatBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCIMChatBar.m; sourceTree = "<group>"; };
+		9A8453BE1C9EF02100BDBBA4 /* LCIMChatFaceView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMChatFaceView.h; sourceTree = "<group>"; };
+		9A8453BF1C9EF02100BDBBA4 /* LCIMChatFaceView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCIMChatFaceView.m; sourceTree = "<group>"; };
+		9A8453C01C9EF02100BDBBA4 /* LCIMChatMoreItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMChatMoreItem.h; sourceTree = "<group>"; };
+		9A8453C11C9EF02100BDBBA4 /* LCIMChatMoreItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCIMChatMoreItem.m; sourceTree = "<group>"; };
+		9A8453C21C9EF02100BDBBA4 /* LCIMChatMoreView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMChatMoreView.h; sourceTree = "<group>"; };
+		9A8453C31C9EF02100BDBBA4 /* LCIMChatMoreView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCIMChatMoreView.m; sourceTree = "<group>"; };
+		9A8453C51C9EF02100BDBBA4 /* LCIMChatImageMessageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMChatImageMessageCell.h; sourceTree = "<group>"; };
+		9A8453C61C9EF02100BDBBA4 /* LCIMChatImageMessageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCIMChatImageMessageCell.m; sourceTree = "<group>"; };
+		9A8453C71C9EF02100BDBBA4 /* LCIMChatLocationMessageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMChatLocationMessageCell.h; sourceTree = "<group>"; };
+		9A8453C81C9EF02100BDBBA4 /* LCIMChatLocationMessageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCIMChatLocationMessageCell.m; sourceTree = "<group>"; };
+		9A8453C91C9EF02100BDBBA4 /* LCIMChatMessageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMChatMessageCell.h; sourceTree = "<group>"; };
+		9A8453CA1C9EF02100BDBBA4 /* LCIMChatMessageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCIMChatMessageCell.m; sourceTree = "<group>"; };
+		9A8453CB1C9EF02100BDBBA4 /* LCIMChatSystemMessageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMChatSystemMessageCell.h; sourceTree = "<group>"; };
+		9A8453CC1C9EF02100BDBBA4 /* LCIMChatSystemMessageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCIMChatSystemMessageCell.m; sourceTree = "<group>"; };
+		9A8453CD1C9EF02100BDBBA4 /* LCIMChatTextMessageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMChatTextMessageCell.h; sourceTree = "<group>"; };
+		9A8453CE1C9EF02100BDBBA4 /* LCIMChatTextMessageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCIMChatTextMessageCell.m; sourceTree = "<group>"; };
+		9A8453CF1C9EF02100BDBBA4 /* LCIMChatVoiceMessageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMChatVoiceMessageCell.h; sourceTree = "<group>"; };
+		9A8453D01C9EF02100BDBBA4 /* LCIMChatVoiceMessageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCIMChatVoiceMessageCell.m; sourceTree = "<group>"; };
+		9A8453D11C9EF02100BDBBA4 /* LCIMContentView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMContentView.h; sourceTree = "<group>"; };
+		9A8453D21C9EF02100BDBBA4 /* LCIMContentView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCIMContentView.m; sourceTree = "<group>"; };
+		9A8453D31C9EF02100BDBBA4 /* LCIMSendImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMSendImageView.h; sourceTree = "<group>"; };
+		9A8453D41C9EF02100BDBBA4 /* LCIMSendImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCIMSendImageView.m; sourceTree = "<group>"; };
+		9A8453D51C9EF02100BDBBA4 /* LCIMFacePageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMFacePageView.h; sourceTree = "<group>"; };
+		9A8453D61C9EF02100BDBBA4 /* LCIMFacePageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCIMFacePageView.m; sourceTree = "<group>"; };
+		9A8453D71C9EF02100BDBBA4 /* LCIMProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMProgressHUD.h; sourceTree = "<group>"; };
+		9A8453D81C9EF02100BDBBA4 /* LCIMProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCIMProgressHUD.m; sourceTree = "<group>"; };
+		9A8453D91C9EF02100BDBBA4 /* LCIMChat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMChat.h; sourceTree = "<group>"; };
+		9A8453DA1C9EF02100BDBBA4 /* LCIMChatUntiles.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMChatUntiles.h; sourceTree = "<group>"; };
+		9A8453DB1C9EF02100BDBBA4 /* LCIMChatViewModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMChatViewModel.h; sourceTree = "<group>"; };
+		9A8453DC1C9EF02100BDBBA4 /* LCIMChatViewModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCIMChatViewModel.m; sourceTree = "<group>"; };
+		9A8453FC1C9F061A00BDBBA4 /* LCIMBubbleImageFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMBubbleImageFactory.h; sourceTree = "<group>"; };
+		9A8453FD1C9F061A00BDBBA4 /* LCIMBubbleImageFactory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCIMBubbleImageFactory.m; sourceTree = "<group>"; };
+		9A8453FF1C9F0B8100BDBBA4 /* LCIMMessageVoiceFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMMessageVoiceFactory.h; sourceTree = "<group>"; };
+		9A8454001C9F0B8100BDBBA4 /* LCIMMessageVoiceFactory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCIMMessageVoiceFactory.m; sourceTree = "<group>"; };
+		9A8454021C9F122D00BDBBA4 /* lame.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = lame.framework; sourceTree = "<group>"; };
 		9AD664F01C91273900885170 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		9AD664F11C91273900885170 /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		9AD664F51C912ADE00885170 /* LCIMUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMUser.h; sourceTree = "<group>"; };
@@ -321,6 +422,16 @@
 		9AD6652A1C912ADE00885170 /* MBProgressHUD.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = MBProgressHUD.bundle; sourceTree = "<group>"; };
 		9AD6653B1C9130C400885170 /* LCIMContactManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMContactManager.h; sourceTree = "<group>"; };
 		9AD6653C1C9130C400885170 /* LCIMContactManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCIMContactManager.m; sourceTree = "<group>"; };
+		9AD83A151CA0605700A068D1 /* LCIMConversationRefreshHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMConversationRefreshHeader.h; sourceTree = "<group>"; };
+		9AD83A161CA0605700A068D1 /* LCIMConversationRefreshHeader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCIMConversationRefreshHeader.m; sourceTree = "<group>"; };
+		9AD83A191CA129E200A068D1 /* LCIMConversationListService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMConversationListService.h; sourceTree = "<group>"; };
+		9AD83A1A1CA129E200A068D1 /* LCIMConversationListService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCIMConversationListService.m; sourceTree = "<group>"; };
+		9AD83A1C1CA1407A00A068D1 /* LCIMConversatonListViewModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMConversatonListViewModel.h; sourceTree = "<group>"; };
+		9AD83A1D1CA1407A00A068D1 /* LCIMConversatonListViewModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCIMConversatonListViewModel.m; sourceTree = "<group>"; };
+		9AD83A1F1CA149AE00A068D1 /* LCIMConversatonListCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMConversatonListCell.h; sourceTree = "<group>"; };
+		9AD83A201CA149AE00A068D1 /* LCIMConversatonListCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCIMConversatonListCell.m; sourceTree = "<group>"; };
+		9AD83A221CA1649600A068D1 /* LCIMLastMessageTypeManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMLastMessageTypeManager.h; sourceTree = "<group>"; };
+		9AD83A231CA1649600A068D1 /* LCIMLastMessageTypeManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCIMLastMessageTypeManager.m; sourceTree = "<group>"; };
 		9ADA336E1C901B970041AA6C /* LCIMKit_Internal.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LCIMKit_Internal.h; sourceTree = "<group>"; };
 		9AEE61C01C607B150049335C /* LeanCloudIMKit-iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "LeanCloudIMKit-iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		ECBE0565469B5C113C407217 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
@@ -332,6 +443,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B03B4DCA304BD2FA73DD23A3 /* libPods.a in Frameworks */,
+				9A8454031C9F122D00BDBBA4 /* lame.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -712,6 +824,7 @@
 		9A6AD34E1C91CD2B00CF9EB3 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				9A8453541C9EEB4300BDBBA4 /* Emoji.bundle */,
 				9A6AD34F1C91CD2B00CF9EB3 /* BarButtonIcon.bundle */,
 				9A6AD3501C91CD2B00CF9EB3 /* ChatKeyboard.bundle */,
 				9A6AD3511C91CD2B00CF9EB3 /* Common.bundle */,
@@ -727,6 +840,7 @@
 		9A738DB91C855DB600D8A961 /* internal */ = {
 			isa = PBXGroup;
 			children = (
+				9A8453951C9EF02100BDBBA4 /* ChatBar */,
 				9A5C701A1C921816005543CC /* NSStringEmojize */,
 				9A6AD34E1C91CD2B00CF9EB3 /* Resources */,
 				9A5E4B781C917477007D987A /* MessageDisplayKit */,
@@ -736,6 +850,8 @@
 				9A738DC51C855DB600D8A961 /* LCIMUserSystemService.m */,
 				9A738DBA1C855DB600D8A961 /* LCIMConversationService.h */,
 				9A738DBB1C855DB600D8A961 /* LCIMConversationService.m */,
+				9AD83A191CA129E200A068D1 /* LCIMConversationListService.h */,
+				9AD83A1A1CA129E200A068D1 /* LCIMConversationListService.m */,
 				9A738DC01C855DB600D8A961 /* LCIMSignatureService.h */,
 				9A738DC11C855DB600D8A961 /* LCIMSignatureService.m */,
 				9A738DC21C855DB600D8A961 /* LCIMUIService.h */,
@@ -749,6 +865,8 @@
 				9A5C700F1C91FC92005543CC /* LCIMEmotionUtils.m */,
 				9A5C70111C9200AE005543CC /* LCIMSoundManager.h */,
 				9A5C70121C9200AE005543CC /* LCIMSoundManager.m */,
+				9AD83A221CA1649600A068D1 /* LCIMLastMessageTypeManager.h */,
+				9AD83A231CA1649600A068D1 /* LCIMLastMessageTypeManager.m */,
 				9A5C70141C920ED5005543CC /* AVIMConversation+LCIMAddition.h */,
 				9A5C70151C920ED5005543CC /* AVIMConversation+LCIMAddition.m */,
 				9A5C70171C92132B005543CC /* AVIMEmotionMessage.h */,
@@ -766,16 +884,156 @@
 				9A738DCD1C855DB600D8A961 /* LCIMConversationViewController.m */,
 				9A738DCA1C855DB600D8A961 /* LCIMConversationListViewController.h */,
 				9A738DCB1C855DB600D8A961 /* LCIMConversationListViewController.m */,
+				9AD83A1C1CA1407A00A068D1 /* LCIMConversatonListViewModel.h */,
+				9AD83A1D1CA1407A00A068D1 /* LCIMConversatonListViewModel.m */,
+				9AD83A1F1CA149AE00A068D1 /* LCIMConversatonListCell.h */,
+				9AD83A201CA149AE00A068D1 /* LCIMConversatonListCell.m */,
 				9A738DD11C855DB600D8A961 /* LCIMUserModelDelegate.h */,
 				9A738DD01C855DB600D8A961 /* LCIMServiceDefinition.h */,
 				9A738DC71C855DB600D8A961 /* LCIMBaseViewController.h */,
 				9A738DC81C855DB600D8A961 /* LCIMBaseViewController.m */,
 				9A5C70081C91ECA8005543CC /* LCIMBaseNavigationController.h */,
 				9A5C70091C91ECA8005543CC /* LCIMBaseNavigationController.m */,
+				9A77E10E1C9F9CAD002DE037 /* LCIMBaseConversationViewController.h */,
+				9A77E10F1C9F9CAD002DE037 /* LCIMBaseConversationViewController.m */,
 				9A738DC91C855DB600D8A961 /* LCIMConstants.h */,
 				9A6AD3611C91E22E00CF9EB3 /* IMKitHeaders.h */,
 			);
 			path = public;
+			sourceTree = "<group>";
+		};
+		9A8453951C9EF02100BDBBA4 /* ChatBar */ = {
+			isa = PBXGroup;
+			children = (
+				9AD83A151CA0605700A068D1 /* LCIMConversationRefreshHeader.h */,
+				9AD83A161CA0605700A068D1 /* LCIMConversationRefreshHeader.m */,
+				9A8453961C9EF02100BDBBA4 /* Categories */,
+				9A8453A01C9EF02100BDBBA4 /* Controllers */,
+				9A8453A71C9EF02100BDBBA4 /* Helpers */,
+				9A8453AF1C9EF02100BDBBA4 /* Vendors */,
+				9A8453BB1C9EF02100BDBBA4 /* Views */,
+				9A8453D91C9EF02100BDBBA4 /* LCIMChat.h */,
+				9A8453DA1C9EF02100BDBBA4 /* LCIMChatUntiles.h */,
+				9A8453DB1C9EF02100BDBBA4 /* LCIMChatViewModel.h */,
+				9A8453DC1C9EF02100BDBBA4 /* LCIMChatViewModel.m */,
+			);
+			path = ChatBar;
+			sourceTree = "<group>";
+		};
+		9A8453961C9EF02100BDBBA4 /* Categories */ = {
+			isa = PBXGroup;
+			children = (
+				9A8453971C9EF02100BDBBA4 /* NSString+MD5.h */,
+				9A8453981C9EF02100BDBBA4 /* NSString+MD5.m */,
+				9A8453991C9EF02100BDBBA4 /* UIImageView+LCIMWebImage.h */,
+				9A84539A1C9EF02100BDBBA4 /* UIImageView+LCIMWebImage.m */,
+				9A84539B1C9EF02100BDBBA4 /* LCIMCellRegisterController.h */,
+				9A84539C1C9EF02100BDBBA4 /* LCIMCellRegisterController.m */,
+				9A84539D1C9EF02100BDBBA4 /* LCIMCellIdentifierFactory.h */,
+				9A84539E1C9EF02100BDBBA4 /* LCIMCellIdentifierFactory.m */,
+			);
+			path = Categories;
+			sourceTree = "<group>";
+		};
+		9A8453A01C9EF02100BDBBA4 /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				9A8453A11C9EF02100BDBBA4 /* LCIMLocationController.h */,
+				9A8453A21C9EF02100BDBBA4 /* LCIMLocationController.m */,
+				9A8453A31C9EF02100BDBBA4 /* LCIMChatController.h */,
+				9A8453A41C9EF02100BDBBA4 /* LCIMChatController.m */,
+			);
+			path = Controllers;
+			sourceTree = "<group>";
+		};
+		9A8453A71C9EF02100BDBBA4 /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				9A8453A81C9EF02100BDBBA4 /* LCIMFaceManager.h */,
+				9A8453A91C9EF02100BDBBA4 /* LCIMFaceManager.m */,
+				9A8453AA1C9EF02100BDBBA4 /* LCIMAVAudioPlayer.h */,
+				9A8453AB1C9EF02100BDBBA4 /* LCIMAVAudioPlayer.m */,
+				9A8453AD1C9EF02100BDBBA4 /* LCIMMessageStateManager.h */,
+				9A8453AE1C9EF02100BDBBA4 /* LCIMMessageStateManager.m */,
+				9A8453FC1C9F061A00BDBBA4 /* LCIMBubbleImageFactory.h */,
+				9A8453FD1C9F061A00BDBBA4 /* LCIMBubbleImageFactory.m */,
+				9A8453FF1C9F0B8100BDBBA4 /* LCIMMessageVoiceFactory.h */,
+				9A8454001C9F0B8100BDBBA4 /* LCIMMessageVoiceFactory.m */,
+				9A77E1111C9FA43C002DE037 /* LCIMMessage.h */,
+				9A77E1121C9FA43C002DE037 /* LCIMMessage.m */,
+			);
+			path = Helpers;
+			sourceTree = "<group>";
+		};
+		9A8453AF1C9EF02100BDBBA4 /* Vendors */ = {
+			isa = PBXGroup;
+			children = (
+				9A8453B31C9EF02100BDBBA4 /* VoiceLib */,
+				9A8453B81C9EF02100BDBBA4 /* XMLocationManager */,
+			);
+			path = Vendors;
+			sourceTree = "<group>";
+		};
+		9A8453B31C9EF02100BDBBA4 /* VoiceLib */ = {
+			isa = PBXGroup;
+			children = (
+				9A8454021C9F122D00BDBBA4 /* lame.framework */,
+				9A8453B61C9EF02100BDBBA4 /* Mp3Recorder.h */,
+				9A8453B71C9EF02100BDBBA4 /* Mp3Recorder.m */,
+			);
+			path = VoiceLib;
+			sourceTree = "<group>";
+		};
+		9A8453B81C9EF02100BDBBA4 /* XMLocationManager */ = {
+			isa = PBXGroup;
+			children = (
+				9A8453B91C9EF02100BDBBA4 /* LCIMLocationManager.h */,
+				9A8453BA1C9EF02100BDBBA4 /* LCIMLocationManager.m */,
+			);
+			path = XMLocationManager;
+			sourceTree = "<group>";
+		};
+		9A8453BB1C9EF02100BDBBA4 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				9A8453BC1C9EF02100BDBBA4 /* LCIMChatBar.h */,
+				9A8453BD1C9EF02100BDBBA4 /* LCIMChatBar.m */,
+				9A8453BE1C9EF02100BDBBA4 /* LCIMChatFaceView.h */,
+				9A8453BF1C9EF02100BDBBA4 /* LCIMChatFaceView.m */,
+				9A8453C01C9EF02100BDBBA4 /* LCIMChatMoreItem.h */,
+				9A8453C11C9EF02100BDBBA4 /* LCIMChatMoreItem.m */,
+				9A8453C21C9EF02100BDBBA4 /* LCIMChatMoreView.h */,
+				9A8453C31C9EF02100BDBBA4 /* LCIMChatMoreView.m */,
+				9A8453C41C9EF02100BDBBA4 /* XMNChatMessageCell */,
+				9A8453D51C9EF02100BDBBA4 /* LCIMFacePageView.h */,
+				9A8453D61C9EF02100BDBBA4 /* LCIMFacePageView.m */,
+				9A8453D71C9EF02100BDBBA4 /* LCIMProgressHUD.h */,
+				9A8453D81C9EF02100BDBBA4 /* LCIMProgressHUD.m */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		9A8453C41C9EF02100BDBBA4 /* XMNChatMessageCell */ = {
+			isa = PBXGroup;
+			children = (
+				9A8453C51C9EF02100BDBBA4 /* LCIMChatImageMessageCell.h */,
+				9A8453C61C9EF02100BDBBA4 /* LCIMChatImageMessageCell.m */,
+				9A8453C71C9EF02100BDBBA4 /* LCIMChatLocationMessageCell.h */,
+				9A8453C81C9EF02100BDBBA4 /* LCIMChatLocationMessageCell.m */,
+				9A8453C91C9EF02100BDBBA4 /* LCIMChatMessageCell.h */,
+				9A8453CA1C9EF02100BDBBA4 /* LCIMChatMessageCell.m */,
+				9A8453CB1C9EF02100BDBBA4 /* LCIMChatSystemMessageCell.h */,
+				9A8453CC1C9EF02100BDBBA4 /* LCIMChatSystemMessageCell.m */,
+				9A8453CD1C9EF02100BDBBA4 /* LCIMChatTextMessageCell.h */,
+				9A8453CE1C9EF02100BDBBA4 /* LCIMChatTextMessageCell.m */,
+				9A8453CF1C9EF02100BDBBA4 /* LCIMChatVoiceMessageCell.h */,
+				9A8453D01C9EF02100BDBBA4 /* LCIMChatVoiceMessageCell.m */,
+				9A8453D11C9EF02100BDBBA4 /* LCIMContentView.h */,
+				9A8453D21C9EF02100BDBBA4 /* LCIMContentView.m */,
+				9A8453D31C9EF02100BDBBA4 /* LCIMSendImageView.h */,
+				9A8453D41C9EF02100BDBBA4 /* LCIMSendImageView.m */,
+			);
+			path = XMNChatMessageCell;
 			sourceTree = "<group>";
 		};
 		9AD664F31C912ADE00885170 /* Class */ = {
@@ -803,8 +1061,8 @@
 				9AD665091C912ADE00885170 /* Main */,
 				9AD664F81C912ADE00885170 /* ContactList */,
 				9AD665041C912ADE00885170 /* ConversationList */,
-				9AD665171C912ADE00885170 /* Other */,
 				9AD6651F1C912ADE00885170 /* Profile */,
+				9AD665171C912ADE00885170 /* Other */,
 			);
 			path = Module;
 			sourceTree = "<group>";
@@ -1142,6 +1400,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9A8453551C9EEB4300BDBBA4 /* Emoji.bundle in Resources */,
 				9A6AD35F1C91CD2B00CF9EB3 /* Placeholder.bundle in Resources */,
 				9A6AD3601C91CD2B00CF9EB3 /* VoiceMessageSource.bundle in Resources */,
 				9AD665351C912ADE00885170 /* LaunchScreen.storyboard in Resources */,
@@ -1218,31 +1477,44 @@
 				9A5E4C6D1C917479007D987A /* LCIMBaseTableViewController.m in Sources */,
 				9AD664F21C91273900885170 /* AppDelegate.m in Sources */,
 				9A5E4C831C917479007D987A /* XHMessage.m in Sources */,
+				9A8453EB1C9EF02100BDBBA4 /* Mp3Recorder.m in Sources */,
 				9AD6652B1C912ADE00885170 /* LCIMUser.m in Sources */,
 				9A5E4CB11C917479007D987A /* XHRefreshView.m in Sources */,
 				9A738DD21C855DB600D8A961 /* LCIMConversationService.m in Sources */,
 				9A5E4CA31C917479007D987A /* XHMessageStatusView.m in Sources */,
 				9A738DD61C855DB600D8A961 /* LCIMUIService.m in Sources */,
 				9A5E4CAB1C917479007D987A /* XHEmotionManagerView.m in Sources */,
+				9A8453F91C9EF02100BDBBA4 /* LCIMFacePageView.m in Sources */,
 				9A5E4C681C917479007D987A /* XHMessageBubbleHelper.m in Sources */,
 				9A5E4C5B1C917478007D987A /* UIImage+Alpha.m in Sources */,
+				9A8453EC1C9EF02100BDBBA4 /* LCIMLocationManager.m in Sources */,
 				9A738DD41C855DB600D8A961 /* LCIMSettingService.m in Sources */,
+				9A8453FE1C9F061A00BDBBA4 /* LCIMBubbleImageFactory.m in Sources */,
 				9A5E4C711C917479007D987A /* XHDisplayLocationViewController.m in Sources */,
 				9A5E4C581C917478007D987A /* NSString+XHDiskSizeTransfrom.m in Sources */,
 				9A5E4CA21C917479007D987A /* XHMessageDisplayTextView.m in Sources */,
+				9A8453FA1C9EF02100BDBBA4 /* LCIMProgressHUD.m in Sources */,
 				9A5E4C811C917479007D987A /* XHEmotion.m in Sources */,
 				9A738DD51C855DB600D8A961 /* LCIMSignatureService.m in Sources */,
 				9A5E4C741C917479007D987A /* XHMessageTableViewController.m in Sources */,
 				9A5E4C821C917479007D987A /* XHEmotionManager.m in Sources */,
 				9A5C70131C9200AE005543CC /* LCIMSoundManager.m in Sources */,
 				9A5E4C7B1C917479007D987A /* XHMessageVideoConverPhotoFactory.m in Sources */,
+				9A8453F01C9EF02100BDBBA4 /* LCIMChatMoreView.m in Sources */,
+				9A8453DD1C9EF02100BDBBA4 /* NSString+MD5.m in Sources */,
 				9A5E4C751C917479007D987A /* XHCacheManager.m in Sources */,
+				9AD83A1E1CA1407A00A068D1 /* LCIMConversatonListViewModel.m in Sources */,
+				9A8453EE1C9EF02100BDBBA4 /* LCIMChatFaceView.m in Sources */,
+				9A8453E01C9EF02100BDBBA4 /* LCIMCellIdentifierFactory.m in Sources */,
 				9A6AD1F81C919C3800CF9EB3 /* XHImageViewer.m in Sources */,
 				9A5E4C6E1C917479007D987A /* XHPullRefreshTableViewController.m in Sources */,
+				9AD83A1B1CA129E200A068D1 /* LCIMConversationListService.m in Sources */,
 				9A5E4CAC1C917479007D987A /* XHEmotionSectionBar.m in Sources */,
 				9A5E4CA81C917479007D987A /* XHVoiceRecordHUD.m in Sources */,
 				9A738DD31C855DB600D8A961 /* LCIMSessionService.m in Sources */,
 				9A5C700D1C91FB93005543CC /* LCIMStatusView.m in Sources */,
+				9A8453F61C9EF02100BDBBA4 /* LCIMChatVoiceMessageCell.m in Sources */,
+				9A77E1101C9F9CAD002DE037 /* LCIMBaseConversationViewController.m in Sources */,
 				9A5E4C761C917479007D987A /* XHFileAttribute.m in Sources */,
 				9A5E4C6A1C917479007D987A /* XHVoiceCommonHelper.m in Sources */,
 				9A5E4C611C917478007D987A /* UIScrollView+XHkeyboardControl.m in Sources */,
@@ -1253,19 +1525,27 @@
 				9A5E4C7E1C917479007D987A /* XHAlbum.m in Sources */,
 				9A5E4CAE1C917479007D987A /* XHLoadMoreView.m in Sources */,
 				9A5E4C5E1C917478007D987A /* UIImage+Utility.m in Sources */,
+				9AD83A241CA1649600A068D1 /* LCIMLastMessageTypeManager.m in Sources */,
 				9A5E4C641C917478007D987A /* XHAudioPlayerHelper.m in Sources */,
 				9AD665311C912ADE00885170 /* LCIMKitExample.m in Sources */,
 				9A5C700A1C91ECA8005543CC /* LCIMBaseNavigationController.m in Sources */,
 				9AD6652C1C912ADE00885170 /* LCIMContactListController.m in Sources */,
 				9AD665321C912ADE00885170 /* LCIMUtil.m in Sources */,
 				9A5E4C841C917479007D987A /* XHShareMenuItem.m in Sources */,
+				9A8453E61C9EF02100BDBBA4 /* LCIMFaceManager.m in Sources */,
+				9A8453ED1C9EF02100BDBBA4 /* LCIMChatBar.m in Sources */,
 				9A5E4C9F1C917479007D987A /* XHBaseTableViewCell.m in Sources */,
 				9A5C70191C92132B005543CC /* AVIMEmotionMessage.m in Sources */,
 				9AD665391C912ADE00885170 /* MBProgressHUD+LCIMAddition.m in Sources */,
 				9A5E4C5D1C917478007D987A /* UIImage+RoundedCorner.m in Sources */,
+				9A77E1131C9FA43C002DE037 /* LCIMMessage.m in Sources */,
+				9A8453F11C9EF02100BDBBA4 /* LCIMChatImageMessageCell.m in Sources */,
 				9A5E4C691C917479007D987A /* XHPhotographyHelper.m in Sources */,
+				9A8453F21C9EF02100BDBBA4 /* LCIMChatLocationMessageCell.m in Sources */,
 				9A5E4C7F1C917479007D987A /* XHAnnotation.m in Sources */,
+				9A8453F31C9EF02100BDBBA4 /* LCIMChatMessageCell.m in Sources */,
 				9A5E4CAF1C917479007D987A /* XHRefreshCircleView.m in Sources */,
+				9A8453F41C9EF02100BDBBA4 /* LCIMChatSystemMessageCell.m in Sources */,
 				9A5C70161C920ED5005543CC /* AVIMConversation+LCIMAddition.m in Sources */,
 				9A738DD71C855DB600D8A961 /* LCIMUserSystemService.m in Sources */,
 				9A738DDB1C855DB600D8A961 /* LCIMKit.m in Sources */,
@@ -1277,23 +1557,35 @@
 				9A5E4CA01C917479007D987A /* XHBubblePhotoImageView.m in Sources */,
 				9A5E4C5A1C917478007D987A /* UIButton+XHButtonTitlePosition.m in Sources */,
 				9A5E4C651C917478007D987A /* XHCaptureHelper.m in Sources */,
+				9A8453EF1C9EF02100BDBBA4 /* LCIMChatMoreItem.m in Sources */,
 				9A5E4C571C917478007D987A /* NSString+MessageInputView.m in Sources */,
 				9A5E4C731C917479007D987A /* XHDisplayTextViewController.m in Sources */,
 				9A5E4C601C917478007D987A /* UIImage+XHRounded.m in Sources */,
 				9A5E4C9E1C917479007D987A /* XHBaseCollectionViewCell.m in Sources */,
 				9A5E4C7D1C917479007D987A /* XHVideoOutputSampleBufferFactory.m in Sources */,
+				9A8453E81C9EF02100BDBBA4 /* LCIMMessageStateManager.m in Sources */,
 				9A5E4CAD1C917479007D987A /* XHShareMenuView.m in Sources */,
 				9AD6653D1C9130C400885170 /* LCIMContactManager.m in Sources */,
 				9AD6652E1C912ADE00885170 /* LCIMContactCell.m in Sources */,
+				9A8453DE1C9EF02100BDBBA4 /* UIImageView+LCIMWebImage.m in Sources */,
+				9A8454011C9F0B8100BDBBA4 /* LCIMMessageVoiceFactory.m in Sources */,
 				9A738DD81C855DB600D8A961 /* LCIMBaseViewController.m in Sources */,
 				9A5E4CA71C917479007D987A /* XHMessageTextView.m in Sources */,
 				9AD665371C912ADE00885170 /* main.m in Sources */,
+				9A8453DF1C9EF02100BDBBA4 /* LCIMCellRegisterController.m in Sources */,
 				9A5E4C621C917478007D987A /* UIView+XHBadgeView.m in Sources */,
 				9A5E4CA61C917479007D987A /* XHMessageInputView.m in Sources */,
+				9A8453FB1C9EF02100BDBBA4 /* LCIMChatViewModel.m in Sources */,
 				9A5E4CA11C917479007D987A /* XHMessageBubbleView.m in Sources */,
+				9AD83A211CA149AE00A068D1 /* LCIMConversatonListCell.m in Sources */,
+				9A8453E31C9EF02100BDBBA4 /* LCIMChatController.m in Sources */,
+				9A8453F51C9EF02100BDBBA4 /* LCIMChatTextMessageCell.m in Sources */,
 				9A5E4CA51C917479007D987A /* XHMessageTableViewCell.m in Sources */,
+				9A8453F71C9EF02100BDBBA4 /* LCIMContentView.m in Sources */,
+				9A8453E71C9EF02100BDBBA4 /* LCIMAVAudioPlayer.m in Sources */,
 				9A5E4C7A1C917479007D987A /* XHMessageBubbleFactory.m in Sources */,
 				9A5E4CA41C917479007D987A /* XHMessageTableView.m in Sources */,
+				9A8453F81C9EF02100BDBBA4 /* LCIMSendImageView.m in Sources */,
 				9A5E4C6B1C917479007D987A /* XHVoiceRecordHelper.m in Sources */,
 				9A5E4C721C917479007D987A /* XHDisplayMediaViewController.m in Sources */,
 				9A5E4C701C917479007D987A /* XHDisplayEmotionViewController.m in Sources */,
@@ -1301,8 +1593,10 @@
 				9A5E4C671C917479007D987A /* XHLocationHelper.m in Sources */,
 				9A5C701E1C921816005543CC /* NSString+Emojize.m in Sources */,
 				9A5C70101C91FC92005543CC /* LCIMEmotionUtils.m in Sources */,
+				9AD83A171CA0605700A068D1 /* LCIMConversationRefreshHeader.m in Sources */,
 				9A5E4CAA1C917479007D987A /* XHEmotionCollectionViewFlowLayout.m in Sources */,
 				9AD665381C912ADE00885170 /* LCIMProfileViewController.m in Sources */,
+				9A8453E21C9EF02100BDBBA4 /* LCIMLocationController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1416,9 +1710,17 @@
 			baseConfigurationReference = ECBE0565469B5C113C407217 /* Pods.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/LeanCloudIMKit-iOS/internal/ChatBar/Vendors/VoiceLib",
+				);
 				INFOPLIST_FILE = "$(SRCROOT)/Example/Class/Module/Other/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/LeanCloudIMKit-iOS/internal/ChatBar/Vendors/VoiceLib",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = "ElonChan.LeanCloudIMKit-iOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -1429,9 +1731,17 @@
 			baseConfigurationReference = 19D15C89E9A800BC9D6889DF /* Pods.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/LeanCloudIMKit-iOS/internal/ChatBar/Vendors/VoiceLib",
+				);
 				INFOPLIST_FILE = "$(SRCROOT)/Example/Class/Module/Other/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/LeanCloudIMKit-iOS/internal/ChatBar/Vendors/VoiceLib",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = "ElonChan.LeanCloudIMKit-iOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};

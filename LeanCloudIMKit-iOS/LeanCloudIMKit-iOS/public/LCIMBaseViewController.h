@@ -44,17 +44,18 @@ typedef void(^LCIMViewDidReceiveMemoryWarningBlock)(void);
 
 typedef void(^LCIMBarButtonItemActionBlock)(void);
 
-typedef NS_ENUM(NSInteger, LCIMBarbuttonItemStyle) {
-    LCIMBarbuttonItemStyleSetting = 0,
-    LCIMBarbuttonItemStyleMore,
-    LCIMBarbuttonItemStyleAdd,
-    LCIMBarbuttonItemStyleAddFriends,
-    LCIMBarbuttonItemStyleShare,
-    LCIMBarbuttonItemStyleSingleProfile,
-    LCIMBarbuttonItemStyleGroupProfile,
+typedef NS_ENUM(NSInteger, LCIMBarButtonItemStyle) {
+    LCIMBarButtonItemStyleSetting = 0,
+    LCIMBarButtonItemStyleMore,
+    LCIMBarButtonItemStyleAdd,
+    LCIMBarButtonItemStyleAddFriends,
+    LCIMBarButtonItemStyleShare,
+    LCIMBarButtonItemStyleSingleProfile,
+    LCIMBarButtonItemStyleGroupProfile,
 };
 
 @interface LCIMBaseViewController : UIViewController <LCIMBaseViewController>
+
 /**
  *  统一设置背景图片
  *
@@ -62,6 +63,12 @@ typedef NS_ENUM(NSInteger, LCIMBarbuttonItemStyle) {
  */
 - (void)setupBackgroundImage:(UIImage *)backgroundImage;
 
-- (void)configureBarbuttonItemStyle:(LCIMBarbuttonItemStyle)style action:(LCIMBarButtonItemActionBlock)action;
+- (void)configureBarButtonItemStyle:(LCIMBarButtonItemStyle)style action:(LCIMBarButtonItemActionBlock)action;
+
+- (void)alert:(NSString *)message;
+
+- (BOOL)alertAVIMError:(NSError *)error;
+
+- (BOOL)filterAVIMError:(NSError *)error;
 
 @end

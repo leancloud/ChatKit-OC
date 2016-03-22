@@ -92,6 +92,7 @@ static CGFloat const kVoiceMargin = 20.0f;
             break;
         }
         case XHBubbleMessageMediaTypePhoto: {
+            //FIXME:why not show bubble
             bubbleSize = [XHMessageBubbleView neededSizeForPhoto:message.photo];
             break;
         }
@@ -111,8 +112,6 @@ static CGFloat const kVoiceMargin = 20.0f;
         case XHBubbleMessageMediaTypeLocalPosition:
             // 固定大小，必须的
             bubbleSize = CGSizeMake(119, 119);
-            break;
-        default:
             break;
     }
     return bubbleSize;
@@ -208,7 +207,8 @@ static CGFloat const kVoiceMargin = 20.0f;
         case XHBubbleMessageMediaTypeLocalPosition: {
             // 只要是图片和视频消息，必须把尖嘴显示控件显示出来
             _bubblePhotoImageView.hidden = NO;
-            
+            //FIXME:
+            _bubblePhotoImageView.backgroundColor = [UIColor redColor];
             _videoPlayImageView.hidden = (currentType != XHBubbleMessageMediaTypeVideo);
             
             _geolocationsLabel.hidden = (currentType != XHBubbleMessageMediaTypeLocalPosition);
@@ -220,8 +220,6 @@ static CGFloat const kVoiceMargin = 20.0f;
             _emotionImageView.hidden = YES;
             break;
         }
-        default:
-            break;
     }
 }
 
@@ -250,8 +248,6 @@ static CGFloat const kVoiceMargin = 20.0f;
             [_bubblePhotoImageView configureMessagePhoto:message.localPositionPhoto thumbnailUrl:nil originPhotoUrl:nil onBubbleMessageType:self.message.bubbleMessageType];
             
             _geolocationsLabel.text = message.geolocations;
-            break;
-        default:
             break;
     }
     
@@ -415,7 +411,8 @@ static CGFloat const kVoiceMargin = 20.0f;
         case XHBubbleMessageMediaTypeLocalPosition: {
             CGRect photoImageViewFrame = CGRectMake(bubbleFrame.origin.x - 2, 0, bubbleFrame.size.width, bubbleFrame.size.height);
             self.bubblePhotoImageView.frame = photoImageViewFrame;
-            
+            //FIXME:???
+            self.bubblePhotoImageView.backgroundColor = [UIColor blueColor];
             self.videoPlayImageView.center = CGPointMake(CGRectGetWidth(photoImageViewFrame) / 2.0, CGRectGetHeight(photoImageViewFrame) / 2.0);
             
             CGRect geolocationsLabelFrame = CGRectMake(11, CGRectGetHeight(photoImageViewFrame) - 47, CGRectGetWidth(photoImageViewFrame) - 20, 40);

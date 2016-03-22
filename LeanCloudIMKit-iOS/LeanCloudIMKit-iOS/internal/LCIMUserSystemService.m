@@ -62,11 +62,20 @@ NSString *const LCIMUserSystemServiceErrorDomain = @"LCIMUserSystemServiceErrorD
     
     _fetchProfilesBlock(userIds, ^(NSArray<id<LCIMUserModelDelegate>> *users, NSError *error) {
         blockUsers = users;
+        for (id<LCIMUserModelDelegate> user in users) {
+            self.cachedUsers[user.userId] = user;
+        }
     });
+    
+    
+
     return blockUsers;
 }
 
 - (void)getProfilesInBackgroundForUserIds:(NSArray<NSString *> *)userIds callback:(LCIMUserResultsCallBack)callback {
+    if (userIds.count == 0) {
+        return;
+    }
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
         if (!_fetchProfilesBlock) {
             // This enforces implementing `-setFetchProfilesBlock:`.
@@ -76,7 +85,6 @@ NSString *const LCIMUserSystemServiceErrorDomain = @"LCIMUserSystemServiceErrorD
                                          userInfo:nil];
             return;
         }
-        
         
         _fetchProfilesBlock(userIds, ^(NSArray<id<LCIMUserModelDelegate>> *users, NSError *error) {
             if (!error) {
@@ -101,6 +109,10 @@ NSString *const LCIMUserSystemServiceErrorDomain = @"LCIMUserSystemServiceErrorD
 }
 
 - (id<LCIMUserModelDelegate>)getProfileForUserId:(NSString *)userId error:(NSError * __autoreleasing *)theError {
+    id<LCIMUserModelDelegate> user = [self getCachedProfileIfExists:userId error:nil];
+    if (user) {
+        return user;
+    }
     NSArray *users = [self getProfilesForUserIds:@[userId] error:theError];
     if (users.count > 0) {
         return users[0];
@@ -153,8 +165,18 @@ NSString *const LCIMUserSystemServiceErrorDomain = @"LCIMUserSystemServiceErrorD
     [self.cachedUserNames removeObjectForKey:peerId];
 }
 
+- (void)removeAllCachedProfiles {
+    self.cachedUserAvators = nil;
+    self.cachedUserNames = nil;
+    self.cachedUsers = nil;
+}
 - (id<LCIMUserModelDelegate>)fetchCurrentUser {
     NSError *error = nil;
+    id<LCIMUserModelDelegate> user = [[LCIMUserSystemService sharedInstance] getCachedProfileIfExists:[LCIMSessionService sharedInstance].clientId error:&error];
+    if (!error) {
+        return user;
+    }
+    error = nil;
     id<LCIMUserModelDelegate> currentUser = [[LCIMUserSystemService sharedInstance] getProfileForUserId:[LCIMSessionService sharedInstance].clientId error:&error];
     if (!error) {
         return currentUser;
@@ -164,6 +186,13 @@ NSString *const LCIMUserSystemServiceErrorDomain = @"LCIMUserSystemServiceErrorD
 }
 
 - (void)fetchCurrentUserInBackground:(LCIMUserResultCallBack)callback {
+    NSError *error = nil;
+    id<LCIMUserModelDelegate> user = [[LCIMUserSystemService sharedInstance] getCachedProfileIfExists:[LCIMSessionService sharedInstance].clientId error:&error];
+    if (!error) {
+        !callback ?: callback(user, nil);
+        return;
+    }
+    
     [[LCIMUserSystemService sharedInstance] getProfileInBackgroundForUserId:[LCIMSessionService sharedInstance].clientId callback:^(id<LCIMUserModelDelegate> user, NSError *error) {
         if (!error) {
             !callback ?: callback(user, nil);
@@ -218,7 +247,7 @@ NSString *const LCIMUserSystemServiceErrorDomain = @"LCIMUserSystemServiceErrorD
 
 - (void)cacheUsers:(NSArray<id<LCIMUserModelDelegate>> *)users {
     for (id<LCIMUserModelDelegate> user in users) {
-        self.cachedUserAvators[user.userId] = user;
+        self.cachedUsers[user.userId] = user;
     }
 }
 
