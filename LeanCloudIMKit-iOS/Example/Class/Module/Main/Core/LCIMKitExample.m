@@ -182,6 +182,10 @@ static NSMutableDictionary *_sharedInstances = nil;
 //            !callback ?: callback([users copy], nil);
 //        }];
     }];
+    
+    [[LCIMKit sharedInstance] setDidSelectItemBlock:^(AVIMConversation *conversation) {
+        [self exampleOpenConversationViewControllerWithConversaion:conversation fromNavigationController:nil];
+    }];
 }
 
 #pragma -
@@ -190,9 +194,8 @@ static NSMutableDictionary *_sharedInstances = nil;
 /**
  *  打开单聊页面
  */
-- (void)exampleOpenConversationViewControllerWithPeerId:(NSString *)peerId fromNavigationController:(UINavigationController *)navigationController {
++ (void)exampleOpenConversationViewControllerWithPeerId:(NSString *)peerId fromNavigationController:(UINavigationController *)navigationController {
     //TODO:
-    __weak __typeof(self) weakSelf = self;
 //    [[LCIMConversationService sharedInstance] fecthConversationWithPeerId:peerId callback:^(AVIMConversation *conversation, NSError *error) {
 //        [weakSelf exampleOpenConversationViewControllerWithConversaion:conversation fromNavigationController:aNavigationController];
 //    }];
@@ -212,8 +215,17 @@ static NSMutableDictionary *_sharedInstances = nil;
     //    [self exampleOpenConversationViewControllerWithConversation:conversation fromNavigationController:aNavigationController];
 }
 
-- (void)exampleOpenConversationViewControllerWithConversaion:(AVIMConversation *)conversation fromNavigationController:(UINavigationController *)aNavigationController {
++ (void)exampleOpenConversationViewControllerWithConversaion:(AVIMConversation *)conversation fromNavigationController:(UINavigationController *)aNavigationController {
     //TODO:
+    LCIMChatController *chatC =[[LCIMChatController alloc] initWithConversation:conversation];
+    //    [self.navigationController pushViewController:chatC animated:YES];
+    chatC.hidesBottomBarWhenPushed = NO;
+    
+    id<UIApplicationDelegate> delegate = ((id<UIApplicationDelegate>)[[UIApplication sharedApplication] delegate]);
+    UIWindow *window = delegate.window;
+    UITabBarController *tabBarController = (UITabBarController *)window.rootViewController;
+    UINavigationController *navigationController_ = tabBarController.selectedViewController;
+    [navigationController_ pushViewController:chatC animated:YES];
     
 }
 

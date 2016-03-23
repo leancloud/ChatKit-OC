@@ -14,7 +14,6 @@
 #import "LCIMChatFaceView.h"
 #import "LCIMProgressHUD.h"
 #import "Mp3Recorder.h"
-
 #import "Masonry.h"
 
 @interface LCIMChatBar () <UITextViewDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate, Mp3RecorderDelegate,LCIMChatMoreViewDelegate, LCIMChatMoreViewDataSource, LCIMChatFaceViewDelegate, LCIMLocationControllerDelegate>

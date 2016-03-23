@@ -73,7 +73,6 @@ typedef void (^LCIMSendMessageSuccessFailedBlock)(NSString *messageUUID, NSError
         return nil;
     }
     _conversationId = conversationId;
-    _peerId = nil;
     return self;
 }
 
@@ -83,7 +82,15 @@ typedef void (^LCIMSendMessageSuccessFailedBlock)(NSString *messageUUID, NSError
         return nil;
     }
     _peerId = peerId;
-    _conversationId = nil;
+    return self;
+}
+
+- (instancetype)initWithConversation:(AVIMConversation *)conversation {
+    self = [super init];
+    if (!self) {
+        return nil;
+    }
+    _conversation = conversation;
     return self;
 }
 
@@ -198,6 +205,7 @@ typedef void (^LCIMSendMessageSuccessFailedBlock)(NSString *messageUUID, NSError
 
 - (void)refreshConversation:(AVIMConversation *)conversation {
     _conversation = conversation;
+    _conversationId = conversation.conversationId;
     self.title = conversation.lcim_title;
     [LCIMConversationService sharedInstance].currentConversation = conversation;;
     [self loadMessagesWhenInit];

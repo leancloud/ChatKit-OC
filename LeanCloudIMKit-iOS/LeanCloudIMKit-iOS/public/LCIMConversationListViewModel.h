@@ -1,5 +1,5 @@
 //
-//  LCIMConversatonListViewModel.h
+//  LCIMConversationListViewModel.h
 //  LeanCloudIMKit-iOS
 //
 //  Created by 陈宜龙 on 16/3/22.
@@ -11,7 +11,7 @@
 @class LCIMConversationListViewController;
 @class AVIMConversation;
 
-@interface LCIMConversatonListViewModel : NSObject <UITableViewDelegate, UITableViewDataSource>
+@interface LCIMConversationListViewModel : NSObject <UITableViewDelegate, UITableViewDataSource>
 
 - (instancetype)initWithConversationListViewController:(LCIMConversationListViewController *)conversationListViewController;
 

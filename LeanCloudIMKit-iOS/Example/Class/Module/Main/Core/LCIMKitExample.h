@@ -112,7 +112,7 @@
 /**
  *  打开单聊页面
  */
-- (void)exampleOpenConversationViewControllerWithPeerId:(NSString *)peerId fromNavigationController:(UINavigationController *)aNavigationController;
++ (void)exampleOpenConversationViewControllerWithPeerId:(NSString *)peerId fromNavigationController:(UINavigationController *)aNavigationController;
 
 /**
  *  打开群聊页面

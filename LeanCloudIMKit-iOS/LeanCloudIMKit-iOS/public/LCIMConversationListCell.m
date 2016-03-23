@@ -1,12 +1,12 @@
 //
-//  LCIMConversatonListCell.m
+//  LCIMConversationListCell.m
 //  LeanCloudIMKit-iOS
 //
 //  Created by 陈宜龙 on 16/3/22.
 //  Copyright © 2016年 EloncChan. All rights reserved.
 //
 
-#import "LCIMConversatonListCell.h"
+#import "LCIMConversationListCell.h"
 #import "JSBadgeView.h"
 
 static CGFloat LCIMImageSize = 45;
@@ -19,26 +19,24 @@ static CGFloat LCIMNameLabelHeight;
 static CGFloat LCIMMessageLabelHeight;
 static CGFloat LCIMLittleBadgeSize = 10;
 
-@implementation LCIMConversatonListCell
+CGFloat const LCIMConversationListCellDefaultHeight = 61; //LCIMImageSize + LCIMVerticalSpacing * 2;
+
+@implementation LCIMConversationListCell
 
 + (instancetype)dequeueOrCreateCellByTableView :(UITableView *)tableView {
-    LCIMConversatonListCell *cell = [tableView dequeueReusableCellWithIdentifier:[LCIMConversatonListCell identifier]];
+    LCIMConversationListCell *cell = [tableView dequeueReusableCellWithIdentifier:[LCIMConversationListCell identifier]];
     if (cell == nil) {
-        cell = [[LCIMConversatonListCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:[[self class] identifier]];
+        cell = [[LCIMConversationListCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:[[self class] identifier]];
     }
     return cell;
 }
 
 + (void)registerCellToTableView:(UITableView *)tableView {
-    [tableView registerClass:[LCIMConversatonListCell class] forCellReuseIdentifier:[[self class] identifier]];
+    [tableView registerClass:[LCIMConversationListCell class] forCellReuseIdentifier:[[self class] identifier]];
 }
 
 + (NSString *)identifier {
-    return NSStringFromClass([LCIMConversatonListCell class]);
-}
-
-+ (CGFloat)heightOfCell {
-    return LCIMImageSize + LCIMVerticalSpacing * 2;
+    return NSStringFromClass([LCIMConversationListCell class]);
 }
 
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {

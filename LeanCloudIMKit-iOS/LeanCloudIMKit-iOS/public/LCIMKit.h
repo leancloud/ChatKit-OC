@@ -24,7 +24,7 @@
  
  */
 
-@interface LCIMKit : NSObject <LCIMSessionService, LCIMUserSystemService, LCIMSignatureService, LCIMSettingService, LCIMUIService, LCIMConversationService>
+@interface LCIMKit : NSObject <LCIMSessionService, LCIMUserSystemService, LCIMSignatureService, LCIMSettingService, LCIMUIService, LCIMConversationService, LCIMConversationsListService>
 
 /*!
  *  appId

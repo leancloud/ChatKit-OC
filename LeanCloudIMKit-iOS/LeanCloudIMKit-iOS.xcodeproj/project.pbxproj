@@ -144,8 +144,8 @@
 		9AD6653D1C9130C400885170 /* LCIMContactManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AD6653C1C9130C400885170 /* LCIMContactManager.m */; };
 		9AD83A171CA0605700A068D1 /* LCIMConversationRefreshHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AD83A161CA0605700A068D1 /* LCIMConversationRefreshHeader.m */; };
 		9AD83A1B1CA129E200A068D1 /* LCIMConversationListService.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AD83A1A1CA129E200A068D1 /* LCIMConversationListService.m */; };
-		9AD83A1E1CA1407A00A068D1 /* LCIMConversatonListViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AD83A1D1CA1407A00A068D1 /* LCIMConversatonListViewModel.m */; };
-		9AD83A211CA149AE00A068D1 /* LCIMConversatonListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AD83A201CA149AE00A068D1 /* LCIMConversatonListCell.m */; };
+		9AD83A1E1CA1407A00A068D1 /* LCIMConversationListViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AD83A1D1CA1407A00A068D1 /* LCIMConversationListViewModel.m */; };
+		9AD83A211CA149AE00A068D1 /* LCIMConversationListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AD83A201CA149AE00A068D1 /* LCIMConversationListCell.m */; };
 		9AD83A241CA1649600A068D1 /* LCIMLastMessageTypeManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AD83A231CA1649600A068D1 /* LCIMLastMessageTypeManager.m */; };
 		B03B4DCA304BD2FA73DD23A3 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F0ADEBDA5E2071F72D14147 /* libPods.a */; };
 /* End PBXBuildFile section */
@@ -426,10 +426,10 @@
 		9AD83A161CA0605700A068D1 /* LCIMConversationRefreshHeader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCIMConversationRefreshHeader.m; sourceTree = "<group>"; };
 		9AD83A191CA129E200A068D1 /* LCIMConversationListService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMConversationListService.h; sourceTree = "<group>"; };
 		9AD83A1A1CA129E200A068D1 /* LCIMConversationListService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCIMConversationListService.m; sourceTree = "<group>"; };
-		9AD83A1C1CA1407A00A068D1 /* LCIMConversatonListViewModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMConversatonListViewModel.h; sourceTree = "<group>"; };
-		9AD83A1D1CA1407A00A068D1 /* LCIMConversatonListViewModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCIMConversatonListViewModel.m; sourceTree = "<group>"; };
-		9AD83A1F1CA149AE00A068D1 /* LCIMConversatonListCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMConversatonListCell.h; sourceTree = "<group>"; };
-		9AD83A201CA149AE00A068D1 /* LCIMConversatonListCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCIMConversatonListCell.m; sourceTree = "<group>"; };
+		9AD83A1C1CA1407A00A068D1 /* LCIMConversationListViewModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMConversationListViewModel.h; sourceTree = "<group>"; };
+		9AD83A1D1CA1407A00A068D1 /* LCIMConversationListViewModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCIMConversationListViewModel.m; sourceTree = "<group>"; };
+		9AD83A1F1CA149AE00A068D1 /* LCIMConversationListCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMConversationListCell.h; sourceTree = "<group>"; };
+		9AD83A201CA149AE00A068D1 /* LCIMConversationListCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCIMConversationListCell.m; sourceTree = "<group>"; };
 		9AD83A221CA1649600A068D1 /* LCIMLastMessageTypeManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMLastMessageTypeManager.h; sourceTree = "<group>"; };
 		9AD83A231CA1649600A068D1 /* LCIMLastMessageTypeManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCIMLastMessageTypeManager.m; sourceTree = "<group>"; };
 		9ADA336E1C901B970041AA6C /* LCIMKit_Internal.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LCIMKit_Internal.h; sourceTree = "<group>"; };
@@ -884,10 +884,10 @@
 				9A738DCD1C855DB600D8A961 /* LCIMConversationViewController.m */,
 				9A738DCA1C855DB600D8A961 /* LCIMConversationListViewController.h */,
 				9A738DCB1C855DB600D8A961 /* LCIMConversationListViewController.m */,
-				9AD83A1C1CA1407A00A068D1 /* LCIMConversatonListViewModel.h */,
-				9AD83A1D1CA1407A00A068D1 /* LCIMConversatonListViewModel.m */,
-				9AD83A1F1CA149AE00A068D1 /* LCIMConversatonListCell.h */,
-				9AD83A201CA149AE00A068D1 /* LCIMConversatonListCell.m */,
+				9AD83A1C1CA1407A00A068D1 /* LCIMConversationListViewModel.h */,
+				9AD83A1D1CA1407A00A068D1 /* LCIMConversationListViewModel.m */,
+				9AD83A1F1CA149AE00A068D1 /* LCIMConversationListCell.h */,
+				9AD83A201CA149AE00A068D1 /* LCIMConversationListCell.m */,
 				9A738DD11C855DB600D8A961 /* LCIMUserModelDelegate.h */,
 				9A738DD01C855DB600D8A961 /* LCIMServiceDefinition.h */,
 				9A738DC71C855DB600D8A961 /* LCIMBaseViewController.h */,
@@ -1503,7 +1503,7 @@
 				9A8453F01C9EF02100BDBBA4 /* LCIMChatMoreView.m in Sources */,
 				9A8453DD1C9EF02100BDBBA4 /* NSString+MD5.m in Sources */,
 				9A5E4C751C917479007D987A /* XHCacheManager.m in Sources */,
-				9AD83A1E1CA1407A00A068D1 /* LCIMConversatonListViewModel.m in Sources */,
+				9AD83A1E1CA1407A00A068D1 /* LCIMConversationListViewModel.m in Sources */,
 				9A8453EE1C9EF02100BDBBA4 /* LCIMChatFaceView.m in Sources */,
 				9A8453E01C9EF02100BDBBA4 /* LCIMCellIdentifierFactory.m in Sources */,
 				9A6AD1F81C919C3800CF9EB3 /* XHImageViewer.m in Sources */,
@@ -1577,7 +1577,7 @@
 				9A5E4CA61C917479007D987A /* XHMessageInputView.m in Sources */,
 				9A8453FB1C9EF02100BDBBA4 /* LCIMChatViewModel.m in Sources */,
 				9A5E4CA11C917479007D987A /* XHMessageBubbleView.m in Sources */,
-				9AD83A211CA149AE00A068D1 /* LCIMConversatonListCell.m in Sources */,
+				9AD83A211CA149AE00A068D1 /* LCIMConversationListCell.m in Sources */,
 				9A8453E31C9EF02100BDBBA4 /* LCIMChatController.m in Sources */,
 				9A8453F51C9EF02100BDBBA4 /* LCIMChatTextMessageCell.m in Sources */,
 				9A5E4CA51C917479007D987A /* XHMessageTableViewCell.m in Sources */,

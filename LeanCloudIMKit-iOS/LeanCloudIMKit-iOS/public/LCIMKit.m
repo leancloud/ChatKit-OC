@@ -123,6 +123,10 @@ static NSMutableDictionary *_sharedInstances = nil;
     return [LCIMConversationService sharedInstance];
 }
 
+- (LCIMConversationListService *)conversationListService {
+    return [LCIMConversationListService sharedInstance];
+}
+
 ///---------------------------------------------------------------------
 ///---------------------LCIMSessionService------------------------------
 ///---------------------------------------------------------------------
@@ -242,6 +246,22 @@ static NSMutableDictionary *_sharedInstances = nil;
 
 - (LCIMConversationListViewController *)createConversationListViewController {
     return [[LCIMConversationService sharedInstance] createConversationListViewController];
+}
+
+///---------------------------------------------------------------------
+///---------------------LCIMConversationsListService--------------------
+///---------------------------------------------------------------------
+
+- (void)setDidSelectItemBlock:(LCIMConversationsListDidSelectItemBlock)didSelectItemBlock {
+    [[[LCIMKit sharedInstance] conversationListService] setDidSelectItemBlock:didSelectItemBlock];
+}
+
+- (void)setDidDeleteItemBlock:(LCIMConversationsListDidDeleteItemBlock)didDeleteItemBlock {
+    [[[LCIMKit sharedInstance] conversationListService] setDidDeleteItemBlock:didDeleteItemBlock];
+}
+
+- (void)setConversationEditActionBlock:(LCIMConversationEditActionsBlock)conversationEditActionBlock {
+    [[[LCIMKit sharedInstance] conversationListService] setConversationEditActionBlock:conversationEditActionBlock];
 }
 
 //TODO:CacheService;

@@ -30,6 +30,8 @@
  *  @details Initialization method is `-initWithPeerId:`.
  */
 @property (nonatomic, copy, readonly) NSString *peerId;
+@property (nonatomic, copy, readonly) AVIMConversation *conversation;
+- (instancetype)initWithConversation:(AVIMConversation *)conversation;
 
 ///---------------------------------------------------------------------------------------------
 ///---- Initialize a unique single chat type object of LCIMConversationViewController ----------

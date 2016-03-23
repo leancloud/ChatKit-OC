@@ -11,7 +11,6 @@
 #import "SwipeView.h"
 #import "LCIMFacePageView.h"
 
-
 @interface LCIMChatFaceView ()<UIScrollViewDelegate,SwipeViewDelegate,SwipeViewDataSource,LCIMFacePageViewDelegate>
 
 @property (nonatomic, strong) SwipeView *swipeView;
@@ -81,15 +80,12 @@
 #pragma mark - Private Methods
 
 - (void)setup{
-    
     [self addSubview:self.swipeView];
     [self addSubview:self.pageControl];
     [self addSubview:self.bottomView];
-    
     self.faceArray = [NSMutableArray array];
     self.faceViewType = LCIMShowEmojiFace;
     [self setupFaceView];
-    
     self.userInteractionEnabled = YES;
     
 }
@@ -109,11 +105,9 @@
  *  初始化最近使用的表情数组
  */
 - (void)setupRecentFaces{
-    
     self.maxRows = 2;
     self.columnPerRow = 4;
     self.pageCount = 1;
-    
     [self.faceArray removeAllObjects];
     [self.faceArray addObjectsFromArray:[LCIMFaceManager recentFaces]];
     
@@ -147,7 +141,6 @@
             [self.faceArray insertObject:@{@"face_id":@"999",@"face_name":@"删除"} atIndex:(i + 1) * pageItemCount + i];
         }
     }
-
 }
 
 - (void)sendAction:(UIButton *)button{
@@ -192,7 +185,7 @@
     return _pageControl;
 }
 
-- (UIView *)bottomView{
+- (UIView *)bottomView {
     if (!_bottomView) {
         _bottomView = [[UIView alloc] initWithFrame:CGRectMake(0, self.frame.size.height - 40, self.frame.size.width, 40)];
         
@@ -205,9 +198,7 @@
         [sendButton setTitle:@"发送" forState:UIControlStateNormal];
         [sendButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         [sendButton addTarget:self action:@selector(sendAction:) forControlEvents:UIControlEventTouchUpInside];
-        
         [_bottomView addSubview:self.sendButton = sendButton];
-        
         
         UIButton *recentButton = [UIButton buttonWithType:UIButtonTypeCustom];
         [recentButton setBackgroundImage:[self imageInBundlePathForImageName:@"chat_bar_recent_normal"] forState:UIControlStateNormal];
@@ -226,9 +217,9 @@
         emojiButton.tag = LCIMShowEmojiFace;
         [emojiButton addTarget:self action:@selector(changeFaceType:) forControlEvents:UIControlEventTouchUpInside];
         [emojiButton sizeToFit];
+        emojiButton.selected = YES;
         [_bottomView addSubview:self.emojiButton = emojiButton];
         [emojiButton setFrame:CGRectMake(recentButton.frame.size.width, _bottomView.frame.size.height/2-emojiButton.frame.size.height/2, emojiButton.frame.size.width, emojiButton.frame.size.height)];
-        
     }
     return _bottomView;
 }
@@ -239,7 +230,6 @@
 - (NSUInteger)itemsPerPage {
     return self.maxRows * self.columnPerRow;
 }
-
 
 - (UIImage *)imageInBundlePathForImageName:(NSString *)imageName {
     return   ({

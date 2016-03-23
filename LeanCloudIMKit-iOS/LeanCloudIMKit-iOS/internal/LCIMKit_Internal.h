@@ -13,6 +13,7 @@
 @class LCIMSettingService;
 @class LCIMUIService;
 @class LCIMConversationService;
+@class LCIMConversationListService;
 
 @interface LCIMKit (LCIMServices)
 
@@ -45,5 +46,10 @@
  * Conversation Service
  */
 @property (nonatomic, strong, readonly) LCIMConversationService *conversationService;
+
+/*!
+ * Conversation List Service
+ */
+@property (nonatomic, strong, readonly) LCIMConversationListService *conversationListService;
 
 @end

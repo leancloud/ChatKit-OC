@@ -38,6 +38,8 @@
  */
 @property (nonatomic, copy, readonly) NSString *peerId;
 
+@property (nonatomic, copy, readonly) AVIMConversation *conversation;
+
 ///---------------------------------------------------------------------------------------------
 ///---- Initialize a unique single chat type object of LCIMConversationViewController ----------
 ///---------------------------------------------------------------------------------------------
@@ -63,6 +65,8 @@
  * @return Initialized single or group chat type odject of LCIMConversationViewController
  */
 - (instancetype)initWithConversationId:(NSString *)conversationId;
+
+- (instancetype)initWithConversation:(AVIMConversation *)conversation;
 
 @end
 

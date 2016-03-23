@@ -167,7 +167,7 @@ static NSString *const LCIMContactListControllerIdentifier = @"LCIMContactListCo
     NSString *sectionKey = self.sortedSectionTitles[(NSUInteger)indexPath.section];
     NSArray *array = self.sections[sectionKey];
     NSString *peerId = array[(NSUInteger)indexPath.row];
-    [[LCIMKitExample sharedInstance] exampleOpenConversationViewControllerWithPeerId:peerId fromNavigationController:self.tabBarController.navigationController];
+    [LCIMKitExample exampleOpenConversationViewControllerWithPeerId:peerId fromNavigationController:self.tabBarController.navigationController];
 }
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {

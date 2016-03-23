@@ -207,4 +207,64 @@ typedef void (^LCIMConversationResultBlock)(AVIMConversation *conversation, NSEr
 
 @end
 
+///---------------------------------------------------------------------
+///---------------------LCIMConversationsListService--------------------
+///---------------------------------------------------------------------
+
+#pragma mark -
+#pragma mark - LCIMConversationsListService
+
+@protocol LCIMConversationsListService <NSObject>
+
+/**
+ *  选中某个会话后的回调
+ *  @param conversation 被选中的会话
+ */
+typedef void(^LCIMConversationsListDidSelectItemBlock)(AVIMConversation *conversation);
+
+/**
+ *  选中某个会话后的回调
+ */
+@property (nonatomic, copy, readonly) LCIMConversationsListDidSelectItemBlock didSelectItemBlock;
+
+/**
+ *  设置选中某个会话后的回调
+ */
+- (void)setDidSelectItemBlock:(LCIMConversationsListDidSelectItemBlock)didSelectItemBlock;
+
+/**
+ *  删除某个会话后的回调
+ *  @param conversation 被选中的会话
+ */
+typedef void(^LCIMConversationsListDidDeleteItemBlock)(AVIMConversation *conversation);
+
+/**
+ *  删除某个会话后的回调
+ */
+@property (nonatomic, copy, readonly) LCIMConversationsListDidDeleteItemBlock didDeleteItemBlock;
+
+/**
+ *  设置删除某个会话后的回调
+ */
+- (void)setDidDeleteItemBlock:(LCIMConversationsListDidDeleteItemBlock)didDeleteItemBlock;
+/*
+ *  会话左滑菜单设置block
+ *  @return  需要显示的菜单数组
+ *  @param conversation, 会话
+ *  @param editActions, 默认的菜单数组，成员为LCIMMoreActionItem类型
+ */
+typedef NSArray *(^LCIMConversationEditActionsBlock)(AVIMConversation *conversation, NSArray *editActions);
+
+/**
+ *  可以通过这个block设置会话列表中每个会话的左滑菜单，这个是同步调用的，需要尽快返回，否则会卡住UI
+ */
+@property (nonatomic, copy) LCIMConversationEditActionsBlock conversationEditActionBlock;
+
+/**
+ *  设置会话列表中每个会话的左滑菜单，这个是同步调用的，需要尽快返回，否则会卡住UI
+ */
+- (void)setConversationEditActionBlock:(LCIMConversationEditActionsBlock)conversationEditActionBlock;
+
+@end
+
 //TODO:CacheService;

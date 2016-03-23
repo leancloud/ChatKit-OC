@@ -12,6 +12,15 @@
 #import "LCIMUserSystemService.h"
 #import "LCIMSessionService.h"
 
+@interface LCIMConversationListService()
+
+@property (nonatomic, copy) LCIMConversationsListDidSelectItemBlock didSelectItemBlock;
+@property (nonatomic, copy) LCIMConversationsListDidDeleteItemBlock didDeleteItemBlock;
+@property (nonatomic, copy) LCIMMarkBadgeWithTotalUnreadCountBlock markBadgeWithTotalUnreadCountBlock;
+@property (nonatomic, copy) LCIMPrepareConversationsWhenLoadBlock prepareConversationsWhenLoadBlock;
+
+@end
+
 @implementation LCIMConversationListService
 
 /**
@@ -109,6 +118,25 @@
             }
         }];
     }
+}
+
+#pragma mark -
+#pragma mark - Setter Method
+
+- (void)setDidSelectItemBlock:(LCIMConversationsListDidSelectItemBlock)didSelectItemBlock {
+    _didSelectItemBlock = didSelectItemBlock;
+}
+
+- (void)setMarkBadgeWithTotalUnreadCountBlock:(LCIMMarkBadgeWithTotalUnreadCountBlock)markBadgeWithTotalUnreadCountBlock {
+    _markBadgeWithTotalUnreadCountBlock = markBadgeWithTotalUnreadCountBlock;
+}
+
+- (void)setPrepareConversationsWhenLoadBlock:(LCIMPrepareConversationsWhenLoadBlock)prepareConversationsWhenLoadBlock {
+    _prepareConversationsWhenLoadBlock = prepareConversationsWhenLoadBlock;
+}
+
+- (void)setDidDeleteItemBlock:(LCIMConversationsListDidDeleteItemBlock)didDeleteItemBlock {
+    _didDeleteItemBlock = didDeleteItemBlock;
 }
 
 @end

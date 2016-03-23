@@ -51,6 +51,7 @@
 //    }
 //    return self;
 //}
+
 #pragma mark -
 #pragma mark - initialization Method
 
@@ -60,8 +61,6 @@
         return nil;
     }
     _conversationId = conversationId;
-    _peerId = nil;
-    [self setup];
     return self;
 }
 
@@ -71,8 +70,16 @@
         return nil;
     }
     _peerId = peerId;
-    _conversationId = nil;
-    [self setup];
+    return self;
+}
+
+- (instancetype)initWithConversation:(AVIMConversation *)conversation {
+    self = [super init];
+    if (!self) {
+        return nil;
+    }
+    _conversation = conversation;
+    [self refreshConversation:conversation];
     return self;
 }
 

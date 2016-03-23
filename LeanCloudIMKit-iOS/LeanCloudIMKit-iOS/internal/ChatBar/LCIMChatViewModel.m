@@ -353,8 +353,10 @@
                 [allMessages addObjectsFromArray:[allFailedAVIMMessages copy]];
                 [self.dataArray addObjectsFromArray:failedMessages];
                 self.avimTypedMessage = allMessages;
-                [self.parentViewController.tableView reloadData];
-                [self.parentViewController scrollToBottomAnimated:NO];
+                dispatch_async(dispatch_get_main_queue(),^{
+                    [self.parentViewController.tableView reloadData];
+                    [self.parentViewController scrollToBottomAnimated:NO];
+                });
                 
                 if (self.avimTypedMessage.count > 0) {
                     [self updateConversationAsRead];

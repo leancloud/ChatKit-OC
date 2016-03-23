@@ -12,17 +12,13 @@
 #import "LCIMStatusView.h"
 #import "MJRefresh.h"
 #import "LCIMConversationService.h"
-#import "LCIMConversatonListViewModel.h"
+#import "LCIMConversationListViewModel.h"
 
 @interface LCIMConversationListViewController ()
 
 @property (nonatomic, strong) LCIMStatusView *clientStatusView;
 @property (nonatomic, strong) NSMutableArray *conversations;
-@property (nonatomic, copy) LCIMConversationsListDidSelectItemBlock conversationsListDidSelectItemBlock;
-@property (nonatomic, copy) LCIMConversationsListDidDeleteItemBlock didDeleteItemBlock;
-@property (nonatomic, copy) LCIMMarkBadgeWithTotalUnreadCountBlock markBadgeWithTotalUnreadCountBlock;
-@property (nonatomic, copy) LCIMPrepareConversationsWhenLoadBlock prepareConversationsWhenLoadBlock;
-@property (nonatomic, copy) LCIMConversatonListViewModel *conversatonListViewModel;
+@property (nonatomic, copy) LCIMConversationListViewModel *conversationListViewModel;
 
 @end
 
@@ -39,11 +35,11 @@
     self.tableView.tableFooterView = [[UIView alloc] init];
     self.tableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
         // 进入刷新状态后会自动调用这个block
-        [self.conversatonListViewModel refresh];
+        [self.conversationListViewModel refresh];
     }];
     [self.tableView.mj_header beginRefreshing];
-    self.tableView.delegate = self.conversatonListViewModel;
-    self.tableView.dataSource = self.conversatonListViewModel;
+    self.tableView.delegate = self.conversationListViewModel;
+    self.tableView.dataSource = self.conversationListViewModel;
 }
 
 - (void)dealloc {
@@ -100,35 +96,16 @@
 }
 
 /**
- *  lazy load conversatonListViewModel
+ *  lazy load conversationListViewModel
  *
- *  @return LCIMConversatonListViewModel
+ *  @return LCIMconversationListViewModel
  */
-- (LCIMConversatonListViewModel *)conversatonListViewModel {
-    if (_conversatonListViewModel == nil) {
-        LCIMConversatonListViewModel *conversatonListViewModel = [[LCIMConversatonListViewModel alloc] initWithConversationListViewController:self];
-        _conversatonListViewModel = conversatonListViewModel;
+- (LCIMConversationListViewModel *)conversationListViewModel {
+    if (_conversationListViewModel == nil) {
+        LCIMConversationListViewModel *conversationListViewModel = [[LCIMConversationListViewModel alloc] initWithConversationListViewController:self];
+        _conversationListViewModel = conversationListViewModel;
     }
-    return _conversatonListViewModel;
-}
-
-#pragma mark -
-#pragma mark - Setter Method
-
-- (void)setDidSelectItemBlock:(LCIMConversationsListDidSelectItemBlock)didSelectItemBlock {
-    _didDeleteItemBlock = didSelectItemBlock;
-}
-
-- (void)setMarkBadgeWithTotalUnreadCountBlock:(LCIMMarkBadgeWithTotalUnreadCountBlock)markBadgeWithTotalUnreadCountBlock {
-    _markBadgeWithTotalUnreadCountBlock = markBadgeWithTotalUnreadCountBlock;
-}
-
-- (void)setPrepareConversationsWhenLoadBlock:(LCIMPrepareConversationsWhenLoadBlock)prepareConversationsWhenLoadBlock {
-    _prepareConversationsWhenLoadBlock = prepareConversationsWhenLoadBlock;
-}
-
-- (void)setDidDeleteItemBlock:(LCIMConversationsListDidSelectItemBlock)didDeleteItemBlock {
-    _didDeleteItemBlock = didDeleteItemBlock;
+    return _conversationListViewModel;
 }
 
 @end

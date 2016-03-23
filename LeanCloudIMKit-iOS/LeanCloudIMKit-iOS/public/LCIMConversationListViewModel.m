@@ -1,13 +1,13 @@
 //
-//  LCIMConversatonListViewModel.m
+//  LCIMConversationListViewModel.m
 //  LeanCloudIMKit-iOS
 //
 //  Created by 陈宜龙 on 16/3/22.
 //  Copyright © 2016年 EloncChan. All rights reserved.
 //
 
-#import "LCIMConversatonListViewModel.h"
-#import "LCIMConversatonListCell.h"
+#import "LCIMConversationListViewModel.h"
+#import "LCIMConversationListCell.h"
 #import <AVOSCloudIM/AVOSCloudIM.h>
 #import "LCIMUserModelDelegate.h"
 #import "YYKit.h"
@@ -20,13 +20,13 @@
 #import "MJRefresh.h"
 #import "LCIMConversationListService.h"
 
-@interface LCIMConversatonListViewModel ()
+@interface LCIMConversationListViewModel ()
 
 @property (nonatomic, strong) LCIMConversationListViewController *conversationListViewController;
 
 @end
 
-@implementation LCIMConversatonListViewModel
+@implementation LCIMConversationListViewModel
 
 #pragma mark -
 #pragma mark - LifeCycle Method
@@ -54,7 +54,7 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    LCIMConversatonListCell *cell = [LCIMConversatonListCell dequeueOrCreateCellByTableView:tableView];
+    LCIMConversationListCell *cell = [LCIMConversationListCell dequeueOrCreateCellByTableView:tableView];
     AVIMConversation *conversation = [self.dataArray objectAtIndex:indexPath.row];
     NSError *error = nil;
     NSString *peerId = conversation.lcim_peerId;
@@ -126,11 +126,11 @@
     AVIMConversation *conversation = [self.dataArray objectAtIndex:indexPath.row];
     [conversation markAsReadInBackground];
     [self refresh];
-    !self.conversationListViewController.didSelectItemBlock ?: self.conversationListViewController.didSelectItemBlock(conversation);
+    ![LCIMConversationListService sharedInstance].didSelectItemBlock ?: [LCIMConversationListService sharedInstance].didSelectItemBlock(conversation);
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return [LCIMConversatonListCell heightOfCell];
+    return LCIMConversationListCellDefaultHeight;
 }
 
 #pragma mark - refresh
@@ -142,12 +142,12 @@
             if ([self.conversationListViewController filterAVIMError:error]) {
                 self.dataArray = [NSMutableArray arrayWithArray:conversations];
                 [self.conversationListViewController.tableView reloadData];
-                !self.conversationListViewController.markBadgeWithTotalUnreadCountBlock ?: self.conversationListViewController.markBadgeWithTotalUnreadCountBlock(totalUnreadCount);
+                ![LCIMConversationListService sharedInstance].markBadgeWithTotalUnreadCountBlock ?: [LCIMConversationListService sharedInstance].markBadgeWithTotalUnreadCountBlock(totalUnreadCount);
                 [self selectConversationIfHasRemoteNotificatoinConvid];
             }
         };
-        if(self.conversationListViewController.prepareConversationsWhenLoadBlock) {
-            self.conversationListViewController.prepareConversationsWhenLoadBlock(conversations, ^(BOOL succeeded, NSError *error) {
+        if([LCIMConversationListService sharedInstance].prepareConversationsWhenLoadBlock) {
+            [LCIMConversationListService sharedInstance].prepareConversationsWhenLoadBlock(conversations, ^(BOOL succeeded, NSError *error) {
                 if ([self.conversationListViewController filterAVIMError:error]) {
                     finishBlock();
                 } else {
@@ -167,7 +167,7 @@
         __block BOOL found = NO;
         [self.dataArray enumerateObjectsUsingBlock:^(AVIMConversation * _Nonnull conversation, NSUInteger idx, BOOL * _Nonnull stop) {
             if ([conversation.conversationId isEqualToString:remoteNotificationConversationId]) {
-                !self.conversationListViewController.didSelectItemBlock ?: self.conversationListViewController.didSelectItemBlock(conversation);
+                ![LCIMConversationListService sharedInstance].didSelectItemBlock ?: [LCIMConversationListService sharedInstance].didSelectItemBlock(conversation);
                 found = YES;
                 *stop = YES;
                 return;

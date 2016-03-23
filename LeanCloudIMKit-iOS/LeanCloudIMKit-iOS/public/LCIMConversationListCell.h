@@ -1,5 +1,5 @@
 //
-//  LCIMConversatonListCell.h
+//  LCIMConversationListCell.h
 //  LeanCloudIMKit-iOS
 //
 //  Created by 陈宜龙 on 16/3/22.
@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 @class JSBadgeView;
 
-@interface LCIMConversatonListCell : UITableViewCell
+@interface LCIMConversationListCell : UITableViewCell
 
 @property (nonatomic, weak) UIImageView *avatorImageView;
 @property (nonatomic, weak) UILabel *nameLabel;
@@ -22,6 +22,5 @@
 + (instancetype)dequeueOrCreateCellByTableView:(UITableView *)tableView;
 + (void)registerCellToTableView:(UITableView *)tableView;
 - (void)prepareForReuse;
-+ (CGFloat)heightOfCell;
 
 @end

@@ -18,6 +18,7 @@ FOUNDATION_EXTERN NSString *const LCIMSessionServiceErrorDemain;
 @interface LCIMSessionService : NSObject <LCIMSessionService>
 
 @property (nonatomic, copy, readonly) NSString *clientId;
+
 /*!
  * AVIMClient 实例
  */
