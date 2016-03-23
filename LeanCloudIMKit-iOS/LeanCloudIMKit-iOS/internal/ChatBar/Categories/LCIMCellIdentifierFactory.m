@@ -69,8 +69,8 @@
             groupKey = @"";
             break;
     }
-    
-    return [NSString stringWithFormat:@"%@_%@_%@_%@",identifierKey,ownerKey,typeKey,groupKey];
+    NSString *cellIdentifier = [NSString stringWithFormat:@"%@_%@_%@_%@",identifierKey,ownerKey,typeKey,groupKey];
+    return cellIdentifier;
 }
 
 

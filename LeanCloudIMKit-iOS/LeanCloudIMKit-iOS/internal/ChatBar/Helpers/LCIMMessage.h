@@ -13,54 +13,54 @@
 
 @interface LCIMMessage : NSObject <NSCoding, NSCopying>
 
-@property (nonatomic, copy) NSString *text;
-@property (nonatomic, strong) UIImage *photo;
-@property (nonatomic, copy) NSString *photoPath;
-@property (nonatomic, copy) NSString *thumbnailUrl;
-@property (nonatomic, copy) NSString *originPhotoUrl;
-@property (nonatomic, strong) UIImage *videoConverPhoto;
-@property (nonatomic, copy) NSString *videoPath;
-@property (nonatomic, copy) NSString *videoUrl;
+@property (nonatomic, copy, readonly) NSString *text;
+@property (nonatomic, strong, readwrite) UIImage *photo;
+@property (nonatomic, copy, readonly) NSString *photoPath;
+@property (nonatomic, copy, readonly) NSString *thumbnailUrl;
+@property (nonatomic, copy, readonly) NSString *originPhotoUrl;
+@property (nonatomic, strong, readonly) UIImage *videoConverPhoto;
+@property (nonatomic, copy, readonly) NSString *videoPath;
+@property (nonatomic, copy, readonly) NSString *videoUrl;
 
-@property (nonatomic, copy) NSString *voicePath;
-@property (nonatomic, copy) NSString *voiceUrl;
-@property (nonatomic, copy) NSString *voiceDuration;
+@property (nonatomic, copy, readonly) NSString *voicePath;
+@property (nonatomic, copy, readonly) NSString *voiceUrl;
+@property (nonatomic, copy, readonly) NSString *voiceDuration;
 
-@property (nonatomic, copy) NSString *emotionName;
-@property (nonatomic, copy) NSString *emotionPath;
+@property (nonatomic, copy, readonly) NSString *emotionName;
+@property (nonatomic, copy, readonly) NSString *emotionPath;
 
-@property (nonatomic, strong) UIImage *localPositionPhoto;
-@property (nonatomic, copy) NSString *geolocations;
-@property (nonatomic, strong) CLLocation *location;
+@property (nonatomic, strong, readonly) UIImage *localPositionPhoto;
+@property (nonatomic, copy, readonly) NSString *geolocations;
+@property (nonatomic, strong, readonly) CLLocation *location;
 
-@property (nonatomic, strong) UIImage *avator;
-@property (nonatomic, strong) NSURL *avatorURL;
+@property (nonatomic, strong, readwrite) UIImage *avator;
+@property (nonatomic, strong, readwrite) NSURL *avatorURL;
 
-@property (nonatomic, copy) NSString *sender;
+@property (nonatomic, copy, readonly) NSString *sender;
 
-@property (nonatomic, strong) NSDate *timestamp;
+@property (nonatomic, strong, readonly) NSDate *timestamp;
 
-@property (nonatomic, assign) BOOL sended;
+@property (nonatomic, assign, readonly) BOOL sended;
 
-@property (nonatomic, assign) LCIMMessageType messageMediaType;
+@property (nonatomic, assign, readonly) LCIMMessageType messageMediaType;
 
 @property (nonatomic, assign) LCIMMessageChat messageGroupType;
 
 @property (nonatomic, assign) LCIMMessageOwner bubbleMessageType;
 
-@property (nonatomic, assign) LCIMMessageReadState messageReadState;
+@property (nonatomic, assign, readonly) LCIMMessageReadState messageReadState;
 
 @property (nonatomic,assign) LCIMMessageSendState status;
 
-@property (nonatomic, assign) BOOL isRead;
+@property (nonatomic, assign, readonly) BOOL isRead;
 
 
 /*!
  * just for failed message store, not meaning messageId
  */
-@property (nonatomic, copy) NSString *messageId;
+@property (nonatomic, copy, readwrite) NSString *messageId;
 
-@property (nonatomic, copy) NSString *conversationId;
+@property (nonatomic, copy, readwrite) NSString *conversationId;
 
 - (instancetype)initWithText:(NSString *)text
                       sender:(NSString *)sender

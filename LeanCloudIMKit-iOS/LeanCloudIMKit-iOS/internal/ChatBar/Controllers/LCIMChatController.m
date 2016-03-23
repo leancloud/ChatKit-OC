@@ -291,7 +291,6 @@
 //    locationMessageDict[kLCIMMessageConfigurationAvatarKey] = kSelfThumb;
 //    locationMessageDict[kLCIMMessageConfigurationLocationKey]=locationText;
 //    [self addMessage:locationMessageDict];
-    
 }
 
 - (void)chatBarFrameDidChange:(LCIMChatBar *)chatBar frame:(CGRect)frame{
@@ -318,17 +317,30 @@
 
 - (void)messageCellTappedMessage:(LCIMChatMessageCell *)messageCell {
     NSIndexPath *indexPath = [self.tableView indexPathForCell:messageCell];
+
     NSLog(@"tapMessage :%@",indexPath);
     switch (messageCell.messageType) {
         case LCIMMessageTypeVoice:
         {
-            NSString *voiceFileName = [self.chatViewModel messageAtIndex:indexPath.row][kLCIMMessageConfigurationVoiceKey];
+            LCIMMessage *message = [self.chatViewModel messageAtIndex:indexPath.row];
+            NSString *voiceFileName = message.voicePath;
             [[LCIMAVAudioPlayer sharePlayer] playAudioWithURLString:voiceFileName atIndex:indexPath.row];
         }
             break;
-            
-        default:
+        case LCIMMessageTypeImage:
+        {
+            LCIMPreviewImageMessageBlock previewImageMessageBlock = [LCIMUIService sharedInstance].previewImageMessageBlock;
+            NSDictionary *userInfo = @{
+                                       LCIMPreviewImageMessageUserInfoKeyFromController : self,
+                                       LCIMPreviewImageMessageUserInfoKeyFromView : self.tableView,
+                                       };
+            NSArray *imageMessages = nil;
+            NSNumber *selectedMessageIndex = nil;
+            [self.chatViewModel getAllImageMessagesForMessage:messageCell.message allImageMessageImages:&imageMessages selectedMessageIndex:&selectedMessageIndex];
+            !previewImageMessageBlock ?: previewImageMessageBlock(selectedMessageIndex.unsignedIntegerValue, imageMessages, userInfo);
+        }
             break;
+            //TODO:
     }
     
 }

@@ -7,6 +7,40 @@
 //
 
 #import "LCIMMessage.h"
+@interface LCIMMessage()
+
+@property (nonatomic, copy)  NSString *text;
+@property (nonatomic, copy)  NSString *photoPath;
+@property (nonatomic, copy)  NSString *thumbnailUrl;
+@property (nonatomic, copy)  NSString *originPhotoUrl;
+@property (nonatomic, strong)  UIImage *videoConverPhoto;
+@property (nonatomic, copy)  NSString *videoPath;
+@property (nonatomic, copy)  NSString *videoUrl;
+
+@property (nonatomic, copy)  NSString *voicePath;
+@property (nonatomic, copy)  NSString *voiceUrl;
+@property (nonatomic, copy)  NSString *voiceDuration;
+
+@property (nonatomic, copy)  NSString *emotionName;
+@property (nonatomic, copy)  NSString *emotionPath;
+
+@property (nonatomic, strong)  UIImage *localPositionPhoto;
+@property (nonatomic, copy)  NSString *geolocations;
+@property (nonatomic, strong)  CLLocation *location;
+
+@property (nonatomic, copy)  NSString *sender;
+
+@property (nonatomic, strong)  NSDate *timestamp;
+
+@property (nonatomic, assign)  BOOL sended;
+
+@property (nonatomic, assign)  LCIMMessageType messageMediaType;
+
+@property (nonatomic, assign)  LCIMMessageReadState messageReadState;
+
+
+@property (nonatomic, assign)  BOOL isRead;
+@end
 
 @implementation LCIMMessage
 

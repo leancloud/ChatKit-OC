@@ -10,6 +10,13 @@
 
 NSString *const LCIMUIServiceErrorDomain = @"LCIMUIServiceErrorDomain";
 
+@interface LCIMUIService ()
+
+@property (nonatomic, copy) LCIMPreviewImageMessageBlock previewImageMessageBlock;
+@property (nonatomic, copy) LCIMOpenProfileBlock openProfileBlock;
+
+@end
+
 @implementation LCIMUIService
 
 /**
@@ -22,6 +29,14 @@ NSString *const LCIMUIServiceErrorDomain = @"LCIMUIServiceErrorDomain";
         _sharedLCIMUIService = [[self alloc] init];
     });
     return _sharedLCIMUIService;
+}
+
+- (void)setPreviewImageMessageBlock:(LCIMPreviewImageMessageBlock)previewImageMessageBlock {
+    _previewImageMessageBlock = previewImageMessageBlock;
+}
+
+- (void)setOpenProfileBlock:(LCIMOpenProfileBlock)openProfileBlock {
+    _openProfileBlock = openProfileBlock;
 }
 
 @end

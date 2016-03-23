@@ -51,7 +51,7 @@ typedef void (^LCIMSendMessageSuccessFailedBlock)(NSString *messageUUID, NSError
 
 - (void)removeMessageAtIndex:(NSUInteger)index;
 
-- (NSDictionary *)messageAtIndex:(NSUInteger)index;
+- (LCIMMessage *)messageAtIndex:(NSUInteger)index;
 
 + (LCIMMessage *)getLCIMMessageByMsg:(AVIMTypedMessage *)message;
 + (NSMutableArray *)getAVIMMessages:(NSArray<LCIMMessage *> *)lcimMessages;
@@ -60,5 +60,6 @@ typedef void (^LCIMSendMessageSuccessFailedBlock)(NSString *messageUUID, NSError
 - (void)loadMessagesWhenInit;
 - (void)loadOldMessages;
 - (void)updateConversationAsRead;
+- (void)getAllImageMessagesForMessage:(LCIMMessage *)message allImageMessageImages:(NSArray **)allImageMessageImages selectedMessageIndex:(NSNumber **)selectedMessageIndex;
 
 @end

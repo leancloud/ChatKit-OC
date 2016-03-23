@@ -10,6 +10,7 @@
 #import "LCIMConstants.h"
 @class LCIMConversationViewController;
 @class LCIMConversationListViewController;
+@class LCIMMessage;
 
 ///---------------------------------------------------------------------
 ///---------------------LCIMSessionService------------------------------
@@ -123,7 +124,7 @@ typedef void(^LCIMGenerateSignatureBlock)(NSString *clientId, NSString *conversa
 
 #pragma mark - - Open Profile
 
-/**
+/*!
  *  打开某个profile的回调block
  *  @param userId 某个userId
  *  @param parentController 用于打开的顶层控制器
@@ -138,6 +139,27 @@ typedef void(^LCIMOpenProfileBlock)(NSString *userId, UIViewController *parentCo
  *  @param parentController 用于打开的顶层控制器
  */
 - (void)setOpenProfileBlock:(LCIMOpenProfileBlock)openProfileBlock;
+
+/*!
+ *  当IMKit需要预览图片消息时，会调用这个block
+ *  @param index 用户点击的图片消息在imageMessages中的下标
+ *  @param imageMessagesInfo 元素可能是图片，也可能是NSURL，以及混合。
+ *  @param userInfo 用来传递上下文信息，例如，从某个Controller触发，或者从某个view触发等，键值在下面定义
+ */
+typedef void(^LCIMPreviewImageMessageBlock)(NSUInteger index, NSArray *imageMessagesInfo, NSDictionary *userInfo);
+
+@property (nonatomic, copy, readonly) LCIMPreviewImageMessageBlock previewImageMessageBlock;
+
+/// 传递触发的UIViewController对象
+#define LCIMPreviewImageMessageUserInfoKeyFromController    @"LCIMPreviewImageMessageUserInfoKeyFromController"
+/// 传递触发的UIView对象
+#define LCIMPreviewImageMessageUserInfoKeyFromView          @"LCIMPreviewImageMessageUserInfoKeyFromView"
+
+/*!
+ *  当IMKit需要预览图片消息时，会调用这个block.
+ *  使用NSDictionary传递上下文信息，便于扩展
+ */
+- (void)setPreviewImageMessageBlock:(LCIMPreviewImageMessageBlock)previewImageMessageBlock;
 
 @end
 
@@ -165,7 +187,7 @@ typedef void(^LCIMOpenProfileBlock)(NSString *userId, UIViewController *parentCo
 + (NSString *)IMKitVersion;
 - (void)syncBadge;
 
-/**
+/*!
  *  是否使用开发证书去推送，默认为 NO。如果设为 YES 的话每条消息会带上这个参数，云代码利用 Hook 设置证书
  *  参考 https://github.com/leancloud/leanchat-cloudcode/blob/master/cloud/mchat.js
  */
@@ -186,20 +208,20 @@ typedef void (^LCIMConversationResultBlock)(AVIMConversation *conversation, NSEr
 
 - (void)didReceiveRemoteNotification:(NSDictionary *)userInfo;
 
-/**
+/*!
  *  通过会话Id构建聊天页面
  *  @param conversationId 会话Id
  *  @return 聊天页面
  */
 - (LCIMConversationViewController *)createConversationViewControllerWithConversationId:(NSString *)conversationId;
 
-/**
+/*!
  *  构建单聊页面
  *  @param peedId 聊天对象
  */
 - (LCIMConversationViewController *)createConversationViewControllerWithPeerId:(NSString *)peerId;
 
-/**
+/*!
  *  创建会话列表页面
  *  @return 所创建的会话列表页面
  */
@@ -216,34 +238,34 @@ typedef void (^LCIMConversationResultBlock)(AVIMConversation *conversation, NSEr
 
 @protocol LCIMConversationsListService <NSObject>
 
-/**
+/*!
  *  选中某个会话后的回调
  *  @param conversation 被选中的会话
  */
 typedef void(^LCIMConversationsListDidSelectItemBlock)(AVIMConversation *conversation);
 
-/**
+/*!
  *  选中某个会话后的回调
  */
 @property (nonatomic, copy, readonly) LCIMConversationsListDidSelectItemBlock didSelectItemBlock;
 
-/**
+/*!
  *  设置选中某个会话后的回调
  */
 - (void)setDidSelectItemBlock:(LCIMConversationsListDidSelectItemBlock)didSelectItemBlock;
 
-/**
+/*!
  *  删除某个会话后的回调
  *  @param conversation 被选中的会话
  */
 typedef void(^LCIMConversationsListDidDeleteItemBlock)(AVIMConversation *conversation);
 
-/**
+/*!
  *  删除某个会话后的回调
  */
 @property (nonatomic, copy, readonly) LCIMConversationsListDidDeleteItemBlock didDeleteItemBlock;
 
-/**
+/*!
  *  设置删除某个会话后的回调
  */
 - (void)setDidDeleteItemBlock:(LCIMConversationsListDidDeleteItemBlock)didDeleteItemBlock;
@@ -255,12 +277,12 @@ typedef void(^LCIMConversationsListDidDeleteItemBlock)(AVIMConversation *convers
  */
 typedef NSArray *(^LCIMConversationEditActionsBlock)(AVIMConversation *conversation, NSArray *editActions);
 
-/**
+/*!
  *  可以通过这个block设置会话列表中每个会话的左滑菜单，这个是同步调用的，需要尽快返回，否则会卡住UI
  */
 @property (nonatomic, copy) LCIMConversationEditActionsBlock conversationEditActionBlock;
 
-/**
+/*!
  *  设置会话列表中每个会话的左滑菜单，这个是同步调用的，需要尽快返回，否则会卡住UI
  */
 - (void)setConversationEditActionBlock:(LCIMConversationEditActionsBlock)conversationEditActionBlock;

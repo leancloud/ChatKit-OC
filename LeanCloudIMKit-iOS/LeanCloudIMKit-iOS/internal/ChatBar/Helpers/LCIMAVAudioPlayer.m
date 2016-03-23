@@ -204,11 +204,9 @@ NSString *const kLCIMAudioDataKey;
 
 - (void)audioPlayerDidFinishPlaying:(AVAudioPlayer *)player successfully:(BOOL)flag {
     [self setAudioPlayerState:LCIMVoiceMessageStateNormal];
-    
 //    //删除近距离事件监听
 //    [[UIDevice currentDevice] setProximityMonitoringEnabled:NO];
 //    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIDeviceProximityStateDidChangeNotification object:nil];
-    
     //延迟一秒将audioPlayer 释放
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, .2f * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
         [self stopAudioPlayer];
@@ -217,12 +215,11 @@ NSString *const kLCIMAudioDataKey;
 }
 
 #pragma mark - NSNotificationCenter Methods
-- (void)applicationWillResignActive:(UIApplication *)application {
 
+- (void)applicationWillResignActive:(UIApplication *)application {
     [self cancelOperation];
     [self stopAudioPlayer];
     [self setAudioPlayerState:LCIMVoiceMessageStateCancel];
-
 }
 
 - (void)proximityStateChanged:(NSNotification *)notification {

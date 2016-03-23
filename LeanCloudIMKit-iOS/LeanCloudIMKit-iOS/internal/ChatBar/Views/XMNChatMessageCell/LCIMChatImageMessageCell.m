@@ -59,7 +59,12 @@
         NSString *imageName = @"Placeholder_Image";
         NSString *imageNameWithBundlePath = [NSString stringWithFormat:@"Placeholder.bundle/%@", imageName];
         UIImage *image = [UIImage imageNamed:imageNameWithBundlePath];
-        image;})];
+        image;})
+                                   options:YYWebImageOptionShowNetworkActivity
+                                completion:^(UIImage * _Nullable image, NSURL * _Nonnull url, YYWebImageFromType from, YYWebImageStage stage, NSError * _Nullable error) {
+                                    message.photo = image;
+                                }
+     ];
 //    if ([image isKindOfClass:[UIImage class]]) {
 ////        self.messageImageView.image = image;
 //    } else if ([image isKindOfClass:[NSString class]]) {

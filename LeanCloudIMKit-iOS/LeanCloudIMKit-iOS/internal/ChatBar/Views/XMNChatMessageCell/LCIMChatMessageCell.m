@@ -190,14 +190,19 @@
 #pragma mark - Public Methods
 
 - (void)configureCellWithData:(LCIMMessage *)message {
+    _message = message;
     self.nicknameLabel.text = message.sender;
     
-//    [self.headImageView lcim_setImageWithURLString:message.avatorURL];
+    //    [self.headImageView lcim_setImageWithURLString:message.avatorURL];
     [self.headImageView setImageWithURL:message.avatorURL placeholder:({
         NSString *imageName = @"Placeholder_Avator";
         NSString *imageNameWithBundlePath = [NSString stringWithFormat:@"Placeholder.bundle/%@", imageName];
         UIImage *image = [UIImage imageNamed:imageNameWithBundlePath];
         image;})
+                                options:YYWebImageOptionShowNetworkActivity
+                             completion:^(UIImage * _Nullable image, NSURL * _Nonnull url, YYWebImageFromType from, YYWebImageStage stage, NSError * _Nullable error) {
+                                 message.photo = image;
+                             }
      ];
     if (message.messageReadState) {
         self.messageReadState = message.messageReadState;
@@ -306,7 +311,7 @@
         return LCIMMessageTypeText;
     } else if ([self isKindOfClass:[LCIMChatImageMessageCell class]]) {
         return LCIMMessageTypeImage;
-    } else if ([self isKindOfClass:[LCIMChatImageMessageCell class]]) {
+    } else if ([self isKindOfClass:[LCIMChatVoiceMessageCell class]]) {
         return LCIMMessageTypeVoice;
     } else if ([self isKindOfClass:[LCIMChatLocationMessageCell class]]) {
         return LCIMMessageTypeLocation;

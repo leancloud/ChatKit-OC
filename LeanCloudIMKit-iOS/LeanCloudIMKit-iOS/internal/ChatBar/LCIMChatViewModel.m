@@ -469,4 +469,26 @@ static CGPoint  delayOffset = {0.0};
     [[NSNotificationCenter defaultCenter] postNotificationName:LCIMNotificationUnreadsUpdated object:nil];
 }
 
+- (void)getAllImageMessagesForMessage:(LCIMMessage *)message allImageMessageImages:(NSArray **)allImageMessageImages selectedMessageIndex:(NSNumber **)selectedMessageIndex{
+    NSMutableArray *allImageMessageImages_ = [[NSMutableArray alloc] initWithCapacity:0];
+    NSUInteger idx = 0;
+    for (LCIMMessage *message_ in self.dataArray) {
+        if (message_.messageMediaType == LCIMMessageTypeImage) {
+            UIImage *image = message_.photo;
+            if (!image && message_.originPhotoUrl) {
+                [allImageMessageImages_ addObject:message_.originPhotoUrl];
+            } else {
+                [allImageMessageImages_ addObject:image];
+                if (message == message_ && *selectedMessageIndex == nil) {
+                    *selectedMessageIndex = @(idx);
+                }
+            }
+            idx++;
+        }
+    }
+    if (*allImageMessageImages == nil) {
+        *allImageMessageImages = allImageMessageImages_;
+    }
+}
+
 @end

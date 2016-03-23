@@ -185,6 +185,9 @@ static NSMutableDictionary *_sharedInstances = nil;
 - (void)setOpenProfileBlock:(LCIMOpenProfileBlock)openProfileBlock {
     [[[LCIMKit sharedInstance] UIService] setOpenProfileBlock:openProfileBlock];
 }
+- (void)setPreviewImageMessageBlock:(LCIMPreviewImageMessageBlock)previewImageMessageBlock {
+    [[[LCIMKit sharedInstance] UIService] setPreviewImageMessageBlock:previewImageMessageBlock];
+}
 
 ///---------------------------------------------------------------------
 ///------------------LCIMSettingService---------------------------------

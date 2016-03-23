@@ -12,6 +12,7 @@
 #import "LCIMTabBarControllerConfig.h"
 #import "LCIMUser.h"
 #import "LCIMChatController.h"
+#import "MWPhotoBrowser.h"
 
 //==================================================================================================================================
 //If you want to see the storage of this demo, log in public account of leancloud.cn, search for the app named `LeanCloudIMKit-iOS`.
@@ -26,6 +27,14 @@ static NSString *const LCIMAPPKEY = @"057x24cfdzhffnl3dzk14jh9xo2rq6w1hy1fdzt5tv
 
 // Dictionary that holds all instances of Singleton include subclasses
 static NSMutableDictionary *_sharedInstances = nil;
+
+@interface LCIMKitExample () <MWPhotoBrowserDelegate>
+
+@property (nonatomic, strong) NSMutableArray *photos;
+@property (nonatomic, strong) NSMutableArray *thumbs;
+@property (nonatomic, strong) NSMutableArray *selections;
+
+@end
 
 @implementation LCIMKitExample
 
@@ -79,7 +88,7 @@ static NSMutableDictionary *_sharedInstances = nil;
 + (void)invokeThisMethodInDidFinishLaunching {
     [AVOSCloudIM registerForRemoteNotification];
     [AVIMClient setTimeoutIntervalInSeconds:20];
-    [self exampleInit];
+    [[self sharedInstance] exampleInit];
 }
 
 + (void)invokeThisMethodInDidRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
@@ -134,7 +143,7 @@ static NSMutableDictionary *_sharedInstances = nil;
 /**
  *  初始化的示例代码
  */
-+ (void)exampleInit {
+- (void)exampleInit {
 #ifndef __OPTIMIZE__
     [LCIMKit setAllLogsEnabled:YES];
 #endif
@@ -184,7 +193,11 @@ static NSMutableDictionary *_sharedInstances = nil;
     }];
     
     [[LCIMKit sharedInstance] setDidSelectItemBlock:^(AVIMConversation *conversation) {
-        [self exampleOpenConversationViewControllerWithConversaion:conversation fromNavigationController:nil];
+        [[self class] exampleOpenConversationViewControllerWithConversaion:conversation fromNavigationController:nil];
+    }];
+    
+    [[LCIMKit sharedInstance] setPreviewImageMessageBlock:^(NSUInteger index, NSArray *imageMessageInfo, NSDictionary *userInfo) {
+        [self examplePreviewImageMessageWithIndex:index imageMessages:imageMessageInfo];
     }];
 }
 
@@ -227,6 +240,115 @@ static NSMutableDictionary *_sharedInstances = nil;
     UINavigationController *navigationController_ = tabBarController.selectedViewController;
     [navigationController_ pushViewController:chatC animated:YES];
     
+}
+
+
+- (void)examplePreviewImageMessageWithIndex:(NSUInteger)index imageMessages:(NSArray *)imageMessageInfo {
+    // Browser
+    NSMutableArray *photos = [[NSMutableArray alloc] initWithCapacity:[imageMessageInfo count]];
+    NSMutableArray *thumbs = [[NSMutableArray alloc] initWithCapacity:[imageMessageInfo count]];
+    MWPhoto *photo, *thumb;
+    BOOL displayActionButton = YES;
+    BOOL displaySelectionButtons = NO;
+    BOOL displayNavArrows = NO;
+    BOOL enableGrid = YES;
+    BOOL startOnGrid = NO;
+    BOOL autoPlayOnAppear = NO;
+    for (id image in imageMessageInfo) {
+        if ([image isKindOfClass:[UIImage class]]) {
+            // Photos
+            photo = [MWPhoto photoWithImage:image];
+//            photo.caption = @"White Tower";
+            [photos addObject:photo];
+            [thumbs addObject:photo];
+
+        } else {
+            photo = [MWPhoto photoWithURL:image];
+            [photos addObject:photo];
+            [thumbs addObject:photo];
+        }
+    }
+    
+    
+    // Options
+    startOnGrid = NO;
+    displayNavArrows = YES;
+    
+    self.photos = photos;
+    self.thumbs = thumbs;
+    // Create browser
+    MWPhotoBrowser *browser = [[MWPhotoBrowser alloc] initWithDelegate:self];
+    browser.displayActionButton = displayActionButton;
+    browser.displayNavArrows = displayNavArrows;
+    browser.displaySelectionButtons = displaySelectionButtons;
+    browser.alwaysShowControls = displaySelectionButtons;
+    browser.zoomPhotosToFill = YES;
+    browser.enableGrid = enableGrid;
+    browser.startOnGrid = startOnGrid;
+    browser.enableSwipeToDismiss = NO;
+    browser.autoPlayOnAppear = autoPlayOnAppear;
+    [browser setCurrentPhotoIndex:index];
+    
+    // Test custom selection images
+    //    browser.customImageSelectedIconName = @"ImageSelected.png";
+    //    browser.customImageSelectedSmallIconName = @"ImageSelectedSmall.png";
+    
+    // Reset selections
+    if (displaySelectionButtons) {
+        _selections = [[NSMutableArray alloc] initWithCapacity:[imageMessageInfo count]];;
+        for (int i = 0; i < photos.count; i++) {
+            [_selections addObject:[NSNumber numberWithBool:NO]];
+        }
+    }
+    
+    
+    id<UIApplicationDelegate> delegate = ((id<UIApplicationDelegate>)[[UIApplication sharedApplication] delegate]);
+    UIWindow *window = delegate.window;
+    UITabBarController *tabBarController = (UITabBarController *)window.rootViewController;
+    UINavigationController *navigationController_ = tabBarController.selectedViewController;
+    [navigationController_ pushViewController:browser animated:YES];
+
+}
+#pragma mark - MWPhotoBrowserDelegate
+
+- (NSUInteger)numberOfPhotosInPhotoBrowser:(MWPhotoBrowser *)photoBrowser {
+    return _photos.count;
+}
+
+- (id <MWPhoto>)photoBrowser:(MWPhotoBrowser *)photoBrowser photoAtIndex:(NSUInteger)index {
+    if (index < _photos.count)
+        return [_photos objectAtIndex:index];
+    return nil;
+}
+
+- (id <MWPhoto>)photoBrowser:(MWPhotoBrowser *)photoBrowser thumbPhotoAtIndex:(NSUInteger)index {
+    if (index < _thumbs.count)
+        return [_thumbs objectAtIndex:index];
+    return nil;
+}
+
+
+- (void)photoBrowser:(MWPhotoBrowser *)photoBrowser didDisplayPhotoAtIndex:(NSUInteger)index {
+    NSLog(@"Did start viewing photo at index %lu", (unsigned long)index);
+}
+
+- (BOOL)photoBrowser:(MWPhotoBrowser *)photoBrowser isPhotoSelectedAtIndex:(NSUInteger)index {
+    return [[_selections objectAtIndex:index] boolValue];
+}
+
+//- (NSString *)photoBrowser:(MWPhotoBrowser *)photoBrowser titleForPhotoAtIndex:(NSUInteger)index {
+//    return [NSString stringWithFormat:@"Photo %lu", (unsigned long)index+1];
+//}
+
+- (void)photoBrowser:(MWPhotoBrowser *)photoBrowser photoAtIndex:(NSUInteger)index selectedChanged:(BOOL)selected {
+    [_selections replaceObjectAtIndex:index withObject:[NSNumber numberWithBool:selected]];
+    NSLog(@"Photo at index %lu selected %@", (unsigned long)index, selected ? @"YES" : @"NO");
+}
+
+- (void)photoBrowserDidFinishModalPresentation:(MWPhotoBrowser *)photoBrowser {
+    // If we subscribe to this method we must dismiss the view controller ourselves
+    NSLog(@"Did finish modal presentation");
+//    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 @end

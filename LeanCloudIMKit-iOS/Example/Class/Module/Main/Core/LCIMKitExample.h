@@ -71,7 +71,7 @@
 /**
  *  初始化的示例代码
  */
-+ (void)exampleInit;
+- (void)exampleInit;
 
 
 /**

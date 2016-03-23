@@ -27,6 +27,8 @@
 
 @interface LCIMChatMessageCell : UITableViewCell
 
+@property (nonatomic, strong, readonly) LCIMMessage *message;
+
 /**
  *  显示用户头像的UIImageView
  */
