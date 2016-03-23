@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9A12C0EB1CA298C90098FBDF /* LCIMTextFullScreenViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A12C0EA1CA298C90098FBDF /* LCIMTextFullScreenViewController.m */; };
 		9A5C700A1C91ECA8005543CC /* LCIMBaseNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A5C70091C91ECA8005543CC /* LCIMBaseNavigationController.m */; };
 		9A5C700D1C91FB93005543CC /* LCIMStatusView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A5C700C1C91FB93005543CC /* LCIMStatusView.m */; };
 		9A5C70101C91FC92005543CC /* LCIMEmotionUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A5C700F1C91FC92005543CC /* LCIMEmotionUtils.m */; };
@@ -153,6 +154,8 @@
 /* Begin PBXFileReference section */
 		19D15C89E9A800BC9D6889DF /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		5F0ADEBDA5E2071F72D14147 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		9A12C0E91CA298C90098FBDF /* LCIMTextFullScreenViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMTextFullScreenViewController.h; sourceTree = "<group>"; };
+		9A12C0EA1CA298C90098FBDF /* LCIMTextFullScreenViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCIMTextFullScreenViewController.m; sourceTree = "<group>"; };
 		9A5C70081C91ECA8005543CC /* LCIMBaseNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMBaseNavigationController.h; sourceTree = "<group>"; };
 		9A5C70091C91ECA8005543CC /* LCIMBaseNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCIMBaseNavigationController.m; sourceTree = "<group>"; };
 		9A5C700B1C91FB93005543CC /* LCIMStatusView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMStatusView.h; sourceTree = "<group>"; };
@@ -888,6 +891,8 @@
 				9AD83A1D1CA1407A00A068D1 /* LCIMConversationListViewModel.m */,
 				9AD83A1F1CA149AE00A068D1 /* LCIMConversationListCell.h */,
 				9AD83A201CA149AE00A068D1 /* LCIMConversationListCell.m */,
+				9A12C0E91CA298C90098FBDF /* LCIMTextFullScreenViewController.h */,
+				9A12C0EA1CA298C90098FBDF /* LCIMTextFullScreenViewController.m */,
 				9A738DD11C855DB600D8A961 /* LCIMUserModelDelegate.h */,
 				9A738DD01C855DB600D8A961 /* LCIMServiceDefinition.h */,
 				9A738DC71C855DB600D8A961 /* LCIMBaseViewController.h */,
@@ -1494,6 +1499,7 @@
 				9A5E4C581C917478007D987A /* NSString+XHDiskSizeTransfrom.m in Sources */,
 				9A5E4CA21C917479007D987A /* XHMessageDisplayTextView.m in Sources */,
 				9A8453FA1C9EF02100BDBBA4 /* LCIMProgressHUD.m in Sources */,
+				9A12C0EB1CA298C90098FBDF /* LCIMTextFullScreenViewController.m in Sources */,
 				9A5E4C811C917479007D987A /* XHEmotion.m in Sources */,
 				9A738DD51C855DB600D8A961 /* LCIMSignatureService.m in Sources */,
 				9A5E4C741C917479007D987A /* XHMessageTableViewController.m in Sources */,

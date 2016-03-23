@@ -23,6 +23,7 @@
 #import "LCIMSettingService.h"
 #import "LCIMEmotionUtils.h"
 #import "LCIMSoundManager.h"
+#import "LCIMTextFullScreenViewController.h"
 
 #define kSelfName @"https://LeanCloud.cn "
 #define kSelfThumb @"http://img1.touxiang.cn/uploads/20131114/14-065809_117.jpg"
@@ -258,8 +259,8 @@
     if (error == nil) {
         LCIMMessage *message = [[LCIMMessage alloc] initWithPhoto:image
                                                         photoPath:path
-                                                     thumbnailUrl:nil
-                                                   originPhotoUrl:nil
+                                                     thumbnailURL:nil
+                                                   originPhotoURL:nil
                                                            sender:[LCIMKit sharedInstance].clientId
                                                         timestamp:[NSDate date]];
         //TODO:
@@ -272,7 +273,7 @@
 
 - (void)sendVoiceWithPath:(NSString *)voicePath {
     LCIMMessage *message = [[LCIMMessage alloc] initWithVoicePath:voicePath
-                                                     voiceUrl:nil
+                                                     voiceURL:nil
                                                 voiceDuration:nil
                                                        sender:[LCIMKit sharedInstance].clientId
                                                     timestamp:[NSDate date]];
@@ -342,7 +343,11 @@
             break;
             //TODO:
     }
-    
+}
+
+- (void)textMessageCellDoubleTapped:(LCIMChatMessageCell *)messageCell {
+    LCIMTextFullScreenViewController *textFullScreenViewController = [[LCIMTextFullScreenViewController alloc] initWithText:messageCell.message.text];
+    [self.navigationController pushViewController:textFullScreenViewController animated:NO];
 }
 
 - (void)messageCell:(LCIMChatMessageCell *)messageCell withActionType:(LCIMChatMessageCellMenuActionType)actionType {
@@ -397,16 +402,6 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         [voiceMessageCell setVoiceMessageState:audioPlayerState];
     });
-}
-
-#pragma mark - Private Methods
-
-- (void)addMessage:(LCIMMessage *)message {
-    [self.chatViewModel addMessage:message];
-    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:self.chatViewModel.messageCount - 1 inSection:0];
-    [self.tableView reloadData];
-    [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionTop animated:NO];
-    [self.chatViewModel sendMessage:message];
 }
 
 - (void)loadMoreMessagesScrollTotop {

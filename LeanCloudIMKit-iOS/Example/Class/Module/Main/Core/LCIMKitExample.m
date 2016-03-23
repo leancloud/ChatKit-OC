@@ -239,11 +239,10 @@ static NSMutableDictionary *_sharedInstances = nil;
     UITabBarController *tabBarController = (UITabBarController *)window.rootViewController;
     UINavigationController *navigationController_ = tabBarController.selectedViewController;
     [navigationController_ pushViewController:chatC animated:YES];
-    
 }
 
-
 - (void)examplePreviewImageMessageWithIndex:(NSUInteger)index imageMessages:(NSArray *)imageMessageInfo {
+    
     // Browser
     NSMutableArray *photos = [[NSMutableArray alloc] initWithCapacity:[imageMessageInfo count]];
     NSMutableArray *thumbs = [[NSMutableArray alloc] initWithCapacity:[imageMessageInfo count]];
@@ -258,17 +257,14 @@ static NSMutableDictionary *_sharedInstances = nil;
         if ([image isKindOfClass:[UIImage class]]) {
             // Photos
             photo = [MWPhoto photoWithImage:image];
-//            photo.caption = @"White Tower";
             [photos addObject:photo];
             [thumbs addObject:photo];
-
         } else {
             photo = [MWPhoto photoWithURL:image];
             [photos addObject:photo];
             [thumbs addObject:photo];
         }
     }
-    
     
     // Options
     startOnGrid = NO;
@@ -301,14 +297,13 @@ static NSMutableDictionary *_sharedInstances = nil;
         }
     }
     
-    
     id<UIApplicationDelegate> delegate = ((id<UIApplicationDelegate>)[[UIApplication sharedApplication] delegate]);
     UIWindow *window = delegate.window;
     UITabBarController *tabBarController = (UITabBarController *)window.rootViewController;
     UINavigationController *navigationController_ = tabBarController.selectedViewController;
     [navigationController_ pushViewController:browser animated:YES];
-
 }
+
 #pragma mark - MWPhotoBrowserDelegate
 
 - (NSUInteger)numberOfPhotosInPhotoBrowser:(MWPhotoBrowser *)photoBrowser {

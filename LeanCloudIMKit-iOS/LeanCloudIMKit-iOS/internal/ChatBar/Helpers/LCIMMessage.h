@@ -16,14 +16,14 @@
 @property (nonatomic, copy, readonly) NSString *text;
 @property (nonatomic, strong, readwrite) UIImage *photo;
 @property (nonatomic, copy, readonly) NSString *photoPath;
-@property (nonatomic, copy, readonly) NSString *thumbnailUrl;
-@property (nonatomic, copy, readonly) NSString *originPhotoUrl;
+@property (nonatomic, strong, readonly) NSURL *thumbnailURL;
+@property (nonatomic, strong, readonly) NSURL *originPhotoURL;
 @property (nonatomic, strong, readonly) UIImage *videoConverPhoto;
 @property (nonatomic, copy, readonly) NSString *videoPath;
-@property (nonatomic, copy, readonly) NSString *videoUrl;
+@property (nonatomic, strong, readonly) NSURL *videoURL;
 
 @property (nonatomic, copy, readonly) NSString *voicePath;
-@property (nonatomic, copy, readonly) NSString *voiceUrl;
+@property (nonatomic, strong, readonly) NSURL *voiceURL;
 @property (nonatomic, copy, readonly) NSString *voiceDuration;
 
 @property (nonatomic, copy, readonly) NSString *emotionName;
@@ -72,8 +72,8 @@
  *
  *  @param photo          目标图片
  *  @param photePath      目标图片的本地路径
- *  @param thumbnailUrl   目标图片在服务器的缩略图地址
- *  @param originPhotoUrl 目标图片在服务器的原图地址
+ *  @param thumbnailURL   目标图片在服务器的缩略图地址
+ *  @param originPhotoURL 目标图片在服务器的原图地址
  *  @param sender         发送者
  *  @param date           发送时间
  *
@@ -81,8 +81,8 @@
  */
 - (instancetype)initWithPhoto:(UIImage *)photo
                     photoPath:(NSString *)photoPath
-                 thumbnailUrl:(NSString *)thumbnailUrl
-               originPhotoUrl:(NSString *)originPhotoUrl
+                 thumbnailURL:(NSURL *)thumbnailURL
+               originPhotoURL:(NSURL *)originPhotoURL
                        sender:(NSString *)sender
                     timestamp:(NSDate *)timestamp;
 
@@ -91,7 +91,7 @@
  *
  *  @param videoConverPhoto 目标视频的封面图
  *  @param videoPath        目标视频的本地路径，如果是下载过，或者是从本地发送的时候，会存在
- *  @param videoUrl         目标视频在服务器上的地址
+ *  @param videoURL         目标视频在服务器上的地址
  *  @param sender           发送者
  *  @param date             发送时间
  *
@@ -99,7 +99,7 @@
  */
 - (instancetype)initWithVideoConverPhoto:(UIImage *)videoConverPhoto
                                videoPath:(NSString *)videoPath
-                                videoUrl:(NSString *)videoUrl
+                                videoURL:(NSURL *)videoURL
                                   sender:(NSString *)sender
                                timestamp:(NSDate *)timestamp;
 
@@ -107,7 +107,7 @@
  *  初始化语音类型的消息
  *
  *  @param voicePath        目标语音的本地路径
- *  @param voiceUrl         目标语音在服务器的地址
+ *  @param voiceURL         目标语音在服务器的地址
  *  @param voiceDuration    目标语音的时长
  *  @param sender           发送者
  *  @param date             发送时间
@@ -115,7 +115,7 @@
  *  @return 返回Message model 对象
  */
 - (instancetype)initWithVoicePath:(NSString *)voicePath
-                         voiceUrl:(NSString *)voiceUrl
+                         voiceURL:(NSURL *)voiceURL
                     voiceDuration:(NSString *)voiceDuration
                            sender:(NSString *)sender
                         timestamp:(NSDate *)timestamp;
@@ -124,7 +124,7 @@
  *  初始化语音类型的消息。增加已读未读标记
  *
  *  @param voicePath        目标语音的本地路径
- *  @param voiceUrl         目标语音在服务器的地址
+ *  @param voiceURL         目标语音在服务器的地址
  *  @param voiceDuration    目标语音的时长
  *  @param sender           发送者
  *  @param date             发送时间
@@ -133,7 +133,7 @@
  *  @return 返回Message model 对象
  */
 - (instancetype)initWithVoicePath:(NSString *)voicePath
-                         voiceUrl:(NSString *)voiceUrl
+                         voiceURL:(NSURL *)voiceURL
                     voiceDuration:(NSString *)voiceDuration
                            sender:(NSString *)sender
                         timestamp:(NSDate *)timestamp

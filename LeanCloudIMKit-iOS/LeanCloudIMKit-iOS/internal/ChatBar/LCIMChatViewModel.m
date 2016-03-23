@@ -117,11 +117,11 @@
     }
 }
 
-#pragma mark - Public Methods
-
 - (void)addMessage:(LCIMMessage *)message {
     [self.dataArray addObject:message];
 }
+
+#pragma mark - Public Methods
 
 - (void)sendMessage:(LCIMMessage *)message {
     __weak __typeof(&*self) wself = self;
@@ -147,6 +147,7 @@
     message.bubbleMessageType = LCIMMessageOwnerSelf;
     AVIMTypedMessage *avimTypedMessage = [LCIMChatViewModel getAVIMTypedMessageWithMessage:message];
     [self.avimTypedMessage addObject:avimTypedMessage];
+NSLog(@"🔴类名与方法名：%@（在第%@行），描述：%@", @(__PRETTY_FUNCTION__), @(__LINE__), @(self.dataArray.count));
     [self preloadMessageToTableView:message];
     
     // if `message.messageId` is not nil, it is a failed message being resended.
@@ -186,10 +187,14 @@
 }
 
 - (void)preloadMessageToTableView:(LCIMMessage *)message {
-    [self.dataArray addObject:message];
+    [self addMessage:message];
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:self.dataArray.count - 1 inSection:0];
-    [self.parentViewController.tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
-    [self.parentViewController scrollToBottomAnimated:YES];
+    dispatch_async(dispatch_get_main_queue(),^{
+        [self.parentViewController.tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+        [self.parentViewController scrollToBottomAnimated:YES];
+        
+    });
+    NSLog(@"🔴类名与方法名：%@（在第%@行），描述：%@", @(__PRETTY_FUNCTION__), @(__LINE__), @(self.dataArray.count));
 }
 
 - (void)removeMessageAtIndex:(NSUInteger)index {
@@ -227,7 +232,7 @@
     } else if (message.mediaType == kAVIMMessageMediaTypeAudio) {
         AVIMAudioMessage *audioMsg = (AVIMAudioMessage *)message;
         NSString *duration = [NSString stringWithFormat:@"%.0f", audioMsg.duration];
-        lcimMessage = [[LCIMMessage alloc] initWithVoicePath:audioMsg.file.localPath voiceUrl:nil voiceDuration:duration sender:fromUser.name timestamp:time];
+        lcimMessage = [[LCIMMessage alloc] initWithVoicePath:audioMsg.file.localPath voiceURL:nil voiceDuration:duration sender:fromUser.name timestamp:time];
     } else if (message.mediaType == kAVIMMessageMediaTypeLocation) {
         AVIMLocationMessage *locationMsg = (AVIMLocationMessage *)message;
         lcimMessage = [[LCIMMessage alloc] initWithLocalPositionPhoto:({
@@ -238,7 +243,7 @@
                                                          geolocations:locationMsg.text location:[[CLLocation alloc] initWithLatitude:locationMsg.latitude longitude:locationMsg.longitude] sender:fromUser.name timestamp:time];
     } else if (message.mediaType == kAVIMMessageMediaTypeImage) {
         AVIMImageMessage *imageMsg = (AVIMImageMessage *)message;
-        lcimMessage = [[LCIMMessage alloc] initWithPhoto:nil photoPath:nil thumbnailUrl:nil originPhotoUrl:imageMsg.file.url sender:fromUser.name timestamp:time];
+        lcimMessage = [[LCIMMessage alloc] initWithPhoto:nil photoPath:nil thumbnailURL:nil originPhotoURL:[NSURL URLWithString:imageMsg.file.url] sender:fromUser.name timestamp:time];
     } else if (message.mediaType == kAVIMMessageMediaTypeEmotion) {
         AVIMEmotionMessage *emotionMsg = (AVIMEmotionMessage *)message;
         NSString *path = [[NSBundle mainBundle] pathForResource:emotionMsg.emotionPath ofType:@"gif"];
@@ -246,7 +251,7 @@
     } else if (message.mediaType == kAVIMMessageMediaTypeVideo) {
         AVIMVideoMessage *videoMsg = (AVIMVideoMessage *)message;
         NSString *path = [[LCIMSettingService sharedInstance] videoPathOfMessage:videoMsg];
-        lcimMessage = [[LCIMMessage alloc] initWithVideoConverPhoto:[XHMessageVideoConverPhotoFactory videoConverPhotoWithVideoPath:path] videoPath:path videoUrl:nil sender:fromUser.name timestamp:time];
+        lcimMessage = [[LCIMMessage alloc] initWithVideoConverPhoto:[XHMessageVideoConverPhotoFactory videoConverPhotoWithVideoPath:path] videoPath:path videoURL:nil sender:fromUser.name timestamp:time];
     } else {
         lcimMessage = [[LCIMMessage alloc] initWithText:@"未知消息" sender:fromUser.name timestamp:time];
         DLog("unkonwMessage");
@@ -304,7 +309,7 @@
     AVIMTypedMessage *avimTypedMessage;
     switch (message.messageMediaType) {
         case LCIMMessageTypeText: {
-            avimTypedMessage = [AVIMTextMessage messageWithText:[LCIMEmotionUtils plainStringFromEmojiString:message.text] attributes:nil];
+            avimTypedMessage = [AVIMTextMessage messageWithText:message.text attributes:nil];
             break;
         }
         case LCIMMessageTypeVideo:
@@ -475,13 +480,14 @@ static CGPoint  delayOffset = {0.0};
     for (LCIMMessage *message_ in self.dataArray) {
         if (message_.messageMediaType == LCIMMessageTypeImage) {
             UIImage *image = message_.photo;
-            if (!image && message_.originPhotoUrl) {
-                [allImageMessageImages_ addObject:message_.originPhotoUrl];
+            if (!image) {
+                if (message_.originPhotoURL) { [allImageMessageImages_ addObject:message_.originPhotoURL]; }
             } else {
                 [allImageMessageImages_ addObject:image];
-                if (message == message_ && *selectedMessageIndex == nil) {
-                    *selectedMessageIndex = @(idx);
-                }
+            }
+            
+            if ((message == message_) && (*selectedMessageIndex == nil)) {
+                *selectedMessageIndex = @(idx);
             }
             idx++;
         }

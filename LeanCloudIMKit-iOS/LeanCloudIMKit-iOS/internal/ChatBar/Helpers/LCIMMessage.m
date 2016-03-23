@@ -11,14 +11,14 @@
 
 @property (nonatomic, copy)  NSString *text;
 @property (nonatomic, copy)  NSString *photoPath;
-@property (nonatomic, copy)  NSString *thumbnailUrl;
-@property (nonatomic, copy)  NSString *originPhotoUrl;
+@property (nonatomic, strong)  NSURL *thumbnailURL;
+@property (nonatomic, strong)  NSURL *originPhotoURL;
 @property (nonatomic, strong)  UIImage *videoConverPhoto;
 @property (nonatomic, copy)  NSString *videoPath;
-@property (nonatomic, copy)  NSString *videoUrl;
+@property (nonatomic, strong)  NSURL *videoURL;
 
 @property (nonatomic, copy)  NSString *voicePath;
-@property (nonatomic, copy)  NSString *voiceUrl;
+@property (nonatomic, strong)  NSURL *voiceURL;
 @property (nonatomic, copy)  NSString *voiceDuration;
 
 @property (nonatomic, copy)  NSString *emotionName;
@@ -59,16 +59,16 @@
 
 - (instancetype)initWithPhoto:(UIImage *)photo
                     photoPath:(NSString *)photoPath
-                 thumbnailUrl:(NSString *)thumbnailUrl
-               originPhotoUrl:(NSString *)originPhotoUrl
+                 thumbnailURL:(NSURL *)thumbnailURL
+               originPhotoURL:(NSURL *)originPhotoURL
                        sender:(NSString *)sender
                     timestamp:(NSDate *)timestamp {
     self = [super init];
     if (self) {
         _photo = photo;
         _photoPath = photoPath;
-        _thumbnailUrl = thumbnailUrl;
-        _originPhotoUrl = originPhotoUrl;
+        _thumbnailURL = thumbnailURL;
+        _originPhotoURL = originPhotoURL;
         _sender = sender;
         _timestamp = timestamp;
         _messageMediaType = LCIMMessageTypeImage;
@@ -78,14 +78,14 @@
 
 - (instancetype)initWithVideoConverPhoto:(UIImage *)videoConverPhoto
                                videoPath:(NSString *)videoPath
-                                videoUrl:(NSString *)videoUrl
+                                videoURL:(NSURL *)videoURL
                                   sender:(NSString *)sender
                                timestamp:(NSDate *)timestamp{
     self = [super init];
     if (self) {
         _videoConverPhoto = videoConverPhoto;
         _videoPath = videoPath;
-        _videoUrl = videoUrl;
+        _videoURL = videoURL;
         _sender = sender;
         _timestamp = timestamp;
         _messageMediaType = LCIMMessageTypeVideo;
@@ -94,16 +94,16 @@
 }
 
 - (instancetype)initWithVoicePath:(NSString *)voicePath
-                         voiceUrl:(NSString *)voiceUrl
+                         voiceURL:(NSURL *)voiceURL
                     voiceDuration:(NSString *)voiceDuration
                            sender:(NSString *)sender
                         timestamp:(NSDate *)timestamp{
     
-    return [self initWithVoicePath:voicePath voiceUrl:voiceUrl voiceDuration:voiceDuration sender:sender timestamp:timestamp isRead:YES];
+    return [self initWithVoicePath:voicePath voiceURL:voiceURL voiceDuration:voiceDuration sender:sender timestamp:timestamp isRead:YES];
 }
 
 - (instancetype)initWithVoicePath:(NSString *)voicePath
-                         voiceUrl:(NSString *)voiceUrl
+                         voiceURL:(NSURL *)voiceURL
                     voiceDuration:(NSString *)voiceDuration
                            sender:(NSString *)sender
                         timestamp:(NSDate *)timestamp
@@ -111,7 +111,7 @@
     self = [super init];
     if (self) {
         _voicePath = voicePath;
-        _voiceUrl = voiceUrl;
+        _voiceURL = voiceURL;
         _voiceDuration = voiceDuration;
         
         _sender = sender;
@@ -172,15 +172,15 @@
         _text = [aDecoder decodeObjectForKey:@"text"];
         
         _photo = [aDecoder decodeObjectForKey:@"photo"];
-        _thumbnailUrl = [aDecoder decodeObjectForKey:@"thumbnailUrl"];
-        _originPhotoUrl = [aDecoder decodeObjectForKey:@"originPhotoUrl"];
+        _thumbnailURL = [aDecoder decodeObjectForKey:@"thumbnailURL"];
+        _originPhotoURL = [aDecoder decodeObjectForKey:@"originPhotoURL"];
         
         _videoConverPhoto = [aDecoder decodeObjectForKey:@"videoConverPhoto"];
         _videoPath = [aDecoder decodeObjectForKey:@"videoPath"];
-        _videoUrl = [aDecoder decodeObjectForKey:@"videoUrl"];
+        _videoURL = [aDecoder decodeObjectForKey:@"videoURL"];
         
         _voicePath = [aDecoder decodeObjectForKey:@"voicePath"];
-        _voiceUrl = [aDecoder decodeObjectForKey:@"voiceUrl"];
+        _voiceURL = [aDecoder decodeObjectForKey:@"voiceURL"];
         _voiceDuration = [aDecoder decodeObjectForKey:@"voiceDuration"];
         
         _emotionPath = [aDecoder decodeObjectForKey:@"emotionPath"];
@@ -210,15 +210,15 @@
     [aCoder encodeObject:self.text forKey:@"text"];
     
     [aCoder encodeObject:self.photo forKey:@"photo"];
-    [aCoder encodeObject:self.thumbnailUrl forKey:@"thumbnailUrl"];
-    [aCoder encodeObject:self.originPhotoUrl forKey:@"originPhotoUrl"];
+    [aCoder encodeObject:self.thumbnailURL forKey:@"thumbnailURL"];
+    [aCoder encodeObject:self.originPhotoURL forKey:@"originPhotoURL"];
     
     [aCoder encodeObject:self.videoConverPhoto forKey:@"videoConverPhoto"];
     [aCoder encodeObject:self.videoPath forKey:@"videoPath"];
-    [aCoder encodeObject:self.videoUrl forKey:@"videoUrl"];
+    [aCoder encodeObject:self.videoURL forKey:@"videoURL"];
     
     [aCoder encodeObject:self.voicePath forKey:@"voicePath"];
-    [aCoder encodeObject:self.voiceUrl forKey:@"voiceUrl"];
+    [aCoder encodeObject:self.voiceURL forKey:@"voiceURL"];
     [aCoder encodeObject:self.voiceDuration forKey:@"voiceDuration"];
     
     [aCoder encodeObject:self.emotionPath forKey:@"emotionPath"];
@@ -252,19 +252,19 @@
         case LCIMMessageTypeImage:
             message =  [[[self class] allocWithZone:zone] initWithPhoto:[self.photo copy]
                                                               photoPath:[self.photoPath copy]
-                                                           thumbnailUrl:[self.thumbnailUrl copy]
-                                                         originPhotoUrl:[self.originPhotoUrl copy]
+                                                           thumbnailURL:[self.thumbnailURL copy]
+                                                         originPhotoURL:[self.originPhotoURL copy]
                                                                  sender:[self.sender copy]
                                                               timestamp:[self.timestamp copy]];
         case LCIMMessageTypeVideo:
             message = [[[self class] allocWithZone:zone] initWithVideoConverPhoto:[self.videoConverPhoto copy]
                                                                         videoPath:[self.videoPath copy]
-                                                                         videoUrl:[self.videoUrl copy]
+                                                                         videoURL:[self.videoURL copy]
                                                                            sender:[self.sender copy]
                                                                         timestamp:[self.timestamp copy]];
         case LCIMMessageTypeVoice:
             message =  [[[self class] allocWithZone:zone] initWithVoicePath:[self.voicePath copy]
-                                                                   voiceUrl:[self.voiceUrl copy]
+                                                                   voiceURL:[self.voiceURL copy]
                                                               voiceDuration:[self.voiceDuration copy]
                                                                      sender:[self.sender copy]
                                                                   timestamp:[self.timestamp copy]];

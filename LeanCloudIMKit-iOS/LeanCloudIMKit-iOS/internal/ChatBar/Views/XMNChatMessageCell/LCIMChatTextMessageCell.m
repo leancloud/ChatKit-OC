@@ -36,19 +36,18 @@
 #pragma mark - Public Methods
 
 - (void)setup {
-    
     [self.messageContentView addSubview:self.messageTextL];
+    UITapGestureRecognizer *tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(doubleTapMessageContentViewGestureRecognizerHandle:)];
+    tapGestureRecognizer.numberOfTapsRequired = 2;
+    [self.messageContentView addGestureRecognizer:tapGestureRecognizer];
     [super setup];
-    
 }
 
 - (void)configureCellWithData:(LCIMMessage *)message {
     [super configureCellWithData:message];
-
     NSMutableAttributedString *attrS = [LCIMFaceManager emotionStrWithString:message.text];
     [attrS addAttributes:self.textStyle range:NSMakeRange(0, attrS.length)];
     self.messageTextL.attributedText = attrS;
-    
 }
 
 #pragma mark - Getters
@@ -59,9 +58,17 @@
         _messageTextL.textColor = [UIColor blackColor];
         _messageTextL.font = [UIFont systemFontOfSize:16.0f];
         _messageTextL.numberOfLines = 0;
-        _messageTextL.lineBreakMode = NSLineBreakByWordWrapping;
+        _messageTextL.lineBreakMode = NSLineBreakByWordWrapping;;
     }
     return _messageTextL;
+}
+
+- (void)doubleTapMessageContentViewGestureRecognizerHandle:(UITapGestureRecognizer *)tapGestureRecognizer {
+    if (tapGestureRecognizer.state == UIGestureRecognizerStateEnded) {
+        if ([self.delegate respondsToSelector:@selector(textMessageCellDoubleTapped:)]) {
+            [self.delegate textMessageCellDoubleTapped:self];
+        }
+    }
 }
 
 - (NSDictionary *)textStyle {
@@ -75,7 +82,6 @@
                  NSParagraphStyleAttributeName: style};
     }
     return _textStyle;
-    
 }
 
 @end

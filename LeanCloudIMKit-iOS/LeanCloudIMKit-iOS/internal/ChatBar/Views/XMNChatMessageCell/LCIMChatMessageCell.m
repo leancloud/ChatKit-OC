@@ -178,13 +178,25 @@
     
     [self updateConstraintsIfNeeded];
     
-    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTap:)];
-    [self.contentView addGestureRecognizer:tap];
     
     UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleLongPress:)];
     longPress.numberOfTouchesRequired = 1;
     longPress.minimumPressDuration = 1.f;
     [self.contentView addGestureRecognizer:longPress];
+
+}
+
+- (void)sigleTapGestureRecognizerHandle:(UITapGestureRecognizer *)tapGestureRecognizer {
+    [self handleTap:tapGestureRecognizer];
+}
+
+- (void)doubleTapGestureRecognizerHandle:(UITapGestureRecognizer *)tapGestureRecognizer {
+    [self handleTap:tapGestureRecognizer];
+    if (tapGestureRecognizer.state == UIGestureRecognizerStateEnded) {
+//        if ([self.delegate respondsToSelector:@selector(didDoubleSelectedOnTextMessage:atIndexPath:)]) {
+//            [self.delegate didDoubleSelectedOnTextMessage:self.messageBubbleView.message atIndexPath:self.indexPath];
+//        }
+    }
 }
 
 #pragma mark - Public Methods
@@ -192,17 +204,11 @@
 - (void)configureCellWithData:(LCIMMessage *)message {
     _message = message;
     self.nicknameLabel.text = message.sender;
-    
-    //    [self.headImageView lcim_setImageWithURLString:message.avatorURL];
     [self.headImageView setImageWithURL:message.avatorURL placeholder:({
         NSString *imageName = @"Placeholder_Avator";
         NSString *imageNameWithBundlePath = [NSString stringWithFormat:@"Placeholder.bundle/%@", imageName];
         UIImage *image = [UIImage imageNamed:imageNameWithBundlePath];
         image;})
-                                options:YYWebImageOptionShowNetworkActivity
-                             completion:^(UIImage * _Nullable image, NSURL * _Nonnull url, YYWebImageFromType from, YYWebImageStage stage, NSError * _Nullable error) {
-                                 message.photo = image;
-                             }
      ];
     if (message.messageReadState) {
         self.messageReadState = message.messageReadState;
@@ -216,6 +222,13 @@
 #pragma mark - Private Methods
 
 
+- (void)headImageViewSingleTapGestureRecognizerHandle:(UITapGestureRecognizer *)tapGestureRecognizer {
+    if (tapGestureRecognizer.state == UIGestureRecognizerStateEnded) {
+        if ([self.delegate respondsToSelector:@selector(messageCellTappedHead:)]) {
+            [self.delegate messageCellTappedHead:self];
+        }
+    }
+}
 
 - (void)handleTap:(UITapGestureRecognizer *)tap {
     if (tap.state == UIGestureRecognizerStateEnded) {
@@ -263,6 +276,8 @@
         _headImageView.layer.cornerRadius = 25.0f;
         _headImageView.layer.masksToBounds = YES;
         _headImageView.backgroundColor = [UIColor redColor];
+        UITapGestureRecognizer *recognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(headImageViewSingleTapGestureRecognizerHandle:)];
+        [_headImageView addGestureRecognizer:recognizer];
     }
     return _headImageView;
 }
@@ -421,6 +436,14 @@ NSString * const kLCIMChatMessageCellMenuControllerKey;
     return menuController;
 }
 
+- (void)prepareForReuse {
+    [super prepareForReuse];
+    self.headImageView = nil;
+    self.nicknameLabel = nil;
+    self.messageContentView = nil;
+    self.messageReadStateImageView = nil;
+    self.messageSendStateImageView = nil;
+}
 
 @end
 

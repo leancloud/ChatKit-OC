@@ -8,7 +8,7 @@
 
 #import "LCIMChatImageMessageCell.h"
 #import "Masonry.h"
-#import "YYKit.h"
+#import <SDWebImage/UIImageView+WebCache.h>
 
 @interface LCIMChatImageMessageCell ()
 
@@ -46,33 +46,35 @@
 - (void)setup {
     [self.messageContentView addSubview:self.messageImageView];
     [self.messageContentView addSubview:self.messageProgressView];
+    UITapGestureRecognizer *recognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(singleTapMessageImageViewGestureRecognizerHandler:)];
+    [self.messageContentView addGestureRecognizer:recognizer];
     [super setup];
     
 }
 
+- (void)singleTapMessageImageViewGestureRecognizerHandler:(UITapGestureRecognizer *)tapGestureRecognizer {
+    if (tapGestureRecognizer.state == UIGestureRecognizerStateEnded) {
+        if ([self.delegate respondsToSelector:@selector(messageCellTappedMessage:)]) {
+            [self.delegate messageCellTappedMessage:self];
+        }
+    }
+}
 - (void)configureCellWithData:(LCIMMessage *)message {
     [super configureCellWithData:message];
-//    self.messageImageView.image =
-//    id image = message.photo;
-    
-    [self.messageImageView setImageWithURL:[NSURL URLWithString:message.originPhotoUrl] placeholder:({
+    UIImage *image = message.photo;
+    if (image) {
+        self.messageImageView.image = image;
+        return;
+    }
+    [self.messageImageView  sd_setImageWithURL:message.originPhotoURL placeholderImage:({
         NSString *imageName = @"Placeholder_Image";
         NSString *imageNameWithBundlePath = [NSString stringWithFormat:@"Placeholder.bundle/%@", imageName];
         UIImage *image = [UIImage imageNamed:imageNameWithBundlePath];
         image;})
-                                   options:YYWebImageOptionShowNetworkActivity
-                                completion:^(UIImage * _Nullable image, NSURL * _Nonnull url, YYWebImageFromType from, YYWebImageStage stage, NSError * _Nullable error) {
-                                    message.photo = image;
-                                }
+                                     completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+//                                         message.photo = image;
+                                     }
      ];
-//    if ([image isKindOfClass:[UIImage class]]) {
-////        self.messageImageView.image = image;
-//    } else if ([image isKindOfClass:[NSString class]]) {
-//        //TODO: 是一个路径,可能是网址,需要加载
-//        NSLog(@"是一个路径");
-//    } else {
-//        NSLog(@"未知的图片类型");
-//    }
 }
 
 #pragma mark - Setters

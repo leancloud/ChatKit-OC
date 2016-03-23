@@ -22,6 +22,7 @@
 - (void)messageCellTappedHead:(LCIMChatMessageCell *)messageCell;
 - (void)messageCellTappedMessage:(LCIMChatMessageCell *)messageCell;
 - (void)messageCell:(LCIMChatMessageCell *)messageCell withActionType:(LCIMChatMessageCellMenuActionType)actionType;
+- (void)textMessageCellDoubleTapped:(LCIMChatMessageCell *)messageCell;
 
 @end
 
@@ -59,7 +60,6 @@
  */
 @property (nonatomic, strong) UIImageView *messageContentBackgroundImageView;
 
-
 @property (nonatomic, weak) id<LCIMChatMessageCellDelegate> delegate;
 
 /**
@@ -86,7 +86,6 @@
  *  消息阅读状态,当状态为LCIMMessageUnRead时,LCIMmessageReadStateImageView显示
  */
 @property (nonatomic, assign) LCIMMessageReadState messageReadState;
-
 
 #pragma mark - Public Methods
 
