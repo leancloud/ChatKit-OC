@@ -26,7 +26,7 @@ CGFloat const LCIMConversationListCellDefaultHeight = 61; //LCIMImageSize + LCIM
 + (instancetype)dequeueOrCreateCellByTableView :(UITableView *)tableView {
     LCIMConversationListCell *cell = [tableView dequeueReusableCellWithIdentifier:[LCIMConversationListCell identifier]];
     if (cell == nil) {
-        cell = [[LCIMConversationListCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:[[self class] identifier]];
+        cell = [[LCIMConversationListCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:[[self class] identifier]];
     }
     return cell;
 }

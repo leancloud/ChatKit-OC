@@ -71,7 +71,6 @@ static NSMutableDictionary *_sharedInstances = nil;
             [_sharedInstances setObject:sharedInstance forKey:instanceClass];
         }
     }
-    
     return sharedInstance;
 }
 
@@ -108,6 +107,8 @@ static NSMutableDictionary *_sharedInstances = nil;
             !failed ?: failed(error);
         }
     }];
+    NSString *subtitle = [NSString stringWithFormat:@"User Id 是 : %@", clientId];
+    [LCIMUtil showNotificationWithTitle:@"登陆成功" subtitle:subtitle type:LCIMMessageNotificationTypeSuccess];
     //TODO:
 }
 
@@ -159,7 +160,6 @@ static NSMutableDictionary *_sharedInstances = nil;
             NSError *error = [NSError errorWithDomain:@"LCIMKit"
                                                  code:code
                                              userInfo:errorInfo];
-            
             !callback ?: callback(nil, error);
             return;
         }
@@ -199,54 +199,75 @@ static NSMutableDictionary *_sharedInstances = nil;
     [[LCIMKit sharedInstance] setPreviewImageMessageBlock:^(NSUInteger index, NSArray *imageMessageInfo, NSDictionary *userInfo) {
         [self examplePreviewImageMessageWithIndex:index imageMessages:imageMessageInfo];
     }];
+    
+    [[LCIMKit sharedInstance] setDidDeleteItemBlock:^(AVIMConversation *conversation) {
+        //TODO:
+    }];
+    
+    [[LCIMKit sharedInstance] setOpenProfileBlock:^(NSString *userId, UIViewController *parentController) {
+        [self exampleOpenProfileForUserId:userId];
+    }];
+    
+    [[LCIMKit sharedInstance] setShowNotificationBlock:^(UIViewController *viewController, NSString *title, NSString *subtitle, LCIMMessageNotificationType type) {
+        [self exampleShowNotificationWithTitle:title subtitle:subtitle type:type];
+    }];
+    
+    // 自定义Cell菜单
+    [[LCIMKit sharedInstance] setConversationEditActionBlock:^NSArray *(NSIndexPath *indexPath, NSArray *editActions) {
+        return [self exampleConversationEditAction:indexPath];
+    }];
+}
+
+- (NSArray *)exampleConversationEditAction:(NSIndexPath *)indexPath {
+    // 如果需要自定义其他会话的菜单，在此编辑
+    return [self rightButtons];
+}
+
+- (NSArray *)rightButtons {
+    LCIMTableViewRowAction *actionItemMore = [LCIMTableViewRowAction rowActionWithStyle:LCIMTableViewRowActionStyleDefault
+                                                                                  title:@"More"
+                                                                                handler:^(LCIMTableViewRowAction *action, NSIndexPath *indexPath) {
+                                                                                    NSLog(@"More");
+                                                                                }];
+    actionItemMore.backgroundColor = [UIColor colorWithRed:0.78f green:0.78f blue:0.8f alpha:1.0];
+    
+    LCIMTableViewRowAction *actionItemDelete = [LCIMTableViewRowAction rowActionWithStyle:LCIMTableViewRowActionStyleDefault
+                                                                                    title:@"Delete"
+                                                                                  handler:^(LCIMTableViewRowAction *action, NSIndexPath *indexPath) {
+                                                                                        //        [[LCIMConversationService sharedInstance] deleteConversation:conversation];
+                                                                                    }];
+    return @[ actionItemDelete, actionItemMore ];
 }
 
 #pragma -
-#pragma mark - Other  Method
+#pragma mark - Other Method
 
 /**
  *  打开单聊页面
  */
 + (void)exampleOpenConversationViewControllerWithPeerId:(NSString *)peerId fromNavigationController:(UINavigationController *)navigationController {
-    //TODO:
-//    [[LCIMConversationService sharedInstance] fecthConversationWithPeerId:peerId callback:^(AVIMConversation *conversation, NSError *error) {
-//        [weakSelf exampleOpenConversationViewControllerWithConversaion:conversation fromNavigationController:aNavigationController];
-//    }];
-    //    AVIMConversation *conversation = [AVIMConversation fetchConversationByPerson:aPerson creatIfNotExist:YES];
-//    LCIMConversationViewController *conversaionViewController = [[LCIMConversationViewController alloc] initWithPeerId:peerId];
-//    LCIMConversationViewController *conversationController = [[LCIMKit sharedInstance] createConversationViewControllerWithPeerId:peerId];
-    LCIMChatController *chatC =[[LCIMChatController alloc] initWithPeerId:peerId];
-//    [self.navigationController pushViewController:chatC animated:YES];
-    chatC.hidesBottomBarWhenPushed = NO;
-    
-    id<UIApplicationDelegate> delegate = ((id<UIApplicationDelegate>)[[UIApplication sharedApplication] delegate]);
-    UIWindow *window = delegate.window;
-    UITabBarController *tabBarController = (UITabBarController *)window.rootViewController;
-    UINavigationController *navigationController_ = tabBarController.selectedViewController;
-    [navigationController_ pushViewController:chatC animated:YES];
-    //    [[LCIMConversationService sharedInstance] openChatWithPeerId:peerId fromController:aNavigationController];
-    //    [self exampleOpenConversationViewControllerWithConversation:conversation fromNavigationController:aNavigationController];
+    LCIMChatController *conversationViewController = [[LCIMChatController alloc] initWithPeerId:peerId];
+    [self pushToViewController:conversationViewController];
 }
 
 + (void)exampleOpenConversationViewControllerWithConversaion:(AVIMConversation *)conversation fromNavigationController:(UINavigationController *)aNavigationController {
-    //TODO:
-    LCIMChatController *chatC =[[LCIMChatController alloc] initWithConversation:conversation];
-    //    [self.navigationController pushViewController:chatC animated:YES];
-    chatC.hidesBottomBarWhenPushed = NO;
-    
+    LCIMChatController *conversationViewController =[[LCIMChatController alloc] initWithConversation:conversation];
+    [self pushToViewController:conversationViewController];
+}
+
++ (void)pushToViewController:(UIViewController *)viewController {
     id<UIApplicationDelegate> delegate = ((id<UIApplicationDelegate>)[[UIApplication sharedApplication] delegate]);
     UIWindow *window = delegate.window;
     UITabBarController *tabBarController = (UITabBarController *)window.rootViewController;
     UINavigationController *navigationController_ = tabBarController.selectedViewController;
-    [navigationController_ pushViewController:chatC animated:YES];
+    [navigationController_ pushViewController:viewController animated:YES];
 }
 
 - (void)examplePreviewImageMessageWithIndex:(NSUInteger)index imageMessages:(NSArray *)imageMessageInfo {
-    
     // Browser
     NSMutableArray *photos = [[NSMutableArray alloc] initWithCapacity:[imageMessageInfo count]];
     NSMutableArray *thumbs = [[NSMutableArray alloc] initWithCapacity:[imageMessageInfo count]];
-    MWPhoto *photo, *thumb;
+    MWPhoto *photo;
     BOOL displayActionButton = YES;
     BOOL displaySelectionButtons = NO;
     BOOL displayNavArrows = NO;
@@ -265,11 +286,9 @@ static NSMutableDictionary *_sharedInstances = nil;
             [thumbs addObject:photo];
         }
     }
-    
     // Options
     startOnGrid = NO;
     displayNavArrows = YES;
-    
     self.photos = photos;
     self.thumbs = thumbs;
     // Create browser
@@ -284,11 +303,6 @@ static NSMutableDictionary *_sharedInstances = nil;
     browser.enableSwipeToDismiss = NO;
     browser.autoPlayOnAppear = autoPlayOnAppear;
     [browser setCurrentPhotoIndex:index];
-    
-    // Test custom selection images
-    //    browser.customImageSelectedIconName = @"ImageSelected.png";
-    //    browser.customImageSelectedSmallIconName = @"ImageSelectedSmall.png";
-    
     // Reset selections
     if (displaySelectionButtons) {
         _selections = [[NSMutableArray alloc] initWithCapacity:[imageMessageInfo count]];;
@@ -296,12 +310,16 @@ static NSMutableDictionary *_sharedInstances = nil;
             [_selections addObject:[NSNumber numberWithBool:NO]];
         }
     }
-    
-    id<UIApplicationDelegate> delegate = ((id<UIApplicationDelegate>)[[UIApplication sharedApplication] delegate]);
-    UIWindow *window = delegate.window;
-    UITabBarController *tabBarController = (UITabBarController *)window.rootViewController;
-    UINavigationController *navigationController_ = tabBarController.selectedViewController;
-    [navigationController_ pushViewController:browser animated:YES];
+    [[self class] pushToViewController:browser];
+}
+
+- (void)exampleOpenProfileForUserId:(NSString *)userId {
+    NSString *subtitle = [NSString stringWithFormat:@"User Id 是 : %@", userId];
+    [LCIMUtil showNotificationWithTitle:@"打开用户主页" subtitle:subtitle type:LCIMMessageNotificationTypeMessage];
+}
+
+- (void)exampleShowNotificationWithTitle:(NSString *)title subtitle:(NSString *)subtitle type:(LCIMMessageNotificationType)type {
+    [LCIMUtil showNotificationWithTitle:title subtitle:subtitle type:type];
 }
 
 #pragma mark - MWPhotoBrowserDelegate
@@ -321,7 +339,6 @@ static NSMutableDictionary *_sharedInstances = nil;
         return [_thumbs objectAtIndex:index];
     return nil;
 }
-
 
 - (void)photoBrowser:(MWPhotoBrowser *)photoBrowser didDisplayPhotoAtIndex:(NSUInteger)index {
     NSLog(@"Did start viewing photo at index %lu", (unsigned long)index);

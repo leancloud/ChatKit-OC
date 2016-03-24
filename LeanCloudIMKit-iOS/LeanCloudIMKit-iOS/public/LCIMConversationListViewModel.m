@@ -19,10 +19,13 @@
 #import "NSDate+DateTools.h"
 #import "MJRefresh.h"
 #import "LCIMConversationListService.h"
+#import "LCIMTableViewRowAction.h"
+#import "SWUtilityButtonView.h"
 
-@interface LCIMConversationListViewModel ()
+@interface LCIMConversationListViewModel () <SWTableViewCellDelegate>
 
 @property (nonatomic, strong) LCIMConversationListViewController *conversationListViewController;
+@property (nonatomic, copy) NSArray<LCIMTableViewRowActionHandler> *rightUtilityButtonsBlocks;
 
 @end
 
@@ -55,6 +58,19 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     LCIMConversationListCell *cell = [LCIMConversationListCell dequeueOrCreateCellByTableView:tableView];
+
+    if ([[UIDevice currentDevice].systemVersion floatValue] < 8.0) {
+        LCIMConversationEditActionsBlock conversationEditActionBlock = [[LCIMConversationListService sharedInstance] conversationEditActionBlock];
+        NSArray *editActions = [NSArray array];
+        if (conversationEditActionBlock) {
+            editActions = conversationEditActionBlock(indexPath, [self defaultRightButtons]);
+        } else {
+            editActions = [self defaultRightButtons];
+        }
+        cell.rightUtilityButtons = [self convertLCIMTableViewRowActionToSWUtilityButtonForButtons:editActions];
+        cell.delegate = self;
+    }
+    
     AVIMConversation *conversation = [self.dataArray objectAtIndex:indexPath.row];
     NSError *error = nil;
     NSString *peerId = conversation.lcim_peerId;
@@ -109,16 +125,94 @@
     return cell;
 }
 
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        AVIMConversation *conversation = [self.dataArray objectAtIndex:indexPath.row];
-        [[LCIMConversationService sharedInstance] deleteConversation:conversation];
-        [self refresh];
-    }
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
+    return YES;
 }
 
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-    return true;
+- (NSArray<UITableViewRowAction *> *)tableView:(UITableView *)tableView editActionsForRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    LCIMConversationEditActionsBlock conversationEditActionBlock = [[LCIMConversationListService sharedInstance] conversationEditActionBlock];
+    NSArray *editActions = [NSArray array];
+    if (conversationEditActionBlock) {
+        editActions = conversationEditActionBlock(indexPath, [self defaultRightButtons]);
+    } else {
+        editActions = [self defaultRightButtons];
+    }
+    return [self convertLCIMTableViewRowActionToUITableViewRowActions:editActions];
+}
+
+- (NSArray *)defaultRightButtons {
+    LCIMTableViewRowAction *actionItemDelete = [LCIMTableViewRowAction
+                                                rowActionWithStyle:LCIMTableViewRowActionStyleNormal
+                                                title:@"Delete"
+                                                handler:^(LCIMTableViewRowAction *action, NSIndexPath *indexPath) {
+                                                    AVIMConversation *conversation = [self.dataArray objectAtIndex:indexPath.row];
+                                                    [[LCIMConversationService sharedInstance] deleteConversation:conversation];
+                                                    [self refresh];
+                                                    LCIMConversationsListDidDeleteItemBlock conversationsListDidDeleteItemBlock = [LCIMConversationListService sharedInstance].didDeleteItemBlock;
+                                                    !conversationsListDidDeleteItemBlock ?: conversationsListDidDeleteItemBlock(conversation);
+                                                }];
+    
+//    actionItemDelete.backgroundColor = [UIColor colorWithRed:1.0f green:0.231f blue:0.188 alpha:1.0f];
+    return @[ actionItemDelete ];
+}
+
+- (NSArray *)convertLCIMTableViewRowActionToSWUtilityButtonForButtons:(NSArray *)moreActionItems {
+    NSMutableArray *blocks = [[NSMutableArray alloc] initWithCapacity:[moreActionItems count]];
+    NSMutableArray *sw_UtilityButtons = [[NSMutableArray alloc] initWithCapacity:[moreActionItems count]];
+    for (LCIMTableViewRowAction *item in moreActionItems) {
+        [sw_UtilityButtons sw_addUtilityButtonWithColor:item.backgroundColor
+                                                    title:item.title];
+        [blocks addObject:item.handler];
+    }
+    self.rightUtilityButtonsBlocks = [blocks copy];
+    return [sw_UtilityButtons copy];
+}
+
+- (NSArray *)convertLCIMTableViewRowActionToUITableViewRowActions:(NSArray *)moreActionItems {
+    NSMutableArray *tableViewRowActions = [[NSMutableArray alloc] initWithCapacity:[moreActionItems count]];
+    
+    for (LCIMTableViewRowAction *item in moreActionItems) {
+        UITableViewRowActionStyle ui_tableViewRowActionStyle;
+        LCIMTableViewRowActionStyle lcim_tableViewRowActionStyle = item.style;
+        switch (lcim_tableViewRowActionStyle) {
+            case LCIMTableViewRowActionStyleDefault:
+                ui_tableViewRowActionStyle = UITableViewRowActionStyleDefault;
+                break;
+            case LCIMTableViewRowActionStyleNormal:
+                ui_tableViewRowActionStyle = UITableViewRowActionStyleNormal;
+                break;
+            default:
+                break;
+        }
+        
+        UITableViewRowAction *action = [UITableViewRowAction rowActionWithStyle:ui_tableViewRowActionStyle
+                                                                          title:item.title
+                                                                        handler:^(UITableViewRowAction * _Nonnull action, NSIndexPath * _Nonnull indexPath) {
+            !item.handler ?: item.handler(item, indexPath);
+        }];
+        action.backgroundColor = item.backgroundColor;
+        
+        [tableViewRowActions addObject:action];
+    }
+    return [tableViewRowActions copy];
+}
+
+// click event on right utility button
+- (void)swipeableTableViewCell:(SWTableViewCell *)cell didTriggerRightUtilityButtonWithIndex:(NSInteger)index {
+    LCIMTableViewRowActionHandler block = self.rightUtilityButtonsBlocks[index];
+    !block ?: block(nil, nil);
+}
+
+
+// prevent multiple cells from showing utilty buttons simultaneously
+- (BOOL)swipeableTableViewCellShouldHideUtilityButtonsOnSwipe:(SWTableViewCell *)cell {
+    return YES;
+}
+
+// prevent cell(s) from displaying left/right utility buttons
+- (BOOL)swipeableTableViewCell:(SWTableViewCell *)cell canSwipeToState:(SWCellState)state {
+    return YES;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {

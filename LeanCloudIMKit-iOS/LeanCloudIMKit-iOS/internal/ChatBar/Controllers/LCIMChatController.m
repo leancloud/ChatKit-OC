@@ -61,6 +61,7 @@
     if (!self) {
         return nil;
     }
+    [self setup];
     _conversationId = conversationId;
     return self;
 }
@@ -71,6 +72,7 @@
         return nil;
     }
     _peerId = peerId;
+    [self setup];
     return self;
 }
 
@@ -79,6 +81,7 @@
     if (!self) {
         return nil;
     }
+    [self setup];
     _conversation = conversation;
     [self refreshConversation:conversation];
     return self;
@@ -119,7 +122,7 @@
 
 - (void)setup {
     self.loadingMoreMessage = NO;
-
+    self.disableTextShowInFullScreen = NO;
 }
 
 /**
@@ -307,6 +310,8 @@
 
 - (void)messageCellTappedHead:(LCIMChatMessageCell *)messageCell {
     NSIndexPath *indexPath = [self.tableView indexPathForCell:messageCell];
+    LCIMOpenProfileBlock openProfileBlock = [LCIMUIService sharedInstance].openProfileBlock;
+    !openProfileBlock ?: openProfileBlock(messageCell.message.sender, self);
     NSLog(@"tapHead :%@",indexPath);
 }
 
@@ -346,6 +351,9 @@
 }
 
 - (void)textMessageCellDoubleTapped:(LCIMChatMessageCell *)messageCell {
+    if (self.disableTextShowInFullScreen) {
+        return;
+    }
     LCIMTextFullScreenViewController *textFullScreenViewController = [[LCIMTextFullScreenViewController alloc] initWithText:messageCell.message.text];
     [self.navigationController pushViewController:textFullScreenViewController animated:NO];
 }

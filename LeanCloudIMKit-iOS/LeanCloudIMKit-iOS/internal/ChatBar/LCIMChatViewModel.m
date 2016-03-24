@@ -147,7 +147,7 @@
     message.bubbleMessageType = LCIMMessageOwnerSelf;
     AVIMTypedMessage *avimTypedMessage = [LCIMChatViewModel getAVIMTypedMessageWithMessage:message];
     [self.avimTypedMessage addObject:avimTypedMessage];
-NSLog(@"🔴类名与方法名：%@（在第%@行），描述：%@", @(__PRETTY_FUNCTION__), @(__LINE__), @(self.dataArray.count));
+    NSLog(@"🔴类名与方法名：%@（在第%@行），描述：%@", @(__PRETTY_FUNCTION__), @(__LINE__), @(self.dataArray.count));
     [self preloadMessageToTableView:message];
     
     // if `message.messageId` is not nil, it is a failed message being resended.
@@ -330,8 +330,8 @@ NSLog(@"🔴类名与方法名：%@（在第%@行），描述：%@", @(__PRETTY_
             //TODO:
             // avimTypedMessage = [AVIMLocationMessage messageWithText:nil latitude:message.latitude longitude:message.longitude attributes:nil];
             break;
-            case LCIMMessageTypeSystem:
-            case LCIMMessageTypeUnknow:
+        case LCIMMessageTypeSystem:
+        case LCIMMessageTypeUnknow:
             //TODO:
             break;
         }
@@ -385,14 +385,14 @@ NSLog(@"🔴类名与方法名：%@（在第%@行），描述：%@", @(__PRETTY_
                                                                        timestamp:timestamp
                                                                            limit:kLCIMOnePageSize
                                                                            block:^(NSArray *avimTypedMessage, NSError *error) {
-        if (error) {
-            !block ?: block(avimTypedMessage, error);
-        } else {
-            [LCIMConversationService cacheMessages:avimTypedMessage callback:^(BOOL succeeded, NSError *error) {
-                !block ?: block(avimTypedMessage, error);
-            }];
-        }
-    }];
+                                                                               if (error) {
+                                                                                   !block ?: block(avimTypedMessage, error);
+                                                                               } else {
+                                                                                   [LCIMConversationService cacheMessages:avimTypedMessage callback:^(BOOL succeeded, NSError *error) {
+                                                                                       !block ?: block(avimTypedMessage, error);
+                                                                                   }];
+                                                                               }
+                                                                           }];
 }
 
 - (void)loadOldMessages {
@@ -474,19 +474,26 @@ static CGPoint  delayOffset = {0.0};
     [[NSNotificationCenter defaultCenter] postNotificationName:LCIMNotificationUnreadsUpdated object:nil];
 }
 
-- (void)getAllImageMessagesForMessage:(LCIMMessage *)message allImageMessageImages:(NSArray **)allImageMessageImages selectedMessageIndex:(NSNumber **)selectedMessageIndex{
+- (void)getAllImageMessagesForMessage:(LCIMMessage *)message allImageMessageImages:(NSArray **)allImageMessageImages selectedMessageIndex:(NSNumber **)selectedMessageIndex {
     NSMutableArray *allImageMessageImages_ = [[NSMutableArray alloc] initWithCapacity:0];
     NSUInteger idx = 0;
     for (LCIMMessage *message_ in self.dataArray) {
-        if (message_.messageMediaType == LCIMMessageTypeImage) {
+        BOOL isImageType = (message_.messageMediaType == LCIMMessageTypeImage || message_.photo || message_.originPhotoURL);
+        if (isImageType) {
             UIImage *image = message_.photo;
-            if (!image) {
-                if (message_.originPhotoURL) { [allImageMessageImages_ addObject:message_.originPhotoURL]; }
-            } else {
+            if (image) {
                 [allImageMessageImages_ addObject:image];
+            } else if (message_.originPhotoURL) {
+                [allImageMessageImages_ addObject:message_.originPhotoURL];
+            } else {
+                [allImageMessageImages_ addObject:({
+                    NSString *imageName = @"Placeholder_Image";
+                    NSString *imageNameWithBundlePath = [NSString stringWithFormat:@"Placeholder.bundle/%@", imageName];
+                    UIImage *image = [UIImage imageNamed:imageNameWithBundlePath];
+                    image;})];
             }
-            
-            if ((message == message_) && (*selectedMessageIndex == nil)) {
+        
+            if ((message == message_) && (*selectedMessageIndex == nil)){
                 *selectedMessageIndex = @(idx);
             }
             idx++;

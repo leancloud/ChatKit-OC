@@ -53,7 +53,7 @@
     [MBProgressHUD hideHUDForView:window animated:YES];
 }
 
-- (void)showNotificationWithTitle:(NSString *)title subtitle:(NSString *)subtitle type:(LCIMMessageNotificationType)type duration:(CGFloat)duration {
++ (void)showNotificationWithTitle:(NSString *)title subtitle:(NSString *)subtitle type:(LCIMMessageNotificationType)type duration:(CGFloat)duration {
     /**
      在这里使用了LCIMKit提供的默认样式显示提示信息
      在你的app中，也可以换成你app中已有的提示方式
@@ -82,11 +82,11 @@
                                                       callback:nil];
 }
 
-- (void)showNotificationWithTitle:(NSString *)title subtitle:(NSString *)subtitle type:(LCIMMessageNotificationType)type {
++ (void)showNotificationWithTitle:(NSString *)title subtitle:(NSString *)subtitle type:(LCIMMessageNotificationType)type {
     [self showNotificationWithTitle:title subtitle:subtitle type:type duration:1.f];
 }
 
-- (void)hideNotification {
++ (void)hideNotification {
     [[TWMessageBarManager sharedInstance] hideAll];
 }
 

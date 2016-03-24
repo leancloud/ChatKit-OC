@@ -189,6 +189,10 @@ static NSMutableDictionary *_sharedInstances = nil;
     [[[LCIMKit sharedInstance] UIService] setPreviewImageMessageBlock:previewImageMessageBlock];
 }
 
+- (void)setShowNotificationBlock:(LCIMShowNotificationBlock)showNotificationBlock {
+    [[[LCIMKit sharedInstance] UIService] setShowNotificationBlock:showNotificationBlock];
+}
+
 ///---------------------------------------------------------------------
 ///------------------LCIMSettingService---------------------------------
 ///---------------------------------------------------------------------

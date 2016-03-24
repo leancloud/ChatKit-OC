@@ -178,3 +178,18 @@ typedef NS_ENUM(NSInteger, LCIMBubbleMessageType) {
 };
 
 static NSInteger const kLCIMOnePageSize = 10;
+
+
+/**
+ *  提示信息的类型定义
+ */
+typedef NS_ENUM(NSInteger, LCIMMessageNotificationType) {
+    /// 普通消息
+    LCIMMessageNotificationTypeMessage = 0,
+    /// 警告
+    LCIMMessageNotificationTypeWarning,
+    /// 错误
+    LCIMMessageNotificationTypeError,
+    /// 成功
+    LCIMMessageNotificationTypeSuccess
+};

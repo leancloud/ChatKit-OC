@@ -15,6 +15,7 @@
 #import "LCIMProgressHUD.h"
 #import "Mp3Recorder.h"
 #import "Masonry.h"
+#import "LCIMUIService.h"
 
 @interface LCIMChatBar () <UITextViewDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate, Mp3RecorderDelegate,LCIMChatMoreViewDelegate, LCIMChatMoreViewDataSource, LCIMChatFaceViewDelegate, LCIMLocationControllerDelegate>
 
@@ -204,8 +205,8 @@
         {
             //显示拍照
             if (![UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
-                UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:nil message:@"您的设备不支持拍照" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
-                [alertView show];
+                LCIMShowNotificationBlock showNotificationBlock = [LCIMUIService sharedInstance].showNotificationBlock;
+                !showNotificationBlock ?: showNotificationBlock(self, @"您的设备不支持拍照", nil, LCIMMessageNotificationTypeError);
                 break;
             }
             UIImagePickerController *pickerC = [[UIImagePickerController alloc] init];

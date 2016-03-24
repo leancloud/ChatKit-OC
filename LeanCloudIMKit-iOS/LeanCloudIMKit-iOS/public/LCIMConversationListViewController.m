@@ -40,6 +40,8 @@
     [self.tableView.mj_header beginRefreshing];
     self.tableView.delegate = self.conversationListViewModel;
     self.tableView.dataSource = self.conversationListViewModel;
+    self.tableView.separatorInset = UIEdgeInsetsMake(0, 0, 0, 0);
+
 }
 
 - (void)dealloc {

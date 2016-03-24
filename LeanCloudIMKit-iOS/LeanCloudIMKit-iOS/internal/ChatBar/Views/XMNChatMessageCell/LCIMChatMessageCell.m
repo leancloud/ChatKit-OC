@@ -54,7 +54,7 @@
         return;
     }
     if (self.messageOwner == LCIMMessageOwnerSelf) {
-        [self.headImageView mas_makeConstraints:^(MASConstraintMaker *make) {
+        [self.avatorButton mas_makeConstraints:^(MASConstraintMaker *make) {
             make.right.equalTo(self.contentView.mas_right).with.offset(-16);
             make.top.equalTo(self.contentView.mas_top).with.offset(16);
             make.width.equalTo(@50);
@@ -62,14 +62,14 @@
         }];
         
         [self.nicknameLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.top.equalTo(self.headImageView.mas_top);
-            make.right.equalTo(self.headImageView.mas_left).with.offset(-16);
+            make.top.equalTo(self.avatorButton.mas_top);
+            make.right.equalTo(self.avatorButton.mas_left).with.offset(-16);
             make.width.mas_lessThanOrEqualTo(@120);
             make.height.equalTo(self.messageChatType == LCIMMessageChatGroup ? @16 : @0);
         }];
         
         [self.messageContentView mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.right.equalTo(self.headImageView.mas_left).with.offset(-16);
+            make.right.equalTo(self.avatorButton.mas_left).with.offset(-16);
             make.top.equalTo(self.nicknameLabel.mas_bottom).with.offset(4);
             make.width.lessThanOrEqualTo(@([UIApplication sharedApplication].keyWindow.frame.size.width/5*3)).priorityHigh();
             make.bottom.equalTo(self.contentView.mas_bottom).with.offset(-16).priorityLow();
@@ -89,7 +89,7 @@
             make.height.equalTo(@10);
         }];
     } else if (self.messageOwner == LCIMMessageOwnerOther){
-        [self.headImageView mas_makeConstraints:^(MASConstraintMaker *make) {
+        [self.avatorButton mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.equalTo(self.contentView.mas_left).with.offset(16);
             make.top.equalTo(self.contentView.mas_top).with.offset(16);
             make.width.equalTo(@50);
@@ -97,14 +97,14 @@
         }];
         
         [self.nicknameLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.top.equalTo(self.headImageView.mas_top);
-            make.left.equalTo(self.headImageView.mas_right).with.offset(16);
+            make.top.equalTo(self.avatorButton.mas_top);
+            make.left.equalTo(self.avatorButton.mas_right).with.offset(16);
             make.width.mas_lessThanOrEqualTo(@120);
             make.height.equalTo(self.messageChatType == LCIMMessageChatGroup ? @16 : @0);
         }];
         
         [self.messageContentView mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.left.equalTo(self.headImageView.mas_right).with.offset(16);
+            make.left.equalTo(self.avatorButton.mas_right).with.offset(16);
             make.top.equalTo(self.nicknameLabel.mas_bottom).with.offset(4);
             make.width.lessThanOrEqualTo(@([UIApplication sharedApplication].keyWindow.frame.size.width/5*3)).priorityHigh();
             make.bottom.equalTo(self.contentView.mas_bottom).with.offset(-16).priorityLow();
@@ -161,7 +161,7 @@
     self.selectionStyle = UITableViewCellSelectionStyleNone;
     self.backgroundColor = [UIColor clearColor];
     
-    [self.contentView addSubview:self.headImageView];
+    [self.contentView addSubview:self.avatorButton];
     [self.contentView addSubview:self.nicknameLabel];
     [self.contentView addSubview:self.messageContentView];
     [self.contentView addSubview:self.messageReadStateImageView];
@@ -178,25 +178,13 @@
     
     [self updateConstraintsIfNeeded];
     
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTap:)];
+    [self.contentView addGestureRecognizer:tap];
     
     UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleLongPress:)];
     longPress.numberOfTouchesRequired = 1;
     longPress.minimumPressDuration = 1.f;
     [self.contentView addGestureRecognizer:longPress];
-
-}
-
-- (void)sigleTapGestureRecognizerHandle:(UITapGestureRecognizer *)tapGestureRecognizer {
-    [self handleTap:tapGestureRecognizer];
-}
-
-- (void)doubleTapGestureRecognizerHandle:(UITapGestureRecognizer *)tapGestureRecognizer {
-    [self handleTap:tapGestureRecognizer];
-    if (tapGestureRecognizer.state == UIGestureRecognizerStateEnded) {
-//        if ([self.delegate respondsToSelector:@selector(didDoubleSelectedOnTextMessage:atIndexPath:)]) {
-//            [self.delegate didDoubleSelectedOnTextMessage:self.messageBubbleView.message atIndexPath:self.indexPath];
-//        }
-    }
 }
 
 #pragma mark - Public Methods
@@ -204,7 +192,9 @@
 - (void)configureCellWithData:(LCIMMessage *)message {
     _message = message;
     self.nicknameLabel.text = message.sender;
-    [self.headImageView setImageWithURL:message.avatorURL placeholder:({
+    [self.avatorButton setImageWithURL:message.avatorURL
+                              forState:UIControlStateNormal
+                           placeholder:({
         NSString *imageName = @"Placeholder_Avator";
         NSString *imageNameWithBundlePath = [NSString stringWithFormat:@"Placeholder.bundle/%@", imageName];
         UIImage *image = [UIImage imageNamed:imageNameWithBundlePath];
@@ -221,13 +211,8 @@
 
 #pragma mark - Private Methods
 
-
-- (void)headImageViewSingleTapGestureRecognizerHandle:(UITapGestureRecognizer *)tapGestureRecognizer {
-    if (tapGestureRecognizer.state == UIGestureRecognizerStateEnded) {
-        if ([self.delegate respondsToSelector:@selector(messageCellTappedHead:)]) {
-            [self.delegate messageCellTappedHead:self];
-        }
-    }
+- (void)avatorButtonClicked:(id)sender {
+    [self.delegate messageCellTappedHead:self];
 }
 
 - (void)handleTap:(UITapGestureRecognizer *)tap {
@@ -235,11 +220,13 @@
         CGPoint tapPoint = [tap locationInView:self.contentView];
         if (CGRectContainsPoint(self.messageContentView.frame, tapPoint)) {
             [self.delegate messageCellTappedMessage:self];
-        } else if (CGRectContainsPoint(self.headImageView.frame, tapPoint)) {
-            [self.delegate messageCellTappedHead:self];
+        } else if (CGRectContainsPoint(self.avatorButton.frame, tapPoint)) {
+//            [self.delegate messageCellTappedHead:self];
         } else {
             [self.delegate messageCellTappedBlank:self];
+
         }
+
     }
 }
 
@@ -270,16 +257,17 @@
 
 #pragma mark - Getters
 
-- (UIImageView *)headImageView {
-    if (!_headImageView) {
-        _headImageView = [[UIImageView alloc] init];
-        _headImageView.layer.cornerRadius = 25.0f;
-        _headImageView.layer.masksToBounds = YES;
-        _headImageView.backgroundColor = [UIColor redColor];
-        UITapGestureRecognizer *recognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(headImageViewSingleTapGestureRecognizerHandle:)];
-        [_headImageView addGestureRecognizer:recognizer];
+- (UIButton *)avatorButton {
+    if (!_avatorButton) {
+        _avatorButton = [[UIButton alloc] init];
+        //TODO:
+//        _avatorButton.layer.cornerRadius = 25.0f;
+//        _avatorButton.layer.masksToBounds = YES;
+        [_avatorButton bringSubviewToFront:self];
+        [_avatorButton addTarget:self action:@selector(avatorButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
+        
     }
-    return _headImageView;
+    return _avatorButton;
 }
 
 - (UILabel *)nicknameLabel {
@@ -302,7 +290,6 @@
 - (UIImageView *)messageReadStateImageView {
     if (!_messageReadStateImageView) {
         _messageReadStateImageView = [[UIImageView alloc] init];
-        _messageReadStateImageView.backgroundColor = [UIColor redColor];
     }
     return _messageReadStateImageView;
 }
@@ -438,7 +425,7 @@ NSString * const kLCIMChatMessageCellMenuControllerKey;
 
 - (void)prepareForReuse {
     [super prepareForReuse];
-    self.headImageView = nil;
+    self.avatorButton = nil;
     self.nicknameLabel = nil;
     self.messageContentView = nil;
     self.messageReadStateImageView = nil;

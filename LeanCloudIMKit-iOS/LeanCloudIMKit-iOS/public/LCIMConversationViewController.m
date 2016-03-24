@@ -228,6 +228,7 @@ typedef void (^LCIMSendMessageSuccessFailedBlock)(NSString *messageUUID, NSError
         self.clientStatusView.hidden = NO;
     }
 }
+
 - (void)getAllImageMessageViewsForMessage:(id<XHMessageModel>)message allImageMessageViews:(NSArray<UIImageView *> **)allImageMessageViews selectedMessageView:(UIImageView **)selectedMessageView {
     NSMutableArray *allImageMessageViews_ = [[NSMutableArray alloc] initWithCapacity:0];
     for (XHMessage *message_ in self.messages) {
@@ -495,32 +496,6 @@ typedef void (^LCIMSendMessageSuccessFailedBlock)(NSString *messageUUID, NSError
 }
 
 #pragma mark - alert and async utils
-
-- (void)alert:(NSString *)msg {
-    UIAlertView *alertView = [[UIAlertView alloc]
-                              initWithTitle:nil message:msg delegate:nil
-                              cancelButtonTitle   :@"确定" otherButtonTitles:nil];
-    [alertView show];
-}
-
-- (BOOL)alertAVIMError:(NSError *)error {
-    if (error) {
-        if (error.code == kAVIMErrorConnectionLost) {
-            [self alert:@"未能连接聊天服务"];
-        } else if ([error.domain isEqualToString:NSURLErrorDomain]) {
-            [self alert:@"网络连接发生错误"];
-        } else {
-            [self alert:[NSString stringWithFormat:@"%@", error]];
-        }
-        return YES;
-    }
-    return NO;
-}
-
-- (BOOL)filterAVIMError:(NSError *)error {
-    return [self alertAVIMError:error] == NO;
-}
-
 
 - (void)runInMainQueue:(void (^)())queue {
     dispatch_async(dispatch_get_main_queue(), queue);

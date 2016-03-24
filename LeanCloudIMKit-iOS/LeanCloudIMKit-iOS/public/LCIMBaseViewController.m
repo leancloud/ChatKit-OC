@@ -8,6 +8,7 @@
 
 #import "LCIMBaseViewController.h"
 #import <AVOSCloudIM/AVOSCloudIM.h>
+#import "LCIMUIService.h"
 
 @interface LCIMBaseViewController ()
 
@@ -142,13 +143,8 @@
 #pragma mark - alert and async utils
 
 - (void)alert:(NSString *)message {
-    UIAlertView *alertView = [[UIAlertView alloc]
-                              initWithTitle:nil
-                              message:message
-                              delegate:nil
-                              cancelButtonTitle:@"确定"
-                              otherButtonTitles:nil];
-    [alertView show];
+    LCIMShowNotificationBlock showNotificationBlock = [LCIMUIService sharedInstance].showNotificationBlock;
+    !showNotificationBlock ?: showNotificationBlock(self, message, nil, LCIMMessageNotificationTypeError);
 }
 
 - (BOOL)alertAVIMError:(NSError *)error {

@@ -48,7 +48,6 @@ typedef void (^LCIMSendMessageSuccessFailedBlock)(NSString *messageUUID, NSError
  */
 - (void)sendMessage:(LCIMMessage *)message;
 
-
 - (void)removeMessageAtIndex:(NSUInteger)index;
 
 - (LCIMMessage *)messageAtIndex:(NSUInteger)index;

@@ -12,8 +12,8 @@
 
 @interface LCIMChatLocationMessageCell ()
 
-@property (nonatomic, strong) UIImageView *locationIV;
-@property (nonatomic, strong) UILabel *locationAddressL;
+@property (nonatomic, strong) UIImageView *locationImageView;
+@property (nonatomic, strong) UILabel *locationAddressLabel;
 
 @end
 
@@ -24,7 +24,7 @@
 - (void)updateConstraints {
     [super updateConstraints];
     
-    [self.locationIV mas_makeConstraints:^(MASConstraintMaker *make) {
+    [self.locationImageView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self.messageContentView.mas_left).with.offset(16);
         make.top.equalTo(self.messageContentView.mas_top).with.offset(8);
         make.bottom.equalTo(self.messageContentView.mas_bottom).with.offset(-8);
@@ -32,9 +32,9 @@
         make.height.equalTo(@60);
     }];
     
-    [self.locationAddressL mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(self.locationIV.mas_right).with.offset(8);
-        make.top.equalTo(self.locationIV.mas_top);
+    [self.locationAddressLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(self.locationImageView.mas_right).with.offset(8);
+        make.top.equalTo(self.locationImageView.mas_top);
         make.right.equalTo(self.messageContentView.mas_right).with.offset(-16);
         //        make.bottom.equalTo(self.messageContentView.mas_bottom).with.offset(-8);
     }];
@@ -45,42 +45,42 @@
 
 - (void)setup {
     
-    [self.messageContentView addSubview:self.locationIV];
-    [self.messageContentView addSubview:self.locationAddressL];
+    [self.messageContentView addSubview:self.locationImageView];
+    [self.messageContentView addSubview:self.locationAddressLabel];
     [super setup];
     
 }
 
 - (void)configureCellWithData:(LCIMMessage *)message {
     [super configureCellWithData:message];
-    _locationAddressL.text = message.geolocations;
+    _locationAddressLabel.text = message.geolocations;
 }
 
 #pragma mark - Getters
 
-- (UILabel *)locationAddressL {
-    if (!_locationAddressL) {
-        _locationAddressL = [[UILabel alloc] init];
-        _locationAddressL.textColor = [UIColor blackColor];
-        _locationAddressL.font = [UIFont systemFontOfSize:16.0f];
-        _locationAddressL.numberOfLines = 3;
-        _locationAddressL.textAlignment = NSTextAlignmentNatural;
-        _locationAddressL.lineBreakMode = NSLineBreakByTruncatingTail;
-        _locationAddressL.text = @"上海市 试验费snap那就开动脑筋阿萨德你接啊三年级可 ";
+- (UILabel *)locationAddressLabel {
+    if (!_locationAddressLabel) {
+        _locationAddressLabel = [[UILabel alloc] init];
+        _locationAddressLabel.textColor = [UIColor blackColor];
+        _locationAddressLabel.font = [UIFont systemFontOfSize:16.0f];
+        _locationAddressLabel.numberOfLines = 3;
+        _locationAddressLabel.textAlignment = NSTextAlignmentNatural;
+        _locationAddressLabel.lineBreakMode = NSLineBreakByTruncatingTail;
+        _locationAddressLabel.text = @"上海市 试验费snap那就开动脑筋阿萨德你接啊三年级可 ";
     }
-    return _locationAddressL;
+    return _locationAddressLabel;
 }
 
-- (UIImageView *)locationIV {
-    if (!_locationIV) {
-        _locationIV = [[UIImageView alloc] initWithImage:({
+- (UIImageView *)locationImageView {
+    if (!_locationImageView) {
+        _locationImageView = [[UIImageView alloc] initWithImage:({
             NSString *imageName = @"MessageBubble_Location";
             NSString *imageNameWithBundlePath = [NSString stringWithFormat:@"MessageBubble.bundle/%@", imageName];
             UIImage *image = [UIImage imageNamed:imageNameWithBundlePath];
             image;})
                        ];
     }
-    return _locationIV;
+    return _locationImageView;
 }
 
 @end

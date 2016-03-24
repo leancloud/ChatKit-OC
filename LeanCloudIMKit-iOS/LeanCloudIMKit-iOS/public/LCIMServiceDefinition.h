@@ -161,6 +161,28 @@ typedef void(^LCIMPreviewImageMessageBlock)(NSUInteger index, NSArray *imageMess
  */
 - (void)setPreviewImageMessageBlock:(LCIMPreviewImageMessageBlock)previewImageMessageBlock;
 
+/**
+ *  当IMUIKit需要显示通知时，会调用这个block。
+ *  开发者需要实现并设置这个block，以便给用户提示。
+ *  @param viewController 当前的controller
+ *  @param title 标题
+ *  @param subtitle 子标题
+ *  @param type 类型
+ */
+typedef void(^LCIMShowNotificationBlock)(UIViewController *viewController, NSString *title, NSString *subtitle, LCIMMessageNotificationType type);
+
+@property (nonatomic, copy, readonly) LCIMShowNotificationBlock showNotificationBlock;
+
+/**
+ *  当IMUIKit需要显示通知时，会调用这个block。
+ *  开发者需要实现并设置这个block，以便给用户提示。
+ *  @param viewController 当前的controller
+ *  @param title 标题
+ *  @param subtitle 子标题
+ *  @param type 类型
+ */
+- (void)setShowNotificationBlock:(LCIMShowNotificationBlock)showNotificationBlock;
+
 @end
 
 ///---------------------------------------------------------------------
@@ -269,18 +291,19 @@ typedef void(^LCIMConversationsListDidDeleteItemBlock)(AVIMConversation *convers
  *  设置删除某个会话后的回调
  */
 - (void)setDidDeleteItemBlock:(LCIMConversationsListDidDeleteItemBlock)didDeleteItemBlock;
-/*
+
+/*!
  *  会话左滑菜单设置block
  *  @return  需要显示的菜单数组
  *  @param conversation, 会话
- *  @param editActions, 默认的菜单数组，成员为LCIMMoreActionItem类型
+ *  @param editActions, 默认的菜单数组，成员为LCIMTableViewRowAction类型
  */
-typedef NSArray *(^LCIMConversationEditActionsBlock)(AVIMConversation *conversation, NSArray *editActions);
+typedef NSArray *(^LCIMConversationEditActionsBlock)(NSIndexPath *indexPath, NSArray *editActions);
 
 /*!
  *  可以通过这个block设置会话列表中每个会话的左滑菜单，这个是同步调用的，需要尽快返回，否则会卡住UI
  */
-@property (nonatomic, copy) LCIMConversationEditActionsBlock conversationEditActionBlock;
+@property (nonatomic, copy, readonly) LCIMConversationEditActionsBlock conversationEditActionBlock;
 
 /*!
  *  设置会话列表中每个会话的左滑菜单，这个是同步调用的，需要尽快返回，否则会卡住UI

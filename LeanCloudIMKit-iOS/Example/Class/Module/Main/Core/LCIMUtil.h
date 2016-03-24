@@ -19,14 +19,14 @@
 /**
  *  显示提示信息
  */
-- (void)showNotificationWithTitle:(NSString *)title
++ (void)showNotificationWithTitle:(NSString *)title
                          subtitle:(NSString *)subtitle
                              type:(LCIMMessageNotificationType)type;
 
 /**
  *  显示提示信息
  */
-- (void)showNotificationWithTitle:(NSString *)title
++ (void)showNotificationWithTitle:(NSString *)title
                          subtitle:(NSString *)subtitle
                              type:(LCIMMessageNotificationType)type
                          duration:(CGFloat)duration;
@@ -34,6 +34,6 @@
 /**
  *  显示提示信息
  */
-- (void)hideNotification;
++ (void)hideNotification;
 
 @end

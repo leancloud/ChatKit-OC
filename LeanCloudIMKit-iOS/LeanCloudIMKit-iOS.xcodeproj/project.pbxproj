@@ -75,6 +75,7 @@
 		9A5E4CAF1C917479007D987A /* XHRefreshCircleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A5E4C521C917478007D987A /* XHRefreshCircleView.m */; };
 		9A5E4CB01C917479007D987A /* XHRefreshControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A5E4C541C917478007D987A /* XHRefreshControl.m */; };
 		9A5E4CB11C917479007D987A /* XHRefreshView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A5E4C561C917478007D987A /* XHRefreshView.m */; };
+		9A69CD7D1CA39D750039654D /* LCIMTableViewRowAction.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A69CD7C1CA39D750039654D /* LCIMTableViewRowAction.m */; };
 		9A6AD1F81C919C3800CF9EB3 /* XHImageViewer.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A6AD1F31C919C3800CF9EB3 /* XHImageViewer.m */; };
 		9A6AD1F91C919C3800CF9EB3 /* XHViewState.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A6AD1F51C919C3800CF9EB3 /* XHViewState.m */; };
 		9A6AD1FA1C919C3800CF9EB3 /* XHZoomingImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A6AD1F71C919C3800CF9EB3 /* XHZoomingImageView.m */; };
@@ -295,6 +296,8 @@
 		9A5E4C541C917478007D987A /* XHRefreshControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XHRefreshControl.m; sourceTree = "<group>"; };
 		9A5E4C551C917478007D987A /* XHRefreshView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XHRefreshView.h; sourceTree = "<group>"; };
 		9A5E4C561C917478007D987A /* XHRefreshView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XHRefreshView.m; sourceTree = "<group>"; };
+		9A69CD7B1CA39D750039654D /* LCIMTableViewRowAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMTableViewRowAction.h; sourceTree = "<group>"; };
+		9A69CD7C1CA39D750039654D /* LCIMTableViewRowAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCIMTableViewRowAction.m; sourceTree = "<group>"; };
 		9A6AD1F21C919C3800CF9EB3 /* XHImageViewer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XHImageViewer.h; sourceTree = "<group>"; };
 		9A6AD1F31C919C3800CF9EB3 /* XHImageViewer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XHImageViewer.m; sourceTree = "<group>"; };
 		9A6AD1F41C919C3800CF9EB3 /* XHViewState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XHViewState.h; sourceTree = "<group>"; };
@@ -903,6 +906,8 @@
 				9A77E10F1C9F9CAD002DE037 /* LCIMBaseConversationViewController.m */,
 				9A738DC91C855DB600D8A961 /* LCIMConstants.h */,
 				9A6AD3611C91E22E00CF9EB3 /* IMKitHeaders.h */,
+				9A69CD7B1CA39D750039654D /* LCIMTableViewRowAction.h */,
+				9A69CD7C1CA39D750039654D /* LCIMTableViewRowAction.m */,
 			);
 			path = public;
 			sourceTree = "<group>";
@@ -1560,6 +1565,7 @@
 				9A738DDA1C855DB600D8A961 /* LCIMConversationViewController.m in Sources */,
 				9A738DD91C855DB600D8A961 /* LCIMConversationListViewController.m in Sources */,
 				9A6AD1FA1C919C3800CF9EB3 /* XHZoomingImageView.m in Sources */,
+				9A69CD7D1CA39D750039654D /* LCIMTableViewRowAction.m in Sources */,
 				9A5E4CA01C917479007D987A /* XHBubblePhotoImageView.m in Sources */,
 				9A5E4C5A1C917478007D987A /* UIButton+XHButtonTitlePosition.m in Sources */,
 				9A5E4C651C917478007D987A /* XHCaptureHelper.m in Sources */,

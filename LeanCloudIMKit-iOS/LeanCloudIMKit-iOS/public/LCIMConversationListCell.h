@@ -7,9 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "SWTableViewCell.h"
+
 @class JSBadgeView;
 
-@interface LCIMConversationListCell : UITableViewCell
+@interface LCIMConversationListCell : SWTableViewCell
 
 @property (nonatomic, weak) UIImageView *avatorImageView;
 @property (nonatomic, weak) UILabel *nameLabel;

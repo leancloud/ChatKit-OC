@@ -17,6 +17,12 @@ NSString *const LCIMUIServiceErrorDomain = @"LCIMUIServiceErrorDomain";
 
 @end
 
+@interface LCIMUIService ()
+
+@property (nonatomic, copy) LCIMShowNotificationBlock showNotificationBlock;
+
+@end
+
 @implementation LCIMUIService
 
 /**
@@ -37,6 +43,10 @@ NSString *const LCIMUIServiceErrorDomain = @"LCIMUIServiceErrorDomain";
 
 - (void)setOpenProfileBlock:(LCIMOpenProfileBlock)openProfileBlock {
     _openProfileBlock = openProfileBlock;
+}
+
+- (void)setShowNotificationBlock:(LCIMShowNotificationBlock)showNotificationBlock {
+    _showNotificationBlock = showNotificationBlock;
 }
 
 @end

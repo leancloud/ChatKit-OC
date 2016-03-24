@@ -31,9 +31,9 @@
 @property (nonatomic, strong, readonly) LCIMMessage *message;
 
 /**
- *  显示用户头像的UIImageView
+ *  显示用户头像
  */
-@property (nonatomic, strong) UIImageView *headImageView;
+@property (nonatomic, strong) UIButton *avatorButton;
 
 /**
  *  显示用户昵称的UILabel

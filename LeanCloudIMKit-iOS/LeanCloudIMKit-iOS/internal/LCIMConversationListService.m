@@ -14,10 +14,11 @@
 
 @interface LCIMConversationListService()
 
-@property (nonatomic, copy) LCIMConversationsListDidSelectItemBlock didSelectItemBlock;
-@property (nonatomic, copy) LCIMConversationsListDidDeleteItemBlock didDeleteItemBlock;
-@property (nonatomic, copy) LCIMMarkBadgeWithTotalUnreadCountBlock markBadgeWithTotalUnreadCountBlock;
-@property (nonatomic, copy) LCIMPrepareConversationsWhenLoadBlock prepareConversationsWhenLoadBlock;
+@property (nonatomic, copy, readwrite) LCIMConversationsListDidSelectItemBlock didSelectItemBlock;
+@property (nonatomic, copy, readwrite) LCIMConversationsListDidDeleteItemBlock didDeleteItemBlock;
+@property (nonatomic, copy, readwrite) LCIMMarkBadgeWithTotalUnreadCountBlock markBadgeWithTotalUnreadCountBlock;
+@property (nonatomic, copy, readwrite) LCIMPrepareConversationsWhenLoadBlock prepareConversationsWhenLoadBlock;
+@property (nonatomic, copy, readwrite) LCIMConversationEditActionsBlock conversationEditActionBlock;
 
 @end
 
@@ -137,6 +138,10 @@
 
 - (void)setDidDeleteItemBlock:(LCIMConversationsListDidDeleteItemBlock)didDeleteItemBlock {
     _didDeleteItemBlock = didDeleteItemBlock;
+}
+
+- (void)setConversationEditActionBlock:(LCIMConversationEditActionsBlock)conversationEditActionBlock {
+    _conversationEditActionBlock = conversationEditActionBlock;
 }
 
 @end
