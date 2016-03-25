@@ -31,8 +31,6 @@
  */
 @property (nonatomic, copy, readonly) NSString *peerId;
 
-@property (nonatomic, copy, readonly) AVIMConversation *conversation;
-
 ///---------------------------------------------------------------------------------------------
 ///---- Initialize a unique single chat type object of LCIMChatController ----------
 ///---------------------------------------------------------------------------------------------
@@ -58,8 +56,6 @@
  * @return Initialized single or group chat type odject of LCIMChatController
  */
 - (instancetype)initWithConversationId:(NSString *)conversationId;
-
-- (instancetype)initWithConversation:(AVIMConversation *)conversation;
 
 /*!
  *  是否禁止导航栏标题的自动设置，默认为NO;

@@ -193,7 +193,7 @@ static NSMutableDictionary *_sharedInstances = nil;
     }];
     
     [[LCIMKit sharedInstance] setDidSelectItemBlock:^(AVIMConversation *conversation) {
-        [[self class] exampleOpenConversationViewControllerWithConversaion:conversation fromNavigationController:nil];
+        [[self class] exampleOpenConversationViewControllerWithConversaionId:conversation.conversationId fromNavigationController:nil];
     }];
     
     [[LCIMKit sharedInstance] setPreviewImageMessageBlock:^(NSUInteger index, NSArray *imageMessageInfo, NSDictionary *userInfo) {
@@ -250,8 +250,8 @@ static NSMutableDictionary *_sharedInstances = nil;
     [self pushToViewController:conversationViewController];
 }
 
-+ (void)exampleOpenConversationViewControllerWithConversaion:(AVIMConversation *)conversation fromNavigationController:(UINavigationController *)aNavigationController {
-    LCIMChatController *conversationViewController =[[LCIMChatController alloc] initWithConversation:conversation];
++ (void)exampleOpenConversationViewControllerWithConversaionId:(NSString *)conversationId fromNavigationController:(UINavigationController *)aNavigationController {
+    LCIMChatController *conversationViewController =[[LCIMChatController alloc] initWithConversationId:conversationId];
     [self pushToViewController:conversationViewController];
 }
 

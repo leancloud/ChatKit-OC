@@ -146,11 +146,11 @@ NSString *const LCIMConversationServiceErrorDomain = @"LCIMConversationServiceEr
  */
 - (void)fecthConversationWithConversationId:(NSString *)conversationId callback:(LCIMConversationResultBlock)callback {
     NSAssert(conversationId.length > 0, @"Conversation id is nil");
-//    AVIMConversation *conversation = [self.client conversationForId:conversationId];
-//    if (conversation) {
-//        !callback ?: callback(conversation, nil);
-//        return;
-//    }
+    AVIMConversation *conversation = [self.client conversationForId:conversationId];
+    if (conversation) {
+        !callback ?: callback(conversation, nil);
+        return;
+    }
     
     NSSet *conversationSet = [NSSet setWithObject:conversationId];
     [[LCIMConversationListService sharedInstance] fetchConversationsWithConversationIds:conversationSet callback:^(NSArray *objects, NSError *error) {

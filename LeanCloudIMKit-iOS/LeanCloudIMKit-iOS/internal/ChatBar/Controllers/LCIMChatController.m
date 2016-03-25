@@ -76,16 +76,16 @@
     return self;
 }
 
-- (instancetype)initWithConversation:(AVIMConversation *)conversation {
-    self = [super init];
-    if (!self) {
-        return nil;
-    }
-    [self setup];
-    _conversation = conversation;
-    [self refreshConversation:conversation];
-    return self;
-}
+//- (instancetype)initWithConversation:(AVIMConversation *)conversation {
+//    self = [super init];
+//    if (!self) {
+//        return nil;
+//    }
+//    [self setup];
+//    _conversation = conversation;
+//    [self refreshConversation:conversation];
+//    return self;
+//}
 
 /**
  *  lazy load conversation
@@ -105,7 +105,7 @@
                 break;
             }
             /* If object is clean, ignore save request. */
-            if (_conversation) {
+            if (_conversationId) {
                 [[LCIMConversationService sharedInstance] fecthConversationWithConversationId:self.conversationId callback:^(AVIMConversation *conversation, NSError *error) {
                     if (!error) {
                         [self refreshConversation:conversation];
@@ -165,7 +165,6 @@
 }
 
 - (void)viewWillDisappear:(BOOL)animated{
-
     [super viewWillDisappear:animated];
     [[LCIMAVAudioPlayer sharePlayer] stopAudioPlayer];
     [LCIMAVAudioPlayer sharePlayer].index = NSUIntegerMax;

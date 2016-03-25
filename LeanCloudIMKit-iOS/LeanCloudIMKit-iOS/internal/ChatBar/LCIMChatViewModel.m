@@ -468,6 +468,10 @@ static CGPoint  delayOffset = {0.0};
 
 - (void)updateConversationAsRead {
     AVIMConversation *conversation = [LCIMConversationService sharedInstance].currentConversation;
+    if (!conversation) {
+        NSAssert(conversation, @"currentConversation is nil");
+        return;
+    }
     [[LCIMConversationService sharedInstance] insertConversation:conversation];
     [[LCIMConversationService sharedInstance] updateUnreadCountToZeroWithConversation:conversation];
     [[LCIMConversationService sharedInstance] updateMentioned:NO conversation:conversation];
