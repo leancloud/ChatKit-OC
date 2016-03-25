@@ -180,11 +180,7 @@
     
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTap:)];
     [self.contentView addGestureRecognizer:tap];
-    
-    UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleLongPress:)];
-    longPress.numberOfTouchesRequired = 1;
-    longPress.minimumPressDuration = 1.f;
-    [self.contentView addGestureRecognizer:longPress];
+
 }
 
 #pragma mark - Public Methods

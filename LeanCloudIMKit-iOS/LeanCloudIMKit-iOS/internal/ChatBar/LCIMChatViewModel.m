@@ -265,6 +265,7 @@
     } else {
         lcimMessage.bubbleMessageType = LCIMMessageOwnerOther;
     }
+    
     NSInteger msgStatuses[4] = { AVIMMessageStatusSending, AVIMMessageStatusSent, AVIMMessageStatusDelivered, AVIMMessageStatusFailed };
     NSInteger lcimMessageStatuses[4] = { LCIMMessageSendStateSending, LCIMMessageSendStateSuccess, LCIMMessageSendStateReceived, LCIMMessageSendStateFailed };
     
@@ -355,8 +356,9 @@
                 NSArray<LCIMMessage *> *failedMessages = [[LCIMConversationService sharedInstance] selectFailedMessagesByConversationId:[LCIMConversationService sharedInstance].currentConversation.conversationId];
                 NSMutableArray *allFailedAVIMMessages = [LCIMChatViewModel getAVIMMessages:failedMessages];
                 NSMutableArray *allMessages = [NSMutableArray arrayWithArray:avimTypedMessage];
-                [allMessages addObjectsFromArray:[allFailedAVIMMessages copy]];
-                [self.dataArray addObjectsFromArray:failedMessages];
+                //TODO:
+//                [allMessages addObjectsFromArray:[allFailedAVIMMessages copy]];
+//                [self.dataArray addObjectsFromArray:failedMessages];
                 self.avimTypedMessage = allMessages;
                 dispatch_async(dispatch_get_main_queue(),^{
                     [self.parentViewController.tableView reloadData];

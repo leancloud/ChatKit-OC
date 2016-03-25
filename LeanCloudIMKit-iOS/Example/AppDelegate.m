@@ -39,12 +39,12 @@
         /* If not loged in, log in. */
         [LCIMUtil showProgressText:@"log in ..." duration:10.0f];
         NSError *error = nil;
-        [AVUser logInWithUsername:@"ElonChan" password:@"123123" error:&error];
+        [AVUser logInWithUsername:@"imkittest" password:@"123456" error:&error];
         [LCIMUtil hideProgress];
         if (error) {
             NSLog(@"%@",error);
         } else  {
-            [[NSUserDefaults standardUserDefaults] setObject:@"ElonChan" forKey:LCIM_KEY_USERNAME];
+            [[NSUserDefaults standardUserDefaults] setObject:@"imkittest" forKey:LCIM_KEY_USERNAME];
             break;
         }
     } while (NO);

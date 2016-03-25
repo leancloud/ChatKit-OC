@@ -32,7 +32,6 @@
             [images addObject:image];
     }
     
-    
     messageVoiceAniamtionImageView.image = ({
         [imageSepatorName stringByAppendingString:@"VoiceNodePlaying"];
         NSString *imageNameWithBundlePath = [NSString stringWithFormat:@"VoiceMessageSource.bundle/%@", imageSepatorName];
