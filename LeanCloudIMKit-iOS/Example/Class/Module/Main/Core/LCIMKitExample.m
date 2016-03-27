@@ -214,9 +214,9 @@ static NSMutableDictionary *_sharedInstances = nil;
     }];
     
     // 自定义Cell菜单
-//    [[LCIMKit sharedInstance] setConversationEditActionBlock:^NSArray *(NSIndexPath *indexPath, NSArray *editActions) {
-//        return [self exampleConversationEditAction:indexPath];
-//    }];
+    //    [[LCIMKit sharedInstance] setConversationEditActionBlock:^NSArray *(NSIndexPath *indexPath, NSArray *editActions) {
+    //        return [self exampleConversationEditAction:indexPath];
+    //    }];
 }
 
 - (NSArray *)exampleConversationEditAction:(NSIndexPath *)indexPath {
@@ -252,10 +252,7 @@ static NSMutableDictionary *_sharedInstances = nil;
 }
 
 + (void)exampleOpenConversationViewControllerWithConversaionId:(NSString *)conversationId fromNavigationController:(UINavigationController *)aNavigationController {
-    //    LCIMChatController *conversationViewController =[[LCIMChatController alloc] initWithConversationId:conversationId];
-    
-    LCIMChatController *conversationViewController =[[LCIMChatController alloc] initWithConversationId:@"56d880b9f3609a005d88415e"];
-    
+    LCIMChatController *conversationViewController =[[LCIMChatController alloc] initWithConversationId:conversationId];
     [self pushToViewController:conversationViewController];
 }
 
