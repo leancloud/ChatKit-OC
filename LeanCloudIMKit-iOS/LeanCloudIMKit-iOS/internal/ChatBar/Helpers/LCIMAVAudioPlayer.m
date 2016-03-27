@@ -211,7 +211,6 @@ NSString *const kLCIMAudioDataKey;
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, .2f * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
         [self stopAudioPlayer];
     });
-    
 }
 
 #pragma mark - NSNotificationCenter Methods

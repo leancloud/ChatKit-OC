@@ -12,11 +12,6 @@
 
 @interface LCIMChatController : LCIMBaseConversationViewController <LCIMChatMessageCellDelegate>
 
-//@property (assign, nonatomic) LCIMMessageChat messageChatType;
-
-//
-//- (instancetype)initWithChatType:(LCIMMessageChat)messageChatType;
-
 //TODO:对于 conversationId 的得来，也就是说用户该如何事先创建好 conversation，可以加点示例代码。
 
 /*!

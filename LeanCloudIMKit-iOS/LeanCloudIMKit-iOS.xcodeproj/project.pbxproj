@@ -75,7 +75,6 @@
 		9A5E4CAF1C917479007D987A /* XHRefreshCircleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A5E4C521C917478007D987A /* XHRefreshCircleView.m */; };
 		9A5E4CB01C917479007D987A /* XHRefreshControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A5E4C541C917478007D987A /* XHRefreshControl.m */; };
 		9A5E4CB11C917479007D987A /* XHRefreshView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A5E4C561C917478007D987A /* XHRefreshView.m */; };
-		9A69CD7D1CA39D750039654D /* LCIMTableViewRowAction.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A69CD7C1CA39D750039654D /* LCIMTableViewRowAction.m */; };
 		9A6AD1F81C919C3800CF9EB3 /* XHImageViewer.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A6AD1F31C919C3800CF9EB3 /* XHImageViewer.m */; };
 		9A6AD1F91C919C3800CF9EB3 /* XHViewState.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A6AD1F51C919C3800CF9EB3 /* XHViewState.m */; };
 		9A6AD1FA1C919C3800CF9EB3 /* XHZoomingImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A6AD1F71C919C3800CF9EB3 /* XHZoomingImageView.m */; };
@@ -129,6 +128,9 @@
 		9A8453FE1C9F061A00BDBBA4 /* LCIMBubbleImageFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A8453FD1C9F061A00BDBBA4 /* LCIMBubbleImageFactory.m */; };
 		9A8454011C9F0B8100BDBBA4 /* LCIMMessageVoiceFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A8454001C9F0B8100BDBBA4 /* LCIMMessageVoiceFactory.m */; };
 		9A8454031C9F122D00BDBBA4 /* lame.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A8454021C9F122D00BDBBA4 /* lame.framework */; };
+		9A9D4C731CA845B4002F6E87 /* UITableViewCell+LCIMExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A9D4C6F1CA845B4002F6E87 /* UITableViewCell+LCIMExtension.m */; };
+		9A9D4C741CA845B4002F6E87 /* UITableViewRowAction+LCIMExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A9D4C711CA845B4002F6E87 /* UITableViewRowAction+LCIMExtension.m */; };
+		9A9D4C751CA845B4002F6E87 /* UITableViewRowAction.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A9D4C721CA845B4002F6E87 /* UITableViewRowAction.m */; };
 		9AD664F21C91273900885170 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AD664F11C91273900885170 /* AppDelegate.m */; };
 		9AD6652B1C912ADE00885170 /* LCIMUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AD664F61C912ADE00885170 /* LCIMUser.m */; };
 		9AD6652C1C912ADE00885170 /* LCIMContactListController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AD664FB1C912ADE00885170 /* LCIMContactListController.m */; };
@@ -296,8 +298,6 @@
 		9A5E4C541C917478007D987A /* XHRefreshControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XHRefreshControl.m; sourceTree = "<group>"; };
 		9A5E4C551C917478007D987A /* XHRefreshView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XHRefreshView.h; sourceTree = "<group>"; };
 		9A5E4C561C917478007D987A /* XHRefreshView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XHRefreshView.m; sourceTree = "<group>"; };
-		9A69CD7B1CA39D750039654D /* LCIMTableViewRowAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMTableViewRowAction.h; sourceTree = "<group>"; };
-		9A69CD7C1CA39D750039654D /* LCIMTableViewRowAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCIMTableViewRowAction.m; sourceTree = "<group>"; };
 		9A6AD1F21C919C3800CF9EB3 /* XHImageViewer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XHImageViewer.h; sourceTree = "<group>"; };
 		9A6AD1F31C919C3800CF9EB3 /* XHImageViewer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XHImageViewer.m; sourceTree = "<group>"; };
 		9A6AD1F41C919C3800CF9EB3 /* XHViewState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XHViewState.h; sourceTree = "<group>"; };
@@ -401,6 +401,10 @@
 		9A8453FF1C9F0B8100BDBBA4 /* LCIMMessageVoiceFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMMessageVoiceFactory.h; sourceTree = "<group>"; };
 		9A8454001C9F0B8100BDBBA4 /* LCIMMessageVoiceFactory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCIMMessageVoiceFactory.m; sourceTree = "<group>"; };
 		9A8454021C9F122D00BDBBA4 /* lame.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = lame.framework; sourceTree = "<group>"; };
+		9A9D4C6F1CA845B4002F6E87 /* UITableViewCell+LCIMExtension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITableViewCell+LCIMExtension.m"; sourceTree = "<group>"; };
+		9A9D4C701CA845B4002F6E87 /* UITableViewRowAction+LCIMExtension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITableViewRowAction+LCIMExtension.h"; sourceTree = "<group>"; };
+		9A9D4C711CA845B4002F6E87 /* UITableViewRowAction+LCIMExtension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITableViewRowAction+LCIMExtension.m"; sourceTree = "<group>"; };
+		9A9D4C721CA845B4002F6E87 /* UITableViewRowAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITableViewRowAction.m; sourceTree = "<group>"; };
 		9AD664F01C91273900885170 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		9AD664F11C91273900885170 /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		9AD664F51C912ADE00885170 /* LCIMUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMUser.h; sourceTree = "<group>"; };
@@ -846,6 +850,7 @@
 		9A738DB91C855DB600D8A961 /* internal */ = {
 			isa = PBXGroup;
 			children = (
+				9A9D4C6E1CA845B4002F6E87 /* LCIMTableViewRowAction */,
 				9A8453951C9EF02100BDBBA4 /* ChatBar */,
 				9A5C701A1C921816005543CC /* NSStringEmojize */,
 				9A6AD34E1C91CD2B00CF9EB3 /* Resources */,
@@ -906,8 +911,6 @@
 				9A77E10F1C9F9CAD002DE037 /* LCIMBaseConversationViewController.m */,
 				9A738DC91C855DB600D8A961 /* LCIMConstants.h */,
 				9A6AD3611C91E22E00CF9EB3 /* IMKitHeaders.h */,
-				9A69CD7B1CA39D750039654D /* LCIMTableViewRowAction.h */,
-				9A69CD7C1CA39D750039654D /* LCIMTableViewRowAction.m */,
 			);
 			path = public;
 			sourceTree = "<group>";
@@ -1044,6 +1047,17 @@
 				9A8453D41C9EF02100BDBBA4 /* LCIMSendImageView.m */,
 			);
 			path = XMNChatMessageCell;
+			sourceTree = "<group>";
+		};
+		9A9D4C6E1CA845B4002F6E87 /* LCIMTableViewRowAction */ = {
+			isa = PBXGroup;
+			children = (
+				9A9D4C6F1CA845B4002F6E87 /* UITableViewCell+LCIMExtension.m */,
+				9A9D4C701CA845B4002F6E87 /* UITableViewRowAction+LCIMExtension.h */,
+				9A9D4C711CA845B4002F6E87 /* UITableViewRowAction+LCIMExtension.m */,
+				9A9D4C721CA845B4002F6E87 /* UITableViewRowAction.m */,
+			);
+			path = LCIMTableViewRowAction;
 			sourceTree = "<group>";
 		};
 		9AD664F31C912ADE00885170 /* Class */ = {
@@ -1511,12 +1525,14 @@
 				9A5E4C821C917479007D987A /* XHEmotionManager.m in Sources */,
 				9A5C70131C9200AE005543CC /* LCIMSoundManager.m in Sources */,
 				9A5E4C7B1C917479007D987A /* XHMessageVideoConverPhotoFactory.m in Sources */,
+				9A9D4C731CA845B4002F6E87 /* UITableViewCell+LCIMExtension.m in Sources */,
 				9A8453F01C9EF02100BDBBA4 /* LCIMChatMoreView.m in Sources */,
 				9A8453DD1C9EF02100BDBBA4 /* NSString+MD5.m in Sources */,
 				9A5E4C751C917479007D987A /* XHCacheManager.m in Sources */,
 				9AD83A1E1CA1407A00A068D1 /* LCIMConversationListViewModel.m in Sources */,
 				9A8453EE1C9EF02100BDBBA4 /* LCIMChatFaceView.m in Sources */,
 				9A8453E01C9EF02100BDBBA4 /* LCIMCellIdentifierFactory.m in Sources */,
+				9A9D4C741CA845B4002F6E87 /* UITableViewRowAction+LCIMExtension.m in Sources */,
 				9A6AD1F81C919C3800CF9EB3 /* XHImageViewer.m in Sources */,
 				9A5E4C6E1C917479007D987A /* XHPullRefreshTableViewController.m in Sources */,
 				9AD83A1B1CA129E200A068D1 /* LCIMConversationListService.m in Sources */,
@@ -1565,7 +1581,6 @@
 				9A738DDA1C855DB600D8A961 /* LCIMConversationViewController.m in Sources */,
 				9A738DD91C855DB600D8A961 /* LCIMConversationListViewController.m in Sources */,
 				9A6AD1FA1C919C3800CF9EB3 /* XHZoomingImageView.m in Sources */,
-				9A69CD7D1CA39D750039654D /* LCIMTableViewRowAction.m in Sources */,
 				9A5E4CA01C917479007D987A /* XHBubblePhotoImageView.m in Sources */,
 				9A5E4C5A1C917478007D987A /* UIButton+XHButtonTitlePosition.m in Sources */,
 				9A5E4C651C917478007D987A /* XHCaptureHelper.m in Sources */,
@@ -1576,6 +1591,7 @@
 				9A5E4C9E1C917479007D987A /* XHBaseCollectionViewCell.m in Sources */,
 				9A5E4C7D1C917479007D987A /* XHVideoOutputSampleBufferFactory.m in Sources */,
 				9A8453E81C9EF02100BDBBA4 /* LCIMMessageStateManager.m in Sources */,
+				9A9D4C751CA845B4002F6E87 /* UITableViewRowAction.m in Sources */,
 				9A5E4CAD1C917479007D987A /* XHShareMenuView.m in Sources */,
 				9AD6653D1C9130C400885170 /* LCIMContactManager.m in Sources */,
 				9AD6652E1C912ADE00885170 /* LCIMContactCell.m in Sources */,

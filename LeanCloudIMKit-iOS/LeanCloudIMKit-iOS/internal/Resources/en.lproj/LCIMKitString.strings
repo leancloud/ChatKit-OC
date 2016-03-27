@@ -1,10 +1,10 @@
-/* 
-  LCIMKitString.strings
-  MessageDisplayExample
-
-  Created by qtone-1 on 14-4-26.
-  Copyright (c) 2014年 曾宪华 开发团队(http://iyilunba.com ) 本人QQ:543413507 本人QQ群（142557668）. All rights reserved.
-*/
+//  LCIMKitString.strings
+//  LeanCloudIMKit-iOS
+//
+//  Created by ElonChan on 16/3/1.
+//  Copyright © 2016年 LeanCloud. All rights reserved.
+//
+"Delete" = "Delete";
 "copy" = "copy";
 "transpond" = "transpond";
 "favorites" = "favorites";

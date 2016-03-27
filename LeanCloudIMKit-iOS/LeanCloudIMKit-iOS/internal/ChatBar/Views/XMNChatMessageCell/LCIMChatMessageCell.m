@@ -65,7 +65,7 @@
             make.top.equalTo(self.avatorButton.mas_top);
             make.right.equalTo(self.avatorButton.mas_left).with.offset(-16);
             make.width.mas_lessThanOrEqualTo(@120);
-            make.height.equalTo(self.messageChatType == LCIMMessageChatGroup ? @16 : @0);
+            make.height.equalTo(self.messageChatType == LCIMConversationTypeGroup ? @16 : @0);
         }];
         
         [self.messageContentView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -100,7 +100,7 @@
             make.top.equalTo(self.avatorButton.mas_top);
             make.left.equalTo(self.avatorButton.mas_right).with.offset(16);
             make.width.mas_lessThanOrEqualTo(@120);
-            make.height.equalTo(self.messageChatType == LCIMMessageChatGroup ? @16 : @0);
+            make.height.equalTo(self.messageChatType == LCIMConversationTypeGroup ? @16 : @0);
         }];
         
         [self.messageContentView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -128,7 +128,7 @@
         make.edges.equalTo(self.messageContentView);
     }];
     
-    if (self.messageChatType == LCIMMessageChatSingle) {
+    if (self.messageChatType == LCIMConversationTypeSingle) {
         [self.nicknameLabel mas_updateConstraints:^(MASConstraintMaker *make) {
             make.height.equalTo(@0);
         }];
@@ -216,11 +216,8 @@
         CGPoint tapPoint = [tap locationInView:self.contentView];
         if (CGRectContainsPoint(self.messageContentView.frame, tapPoint)) {
             [self.delegate messageCellTappedMessage:self];
-        } else if (CGRectContainsPoint(self.avatorButton.frame, tapPoint)) {
-//            [self.delegate messageCellTappedHead:self];
-        } else {
+        } else if (!CGRectContainsPoint(self.avatorButton.frame, tapPoint))  {
             [self.delegate messageCellTappedBlank:self];
-
         }
 
     }
@@ -259,7 +256,7 @@
         //TODO:
 //        _avatorButton.layer.cornerRadius = 25.0f;
 //        _avatorButton.layer.masksToBounds = YES;
-        [_avatorButton bringSubviewToFront:self];
+        [self bringSubviewToFront:_avatorButton];
         [_avatorButton addTarget:self action:@selector(avatorButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
         
     }
@@ -319,11 +316,11 @@
     return LCIMMessageTypeUnknow;
 }
 
-- (LCIMMessageChat)messageChatType {
+- (LCIMConversationType)messageChatType {
     if ([self.reuseIdentifier containsString:@"GroupCell"]) {
-        return LCIMMessageChatGroup;
+        return LCIMConversationTypeGroup;
     }
-    return LCIMMessageChatSingle;
+    return LCIMConversationTypeSingle;
 }
 
 - (LCIMMessageOwner)messageOwner {

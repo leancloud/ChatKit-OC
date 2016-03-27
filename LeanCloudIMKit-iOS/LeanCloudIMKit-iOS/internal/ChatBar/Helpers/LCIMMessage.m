@@ -7,6 +7,8 @@
 //
 
 #import "LCIMMessage.h"
+#import "LCIMSessionService.h"
+
 @interface LCIMMessage()
 
 @property (nonatomic, copy)  NSString *text;
@@ -117,7 +119,6 @@
         _sender = sender;
         _timestamp = timestamp;
         _isRead = isRead;
-        
         _messageMediaType = LCIMMessageTypeVoice;
     }
     return self;

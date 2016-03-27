@@ -30,4 +30,3 @@ pod 'SwipeView'
 pod 'StitchingImage', :git => 'https://github.com/zhengjinghua/StitchingImage.git'
 pod 'HJCornerRadius', :git => "https://github.com/panghaijiao/HJCornerRadius.git"
 pod 'MWPhotoBrowser'
-pod 'SWTableViewCell'

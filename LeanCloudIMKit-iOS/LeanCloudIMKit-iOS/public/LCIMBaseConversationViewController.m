@@ -113,7 +113,7 @@
 #else
 #endif
         [self.view addSubview:(_chatBar = chatBar)];
-        [_chatBar bringSubviewToFront:self.view];
+        [self.view bringSubviewToFront:_chatBar];
     }
     return _chatBar;
 }

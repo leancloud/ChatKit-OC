@@ -75,7 +75,7 @@
 /**
  *  消息群组类型,只读类型,根据reuseIdentifier判断
  */
-@property (nonatomic, assign) LCIMMessageChat messageChatType;
+@property (nonatomic, assign) LCIMConversationType messageChatType;
 
 /**
  *  消息发送状态,当状态为LCIMMessageSendFail或LCIMMessageSendStateSending时,LCIMmessageSendStateImageView显示

@@ -296,9 +296,9 @@ typedef void(^LCIMConversationsListDidDeleteItemBlock)(AVIMConversation *convers
  *  会话左滑菜单设置block
  *  @return  需要显示的菜单数组
  *  @param conversation, 会话
- *  @param editActions, 默认的菜单数组，成员为LCIMTableViewRowAction类型
+ *  @param editActions, 默认的菜单数组，成员为 UITableViewRowAction 类型
  */
-typedef NSArray *(^LCIMConversationEditActionsBlock)(NSIndexPath *indexPath, NSArray *editActions);
+typedef NSArray *(^LCIMConversationEditActionsBlock)(NSIndexPath *indexPath, NSArray<UITableViewRowAction *> *editActions);
 
 /*!
  *  可以通过这个block设置会话列表中每个会话的左滑菜单，这个是同步调用的，需要尽快返回，否则会卡住UI

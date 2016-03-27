@@ -79,7 +79,7 @@
 
 - (void)configureCellWithData:(LCIMMessage *)message {
     [super configureCellWithData:message];
-    self.messageVoiceSecondsLabel.text = message.voiceDuration;
+    self.messageVoiceSecondsLabel.text = [NSString stringWithFormat:@"%@''",message.voiceDuration];
 }
 
 #pragma mark - Getters

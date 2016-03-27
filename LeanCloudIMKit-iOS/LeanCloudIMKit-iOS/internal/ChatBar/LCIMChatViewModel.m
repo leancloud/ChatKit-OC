@@ -144,7 +144,6 @@
 - (void)sendMessage:(LCIMMessage *)message success:(LCIMSendMessageSuccessBlock)success failed:(LCIMSendMessageSuccessFailedBlock)failed {
     message.conversationId = [LCIMConversationService sharedInstance].currentConversation.conversationId;
     message.status = LCIMMessageSendStateSending;
-    message.bubbleMessageType = LCIMMessageOwnerSelf;
     AVIMTypedMessage *avimTypedMessage = [LCIMChatViewModel getAVIMTypedMessageWithMessage:message];
     [self.avimTypedMessage addObject:avimTypedMessage];
     NSLog(@"🔴类名与方法名：%@（在第%@行），描述：%@", @(__PRETTY_FUNCTION__), @(__LINE__), @(self.dataArray.count));
@@ -226,6 +225,7 @@
     id<LCIMUserModelDelegate> fromUser = [[LCIMUserSystemService sharedInstance] getProfileForUserId:message.clientId error:nil];
     LCIMMessage *lcimMessage;
     NSDate *time = [self getTimestampDate:message.sendTimestamp];
+    //FIXME:
     if (message.mediaType == kAVIMMessageMediaTypeText) {
         AVIMTextMessage *textMsg = (AVIMTextMessage *)message;
         lcimMessage = [[LCIMMessage alloc] initWithText:[LCIMEmotionUtils emojiStringFromString:textMsg.text] sender:fromUser.name timestamp:time];
@@ -256,7 +256,9 @@
         lcimMessage = [[LCIMMessage alloc] initWithText:@"未知消息" sender:fromUser.name timestamp:time];
         DLog("unkonwMessage");
     }
-    
+    [[LCIMConversationService sharedInstance] fecthConversationWithConversationId:message.conversationId callback:^(AVIMConversation *conversation, NSError *error) {
+            lcimMessage.messageGroupType = conversation.lcim_type;
+    }];
     lcimMessage.avator = nil;
     lcimMessage.avatorURL = [fromUser avatorURL];
     
@@ -319,6 +321,7 @@
             break;
         }
         case LCIMMessageTypeVoice: {
+            NSLog(@"🔴类名与方法名：%@（在第%@行），描述：%@", @(__PRETTY_FUNCTION__), @(__LINE__), message.voicePath);
             avimTypedMessage = [AVIMAudioMessage messageWithText:nil attachedFilePath:message.voicePath attributes:nil];
             break;
         }

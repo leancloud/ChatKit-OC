@@ -21,14 +21,6 @@ typedef NS_ENUM(NSUInteger, LCIMMessageOwner){
 };
 
 /**
- *  消息聊天类型
- */
-typedef NS_ENUM(NSUInteger, LCIMMessageChat){
-    LCIMMessageChatSingle = 0 /**< 单人聊天,不显示nickname */,
-    LCIMMessageChatGroup /**< 群组聊天,显示nickname */,
-};
-
-/**
  *  消息类型
  */
 typedef NS_ENUM(NSUInteger, LCIMMessageType){

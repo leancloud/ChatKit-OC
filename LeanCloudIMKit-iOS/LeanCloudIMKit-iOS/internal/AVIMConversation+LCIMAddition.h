@@ -9,6 +9,7 @@
 #import "AVIMConversation.h"
 #import "LCIMConversationService.h"
 #import "LCIMConstants.h"
+#import "LCIMChatUntiles.h"
 
 @interface AVIMConversation (LCIMAddition)
 

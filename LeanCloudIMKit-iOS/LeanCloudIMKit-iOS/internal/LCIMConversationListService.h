@@ -44,34 +44,42 @@ typedef NSString *(^LCIMConversationsLatestMessageContent)(AVIMConversation *con
  */
 - (void)setLatestMessageContentBlock:(LCIMConversationsLatestMessageContent)latestMessageContentBlock;
 
-/**
- *  在没有数据时显示该view，占据Controller的View整个页面
- */
-@property (nonatomic, strong) UIView *viewForNoData;
+//TODO:
+///**
+// *  在没有数据时显示该view，占据Controller的View整个页面
+// */
+//@property (nonatomic, strong) UIView *viewForNoData;
 
 + (instancetype)sharedInstance;
 - (void)fetchConversationsWithConversationIds:(NSSet *)conversationIds callback:(LCIMArrayResultBlock)callback;
 - (void)findRecentConversationsWithBlock:(LCIMRecentConversationsCallback)block;
 
 /**
- *  提供自定义行高的 Block，其中 tableView 和 indexPath 可能为搜索列表的对象
+ *  提供自定义行高的 Block
  */
-@property (nonatomic, copy) CGFloat (^LCIMHeightForRowBlock) (UITableView *tableView, NSIndexPath *indexPath, AVIMConversation *conversation);
+typedef CGFloat (^LCIMHeightForRowBlock) (UITableView *tableView, NSIndexPath *indexPath, AVIMConversation *conversation);
+@property (nonatomic, copy, readonly) LCIMHeightForRowBlock heightForRowBlock;
+- (void)setHeightForRowBlock:(LCIMHeightForRowBlock)heightForRowBlock;
 
 /**
  *  提供自定义 Cell 的 Block，如果返回为 nil 则使用默认 Cell
  *  当使用自定义的 Cell 时，内部将不会处理 Cell，需要使用 configureCellBlock 自行配制 Cell
  */
-@property (nonatomic, copy) UITableViewCell* (^LCIMCellForRowBlock)(UITableView *tableView, NSIndexPath *indexPath, AVIMConversation *conversation);
+typedef UITableViewCell* (^LCIMCellForRowBlock)(UITableView *tableView, NSIndexPath *indexPath, AVIMConversation *conversation);
+@property (nonatomic, copy, readonly) LCIMCellForRowBlock cellForRowBlock;
+- (void)setCellForRowBlock:(LCIMCellForRowBlock)cellForRowBlock;
 
 /**
  *  配置 Cell 的 Block，当默认的 Cell 或自定义的 Cell 需要配置时，该 block 将被调用
  */
-@property (nonatomic, copy) void (^LCIMConfigureCellBlock) (UITableViewCell *cell, UITableView *tableView, NSIndexPath *indexPath, AVIMConversation *conversation);
+typedef void (^LCIMConfigureCellBlock) (UITableViewCell *cell, UITableView *tableView, NSIndexPath *indexPath, AVIMConversation *conversation);
+@property (nonatomic, copy, readonly) LCIMConfigureCellBlock configureCellBlock;
+-(void)setConfigureCellBlock:(LCIMConfigureCellBlock)configureCellBlock;
 
-/**
- *  与会话列表关联的 UISearchBar
- */
-@property(nonatomic, readonly, strong) UISearchBar *searchBar;
+//TODO:
+///**
+// *  与会话列表关联的 UISearchBar
+// */
+//@property(nonatomic, readonly, strong) UISearchBar *searchBar;
 
 @end

@@ -19,13 +19,11 @@
 #import "NSDate+DateTools.h"
 #import "MJRefresh.h"
 #import "LCIMConversationListService.h"
-#import "LCIMTableViewRowAction.h"
 #import "SWUtilityButtonView.h"
 
-@interface LCIMConversationListViewModel () <SWTableViewCellDelegate>
+@interface LCIMConversationListViewModel ()
 
 @property (nonatomic, strong) LCIMConversationListViewController *conversationListViewController;
-@property (nonatomic, copy) NSArray<LCIMTableViewRowActionHandler> *rightUtilityButtonsBlocks;
 
 @end
 
@@ -57,21 +55,19 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    LCIMConversationListCell *cell = [LCIMConversationListCell dequeueOrCreateCellByTableView:tableView];
+    AVIMConversation *conversation = [self.dataArray objectAtIndex:indexPath.row];
 
-    if ([[UIDevice currentDevice].systemVersion floatValue] < 8.0) {
-        LCIMConversationEditActionsBlock conversationEditActionBlock = [[LCIMConversationListService sharedInstance] conversationEditActionBlock];
-        NSArray *editActions = [NSArray array];
-        if (conversationEditActionBlock) {
-            editActions = conversationEditActionBlock(indexPath, [self defaultRightButtons]);
-        } else {
-            editActions = [self defaultRightButtons];
+    LCIMCellForRowBlock cellForRowBlock = [[LCIMConversationListService sharedInstance] cellForRowBlock];
+    if (cellForRowBlock) {
+        UITableViewCell *customCell = cellForRowBlock(tableView, indexPath, conversation);
+        LCIMConfigureCellBlock configureCellBlock = [[LCIMConversationListService sharedInstance] configureCellBlock];
+        if (configureCellBlock) {
+            configureCellBlock(customCell, tableView, indexPath, conversation);
         }
-        cell.rightUtilityButtons = [self convertLCIMTableViewRowActionToSWUtilityButtonForButtons:editActions];
-        cell.delegate = self;
+        return customCell;
     }
     
-    AVIMConversation *conversation = [self.dataArray objectAtIndex:indexPath.row];
+    LCIMConversationListCell *cell = [LCIMConversationListCell dequeueOrCreateCellByTableView:tableView];
     NSError *error = nil;
     NSString *peerId = conversation.lcim_peerId;
     cell.identifier = peerId;
@@ -97,16 +93,14 @@
             }
         }];
     }
-    
+    cell.nameLabel.text = conversation.lcim_displayName;
+
     if (conversation.lcim_type == LCIMConversationTypeSingle) {
-        cell.nameLabel.text = displayName;
         [cell.avatorImageView setImageWithURL:avatorURL placeholder:[self imageInBundleForImageName:@"Placeholder_Avator"]];
     } else {
-        //TODO:
-        [cell.avatorImageView setImage:[self imageInBundleForImageName:@"Placeholder_Avator"]];
-        cell.nameLabel.text = conversation.lcim_displayName;
+        [cell.avatorImageView setImage:[self imageInBundleForImageName:@"Placeholder_Group"]];
     }
-    
+
     if (conversation.lcim_lastMessage) {
         cell.messageTextLabel.attributedText = [LCIMLastMessageTypeManager attributedStringWithMessage:conversation.lcim_lastMessage conversation:conversation userName:displayName];
         cell.timestampLabel.text = [[NSDate dateWithTimeIntervalSince1970:conversation.lcim_lastMessage.sendTimestamp / 1000] timeAgoSinceNow];
@@ -115,13 +109,14 @@
         if (conversation.muted) {
             cell.litteBadgeView.hidden = NO;
         } else {
-            //FIXME:
-            //            cell.badgeView.badgeText = [NSString stringWithFormat:@"%@", @(conversation.lcim_unreadCount)];
+            cell.badgeView.badgeText = [NSString stringWithFormat:@"%@", @(conversation.lcim_unreadCount)];
         }
     }
-    //    if ([self.chatListDelegate respondsToSelector:@selector(configureCell:atIndexPath:withConversation:)]) {
-    //        [self.chatListDelegate configureCell:cell atIndexPath:indexPath withConversation:conversation];
-    //    }
+    
+    LCIMConfigureCellBlock configureCellBlock = [[LCIMConversationListService sharedInstance] configureCellBlock];
+    if (configureCellBlock) {
+        configureCellBlock(cell, tableView, indexPath, conversation);
+    }
     return cell;
 }
 
@@ -130,7 +125,6 @@
 }
 
 - (NSArray<UITableViewRowAction *> *)tableView:(UITableView *)tableView editActionsForRowAtIndexPath:(NSIndexPath *)indexPath {
-    
     LCIMConversationEditActionsBlock conversationEditActionBlock = [[LCIMConversationListService sharedInstance] conversationEditActionBlock];
     NSArray *editActions = [NSArray array];
     if (conversationEditActionBlock) {
@@ -138,81 +132,22 @@
     } else {
         editActions = [self defaultRightButtons];
     }
-    return [self convertLCIMTableViewRowActionToUITableViewRowActions:editActions];
+    return editActions;
 }
 
 - (NSArray *)defaultRightButtons {
-    LCIMTableViewRowAction *actionItemDelete = [LCIMTableViewRowAction
-                                                rowActionWithStyle:LCIMTableViewRowActionStyleNormal
-                                                title:@"Delete"
-                                                handler:^(LCIMTableViewRowAction *action, NSIndexPath *indexPath) {
+    UITableViewRowAction *actionItemDelete = [UITableViewRowAction
+                                                rowActionWithStyle:UITableViewRowActionStyleNormal
+                                                title:NSLocalizedStringFromTable(@"Delete", @"LCIMKitString", @"Delete")
+                                                handler:^(UITableViewRowAction *action, NSIndexPath *indexPath) {
                                                     AVIMConversation *conversation = [self.dataArray objectAtIndex:indexPath.row];
                                                     [[LCIMConversationService sharedInstance] deleteConversation:conversation];
                                                     [self refresh];
                                                     LCIMConversationsListDidDeleteItemBlock conversationsListDidDeleteItemBlock = [LCIMConversationListService sharedInstance].didDeleteItemBlock;
                                                     !conversationsListDidDeleteItemBlock ?: conversationsListDidDeleteItemBlock(conversation);
                                                 }];
-    
-//    actionItemDelete.backgroundColor = [UIColor colorWithRed:1.0f green:0.231f blue:0.188 alpha:1.0f];
+    actionItemDelete.backgroundColor = [UIColor redColor];
     return @[ actionItemDelete ];
-}
-
-- (NSArray *)convertLCIMTableViewRowActionToSWUtilityButtonForButtons:(NSArray *)moreActionItems {
-    NSMutableArray *blocks = [[NSMutableArray alloc] initWithCapacity:[moreActionItems count]];
-    NSMutableArray *sw_UtilityButtons = [[NSMutableArray alloc] initWithCapacity:[moreActionItems count]];
-    for (LCIMTableViewRowAction *item in moreActionItems) {
-        [sw_UtilityButtons sw_addUtilityButtonWithColor:item.backgroundColor
-                                                    title:item.title];
-        [blocks addObject:item.handler];
-    }
-    self.rightUtilityButtonsBlocks = [blocks copy];
-    return [sw_UtilityButtons copy];
-}
-
-- (NSArray *)convertLCIMTableViewRowActionToUITableViewRowActions:(NSArray *)moreActionItems {
-    NSMutableArray *tableViewRowActions = [[NSMutableArray alloc] initWithCapacity:[moreActionItems count]];
-    
-    for (LCIMTableViewRowAction *item in moreActionItems) {
-        UITableViewRowActionStyle ui_tableViewRowActionStyle;
-        LCIMTableViewRowActionStyle lcim_tableViewRowActionStyle = item.style;
-        switch (lcim_tableViewRowActionStyle) {
-            case LCIMTableViewRowActionStyleDefault:
-                ui_tableViewRowActionStyle = UITableViewRowActionStyleDefault;
-                break;
-            case LCIMTableViewRowActionStyleNormal:
-                ui_tableViewRowActionStyle = UITableViewRowActionStyleNormal;
-                break;
-            default:
-                break;
-        }
-        
-        UITableViewRowAction *action = [UITableViewRowAction rowActionWithStyle:ui_tableViewRowActionStyle
-                                                                          title:item.title
-                                                                        handler:^(UITableViewRowAction * _Nonnull action, NSIndexPath * _Nonnull indexPath) {
-            !item.handler ?: item.handler(item, indexPath);
-        }];
-        action.backgroundColor = item.backgroundColor;
-        
-        [tableViewRowActions addObject:action];
-    }
-    return [tableViewRowActions copy];
-}
-
-// click event on right utility button
-- (void)swipeableTableViewCell:(SWTableViewCell *)cell didTriggerRightUtilityButtonWithIndex:(NSInteger)index {
-    LCIMTableViewRowActionHandler block = self.rightUtilityButtonsBlocks[index];
-    !block ?: block(nil, nil);
-}
-
-
-// prevent multiple cells from showing utilty buttons simultaneously
-- (BOOL)swipeableTableViewCellShouldHideUtilityButtonsOnSwipe:(SWTableViewCell *)cell {
-    return YES;
-}
-
-// prevent cell(s) from displaying left/right utility buttons
-- (BOOL)swipeableTableViewCell:(SWTableViewCell *)cell canSwipeToState:(SWCellState)state {
-    return YES;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -224,6 +159,12 @@
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    AVIMConversation *conversation = [self.dataArray objectAtIndex:indexPath.row];
+
+    LCIMHeightForRowBlock heightForRowBlock = [[LCIMConversationListService sharedInstance] heightForRowBlock];
+    if (heightForRowBlock) {
+        return heightForRowBlock(tableView, indexPath, conversation);
+    }
     return LCIMConversationListCellDefaultHeight;
 }
 

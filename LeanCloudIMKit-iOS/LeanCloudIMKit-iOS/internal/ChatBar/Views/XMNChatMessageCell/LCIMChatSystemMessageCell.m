@@ -12,7 +12,7 @@
 
 @interface LCIMChatSystemMessageCell ()
 
-@property (nonatomic, weak) UILabel *systemMessageL;
+@property (nonatomic, weak) UILabel *systemMessageLabel;
 @property (nonatomic, strong) UIView *systemmessageContentView;
 @property (nonatomic, strong, readonly) NSDictionary *systemMessageStyle;
 
@@ -30,9 +30,7 @@
         make.bottom.equalTo(self.contentView.mas_bottom).with.offset(-8);
         make.width.lessThanOrEqualTo(@([UIApplication sharedApplication].keyWindow.frame.size.width/5*3));
         make.centerX.equalTo(self.contentView.mas_centerX);
-        
     }];
-    
 }
 
 #pragma mark - Public Methods
@@ -48,11 +46,8 @@
 
 - (void)configureCellWithData:(LCIMMessage *)message {
     [super configureCellWithData:message];
-
-    self.systemMessageL.attributedText = [[NSAttributedString alloc] initWithString:message.text attributes:self.systemMessageStyle];
-    
+    self.systemMessageLabel.attributedText = [[NSAttributedString alloc] initWithString:message.text attributes:self.systemMessageStyle];
 }
-
 
 #pragma mark - Getters
 
@@ -64,15 +59,15 @@
         _systemmessageContentView.layer.cornerRadius = 6.0f;
         _systemmessageContentView.translatesAutoresizingMaskIntoConstraints = NO;
 
-        UILabel *systemMessageL = [[UILabel alloc] init];
-        systemMessageL.numberOfLines = 0;
+        UILabel *systemMessageLabel = [[UILabel alloc] init];
+        systemMessageLabel.numberOfLines = 0;
         
-        [_systemmessageContentView addSubview:self.systemMessageL = systemMessageL];
-        [systemMessageL mas_makeConstraints:^(MASConstraintMaker *make) {
+        [_systemmessageContentView addSubview:self.systemMessageLabel = systemMessageLabel];
+        [systemMessageLabel mas_makeConstraints:^(MASConstraintMaker *make) {
             make.edges.equalTo(_systemmessageContentView).with.insets(UIEdgeInsetsMake(8, 16, 8, 16));
         }];
         
-        systemMessageL.attributedText = [[NSAttributedString alloc] initWithString:@"2015-11-16" attributes:self.systemMessageStyle];
+        systemMessageLabel.attributedText = [[NSAttributedString alloc] initWithString:@"2015-11-16" attributes:self.systemMessageStyle];
     }
     return _systemmessageContentView;
 }

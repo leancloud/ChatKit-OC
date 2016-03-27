@@ -14,7 +14,7 @@
 + (NSString *)cellIdentifierForMessageConfiguration:(LCIMMessage *)message {
     LCIMMessageType messageType = message.messageMediaType;
     LCIMMessageOwner messageOwner = message.bubbleMessageType;
-    LCIMMessageChat messageChat = message.messageGroupType;
+    LCIMConversationType messageChat = message.messageGroupType;
     NSString *identifierKey = @"LCIMChatMessageCell";
     NSString *ownerKey;
     NSString *typeKey;
@@ -50,8 +50,9 @@
         case LCIMMessageTypeText:
             typeKey = @"TextMessage";
             break;
-            case LCIMMessageTypeEmotion:
-            case LCIMMessageTypeVideo:
+        case LCIMMessageTypeEmotion:
+        case LCIMMessageTypeVideo:
+        case LCIMMessageTypeUnknow:
             //TODO:
             typeKey = @"TextMessage";
 //        default:
@@ -59,10 +60,10 @@
             break;
     }
     switch (messageChat) {
-        case LCIMMessageChatGroup:
+        case LCIMConversationTypeGroup:
             groupKey = @"GroupCell";
             break;
-        case LCIMMessageChatSingle:
+        case LCIMConversationTypeSingle:
             groupKey = @"SingleCell";
             break;
         default:

@@ -44,7 +44,7 @@
 
 @property (nonatomic, assign, readonly) LCIMMessageType messageMediaType;
 
-@property (nonatomic, assign) LCIMMessageChat messageGroupType;
+@property (nonatomic, assign) LCIMConversationType messageGroupType;
 
 @property (nonatomic, assign) LCIMMessageOwner bubbleMessageType;
 

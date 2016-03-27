@@ -7,11 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "SWTableViewCell.h"
 
-@class JSBadgeView;
+#import "JSBadgeView.h"
 
-@interface LCIMConversationListCell : SWTableViewCell
+@interface LCIMConversationListCell : UITableViewCell
 
 @property (nonatomic, weak) UIImageView *avatorImageView;
 @property (nonatomic, weak) UILabel *nameLabel;
@@ -23,6 +22,5 @@
 
 + (instancetype)dequeueOrCreateCellByTableView:(UITableView *)tableView;
 + (void)registerCellToTableView:(UITableView *)tableView;
-- (void)prepareForReuse;
 
 @end

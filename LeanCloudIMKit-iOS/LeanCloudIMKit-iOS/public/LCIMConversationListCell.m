@@ -51,10 +51,11 @@ CGFloat const LCIMConversationListCellDefaultHeight = 61; //LCIMImageSize + LCIM
     LCIMNameLabelHeight = LCIMImageSize * LCIMNameLabelHeightProportion;
     LCIMMessageLabelHeight = LCIMImageSize - LCIMNameLabelHeight;
     [self addSubview:self.avatorImageView];
+    [self.avatorImageView addSubview:self.badgeView];
     [self addSubview:self.timestampLabel];
-    [self addSubview:self.litteBadgeView];
-    [self addSubview:self.nameLabel];
-    [self addSubview:self.messageTextLabel];
+    [self.contentView addSubview:self.litteBadgeView];
+    [self.contentView addSubview:self.nameLabel];
+    [self.contentView addSubview:self.messageTextLabel];
 }
 
 - (UIImageView *)avatorImageView {
@@ -109,18 +110,23 @@ CGFloat const LCIMConversationListCellDefaultHeight = 61; //LCIMImageSize + LCIM
 
 - (JSBadgeView *)badgeView {
     if (_badgeView == nil) {
-        JSBadgeView *badgeView = [[JSBadgeView alloc] initWithParentView:_avatorImageView alignment:JSBadgeViewAlignmentTopRight];
-        [self addSubview:(_badgeView = badgeView)];
+        JSBadgeView *badgeView = [[JSBadgeView alloc] initWithParentView:self.avatorImageView
+                                                               alignment:JSBadgeViewAlignmentTopRight];
+        [self.avatorImageView addSubview:(_badgeView = badgeView)];
+        [self.avatorImageView bringSubviewToFront:_badgeView];
     }
     return _badgeView;
 }
 
 - (void)prepareForReuse {
     [super prepareForReuse];
+    self.avatorImageView = nil;
     self.badgeView.badgeText = nil;
+    self.badgeView = nil;
     self.litteBadgeView.hidden = YES;
     self.messageTextLabel.text = nil;
     self.timestampLabel.text = nil;
+    self.timestampLabel = nil;
     self.nameLabel.text = nil;
 }
 

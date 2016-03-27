@@ -125,10 +125,13 @@ static NSString *const LCIM_KEY_USERNAME = @"LCIM_KEY_USERNAME";
 
 static NSString *const LCIM_CONVERSATION_TYPE = @"type";
 
-typedef enum : NSUInteger {
-    LCIMConversationTypeSingle = 0,
-    LCIMConversationTypeGroup,
-} LCIMConversationType;
+/**
+ *  消息聊天类型
+ */
+typedef NS_ENUM(NSUInteger, LCIMConversationType){
+    LCIMConversationTypeSingle = 0 /**< 单人聊天,不显示nickname */,
+    LCIMConversationTypeGroup /**< 群组聊天,显示nickname */,
+};
 
 static NSString *const LCIMInstallationKeyChannels = @"channels";
 
@@ -193,3 +196,101 @@ typedef NS_ENUM(NSInteger, LCIMMessageNotificationType) {
     /// 成功
     LCIMMessageNotificationTypeSuccess
 };
+
+
+///-------------------------------------------------------------------------
+///---------------------Succeed Message Store-------------------------------
+///-------------------------------------------------------------------------
+
+#define LCIMConversationTableName           @"conversations"
+#define LCIMConversationTableKeyId          @"id"
+#define LCIMConversationTableKeyData        @"data"
+#define LCIMConversationTableKeyUnreadCount @"unreadCount"
+#define LCIMConversationTableKeyMentioned   @"mentioned"
+
+
+#define LCIMConversatoinTableCreateSQL                                       \
+    @"CREATE TABLE IF NOT EXISTS " LCIMConversationTableName @" ("           \
+        LCIMConversationTableKeyId           @" VARCHAR(63) PRIMARY KEY, "   \
+        LCIMConversationTableKeyData         @" BLOB NOT NULL, "             \
+        LCIMConversationTableKeyUnreadCount  @" INTEGER DEFAULT 0, "         \
+        LCIMConversationTableKeyMentioned    @" BOOL DEFAULT FALSE "         \
+    @")"
+
+#define LCIMConversationTableInsertSQL                           \
+    @"INSERT OR IGNORE INTO " LCIMConversationTableName @" ("    \
+        LCIMConversationTableKeyId               @", "           \
+        LCIMConversationTableKeyData             @", "           \
+        LCIMConversationTableKeyUnreadCount      @", "           \
+        LCIMConversationTableKeyMentioned                        \
+    @") VALUES(?, ?, ?, ?)"
+
+#define LCIMConversationTableWhereClause                         \
+    @" WHERE " LCIMConversationTableKeyId         @" = ?"
+
+#define LCIMConversationTableDeleteSQL                           \
+    @"DELETE FROM " LCIMConversationTableName                    \
+    LCIMConversationTableWhereClause
+
+#define LCIMConversationTableIncreaseUnreadCountSQL              \
+    @"UPDATE " LCIMConversationTableName         @" "            \
+    @"SET " LCIMConversationTableKeyUnreadCount  @" = "          \
+            LCIMConversationTableKeyUnreadCount  @" + 1 "        \
+    LCIMConversationTableWhereClause
+
+#define LCIMConversationTableUpdateUnreadCountSQL                \
+    @"UPDATE " LCIMConversationTableName         @" "            \
+    @"SET " LCIMConversationTableKeyUnreadCount  @" = ? "        \
+    LCIMConversationTableWhereClause
+
+#define LCIMConversationTableUpdateMentionedSQL                  \
+    @"UPDATE " LCIMConversationTableName         @" "            \
+    @"SET " LCIMConversationTableKeyMentioned    @" = ? "        \
+    LCIMConversationTableWhereClause
+
+#define LCIMConversationTableSelectSQL                           \
+    @"SELECT * FROM " LCIMConversationTableName                  \
+
+#define LCIMConversationTableSelectOneSQL                        \
+    @"SELECT * FROM " LCIMConversationTableName                  \
+    LCIMConversationTableWhereClause
+
+#define LCIMConversationTableUpdateDataSQL                       \
+    @"UPDATE " LCIMConversationTableName @" "                    \
+    @"SET " LCIMConversationTableKeyData @" = ? "                \
+    LCIMConversationTableWhereClause                             \
+
+///------------------------------------------------------------------------
+///---------------------Failed Message Store-------------------------------
+///------------------------------------------------------------------------
+
+#define LCIMFaildMessageTable   @"failed_messages"
+#define LCIMKeyId               @"id"
+#define LCIMKeyConversationId   @"conversationId"
+#define LCIMKeyMessage          @"message"
+
+#define LCIMCreateTableSQL                                       \
+    @"CREATE TABLE IF NOT EXISTS " LCIMFaildMessageTable @"("    \
+        LCIMKeyId @" VARCHAR(63) PRIMARY KEY, "                  \
+        LCIMKeyConversationId @" VARCHAR(63) NOT NULL,"          \
+        LCIMKeyMessage @" BLOB NOT NULL"                         \
+    @")"
+
+#define LCIMWhereConversationId \
+    @" WHERE " LCIMKeyConversationId @" = ? "
+
+#define LCIMSelectMessagesSQL                        \
+    @"SELECT * FROM " LCIMFaildMessageTable          \
+    LCIMWhereConversationId
+
+#define LCIMInsertMessageSQL                             \
+    @"INSERT OR IGNORE INTO " LCIMFaildMessageTable @"(" \
+        LCIMKeyId @","                                   \
+        LCIMKeyConversationId @","                       \
+        LCIMKeyMessage                                   \
+    @") values (?, ?, ?) "                              \
+
+#define LCIMDeleteMessageSQL                             \
+    @"DELETE FROM " LCIMFaildMessageTable @" "           \
+    @"WHERE " LCIMKeyId " = ? "                          \
+    

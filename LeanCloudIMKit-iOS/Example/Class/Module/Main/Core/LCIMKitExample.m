@@ -102,13 +102,14 @@ static NSMutableDictionary *_sharedInstances = nil;
 + (void)invokeThisMethodAfterLoginSuccessWithClientId:(NSString *)clientId success:(LCIMVoidBlock)success failed:(LCIMErrorBlock)failed  {
     [[LCIMKit sharedInstance] openWithClientId:clientId callback:^(BOOL succeeded, NSError *error) {
         if (succeeded) {
+            NSString *subtitle = [NSString stringWithFormat:@"User Id 是 : %@", clientId];
+            [LCIMUtil showNotificationWithTitle:@"登陆成功" subtitle:subtitle type:LCIMMessageNotificationTypeSuccess];
             !success ?: success();
         } else {
+            [LCIMUtil showNotificationWithTitle:@"登陆失败" subtitle:nil type:LCIMMessageNotificationTypeSuccess];
             !failed ?: failed(error);
         }
     }];
-    NSString *subtitle = [NSString stringWithFormat:@"User Id 是 : %@", clientId];
-    [LCIMUtil showNotificationWithTitle:@"登陆成功" subtitle:subtitle type:LCIMMessageNotificationTypeSuccess];
     //TODO:
 }
 
@@ -126,7 +127,7 @@ static NSMutableDictionary *_sharedInstances = nil;
         //            };
         //            convid = 55bae86300b0efdcbe3e742e;
         //        }
-    [[LCIMKit sharedInstance] didReceiveRemoteNotification:userInfo];
+        [[LCIMKit sharedInstance] didReceiveRemoteNotification:userInfo];
     }
 }
 
@@ -179,17 +180,17 @@ static NSMutableDictionary *_sharedInstances = nil;
         }
         !callback ?: callback([users copy], nil);
         
-//        [query findObjectsInBackgroundWithBlock:^(NSArray<AVUser *> *objects, NSError *error) {
-//            NSMutableArray *users = [NSMutableArray arrayWithCapacity:0];;
-//            for (AVUser *user in objects) {
-//                // MARK: - add new string named "avatar", custmizing LeanCloud storage
-//                AVFile *avator = [user objectForKey:@"avatar"];
-//                NSURL *avatorURL = [NSURL URLWithString:avator.url];
-//                LCIMUser *user_ = [[LCIMUser alloc] initWithUserId:user.objectId name:user.username avatorURL:avatorURL];
-//                [users addObject:user_];
-//            }
-//            !callback ?: callback([users copy], nil);
-//        }];
+        //        [query findObjectsInBackgroundWithBlock:^(NSArray<AVUser *> *objects, NSError *error) {
+        //            NSMutableArray *users = [NSMutableArray arrayWithCapacity:0];;
+        //            for (AVUser *user in objects) {
+        //                // MARK: - add new string named "avatar", custmizing LeanCloud storage
+        //                AVFile *avator = [user objectForKey:@"avatar"];
+        //                NSURL *avatorURL = [NSURL URLWithString:avator.url];
+        //                LCIMUser *user_ = [[LCIMUser alloc] initWithUserId:user.objectId name:user.username avatorURL:avatorURL];
+        //                [users addObject:user_];
+        //            }
+        //            !callback ?: callback([users copy], nil);
+        //        }];
     }];
     
     [[LCIMKit sharedInstance] setDidSelectItemBlock:^(AVIMConversation *conversation) {
@@ -213,9 +214,9 @@ static NSMutableDictionary *_sharedInstances = nil;
     }];
     
     // 自定义Cell菜单
-    [[LCIMKit sharedInstance] setConversationEditActionBlock:^NSArray *(NSIndexPath *indexPath, NSArray *editActions) {
-        return [self exampleConversationEditAction:indexPath];
-    }];
+//    [[LCIMKit sharedInstance] setConversationEditActionBlock:^NSArray *(NSIndexPath *indexPath, NSArray *editActions) {
+//        return [self exampleConversationEditAction:indexPath];
+//    }];
 }
 
 - (NSArray *)exampleConversationEditAction:(NSIndexPath *)indexPath {
@@ -224,18 +225,18 @@ static NSMutableDictionary *_sharedInstances = nil;
 }
 
 - (NSArray *)rightButtons {
-    LCIMTableViewRowAction *actionItemMore = [LCIMTableViewRowAction rowActionWithStyle:LCIMTableViewRowActionStyleDefault
-                                                                                  title:@"More"
-                                                                                handler:^(LCIMTableViewRowAction *action, NSIndexPath *indexPath) {
-                                                                                    NSLog(@"More");
-                                                                                }];
+    UITableViewRowAction *actionItemMore = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleDefault
+                                                                              title:@"More"
+                                                                            handler:^(UITableViewRowAction *action, NSIndexPath *indexPath) {
+                                                                                NSLog(@"More");
+                                                                            }];
     actionItemMore.backgroundColor = [UIColor colorWithRed:0.78f green:0.78f blue:0.8f alpha:1.0];
     
-    LCIMTableViewRowAction *actionItemDelete = [LCIMTableViewRowAction rowActionWithStyle:LCIMTableViewRowActionStyleDefault
-                                                                                    title:@"Delete"
-                                                                                  handler:^(LCIMTableViewRowAction *action, NSIndexPath *indexPath) {
-                                                                                        //        [[LCIMConversationService sharedInstance] deleteConversation:conversation];
-                                                                                    }];
+    UITableViewRowAction *actionItemDelete = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleDefault
+                                                                                title:@"Delete"
+                                                                              handler:^(UITableViewRowAction *action, NSIndexPath *indexPath) {
+                                                                                  //        [[LCIMConversationService sharedInstance] deleteConversation:conversation];
+                                                                              }];
     return @[ actionItemDelete, actionItemMore ];
 }
 
@@ -251,7 +252,10 @@ static NSMutableDictionary *_sharedInstances = nil;
 }
 
 + (void)exampleOpenConversationViewControllerWithConversaionId:(NSString *)conversationId fromNavigationController:(UINavigationController *)aNavigationController {
-    LCIMChatController *conversationViewController =[[LCIMChatController alloc] initWithConversationId:conversationId];
+    //    LCIMChatController *conversationViewController =[[LCIMChatController alloc] initWithConversationId:conversationId];
+    
+    LCIMChatController *conversationViewController =[[LCIMChatController alloc] initWithConversationId:@"56d880b9f3609a005d88415e"];
+    
     [self pushToViewController:conversationViewController];
 }
 
@@ -259,8 +263,8 @@ static NSMutableDictionary *_sharedInstances = nil;
     id<UIApplicationDelegate> delegate = ((id<UIApplicationDelegate>)[[UIApplication sharedApplication] delegate]);
     UIWindow *window = delegate.window;
     UITabBarController *tabBarController = (UITabBarController *)window.rootViewController;
-    UINavigationController *navigationController_ = tabBarController.selectedViewController;
-    [navigationController_ pushViewController:viewController animated:YES];
+    UINavigationController *navigationController = tabBarController.selectedViewController;
+    [navigationController pushViewController:viewController animated:YES];
 }
 
 - (void)examplePreviewImageMessageWithIndex:(NSUInteger)index imageMessages:(NSArray *)imageMessageInfo {
@@ -360,7 +364,7 @@ static NSMutableDictionary *_sharedInstances = nil;
 - (void)photoBrowserDidFinishModalPresentation:(MWPhotoBrowser *)photoBrowser {
     // If we subscribe to this method we must dismiss the view controller ourselves
     NSLog(@"Did finish modal presentation");
-//    [self dismissViewControllerAnimated:YES completion:nil];
+    //    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 @end

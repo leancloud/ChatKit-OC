@@ -19,6 +19,9 @@
 @property (nonatomic, copy, readwrite) LCIMMarkBadgeWithTotalUnreadCountBlock markBadgeWithTotalUnreadCountBlock;
 @property (nonatomic, copy, readwrite) LCIMPrepareConversationsWhenLoadBlock prepareConversationsWhenLoadBlock;
 @property (nonatomic, copy, readwrite) LCIMConversationEditActionsBlock conversationEditActionBlock;
+@property (nonatomic, copy, readwrite) LCIMHeightForRowBlock heightForRowBlock;
+@property (nonatomic, copy, readwrite) LCIMCellForRowBlock cellForRowBlock;
+@property (nonatomic, copy, readwrite) LCIMConfigureCellBlock configureCellBlock;
 
 @end
 
@@ -142,6 +145,19 @@
 
 - (void)setConversationEditActionBlock:(LCIMConversationEditActionsBlock)conversationEditActionBlock {
     _conversationEditActionBlock = conversationEditActionBlock;
+}
+
+
+- (void)setHeightForRowBlock:(LCIMHeightForRowBlock)heightForRowBlock {
+    _heightForRowBlock = heightForRowBlock;
+}
+
+- (void)setCellForRowBlock:(LCIMCellForRowBlock)cellForRowBlock {
+    _cellForRowBlock = cellForRowBlock;
+}
+
+-(void)setConfigureCellBlock:(LCIMConfigureCellBlock)configureCellBlock {
+    _configureCellBlock = configureCellBlock;
 }
 
 @end

@@ -34,19 +34,18 @@
 //@property (copy, nonatomic) NSString *messageSender /**< 正在聊天的用户昵称 */;
 //@property (copy, nonatomic) NSString *chatterThumb /**< 正在聊天的用户头像 */;
 @property (nonatomic, strong) LCIMStatusView *clientStatusView;
-@property (assign, nonatomic) LCIMMessageChat messageChatType;
 /**< 正在聊天的用户昵称 */
 @property (nonatomic, copy) NSString *chatterName;
  /**< 正在聊天的用户头像 */
 @property (nonatomic, copy) NSURL *chatterThumb;
-//@property (assign, nonatomic) LCIMMessageChat messageChatType;
+//@property (assign, nonatomic) LCIMConversationType messageChatType;
 @property (nonatomic, strong) LCIMChatViewModel *chatViewModel;
 
 @end
 
 @implementation LCIMChatController
 
-//- (instancetype)initWithChatType:(LCIMMessageChat)messageChatType{
+//- (instancetype)initWithChatType:(LCIMConversationType)messageChatType{
 //    if ([super init]) {
 //        _messageChatType = messageChatType;
 //    }
@@ -139,6 +138,7 @@
     return _chatViewModel;
 }
 
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.tableView.delegate = self.chatViewModel;
@@ -227,8 +227,7 @@
         LCIMMessage *lcimMessage = [[LCIMMessage alloc] initWithText:message
                                                               sender:[LCIMKit sharedInstance].clientId
                                                            timestamp:[NSDate date]];
-        //TODO:
-        lcimMessage.messageGroupType = LCIMMessageChatSingle;
+        lcimMessage.messageGroupType = self.conversation.lcim_type;
         [self.chatViewModel sendMessage:lcimMessage];
     }
 }
@@ -237,7 +236,7 @@
     if ([LCIMSessionService sharedInstance].client.status != AVIMClientStatusOpened) {
         return;
     }
-    [self sendVoiceWithPath:voiceFileName];
+    [self sendVoiceWithPath:voiceFileName seconds:seconds];
 }
 
 - (void)chatBar:(LCIMChatBar *)chatBar sendPictures:(NSArray<UIImage *> *)pictures{
@@ -265,22 +264,20 @@
                                                    originPhotoURL:nil
                                                            sender:[LCIMKit sharedInstance].clientId
                                                         timestamp:[NSDate date]];
-        //TODO:
-        message.messageGroupType = LCIMMessageChatSingle;
+        message.messageGroupType =  self.conversation.lcim_type;
         [self.chatViewModel sendMessage:message];
     } else {
         [self alert:@"write image to file error"];
     }
 }
 
-- (void)sendVoiceWithPath:(NSString *)voicePath {
+- (void)sendVoiceWithPath:(NSString *)voicePath seconds:(NSTimeInterval)seconds {
     LCIMMessage *message = [[LCIMMessage alloc] initWithVoicePath:voicePath
                                                      voiceURL:nil
-                                                voiceDuration:nil
+                                                voiceDuration:[NSString stringWithFormat:@"%@", @(seconds)]
                                                        sender:[LCIMKit sharedInstance].clientId
                                                     timestamp:[NSDate date]];
-    //TODO:
-    message.messageGroupType = LCIMMessageChatSingle;
+    message.messageGroupType =  self.conversation.lcim_type;
     [self.chatViewModel sendMessage:message];
 }
 
@@ -325,15 +322,13 @@
 
     NSLog(@"tapMessage :%@",indexPath);
     switch (messageCell.messageType) {
-        case LCIMMessageTypeVoice:
-        {
+        case LCIMMessageTypeVoice: {
             LCIMMessage *message = [self.chatViewModel messageAtIndex:indexPath.row];
             NSString *voiceFileName = message.voicePath;
             [[LCIMAVAudioPlayer sharePlayer] playAudioWithURLString:voiceFileName atIndex:indexPath.row];
         }
             break;
-        case LCIMMessageTypeImage:
-        {
+        case LCIMMessageTypeImage: {
             LCIMPreviewImageMessageBlock previewImageMessageBlock = [LCIMUIService sharedInstance].previewImageMessageBlock;
             NSDictionary *userInfo = @{
                                        LCIMPreviewImageMessageUserInfoKeyFromController : self,
@@ -405,9 +400,12 @@
 
 - (void)audioPlayerStateDidChanged:(LCIMVoiceMessageState)audioPlayerState forIndex:(NSUInteger)index {
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:index inSection:0];
+    //FIXME:Cell sometimes is textMessage
     LCIMChatVoiceMessageCell *voiceMessageCell = [self.tableView cellForRowAtIndexPath:indexPath];
     dispatch_async(dispatch_get_main_queue(), ^{
-        [voiceMessageCell setVoiceMessageState:audioPlayerState];
+        if ([voiceMessageCell respondsToSelector:@selector(setVoiceMessageState:)]) {
+            [voiceMessageCell setVoiceMessageState:audioPlayerState];
+        }
     });
 }
 

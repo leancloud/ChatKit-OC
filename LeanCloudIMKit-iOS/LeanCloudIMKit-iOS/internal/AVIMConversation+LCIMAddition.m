@@ -43,7 +43,11 @@
 }
 
 - (LCIMConversationType)lcim_type {
-    return [[self.attributes objectForKey:LCIM_CONVERSATION_TYPE] intValue];
+    if (self.members.count > 2) {
+        return LCIMConversationTypeGroup;
+    }
+    return LCIMConversationTypeSingle;
+//    return [[self.attributes objectForKey:LCIM_CONVERSATION_TYPE] intValue];
 }
 
 + (NSString *)lcim_groupConversaionDefaultNameForUserIds:(NSArray *)userIds {
@@ -65,7 +69,7 @@
         NSString *peerId = [self lcim_peerId];
         NSError *error = nil;
         id<LCIMUserModelDelegate> peer = [[LCIMUserSystemService sharedInstance] getProfileForUserId:peerId error:&error];
-        return peer.name;
+        return peer.name ? peer.name : peerId;
     } else {
         return self.name;
     }
