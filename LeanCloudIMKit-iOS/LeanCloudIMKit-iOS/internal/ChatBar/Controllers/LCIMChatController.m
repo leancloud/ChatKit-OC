@@ -283,14 +283,18 @@
 
 - (void)chatBar:(LCIMChatBar *)chatBar sendLocation:(CLLocationCoordinate2D)locationCoordinate locationText:(NSString *)locationText{
 //TODO:
-//    NSMutableDictionary *locationMessageDict = [NSMutableDictionary dictionary];
-//    locationMessageDict[kLCIMMessageConfigurationTypeKey] = @(LCIMMessageTypeLocation);
-//    locationMessageDict[kLCIMMessageConfigurationOwnerKey] = @(LCIMMessageOwnerSelf);
-//    locationMessageDict[kLCIMMessageConfigurationGroupKey] = @(self.messageChatType);
-//    locationMessageDict[kLCIMMessageConfigurationNicknameKey] = kSelfName;
-//    locationMessageDict[kLCIMMessageConfigurationAvatarKey] = kSelfThumb;
-//    locationMessageDict[kLCIMMessageConfigurationLocationKey]=locationText;
-//    [self addMessage:locationMessageDict];
+    LCIMMessage *message = [[LCIMMessage alloc] initWithLocalPositionPhoto:({
+        NSString *imageName = @"MessageBubble_Location";
+        NSString *imageNameWithBundlePath = [NSString stringWithFormat:@"MessageBubble.bundle/%@", imageName];
+        UIImage *image = [UIImage imageNamed:imageNameWithBundlePath];
+        image;})
+                                                     geolocations:locationText
+                                                                  location:[[CLLocation alloc] initWithLatitude:locationCoordinate.latitude
+                                                                                                      longitude:locationCoordinate.longitude]
+                                                           sender:[LCIMKit sharedInstance].clientId
+                                                        timestamp:[NSDate date]];
+    [self.chatViewModel sendMessage:message];
+
 }
 
 - (void)chatBarFrameDidChange:(LCIMChatBar *)chatBar frame:(CGRect)frame{
@@ -341,6 +345,9 @@
         }
             break;
             //TODO:
+            case LCIMMessageTypeLocation:
+            
+            break;
     }
 }
 

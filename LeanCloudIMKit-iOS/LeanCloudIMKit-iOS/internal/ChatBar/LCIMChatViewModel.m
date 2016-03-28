@@ -144,6 +144,7 @@
 - (void)sendMessage:(LCIMMessage *)message success:(LCIMSendMessageSuccessBlock)success failed:(LCIMSendMessageSuccessFailedBlock)failed {
     message.conversationId = [LCIMConversationService sharedInstance].currentConversation.conversationId;
     message.status = LCIMMessageSendStateSending;
+    message.bubbleMessageType = LCIMMessageOwnerSelf;
     AVIMTypedMessage *avimTypedMessage = [LCIMChatViewModel getAVIMTypedMessageWithMessage:message];
     [self.avimTypedMessage addObject:avimTypedMessage];
     NSLog(@"🔴类名与方法名：%@（在第%@行），描述：%@", @(__PRETTY_FUNCTION__), @(__LINE__), @(self.dataArray.count));
@@ -332,7 +333,10 @@
             
         case LCIMMessageTypeLocation: {
             //TODO:
-            // avimTypedMessage = [AVIMLocationMessage messageWithText:nil latitude:message.latitude longitude:message.longitude attributes:nil];
+             avimTypedMessage = [AVIMLocationMessage messageWithText:message.geolocations
+                                                            latitude:message.location.coordinate.latitude
+                                                           longitude:message.location.coordinate.longitude
+                                                          attributes:nil];
             break;
         case LCIMMessageTypeSystem:
         case LCIMMessageTypeUnknow:
