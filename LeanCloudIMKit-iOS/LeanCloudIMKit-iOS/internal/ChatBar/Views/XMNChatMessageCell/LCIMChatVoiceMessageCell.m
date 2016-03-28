@@ -9,6 +9,7 @@
 #import "LCIMChatVoiceMessageCell.h"
 #import "Masonry.h"
 #import "LCIMMessageVoiceFactory.h"
+#import "LCIMAVAudioPlayer.h"
 
 @interface LCIMChatVoiceMessageCell ()
 
@@ -73,10 +74,20 @@
     [self.messageContentView addSubview:self.messageVoiceSecondsLabel];
     [self.messageContentView addSubview:self.messageVoiceStatusImageView];
     [self.messageContentView addSubview:self.messageIndicatorView];
+    UITapGestureRecognizer *recognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(singleTapMessageImageViewGestureRecognizerHandler:)];
+    [self.messageContentView addGestureRecognizer:recognizer];
     [super setup];
     self.voiceMessageState = LCIMVoiceMessageStateNormal;
 }
 
+
+- (void)singleTapMessageImageViewGestureRecognizerHandler:(UITapGestureRecognizer *)tapGestureRecognizer {
+    if (tapGestureRecognizer.state == UIGestureRecognizerStateEnded) {
+        if ([self.delegate respondsToSelector:@selector(messageCellTappedMessage:)]) {
+            [self.delegate messageCellTappedMessage:self];
+        }
+    }
+}
 - (void)configureCellWithData:(LCIMMessage *)message {
     [super configureCellWithData:message];
     self.messageVoiceSecondsLabel.text = [NSString stringWithFormat:@"%@''",message.voiceDuration];

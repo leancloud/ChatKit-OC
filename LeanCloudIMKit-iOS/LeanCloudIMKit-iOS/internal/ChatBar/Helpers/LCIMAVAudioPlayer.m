@@ -177,11 +177,6 @@ NSString *const kLCIMAudioDataKey;
         return;
     }
     
-    
-    //开启红外感应 !!! 有bug 暂时弃用
-//    [[UIDevice currentDevice] setProximityMonitoringEnabled:YES];
-//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(proximityStateChanged:) name:UIDeviceProximityStateDidChangeNotification object:nil];
-    
     _audioPlayer.volume = 1.0f;
     _audioPlayer.delegate = self;
     [_audioPlayer prepareToPlay];
