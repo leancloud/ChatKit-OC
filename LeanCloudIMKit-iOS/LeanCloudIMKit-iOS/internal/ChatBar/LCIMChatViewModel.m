@@ -32,6 +32,7 @@
 #import "AVIMEmotionMessage.h"
 #import "LCIMEmotionUtils.h"
 #import "LCIMChatController.h"
+#import "NSDate+DateTools.h"
 
 @interface LCIMChatViewModel ()
 
@@ -62,6 +63,42 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return self.dataArray.count;
+}
+
+// 是否显示时间轴Label的回调方法
+- (BOOL)shouldDisplayTimestampForRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (indexPath.row == 0) {
+        return NO;
+    }  else {
+        LCIMMessage *msg = [self.dataArray objectAtIndex:indexPath.row];
+        LCIMMessage *lastMsg = [self.dataArray objectAtIndex:indexPath.row - 1];
+        int interval = [msg.timestamp timeIntervalSinceDate:lastMsg.timestamp];
+        if (interval > 60 * 3) {
+            return YES;
+        } else {
+            return NO;
+        }
+    }
+}
+
+// 是否显示时间轴Label
+- (BOOL)shouldDisplayTimestampForMessage:(LCIMMessage *)message forMessages:(NSArray *)messages {
+    BOOL containsMessage= [messages containsObject:message];
+    if (!containsMessage) {
+        return NO;
+    }
+    NSUInteger index = [messages indexOfObject:message];
+    if (index == 0) {
+        return YES;
+    }  else {
+        LCIMMessage *lastMessage = [messages objectAtIndex:index - 1];
+        int interval = [message.timestamp timeIntervalSinceDate:lastMessage.timestamp];
+        if (interval > 60 * 3) {
+            return YES;
+        } else {
+            return NO;
+        }
+    }
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -117,8 +154,47 @@
     }
 }
 
+- (LCIMMessage *)timeMessage:(NSDate *)timestamp {
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"MM-dd HH:mm"];
+    NSString *text = [dateFormatter stringFromDate:timestamp];
+    LCIMMessage *timeMessage = [[LCIMMessage alloc] initWithSystemText:text];
+    return timeMessage;
+}
+
+- (void)addMessages:(NSArray<LCIMMessage *> *)messages {
+    [self.dataArray addObjectsFromArray:[self messagesWithSystemMessages:messages]];
+}
+
+- (NSArray *)messagesWithSystemMessages:(NSArray<LCIMMessage *> *)messages {
+    NSMutableArray *messageWithSystemMessages = [NSMutableArray arrayWithArray:self.dataArray];
+    for (LCIMMessage *message in messages) {
+        [messageWithSystemMessages addObject:message];
+        BOOL shouldDisplayTimestamp = [self shouldDisplayTimestampForMessage:message forMessages:messageWithSystemMessages];
+        if (shouldDisplayTimestamp) {
+            [messageWithSystemMessages insertObject:[self timeMessage:message.timestamp] atIndex:(messageWithSystemMessages.count - 1)];
+        }
+    }
+    [messageWithSystemMessages removeObjectsInArray:self.dataArray];
+    return [messageWithSystemMessages copy];
+}
+
+- (NSArray *)topMessagesWithSystemMessages:(NSArray<LCIMMessage *> *)messages {
+    NSMutableArray *messageWithSystemMessages = [NSMutableArray arrayWithArray:messages];
+    NSUInteger idx = 0;
+    for (LCIMMessage *message in messages) {
+        BOOL shouldDisplayTimestamp = [self shouldDisplayTimestampForMessage:message forMessages:messageWithSystemMessages];
+        if (shouldDisplayTimestamp) {
+            [messageWithSystemMessages insertObject:[self timeMessage:message.timestamp] atIndex:idx];
+            idx++;
+        }
+        idx++;
+    }
+    return [messageWithSystemMessages copy];
+}
+
 - (void)addMessage:(LCIMMessage *)message {
-    [self.dataArray addObject:message];
+    [self addMessages:@[message]];
 }
 
 #pragma mark - Public Methods
@@ -147,7 +223,6 @@
     message.bubbleMessageType = LCIMMessageOwnerSelf;
     AVIMTypedMessage *avimTypedMessage = [LCIMChatViewModel getAVIMTypedMessageWithMessage:message];
     [self.avimTypedMessage addObject:avimTypedMessage];
-    NSLog(@"🔴类名与方法名：%@（在第%@行），描述：%@", @(__PRETTY_FUNCTION__), @(__LINE__), @(self.dataArray.count));
     [self preloadMessageToTableView:message];
     
     // if `message.messageId` is not nil, it is a failed message being resended.
@@ -190,11 +265,10 @@
     [self addMessage:message];
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:self.dataArray.count - 1 inSection:0];
     dispatch_async(dispatch_get_main_queue(),^{
-        [self.parentViewController.tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+        [self.parentViewController.tableView reloadData];
+//        [self.parentViewController.tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
         [self.parentViewController scrollToBottomAnimated:YES];
-        
     });
-    NSLog(@"🔴类名与方法名：%@（在第%@行），描述：%@", @(__PRETTY_FUNCTION__), @(__LINE__), @(self.dataArray.count));
 }
 
 - (void)removeMessageAtIndex:(NSUInteger)index {
@@ -258,7 +332,7 @@
         DLog("unkonwMessage");
     }
     [[LCIMConversationService sharedInstance] fecthConversationWithConversationId:message.conversationId callback:^(AVIMConversation *conversation, NSError *error) {
-            lcimMessage.messageGroupType = conversation.lcim_type;
+        lcimMessage.messageGroupType = conversation.lcim_type;
     }];
     lcimMessage.avator = nil;
     lcimMessage.avatorURL = [fromUser avatorURL];
@@ -322,7 +396,6 @@
             break;
         }
         case LCIMMessageTypeVoice: {
-            NSLog(@"🔴类名与方法名：%@（在第%@行），描述：%@", @(__PRETTY_FUNCTION__), @(__LINE__), message.voicePath);
             avimTypedMessage = [AVIMAudioMessage messageWithText:nil attachedFilePath:message.voicePath attributes:nil];
             break;
         }
@@ -333,10 +406,10 @@
             
         case LCIMMessageTypeLocation: {
             //TODO:
-             avimTypedMessage = [AVIMLocationMessage messageWithText:message.geolocations
-                                                            latitude:message.location.coordinate.latitude
-                                                           longitude:message.location.coordinate.longitude
-                                                          attributes:nil];
+            avimTypedMessage = [AVIMLocationMessage messageWithText:message.geolocations
+                                                           latitude:message.location.coordinate.latitude
+                                                          longitude:message.location.coordinate.longitude
+                                                         attributes:nil];
             break;
         case LCIMMessageTypeSystem:
         case LCIMMessageTypeUnknow:
@@ -359,13 +432,14 @@
                 // 失败消息加到末尾，因为 SDK 缓存不保存它们
                 //TODO: why only when the net is ok, can the failed messages load fast
                 NSMutableArray *lcimSucceedMessags = [LCIMChatViewModel getLCIMMessages:avimTypedMessage];
-                self.dataArray = [NSMutableArray arrayWithArray:lcimSucceedMessags];
+                [self addMessages:lcimSucceedMessags];
+                //                [NSMutableArray arrayWithArray:lcimSucceedMessags];
                 NSArray<LCIMMessage *> *failedMessages = [[LCIMConversationService sharedInstance] selectFailedMessagesByConversationId:[LCIMConversationService sharedInstance].currentConversation.conversationId];
                 NSMutableArray *allFailedAVIMMessages = [LCIMChatViewModel getAVIMMessages:failedMessages];
                 NSMutableArray *allMessages = [NSMutableArray arrayWithArray:avimTypedMessage];
                 //TODO:
-//                [allMessages addObjectsFromArray:[allFailedAVIMMessages copy]];
-//                [self.dataArray addObjectsFromArray:failedMessages];
+                //                [allMessages addObjectsFromArray:[allFailedAVIMMessages copy]];
+                //                [self.dataArray addObjectsFromArray:failedMessages];
                 self.avimTypedMessage = allMessages;
                 dispatch_async(dispatch_get_main_queue(),^{
                     [self.parentViewController.tableView reloadData];
@@ -423,7 +497,7 @@
             NSMutableArray *newMessages = [NSMutableArray arrayWithArray:avimTypedMessage];
             [newMessages addObjectsFromArray:self.avimTypedMessage];
             self.avimTypedMessage = newMessages;
-            [self insertOldMessages:lcimMessages completion: ^{
+            [self insertOldMessages:[self topMessagesWithSystemMessages:lcimMessages] completion: ^{
                 self.parentViewController.loadingMoreMessage = NO;
             }];
         } else {
@@ -505,7 +579,7 @@ static CGPoint  delayOffset = {0.0};
                     UIImage *image = [UIImage imageNamed:imageNameWithBundlePath];
                     image;})];
             }
-        
+            
             if ((message == message_) && (*selectedMessageIndex == nil)){
                 *selectedMessageIndex = @(idx);
             }

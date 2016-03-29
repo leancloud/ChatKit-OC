@@ -80,7 +80,6 @@ FOUNDATION_EXTERN NSString *const LCIMConversationServiceErrorDomain;
  *  @brief 如果尚未连接到服务器，首先会连接到服务器
  *  @param conversationId 聊天会话Id。
  *  @attention 注意：conversationId 与 personId 并不等同。您一般不能自己构造一个conversationId，而是从conversation等特定接口中才能读取到conversationId。如果需要使用personId来打开会话，应该使用openChatWithPeer这个接口。
- *  @param controller 用以弹出IM页面的外部Controller，例如H5容器Controller
  *  @return 如果尚未设置登录能力或者conversation为空，则返回NO，否则返回YES
  */
 - (BOOL)openChatWithConversationId:(NSString *)conversationId fromController:(UIViewController *)controller;

@@ -14,6 +14,7 @@
 @interface LCIMMessage : NSObject <NSCoding, NSCopying>
 
 @property (nonatomic, copy, readonly) NSString *text;
+@property (nonatomic, copy, readonly) NSString *systemText;
 @property (nonatomic, strong, readwrite) UIImage *photo;
 @property (nonatomic, copy, readonly) NSString *photoPath;
 @property (nonatomic, strong, readonly) NSURL *thumbnailURL;
@@ -66,6 +67,7 @@
                       sender:(NSString *)sender
                    timestamp:(NSDate *)timestamp;
 
+- (instancetype)initWithSystemText:(NSString *)text;
 
 /**
  *  初始化图片类型的消息

@@ -33,15 +33,14 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateStatusView) name:LCIMNotificationConnectivityUpdated object:nil];
     [self updateStatusView];
     self.tableView.tableFooterView = [[UIView alloc] init];
+    self.tableView.delegate = self.conversationListViewModel;
+    self.tableView.dataSource = self.conversationListViewModel;
     self.tableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
         // 进入刷新状态后会自动调用这个block
         [self.conversationListViewModel refresh];
     }];
     [self.tableView.mj_header beginRefreshing];
-    self.tableView.delegate = self.conversationListViewModel;
-    self.tableView.dataSource = self.conversationListViewModel;
     self.tableView.separatorInset = UIEdgeInsetsMake(0, 0, 0, 0);
-
 }
 
 - (void)dealloc {

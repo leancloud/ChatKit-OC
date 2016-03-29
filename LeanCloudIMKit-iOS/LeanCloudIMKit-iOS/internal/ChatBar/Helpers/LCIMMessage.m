@@ -12,6 +12,7 @@
 @interface LCIMMessage()
 
 @property (nonatomic, copy)  NSString *text;
+@property (nonatomic, copy) NSString *systemText;
 @property (nonatomic, copy)  NSString *photoPath;
 @property (nonatomic, strong)  NSURL *thumbnailURL;
 @property (nonatomic, strong)  NSURL *originPhotoURL;
@@ -58,6 +59,17 @@
     }
     return self;
 }
+
+- (instancetype)initWithSystemText:(NSString *)text {
+    self = [super init];
+    if (self) {
+        _systemText = text;
+        _messageMediaType = LCIMMessageTypeSystem;
+        _bubbleMessageType = LCIMMessageOwnerSystem;
+    }
+    return self;
+}
+
 
 - (instancetype)initWithPhoto:(UIImage *)photo
                     photoPath:(NSString *)photoPath
@@ -171,7 +183,8 @@
     if (self) {
         
         _text = [aDecoder decodeObjectForKey:@"text"];
-        
+        _systemText = [aDecoder decodeObjectForKey:@"systemText"];
+
         _photo = [aDecoder decodeObjectForKey:@"photo"];
         _thumbnailURL = [aDecoder decodeObjectForKey:@"thumbnailURL"];
         _originPhotoURL = [aDecoder decodeObjectForKey:@"originPhotoURL"];
@@ -209,7 +222,8 @@
 
 - (void)encodeWithCoder:(NSCoder *)aCoder {
     [aCoder encodeObject:self.text forKey:@"text"];
-    
+    [aCoder encodeObject:self.systemText forKey:@"systemText"];
+
     [aCoder encodeObject:self.photo forKey:@"photo"];
     [aCoder encodeObject:self.thumbnailURL forKey:@"thumbnailURL"];
     [aCoder encodeObject:self.originPhotoURL forKey:@"originPhotoURL"];
@@ -281,6 +295,7 @@
                                                                               sender:[self.sender copy]
                                                                            timestamp:[self.timestamp copy]];
             case LCIMMessageTypeSystem:
+            message = [[[self class] allocWithZone:zone] initWithSystemText:[self.systemText copy]];
             case LCIMMessageTypeUnknow:
             //TODO:
             break;

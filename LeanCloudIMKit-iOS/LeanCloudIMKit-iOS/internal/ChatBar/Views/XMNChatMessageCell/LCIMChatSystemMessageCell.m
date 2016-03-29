@@ -46,7 +46,7 @@
 
 - (void)configureCellWithData:(LCIMMessage *)message {
     [super configureCellWithData:message];
-    self.systemMessageLabel.attributedText = [[NSAttributedString alloc] initWithString:message.text attributes:self.systemMessageStyle];
+    self.systemMessageLabel.attributedText = [[NSAttributedString alloc] initWithString:message.systemText attributes:self.systemMessageStyle];
 }
 
 #pragma mark - Getters
@@ -66,7 +66,6 @@
         [systemMessageLabel mas_makeConstraints:^(MASConstraintMaker *make) {
             make.edges.equalTo(_systemmessageContentView).with.insets(UIEdgeInsetsMake(8, 16, 8, 16));
         }];
-        
         systemMessageLabel.attributedText = [[NSAttributedString alloc] initWithString:@"2015-11-16" attributes:self.systemMessageStyle];
     }
     return _systemmessageContentView;

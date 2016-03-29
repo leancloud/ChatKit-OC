@@ -45,13 +45,6 @@
 
 @implementation LCIMChatController
 
-//- (instancetype)initWithChatType:(LCIMConversationType)messageChatType{
-//    if ([super init]) {
-//        _messageChatType = messageChatType;
-//    }
-//    return self;
-//}
-
 #pragma mark -
 #pragma mark - initialization Method
 
@@ -74,17 +67,6 @@
     [self setup];
     return self;
 }
-
-//- (instancetype)initWithConversation:(AVIMConversation *)conversation {
-//    self = [super init];
-//    if (!self) {
-//        return nil;
-//    }
-//    [self setup];
-//    _conversation = conversation;
-//    [self refreshConversation:conversation];
-//    return self;
-//}
 
 /**
  *  lazy load conversation
@@ -225,7 +207,7 @@
     }
     if ([message length] > 0 ) {
         LCIMMessage *lcimMessage = [[LCIMMessage alloc] initWithText:message
-                                                              sender:[LCIMKit sharedInstance].clientId
+                                                              sender:self.chatterName
                                                            timestamp:[NSDate date]];
         lcimMessage.messageGroupType = self.conversation.lcim_type;
         [self.chatViewModel sendMessage:lcimMessage];
@@ -262,7 +244,7 @@
                                                         photoPath:path
                                                      thumbnailURL:nil
                                                    originPhotoURL:nil
-                                                           sender:[LCIMKit sharedInstance].clientId
+                                                           sender:self.chatterName
                                                         timestamp:[NSDate date]];
         message.messageGroupType =  self.conversation.lcim_type;
         [self.chatViewModel sendMessage:message];
@@ -275,7 +257,7 @@
     LCIMMessage *message = [[LCIMMessage alloc] initWithVoicePath:voicePath
                                                      voiceURL:nil
                                                 voiceDuration:[NSString stringWithFormat:@"%@", @(seconds)]
-                                                       sender:[LCIMKit sharedInstance].clientId
+                                                       sender:self.chatterName
                                                     timestamp:[NSDate date]];
     message.messageGroupType =  self.conversation.lcim_type;
     [self.chatViewModel sendMessage:message];
@@ -291,7 +273,7 @@
                                                      geolocations:locationText
                                                                   location:[[CLLocation alloc] initWithLatitude:locationCoordinate.latitude
                                                                                                       longitude:locationCoordinate.longitude]
-                                                           sender:[LCIMKit sharedInstance].clientId
+                                                           sender:self.chatterName
                                                         timestamp:[NSDate date]];
     [self.chatViewModel sendMessage:message];
 
