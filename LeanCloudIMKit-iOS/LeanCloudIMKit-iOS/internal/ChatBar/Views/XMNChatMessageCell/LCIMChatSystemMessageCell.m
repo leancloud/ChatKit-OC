@@ -28,7 +28,7 @@
     [self.systemmessageContentView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.contentView.mas_top).with.offset(8);
         make.bottom.equalTo(self.contentView.mas_bottom).with.offset(-8);
-        make.width.lessThanOrEqualTo(@([UIApplication sharedApplication].keyWindow.frame.size.width/5*3));
+        make.width.lessThanOrEqualTo(@LCIMMessageCellLimit);
         make.centerX.equalTo(self.contentView.mas_centerX);
     }];
 }

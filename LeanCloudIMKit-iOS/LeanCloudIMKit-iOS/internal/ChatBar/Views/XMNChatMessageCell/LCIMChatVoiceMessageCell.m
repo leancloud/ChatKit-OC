@@ -63,7 +63,7 @@
     }
     
     [self.messageContentView mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.width.equalTo(@(80));
+        make.width.mas_greaterThanOrEqualTo(@(80)).priorityHigh();
     }];
 
 }
@@ -91,6 +91,27 @@
 - (void)configureCellWithData:(LCIMMessage *)message {
     [super configureCellWithData:message];
     self.messageVoiceSecondsLabel.text = [NSString stringWithFormat:@"%@''",message.voiceDuration];
+    CGFloat voiceDuration = [message.voiceDuration floatValue];
+    
+    if (voiceDuration > 2) {
+        __block CGFloat length;
+        CGFloat lengthUnit = 10.f;
+       // 1-2 是最短的。2-10s每秒增加一个单位。10-60s每10s增
+        do {
+            if (voiceDuration <= 10) {
+                length = lengthUnit*(voiceDuration-2);
+            }
+            if (voiceDuration > 10) {
+                length = lengthUnit*(10-2) + lengthUnit*((voiceDuration-2)/10);
+            }
+        } while (NO);
+                [self.messageContentView mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.width.equalTo(@(80+length));
+        }];
+    }
+   
+    
+    
 }
 
 #pragma mark - Getters

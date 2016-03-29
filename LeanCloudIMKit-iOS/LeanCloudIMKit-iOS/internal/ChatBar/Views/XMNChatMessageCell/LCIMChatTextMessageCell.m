@@ -16,7 +16,7 @@
 /**
  *  用于显示文本消息的文字
  */
-@property (nonatomic, strong) UILabel *messageTextL;
+@property (nonatomic, strong) UILabel *messageTextLabel;
 @property (nonatomic, copy, readonly) NSDictionary *textStyle;
 
 @end
@@ -28,7 +28,7 @@
 
 - (void)updateConstraints {
     [super updateConstraints];
-    [self.messageTextL mas_makeConstraints:^(MASConstraintMaker *make) {
+    [self.messageTextLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.edges.equalTo(self.messageContentView).with.insets(UIEdgeInsetsMake(8, 16, 8, 16));
     }];
 }
@@ -36,7 +36,7 @@
 #pragma mark - Public Methods
 
 - (void)setup {
-    [self.messageContentView addSubview:self.messageTextL];
+    [self.messageContentView addSubview:self.messageTextLabel];
     UITapGestureRecognizer *tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(doubleTapMessageContentViewGestureRecognizerHandle:)];
     tapGestureRecognizer.numberOfTapsRequired = 2;
     [self.messageContentView addGestureRecognizer:tapGestureRecognizer];
@@ -47,20 +47,20 @@
     [super configureCellWithData:message];
     NSMutableAttributedString *attrS = [LCIMFaceManager emotionStrWithString:message.text];
     [attrS addAttributes:self.textStyle range:NSMakeRange(0, attrS.length)];
-    self.messageTextL.attributedText = attrS;
+    self.messageTextLabel.attributedText = attrS;
 }
 
 #pragma mark - Getters
 
-- (UILabel *)messageTextL {
-    if (!_messageTextL) {
-        _messageTextL = [[UILabel alloc] init];
-        _messageTextL.textColor = [UIColor blackColor];
-        _messageTextL.font = [UIFont systemFontOfSize:16.0f];
-        _messageTextL.numberOfLines = 0;
-        _messageTextL.lineBreakMode = NSLineBreakByWordWrapping;;
+- (UILabel *)messageTextLabel {
+    if (!_messageTextLabel) {
+        _messageTextLabel = [[UILabel alloc] init];
+        _messageTextLabel.textColor = [UIColor blackColor];
+        _messageTextLabel.font = [UIFont systemFontOfSize:16.0f];
+        _messageTextLabel.numberOfLines = 0;
+        _messageTextLabel.lineBreakMode = NSLineBreakByWordWrapping;;
     }
-    return _messageTextL;
+    return _messageTextLabel;
 }
 
 - (void)doubleTapMessageContentViewGestureRecognizerHandle:(UITapGestureRecognizer *)tapGestureRecognizer {

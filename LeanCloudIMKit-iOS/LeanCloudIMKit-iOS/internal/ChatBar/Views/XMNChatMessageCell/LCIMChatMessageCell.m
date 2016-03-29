@@ -70,7 +70,7 @@
         [self.messageContentView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.right.equalTo(self.avatorButton.mas_left).with.offset(-16);
             make.top.equalTo(self.nicknameLabel.mas_bottom).with.offset(4);
-            make.width.lessThanOrEqualTo(@([UIApplication sharedApplication].keyWindow.frame.size.width/5*3)).priorityHigh();
+            make.width.lessThanOrEqualTo(@LCIMMessageCellLimit).priorityHigh();
             make.bottom.equalTo(self.contentView.mas_bottom).with.offset(-16).priorityLow();
         }];
         
@@ -105,7 +105,7 @@
         [self.messageContentView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.equalTo(self.avatorButton.mas_right).with.offset(16);
             make.top.equalTo(self.nicknameLabel.mas_bottom).with.offset(4);
-            make.width.lessThanOrEqualTo(@([UIApplication sharedApplication].keyWindow.frame.size.width/5*3)).priorityHigh();
+            make.width.lessThanOrEqualTo(@LCIMMessageCellLimit).priorityHigh();
             make.bottom.equalTo(self.contentView.mas_bottom).with.offset(-16).priorityLow();
         }];
         

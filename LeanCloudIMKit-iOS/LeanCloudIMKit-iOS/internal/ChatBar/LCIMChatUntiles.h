@@ -9,7 +9,7 @@
 #ifndef LCIMChatUntiles_h
 #define LCIMChatUntiles_h
 
-
+#define LCIMMessageCellLimit ([UIApplication sharedApplication].keyWindow.frame.size.width/5*3)
 /**
  *  消息拥有者类型
  */

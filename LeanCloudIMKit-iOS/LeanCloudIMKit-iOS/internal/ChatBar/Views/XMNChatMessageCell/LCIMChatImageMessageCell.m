@@ -38,6 +38,7 @@
     [self.messageImageView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.edges.equalTo(self.messageContentView);
         make.height.mas_equalTo(@200);
+        make.width.mas_equalTo(@200);
     }];
 }
 
