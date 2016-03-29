@@ -8,8 +8,11 @@
 
 
 #import "LCIMBaseViewController.h"
+@class LCIMStatusView;
 
 @interface LCIMBaseTableViewController : LCIMBaseViewController <UITableViewDelegate, UITableViewDataSource>
+
+@property (nonatomic, strong, readonly) LCIMStatusView *clientStatusView;
 
 /**
  *  显示大量数据的控件

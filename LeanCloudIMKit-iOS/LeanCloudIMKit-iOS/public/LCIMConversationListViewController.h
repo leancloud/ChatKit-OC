@@ -9,7 +9,6 @@
 #import <UIKit/UIKit.h>
 #import "LCIMBaseTableViewController.h"
 #import <AVOSCloudIM/AVOSCloudIM.h>
-#import "LCIMConstants.h"
 
 /**
  *  会话列表 Cell 的默认高度

@@ -8,15 +8,19 @@
 
 
 #import "LCIMBaseTableViewController.h"
+#import "LCIMStatusView.h"
+#import "LCIMConstants.h"
+#import "LCIMSessionService.h"
 
 @interface LCIMBaseTableViewController ()
+
+@property (nonatomic, strong) LCIMStatusView *clientStatusView;
 
 @end
 
 @implementation LCIMBaseTableViewController
 
 #pragma mark - Publish Method
-
 
 - (void)configuraSectionIndexBackgroundColorWithTableView:(UITableView *)tableView {
     if ([tableView respondsToSelector:@selector(setSectionIndexBackgroundColor:)]) {
@@ -60,6 +64,8 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateStatusView) name:LCIMNotificationConnectivityUpdated object:nil];
+    [self updateStatusView];
     // Do any additional setup after loading the view.
 }
 
@@ -68,6 +74,7 @@
     self.tableView.delegate = nil;
     self.tableView.dataSource = nil;
     self.tableView = nil;
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 #pragma mark - UITableView DataSource
@@ -85,5 +92,18 @@
     return nil;
 }
 
+#pragma mark - connect status view
+
+- (LCIMStatusView *)clientStatusView {
+    if (_clientStatusView == nil) {
+        _clientStatusView = [[LCIMStatusView alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, LCIMStatusViewHight)];
+    }
+    return _clientStatusView;
+}
+
+- (void)updateStatusView {
+    // This enforces implementing this method in subclasses
+    [self doesNotRecognizeSelector:_cmd];
+}
 
 @end

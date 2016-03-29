@@ -208,7 +208,6 @@ typedef NS_ENUM(NSInteger, LCIMMessageNotificationType) {
 #define LCIMConversationTableKeyUnreadCount @"unreadCount"
 #define LCIMConversationTableKeyMentioned   @"mentioned"
 
-
 #define LCIMConversatoinTableCreateSQL                                       \
     @"CREATE TABLE IF NOT EXISTS " LCIMConversationTableName @" ("           \
         LCIMConversationTableKeyId           @" VARCHAR(63) PRIMARY KEY, "   \

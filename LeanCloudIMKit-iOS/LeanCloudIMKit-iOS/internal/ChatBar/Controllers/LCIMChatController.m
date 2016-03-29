@@ -33,7 +33,6 @@
 @property (nonatomic, strong, readwrite) AVIMConversation *conversation;
 //@property (copy, nonatomic) NSString *messageSender /**< 正在聊天的用户昵称 */;
 //@property (copy, nonatomic) NSString *chatterThumb /**< 正在聊天的用户头像 */;
-@property (nonatomic, strong) LCIMStatusView *clientStatusView;
 /**< 正在聊天的用户昵称 */
 @property (nonatomic, copy) NSString *chatterName;
  /**< 正在聊天的用户头像 */
@@ -129,9 +128,8 @@
     [LCIMAVAudioPlayer sharePlayer].delegate = self;
     self.view.backgroundColor = [UIColor colorWithRed:234.0f/255.0f green:234/255.0f blue:234/255.f alpha:1.0f];
     [self.view addSubview:self.chatBar];
-    [self initBarButton];
     [self.view addSubview:self.clientStatusView];
-    [self updateStatusView];
+    [self initBarButton];
 
     [[LCIMUserSystemService sharedInstance] fetchCurrentUserInBackground:^(id<LCIMUserModelDelegate> user, NSError *error) {
         // 设置自身用户名
@@ -172,24 +170,6 @@
 - (void)initBarButton {
     UIBarButtonItem *backBtn = [[UIBarButtonItem alloc] initWithTitle:@"返回" style:UIBarButtonItemStylePlain target:nil action:nil];
     [self.navigationItem setBackBarButtonItem:backBtn];
-}
-
-#pragma mark - connect status view
-
-- (LCIMStatusView *)clientStatusView {
-    if (_clientStatusView == nil) {
-        _clientStatusView = [[LCIMStatusView alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, LCIMStatusViewHight)];
-        _clientStatusView.hidden = YES;
-    }
-    return _clientStatusView;
-}
-
-- (void)updateStatusView {
-    if ([LCIMSessionService sharedInstance].connect) {
-        self.clientStatusView.hidden = YES;
-    } else {
-        self.clientStatusView.hidden = NO;
-    }
 }
 
 - (void)refreshConversation:(AVIMConversation *)conversation {
@@ -400,6 +380,15 @@
 
 - (void)loadMoreMessagesScrollTotop {
     [self.chatViewModel loadOldMessages];
+}
+
+- (void)updateStatusView {
+    BOOL isConnected = [LCIMSessionService sharedInstance].connect;
+    if (isConnected) {
+        self.clientStatusView.hidden = YES;
+    } else {
+        self.clientStatusView.hidden = NO;
+    }
 }
 
 @end
