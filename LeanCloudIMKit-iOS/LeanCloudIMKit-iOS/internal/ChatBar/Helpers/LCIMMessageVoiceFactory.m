@@ -24,25 +24,28 @@
             break;
     }
     NSMutableArray *images = [NSMutableArray arrayWithCapacity:4];
-    NSString *imagePrefix = imageSepatorName;
     for (NSInteger i = 0; i < 4; i ++) {
-        NSString *imageName = [imagePrefix stringByAppendingFormat:@"VoiceNodePlaying00%ld", (long)i];
-        NSString *imageNameWithBundlePath = [NSString stringWithFormat:@"VoiceMessageSource.bundle/%@", imageName];
-        UIImage *image = [UIImage imageNamed:imageNameWithBundlePath];
+        NSString *imageName = [imageSepatorName stringByAppendingFormat:@"VoiceNodePlaying00%ld", (long)i];
+        UIImage *image = [self imageInBundleForImageName:imageName];
         if (image)
             [images addObject:image];
     }
     
     messageVoiceAniamtionImageView.image = ({
-        NSString *imageName = [imagePrefix stringByAppendingString:@"VoiceNodePlaying"];
-        NSString *imageNameWithBundlePath = [NSString stringWithFormat:@"VoiceMessageSource.bundle/%@", imageName];
-        UIImage *image = [UIImage imageNamed:imageNameWithBundlePath];
+        NSString *imageName = [imageSepatorName stringByAppendingString:@"VoiceNodePlaying"];
+        UIImage *image = [self imageInBundleForImageName:imageName];
         image;});
     messageVoiceAniamtionImageView.animationImages = images;
     messageVoiceAniamtionImageView.animationDuration = 1.0;
     [messageVoiceAniamtionImageView stopAnimating];
-    
     return messageVoiceAniamtionImageView;
+}
+
+
++ (UIImage *)imageInBundleForImageName:(NSString *)imageName {
+    NSString *imageNameWithBundlePath = [NSString stringWithFormat:@"VoiceMessageSource.bundle/%@", imageName];
+    UIImage *image = [UIImage imageNamed:imageNameWithBundlePath];
+    return  image;
 }
 
 @end
