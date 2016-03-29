@@ -12,16 +12,10 @@
 
 @class AVIMConversation;
 
-
-typedef void(^LCIMMarkBadgeWithTotalUnreadCountBlock)(NSInteger totalUnreadCount);
 typedef void(^LCIMPrepareConversationsWhenLoadBlock)(NSArray<AVIMConversation *> *conversations, LCIMBooleanResultBlock callback);
 typedef void (^LCIMRecentConversationsCallback)(NSArray *conversations, NSInteger totalUnreadCount,  NSError *error);
 
 @interface LCIMConversationListService : NSObject <LCIMConversationsListService>
-
-@property (nonatomic, copy, readonly) LCIMMarkBadgeWithTotalUnreadCountBlock markBadgeWithTotalUnreadCountBlock;
-
-- (void)setMarkBadgeWithTotalUnreadCountBlock:(LCIMMarkBadgeWithTotalUnreadCountBlock)markBadgeWithTotalUnreadCountBlock;
 
 @property (nonatomic, copy, readonly) LCIMPrepareConversationsWhenLoadBlock prepareConversationsWhenLoadBlock;
 

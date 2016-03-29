@@ -217,6 +217,10 @@ static NSMutableDictionary *_sharedInstances = nil;
     //    [[LCIMKit sharedInstance] setConversationEditActionBlock:^NSArray *(NSIndexPath *indexPath, NSArray *editActions) {
     //        return [self exampleConversationEditAction:indexPath];
     //    }];
+    
+    [[LCIMKit sharedInstance] setMarkBadgeWithTotalUnreadCountBlock:^(NSInteger totalUnreadCount, UIViewController *controller) {
+        [self exampleMarkBadgeWithTotalUnreadCount:totalUnreadCount controller:controller];
+    }];
 }
 
 - (NSArray *)exampleConversationEditAction:(NSIndexPath *)indexPath {
@@ -262,6 +266,16 @@ static NSMutableDictionary *_sharedInstances = nil;
     UITabBarController *tabBarController = (UITabBarController *)window.rootViewController;
     UINavigationController *navigationController = tabBarController.selectedViewController;
     [navigationController pushViewController:viewController animated:YES];
+}
+
+- (void)exampleMarkBadgeWithTotalUnreadCount:(NSInteger)totalUnreadCount controller:(UIViewController *)controller{
+    if (totalUnreadCount > 0) {
+        controller.tabBarItem.badgeValue = [NSString stringWithFormat:@"%ld", (long)totalUnreadCount];
+        [[UIApplication sharedApplication] setApplicationIconBadgeNumber:totalUnreadCount];
+    } else {
+        controller.tabBarItem.badgeValue = nil;
+        [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
+    }
 }
 
 - (void)examplePreviewImageMessageWithIndex:(NSUInteger)index imageMessages:(NSArray *)imageMessageInfo {

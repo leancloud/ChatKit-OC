@@ -271,6 +271,10 @@ static NSMutableDictionary *_sharedInstances = nil;
     [[[LCIMKit sharedInstance] conversationListService] setConversationEditActionBlock:conversationEditActionBlock];
 }
 
+- (void)setMarkBadgeWithTotalUnreadCountBlock:(LCIMMarkBadgeWithTotalUnreadCountBlock)markBadgeWithTotalUnreadCountBlock {
+    [[[LCIMKit sharedInstance] conversationListService] setMarkBadgeWithTotalUnreadCountBlock:markBadgeWithTotalUnreadCountBlock];
+}
+
 //TODO:CacheService;
 
 @end

@@ -310,6 +310,12 @@ typedef NSArray *(^LCIMConversationEditActionsBlock)(NSIndexPath *indexPath, NSA
  */
 - (void)setConversationEditActionBlock:(LCIMConversationEditActionsBlock)conversationEditActionBlock;
 
+typedef void(^LCIMMarkBadgeWithTotalUnreadCountBlock)(NSInteger totalUnreadCount, UIViewController *controller);
+
+@property (nonatomic, copy, readonly) LCIMMarkBadgeWithTotalUnreadCountBlock markBadgeWithTotalUnreadCountBlock;
+
+- (void)setMarkBadgeWithTotalUnreadCountBlock:(LCIMMarkBadgeWithTotalUnreadCountBlock)markBadgeWithTotalUnreadCountBlock;
+
 @end
 
 //TODO:CacheService;
