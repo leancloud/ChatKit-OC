@@ -88,8 +88,13 @@
             if (_conversationId) {
                 [[LCIMConversationService sharedInstance] fecthConversationWithConversationId:self.conversationId callback:^(AVIMConversation *conversation, NSError *error) {
                     if (!error) {
-                        [self refreshConversation:conversation];
+                        NSString *currentClientId = [LCIMSessionService sharedInstance].clientId;
+                        BOOL containsCurrentClientId = [conversation.members containsObject:currentClientId];
+                        if (!containsCurrentClientId) {
+                            [conversation joinWithCallback:nil];
+                        }
                     }
+                    [self refreshConversation:conversation];
                 }];
                 break;
             }
@@ -129,6 +134,7 @@
     self.view.backgroundColor = [UIColor colorWithRed:234.0f/255.0f green:234/255.0f blue:234/255.f alpha:1.0f];
     [self.view addSubview:self.chatBar];
     [self.view addSubview:self.clientStatusView];
+    [self updateStatusView];
     [self initBarButton];
 
     [[LCIMUserSystemService sharedInstance] fetchCurrentUserInBackground:^(id<LCIMUserModelDelegate> user, NSError *error) {
