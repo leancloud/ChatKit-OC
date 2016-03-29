@@ -3,7 +3,7 @@
 //  LeanCloudIMKit-iOS
 //
 //  Created by 陈宜龙 on 16/3/21.
-//  Copyright © 2016年 EloncChan. All rights reserved.
+//  Copyright © 2016年 ElonChan. All rights reserved.
 //
 
 #import "LCIMMessageVoiceFactory.h"
@@ -24,17 +24,18 @@
             break;
     }
     NSMutableArray *images = [NSMutableArray arrayWithCapacity:4];
+    NSString *imagePrefix = imageSepatorName;
     for (NSInteger i = 0; i < 4; i ++) {
-        [imageSepatorName stringByAppendingFormat:@"VoiceNodePlaying00%ld", (long)i];
-        NSString *imageNameWithBundlePath = [NSString stringWithFormat:@"VoiceMessageSource.bundle/%@", imageSepatorName];
+        NSString *imageName = [imagePrefix stringByAppendingFormat:@"VoiceNodePlaying00%ld", (long)i];
+        NSString *imageNameWithBundlePath = [NSString stringWithFormat:@"VoiceMessageSource.bundle/%@", imageName];
         UIImage *image = [UIImage imageNamed:imageNameWithBundlePath];
         if (image)
             [images addObject:image];
     }
     
     messageVoiceAniamtionImageView.image = ({
-        [imageSepatorName stringByAppendingString:@"VoiceNodePlaying"];
-        NSString *imageNameWithBundlePath = [NSString stringWithFormat:@"VoiceMessageSource.bundle/%@", imageSepatorName];
+        NSString *imageName = [imagePrefix stringByAppendingString:@"VoiceNodePlaying"];
+        NSString *imageNameWithBundlePath = [NSString stringWithFormat:@"VoiceMessageSource.bundle/%@", imageName];
         UIImage *image = [UIImage imageNamed:imageNameWithBundlePath];
         image;});
     messageVoiceAniamtionImageView.animationImages = images;

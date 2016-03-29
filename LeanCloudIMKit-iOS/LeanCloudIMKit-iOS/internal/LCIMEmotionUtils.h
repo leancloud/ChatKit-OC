@@ -3,7 +3,7 @@
 //  LeanCloudIMKit-iOS
 //
 //  Created by 陈宜龙 on 16/3/11.
-//  Copyright © 2016年 EloncChan. All rights reserved.
+//  Copyright © 2016年 ElonChan. All rights reserved.
 //  表情工具类，提供表情、转换表情与文本
 
 

@@ -3,7 +3,7 @@
 //  LeanCloudIMKit-iOS
 //
 //  Created by 陈宜龙 on 16/3/21.
-//  Copyright © 2016年 EloncChan. All rights reserved.
+//  Copyright © 2016年 ElonChan. All rights reserved.
 //
 #define LCIMDebugging 1
 #import "LCIMBaseConversationViewController.h"

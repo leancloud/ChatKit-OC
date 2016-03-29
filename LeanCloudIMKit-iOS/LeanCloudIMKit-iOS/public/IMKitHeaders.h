@@ -3,7 +3,7 @@
 //  LeanCloudIMKit-iOS
 //
 //  Created by 陈宜龙 on 16/3/11.
-//  Copyright © 2016年 EloncChan. All rights reserved.
+//  Copyright © 2016年 ElonChan. All rights reserved.
 //
 
 #if __has_include(<LCIMKit/LCIMKit.h>)
