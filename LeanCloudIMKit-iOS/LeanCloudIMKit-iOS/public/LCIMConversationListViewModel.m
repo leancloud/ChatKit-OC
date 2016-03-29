@@ -66,40 +66,25 @@
         }
         return customCell;
     }
-    
     LCIMConversationListCell *cell = [LCIMConversationListCell dequeueOrCreateCellByTableView:tableView];
-    NSError *error = nil;
-    NSString *peerId = conversation.lcim_peerId;
-    cell.identifier = peerId;
     __block NSString *displayName = nil;
     __block NSURL *avatorURL = nil;
-    [[LCIMUserSystemService sharedInstance] getCachedProfileIfExists:peerId name:&displayName avatorURL:&avatorURL error:&error];
-    if (error) {
-        NSLog(@"%@", error);
+    NSString *peerId = nil;
+    if (conversation.lcim_type == LCIMConversationTypeSingle) {
+        peerId = conversation.lcim_peerId;
+    } else {
+        peerId = conversation.lcim_lastMessage.clientId;
     }
-    if (!displayName) {
-        displayName = peerId;
-        __weak __typeof(self) weakSelf = self;
-        __weak __typeof(cell) weakCell = cell;
-        [[LCIMUserSystemService sharedInstance] getProfileInBackgroundForUserId:peerId callback:^(id<LCIMUserModelDelegate> user, NSError *error) {
-            if (!error && [weakCell.identifier isEqualToString:user.userId]) {
-                NSIndexPath *indexPath_ = [weakSelf.conversationListViewController.tableView indexPathForCell:weakCell];
-                if (!indexPath_) {
-                    return;
-                }
-                dispatch_async(dispatch_get_main_queue(),^{
-                    [weakSelf.conversationListViewController.tableView reloadRowsAtIndexPaths:@[indexPath_] withRowAnimation:UITableViewRowAnimationNone];
-                });
-            }
-        }];
-    }
-    cell.nameLabel.text = conversation.lcim_displayName;
+    [self asyncCacheElseNetLoadCell:cell identifier:conversation.lcim_displayName peerId:peerId name:&displayName avatorURL:&avatorURL];
 
     if (conversation.lcim_type == LCIMConversationTypeSingle) {
         [cell.avatorImageView setImageWithURL:avatorURL placeholder:[self imageInBundleForImageName:@"Placeholder_Avator"]];
     } else {
         [cell.avatorImageView setImage:[self imageInBundleForImageName:@"Placeholder_Group"]];
     }
+    
+    cell.nameLabel.text = conversation.lcim_displayName;
+
 
     if (conversation.lcim_lastMessage) {
         cell.messageTextLabel.attributedText = [LCIMLastMessageTypeManager attributedStringWithMessage:conversation.lcim_lastMessage conversation:conversation userName:displayName];
@@ -133,6 +118,33 @@
         editActions = [self defaultRightButtons];
     }
     return editActions;
+}
+
+- (void)asyncCacheElseNetLoadCell:(LCIMConversationListCell *)cell identifier:(NSString *)identifier peerId:(NSString *)peerId name:(NSString **)name avatorURL:(NSURL **)avatorURL {
+    NSError *error = nil;
+    cell.identifier = identifier;
+    [[LCIMUserSystemService sharedInstance] getCachedProfileIfExists:peerId name:name avatorURL:avatorURL error:&error];
+    if (error) {
+        NSLog(@"%@", error);
+    }
+    if (!name) {
+        if (peerId != NULL) {
+            *name = peerId;
+        }
+        __weak __typeof(self) weakSelf = self;
+        __weak __typeof(cell) weakCell = cell;
+        [[LCIMUserSystemService sharedInstance] getProfileInBackgroundForUserId:peerId callback:^(id<LCIMUserModelDelegate> user, NSError *error) {
+            if (!error && [weakCell.identifier isEqualToString:user.userId]) {
+                NSIndexPath *indexPath_ = [weakSelf.conversationListViewController.tableView indexPathForCell:weakCell];
+                if (!indexPath_) {
+                    return;
+                }
+                dispatch_async(dispatch_get_main_queue(),^{
+                    [weakSelf.conversationListViewController.tableView reloadRowsAtIndexPaths:@[indexPath_] withRowAnimation:UITableViewRowAnimationNone];
+                });
+            }
+        }];
+    }
 }
 
 - (NSArray *)defaultRightButtons {
@@ -177,7 +189,7 @@
             if ([self.conversationListViewController filterAVIMError:error]) {
                 self.dataArray = [NSMutableArray arrayWithArray:conversations];
                 [self.conversationListViewController.tableView reloadData];
-                ![LCIMConversationListService sharedInstance].markBadgeWithTotalUnreadCountBlock ?: [LCIMConversationListService sharedInstance].markBadgeWithTotalUnreadCountBlock(totalUnreadCount);
+                ![LCIMConversationListService sharedInstance].markBadgeWithTotalUnreadCountBlock ?: [LCIMConversationListService sharedInstance].markBadgeWithTotalUnreadCountBlock(totalUnreadCount, self.conversationListViewController.navigationController);
                 [self selectConversationIfHasRemoteNotificatoinConvid];
             }
         };
