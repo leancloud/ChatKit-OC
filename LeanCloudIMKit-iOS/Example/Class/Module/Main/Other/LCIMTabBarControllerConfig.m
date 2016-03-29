@@ -54,7 +54,6 @@
         [tabBarController setViewControllers:@[
                                                firstNavigationController,
                                                secondNavigationController,
-                                               thirdNavigationController,
                                                ]];
         /**
          *  更多TabBar自定义设置：比如：tabBarItem 的选中和不选中文字和背景图片属性、tabbar 背景图片属性
@@ -91,7 +90,6 @@
     NSArray *tabBarItemsAttributes = @[
                                        dict1,
                                        dict2,
-                                       dict3
                                        ];
     tabBarController.tabBarItemsAttributes = tabBarItemsAttributes;
 }

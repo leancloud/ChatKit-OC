@@ -42,10 +42,10 @@ static NSString *const LCIMContactListControllerIdentifier = @"LCIMContactListCo
     if (self.mode == LCIMContactListModeNormal) {
         self.navigationItem.title = @"联系人";
         //TODO:
-        self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"搜索"
-                                                                                 style:UIBarButtonItemStylePlain
-                                                                                target:self
-                                                                                action:@selector(searchBarButtonItemPressed:)];
+//        self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"搜索"
+//                                                                                 style:UIBarButtonItemStylePlain
+//                                                                                target:self
+//                                                                                action:@selector(searchBarButtonItemPressed:)];
         
     } else {
         self.navigationItem.title = @"选择联系人";

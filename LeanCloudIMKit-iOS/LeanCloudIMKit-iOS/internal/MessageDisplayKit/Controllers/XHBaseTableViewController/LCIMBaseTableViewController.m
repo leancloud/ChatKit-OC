@@ -65,7 +65,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateStatusView) name:LCIMNotificationConnectivityUpdated object:nil];
-    [self updateStatusView];
     // Do any additional setup after loading the view.
 }
 
@@ -102,8 +101,6 @@
 }
 
 - (void)updateStatusView {
-    // This enforces implementing this method in subclasses
-    [self doesNotRecognizeSelector:_cmd];
 }
 
 @end

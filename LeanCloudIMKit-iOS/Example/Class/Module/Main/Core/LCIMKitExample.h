@@ -107,17 +107,13 @@
 /**
  *  打开某个会话
  */
-//- (void)exampleOpenConversationViewControllerWithConversation:(LCIMConversation *)aConversation fromNavigationController:(UINavigationController *)aNavigationController;
++ (void)exampleOpenConversationViewControllerWithConversaionId:(NSString *)conversationId fromNavigationController:(UINavigationController *)navigationController;
 
 /**
  *  打开单聊页面
  */
-+ (void)exampleOpenConversationViewControllerWithPeerId:(NSString *)peerId fromNavigationController:(UINavigationController *)aNavigationController;
++ (void)exampleOpenConversationViewControllerWithPeerId:(NSString *)peerId fromNavigationController:(UINavigationController *)navigationController;
 
-/**
- *  打开群聊页面
- */
-//- (void)exampleOpenConversationViewControllerWithTribe:(LCIMTribe *)aTribe fromNavigationController:(UINavigationController *)aNavigationController;
 
 #pragma mark - 自定义业务
 

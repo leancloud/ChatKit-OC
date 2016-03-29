@@ -52,7 +52,8 @@
                 [userIds addObject:conversation.lcim_peerId];
             } else {
                 if (conversation.lastMessageAt) {
-                    [userIds addObject:conversation.lcim_lastMessage.clientId];
+                    NSString *userId = conversation.lcim_lastMessage.clientId;
+                    !userId ?: [userIds addObject:userId];
                 }
             }
             if (conversation.muted == NO) {

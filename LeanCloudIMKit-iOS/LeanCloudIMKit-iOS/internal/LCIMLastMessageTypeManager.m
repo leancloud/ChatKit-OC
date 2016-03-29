@@ -25,11 +25,13 @@ static NSMutableDictionary *attributedStringCache = nil;
             break;
             
         case kAVIMMessageMediaTypeAudio:
-            title = @"声音";
+            title = NSLocalizedStringFromTable(@"Voice", @"LCIMKitString", @"声音");
+            title = [NSString stringWithFormat:@"[%@]",title];
             break;
             
         case kAVIMMessageMediaTypeImage:
-            title = @"图片";
+            title = NSLocalizedStringFromTable(@"Photo", @"LCIMKitString", @"图片");
+            title = [NSString stringWithFormat:@"[%@]",title];
             break;
             
         case kAVIMMessageMediaTypeLocation:
@@ -37,10 +39,14 @@ static NSMutableDictionary *attributedStringCache = nil;
             title = locationMessage.text;
             break;
 //        case kAVIMMessageMediaTypeEmotion:
-//            title = @"表情";
+//            title = NSLocalizedStringFromTable(@"Sight", @"LCIMKitString", @"表情");
+//            title = [NSString stringWithFormat:@"[%@]",title];
+
 //            break;
         case kAVIMMessageMediaTypeVideo:
-            title = @"视频";
+            title = NSLocalizedStringFromTable(@"Video", @"LCIMKitString", @"视频");
+            title = [NSString stringWithFormat:@"[%@]",title];
+
 //TODO:
     }
     return title;
@@ -68,7 +74,7 @@ static NSMutableDictionary *attributedStringCache = nil;
         return [attributedStringCache objectForKey:finalText];
     }
     UIFont *font = [UIFont systemFontOfSize:13];
-    NSDictionary *attributes = @{NSForegroundColorAttributeName: [UIColor grayColor], (id)NSFontAttributeName:font};
+    NSDictionary *attributes = @{ NSForegroundColorAttributeName: [UIColor grayColor], (id)NSFontAttributeName:font};
     NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:finalText attributes:attributes];
     
     if (conversation.lcim_mentioned) {

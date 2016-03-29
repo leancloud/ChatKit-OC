@@ -107,7 +107,6 @@
 		9A8453E31C9EF02100BDBBA4 /* LCIMChatController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A8453A41C9EF02100BDBBA4 /* LCIMChatController.m */; };
 		9A8453E61C9EF02100BDBBA4 /* LCIMFaceManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A8453A91C9EF02100BDBBA4 /* LCIMFaceManager.m */; };
 		9A8453E71C9EF02100BDBBA4 /* LCIMAVAudioPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A8453AB1C9EF02100BDBBA4 /* LCIMAVAudioPlayer.m */; };
-		9A8453E81C9EF02100BDBBA4 /* LCIMMessageStateManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A8453AE1C9EF02100BDBBA4 /* LCIMMessageStateManager.m */; };
 		9A8453EB1C9EF02100BDBBA4 /* Mp3Recorder.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A8453B71C9EF02100BDBBA4 /* Mp3Recorder.m */; };
 		9A8453EC1C9EF02100BDBBA4 /* LCIMLocationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A8453BA1C9EF02100BDBBA4 /* LCIMLocationManager.m */; };
 		9A8453ED1C9EF02100BDBBA4 /* LCIMChatBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A8453BD1C9EF02100BDBBA4 /* LCIMChatBar.m */; };
@@ -131,6 +130,7 @@
 		9A9D4C731CA845B4002F6E87 /* UITableViewCell+LCIMExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A9D4C6F1CA845B4002F6E87 /* UITableViewCell+LCIMExtension.m */; };
 		9A9D4C741CA845B4002F6E87 /* UITableViewRowAction+LCIMExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A9D4C711CA845B4002F6E87 /* UITableViewRowAction+LCIMExtension.m */; };
 		9A9D4C751CA845B4002F6E87 /* UITableViewRowAction.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A9D4C721CA845B4002F6E87 /* UITableViewRowAction.m */; };
+		9A9D4C7B1CAA5E2F002F6E87 /* LCIMPlusButtonSubclass.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A9D4C7A1CAA5E2E002F6E87 /* LCIMPlusButtonSubclass.m */; };
 		9AD664F21C91273900885170 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AD664F11C91273900885170 /* AppDelegate.m */; };
 		9AD6652B1C912ADE00885170 /* LCIMUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AD664F61C912ADE00885170 /* LCIMUser.m */; };
 		9AD6652C1C912ADE00885170 /* LCIMContactListController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AD664FB1C912ADE00885170 /* LCIMContactListController.m */; };
@@ -358,8 +358,6 @@
 		9A8453A91C9EF02100BDBBA4 /* LCIMFaceManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCIMFaceManager.m; sourceTree = "<group>"; };
 		9A8453AA1C9EF02100BDBBA4 /* LCIMAVAudioPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMAVAudioPlayer.h; sourceTree = "<group>"; };
 		9A8453AB1C9EF02100BDBBA4 /* LCIMAVAudioPlayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCIMAVAudioPlayer.m; sourceTree = "<group>"; };
-		9A8453AD1C9EF02100BDBBA4 /* LCIMMessageStateManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMMessageStateManager.h; sourceTree = "<group>"; };
-		9A8453AE1C9EF02100BDBBA4 /* LCIMMessageStateManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCIMMessageStateManager.m; sourceTree = "<group>"; };
 		9A8453B61C9EF02100BDBBA4 /* Mp3Recorder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Mp3Recorder.h; sourceTree = "<group>"; };
 		9A8453B71C9EF02100BDBBA4 /* Mp3Recorder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Mp3Recorder.m; sourceTree = "<group>"; };
 		9A8453B91C9EF02100BDBBA4 /* LCIMLocationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMLocationManager.h; sourceTree = "<group>"; };
@@ -405,6 +403,8 @@
 		9A9D4C701CA845B4002F6E87 /* UITableViewRowAction+LCIMExtension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITableViewRowAction+LCIMExtension.h"; sourceTree = "<group>"; };
 		9A9D4C711CA845B4002F6E87 /* UITableViewRowAction+LCIMExtension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITableViewRowAction+LCIMExtension.m"; sourceTree = "<group>"; };
 		9A9D4C721CA845B4002F6E87 /* UITableViewRowAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITableViewRowAction.m; sourceTree = "<group>"; };
+		9A9D4C791CAA5E2E002F6E87 /* LCIMPlusButtonSubclass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMPlusButtonSubclass.h; sourceTree = "<group>"; };
+		9A9D4C7A1CAA5E2E002F6E87 /* LCIMPlusButtonSubclass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCIMPlusButtonSubclass.m; sourceTree = "<group>"; };
 		9AD664F01C91273900885170 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		9AD664F11C91273900885170 /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		9AD664F51C912ADE00885170 /* LCIMUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMUser.h; sourceTree = "<group>"; };
@@ -966,8 +966,6 @@
 				9A8453A91C9EF02100BDBBA4 /* LCIMFaceManager.m */,
 				9A8453AA1C9EF02100BDBBA4 /* LCIMAVAudioPlayer.h */,
 				9A8453AB1C9EF02100BDBBA4 /* LCIMAVAudioPlayer.m */,
-				9A8453AD1C9EF02100BDBBA4 /* LCIMMessageStateManager.h */,
-				9A8453AE1C9EF02100BDBBA4 /* LCIMMessageStateManager.m */,
 				9A8453FC1C9F061A00BDBBA4 /* LCIMBubbleImageFactory.h */,
 				9A8453FD1C9F061A00BDBBA4 /* LCIMBubbleImageFactory.m */,
 				9A8453FF1C9F0B8100BDBBA4 /* LCIMMessageVoiceFactory.h */,
@@ -1209,6 +1207,8 @@
 			isa = PBXGroup;
 			children = (
 				9AD665131C912ADE00885170 /* LCIMConstantsDefinition.h */,
+				9A9D4C791CAA5E2E002F6E87 /* LCIMPlusButtonSubclass.h */,
+				9A9D4C7A1CAA5E2E002F6E87 /* LCIMPlusButtonSubclass.m */,
 				9AD665141C912ADE00885170 /* LCIMTabBarControllerConfig.h */,
 				9AD665151C912ADE00885170 /* LCIMTabBarControllerConfig.m */,
 			);
@@ -1530,6 +1530,7 @@
 				9A8453DD1C9EF02100BDBBA4 /* NSString+MD5.m in Sources */,
 				9A5E4C751C917479007D987A /* XHCacheManager.m in Sources */,
 				9AD83A1E1CA1407A00A068D1 /* LCIMConversationListViewModel.m in Sources */,
+				9A9D4C7B1CAA5E2F002F6E87 /* LCIMPlusButtonSubclass.m in Sources */,
 				9A8453EE1C9EF02100BDBBA4 /* LCIMChatFaceView.m in Sources */,
 				9A8453E01C9EF02100BDBBA4 /* LCIMCellIdentifierFactory.m in Sources */,
 				9A9D4C741CA845B4002F6E87 /* UITableViewRowAction+LCIMExtension.m in Sources */,
@@ -1590,7 +1591,6 @@
 				9A5E4C601C917478007D987A /* UIImage+XHRounded.m in Sources */,
 				9A5E4C9E1C917479007D987A /* XHBaseCollectionViewCell.m in Sources */,
 				9A5E4C7D1C917479007D987A /* XHVideoOutputSampleBufferFactory.m in Sources */,
-				9A8453E81C9EF02100BDBBA4 /* LCIMMessageStateManager.m in Sources */,
 				9A9D4C751CA845B4002F6E87 /* UITableViewRowAction.m in Sources */,
 				9A5E4CAD1C917479007D987A /* XHShareMenuView.m in Sources */,
 				9AD6653D1C9130C400885170 /* LCIMContactManager.m in Sources */,
