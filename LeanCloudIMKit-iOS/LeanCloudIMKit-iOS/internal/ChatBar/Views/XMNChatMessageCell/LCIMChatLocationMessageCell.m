@@ -44,11 +44,9 @@
 #pragma mark - Public Methods
 
 - (void)setup {
-    
     [self.messageContentView addSubview:self.locationImageView];
     [self.messageContentView addSubview:self.locationAddressLabel];
     [super setup];
-    
 }
 
 - (void)configureCellWithData:(LCIMMessage *)message {

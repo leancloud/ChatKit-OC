@@ -11,7 +11,6 @@
 "favorites" = "收藏";
 "more" = "更多";
 "Location" = "地理位置";
-"Photo" = "照片";
 "Photo" = "图片";
 "TextDetail" = "文本消息";
 "Video" = "视频";
@@ -36,3 +35,5 @@
 "Setting" = "设置";
 "Profile" = "我";
 "News" = "新闻";
+"Voice" = "声音";
+"Sight" = "表情";

@@ -114,17 +114,22 @@
     if (!_messageProgressView) {
         _messageProgressView = [[UIView alloc] init];
         _messageProgressView.backgroundColor = [UIColor colorWithRed:.0f green:.0f blue:.0f alpha:.3f];
+        _messageProgressView.backgroundColor = [UIColor redColor];
         _messageProgressView.translatesAutoresizingMaskIntoConstraints = NO;
         _messageProgressView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
         UILabel *progressLabel = [[UILabel alloc] init];
         progressLabel.font = [UIFont systemFontOfSize:14.0f];
         progressLabel.textColor = [UIColor whiteColor];
         progressLabel.textAlignment = NSTextAlignmentCenter;
-        progressLabel.text = @"50.0%";
-        
+        progressLabel.text = @"0.0%";
         [_messageProgressView addSubview:self.messageProgressLabel = progressLabel];
     }
     return _messageProgressView;
+}
+
+-(void)prepareForReuse {
+    [super prepareForReuse];
+    self.messageProgressLabel.text = @"0.0%";
 }
 
 @end

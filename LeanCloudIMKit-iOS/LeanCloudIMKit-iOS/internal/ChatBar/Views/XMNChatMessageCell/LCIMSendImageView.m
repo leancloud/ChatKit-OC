@@ -35,16 +35,12 @@
     _messageSendState = messageSendState;
     if (_messageSendState == LCIMMessageSendStateSending) {
         dispatch_async(dispatch_get_main_queue(),^{
-            if (!self.indicatorView.isAnimating) {
-                [self.indicatorView startAnimating];
-            }
+            [self.indicatorView startAnimating];
         });
         self.indicatorView.hidden = NO;
     } else {
         dispatch_async(dispatch_get_main_queue(),^{
-            if (self.indicatorView.isAnimating) {
-                [self.indicatorView stopAnimating];
-            }
+            [self.indicatorView stopAnimating];
         });
         self.indicatorView.hidden = YES;
     }
@@ -59,5 +55,35 @@
             break;
     }
 }
+
+//- (void)setMessageSendState:(LCIMMessageSendState)messageSendState {
+//    _messageSendState = messageSendState;
+//    if (_messageSendState == LCIMMessageSendStateSending) {
+//        dispatch_async(dispatch_get_main_queue(),^{
+//            if (!self.indicatorView.isAnimating) {
+//                [self.indicatorView startAnimating];
+//            }
+//        });
+//        self.indicatorView.hidden = NO;
+//    } else {
+//        dispatch_async(dispatch_get_main_queue(),^{
+//            if (self.indicatorView.isAnimating) {
+//                [self.indicatorView stopAnimating];
+//            }
+//        });
+//        self.indicatorView.hidden = YES;
+//    }
+//    
+//    switch (_messageSendState) {
+//        case LCIMMessageSendStateSending:
+//        case LCIMMessageSendStateFailed:
+//            self.hidden = NO;
+//            break;
+//        default:
+//            self.hidden = YES;
+//            break;
+//    }
+//}
+
 
 @end

@@ -28,7 +28,6 @@
 
 @implementation LCIMChatMessageCell
 
-
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     if ([super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
         [self setup];
@@ -180,7 +179,6 @@
     
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTap:)];
     [self.contentView addGestureRecognizer:tap];
-
 }
 
 #pragma mark - Public Methods
@@ -199,10 +197,7 @@
     if (message.messageReadState) {
         self.messageReadState = message.messageReadState;
     }
-    
-    if (message.status) {
-        self.messageSendState = message.status;
-    }
+    self.messageSendState = message.status;
 }
 
 #pragma mark - Private Methods
@@ -258,7 +253,6 @@
 //        _avatorButton.layer.masksToBounds = YES;
         [self bringSubviewToFront:_avatorButton];
         [_avatorButton addTarget:self action:@selector(avatorButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
-        
     }
     return _avatorButton;
 }
@@ -383,7 +377,6 @@ NSString * const kLCIMChatMessageCellMenuControllerKey;
     }
 }
 
-
 - (void)menuCopyAction {
     if (self.delegate && [self.delegate respondsToSelector:@selector(messageCell:withActionType:)]) {
         [self.delegate messageCell:self withActionType:kLCIMChatMessageCellMenuControllerKey];
@@ -397,7 +390,6 @@ NSString * const kLCIMChatMessageCellMenuControllerKey;
 }
 
 #pragma mark - Getters
-
 
 - (UIMenuController *)menuController{
     UIMenuController *menuController = objc_getAssociatedObject(self,&kLCIMChatMessageCellMenuControllerKey);
@@ -420,9 +412,6 @@ NSString * const kLCIMChatMessageCellMenuControllerKey;
     [super prepareForReuse];
     self.avatorButton = nil;
     self.nicknameLabel = nil;
-    self.messageContentView = nil;
-    self.messageReadStateImageView = nil;
-    self.messageSendStateImageView = nil;
 }
 
 @end

@@ -18,7 +18,6 @@
 //#import "LCIMChatServerExample.h"
 #import "LCIMConstants.h"
 #import <AVOSCloudIM/AVOSCloudIM.h>
-#import "LCIMMessageStateManager.h"
 #import "LCIMConversationService.h"
 #import "LCIMSoundManager.h"
 
@@ -55,7 +54,6 @@
 }
 
 - (void)dealloc {
-    [[LCIMMessageStateManager shareManager] cleanState];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
@@ -106,8 +104,6 @@
     NSString *identifier = [LCIMCellIdentifierFactory cellIdentifierForMessageConfiguration:message];
     LCIMChatMessageCell *messageCell = [tableView dequeueReusableCellWithIdentifier:identifier];
     [messageCell configureCellWithData:message];
-    messageCell.messageReadState = [[LCIMMessageStateManager shareManager] messageReadStateForIndex:indexPath.row];
-    messageCell.messageSendState = [[LCIMMessageStateManager shareManager] messageSendStateForIndex:indexPath.row];
     messageCell.delegate = self.parentViewController;
     return messageCell;
 }
@@ -201,17 +197,16 @@
 
 - (void)sendMessage:(LCIMMessage *)message {
     __weak __typeof(&*self) wself = self;
-    [[LCIMMessageStateManager shareManager] setMessageSendState:LCIMMessageSendStateSending forIndex:[self.dataArray indexOfObject:message]];
-    [self.delegate messageSendStateChanged:LCIMMessageSendStateSending withProgress:0.0f forIndex:[self.dataArray indexOfObject:message]];
     [self sendMessage:message success:^(NSString *messageUUID) {
         __strong __typeof(wself)self = wself;
-        [[LCIMMessageStateManager shareManager] setMessageSendState:LCIMMessageSendStateSuccess forIndex:[self.dataArray indexOfObject:message]];
+            message.status = LCIMMessageSendStateSuccess;
         [self.delegate messageSendStateChanged:LCIMMessageSendStateSuccess withProgress:1.0f forIndex:[self.dataArray indexOfObject:message]];
         [[LCIMSoundManager defaultManager] playSendSoundIfNeed];
     } failed:^(NSString *messageUUID, NSError *error) {
+        message.status = LCIMMessageSendStateFailed;
         __strong __typeof(wself)self = wself;
-        [[LCIMMessageStateManager shareManager] setMessageSendState:LCIMMessageSendStateFailed forIndex:[self.dataArray indexOfObject:message]];
-        [self.delegate messageSendStateChanged:LCIMMessageSendStateFailed withProgress:1.0f forIndex:[self.dataArray indexOfObject:message]];
+        message.status = LCIMMessageSendStateFailed;
+        [self.delegate messageSendStateChanged:LCIMMessageSendStateFailed withProgress:0.0f forIndex:[self.dataArray indexOfObject:message]];
         message.messageId = messageUUID;
         [[LCIMConversationService sharedInstance] insertFailedLCIMMessage:message];
     }];
@@ -262,11 +257,23 @@
 }
 
 - (void)preloadMessageToTableView:(LCIMMessage *)message {
+    message.status = LCIMMessageSendStateSending;
+    NSUInteger oldLastMessageCount = self.dataArray.count;
     [self addMessage:message];
+    NSUInteger newLastMessageCout = self.dataArray.count;
+    
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:self.dataArray.count - 1 inSection:0];
+    [self.delegate messageSendStateChanged:LCIMMessageSendStateSending withProgress:0.0f forIndex:indexPath.row];
+    NSMutableArray *indexPaths = [NSMutableArray arrayWithObject:indexPath];
+    NSUInteger additionItemsCount = newLastMessageCout - oldLastMessageCount;
+    if (additionItemsCount > 1) {
+        for (NSUInteger index = 2; index <= additionItemsCount; index++) {
+            NSIndexPath *indexPath = [NSIndexPath indexPathForRow:newLastMessageCout - index inSection:0];
+            [indexPaths addObject:indexPath];
+        }
+    }
     dispatch_async(dispatch_get_main_queue(),^{
-        [self.parentViewController.tableView reloadData];
-//        [self.parentViewController.tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+        [self.parentViewController.tableView insertRowsAtIndexPaths:[indexPaths copy] withRowAnimation:UITableViewRowAnimationNone];
         [self.parentViewController scrollToBottomAnimated:YES];
     });
 }

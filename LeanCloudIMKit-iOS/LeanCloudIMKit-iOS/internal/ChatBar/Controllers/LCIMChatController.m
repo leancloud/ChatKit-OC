@@ -131,7 +131,7 @@
     self.tableView.dataSource = self.chatViewModel;
     self.chatBar.delegate = self;
     [LCIMAVAudioPlayer sharePlayer].delegate = self;
-    self.view.backgroundColor = [UIColor colorWithRed:234.0f/255.0f green:234/255.0f blue:234/255.f alpha:1.0f];
+    self.tableView.backgroundColor = [UIColor colorWithRed:234.0f/255.0f green:234/255.0f blue:234/255.f alpha:1.0f];
     [self.view addSubview:self.chatBar];
     [self.view addSubview:self.clientStatusView];
     [self updateStatusView];
