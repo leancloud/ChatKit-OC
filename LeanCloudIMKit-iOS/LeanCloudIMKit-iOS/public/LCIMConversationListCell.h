@@ -12,12 +12,12 @@
 
 @interface LCIMConversationListCell : UITableViewCell
 
-@property (nonatomic, weak) UIImageView *avatorImageView;
-@property (nonatomic, weak) UILabel *nameLabel;
-@property (nonatomic, weak) UILabel  *messageTextLabel;
-@property (nonatomic, weak) JSBadgeView *badgeView;
-@property (nonatomic, weak) UIView *litteBadgeView;
-@property (nonatomic, weak) UILabel *timestampLabel;
+@property (nonatomic, strong) UIImageView *avatorImageView;
+@property (nonatomic, strong) UILabel *nameLabel;
+@property (nonatomic, strong) UILabel  *messageTextLabel;
+@property (nonatomic, strong) JSBadgeView *badgeView;
+@property (nonatomic, strong) UIView *litteBadgeView;
+@property (nonatomic, strong) UILabel *timestampLabel;
 @property (nonatomic, copy) NSString *identifier;
 
 + (instancetype)dequeueOrCreateCellByTableView:(UITableView *)tableView;

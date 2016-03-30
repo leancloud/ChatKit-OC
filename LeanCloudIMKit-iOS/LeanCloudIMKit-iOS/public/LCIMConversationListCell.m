@@ -61,7 +61,7 @@ CGFloat const LCIMConversationListCellDefaultHeight = 61; //LCIMImageSize + LCIM
 - (UIImageView *)avatorImageView {
     if (_avatorImageView == nil) {
         UIImageView *avatorImageView = [[UIImageView alloc] initWithFrame:CGRectMake(LCIMHorizontalSpacing, LCIMVerticalSpacing, LCIMImageSize, LCIMImageSize)];
-        [self addSubview:(_avatorImageView = avatorImageView)];
+        _avatorImageView = avatorImageView;
     }
     return _avatorImageView;
 }
@@ -74,7 +74,7 @@ CGFloat const LCIMConversationListCellDefaultHeight = 61; //LCIMImageSize + LCIM
         litteBadgeView.layer.cornerRadius = LCIMLittleBadgeSize / 2;
         litteBadgeView.center = CGPointMake(CGRectGetMaxX(_avatorImageView.frame), CGRectGetMinY(_avatorImageView.frame));
         litteBadgeView.hidden = YES;
-        [self addSubview:(_litteBadgeView = litteBadgeView)];
+        _litteBadgeView = litteBadgeView;
     }
     return _litteBadgeView;
 }
@@ -85,7 +85,7 @@ CGFloat const LCIMConversationListCellDefaultHeight = 61; //LCIMImageSize + LCIM
         timestampLabel.font = [UIFont systemFontOfSize:13];
         timestampLabel.textAlignment = NSTextAlignmentRight;
         timestampLabel.textColor = [UIColor grayColor];
-        [self addSubview:(_timestampLabel = timestampLabel)];
+        _timestampLabel = timestampLabel;
     }
     return _timestampLabel;
 }
@@ -94,7 +94,7 @@ CGFloat const LCIMConversationListCellDefaultHeight = 61; //LCIMImageSize + LCIM
     if (_nameLabel == nil) {
         UILabel *nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(_avatorImageView.frame) + LCIMHorizontalSpacing, CGRectGetMinY(_avatorImageView.frame), CGRectGetMinX(_timestampLabel.frame) - LCIMHorizontalSpacing * 3 - LCIMImageSize, LCIMNameLabelHeight)];
         nameLabel.font = [UIFont systemFontOfSize:17];
-        [self addSubview:(_nameLabel = nameLabel)];
+        _nameLabel = nameLabel;
     }
     return _nameLabel;
 }
@@ -103,7 +103,7 @@ CGFloat const LCIMConversationListCellDefaultHeight = 61; //LCIMImageSize + LCIM
     if (_messageTextLabel == nil) {
         UILabel *messageTextLabel = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMinX(_nameLabel.frame), CGRectGetMaxY(_nameLabel.frame), CGRectGetWidth([UIScreen mainScreen].bounds)- 3 * LCIMHorizontalSpacing - LCIMImageSize, LCIMMessageLabelHeight)];
         messageTextLabel.backgroundColor = [UIColor clearColor];
-        [self addSubview:(_messageTextLabel = messageTextLabel)];
+        _messageTextLabel = messageTextLabel;
     }
     return _messageTextLabel;
 }
@@ -120,13 +120,11 @@ CGFloat const LCIMConversationListCellDefaultHeight = 61; //LCIMImageSize + LCIM
 
 - (void)prepareForReuse {
     [super prepareForReuse];
-    self.avatorImageView = nil;
     self.badgeView.badgeText = nil;
     self.badgeView = nil;
     self.litteBadgeView.hidden = YES;
     self.messageTextLabel.text = nil;
     self.timestampLabel.text = nil;
-    self.timestampLabel = nil;
     self.nameLabel.text = nil;
 }
 
