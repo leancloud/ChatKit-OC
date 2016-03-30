@@ -581,7 +581,7 @@ static CGPoint  delayOffset = {0.0};
                 [allImageMessageImages_ addObject:message_.originPhotoURL];
             } else {
                 [allImageMessageImages_ addObject:({
-                    NSString *imageName = @"Placeholder_Image";
+                    NSString *imageName = @"Placeholder_Accept_Defeat";
                     NSString *imageNameWithBundlePath = [NSString stringWithFormat:@"Placeholder.bundle/%@", imageName];
                     UIImage *image = [UIImage imageNamed:imageNameWithBundlePath];
                     image;})];

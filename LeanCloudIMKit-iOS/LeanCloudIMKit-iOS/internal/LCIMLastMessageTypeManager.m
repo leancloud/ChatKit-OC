@@ -35,8 +35,8 @@ static NSMutableDictionary *attributedStringCache = nil;
             break;
             
         case kAVIMMessageMediaTypeLocation:
-            locationMessage = (AVIMLocationMessage *)message;
-            title = locationMessage.text;
+            title = NSLocalizedStringFromTable(@"Location", @"LCIMKitString", @"位置");
+            title = [NSString stringWithFormat:@"[%@]",title];
             break;
 //        case kAVIMMessageMediaTypeEmotion:
 //            title = NSLocalizedStringFromTable(@"Sight", @"LCIMKitString", @"表情");

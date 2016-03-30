@@ -80,7 +80,6 @@
     self.voiceMessageState = LCIMVoiceMessageStateNormal;
 }
 
-
 - (void)singleTapMessageImageViewGestureRecognizerHandler:(UITapGestureRecognizer *)tapGestureRecognizer {
     if (tapGestureRecognizer.state == UIGestureRecognizerStateEnded) {
         if ([self.delegate respondsToSelector:@selector(messageCellTappedMessage:)]) {
@@ -88,6 +87,7 @@
         }
     }
 }
+
 - (void)configureCellWithData:(LCIMMessage *)message {
     [super configureCellWithData:message];
     self.messageVoiceSecondsLabel.text = [NSString stringWithFormat:@"%@''",message.voiceDuration];
@@ -96,22 +96,21 @@
     if (voiceDuration > 2) {
         __block CGFloat length;
         CGFloat lengthUnit = 10.f;
-       // 1-2 是最短的。2-10s每秒增加一个单位。10-60s每10s增
+        // 1-2 长度固定, 2-10s每秒增加一个单位, 10-60s每10s增加一个单位
         do {
             if (voiceDuration <= 10) {
                 length = lengthUnit*(voiceDuration-2);
+                break;
             }
             if (voiceDuration > 10) {
                 length = lengthUnit*(10-2) + lengthUnit*((voiceDuration-2)/10);
+                break;
             }
         } while (NO);
-                [self.messageContentView mas_updateConstraints:^(MASConstraintMaker *make) {
+        [self.messageContentView mas_updateConstraints:^(MASConstraintMaker *make) {
             make.width.equalTo(@(80+length));
         }];
     }
-   
-    
-    
 }
 
 #pragma mark - Getters

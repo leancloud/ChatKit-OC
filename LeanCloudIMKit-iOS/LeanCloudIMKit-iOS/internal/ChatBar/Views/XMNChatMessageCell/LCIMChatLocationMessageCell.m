@@ -46,8 +46,20 @@
 - (void)setup {
     [self.messageContentView addSubview:self.locationImageView];
     [self.messageContentView addSubview:self.locationAddressLabel];
+    UITapGestureRecognizer *recognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(singleTapMessageImageViewGestureRecognizerHandler:)];
+    [self.messageContentView addGestureRecognizer:recognizer];
     [super setup];
+    
 }
+
+- (void)singleTapMessageImageViewGestureRecognizerHandler:(UITapGestureRecognizer *)tapGestureRecognizer {
+    if (tapGestureRecognizer.state == UIGestureRecognizerStateEnded) {
+        if ([self.delegate respondsToSelector:@selector(messageCellTappedMessage:)]) {
+            [self.delegate messageCellTappedMessage:self];
+        }
+    }
+}
+
 
 - (void)configureCellWithData:(LCIMMessage *)message {
     [super configureCellWithData:message];
@@ -71,12 +83,17 @@
 
 - (UIImageView *)locationImageView {
     if (!_locationImageView) {
+        NSString *imageName;
+        if (self.messageOwner == LCIMMessageOwnerSelf) {
+            imageName = @"message_sender_location";
+        } else {
+            imageName = @"message_receiver_location";
+        }
         _locationImageView = [[UIImageView alloc] initWithImage:({
-            NSString *imageName = @"MessageBubble_Location";
             NSString *imageNameWithBundlePath = [NSString stringWithFormat:@"MessageBubble.bundle/%@", imageName];
             UIImage *image = [UIImage imageNamed:imageNameWithBundlePath];
             image;})
-                       ];
+                              ];
     }
     return _locationImageView;
 }

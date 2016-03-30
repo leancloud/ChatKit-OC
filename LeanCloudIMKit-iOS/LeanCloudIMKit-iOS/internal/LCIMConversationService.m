@@ -154,25 +154,6 @@ NSString *const LCIMConversationServiceErrorDomain = @"LCIMConversationServiceEr
     return [names componentsJoinedByString:@","];
 }
 
-- (LCIMConversationViewController *)createConversationViewControllerWithConversationId:(NSString *)conversationId {
-    LCIMConversationViewController *conversationViewController = [[LCIMConversationViewController alloc] initWithConversationId:conversationId];
-    return conversationViewController;
-}
-
-- (LCIMConversationListViewController *)createConversationListViewController {
-    LCIMConversationListViewController *conversationListViewController = [[LCIMConversationListViewController alloc] init];
-    return conversationListViewController;
-}
-
-/**
- *  构建单聊页面
- *  @param aPerson 聊天对象
- */
-- (LCIMConversationViewController *)createConversationViewControllerWithPeerId:(NSString *)peerId {
-    LCIMConversationViewController *conversationViewController = [[LCIMConversationViewController alloc] initWithPeerId:peerId];
-    return conversationViewController;
-}
-
 - (NSString *)databasePathWithUserId:(NSString *)userId{
     NSString *libPath = [NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) objectAtIndex:0];
     return [libPath stringByAppendingPathComponent:[NSString stringWithFormat:@"com.leancloud.lcimkit.%@.db3", userId]];

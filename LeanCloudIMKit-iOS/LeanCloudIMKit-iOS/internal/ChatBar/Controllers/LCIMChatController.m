@@ -251,8 +251,10 @@
 
 - (void)chatBar:(LCIMChatBar *)chatBar sendLocation:(CLLocationCoordinate2D)locationCoordinate locationText:(NSString *)locationText{
 //TODO:
+    
+    
     LCIMMessage *message = [[LCIMMessage alloc] initWithLocalPositionPhoto:({
-        NSString *imageName = @"MessageBubble_Location";
+        NSString *imageName = @"message_sender_location";
         NSString *imageNameWithBundlePath = [NSString stringWithFormat:@"MessageBubble.bundle/%@", imageName];
         UIImage *image = [UIImage imageNamed:imageNameWithBundlePath];
         image;})
@@ -291,11 +293,10 @@
 
 - (void)messageCellTappedMessage:(LCIMChatMessageCell *)messageCell {
     NSIndexPath *indexPath = [self.tableView indexPathForCell:messageCell];
-
+    LCIMMessage *message = [self.chatViewModel messageAtIndex:indexPath.row];
     NSLog(@"tapMessage :%@",indexPath);
     switch (messageCell.messageType) {
         case LCIMMessageTypeVoice: {
-            LCIMMessage *message = [self.chatViewModel messageAtIndex:indexPath.row];
             NSString *voiceFileName = message.voicePath;
             [[LCIMAVAudioPlayer sharePlayer] playAudioWithURLString:voiceFileName atIndex:indexPath.row];
         }
@@ -312,9 +313,14 @@
             !previewImageMessageBlock ?: previewImageMessageBlock(selectedMessageIndex.unsignedIntegerValue, imageMessages, userInfo);
         }
             break;
-            //TODO:
-            case LCIMMessageTypeLocation:
-            
+        case LCIMMessageTypeLocation: {
+            NSDictionary *userInfo = @{
+                                       LCIMPreviewImageMessageUserInfoKeyFromController : self,
+                                       LCIMPreviewImageMessageUserInfoKeyFromView : self.tableView,
+                                       };
+            LCIMPreviewLocationMessageBlock previewLocationMessageBlock = [LCIMUIService sharedInstance].previewLocationMessageBlock;
+            !previewLocationMessageBlock ?: previewLocationMessageBlock(message.location, message.geolocations, userInfo);
+        }
             break;
     }
 }

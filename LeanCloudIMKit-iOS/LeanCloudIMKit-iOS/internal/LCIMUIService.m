@@ -13,8 +13,9 @@ NSString *const LCIMUIServiceErrorDomain = @"LCIMUIServiceErrorDomain";
 @interface LCIMUIService ()
 
 @property (nonatomic, copy) LCIMPreviewImageMessageBlock previewImageMessageBlock;
+@property (nonatomic, copy) LCIMPreviewLocationMessageBlock previewLocationMessageBlock;
 @property (nonatomic, copy) LCIMOpenProfileBlock openProfileBlock;
-
+@property (nonatomic, copy) LCIMUnreadCountChangedBlock unreadCountChangedBlock;
 @end
 
 @interface LCIMUIService ()
@@ -41,12 +42,20 @@ NSString *const LCIMUIServiceErrorDomain = @"LCIMUIServiceErrorDomain";
     _previewImageMessageBlock = previewImageMessageBlock;
 }
 
+- (void)setPreviewLocationMessageBlock:(LCIMPreviewLocationMessageBlock)previewLocationMessageBlock {
+    _previewLocationMessageBlock = previewLocationMessageBlock;
+}
+
 - (void)setOpenProfileBlock:(LCIMOpenProfileBlock)openProfileBlock {
     _openProfileBlock = openProfileBlock;
 }
 
 - (void)setShowNotificationBlock:(LCIMShowNotificationBlock)showNotificationBlock {
     _showNotificationBlock = showNotificationBlock;
+}
+
+- (void)setUnreadCountChangedBlock:(LCIMUnreadCountChangedBlock)unreadCountChangedBlock {
+    _unreadCountChangedBlock = unreadCountChangedBlock;
 }
 
 @end

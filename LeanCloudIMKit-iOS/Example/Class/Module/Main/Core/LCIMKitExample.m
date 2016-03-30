@@ -106,7 +106,7 @@ static NSMutableDictionary *_sharedInstances = nil;
             [LCIMUtil showNotificationWithTitle:@"登陆成功" subtitle:subtitle type:LCIMMessageNotificationTypeSuccess];
             !success ?: success();
         } else {
-            [LCIMUtil showNotificationWithTitle:@"登陆失败" subtitle:nil type:LCIMMessageNotificationTypeSuccess];
+            [LCIMUtil showNotificationWithTitle:@"登陆失败" subtitle:nil type:LCIMMessageNotificationTypeError];
             !failed ?: failed(error);
         }
     }];
@@ -221,6 +221,10 @@ static NSMutableDictionary *_sharedInstances = nil;
     [[LCIMKit sharedInstance] setMarkBadgeWithTotalUnreadCountBlock:^(NSInteger totalUnreadCount, UIViewController *controller) {
         [self exampleMarkBadgeWithTotalUnreadCount:totalUnreadCount controller:controller];
     }];
+    
+    [[LCIMKit sharedInstance] setPreviewLocationMessageBlock:^(CLLocation *location, NSString *geolocations, NSDictionary *userInfo) {
+        [self examplePreViewLocationMessageWithLocation:location geolocations:geolocations];
+    }];
 }
 
 - (NSArray *)exampleConversationEditAction:(NSIndexPath *)indexPath {
@@ -276,6 +280,12 @@ static NSMutableDictionary *_sharedInstances = nil;
         controller.tabBarItem.badgeValue = nil;
         [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
     }
+}
+
+- (void)examplePreViewLocationMessageWithLocation:(CLLocation *)location geolocations:(NSString *)geolocations {
+    NSString *title = [NSString stringWithFormat:@"打开地理位置：%@", geolocations];
+    NSString *subTitle = [NSString stringWithFormat:@"纬度：%@\n经度：%@",@(location.coordinate.latitude), @(location.coordinate.longitude)];
+    [LCIMUtil showNotificationWithTitle:title subtitle:subTitle type:LCIMMessageNotificationTypeMessage];
 }
 
 - (void)examplePreviewImageMessageWithIndex:(NSUInteger)index imageMessages:(NSArray *)imageMessageInfo {

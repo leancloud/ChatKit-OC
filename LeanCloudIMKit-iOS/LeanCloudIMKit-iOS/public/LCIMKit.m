@@ -185,9 +185,15 @@ static NSMutableDictionary *_sharedInstances = nil;
 - (void)setOpenProfileBlock:(LCIMOpenProfileBlock)openProfileBlock {
     [[[LCIMKit sharedInstance] UIService] setOpenProfileBlock:openProfileBlock];
 }
+
 - (void)setPreviewImageMessageBlock:(LCIMPreviewImageMessageBlock)previewImageMessageBlock {
     [[[LCIMKit sharedInstance] UIService] setPreviewImageMessageBlock:previewImageMessageBlock];
 }
+
+- (void)setPreviewLocationMessageBlock:(LCIMPreviewLocationMessageBlock)previewLocationMessageBlock {
+    [[[LCIMKit sharedInstance] UIService] setPreviewLocationMessageBlock:previewLocationMessageBlock];
+}
+
 
 - (void)setShowNotificationBlock:(LCIMShowNotificationBlock)showNotificationBlock {
     [[[LCIMKit sharedInstance] UIService] setShowNotificationBlock:showNotificationBlock];
@@ -241,18 +247,6 @@ static NSMutableDictionary *_sharedInstances = nil;
 
 - (void)didReceiveRemoteNotification:(NSDictionary *)userInfo {
     [[LCIMKit sharedInstance] didReceiveRemoteNotification:userInfo];
-}
-
-- (LCIMConversationViewController *)createConversationViewControllerWithConversationId:(NSString *)conversationId {
-    return [[LCIMConversationService sharedInstance] createConversationViewControllerWithConversationId:conversationId];
-}
-
-- (LCIMConversationViewController *)createConversationViewControllerWithPeerId:(NSString *)peerId {
-    return [[LCIMConversationService sharedInstance] createConversationViewControllerWithPeerId:peerId];
-}
-
-- (LCIMConversationListViewController *)createConversationListViewController {
-    return [[LCIMConversationService sharedInstance] createConversationListViewController];
 }
 
 ///---------------------------------------------------------------------

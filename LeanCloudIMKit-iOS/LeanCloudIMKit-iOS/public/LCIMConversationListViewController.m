@@ -28,7 +28,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.navigationItem.title = @"消息";
-    self.tableView.tableFooterView = [[UIView alloc] init];
     self.tableView.delegate = self.conversationListViewModel;
     self.tableView.dataSource = self.conversationListViewModel;
     self.tableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{

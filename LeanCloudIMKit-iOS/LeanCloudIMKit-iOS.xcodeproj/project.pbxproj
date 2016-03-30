@@ -15,6 +15,7 @@
 		9A5C70161C920ED5005543CC /* AVIMConversation+LCIMAddition.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A5C70151C920ED5005543CC /* AVIMConversation+LCIMAddition.m */; };
 		9A5C70191C92132B005543CC /* AVIMEmotionMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A5C70181C92132B005543CC /* AVIMEmotionMessage.m */; };
 		9A5C701E1C921816005543CC /* NSString+Emojize.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A5C701D1C921816005543CC /* NSString+Emojize.m */; };
+		9A5D5EB81CAB85790075A12F /* LCIMMapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A5D5EB71CAB85790075A12F /* LCIMMapViewController.m */; };
 		9A5E4C571C917478007D987A /* NSString+MessageInputView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A5E4B7C1C917477007D987A /* NSString+MessageInputView.m */; };
 		9A5E4C581C917478007D987A /* NSString+XHDiskSizeTransfrom.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A5E4B7E1C917477007D987A /* NSString+XHDiskSizeTransfrom.m */; };
 		9A5E4C591C917478007D987A /* NSString+XHMD5.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A5E4B801C917477007D987A /* NSString+XHMD5.m */; };
@@ -174,6 +175,8 @@
 		9A5C701B1C921816005543CC /* emojis.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = emojis.h; sourceTree = "<group>"; };
 		9A5C701C1C921816005543CC /* NSString+Emojize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Emojize.h"; sourceTree = "<group>"; };
 		9A5C701D1C921816005543CC /* NSString+Emojize.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Emojize.m"; sourceTree = "<group>"; };
+		9A5D5EB61CAB85790075A12F /* LCIMMapViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMMapViewController.h; sourceTree = "<group>"; };
+		9A5D5EB71CAB85790075A12F /* LCIMMapViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCIMMapViewController.m; sourceTree = "<group>"; };
 		9A5E4B7B1C917477007D987A /* NSString+MessageInputView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+MessageInputView.h"; sourceTree = "<group>"; };
 		9A5E4B7C1C917477007D987A /* NSString+MessageInputView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+MessageInputView.m"; sourceTree = "<group>"; };
 		9A5E4B7D1C917477007D987A /* NSString+XHDiskSizeTransfrom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+XHDiskSizeTransfrom.h"; sourceTree = "<group>"; };
@@ -1186,6 +1189,8 @@
 		9AD6650A1C912ADE00885170 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				9A5D5EB61CAB85790075A12F /* LCIMMapViewController.h */,
+				9A5D5EB71CAB85790075A12F /* LCIMMapViewController.m */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -1574,6 +1579,7 @@
 				9A8453F31C9EF02100BDBBA4 /* LCIMChatMessageCell.m in Sources */,
 				9A5E4CAF1C917479007D987A /* XHRefreshCircleView.m in Sources */,
 				9A8453F41C9EF02100BDBBA4 /* LCIMChatSystemMessageCell.m in Sources */,
+				9A5D5EB81CAB85790075A12F /* LCIMMapViewController.m in Sources */,
 				9A5C70161C920ED5005543CC /* AVIMConversation+LCIMAddition.m in Sources */,
 				9A738DD71C855DB600D8A961 /* LCIMUserSystemService.m in Sources */,
 				9A738DDB1C855DB600D8A961 /* LCIMKit.m in Sources */,

@@ -67,15 +67,20 @@
         self.messageImageView.image = image;
         return;
     }
-    [self.messageImageView  sd_setImageWithURL:message.originPhotoURL placeholderImage:({
-        NSString *imageName = @"Placeholder_Image";
-        NSString *imageNameWithBundlePath = [NSString stringWithFormat:@"Placeholder.bundle/%@", imageName];
-        UIImage *image = [UIImage imageNamed:imageNameWithBundlePath];
-        image;})
+    [self.messageImageView  sd_setImageWithURL:message.originPhotoURL placeholderImage:[self imageInBundleForImageName:@"Placeholder_Image"]
                                      completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
-//                                         message.photo = image;
+                                         if (error) {
+                                             self.messageImageView.image = [self imageInBundleForImageName:@"Placeholder_Accept_Defeat"];
+                                         }
                                      }
      ];
+}
+
+- (UIImage *)imageInBundleForImageName:(NSString *)imageName {
+    return ({
+        NSString *imageNameWithBundlePath = [NSString stringWithFormat:@"Placeholder.bundle/%@", imageName];
+        UIImage *image = [UIImage imageNamed:imageNameWithBundlePath];
+        image;});
 }
 
 #pragma mark - Setters

@@ -23,12 +23,14 @@ FOUNDATION_EXTERN NSString *const LCIMUIServiceErrorDomain;
  *  未读数发生变化
  *  @param aCount 总的未读数
  */
-typedef void(^LCIMUnreadCountChangedBlock)(NSInteger aCount);
-
+typedef void(^LCIMUnreadCountChangedBlock)(NSInteger count);
+@property (nonatomic, copy, readonly) LCIMUnreadCountChangedBlock unreadCountChangedBlock;
+- (void)setUnreadCountChangedBlock:(LCIMUnreadCountChangedBlock)unreadCountChangedBlock;
+//TODO:
 /**
  *  新消息通知
  */
-typedef void(^LCIMOnNewMessageBlock)(NSString *aSenderId, NSString *aContent, NSInteger aType, NSDate *aTime);
+typedef void(^LCIMOnNewMessageBlock)(NSString *senderId, NSString *content, NSInteger type, NSDate *time);
 
 
 /**

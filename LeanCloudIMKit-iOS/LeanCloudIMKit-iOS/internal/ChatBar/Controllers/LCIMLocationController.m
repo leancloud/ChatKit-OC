@@ -7,8 +7,9 @@
 //
 
 #import "LCIMLocationController.h"
-
 #import "Masonry.h"
+
+static CGFloat const LCIMLocationPOIListCellHeight = 40.f;
 
 @interface LCIMLocationController ()<UITableViewDelegate,UITableViewDataSource,MKMapViewDelegate>
 
@@ -30,21 +31,21 @@
 - (void)viewDidLoad{
     [super viewDidLoad];
     
-    
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"取消" style:UIBarButtonItemStylePlain target:self action:@selector(cancel)];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"发送" style:UIBarButtonItemStylePlain target:self action:@selector(sendLocation)];
     
     self.placemarks = [NSMutableArray array];
-    
     self.firstLocateUser = YES;
     [self.mapView addSubview:self.locationImageView];
     [self.mapView addSubview:self.showUserLocationButton];
+    self.mapView.delegate = self;
     [self.view addSubview:self.mapView];
     [self.view addSubview:self.tableView];
     
     [[LCIMLocationManager shareManager] requestAuthorization];
+    [[LCIMLocationManager shareManager] startLocation];
+    [self.mapView setUserTrackingMode:MKUserTrackingModeFollow animated:YES];
 
-    
     [self.view updateConstraintsIfNeeded];
     
 }
@@ -63,19 +64,23 @@
         make.bottom.equalTo(self.mapView.mas_bottom).with.offset(-8);
     }];
     
+
+    [self.tableView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(self.view.mas_left);
+        make.right.equalTo(self.view.mas_right);
+//        make.top.equalTo(self.mapView.mas_bottom);
+        make.height.equalTo(@(0));
+        make.bottom.equalTo(self.view.mas_bottom);
+    }];
+    
     [self.mapView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self.view.mas_left);
         make.right.equalTo(self.view.mas_right);
         make.top.equalTo(self.view.mas_top);
-        make.height.mas_equalTo(280);
+//        make.height.mas_equalTo(280);
+        make.bottom.equalTo(self.tableView.mas_top);
     }];
     
-    [self.tableView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(self.view.mas_left);
-        make.right.equalTo(self.view.mas_right);
-        make.top.equalTo(self.mapView.mas_bottom);
-        make.bottom.equalTo(self.view.mas_bottom);
-    }];
 }
 
 
@@ -118,6 +123,10 @@
     [tableView reloadData];
 }
 
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return LCIMLocationPOIListCellHeight;
+}
+
 #pragma mark - MKMapViewDelegate
 
 - (void)mapViewDidFinishLoadingMap:(MKMapView *)mapView{
@@ -153,11 +162,11 @@
     //初始化一个检索请求对象
     MKLocalSearchRequest * req = [[MKLocalSearchRequest alloc]init];
     //设置检索参数
-    req.region=region;
+    req.region = region;
     //兴趣点关键字
-    req.naturalLanguageQuery = @"market";
+    req.naturalLanguageQuery = NSLocalizedStringFromTable(@"community", @"LCIMKitString", @"兴趣点搜索");
     //初始化检索
-    MKLocalSearch * ser = [[MKLocalSearch alloc]initWithRequest:req];
+    MKLocalSearch *ser = [[MKLocalSearch alloc] initWithRequest:req];
     //开始检索，结果返回在block中
     [ser startWithCompletionHandler:^(MKLocalSearchResponse *response, NSError *error) {
         //兴趣点节点数组
@@ -165,7 +174,13 @@
         for (MKMapItem *mapItem in array) {
             [self.placemarks addObject:mapItem.placemark];
         }
-        [self.tableView reloadData];
+        dispatch_async(dispatch_get_main_queue(),^{
+            [self.tableView reloadData];
+            [self.tableView mas_updateConstraints:^(MASConstraintMaker *make) {
+                CGFloat height = LCIMLocationPOIListCellHeight * self.placemarks.count;
+                make.height.mas_equalTo(@(height));
+            }];
+        });
     }];
 }
 
@@ -230,6 +245,7 @@
         _tableView.rowHeight = UITableViewAutomaticDimension;
         _tableView.dataSource = self;
         _tableView.delegate = self;
+        _tableView.tableFooterView = [[UIView alloc] init];
     }
     return _tableView;
 }

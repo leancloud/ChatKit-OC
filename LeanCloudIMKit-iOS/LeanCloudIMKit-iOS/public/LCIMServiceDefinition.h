@@ -11,6 +11,7 @@
 @class LCIMConversationViewController;
 @class LCIMConversationListViewController;
 @class LCIMMessage;
+@import CoreLocation;
 
 ///---------------------------------------------------------------------
 ///---------------------LCIMSessionService------------------------------
@@ -161,6 +162,27 @@ typedef void(^LCIMPreviewImageMessageBlock)(NSUInteger index, NSArray *imageMess
  */
 - (void)setPreviewImageMessageBlock:(LCIMPreviewImageMessageBlock)previewImageMessageBlock;
 
+/*!
+ *  当IMKit需要预览地理位置消息时，会调用这个block
+ *  @param location 地理位置坐标
+ *  @param geolocations 地理位置的文字描述
+ *  @param userInfo 用来传递上下文信息，例如，从某个Controller触发，或者从某个view触发等，键值在下面定义
+ */
+typedef void(^LCIMPreviewLocationMessageBlock)(CLLocation *location, NSString *geolocations, NSDictionary *userInfo);
+
+@property (nonatomic, copy, readonly) LCIMPreviewLocationMessageBlock previewLocationMessageBlock;
+
+/// 传递触发的UIViewController对象
+#define LCIMPreviewLocationMessageUserInfoKeyFromController    @"LCIMPreviewLocationMessageUserInfoKeyFromController"
+/// 传递触发的UIView对象
+#define LCIMPreviewLocationMessageUserInfoKeyFromView          @"LCIMPreviewLocationMessageUserInfoKeyFromView"
+
+/*!
+ *  当IMKit需要预览地理位置消息时，会调用这个block.
+ *  使用NSDictionary传递上下文信息，便于扩展
+ */
+- (void)setPreviewLocationMessageBlock:(LCIMPreviewLocationMessageBlock)previewLocationMessageBlock;
+
 /**
  *  当IMUIKit需要显示通知时，会调用这个block。
  *  开发者需要实现并设置这个block，以便给用户提示。
@@ -229,25 +251,6 @@ typedef void (^LCIMConversationResultBlock)(AVIMConversation *conversation, NSEr
 @protocol LCIMConversationService <NSObject>
 
 - (void)didReceiveRemoteNotification:(NSDictionary *)userInfo;
-
-/*!
- *  通过会话Id构建聊天页面
- *  @param conversationId 会话Id
- *  @return 聊天页面
- */
-- (LCIMConversationViewController *)createConversationViewControllerWithConversationId:(NSString *)conversationId;
-
-/*!
- *  构建单聊页面
- *  @param peedId 聊天对象
- */
-- (LCIMConversationViewController *)createConversationViewControllerWithPeerId:(NSString *)peerId;
-
-/*!
- *  创建会话列表页面
- *  @return 所创建的会话列表页面
- */
-- (LCIMConversationListViewController *)createConversationListViewController;
 
 @end
 
