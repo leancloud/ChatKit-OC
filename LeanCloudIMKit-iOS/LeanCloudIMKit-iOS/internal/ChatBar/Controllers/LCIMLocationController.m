@@ -164,7 +164,7 @@ static CGFloat const LCIMLocationPOIListCellHeight = 40.f;
     //设置检索参数
     req.region = region;
     //兴趣点关键字
-    req.naturalLanguageQuery = NSLocalizedStringFromTable(@"community", @"LCIMKitString", @"兴趣点搜索");
+//    req.naturalLanguageQuery = NSLocalizedStringFromTable(@"community", @"LCIMKitString", @"兴趣点搜索");
     //初始化检索
     MKLocalSearch *ser = [[MKLocalSearch alloc] initWithRequest:req];
     //开始检索，结果返回在block中
