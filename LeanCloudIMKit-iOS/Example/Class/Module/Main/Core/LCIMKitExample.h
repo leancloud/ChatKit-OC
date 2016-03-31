@@ -73,37 +73,6 @@
  */
 - (void)exampleInit;
 
-
-/**
- *  登录的示例代码
- */
-- (void)exampleLoginWithUserID:(NSString *)aUserID password:(NSString *)aPassword successBlock:(void(^)())aSuccessBlock failedBlock:(void(^)(NSError *aError))aFailedBlock;
-
-/**
- *  监听连接状态
- */
-- (void)exampleListenConnectionStatus;
-
-/**
- *  注销的示例代码
- */
-- (void)exampleLogout;
-
-/**
- *  设置头像显示方式：包括圆角弧度和contentMode
- */
-- (void)exampleSetAvatorStyle;
-
-/**
- *  创建会话列表页面
- */
-//- (LCIMConversationListViewController *)exampleMakeConversationListControllerWithSelectItemBlock:(LCIMConversationsListDidSelectItemBlock)selectItemBlock;
-
-/**
- *  创建会话列表页面
- */
-//- (LCIMContactListViewController *)exampleMakeContactListControllerWithSelectItemBlock:(LCIMContactsListDidSelectItemBlock)selectItemBlock;
-
 /**
  *  打开某个会话
  */
@@ -113,24 +82,5 @@
  *  打开单聊页面
  */
 + (void)exampleOpenConversationViewControllerWithPeerId:(NSString *)peerId fromNavigationController:(UINavigationController *)navigationController;
-
-
-#pragma mark - 自定义业务
-
-/**
- *  设置如何显示自定义消息
- */
-//- (void)exampleShowCustomMessageWithConversationController:(LCIMConversationViewController *)aConversationController;
-
-/**
- *  设置气泡最大宽度
- */
-- (void)exampleSetMaxBubbleWidth;
-
-/**
- * 头像点击事件
- */
-- (void)exampleListenOnClickAvator;
-
 
 @end
