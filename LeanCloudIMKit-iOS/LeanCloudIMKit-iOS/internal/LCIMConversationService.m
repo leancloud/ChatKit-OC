@@ -38,11 +38,6 @@ NSString *const LCIMConversationServiceErrorDomain = @"LCIMConversationServiceEr
     return _sharedLCIMConversationService;
 }
 
-- (AVIMConversation *)fetchConversationByConversationId:(NSString *)conversationId {
-    //TODO:
-    return nil;
-}
-
 /**
  *  根据 conversationId 获取对话
  *  @param convid   对话的 id

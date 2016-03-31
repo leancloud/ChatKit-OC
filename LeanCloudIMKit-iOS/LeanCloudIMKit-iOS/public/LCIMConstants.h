@@ -79,6 +79,7 @@ static NSString *const LCIM_KEY_USERNAME = @"LCIM_KEY_USERNAME";
 @[ \
     @{ LCIMProfileKeyPeerId:@"LCIMKit小秘书", LCIMProfileKeyName:@"LCIMKit小秘书", LCIMProfileKeyAvatorURL:@"demo_baichuan_120" },\
     @{ LCIMProfileKeyPeerId:@"561b526160b2b52cdef2d9f9", LCIMProfileKeyName:@"马谡", LCIMProfileKeyAvatorURL:@"http://image17-c.poco.cn/mypoco/myphoto/20151211/16/17338872420151211164742047.png" },\
+    @{ LCIMProfileKeyPeerId:@" ", LCIMProfileKeyName:@"刘备", LCIMProfileKeyAvatorURL:@"http://image17-c.poco.cn/mypoco/myphoto/20151211/16/17338872420151211164742047.png" },\
     @{ LCIMProfileKeyPeerId:@"565c82ccddb299ad390b3490", LCIMProfileKeyName:@"华雄", LCIMProfileKeyAvatorURL:@"http://image17-c.poco.cn/mypoco/myphoto/20151211/16/17338872420151211164742047.png" },\
     @{ LCIMProfileKeyPeerId:@"561b526160b2b52cdef2d9f9", LCIMProfileKeyName:@"公孙止", LCIMProfileKeyAvatorURL:@"http://image17-c.poco.cn/mypoco/myphoto/20151211/16/17338872420151211164742047.png" },\
     @{ LCIMProfileKeyPeerId:@"565c82ccddb299ad390b3490", LCIMProfileKeyName:@"曹植", LCIMProfileKeyAvatorURL:@"http://image17-c.poco.cn/mypoco/myphoto/20151211/16/17338872420151211164742047.png" },\

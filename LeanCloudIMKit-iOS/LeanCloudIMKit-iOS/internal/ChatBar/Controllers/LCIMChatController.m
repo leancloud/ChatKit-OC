@@ -250,9 +250,6 @@
 }
 
 - (void)chatBar:(LCIMChatBar *)chatBar sendLocation:(CLLocationCoordinate2D)locationCoordinate locationText:(NSString *)locationText{
-//TODO:
-    
-    
     LCIMMessage *message = [[LCIMMessage alloc] initWithLocalPositionPhoto:({
         NSString *imageName = @"message_sender_location";
         NSString *imageNameWithBundlePath = [NSString stringWithFormat:@"MessageBubble.bundle/%@", imageName];

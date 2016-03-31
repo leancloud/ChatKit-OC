@@ -28,7 +28,7 @@
 }
 
 - (void)setLcim_unreadCount:(NSInteger)lcim_unreadCount {
-    NSNumber *lcim_unreadCountObject = [NSNumber numberWithBool:lcim_unreadCount];
+    NSNumber *lcim_unreadCountObject = [NSNumber numberWithInteger:lcim_unreadCount];
     objc_setAssociatedObject(self, @selector(lcim_unreadCount), lcim_unreadCountObject, OBJC_ASSOCIATION_ASSIGN);
 }
 

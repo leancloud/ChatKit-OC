@@ -412,7 +412,6 @@
             break;
             
         case LCIMMessageTypeLocation: {
-            //TODO:
             avimTypedMessage = [AVIMLocationMessage messageWithText:message.geolocations
                                                            latitude:message.location.coordinate.latitude
                                                           longitude:message.location.coordinate.longitude
