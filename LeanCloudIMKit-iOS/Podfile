@@ -5,8 +5,10 @@ pod 'MJRefresh'
 pod 'CYLTabBarController'
 pod 'MBProgressHUD'
 pod 'TWMessageBarManager'
-#pod 'XHImageViewer'
 pod 'Masonry'
+pod "FDStackView", "1.0"
+pod 'MWPhotoBrowser'
+#pod 'HJCornerRadius', :git => "https://github.com/panghaijiao/HJCornerRadius.git"
 
 #=========================================================
 #====== s.dependency ======
@@ -28,6 +30,4 @@ pod 'UITableView+FDTemplateLayoutCell'
 pod 'NSData+MD5Digest'
 pod 'SwipeView'
 pod 'StitchingImage', :git => 'https://github.com/zhengjinghua/StitchingImage.git'
-pod 'HJCornerRadius', :git => "https://github.com/panghaijiao/HJCornerRadius.git"
-pod 'MWPhotoBrowser'
-pod "FDStackView", "1.0"
+

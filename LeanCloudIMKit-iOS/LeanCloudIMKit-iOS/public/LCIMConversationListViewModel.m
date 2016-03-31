@@ -19,7 +19,6 @@
 #import "NSDate+DateTools.h"
 #import "MJRefresh.h"
 #import "LCIMConversationListService.h"
-#import "SWUtilityButtonView.h"
 
 @interface LCIMConversationListViewModel ()
 
