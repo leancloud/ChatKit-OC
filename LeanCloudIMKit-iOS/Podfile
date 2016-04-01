@@ -1,0 +1,33 @@
+platform :ios , 7.0 
+link_with 'LeanCloudIMKit-iOS', 'LeanCloudIMKit-iOSTests' 
+
+pod 'MJRefresh'
+pod 'CYLTabBarController'
+pod 'MBProgressHUD'
+pod 'TWMessageBarManager'
+pod 'Masonry'
+pod "FDStackView", "1.0"
+pod 'MWPhotoBrowser'
+#pod 'HJCornerRadius', :git => "https://github.com/panghaijiao/HJCornerRadius.git"
+
+#=========================================================
+#====== s.dependency ======
+#=========================================================
+
+pod "LKBadgeView", :git => 'https://github.com/lakesoft/LKBadgeView.git'
+pod 'SECoreTextView'
+pod 'SDWebImage'
+pod 'CYLDeallocBlockExecutor'
+pod 'FLAnimatedImage'
+pod 'AVOSCloud'
+pod 'AVOSCloudIM'
+pod 'YYKit'
+pod "Emoji", :git => 'https://github.com/jcccn/Emoji.git'
+pod 'FMDB'
+pod 'JSBadgeView'
+pod 'DateTools'
+pod 'UITableView+FDTemplateLayoutCell'
+pod 'NSData+MD5Digest'
+pod 'SwipeView'
+pod 'StitchingImage', :git => 'https://github.com/zhengjinghua/StitchingImage.git'
+
