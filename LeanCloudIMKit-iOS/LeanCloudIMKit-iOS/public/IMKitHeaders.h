@@ -27,5 +27,7 @@ FOUNDATION_EXPORT const unsigned char LCIMKitVersionString[];
 #import "LCIMConversationListService.h"
 #import "LCIMServiceDefinition.h"
 #import "LCIMConversationViewController.h"
+#import "LCIMConversationListViewController.h"
+#import "AVIMConversation+LCIMAddition.h"
 
 #endif

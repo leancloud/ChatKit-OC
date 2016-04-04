@@ -88,5 +88,4 @@
     return _systemMessageStyle;
 }
 
-
 @end

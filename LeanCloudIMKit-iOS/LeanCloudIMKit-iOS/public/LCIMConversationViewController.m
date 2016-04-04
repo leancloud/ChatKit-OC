@@ -510,7 +510,7 @@ typedef void (^LCIMSendMessageSuccessFailedBlock)(NSString *messageUUID, NSError
 #pragma mark - conversations store
 
 - (void)updateConversationAsRead {
-    [[LCIMConversationService sharedInstance] insertConversation:self.conversation];
+    [[LCIMConversationService sharedInstance] insertRecentConversation:self.conversation];
     [[LCIMConversationService sharedInstance] updateUnreadCountToZeroWithConversation:self.conversation];
     [[LCIMConversationService sharedInstance] updateMentioned:NO conversation:self.conversation];
     [[NSNotificationCenter defaultCenter] postNotificationName:LCIMNotificationUnreadsUpdated object:nil];
@@ -794,7 +794,7 @@ typedef void (^LCIMSendMessageSuccessFailedBlock)(NSString *messageUUID, NSError
                 //TODO: why only when the net is ok, can the failed messages load fast
                 NSMutableArray *xhSucceedMessags = [self getXHMessages:avimTypedMessage];
                 self.messages = [NSMutableArray arrayWithArray:xhSucceedMessags];
-                NSArray<XHMessage *> *failedMessages = [[LCIMConversationService sharedInstance] selectFailedMessagesByConversationId:self.conversation.conversationId];
+                NSArray<XHMessage *> *failedMessages = [[LCIMConversationService sharedInstance] failedMessagesByConversationId:self.conversation.conversationId];
                 NSMutableArray *allFailedAVIMMessages = [self getAVIMMessages:failedMessages];
                 NSMutableArray *allMessages = [NSMutableArray arrayWithArray:avimTypedMessage];
                 [allMessages addObjectsFromArray:[allFailedAVIMMessages copy]];

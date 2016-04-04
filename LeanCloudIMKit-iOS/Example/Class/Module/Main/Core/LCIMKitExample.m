@@ -5,7 +5,7 @@
 //  Created by ElonChan on 16/2/24.
 //  Copyright © 2016年 LeanCloud. All rights reserved.
 //
-
+#import "LCIMKit.h"
 #import "LCIMKitExample.h"
 #import "LCIMUtil.h"
 #import "MBProgressHUD+LCIMAddition.h"
@@ -151,7 +151,7 @@ static NSMutableDictionary *_sharedInstances = nil;
 #endif
     [LCIMKit setAppId:LCIMAPPID appKey:LCIMAPPKEY];
     [[LCIMKit sharedInstance] setFetchProfilesBlock:^(NSArray<NSString *> *userIds, LCIMFetchProfilesCallBack callback) {
-        if (userIds == 0) {
+        if (userIds.count == 0) {
             NSInteger code = 0;
             NSString *errorReasonText = @"User ids is nil";
             NSDictionary *errorInfo = @{
@@ -170,7 +170,7 @@ static NSMutableDictionary *_sharedInstances = nil;
         [query whereKey:@"objectId" containedIn:userIds];
         NSError *error;
         NSArray *array = [query findObjects:&error];
-        NSMutableArray *users = [NSMutableArray arrayWithCapacity:0];;
+        NSMutableArray *users = [NSMutableArray arrayWithCapacity:userIds.count];;
         for (AVUser *user in array) {
             // MARK: - add new string named "avatar", custmizing LeanCloud storage
             AVFile *avator = [user objectForKey:@"avatar"];
@@ -193,15 +193,15 @@ static NSMutableDictionary *_sharedInstances = nil;
         //        }];
     }];
     
-    [[LCIMKit sharedInstance] setDidSelectItemBlock:^(AVIMConversation *conversation) {
+    [[LCIMKit sharedInstance] setDidSelectItemBlock:^(NSIndexPath *indexPath, AVIMConversation *conversation, LCIMConversationListViewController *controller) {
         [[self class] exampleOpenConversationViewControllerWithConversaionId:conversation.conversationId fromNavigationController:nil];
     }];
     
-    [[LCIMKit sharedInstance] setPreviewImageMessageBlock:^(NSUInteger index, NSArray *imageMessageInfo, NSDictionary *userInfo) {
-        [self examplePreviewImageMessageWithIndex:index imageMessages:imageMessageInfo];
+    [[LCIMKit sharedInstance] setPreviewImageMessageBlock:^(NSUInteger index, NSArray *imageMessagesInfo, NSDictionary *userInfo) {
+        [self examplePreviewImageMessageWithIndex:index imageMessages:imageMessagesInfo];
     }];
     
-    [[LCIMKit sharedInstance] setDidDeleteItemBlock:^(AVIMConversation *conversation) {
+    [[LCIMKit sharedInstance] setDidDeleteItemBlock:^(NSIndexPath *indexPath, AVIMConversation *conversation, LCIMConversationListViewController *controller) {
         //TODO:
     }];
     
@@ -214,9 +214,9 @@ static NSMutableDictionary *_sharedInstances = nil;
     }];
     
     // 自定义Cell菜单
-    //    [[LCIMKit sharedInstance] setConversationEditActionBlock:^NSArray *(NSIndexPath *indexPath, NSArray *editActions) {
-    //        return [self exampleConversationEditAction:indexPath];
-    //    }];
+    [[LCIMKit sharedInstance] setConversationEditActionBlock:^NSArray *(NSIndexPath *indexPath, NSArray<UITableViewRowAction *> *editActions, AVIMConversation *conversation, LCIMConversationListViewController *controller) {
+        return [self exampleConversationEditActionAtIndexPath:indexPath conversation:conversation controller:controller];
+    }];
     
     [[LCIMKit sharedInstance] setMarkBadgeWithTotalUnreadCountBlock:^(NSInteger totalUnreadCount, UIViewController *controller) {
         [self exampleMarkBadgeWithTotalUnreadCount:totalUnreadCount controller:controller];
@@ -227,23 +227,73 @@ static NSMutableDictionary *_sharedInstances = nil;
     }];
 }
 
-- (NSArray *)exampleConversationEditAction:(NSIndexPath *)indexPath {
+- (NSArray *)exampleConversationEditActionAtIndexPath:(NSIndexPath *)indexPath
+                              conversation:(AVIMConversation *)conversation
+                                controller:(LCIMConversationListViewController *)controller {
+
     // 如果需要自定义其他会话的菜单，在此编辑
-    return [self rightButtons];
+    return [self rightButtonsAtIndexPath:indexPath conversation:conversation controller:controller];
 }
 
-- (NSArray *)rightButtons {
+- (void)markAsRead:(NSIndexPath *)indexPath {
+    
+}
+
+- (void)markAsUnread:(NSIndexPath *)indexPath {
+    
+}
+
+typedef void (^UITableViewRowActionHandler)(UITableViewRowAction *action, NSIndexPath *indexPath);
+
+- (void)markReadStatusAtIndexPath:(NSIndexPath *)indexPath
+                            title:(NSString **)title
+                           handle:(UITableViewRowActionHandler *)handler
+                     conversation:(AVIMConversation *)conversation
+                       controller:(LCIMConversationListViewController *)controller {
+        if (conversation.lcim_unreadCount > 0) {
+            if (*title == nil) {
+                *title = @"标记为已读";
+            }
+            *handler = ^(UITableViewRowAction *action, NSIndexPath *indexPath) {
+                [controller.tableView setEditing:NO animated:YES];
+                [[LCIMConversationService sharedInstance] updateUnreadCountToZeroWithConversation:conversation];
+                [controller refresh];
+            };
+        } else {
+            if (*title == nil) {
+                *title = @"标记为未读";
+            }
+            *handler = ^(UITableViewRowAction *action, NSIndexPath *indexPath) {
+                [controller.tableView setEditing:NO animated:YES];
+                [[LCIMConversationService sharedInstance] increaseUnreadCountWithConversation:conversation];
+//                [controller.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+
+                [controller refresh];
+            };
+        }
+}
+
+- (NSArray *)rightButtonsAtIndexPath:(NSIndexPath *)indexPath
+             conversation:(AVIMConversation *)conversation
+               controller:(LCIMConversationListViewController *)controller {
+    NSString *title = nil;
+    UITableViewRowActionHandler handler = nil;
+    [self markReadStatusAtIndexPath:indexPath
+                              title:&title
+                             handle:&handler
+                       conversation:conversation
+                         controller:controller];
     UITableViewRowAction *actionItemMore = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleDefault
-                                                                              title:@"More"
-                                                                            handler:^(UITableViewRowAction *action, NSIndexPath *indexPath) {
-                                                                                NSLog(@"More");
-                                                                            }];
+                                                                              title:title
+                                                                            handler:handler];
+    
     actionItemMore.backgroundColor = [UIColor colorWithRed:0.78f green:0.78f blue:0.8f alpha:1.0];
     
     UITableViewRowAction *actionItemDelete = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleDefault
                                                                                 title:@"Delete"
                                                                               handler:^(UITableViewRowAction *action, NSIndexPath *indexPath) {
-                                                                                  //        [[LCIMConversationService sharedInstance] deleteConversation:conversation];
+                                                                                          [[LCIMConversationService sharedInstance] deleteRecentConversation:conversation];
+                                                                                  [controller refresh];
                                                                               }];
     return @[ actionItemDelete, actionItemMore ];
 }
@@ -272,12 +322,12 @@ static NSMutableDictionary *_sharedInstances = nil;
     [navigationController pushViewController:viewController animated:YES];
 }
 
-- (void)exampleMarkBadgeWithTotalUnreadCount:(NSInteger)totalUnreadCount controller:(UIViewController *)controller{
+- (void)exampleMarkBadgeWithTotalUnreadCount:(NSInteger)totalUnreadCount controller:(UIViewController *)controller {
     if (totalUnreadCount > 0) {
-        controller.tabBarItem.badgeValue = [NSString stringWithFormat:@"%ld", (long)totalUnreadCount];
+        [controller tabBarItem].badgeValue = [NSString stringWithFormat:@"%ld", (long)totalUnreadCount];
         [[UIApplication sharedApplication] setApplicationIconBadgeNumber:totalUnreadCount];
     } else {
-        controller.tabBarItem.badgeValue = nil;
+        [controller tabBarItem].badgeValue = nil;
         [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
     }
 }

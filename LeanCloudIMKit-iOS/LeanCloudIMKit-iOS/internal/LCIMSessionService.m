@@ -116,7 +116,7 @@ NSString *const LCIMSessionServiceErrorDemain = @"LCIMSessionServiceErrorDemain"
 // content : "{\"_lctype\":-1,\"_lctext\":\"sdfdf\"}"  sdk 会解析好
 - (void)conversation:(AVIMConversation *)conversation didReceiveTypedMessage:(AVIMTypedMessage *)message {
     if (message.messageId) {
-        if (conversation.creator == nil && [[LCIMConversationService sharedInstance] isConversationExists:conversation] == NO) {
+        if (conversation.creator == nil && [[LCIMConversationService sharedInstance] isRecentConversationExist:conversation] == NO) {
             [conversation fetchWithCallback:^(BOOL succeeded, NSError *error) {
                 if (error) {
                     DLog(@"%@", error);
@@ -148,7 +148,7 @@ NSString *const LCIMSessionServiceErrorDemain = @"LCIMSessionServiceErrorDemain"
 #pragma mark - receive message handle
 
 - (void)receiveMessage:(AVIMTypedMessage *)message conversation:(AVIMConversation *)conversation{
-    [[LCIMConversationService sharedInstance] insertConversation:conversation];
+    [[LCIMConversationService sharedInstance] insertRecentConversation:conversation];
     if (![[LCIMConversationService sharedInstance].chattingConversationId isEqualToString:conversation.conversationId]) {
         // 没有在聊天的时候才增加未读数和设置mentioned
         [[LCIMConversationService sharedInstance] increaseUnreadCountWithConversation:conversation];

@@ -63,12 +63,10 @@
         NSArray *sortedRooms = [conversations sortedArrayUsingComparator:^NSComparisonResult(AVIMConversation *conv1, AVIMConversation *conv2) {
             return (NSComparisonResult)(conv2.lcim_lastMessage.sendTimestamp - conv1.lcim_lastMessage.sendTimestamp);
         }];
-        
+        !block ?: block(sortedRooms, totalUnreadCount, error);
         [[LCIMUserSystemService sharedInstance] cacheUsersWithIds:userIds callback:^(BOOL succeeded, NSError *error) {
             if (error) {
-                !block ?: block(nil,0, error);
-            } else {
-                !block ?: block(sortedRooms, totalUnreadCount, error);
+                NSLog(@"%@",error.localizedDescription);
             }
         }];
     }];
@@ -76,7 +74,7 @@
 
 - (void)selectOrRefreshConversationsWithBlock:(AVIMArrayResultBlock)block {
     static BOOL refreshedFromServer = NO;
-    NSArray *conversations = [[LCIMConversationService sharedInstance] selectAllConversations];
+    NSArray *conversations = [[LCIMConversationService sharedInstance] allRecentConversations];
     if (refreshedFromServer == NO && [LCIMSessionService sharedInstance].connect) {
         NSMutableSet *conversationIds = [NSMutableSet set];
         for (AVIMConversation *conversation in conversations) {
@@ -87,8 +85,8 @@
                 !block ?: block(conversations, nil);
             } else {
                 refreshedFromServer = YES;
-                [[LCIMConversationService sharedInstance] updateConversations:objects];
-                !block ?: block([[LCIMConversationService sharedInstance] selectAllConversations], nil);
+                [[LCIMConversationService sharedInstance] updateRecentConversation:objects];
+                !block ?: block([[LCIMConversationService sharedInstance] allRecentConversations], nil);
             }
         }];
     } else {
@@ -147,7 +145,6 @@
 - (void)setConversationEditActionBlock:(LCIMConversationEditActionsBlock)conversationEditActionBlock {
     _conversationEditActionBlock = conversationEditActionBlock;
 }
-
 
 - (void)setHeightForRowBlock:(LCIMHeightForRowBlock)heightForRowBlock {
     _heightForRowBlock = heightForRowBlock;

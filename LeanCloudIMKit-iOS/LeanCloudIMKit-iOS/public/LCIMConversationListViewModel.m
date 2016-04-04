@@ -55,7 +55,7 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     AVIMConversation *conversation = [self.dataArray objectAtIndex:indexPath.row];
-
+    
     LCIMCellForRowBlock cellForRowBlock = [[LCIMConversationListService sharedInstance] cellForRowBlock];
     if (cellForRowBlock) {
         UITableViewCell *customCell = cellForRowBlock(tableView, indexPath, conversation);
@@ -75,7 +75,7 @@
         peerId = conversation.lcim_lastMessage.clientId;
     }
     [self asyncCacheElseNetLoadCell:cell identifier:conversation.lcim_displayName peerId:peerId name:&displayName avatorURL:&avatorURL];
-
+    
     if (conversation.lcim_type == LCIMConversationTypeSingle) {
         [cell.avatorImageView setImageWithURL:avatorURL placeholder:[self imageInBundleForImageName:@"Placeholder_Avator"]];
     } else {
@@ -83,8 +83,8 @@
     }
     
     cell.nameLabel.text = conversation.lcim_displayName;
-
-
+    
+    
     if (conversation.lcim_lastMessage) {
         cell.messageTextLabel.attributedText = [LCIMLastMessageTypeManager attributedStringWithMessage:conversation.lcim_lastMessage conversation:conversation userName:displayName];
         cell.timestampLabel.text = [[NSDate dateWithTimeIntervalSince1970:conversation.lcim_lastMessage.sendTimestamp / 1000] timeAgoSinceNow];
@@ -110,9 +110,10 @@
 
 - (NSArray<UITableViewRowAction *> *)tableView:(UITableView *)tableView editActionsForRowAtIndexPath:(NSIndexPath *)indexPath {
     LCIMConversationEditActionsBlock conversationEditActionBlock = [[LCIMConversationListService sharedInstance] conversationEditActionBlock];
+    AVIMConversation *conversation = [self.dataArray objectAtIndex:indexPath.row];
     NSArray *editActions = [NSArray array];
     if (conversationEditActionBlock) {
-        editActions = conversationEditActionBlock(indexPath, [self defaultRightButtons]);
+        editActions = conversationEditActionBlock(indexPath, [self defaultRightButtons], conversation, self.conversationListViewController);
     } else {
         editActions = [self defaultRightButtons];
     }
@@ -148,15 +149,15 @@
 
 - (NSArray *)defaultRightButtons {
     UITableViewRowAction *actionItemDelete = [UITableViewRowAction
-                                                rowActionWithStyle:UITableViewRowActionStyleNormal
-                                                title:NSLocalizedStringFromTable(@"Delete", @"LCIMKitString", @"Delete")
-                                                handler:^(UITableViewRowAction *action, NSIndexPath *indexPath) {
-                                                    AVIMConversation *conversation = [self.dataArray objectAtIndex:indexPath.row];
-                                                    [[LCIMConversationService sharedInstance] deleteConversation:conversation];
-                                                    [self refresh];
-                                                    LCIMConversationsListDidDeleteItemBlock conversationsListDidDeleteItemBlock = [LCIMConversationListService sharedInstance].didDeleteItemBlock;
-                                                    !conversationsListDidDeleteItemBlock ?: conversationsListDidDeleteItemBlock(conversation);
-                                                }];
+                                              rowActionWithStyle:UITableViewRowActionStyleNormal
+                                              title:NSLocalizedStringFromTable(@"Delete", @"LCIMKitString", @"Delete")
+                                              handler:^(UITableViewRowAction *action, NSIndexPath *indexPath) {
+                                                  AVIMConversation *conversation = [self.dataArray objectAtIndex:indexPath.row];
+                                                  [[LCIMConversationService sharedInstance] deleteRecentConversation:conversation];
+                                                  [self refresh];
+                                                  LCIMConversationsListDidDeleteItemBlock conversationsListDidDeleteItemBlock = [LCIMConversationListService sharedInstance].didDeleteItemBlock;
+                                                  !conversationsListDidDeleteItemBlock ?: conversationsListDidDeleteItemBlock(indexPath, conversation, self.conversationListViewController);
+                                              }];
     actionItemDelete.backgroundColor = [UIColor redColor];
     return @[ actionItemDelete ];
 }
@@ -166,12 +167,12 @@
     AVIMConversation *conversation = [self.dataArray objectAtIndex:indexPath.row];
     [conversation markAsReadInBackground];
     [self refresh];
-    ![LCIMConversationListService sharedInstance].didSelectItemBlock ?: [LCIMConversationListService sharedInstance].didSelectItemBlock(conversation);
+    ![LCIMConversationListService sharedInstance].didSelectItemBlock ?: [LCIMConversationListService sharedInstance].didSelectItemBlock(indexPath, conversation, self.conversationListViewController);
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     AVIMConversation *conversation = [self.dataArray objectAtIndex:indexPath.row];
-
+    
     LCIMHeightForRowBlock heightForRowBlock = [[LCIMConversationListService sharedInstance] heightForRowBlock];
     if (heightForRowBlock) {
         return heightForRowBlock(tableView, indexPath, conversation);
@@ -182,8 +183,10 @@
 #pragma mark - refresh
 
 - (void)refresh {
+    
     [[LCIMConversationListService sharedInstance] findRecentConversationsWithBlock:^(NSArray *conversations, NSInteger totalUnreadCount, NSError *error) {
         dispatch_block_t finishBlock = ^{
+            
             [self.conversationListViewController.tableView.mj_header endRefreshing];
             if ([self.conversationListViewController filterAVIMError:error]) {
                 self.dataArray = [NSMutableArray arrayWithArray:conversations];
@@ -213,7 +216,9 @@
         __block BOOL found = NO;
         [self.dataArray enumerateObjectsUsingBlock:^(AVIMConversation * _Nonnull conversation, NSUInteger idx, BOOL * _Nonnull stop) {
             if ([conversation.conversationId isEqualToString:remoteNotificationConversationId]) {
-                ![LCIMConversationListService sharedInstance].didSelectItemBlock ?: [LCIMConversationListService sharedInstance].didSelectItemBlock(conversation);
+                //TODO: If has section.
+                NSIndexPath *indexPath = [NSIndexPath indexPathWithIndex:idx];
+                ![LCIMConversationListService sharedInstance].didSelectItemBlock ?: [LCIMConversationListService sharedInstance].didSelectItemBlock(indexPath, conversation, self.conversationListViewController);
                 found = YES;
                 *stop = YES;
                 return;

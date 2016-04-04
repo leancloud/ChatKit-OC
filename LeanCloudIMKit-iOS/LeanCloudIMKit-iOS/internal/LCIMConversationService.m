@@ -92,12 +92,6 @@ NSString *const LCIMConversationServiceErrorDomain = @"LCIMConversationServiceEr
                                      userInfo:nil];
         return;
     }
-    //TODO:unique ，这个怎么理解。是指的创建memberId 创建的会话都是unique的吗？
-    //这里需要说明我们是怎么创建／reuse 的 conversation。
-    //unique bool 可选，是否创建唯一会话。如果是创建唯一会话，会查询相同 m 的会话是否已经创建过，如果已经创建过就返回这个已创建的会话
-    //是的。其实如果指定了 memberId，开发者关心的是：我第一次指定 peer 进入聊天，和第二次指定 peer 进入聊天，是否会是同一个对话——就是说历史消息还在不在？所以我们在注释里面要说明，我们是怎么根据 memberId 创建对话的。
-    // unique 指的是这里的吧--》https://github.com/leancloud/avoscloud-push/blob/develop/push-server/doc/protocol.md#convstart
-    
     NSString *myId = [LCIMSessionService sharedInstance].clientId;
     NSArray *array = @[ myId, peerId ];
     [self fetchConversationWithMembers:array type:LCIMConversationTypeSingle callback:callback];
@@ -185,17 +179,17 @@ NSString *const LCIMConversationServiceErrorDomain = @"LCIMConversationServiceEr
 
 - (void)updateUnreadCountToZeroWithConversation:(AVIMConversation *)conversation {
     [self.databaseQueue inDatabase:^(FMDatabase *db) {
-        [db executeUpdate:LCIMConversationTableUpdateUnreadCountSQL  withArgumentsInArray:@[@0 , conversation.conversationId]];
+        [db executeUpdate:LCIMConversationTableUpdateUnreadCountSQL  withArgumentsInArray:@[@0, conversation.conversationId]];
     }];
 }
 
-- (void)deleteConversation:(AVIMConversation *)conversation {
+- (void)deleteRecentConversation:(AVIMConversation *)conversation {
     [self.databaseQueue inDatabase:^(FMDatabase *db) {
         [db executeUpdate:LCIMConversationTableDeleteSQL withArgumentsInArray:@[conversation.conversationId]];
     }];
 }
 
-- (void )insertConversation:(AVIMConversation *)conversation {
+- (void )insertRecentConversation:(AVIMConversation *)conversation {
     if (conversation.creator == nil) {
         return;
     }
@@ -205,7 +199,7 @@ NSString *const LCIMConversationServiceErrorDomain = @"LCIMConversationServiceEr
     }];
 }
 
-- (BOOL)isConversationExists:(AVIMConversation *)conversation {
+- (BOOL)isRecentConversationExist:(AVIMConversation *)conversation {
     __block BOOL exists = NO;
     [self.databaseQueue inDatabase:^(FMDatabase *db) {
         FMResultSet *resultSet = [db executeQuery:LCIMConversationTableSelectOneSQL withArgumentsInArray:@[conversation.conversationId]];
@@ -239,7 +233,7 @@ NSString *const LCIMConversationServiceErrorDomain = @"LCIMConversationServiceEr
     return conversation;
 }
 
-- (NSArray *)selectAllConversations {
+- (NSArray *)allRecentConversations {
     NSMutableArray *conversations = [NSMutableArray array];
     [self.databaseQueue inDatabase:^(FMDatabase *db) {
         FMResultSet  *resultSet = [db executeQuery:LCIMConversationTableSelectSQL withArgumentsInArray:@[]];
@@ -251,7 +245,7 @@ NSString *const LCIMConversationServiceErrorDomain = @"LCIMConversationServiceEr
     return conversations;
 }
 
-- (void)updateConversations:(NSArray *)conversations {
+- (void)updateRecentConversation:(NSArray *)conversations {
     [self.databaseQueue inDatabase:^(FMDatabase *db) {
         [db beginTransaction];
         for (AVIMConversation *conversation in conversations) {
@@ -259,6 +253,24 @@ NSString *const LCIMConversationServiceErrorDomain = @"LCIMConversationServiceEr
         }
         [db commit];
     }];
+}
+
+/**
+ *  删除会话对应的UIProfile缓存，比如当用户信息发生变化时
+ *  @param  conversation 会话，可以是单聊，也可是群聊
+ */
+- (void)removeCacheForConversation:(AVIMConversation *)conversation {
+ //TODO:
+    [self deleteRecentConversation:conversation];
+    
+}
+
+/**
+ *  删除全部缓存，比如当切换用户时，如果同一个人显示的名称和头像需要变更
+ */
+- (void)removeAllCache {
+    //TODO:
+    [self allRecentConversations];
 }
 
 ///---------------------------------------------------------------------
@@ -301,7 +313,7 @@ NSString *const LCIMConversationServiceErrorDomain = @"LCIMConversationServiceEr
     return records;
 }
 
-- (NSArray *)selectFailedMessagesByConversationId:(NSString *)conversationId {
+- (NSArray *)failedMessagesByConversationId:(NSString *)conversationId {
     NSArray *records = [self recordsByConversationId:conversationId];
     NSMutableArray *messages = [NSMutableArray array];
     for (NSDictionary *record in records) {
@@ -405,44 +417,6 @@ NSString *const LCIMConversationServiceErrorDomain = @"LCIMConversationServiceEr
     }
 }
 
-
-
-- (void)openChatWithPeerId:(NSString *)peerId fromController:(UIViewController *)controller {
-//    id<UIApplicationDelegate> delegate = ((id<UIApplicationDelegate>)[[UIApplication sharedApplication] delegate]);
-//    UIWindow *window = delegate.window;
-//    UITabBarController *tabBarController = (UITabBarController *)window.rootViewController;
-//    UINavigationController *navigationController = tabBarController.selectedViewController;
-//   __block LCIMConversationViewController *conversationViewController;
-//    
-//    [self fecthConversationWithPeerId:peerId callback:^(AVIMConversation *conversation, NSError *error) {
-//        if (!error) {
-//            conversationViewController = [[LCIMConversationViewController alloc] initWithConversation:conversation];
-//            if (conversationViewController) {
-//                dispatch_async(dispatch_get_main_queue(),^{
-//                    [navigationController pushViewController:conversationViewController animated:YES];
-//                });
-//            }
-//        }
-//    }];
-
-//    if (conversationViewController) {
-//        return YES;
-//    }
-//    return NO;
-}
-
-/**
- *  lazy load client
- *
- *  @return AVIMClient
- */
-- (AVIMClient *)client {
-    if (_client == nil) {
-        _client = [[LCIMSessionService sharedInstance] client];
-    }
-    return _client;
-}
-
 + (void)cacheMessages:(NSArray<AVIMTypedMessage *> *)messages callback:(AVBooleanResultBlock)callback {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
         NSMutableSet *userIds = [[NSMutableSet alloc] init];
@@ -478,6 +452,21 @@ NSString *const LCIMConversationServiceErrorDomain = @"LCIMConversationServiceEr
             });
         }];
     });
+}
+
+#pragma mark -
+#pragma mark - LazyLoad Method
+
+/**
+ *  lazy load client
+ *
+ *  @return AVIMClient
+ */
+- (AVIMClient *)client {
+    if (_client == nil) {
+        _client = [[LCIMSessionService sharedInstance] client];
+    }
+    return _client;
 }
 
 @end

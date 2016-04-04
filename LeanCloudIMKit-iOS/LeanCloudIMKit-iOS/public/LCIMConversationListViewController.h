@@ -17,5 +17,7 @@ FOUNDATION_EXTERN const CGFloat LCIMConversationListCellDefaultHeight;
 
 @interface LCIMConversationListViewController : LCIMBaseTableViewController
 
+- (void)refresh;
+
 @end
 
