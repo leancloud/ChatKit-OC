@@ -379,6 +379,7 @@
     }
     return messages;
 }
+
 + (NSMutableArray *)getLCIMMessages:(NSArray *)avimTypedMessage {
     NSMutableArray *messages = [[NSMutableArray alloc] init];
     for (AVIMTypedMessage *msg in avimTypedMessage) {
@@ -440,7 +441,7 @@
                 NSMutableArray *lcimSucceedMessags = [LCIMChatViewModel getLCIMMessages:avimTypedMessage];
                 [self addMessages:lcimSucceedMessags];
                 //                [NSMutableArray arrayWithArray:lcimSucceedMessags];
-                NSArray<LCIMMessage *> *failedMessages = [[LCIMConversationService sharedInstance] selectFailedMessagesByConversationId:[LCIMConversationService sharedInstance].currentConversation.conversationId];
+                NSArray<LCIMMessage *> *failedMessages = [[LCIMConversationService sharedInstance] failedMessagesByConversationId:[LCIMConversationService sharedInstance].currentConversation.conversationId];
                 NSMutableArray *allFailedAVIMMessages = [LCIMChatViewModel getAVIMMessages:failedMessages];
                 NSMutableArray *allMessages = [NSMutableArray arrayWithArray:avimTypedMessage];
                 //TODO:
@@ -561,7 +562,7 @@ static CGPoint  delayOffset = {0.0};
         NSAssert(conversation, @"currentConversation is nil");
         return;
     }
-    [[LCIMConversationService sharedInstance] insertConversation:conversation];
+    [[LCIMConversationService sharedInstance] insertRecentConversation:conversation];
     [[LCIMConversationService sharedInstance] updateUnreadCountToZeroWithConversation:conversation];
     [[LCIMConversationService sharedInstance] updateMentioned:NO conversation:conversation];
     [[NSNotificationCenter defaultCenter] postNotificationName:LCIMNotificationUnreadsUpdated object:nil];

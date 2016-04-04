@@ -65,26 +65,6 @@ FOUNDATION_EXTERN NSString *const LCIMConversationServiceErrorDomain;
  */
 - (void)removeAllCache;
 
-/**
- *  打开单聊页面
- *  @brief 如果尚未连接到服务器，首先会连接到服务器
- *  @param peer 聊天对象
- *  @param controller 用以弹出IM页面的外部Controller，例如H5容器Controller
- *  @return 如果尚未设置登录能力或者personId为空，则返回NO，否则返回YES
- */
-- (void)openChatWithPeerId:(NSString *)peerId fromController:(UIViewController *)controller;
-- (BOOL)openChatWithPeerId:(NSString *)peerId fromController:(UIViewController *)controller withDidOpenChatBlock:(void (^)(LCIMConversationViewController *conversationViewController))didOpenChatBlock;
-
-/**
- *  打开单聊页面
- *  @brief 如果尚未连接到服务器，首先会连接到服务器
- *  @param conversationId 聊天会话Id。
- *  @attention 注意：conversationId 与 personId 并不等同。您一般不能自己构造一个conversationId，而是从conversation等特定接口中才能读取到conversationId。如果需要使用personId来打开会话，应该使用openChatWithPeer这个接口。
- *  @return 如果尚未设置登录能力或者conversation为空，则返回NO，否则返回YES
- */
-- (BOOL)openChatWithConversationId:(NSString *)conversationId fromController:(UIViewController *)controller;
-- (BOOL)openChatWithConversationId:(NSString *)conversationId fromController:(UIViewController *)controller withDidOpenChatBlock:(void (^)(LCIMConversationViewController *conversationViewController))didOpenChatBlock;
-
 ///--------------------------------------------------------------------------------------------
 ///---------------------最近对话的本地缓存，最近对话将保存在本地数据库中-------------------------------
 ///--------------------------------------------------------------------------------------------
@@ -99,19 +79,25 @@ FOUNDATION_EXTERN NSString *const LCIMConversationServiceErrorDomain;
  *  插入一条最近对话
  *  @param conversation
  */
-- (void)insertConversation:(AVIMConversation *)conversation;
-
-/**
- *  清空未读数
- *  @param conversation 相应的对话
- */
-- (void)updateUnreadCountToZeroWithConversation:(AVIMConversation *)conversation;
+- (void)insertRecentConversation:(AVIMConversation *)conversation;
 
 /**
  *  增加未读数
  *  @param conversation 相应对话
  */
 - (void)increaseUnreadCountWithConversation:(AVIMConversation *)conversation;
+
+/**
+ *  最近对话列表左滑删除本地数据库的对话，将不显示在列表
+ *  @param conversation
+ */
+- (void)deleteRecentConversation:(AVIMConversation *)conversation;
+
+/**
+ *  清空未读数
+ *  @param conversation 相应的对话
+ */
+- (void)updateUnreadCountToZeroWithConversation:(AVIMConversation *)conversation;
 
 /**
  *  更新 mentioned 值，当接收到消息发现 @了我的时候，设为 YES，进入聊天页面，设为 NO
@@ -124,26 +110,20 @@ FOUNDATION_EXTERN NSString *const LCIMConversationServiceErrorDomain;
  *  更新每条最近对话记录里的 conversation 值，也即某对话的名字、成员可能变了，需要更新应用打开时，第一次加载最近对话列表时，会去向服务器要对话的最新数据，然后更新
  *  @param conversations 要更新的对话
  */
-- (void)updateConversations:(NSArray *)conversations;
-
-/**
- *  最近对话列表左滑删除本地数据库的对话，将不显示在列表
- *  @param conversation
- */
-- (void)deleteConversation:(AVIMConversation *)conversation;
+- (void)updateRecentConversation:(NSArray *)conversations;
 
 /**
  *  从数据库查找所有的对话，即所有的最近对话
  *  @return 对话数据
  */
-- (NSArray *)selectAllConversations;
+- (NSArray *)allRecentConversations;
 
 /**
  *  判断某对话是否存在于本地数据库。接收到消息的时候用，sdk 传过来的对话的members 等数据可能是空的，如果本地数据库存在该对话，则不去服务器请求对话了。如果不存在，则向服务器请求对话的元数据。使得在最近对话列表，取出对话的时候，对话都有元数据。
  *  @param conversation 某对话
  *  @return
  */
-- (BOOL)isConversationExists:(AVIMConversation *)conversation;
+- (BOOL)isRecentConversationExist:(AVIMConversation *)conversation;
 
 
 ///---------------------------------------------------------------------
@@ -188,7 +168,7 @@ FOUNDATION_EXTERN NSString *const LCIMConversationServiceErrorDomain;
  *  @param conversationId 对话的 id
  *  @return 消息数组
  */
-- (NSArray *)selectFailedMessagesByConversationId:(NSString *)conversationId;
+- (NSArray *)failedMessagesByConversationId:(NSString *)conversationId;
 + (void)cacheMessages:(NSArray<AVIMTypedMessage *> *)messages callback:(AVBooleanResultBlock)callback;
 
 @end

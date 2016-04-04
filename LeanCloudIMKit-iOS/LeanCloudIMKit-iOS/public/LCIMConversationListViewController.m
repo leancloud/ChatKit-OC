@@ -92,4 +92,8 @@
    }
 }
 
+- (void)refresh {
+    [self.conversationListViewModel refresh];
+}
+
 @end

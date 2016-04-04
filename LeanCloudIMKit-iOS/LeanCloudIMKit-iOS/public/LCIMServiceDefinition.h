@@ -267,7 +267,7 @@ typedef void (^LCIMConversationResultBlock)(AVIMConversation *conversation, NSEr
  *  选中某个会话后的回调
  *  @param conversation 被选中的会话
  */
-typedef void(^LCIMConversationsListDidSelectItemBlock)(AVIMConversation *conversation);
+typedef void(^LCIMConversationsListDidSelectItemBlock)(NSIndexPath *indexPath, AVIMConversation *conversation, LCIMConversationListViewController *controller);
 
 /*!
  *  选中某个会话后的回调
@@ -283,7 +283,7 @@ typedef void(^LCIMConversationsListDidSelectItemBlock)(AVIMConversation *convers
  *  删除某个会话后的回调
  *  @param conversation 被选中的会话
  */
-typedef void(^LCIMConversationsListDidDeleteItemBlock)(AVIMConversation *conversation);
+typedef void(^LCIMConversationsListDidDeleteItemBlock)(NSIndexPath *indexPath, AVIMConversation *conversation, LCIMConversationListViewController *controller);
 
 /*!
  *  删除某个会话后的回调
@@ -301,7 +301,7 @@ typedef void(^LCIMConversationsListDidDeleteItemBlock)(AVIMConversation *convers
  *  @param conversation, 会话
  *  @param editActions, 默认的菜单数组，成员为 UITableViewRowAction 类型
  */
-typedef NSArray *(^LCIMConversationEditActionsBlock)(NSIndexPath *indexPath, NSArray<UITableViewRowAction *> *editActions);
+typedef NSArray *(^LCIMConversationEditActionsBlock)(NSIndexPath *indexPath, NSArray<UITableViewRowAction *> *editActions, AVIMConversation *conversation, LCIMConversationListViewController *controller);
 
 /*!
  *  可以通过这个block设置会话列表中每个会话的左滑菜单，这个是同步调用的，需要尽快返回，否则会卡住UI
