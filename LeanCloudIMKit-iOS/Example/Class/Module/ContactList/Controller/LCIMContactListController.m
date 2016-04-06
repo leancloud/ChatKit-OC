@@ -60,8 +60,7 @@ static NSString *const LCIMContactListControllerIdentifier = @"LCIMContactListCo
     
 }
 
-- (void)viewWillAppear:(BOOL)animated
-{
+- (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
     if (self.presentingViewController) {
@@ -82,7 +81,6 @@ static NSString *const LCIMContactListControllerIdentifier = @"LCIMContactListCo
 
 - (void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
-    
     _sections = nil;
     _sortedSectionTitles = nil;
 }
@@ -222,8 +220,7 @@ static NSString *const LCIMContactListControllerIdentifier = @"LCIMContactListCo
     return _sections;
 }
 
-- (NSArray *)sortedSectionTitles
-{
+- (NSArray *)sortedSectionTitles {
     if (!_sortedSectionTitles) {
         _sortedSectionTitles = [[self.sections allKeys] sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
     }
