@@ -71,40 +71,35 @@ static NSString *const LCIM_KEY_USERNAME = @"LCIM_KEY_USERNAME";
 ///-----------------------------------------------------------------------------------
 
 #define LCIMProfileKeyPeerId        @"peerId"
-#define LCIMProfileKeyName          @"nick"
-#define LCIMProfileKeyAvatorURL     @"avator"
+#define LCIMProfileKeyName          @"username"
+#define LCIMProfileKeyAvatarURL     @"avatarURL"
+#define LCIMDeveloperPeerId @"561b526160b2b52cdef2d9f9"
 
 //TODO:add more friends
-#define LCIMWorkerPersonProfiles \
+#define LCIMContactProfiles \
 @[ \
-    @{ LCIMProfileKeyPeerId:@"LCIMKit小秘书", LCIMProfileKeyName:@"LCIMKit小秘书", LCIMProfileKeyAvatorURL:@"demo_baichuan_120" },\
-    @{ LCIMProfileKeyPeerId:@"561b526160b2b52cdef2d9f9", LCIMProfileKeyName:@"马谡", LCIMProfileKeyAvatorURL:@"http://image17-c.poco.cn/mypoco/myphoto/20151211/16/17338872420151211164742047.png" },\
-    @{ LCIMProfileKeyPeerId:@" ", LCIMProfileKeyName:@"刘备", LCIMProfileKeyAvatorURL:@"http://image17-c.poco.cn/mypoco/myphoto/20151211/16/17338872420151211164742047.png" },\
-    @{ LCIMProfileKeyPeerId:@"565c82ccddb299ad390b3490", LCIMProfileKeyName:@"华雄", LCIMProfileKeyAvatorURL:@"http://image17-c.poco.cn/mypoco/myphoto/20151211/16/17338872420151211164742047.png" },\
-    @{ LCIMProfileKeyPeerId:@"561b526160b2b52cdef2d9f9", LCIMProfileKeyName:@"公孙止", LCIMProfileKeyAvatorURL:@"http://image17-c.poco.cn/mypoco/myphoto/20151211/16/17338872420151211164742047.png" },\
-    @{ LCIMProfileKeyPeerId:@"565c82ccddb299ad390b3490", LCIMProfileKeyName:@"曹植", LCIMProfileKeyAvatorURL:@"http://image17-c.poco.cn/mypoco/myphoto/20151211/16/17338872420151211164742047.png" },\
-    @{ LCIMProfileKeyPeerId:@"561b526160b2b52cdef2d9f9", LCIMProfileKeyName:@"黑白子", LCIMProfileKeyAvatorURL:@"http://image17-c.poco.cn/mypoco/myphoto/20151211/16/17338872420151211164742047.png" },\
+    @{ LCIMProfileKeyPeerId:LCIMDeveloperPeerId, LCIMProfileKeyName:@"LCIMKit小秘书", LCIMProfileKeyAvatarURL:@"http://image17-c.poco.cn/mypoco/myphoto/20151211/16/17338872420151211164742047.png" },\
+    @{ LCIMProfileKeyPeerId:@"Tom", LCIMProfileKeyName:@"Tom", LCIMProfileKeyAvatarURL:@"http://www.avatarsdb.com/avatars/tom_and_jerry2.jpg" },\
+    @{ LCIMProfileKeyPeerId:@"Jerry", LCIMProfileKeyName:@"Jerry", LCIMProfileKeyAvatarURL:@"http://www.avatarsdb.com/avatars/jerry.jpg" },\
+    @{ LCIMProfileKeyPeerId:@"Harry", LCIMProfileKeyName:@"Harry", LCIMProfileKeyAvatarURL:@"http://www.avatarsdb.com/avatars/young_harry.jpg" },\
+    @{ LCIMProfileKeyPeerId:@"William", LCIMProfileKeyName:@"William", LCIMProfileKeyAvatarURL:@"http://www.avatarsdb.com/avatars/william_shakespeare.jpg" },\
+    @{ LCIMProfileKeyPeerId:@"Bob", LCIMProfileKeyName:@"Bob", LCIMProfileKeyAvatarURL:@"http://www.avatarsdb.com/avatars/bath_bob.jpg" },\
 ]
 
-#define LCIMWorkerPeerIds \
-    [LCIMWorkerPersonProfiles valueForKeyPath:LCIMProfileKeyPeerId]
+#define LCIMContactPeerIds \
+    [LCIMContactProfiles valueForKeyPath:LCIMProfileKeyPeerId]
 
-#define LCIMTryPersonProfiles \
+#define LCIMTestPersonProfiles \
 @[ \
-    @{ LCIMProfileKeyPeerId:@"uid1" },\
-    @{ LCIMProfileKeyPeerId:@"uid2" },\
-    @{ LCIMProfileKeyPeerId:@"uid3" },\
-    @{ LCIMProfileKeyPeerId:@"uid4" },\
-    @{ LCIMProfileKeyPeerId:@"uid5" },\
-    @{ LCIMProfileKeyPeerId:@"uid6" },\
-    @{ LCIMProfileKeyPeerId:@"uid7" },\
-    @{ LCIMProfileKeyPeerId:@"uid8" },\
-    @{ LCIMProfileKeyPeerId:@"uid9" },\
-    @{ LCIMProfileKeyPeerId:@"uid10" },\
+    @{ LCIMProfileKeyPeerId:@"Tom" },\
+    @{ LCIMProfileKeyPeerId:@"Jerry" },\
+    @{ LCIMProfileKeyPeerId:@"Harry" },\
+    @{ LCIMProfileKeyPeerId:@"William" },\
+    @{ LCIMProfileKeyPeerId:@"Bob" },\
 ]
 
-#define LCIMTryPeerIds \
-    [LCIMTryPersonProfiles valueForKeyPath:LCIMProfileKeyPeerId]
+#define LCIMTestPeerIds \
+    [LCIMTestPersonProfiles valueForKeyPath:LCIMProfileKeyPeerId]
 
 #define localize(key, default) NSLocalizedStringWithDefaultValue(key, nil, [NSBundle mainBundle], default, nil)
 

@@ -32,6 +32,7 @@ static NSMutableDictionary *_sharedInstances = nil;
 
 @property (nonatomic, strong) NSMutableArray *photos;
 @property (nonatomic, strong) NSMutableArray *thumbs;
+
 @property (nonatomic, strong) NSMutableArray *selections;
 
 @end
@@ -162,32 +163,20 @@ static NSMutableDictionary *_sharedInstances = nil;
             return;
         }
         
-        AVQuery *query = [AVUser query];
-        [query setCachePolicy:kAVCachePolicyNetworkElseCache];
-        [query whereKey:@"objectId" containedIn:userIds];
-        NSError *error;
-        NSArray *array = [query findObjects:&error];
+//        AVQuery *query = [AVUser query];
+//        [query setCachePolicy:kAVCachePolicyNetworkElseCache];
+//        [query whereKey:@"objectId" containedIn:userIds];
+//        NSError *error;
+//        NSArray *array = [query findObjects:&error];
         NSMutableArray *users = [NSMutableArray arrayWithCapacity:userIds.count];;
-        for (AVUser *user in array) {
+        for (NSDictionary *user in LCIMContactProfiles) {
             // MARK: - add new string named "avatar", custmizing LeanCloud storage
-            AVFile *avator = [user objectForKey:@"avatar"];
-            NSURL *avatorURL = [NSURL URLWithString:avator.url];
-            LCIMUser *user_ = [[LCIMUser alloc] initWithUserId:user.objectId name:user.username avatorURL:avatorURL];
+//            AVFile *avator = [user objectForKey:@"avatar"];
+//            NSURL *avatorURL = [NSURL URLWithString:avator.url];
+            LCIMUser *user_ = [[LCIMUser alloc] initWithUserId:user[LCIMProfileKeyPeerId] name:user[LCIMProfileKeyName] avatorURL:user[LCIMProfileKeyAvatarURL]];
             [users addObject:user_];
         }
         !callback ?: callback([users copy], nil);
-        
-        //        [query findObjectsInBackgroundWithBlock:^(NSArray<AVUser *> *objects, NSError *error) {
-        //            NSMutableArray *users = [NSMutableArray arrayWithCapacity:0];;
-        //            for (AVUser *user in objects) {
-        //                // MARK: - add new string named "avatar", custmizing LeanCloud storage
-        //                AVFile *avator = [user objectForKey:@"avatar"];
-        //                NSURL *avatorURL = [NSURL URLWithString:avator.url];
-        //                LCIMUser *user_ = [[LCIMUser alloc] initWithUserId:user.objectId name:user.username avatorURL:avatorURL];
-        //                [users addObject:user_];
-        //            }
-        //            !callback ?: callback([users copy], nil);
-        //        }];
     }];
     
     [[LCIMKit sharedInstance] setDidSelectItemBlock:^(NSIndexPath *indexPath, AVIMConversation *conversation, LCIMConversationListViewController *controller) {
@@ -302,9 +291,7 @@ typedef void (^UITableViewRowActionHandler)(UITableViewRowAction *action, NSInde
 }
 
 + (void)pushToViewController:(UIViewController *)viewController {
-    id<UIApplicationDelegate> delegate = ((id<UIApplicationDelegate>)[[UIApplication sharedApplication] delegate]);
-    UIWindow *window = delegate.window;
-    UITabBarController *tabBarController = (UITabBarController *)window.rootViewController;
+    UITabBarController *tabBarController = [self cyl_tabBarController];
     UINavigationController *navigationController = tabBarController.selectedViewController;
     [navigationController pushViewController:viewController animated:YES];
 }

@@ -11,21 +11,12 @@
 
 #define __LCIMContactsOfDevelopers \
 @[ \
-    @"uid1", \
-    @"uid2", \
-    @"uid3", \
-    @"uid4", \
-    @"uid5", \
-    @"uid6", \
-    @"uid7", \
-    @"uid8", \
-    @"uid9", \
-    @"uid10", \
+    LCIMDeveloperPeerId, \
 ]
 
 #define __LCIMContactsOfSections \
 @[ \
-    LCIMWorkerPeerIds, \
+    LCIMTestPeerIds, \
     __LCIMContactsOfDevelopers, \
 ]
 
@@ -36,6 +27,7 @@
 @end
 
 @implementation LCIMContactManager
+
 /**
  * create a singleton instance of LCIMContactManager
  */

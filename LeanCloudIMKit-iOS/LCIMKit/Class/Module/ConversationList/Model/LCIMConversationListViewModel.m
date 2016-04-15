@@ -184,7 +184,6 @@
 - (void)refresh {
     [[LCIMConversationListService sharedInstance] findRecentConversationsWithBlock:^(NSArray *conversations, NSInteger totalUnreadCount, NSError *error) {
         dispatch_block_t finishBlock = ^{
-            
             [self.conversationListViewController.tableView.mj_header endRefreshing];
             if ([self.conversationListViewController filterAVIMError:error]) {
                 self.dataArray = [NSMutableArray arrayWithArray:conversations];
