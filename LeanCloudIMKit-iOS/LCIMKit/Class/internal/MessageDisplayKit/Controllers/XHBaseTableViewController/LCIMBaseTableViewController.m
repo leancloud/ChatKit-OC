@@ -29,7 +29,7 @@
 }
 
 - (void)loadDataSource {
-    // subClasse
+    // subClass
 }
 
 #pragma mark - Propertys
@@ -49,7 +49,7 @@
         tableView.delegate = self;
         tableView.dataSource = self;
         tableView.tableFooterView = [[UIView alloc] init];
-
+        tableView.keyboardDismissMode = UIScrollViewKeyboardDismissModeOnDrag;
         [self.view addSubview:_tableView = tableView];
     }
     return _tableView;

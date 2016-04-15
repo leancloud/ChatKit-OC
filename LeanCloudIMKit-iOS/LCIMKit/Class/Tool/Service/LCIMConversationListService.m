@@ -63,7 +63,9 @@
         NSArray *sortedRooms = [conversations sortedArrayUsingComparator:^NSComparisonResult(AVIMConversation *conv1, AVIMConversation *conv2) {
             return (NSComparisonResult)(conv2.lcim_lastMessage.sendTimestamp - conv1.lcim_lastMessage.sendTimestamp);
         }];
-        !block ?: block(sortedRooms, totalUnreadCount, error);
+        dispatch_async(dispatch_get_main_queue(),^{
+            !block ?: block(sortedRooms, totalUnreadCount, error);
+        });
         [[LCIMUserSystemService sharedInstance] cacheUsersWithIds:userIds callback:^(BOOL succeeded, NSError *error) {
             if (error) {
                 NSLog(@"%@",error.localizedDescription);
@@ -75,6 +77,10 @@
 - (void)selectOrRefreshConversationsWithBlock:(AVIMArrayResultBlock)block {
     static BOOL refreshedFromServer = NO;
     NSArray *conversations = [[LCIMConversationService sharedInstance] allRecentConversations];
+    if (conversations.count == 0) {
+        !block ?: block(conversations, nil);
+        return;
+    }
     if (refreshedFromServer == NO && [LCIMSessionService sharedInstance].connect) {
         NSMutableSet *conversationIds = [NSMutableSet set];
         for (AVIMConversation *conversation in conversations) {
@@ -95,7 +101,7 @@
 }
 
 - (void)fetchConversationsWithConversationIds:(NSSet *)conversationIds callback:(LCIMArrayResultBlock)callback {
-    if (conversationIds.count > 0) {
+
         AVIMConversationQuery *query = [[LCIMSessionService sharedInstance].client conversationQuery];
         [query whereKey:@"objectId" containedIn:[conversationIds allObjects]];
         query.cachePolicy = kAVCachePolicyNetworkElseCache;
@@ -120,7 +126,6 @@
                 }
             }
         }];
-    }
 }
 
 #pragma mark -
