@@ -13,7 +13,6 @@ static CGFloat const kTime = 2.0f;
 
 @implementation UIViewController (LCIMAddition)
 
-
 //---------------------显示成功,几秒后消失------------------------------------
 /** 显示成功文字和图片,几秒后消失 */
 + (void)showSuccess:(NSString *)success {

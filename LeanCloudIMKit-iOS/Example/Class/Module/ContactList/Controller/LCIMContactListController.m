@@ -10,7 +10,6 @@
 #import "LCIMContactCell.h"
 #import "LCIMKit_Internal.h"
 #import "LCIMUser.h"
-#import "LCIMUserSystemService.h"
 #import "LCIMContactManager.h"
 #import "LCIMKitExample.h"
 
@@ -113,7 +112,7 @@ static NSString *const LCIMContactListControllerIdentifier = @"LCIMContactListCo
     cell.identifier = peerId;
     __block NSString *displayName = nil;
     __block NSURL *avatorURL = nil;
-    [[LCIMUserSystemService sharedInstance] getCachedProfileIfExists:peerId name:&displayName avatorURL:&avatorURL error:&error];
+    [[LCIMKit sharedInstance] getCachedProfileIfExists:peerId name:&displayName avatorURL:&avatorURL error:&error];
     if (error) {
         NSLog(@"%@", error);
     }
@@ -121,7 +120,7 @@ static NSString *const LCIMContactListControllerIdentifier = @"LCIMContactListCo
         displayName = peerId;
         __weak __typeof(self) weakSelf = self;
         __weak __typeof(cell) weakCell = cell;
-        [[LCIMUserSystemService sharedInstance] getProfileInBackgroundForUserId:peerId callback:^(id<LCIMUserModelDelegate> user, NSError *error) {
+        [[LCIMKit sharedInstance] getProfileInBackgroundForUserId:peerId callback:^(id<LCIMUserModelDelegate> user, NSError *error) {
             if (!error && [weakCell.identifier isEqualToString:user.userId]) {
                 NSIndexPath *indexPath_ = [weakSelf.tableView indexPathForCell:weakCell];
                 if (!indexPath_) {

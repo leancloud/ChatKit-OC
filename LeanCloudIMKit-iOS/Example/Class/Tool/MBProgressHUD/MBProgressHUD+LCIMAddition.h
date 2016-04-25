@@ -73,12 +73,6 @@
 
 - (BOOL)filterError:(NSError *)error;
 
-- (void)runInMainQueue:(void (^)())queue;
-
-- (void)runInGlobalQueue:(void (^)())queue;
-
-- (void)runAfterSecs:(float)secs block:(void (^)())block;
-
 - (void)showHUDText:(NSString *)text;
 
 - (void)toast:(NSString *)text;

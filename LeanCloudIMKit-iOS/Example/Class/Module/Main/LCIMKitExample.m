@@ -13,6 +13,7 @@
 #import "LCIMUser.h"
 #import "LCIMChatController.h"
 #import "MWPhotoBrowser.h"
+#import <objc/runtime.h>
 
 //==================================================================================================================================
 //If you want to see the storage of this demo, log in public account of leancloud.cn, search for the app named `LeanCloudIMKit-iOS`.
@@ -25,6 +26,9 @@
 static NSString *const LCIMAPPID = @"x3o016bxnkpyee7e9pa5pre6efx2dadyerdlcez0wbzhw25g";
 static NSString *const LCIMAPPKEY = @"057x24cfdzhffnl3dzk14jh9xo2rq6w1hy1fdzt5tv46ym78";
 
+//static NSString *const LCIMAPPID = @"dYRQ8YfHRiILshUnfFJu2eQM-gzGzoHsz";
+//static NSString *const LCIMAPPKEY = @"ye24iIK6ys8IvaISMC4Bs5WK";
+
 // Dictionary that holds all instances of Singleton include subclasses
 static NSMutableDictionary *_sharedInstances = nil;
 
@@ -32,7 +36,6 @@ static NSMutableDictionary *_sharedInstances = nil;
 
 @property (nonatomic, strong) NSMutableArray *photos;
 @property (nonatomic, strong) NSMutableArray *thumbs;
-
 @property (nonatomic, strong) NSMutableArray *selections;
 
 @end
@@ -130,15 +133,15 @@ static NSMutableDictionary *_sharedInstances = nil;
 }
 
 + (void)invokeThisMethodInApplicationWillResignActive:(UIApplication *)application {
-    [[LCIMSettingService sharedInstance] syncBadge];
+    [[LCIMKit sharedInstance] syncBadge];
 }
 
 + (void)invokeThisMethodInApplicationWillTerminate:(UIApplication *)application {
-    [[LCIMSettingService sharedInstance] syncBadge];
+    [[LCIMKit sharedInstance] syncBadge];
 }
 
 #pragma -
-#pragma mark - LCIMSettingService Method
+#pragma mark - init Method
 
 /**
  *  初始化的示例代码
@@ -216,7 +219,6 @@ static NSMutableDictionary *_sharedInstances = nil;
 - (NSArray *)exampleConversationEditActionAtIndexPath:(NSIndexPath *)indexPath
                               conversation:(AVIMConversation *)conversation
                                 controller:(LCIMConversationListViewController *)controller {
-
     // 如果需要自定义其他会话的菜单，在此编辑
     return [self rightButtonsAtIndexPath:indexPath conversation:conversation controller:controller];
 }
@@ -234,7 +236,7 @@ typedef void (^UITableViewRowActionHandler)(UITableViewRowAction *action, NSInde
             }
             *handler = ^(UITableViewRowAction *action, NSIndexPath *indexPath) {
                 [controller.tableView setEditing:NO animated:YES];
-                [[LCIMConversationService sharedInstance] updateUnreadCountToZeroWithConversation:conversation];
+                [[LCIMKit sharedInstance] updateUnreadCountToZeroWithConversation:conversation];
                 [controller refresh];
             };
         } else {
@@ -243,7 +245,7 @@ typedef void (^UITableViewRowActionHandler)(UITableViewRowAction *action, NSInde
             }
             *handler = ^(UITableViewRowAction *action, NSIndexPath *indexPath) {
                 [controller.tableView setEditing:NO animated:YES];
-                [[LCIMConversationService sharedInstance] increaseUnreadCountWithConversation:conversation];
+                [[LCIMKit sharedInstance] increaseUnreadCountWithConversation:conversation];
                 [controller refresh];
             };
         }
@@ -268,7 +270,7 @@ typedef void (^UITableViewRowActionHandler)(UITableViewRowAction *action, NSInde
     UITableViewRowAction *actionItemDelete = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleDefault
                                                                                 title:@"Delete"
                                                                               handler:^(UITableViewRowAction *action, NSIndexPath *indexPath) {
-                                                                                          [[LCIMConversationService sharedInstance] deleteRecentConversation:conversation];
+                                                                                          [[LCIMKit sharedInstance] deleteRecentConversation:conversation];
                                                                                   [controller refresh];
                                                                               }];
     return @[ actionItemDelete, actionItemMore ];
@@ -282,11 +284,28 @@ typedef void (^UITableViewRowActionHandler)(UITableViewRowAction *action, NSInde
  */
 + (void)exampleOpenConversationViewControllerWithPeerId:(NSString *)peerId fromNavigationController:(UINavigationController *)navigationController {
     LCIMChatController *conversationViewController = [[LCIMChatController alloc] initWithPeerId:peerId];
+    [conversationViewController setViewDidLoadBlock:^(LCIMBaseViewController *viewController) {
+        [viewController configureBarButtonItemStyle:LCIMBarButtonItemStyleSingleProfile action:^{
+            NSString *title = @"打开用户详情";
+            NSString *subTitle = [NSString stringWithFormat:@"用户id：%@", peerId];
+            [LCIMUtil showNotificationWithTitle:title subtitle:subTitle type:LCIMMessageNotificationTypeMessage];
+        }];
+    }];
     [self pushToViewController:conversationViewController];
 }
 
+
+
 + (void)exampleOpenConversationViewControllerWithConversaionId:(NSString *)conversationId fromNavigationController:(UINavigationController *)aNavigationController {
-    LCIMChatController *conversationViewController =[[LCIMChatController alloc] initWithConversationId:conversationId];
+    LCIMChatController *conversationViewController = [[LCIMChatController alloc] initWithConversationId:conversationId];
+    [conversationViewController setViewDidLoadBlock:^(LCIMBaseViewController *viewController) {
+        [viewController configureBarButtonItemStyle:LCIMBarButtonItemStyleGroupProfile action:^{
+            NSString *title = @"打开用户详情";
+            NSString *subTitle = [NSString stringWithFormat:@"群聊id：%@", conversationId];
+            [LCIMUtil showNotificationWithTitle:title subtitle:subTitle type:LCIMMessageNotificationTypeMessage];
+        }];
+    }];
+
     [self pushToViewController:conversationViewController];
 }
 

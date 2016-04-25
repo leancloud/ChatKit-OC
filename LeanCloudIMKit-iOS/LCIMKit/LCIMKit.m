@@ -13,38 +13,6 @@ static NSMutableDictionary *_sharedInstances = nil;
 
 @interface LCIMKit ()
 
-@property (nonatomic, copy, readwrite) LCIMOpenProfileBlock openProfileBlock;
-
-/*!
- * open or close client Service
- */
-@property (nonatomic, strong, readwrite) LCIMSessionService *sessionService;
-
-/*!
- * User-System Service
- */
-@property (nonatomic, strong, readwrite) LCIMUserSystemService *userSystemService;
-
-/*!
- * Signature Service
- */
-@property (nonatomic, strong, readwrite) LCIMSignatureService *signatureService;
-
-/*!
- * Setting Service
- */
-@property (nonatomic, strong, readwrite) LCIMSettingService *settingService;
-
-/*!
- * UI Service
- */
-@property (nonatomic, strong, readwrite) LCIMUIService *UIService;
-
-/*!
- * Conversation Service
- */
-@property (nonatomic, strong, readwrite) LCIMConversationService *conversationService;
-
 @end
 
 @implementation LCIMKit
@@ -132,15 +100,15 @@ static NSMutableDictionary *_sharedInstances = nil;
 ///---------------------------------------------------------------------
 
 - (NSString *)clientId {
-    return [[LCIMKit sharedInstance] sessionService].clientId;
+    return self.sessionService.clientId;
 }
 
 - (void)openWithClientId:(NSString *)clientId callback:(LCIMBooleanResultBlock)callback {
-    [[[LCIMKit sharedInstance] sessionService] openWithClientId:clientId callback:callback];
+    [self.sessionService openWithClientId:clientId callback:callback];
 }
 
 - (void)closeWithCallback:(LCIMBooleanResultBlock)callback {
-    [[[LCIMKit sharedInstance] sessionService] closeWithCallback:callback];
+    [self.sessionService closeWithCallback:callback];
 }
 
 ///--------------------------------------------------------------------
@@ -151,11 +119,19 @@ static NSMutableDictionary *_sharedInstances = nil;
 #pragma mark - LCIMUserSystemService
 
 - (void)setFetchProfilesBlock:(LCIMFetchProfilesBlock)fetchProfilesBlock {
-    [[[LCIMKit sharedInstance] userSystemService] setFetchProfilesBlock:fetchProfilesBlock];
+    [self.userSystemService setFetchProfilesBlock:fetchProfilesBlock];
 }
 
 - (void)removeAllCachedProfiles {
-    [[[LCIMKit sharedInstance] userSystemService] removeAllCachedProfiles];
+    [self.userSystemService removeAllCachedProfiles];
+}
+
+- (void)getCachedProfileIfExists:(NSString *)userId name:(NSString **)name avatorURL:(NSURL **)avatorURL error:(NSError * __autoreleasing *)error {
+    [self.userSystemService getCachedProfileIfExists:userId name:name avatorURL:avatorURL error:error];
+}
+
+- (void)getProfileInBackgroundForUserId:(NSString *)userId callback:(LCIMUserResultCallBack)callback {
+    [self.userSystemService getProfileInBackgroundForUserId:userId callback:callback];
 }
 
 ///--------------------------------------------------------------------
@@ -166,11 +142,11 @@ static NSMutableDictionary *_sharedInstances = nil;
 #pragma mark - LCIMSignatureService
 
 - (void)setGenerateSignatureBlock:(LCIMGenerateSignatureBlock)generateSignatureBlock {
-    [[[LCIMKit sharedInstance] signatureService] setGenerateSignatureBlock:generateSignatureBlock];
+    [self.signatureService setGenerateSignatureBlock:generateSignatureBlock];
 }
 
 - (LCIMGenerateSignatureBlock)generateSignatureBlock {
-    return [[[LCIMKit sharedInstance] signatureService] generateSignatureBlock];
+    return [self.signatureService generateSignatureBlock];
 }
 
 ///--------------------------------------------------------------------
@@ -183,20 +159,19 @@ static NSMutableDictionary *_sharedInstances = nil;
 #pragma mark - - Open Profile
 
 - (void)setOpenProfileBlock:(LCIMOpenProfileBlock)openProfileBlock {
-    [[[LCIMKit sharedInstance] UIService] setOpenProfileBlock:openProfileBlock];
+    [self.UIService setOpenProfileBlock:openProfileBlock];
 }
 
 - (void)setPreviewImageMessageBlock:(LCIMPreviewImageMessageBlock)previewImageMessageBlock {
-    [[[LCIMKit sharedInstance] UIService] setPreviewImageMessageBlock:previewImageMessageBlock];
+    [self.UIService setPreviewImageMessageBlock:previewImageMessageBlock];
 }
 
 - (void)setPreviewLocationMessageBlock:(LCIMPreviewLocationMessageBlock)previewLocationMessageBlock {
-    [[[LCIMKit sharedInstance] UIService] setPreviewLocationMessageBlock:previewLocationMessageBlock];
+    [self.UIService setPreviewLocationMessageBlock:previewLocationMessageBlock];
 }
 
-
 - (void)setShowNotificationBlock:(LCIMShowNotificationBlock)showNotificationBlock {
-    [[[LCIMKit sharedInstance] UIService] setShowNotificationBlock:showNotificationBlock];
+    [self.UIService setShowNotificationBlock:showNotificationBlock];
 }
 
 ///---------------------------------------------------------------------
@@ -238,15 +213,27 @@ static NSMutableDictionary *_sharedInstances = nil;
 #pragma mark - LCIMConversationService
 
 - (void)fecthConversationWithConversationId:(NSString *)conversationId callback:(AVIMConversationResultBlock)callback {
-    [[[LCIMKit sharedInstance] conversationService] fecthConversationWithConversationId:conversationId callback:callback];
+    [self.conversationService fecthConversationWithConversationId:conversationId callback:callback];
 }
 
 - (void)fecthConversationWithPeerId:(NSString *)peerId callback:(AVIMConversationResultBlock)callback {
-    [[[LCIMKit sharedInstance] conversationService] fecthConversationWithPeerId:peerId callback:callback];
+    [self.conversationService fecthConversationWithPeerId:peerId callback:callback];
 }
 
 - (void)didReceiveRemoteNotification:(NSDictionary *)userInfo {
-    [[LCIMKit sharedInstance] didReceiveRemoteNotification:userInfo];
+    [self.conversationService didReceiveRemoteNotification:userInfo];
+}
+
+- (void)increaseUnreadCountWithConversation:(AVIMConversation *)conversation {
+    [self.conversationService increaseUnreadCountWithConversation:conversation];
+}
+
+- (void)deleteRecentConversation:(AVIMConversation *)conversation {
+    [self.conversationService deleteRecentConversation:conversation];
+}
+
+- (void)updateUnreadCountToZeroWithConversation:(AVIMConversation *)conversation {
+    [self.conversationService updateUnreadCountToZeroWithConversation:conversation];
 }
 
 ///---------------------------------------------------------------------
@@ -254,19 +241,19 @@ static NSMutableDictionary *_sharedInstances = nil;
 ///---------------------------------------------------------------------
 
 - (void)setDidSelectItemBlock:(LCIMConversationsListDidSelectItemBlock)didSelectItemBlock {
-    [[[LCIMKit sharedInstance] conversationListService] setDidSelectItemBlock:didSelectItemBlock];
+    [self.conversationListService setDidSelectItemBlock:didSelectItemBlock];
 }
 
 - (void)setDidDeleteItemBlock:(LCIMConversationsListDidDeleteItemBlock)didDeleteItemBlock {
-    [[[LCIMKit sharedInstance] conversationListService] setDidDeleteItemBlock:didDeleteItemBlock];
+    [self.conversationListService setDidDeleteItemBlock:didDeleteItemBlock];
 }
 
 - (void)setConversationEditActionBlock:(LCIMConversationEditActionsBlock)conversationEditActionBlock {
-    [[[LCIMKit sharedInstance] conversationListService] setConversationEditActionBlock:conversationEditActionBlock];
+    [self.conversationListService setConversationEditActionBlock:conversationEditActionBlock];
 }
 
 - (void)setMarkBadgeWithTotalUnreadCountBlock:(LCIMMarkBadgeWithTotalUnreadCountBlock)markBadgeWithTotalUnreadCountBlock {
-    [[[LCIMKit sharedInstance] conversationListService] setMarkBadgeWithTotalUnreadCountBlock:markBadgeWithTotalUnreadCountBlock];
+    [self.conversationListService setMarkBadgeWithTotalUnreadCountBlock:markBadgeWithTotalUnreadCountBlock];
 }
 
 //TODO:CacheService;

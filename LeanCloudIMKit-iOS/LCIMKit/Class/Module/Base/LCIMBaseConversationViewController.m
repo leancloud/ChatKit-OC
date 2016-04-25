@@ -16,9 +16,6 @@
 #import "LCIMConversationRefreshHeader.h"
 
 @interface LCIMBaseConversationViewController ()
-//@property (nonatomic, strong) UIActivityIndicatorView *loadMoreActivityIndicatorView;
-//@property (nonatomic, strong) UIView *headerContainerView;
-
 @end
 
 @implementation LCIMBaseConversationViewController
@@ -43,48 +40,7 @@
             [self loadMoreMessagesScrollTotop];
         }
     }];
-//    [self setTableViewInsetsWithBottomValue:kLCIMChatBarMinHeight];
 }
-
-//- (UIView *)headerContainerView {
-//    if (!_headerContainerView) {
-//        _headerContainerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.view.bounds), 44)];
-//        _headerContainerView.backgroundColor = self.tableView.backgroundColor;
-//#ifdef LCIMDebugging
-//        _headerContainerView.backgroundColor = [UIColor redColor];
-//#endif
-//        [_headerContainerView addSubview:self.loadMoreActivityIndicatorView];
-//        self.loadMoreActivityIndicatorView.center = CGPointMake(CGRectGetWidth(_headerContainerView.bounds) / 2.0, CGRectGetHeight(_headerContainerView.bounds) / 2.0);
-//    }
-//    return _headerContainerView;
-//}
-
-- (void)setLoadingMoreMessage:(BOOL)loadingMoreMessage {
-    _loadingMoreMessage = loadingMoreMessage;
-//    if (loadingMoreMessage) {
-//        dispatch_async(dispatch_get_main_queue(),^{
-//            if (!self.loadMoreActivityIndicatorView.isAnimating) {
-//                [self.loadMoreActivityIndicatorView startAnimating];
-//            }
-//        });
-//    } else {
-//        dispatch_async(dispatch_get_main_queue(),^{
-//            if (self.loadMoreActivityIndicatorView.isAnimating) {
-//                [self.loadMoreActivityIndicatorView stopAnimating];
-//            }
-//        });
-//    }
-}
-
-//- (UIActivityIndicatorView *)loadMoreActivityIndicatorView {
-//    if (!_loadMoreActivityIndicatorView) {
-//        _loadMoreActivityIndicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-//#ifdef LCIMDebugging
-//        _loadMoreActivityIndicatorView.backgroundColor = [UIColor blueColor];
-//#endif
-//    }
-//    return _loadMoreActivityIndicatorView;
-//}
 
 - (void)loadMoreMessagesScrollTotop {
     // This enforces implementing this method in subclasses

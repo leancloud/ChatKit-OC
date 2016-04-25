@@ -19,7 +19,6 @@
 		9A152E741CB4B03600EF35B5 /* LCIMPlusButtonSubclass.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A152DDD1CB4B03600EF35B5 /* LCIMPlusButtonSubclass.m */; };
 		9A152E751CB4B03600EF35B5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9A152DDF1CB4B03600EF35B5 /* Assets.xcassets */; };
 		9A152E761CB4B03600EF35B5 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9A152DE01CB4B03600EF35B5 /* LaunchScreen.storyboard */; };
-		9A152E771CB4B03600EF35B5 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9A152DE21CB4B03600EF35B5 /* Info.plist */; };
 		9A152E781CB4B03600EF35B5 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A152DE31CB4B03600EF35B5 /* main.m */; };
 		9A152E791CB4B03600EF35B5 /* MBProgressHUD+LCIMAddition.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A152DE71CB4B03600EF35B5 /* MBProgressHUD+LCIMAddition.m */; };
 		9A152E7A1CB4B03600EF35B5 /* MBProgressHUD.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 9A152DE81CB4B03600EF35B5 /* MBProgressHUD.bundle */; };
@@ -1428,7 +1427,7 @@
 		9AEE61B81C607B150049335C /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0720;
+				LastUpgradeCheck = 0730;
 				ORGANIZATIONNAME = EloncChan;
 				TargetAttributes = {
 					9AEE61BF1C607B150049335C = {
@@ -1465,7 +1464,6 @@
 				9A1530281CB4C24A00EF35B5 /* LCIMKitString.strings in Resources */,
 				9A152E761CB4B03600EF35B5 /* LaunchScreen.storyboard in Resources */,
 				9A1530241CB4C24A00EF35B5 /* ChatKeyboard.bundle in Resources */,
-				9A152E771CB4B03600EF35B5 /* Info.plist in Resources */,
 				9A15302A1CB4C24A00EF35B5 /* Placeholder.bundle in Resources */,
 				9A1530261CB4C24A00EF35B5 /* Emoji.bundle in Resources */,
 				9A1530271CB4C24A00EF35B5 /* GifMoticons.bundle in Resources */,
@@ -1774,6 +1772,7 @@
 			baseConfigurationReference = ECBE0565469B5C113C407217 /* Pods.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/LeanCloudIMKit-iOS/internal/ChatBar/Vendors/VoiceLib",
@@ -1797,6 +1796,7 @@
 			baseConfigurationReference = 19D15C89E9A800BC9D6889DF /* Pods.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/LeanCloudIMKit-iOS/internal/ChatBar/Vendors/VoiceLib",

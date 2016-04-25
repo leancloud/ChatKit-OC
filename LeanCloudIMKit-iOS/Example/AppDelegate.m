@@ -72,4 +72,16 @@
     }
 }
 
+- (void)applicationWillResignActive:(UIApplication *)application {
+    [LCIMKitExample invokeThisMethodInApplicationWillResignActive:application];
+}
+
+- (void)applicationWillTerminate:(UIApplication *)application {
+    [LCIMKitExample invokeThisMethodInApplicationWillTerminate:application];
+}
+
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
+    [LCIMKitExample invokeThisMethodInApplication:application didReceiveRemoteNotification:userInfo];
+}
+
 @end

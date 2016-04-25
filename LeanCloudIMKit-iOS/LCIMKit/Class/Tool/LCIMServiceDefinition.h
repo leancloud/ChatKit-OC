@@ -71,6 +71,9 @@ typedef void(^LCIMFetchProfilesBlock)(NSArray<NSString *> *userIds, LCIMFetchPro
  */
 - (void)removeAllCachedProfiles;
 
+- (void)getCachedProfileIfExists:(NSString *)userId name:(NSString **)name avatorURL:(NSURL **)avatorURL error:(NSError * __autoreleasing *)error;
+- (void)getProfileInBackgroundForUserId:(NSString *)userId callback:(LCIMUserResultCallBack)callback;
+
 @end
 
 ///--------------------------------------------------------------------
@@ -251,6 +254,24 @@ typedef void (^LCIMConversationResultBlock)(AVIMConversation *conversation, NSEr
 @protocol LCIMConversationService <NSObject>
 
 - (void)didReceiveRemoteNotification:(NSDictionary *)userInfo;
+
+/**
+ *  增加未读数
+ *  @param conversation 相应对话
+ */
+- (void)increaseUnreadCountWithConversation:(AVIMConversation *)conversation;
+
+/**
+ *  最近对话列表左滑删除本地数据库的对话，将不显示在列表
+ *  @param conversation
+ */
+- (void)deleteRecentConversation:(AVIMConversation *)conversation;
+
+/**
+ *  清空未读数
+ *  @param conversation 相应的对话
+ */
+- (void)updateUnreadCountToZeroWithConversation:(AVIMConversation *)conversation;
 
 @end
 

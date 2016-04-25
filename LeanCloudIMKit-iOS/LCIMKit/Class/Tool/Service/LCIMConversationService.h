@@ -82,24 +82,6 @@ FOUNDATION_EXTERN NSString *const LCIMConversationServiceErrorDomain;
 - (void)insertRecentConversation:(AVIMConversation *)conversation;
 
 /**
- *  增加未读数
- *  @param conversation 相应对话
- */
-- (void)increaseUnreadCountWithConversation:(AVIMConversation *)conversation;
-
-/**
- *  最近对话列表左滑删除本地数据库的对话，将不显示在列表
- *  @param conversation
- */
-- (void)deleteRecentConversation:(AVIMConversation *)conversation;
-
-/**
- *  清空未读数
- *  @param conversation 相应的对话
- */
-- (void)updateUnreadCountToZeroWithConversation:(AVIMConversation *)conversation;
-
-/**
  *  更新 mentioned 值，当接收到消息发现 @了我的时候，设为 YES，进入聊天页面，设为 NO
  *  @param mentioned  要更新的值
  *  @param conversation 相应对话
