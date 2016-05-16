@@ -156,7 +156,6 @@ static CGFloat const kFailureMessageTime = 0.3f;
 
 - (BOOL)alertError:(NSError *)error {
     if (error) {
-        NSLog(@"🔴类名与方法名：%@（在第%@行），描述：%@", @(__PRETTY_FUNCTION__), @(__LINE__), error.description);
 //        [AVAnalytics event:@"Alert Error" attributes:@{@"desc": error.description}];
     }
     if (error) {

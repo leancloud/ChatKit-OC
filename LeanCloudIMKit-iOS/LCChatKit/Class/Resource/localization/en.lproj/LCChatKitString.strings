@@ -1,0 +1,36 @@
+//  LCChatKitString.strings
+//  LeanCloudChatKit-iOS
+//
+//  Created by ElonChan on 16/3/1.
+//  Copyright © 2016年 LeanCloud. All rights reserved.
+//
+"Delete" = "Delete";
+"copy" = "copy";
+"transpond" = "transpond";
+"favorites" = "favorites";
+"more" = "more";
+"Location" = "Location";
+"Photo" = "Photo";
+"TextDetail" = "TextDetail";
+"Video" = "Video";
+"News" = "News";
+"Contact" = "Contact";
+"Chat" = "Chat";
+"Emotion" = "Emotion";
+"Album" = "Album";
+"Bottle" = "Bottle";
+"NearbyPeople" = "NearbyPeople";
+"Shake" = "Shake";
+"Scanning" = "Scanning";
+"Gamge" = "Gamge";
+"Expression" = "Expression";
+"MyAlbum" = "MyAlbum";
+"MyBankCard" = "MyBankCard";
+"MyFavorites" = "MyFavorites";
+"MyProfileInfo" = "MyProfileInfo";
+"Setting" = "Setting";
+"Profile" = "Profile";
+"News" = "News";
+"Voice" = "Voice";
+"Sight" = "Sight";
+"Community" = "Community";
