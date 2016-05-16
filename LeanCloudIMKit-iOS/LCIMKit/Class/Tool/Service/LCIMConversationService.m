@@ -27,18 +27,6 @@ NSString *const LCIMConversationServiceErrorDomain = @"LCIMConversationServiceEr
 @implementation LCIMConversationService
 
 /**
- * create a singleton instance of LCIMConversationService
- */
-+ (instancetype)sharedInstance {
-    static LCIMConversationService *_sharedLCIMConversationService = nil;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        _sharedLCIMConversationService = [[self alloc] init];
-    });
-    return _sharedLCIMConversationService;
-}
-
-/**
  *  根据 conversationId 获取对话
  *  @param convid   对话的 id
  *  @param callback
@@ -73,7 +61,6 @@ NSString *const LCIMConversationServiceErrorDomain = @"LCIMConversationServiceEr
         }
     }];
 }
-
 
 - (void)fecthConversationWithPeerId:(NSString *)peerId callback:(AVIMConversationResultBlock)callback {
     if ([peerId isEqualToString:[[LCIMSessionService sharedInstance] clientId]]) {
@@ -155,7 +142,8 @@ NSString *const LCIMConversationServiceErrorDomain = @"LCIMConversationServiceEr
 }
 
 - (void)setupSucceedMessageDatabaseWithPath:(NSString *)path {
-    if (self.databaseQueue) {
+    if (!self.databaseQueue) {
+        //FIXME:when tom log out then jerry login , log this
         DLog(@"database queue should not be nil !!!!");
     }
     self.databaseQueue = [FMDatabaseQueue databaseQueueWithPath:path];
@@ -173,6 +161,7 @@ NSString *const LCIMConversationServiceErrorDomain = @"LCIMConversationServiceEr
 }
 
 - (AVIMConversation *)conversationFromData:(NSData *)data{
+
     AVIMKeyedConversation *keyedConversation = [NSKeyedUnarchiver unarchiveObjectWithData:data];
     return [[LCIMSessionService sharedInstance].client conversationWithKeyedConversation:keyedConversation];
 }
@@ -189,7 +178,7 @@ NSString *const LCIMConversationServiceErrorDomain = @"LCIMConversationServiceEr
     }];
 }
 
-- (void )insertRecentConversation:(AVIMConversation *)conversation {
+- (void)insertRecentConversation:(AVIMConversation *)conversation {
     if (conversation.creator == nil) {
         return;
     }
@@ -268,21 +257,24 @@ NSString *const LCIMConversationServiceErrorDomain = @"LCIMConversationServiceEr
 /**
  *  删除全部缓存，比如当切换用户时，如果同一个人显示的名称和头像需要变更
  */
-- (void)removeAllCache {
+- (void)removeAllCachedRecentConversations {
     //TODO:
-    [self allRecentConversations];
+    [self.databaseQueue inDatabase:^(FMDatabase *db) {
+//        [db executeUpdate:LCIMDeleteConversationTable];
+    }];
 }
 
-///---------------------------------------------------------------------
+///----------------------------------------------------------------------
 ///---------------------FailedMessageStore-------------------------------
-///---------------------------------------------------------------------
+///----------------------------------------------------------------------
 
 /**
  *  openClient 时调用
  *  @param path 与 clientId 相关
  */
 - (void)setupFailedMessagesDBWithDatabasePath:(NSString *)path {
-    if (self.databaseQueue) {
+    if (!self.databaseQueue) {
+        //FIXME:when tom log out then jerry login , log this
         DLog(@"database queue should not be nil !!!!");
     }
     self.databaseQueue = [FMDatabaseQueue databaseQueueWithPath:path];
@@ -365,7 +357,10 @@ NSString *const LCIMConversationServiceErrorDomain = @"LCIMConversationServiceEr
 
 #pragma mark - utils
 
-- (void)sendMessage:(AVIMTypedMessage*)message conversation:(AVIMConversation *)conversation callback:(LCIMBooleanResultBlock)block {
+- (void)sendMessage:(AVIMTypedMessage*)message
+       conversation:(AVIMConversation *)conversation
+      progressBlock:(AVProgressBlock)progressBlock
+           callback:(LCIMBooleanResultBlock)block {
     id<LCIMUserModelDelegate> currentUser = [[LCIMUserSystemService sharedInstance] fetchCurrentUser];
     NSMutableDictionary *attributes = [NSMutableDictionary dictionary];
     // 云代码中获取到用户名，来设置推送消息, 老王:今晚约吗？
@@ -382,7 +377,7 @@ NSString *const LCIMConversationServiceErrorDomain = @"LCIMConversationServiceEr
         [attributes addEntriesFromDictionary:message.attributes];
         message.attributes = attributes;
     }
-    [conversation sendMessage:message options:AVIMMessageSendOptionRequestReceipt callback:block];
+    [conversation sendMessage:message options:AVIMMessageSendOptionRequestReceipt progressBlock:progressBlock callback:block];
 }
 
 - (void)sendWelcomeMessageToPeerId:(NSString *)peerId text:(NSString *)text block:(LCIMBooleanResultBlock)block {
@@ -391,7 +386,7 @@ NSString *const LCIMConversationServiceErrorDomain = @"LCIMConversationServiceEr
             !block ?: block(NO, error);
         } else {
             AVIMTextMessage *textMessage = [AVIMTextMessage messageWithText:text attributes:nil];
-            [self sendMessage:textMessage conversation:conversation callback:block];
+            [self sendMessage:textMessage conversation:conversation progressBlock:nil callback:block];
         }
     }];
 }
@@ -454,18 +449,8 @@ NSString *const LCIMConversationServiceErrorDomain = @"LCIMConversationServiceEr
     });
 }
 
-#pragma mark -
-#pragma mark - LazyLoad Method
-
-/**
- *  lazy load client
- *
- *  @return AVIMClient
- */
 - (AVIMClient *)client {
-    if (_client == nil) {
-        _client = [[LCIMSessionService sharedInstance] client];
-    }
+    _client = [LCIMSessionService sharedInstance].client;
     return _client;
 }
 

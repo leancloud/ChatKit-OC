@@ -15,7 +15,7 @@
  */
 FOUNDATION_EXTERN NSString *const LCIMSessionServiceErrorDemain;
 
-@interface LCIMSessionService : NSObject <LCIMSessionService>
+@interface LCIMSessionService : LCCKSingleton <LCIMSessionService>
 
 @property (nonatomic, copy, readonly) NSString *clientId;
 
@@ -28,7 +28,5 @@ FOUNDATION_EXTERN NSString *const LCIMSessionServiceErrorDemain;
  *  是否和聊天服务器连通
  */
 @property (nonatomic, assign, readonly) BOOL connect;
-
-+ (instancetype)sharedInstance;
 
 @end

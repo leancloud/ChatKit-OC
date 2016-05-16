@@ -15,40 +15,26 @@ NSString *const LCIMUserSystemServiceErrorDomain = @"LCIMUserSystemServiceErrorD
 
 @property (nonatomic, copy, readwrite) LCIMFetchProfilesBlock fetchProfilesBlock;
 @property (nonatomic, strong) NSMutableDictionary *cachedUsers;
-@property (nonatomic, strong) NSMutableDictionary *cachedUserNames;
-@property (nonatomic, strong) NSMutableDictionary *cachedUserAvators;
 
 @end
 
 @implementation LCIMUserSystemService
 
-/**
- * create a singleton instance of LCIMUserSystemService
- */
-+ (instancetype)sharedInstance {
-    static LCIMUserSystemService *_sharedLCIMUserSystemService = nil;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        _sharedLCIMUserSystemService = [[self alloc] init];
-    });
-    return _sharedLCIMUserSystemService;
-}
-
 - (NSArray<id<LCIMUserModelDelegate>> *)getProfilesForUserIds:(NSArray<NSString *> *)userIds error:(NSError * __autoreleasing *)theError {
     __block NSArray<id<LCIMUserModelDelegate>> *blockUsers = [NSArray array];
-//    __block BOOL hasCallback = NO;
-//    __block NSError *blockError;
-//    [self getProfilesInBackgroundForUserIds:userIds callback:^(NSArray<id<LCIMUserModelDelegate>> *users, NSError *error) {
-//        if (error) {
-//            blockError = error;
-//        }
-//        blockUsers = users;
-//        hasCallback = YES;
-//    }];
-//    LCIM_WAIT_TIL_TRUE(hasCallback, 0.1);
-//    if (theError != NULL) {
-//        *theError = blockError;
-//    }
+    //    __block BOOL hasCallback = NO;
+    //    __block NSError *blockError;
+    //    [self getProfilesInBackgroundForUserIds:userIds callback:^(NSArray<id<LCIMUserModelDelegate>> *users, NSError *error) {
+    //        if (error) {
+    //            blockError = error;
+    //        }
+    //        blockUsers = users;
+    //        hasCallback = YES;
+    //    }];
+    //    LCIM_WAIT_TIL_TRUE(hasCallback, 0.1);
+    //    if (theError != NULL) {
+    //        *theError = blockError;
+    //    }
     //TODO:
     if (!_fetchProfilesBlock) {
         // This enforces implementing `-setFetchProfilesBlock:`.
@@ -58,17 +44,12 @@ NSString *const LCIMUserSystemServiceErrorDomain = @"LCIMUserSystemServiceErrorD
                                      userInfo:nil];
         return nil;
     }
-    
-    
-    _fetchProfilesBlock(userIds, ^(NSArray<id<LCIMUserModelDelegate>> *users, NSError *error) {
+    LCIMFetchProfilesCallBack callback = ^(NSArray<id<LCIMUserModelDelegate>> *users, NSError *error) {
         blockUsers = users;
-        for (id<LCIMUserModelDelegate> user in users) {
-            self.cachedUsers[user.userId] = user;
-        }
-    });
+        [self cacheUsers:users];
+    };
+    _fetchProfilesBlock(userIds, callback);
     
-    
-
     return blockUsers;
 }
 
@@ -87,15 +68,8 @@ NSString *const LCIMUserSystemServiceErrorDomain = @"LCIMUserSystemServiceErrorD
         }
         
         _fetchProfilesBlock(userIds, ^(NSArray<id<LCIMUserModelDelegate>> *users, NSError *error) {
-            if (!error) {
-                for (id<LCIMUserModelDelegate> user in users) {
-                    if (user.name) {
-                        self.cachedUserNames[user.userId] = user.name;
-                    }
-                    if (user.avatorURL) {
-                        self.cachedUserAvators[user.userId] = user.avatorURL;
-                    }
-                }
+            if (!error && (users.count > 0)) {
+                [self cacheUsers:users];
                 dispatch_async(dispatch_get_main_queue(),^{
                     !callback ?: callback(users, nil);
                 });
@@ -109,6 +83,22 @@ NSString *const LCIMUserSystemServiceErrorDomain = @"LCIMUserSystemServiceErrorD
 }
 
 - (id<LCIMUserModelDelegate>)getProfileForUserId:(NSString *)userId error:(NSError * __autoreleasing *)theError {
+    if (!userId) {
+        NSInteger code = 0;
+        NSString *errorReasonText = @"UserId is nil";
+        NSDictionary *errorInfo = @{
+                                    @"code":@(code),
+                                    NSLocalizedDescriptionKey : errorReasonText,
+                                    };
+        NSError *error = [NSError errorWithDomain:LCIMUserSystemServiceErrorDomain
+                                             code:code
+                                         userInfo:errorInfo];
+        if (*theError == nil) {
+            *theError = error;
+        }
+        return nil;
+    }
+    
     id<LCIMUserModelDelegate> user = [self getCachedProfileIfExists:userId error:nil];
     if (user) {
         return user;
@@ -121,6 +111,19 @@ NSString *const LCIMUserSystemServiceErrorDomain = @"LCIMUserSystemServiceErrorD
 }
 
 - (void)getProfileInBackgroundForUserId:(NSString *)userId callback:(LCIMUserResultCallBack)callback {
+    if (!userId) {
+        NSInteger code = 0;
+        NSString *errorReasonText = @"UserId is nil";
+        NSDictionary *errorInfo = @{
+                                    @"code":@(code),
+                                    NSLocalizedDescriptionKey : errorReasonText,
+                                    };
+        NSError *error = [NSError errorWithDomain:LCIMUserSystemServiceErrorDomain
+                                             code:code
+                                         userInfo:errorInfo];
+        !callback ?: callback(nil, error);
+        return;
+    }
     [self getProfilesInBackgroundForUserIds:@[userId] callback:^(NSArray<id<LCIMUserModelDelegate>> *users, NSError *error) {
         if (!error && (users.count > 0)) {
             !callback ?: callback(users[0], nil);
@@ -131,20 +134,22 @@ NSString *const LCIMUserSystemServiceErrorDomain = @"LCIMUserSystemServiceErrorD
 }
 
 - (void)getCachedProfileIfExists:(NSString *)userId name:(NSString **)name avatorURL:(NSURL **)avatorURL error:(NSError * __autoreleasing *)theError {
-    NSString *userName_ = nil;
-    NSURL *avatorURL_ = nil;
     if (userId) {
-        userName_ = self.cachedUserNames[userId];
-        avatorURL_ = self.cachedUserAvators[userId];
-    }
-    if (userName_ || avatorURL_) {
-        if (*name == nil) {
-            *name = userName_;
+        NSString *userName_ = nil;
+        NSURL *avatorURL_ = nil;
+        id<LCIMUserModelDelegate> user = self.cachedUsers[userId];
+        userName_ = user.name;
+        avatorURL_ = user.avatorURL;
+        if (userName_ || avatorURL_) {
+            if (*name == nil) {
+                *name = userName_;
+            }
+            if (*avatorURL == nil) {
+                *avatorURL = avatorURL_;
+            }
+            return;
         }
-        if (*avatorURL == nil) {
-            *avatorURL = avatorURL_;
-        }
-        return;
+        
     }
     NSInteger code = 0;
     NSString *errorReasonText = @"No cached profile";
@@ -161,15 +166,13 @@ NSString *const LCIMUserSystemServiceErrorDomain = @"LCIMUserSystemServiceErrorD
 }
 
 - (void)removeCachedProfileForPeerId:(NSString *)peerId {
-    [self.cachedUserAvators removeObjectForKey:peerId];
-    [self.cachedUserNames removeObjectForKey:peerId];
+    [self.cachedUsers removeObjectForKey:peerId];
 }
 
 - (void)removeAllCachedProfiles {
-    self.cachedUserAvators = nil;
-    self.cachedUserNames = nil;
     self.cachedUsers = nil;
 }
+
 - (id<LCIMUserModelDelegate>)fetchCurrentUser {
     NSError *error = nil;
     id<LCIMUserModelDelegate> user = [[LCIMUserSystemService sharedInstance] getCachedProfileIfExists:[LCIMSessionService sharedInstance].clientId error:&error];
@@ -181,7 +184,7 @@ NSString *const LCIMUserSystemServiceErrorDomain = @"LCIMUserSystemServiceErrorD
     if (!error) {
         return currentUser;
     }
-    NSLog(@"%@", error);
+//    NSLog(@"%@", error);
     return nil;
 }
 
@@ -255,42 +258,17 @@ NSString *const LCIMUserSystemServiceErrorDomain = @"LCIMUserSystemServiceErrorD
 #pragma mark - LazyLoad Method
 
 /**
- *  lazy load cachedUserNames
- *
- *  @return NSMutableDictionary
- */
-- (NSMutableDictionary *)cachedUserNames {
-    if (_cachedUserNames == nil) {
-        NSMutableDictionary *cachedUserNames = [[NSMutableDictionary alloc] init];
-        _cachedUserNames = cachedUserNames;
-    }
-    return _cachedUserNames;
-}
-
-/**
  *  lazy load cachedUsers
  *
  *  @return NSMutableDictionary
  */
 - (NSMutableDictionary *)cachedUsers {
     if (_cachedUsers == nil) {
-        NSMutableDictionary *cachedUsers = [[NSMutableDictionary alloc] init];
-        _cachedUsers = cachedUsers;
+        _cachedUsers = [[NSMutableDictionary alloc] init];
     }
     return _cachedUsers;
 }
 
-/**
- *  lazy load cachedUserAvators
- *
- *  @return NSMutableDictionary
- */
-- (NSMutableDictionary *)cachedUserAvators {
-    if (_cachedUserAvators == nil) {
-        NSMutableDictionary *cachedUserAvators = [[NSMutableDictionary alloc] init];
-        _cachedUserAvators = cachedUserAvators;
-    }
-    return _cachedUserAvators;
-}
+
 
 @end

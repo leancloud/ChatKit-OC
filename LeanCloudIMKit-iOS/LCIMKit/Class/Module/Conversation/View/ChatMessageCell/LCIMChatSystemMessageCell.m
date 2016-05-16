@@ -25,10 +25,19 @@
 
 - (void)updateConstraints {
     [super updateConstraints];
+//    [self.systemmessageContentView mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.top.equalTo(self.contentView.mas_top).with.offset(8);
+//        make.bottom.equalTo(self.contentView.mas_bottom).with.offset(-8);
+//        make.width.lessThanOrEqualTo(@LCIMMessageCellLimit);
+//        make.centerX.equalTo(self.contentView.mas_centerX);
+//    }];
     [self.systemmessageContentView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.contentView.mas_top).with.offset(8);
-        make.bottom.equalTo(self.contentView.mas_bottom).with.offset(-8);
+        CGFloat offset = 3;//8
+        make.top.equalTo(self.contentView.mas_top).with.offset(offset);
+        make.bottom.equalTo(self.contentView.mas_bottom).with.offset(-offset);
         make.width.lessThanOrEqualTo(@LCIMMessageCellLimit);
+        //FIXME:
+        make.height.equalTo(@20);
         make.centerX.equalTo(self.contentView.mas_centerX);
     }];
 }
@@ -36,11 +45,9 @@
 #pragma mark - Public Methods
 
 - (void)setup {
-    
     self.backgroundColor = [UIColor clearColor];
     self.selectionStyle = UITableViewCellSelectionStyleNone;
     [self.contentView addSubview:self.systemmessageContentView];
-
     [self updateConstraintsIfNeeded];
 }
 
@@ -64,7 +71,9 @@
         
         [_systemmessageContentView addSubview:self.systemMessageLabel = systemMessageLabel];
         [systemMessageLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.edges.equalTo(_systemmessageContentView).with.insets(UIEdgeInsetsMake(8, 16, 8, 16));
+            CGFloat offsetTopBottom = 3;//8
+            CGFloat offsetLeftRight = 2 * offsetTopBottom;//8
+            make.edges.equalTo(_systemmessageContentView).with.insets(UIEdgeInsetsMake(offsetTopBottom, offsetLeftRight, offsetTopBottom, offsetLeftRight));
         }];
         systemMessageLabel.attributedText = [[NSAttributedString alloc] initWithString:@"2015-11-16" attributes:self.systemMessageStyle];
     }

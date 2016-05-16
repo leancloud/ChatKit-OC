@@ -70,7 +70,7 @@
 #pragma mark - Event Response
 
 - (void)clickPublish {
-    [LCIMKitExample exampleOpenConversationViewControllerWithConversaionId:@"56d880b9f3609a005d88415e" fromNavigationController:nil];
+    [LCIMKitExample exampleOpenConversationViewControllerWithConversaionId:@"570da6a9daeb3a63ca5b07b0" fromNavigationController:nil];
 }
 
 #pragma mark - UIActionSheetDelegate

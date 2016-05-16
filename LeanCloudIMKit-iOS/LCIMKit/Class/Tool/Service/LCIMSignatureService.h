@@ -14,8 +14,6 @@
  */
 FOUNDATION_EXTERN NSString *const LCIMSignatureServiceErrorDomain;
 
-@interface LCIMSignatureService : NSObject <LCIMSignatureService>
-
-+ (instancetype)sharedInstance;
+@interface LCIMSignatureService : LCCKSingleton <LCIMSignatureService>
 
 @end

@@ -47,7 +47,6 @@
         return LCIMConversationTypeGroup;
     }
     return LCIMConversationTypeSingle;
-//    return [[self.attributes objectForKey:LCIM_CONVERSATION_TYPE] intValue];
 }
 
 + (NSString *)lcim_groupConversaionDefaultNameForUserIds:(NSArray *)userIds {

@@ -1,30 +1,18 @@
 //
 //  LCIMConversationViewController.h
-//  LeanCloudIMKit-iOS
+//  LCIMChatBarExample
 //
-//  Created by ElonChan on 16/2/2.
-//  Copyright © 2016年 LeanCloud. All rights reserved.
-//  Base ViewController for chatting.
+//  Created by ElonChan ( https://github.com/leancloud/LeanCloudIMKit-iOS ) on 15/11/20.
+//  Copyright © 2015年 https://LeanCloud.cn . All rights reserved.
+//
 
-#import "XHMessageTableViewController.h"
-#import "LCIMKit.h"
+#import <UIKit/UIKit.h>
+#import "LCIMChat.h"
+#import "LCIMBaseConversationViewController.h"
 
-@class AVIMConversation;
+typedef void (^LCIMConversationHandler) (AVIMConversation *conversation, LCIMConversationViewController *conversationController);
 
-/*
- 
- LCIMConversationViewController gives a base ViewController for chatting.
- 
- To use LCIMConversationViewController, follow these steps:
- 
- 1. Subclass LCIMConversationViewController
- 2. Initialize the subclass by one of these methods: `-initWithConversationId:`, `-initWithPeerId:`.
-
- */
-
-@interface LCIMConversationViewController : XHMessageTableViewController <LCIMConversationService>
-
-//TODO:对于 conversationId 的得来，也就是说用户该如何事先创建好 conversation，可以加点示例代码。
+@interface LCIMConversationViewController : LCIMBaseConversationViewController <LCIMChatMessageCellDelegate>
 
 /*!
  *  @brief Id of the single or group conversation, group conversation should be initialized with this property.
@@ -38,8 +26,6 @@
  */
 @property (nonatomic, copy, readonly) NSString *peerId;
 
-@property (nonatomic, copy, readonly) AVIMConversation *conversation;
-
 ///---------------------------------------------------------------------------------------------
 ///---- Initialize a unique single chat type object of LCIMConversationViewController ----------
 ///---------------------------------------------------------------------------------------------
@@ -48,7 +34,7 @@
  * @param PeerId id of the peer, a unique single conversation should be initialized with this property.
  * @attention `peerId` can not be equal to current user id, if yes, LeanCloudKit will throw an exception to notice you.
  *            If LCIMConversationViewController is initialized with this method, the property named `conversationId` will be set automatically.
- *            The `conversaionId` will be unique, meaning that if the conversation between the current user id and the `peerId` has already existed, 
+ *            The `conversaionId` will be unique, meaning that if the conversation between the current user id and the `peerId` has already existed,
  *            LeanCloudIMKit will reuse the conversation instead of creating a new one.
  * @return Initialized unique single chat type object of LCIMConversationViewController
  */
@@ -62,63 +48,19 @@
  * @param conversationId Id of the conversation, group conversation should be initialized with this property.
  * @attention ConversationId can not be nil, if yes, LeanCloudKit will throw an exception to notice you.
  *            If LCIMConversationViewController is initialized with this method, the property named `peerId` will be nil.
+ *            conversationId 与 peerId 并不等同。您一般不能自己构造一个conversationId，而是从 conversation 等特定接口中才能读取到conversationId。如果需要使用personId来打开会话，应该使用 `-initWithPeerId:` 这个接口。
  * @return Initialized single or group chat type odject of LCIMConversationViewController
  */
 - (instancetype)initWithConversationId:(NSString *)conversationId;
-
-- (instancetype)initWithConversation:(AVIMConversation *)conversation;
-
-@end
-
-@interface LCIMConversationViewController (LCIMSendMessage)
-
-#pragma mark - 消息发送
-
-/*!
- * 文本发送
- */
-- (void)sendTextMessage:(NSString *)text;
-
-/* 图片发送 包含图片上传交互
- * @param image, 要发送的图片
- * @param useOriginImage, 是否强制发送原图
- */
-- (void)sendImageMessage:(UIImage *)image useOriginImage:(BOOL)useOriginImage;
-- (void)sendImageMessageData:(NSData *)ImageData useOriginImage:(BOOL)useOriginImage;
-
-/*!
- * 语音发送
- */
-- (void)sendVoiceMessage:(NSData*)wavData andTime:(NSTimeInterval)nRecordingTime;
-
-@end
-
-@interface LCIMConversationViewController (LCIMBackgroundImage)
-
-/*!
- * 通过接口设置背景图片
- */
-@property (nonatomic, strong) UIImage *backgroundImage;
-
-/*!
- *  在没有数据时显示该view，占据Controller的View整个页面
- */
-@property (nonatomic, strong) UIView *placeHolder;
-
-@end
-
-@interface LCIMConversationViewController(LCIMSetting)
-
-/*!
- *  是否禁止导航栏标题的自动设置，默认为NO;
- *  默认情况下在单聊界面导航栏显示在线状态和输入状态，如果您想自定义聊天界面的标题，请置为YES，
- *  注意这里只是UI显示控制，如果需要真实在线状态，请将IMCore层中LCIMContactService中的enableContactOnlineStatus置为YES。
- */
-@property (nonatomic, assign) BOOL disableTitleAutoConfig;
 
 /*!
  *  是否禁用文字的双击放大功能，默认为NO
  */
 @property (nonatomic, assign) BOOL disableTextShowInFullScreen;
 
+- (void)setConversationHandler:(LCIMConversationHandler)conversationHandler;
+- (void)setLoadHistoryMessagesHandler:(LCIMBooleanResultBlock)loadHistoryMessagesHandler;
+
 @end
+
+

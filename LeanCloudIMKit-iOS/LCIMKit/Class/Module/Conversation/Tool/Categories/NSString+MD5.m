@@ -15,7 +15,7 @@
 - (NSString *)MD5String {
     const char* str = [self UTF8String];
     unsigned char result[CC_MD5_DIGEST_LENGTH];
-    uint32_t length = strlen(str);
+    uint32_t length = (CC_LONG)strlen(str);
     CC_MD5(str, length, result);
     NSMutableString *ret = [NSMutableString stringWithCapacity:CC_MD5_DIGEST_LENGTH];
     

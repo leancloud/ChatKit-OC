@@ -30,10 +30,12 @@
 
 @property (nonatomic, strong, readonly) LCIMMessage *message;
 
+@property (nonatomic, strong) UITableView *tableView;
+@property (nonatomic, strong) NSIndexPath *indexPath;
 /**
  *  显示用户头像
  */
-@property (nonatomic, strong) UIButton *avatorButton;
+@property (nonatomic, strong) UIImageView *avatarImageView;
 
 /**
  *  显示用户昵称的UILabel

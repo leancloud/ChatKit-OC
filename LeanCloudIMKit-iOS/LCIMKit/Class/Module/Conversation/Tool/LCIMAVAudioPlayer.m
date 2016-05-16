@@ -108,7 +108,7 @@ NSString *const kLCIMAudioDataKey;
         });
     }];
     
-    [blockOperation setName:[[NSString stringWithFormat:@"%@_%ld",self.URLString,self.index] MD5String]];
+    [blockOperation setName:[[NSString stringWithFormat:@"%@_%ld",self.URLString, self.index] MD5String]];
     
     [_audioDataOperationQueue addOperation:blockOperation];
     
@@ -217,7 +217,7 @@ NSString *const kLCIMAudioDataKey;
 }
 
 - (void)proximityStateChanged:(NSNotification *)notification {
-    //如果此时手机靠近面部放在耳朵旁，那么声音将通过听筒输出，并将屏幕变暗（省电啊）
+    //如果此时手机靠近面部放在耳朵旁，那么声音将通过听筒输出，并将屏幕变暗，以达到省电的目的。
     if ([[UIDevice currentDevice] proximityState] == YES) {
         NSLog(@"Device is close to user");
         [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayAndRecord error:nil];

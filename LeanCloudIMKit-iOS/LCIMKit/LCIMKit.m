@@ -16,7 +16,7 @@ static NSMutableDictionary *_sharedInstances = nil;
 @end
 
 @implementation LCIMKit
-
+@synthesize sessionNotOpenedHandler = _sessionNotOpenedHandler;
 #pragma mark -
 
 + (void)initialize {
@@ -110,6 +110,9 @@ static NSMutableDictionary *_sharedInstances = nil;
 - (void)closeWithCallback:(LCIMBooleanResultBlock)callback {
     [self.sessionService closeWithCallback:callback];
 }
+- (void)setSessionNotOpenedHandler:(LCCKSessionNotOpenedHandler)sessionNotOpenedHandler {
+    [self.sessionService setSessionNotOpenedHandler:sessionNotOpenedHandler];
+}
 
 ///--------------------------------------------------------------------
 ///----------------------LCIMUserSystemService-------------------------
@@ -174,6 +177,14 @@ static NSMutableDictionary *_sharedInstances = nil;
     [self.UIService setShowNotificationBlock:showNotificationBlock];
 }
 
+- (void)setAvatarImageViewCornerRadiusBlock:(LCIMAvatarImageViewCornerRadiusBlock)avatarImageViewCornerRadiusBlock {
+    [self.UIService setAvatarImageViewCornerRadiusBlock:avatarImageViewCornerRadiusBlock];
+}
+
+- (LCIMAvatarImageViewCornerRadiusBlock)avatarImageViewCornerRadiusBlock {
+    return self.UIService.avatarImageViewCornerRadiusBlock;
+}
+
 ///---------------------------------------------------------------------
 ///------------------LCIMSettingService---------------------------------
 ///---------------------------------------------------------------------
@@ -234,6 +245,10 @@ static NSMutableDictionary *_sharedInstances = nil;
 
 - (void)updateUnreadCountToZeroWithConversation:(AVIMConversation *)conversation {
     [self.conversationService updateUnreadCountToZeroWithConversation:conversation];
+}
+
+- (void)removeAllCachedRecentConversations {
+    [self.conversationService removeAllCachedRecentConversations];
 }
 
 ///---------------------------------------------------------------------

@@ -15,18 +15,6 @@ static BOOL LCIMAllLogsEnabled;
 
 @implementation LCIMSettingService
 
-/**
- * create a singleton instance of LCIMSettingService
- */
-+ (instancetype)sharedInstance {
-    static LCIMSettingService *_sharedLCIMSettingService = nil;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        _sharedLCIMSettingService = [[self alloc] init];
-    });
-    return _sharedLCIMSettingService;
-}
-
 + (void)setAllLogsEnabled:(BOOL)enabled {
     LCIMAllLogsEnabled = enabled;
     [AVOSCloud setAllLogsEnabled:YES];
@@ -69,7 +57,7 @@ static BOOL LCIMAllLogsEnabled;
 }
 
 - (void)registerForRemoteNotification {
-    [AVOSCloudIM registerForRemoteNotification];
+    [AVOSCloud registerForRemoteNotification];
 }
 
 - (void)saveInstallationWithDeviceToken:(NSData *)deviceToken userId:(NSString *)userId {

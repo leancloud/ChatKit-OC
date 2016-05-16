@@ -6,10 +6,19 @@
 //  Copyright © 2016年 ElonChan. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+@import UIKit;
+@import Foundation;
+
+@protocol LCIMStatusViewDelegate <NSObject>
+
+@optional
+- (void)statusViewClicked:(id)sender;
+@end
 
 static CGFloat LCIMStatusViewHight = 44;
 
 @interface LCIMStatusView : UIView
+
+@property (nonatomic, weak) id<LCIMStatusViewDelegate> delegate;
 
 @end

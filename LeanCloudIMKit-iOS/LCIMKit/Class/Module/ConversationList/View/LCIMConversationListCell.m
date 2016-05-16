@@ -8,6 +8,8 @@
 
 #import "LCIMConversationListCell.h"
 #import "JSBadgeView.h"
+#import "LCIMKit.h"
+#import "UIImageView+CornerRadius.h"
 
 static CGFloat LCIMImageSize = 45;
 static CGFloat LCIMVerticalSpacing = 8;
@@ -61,6 +63,12 @@ CGFloat const LCIMConversationListCellDefaultHeight = 61; //LCIMImageSize + LCIM
 - (UIImageView *)avatorImageView {
     if (_avatorImageView == nil) {
         UIImageView *avatorImageView = [[UIImageView alloc] initWithFrame:CGRectMake(LCIMHorizontalSpacing, LCIMVerticalSpacing, LCIMImageSize, LCIMImageSize)];
+        LCIMAvatarImageViewCornerRadiusBlock avatarImageViewCornerRadiusBlock = [LCIMKit sharedInstance].avatarImageViewCornerRadiusBlock;
+        if (avatarImageViewCornerRadiusBlock) {
+            CGFloat avatarImageViewCornerRadius = avatarImageViewCornerRadiusBlock(avatorImageView.frame.size);
+            [avatorImageView zy_cornerRadiusAdvance:avatarImageViewCornerRadius rectCornerType:UIRectCornerAllCorners];
+
+        }
         _avatorImageView = avatorImageView;
     }
     return _avatorImageView;

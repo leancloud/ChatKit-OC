@@ -10,15 +10,15 @@
 #import <AVOSCloudIM/AVOSCloudIM.h>
 #import "LCIMCellRegisterController.h"
 #import "LCIMChatBar.h"
-// Categorys
-#import "UIScrollView+XHkeyboardControl.h"
 #import "MJRefresh.h"
 #import "LCIMConversationRefreshHeader.h"
+static void * const LCIMBaseConversationViewControllerRefreshContext = (void*)&LCIMBaseConversationViewControllerRefreshContext;
 
 @interface LCIMBaseConversationViewController ()
 @end
 
 @implementation LCIMBaseConversationViewController
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self initilzer];
@@ -28,6 +28,9 @@
     self.shouldLoadMoreMessagesScrollToTop = YES;
     self.automaticallyAdjustsScrollViewInsets = NO;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    // KVO注册监听
+    [self addObserver:self forKeyPath:@"loadingMoreMessage" options:NSKeyValueObservingOptionNew context:LCIMBaseConversationViewControllerRefreshContext];
+
     [LCIMCellRegisterController registerLCIMChatMessageCellClassForTableView:self.tableView];
     self.tableView.frame = ({
         CGRect frame = self.tableView.frame;
@@ -38,8 +41,38 @@
         if (self.shouldLoadMoreMessagesScrollToTop && !self.loadingMoreMessage) {
             // 进入刷新状态后会自动调用这个block
             [self loadMoreMessagesScrollTotop];
+        } else {
+            [self.tableView.mj_header endRefreshing];
         }
     }];
+}
+
+- (void)setShouldLoadMoreMessagesScrollToTop:(BOOL)shouldLoadMoreMessagesScrollToTop {
+    _shouldLoadMoreMessagesScrollToTop = shouldLoadMoreMessagesScrollToTop;
+    if (!_shouldLoadMoreMessagesScrollToTop) {
+        self.tableView.mj_header = nil;
+    }
+}
+
+// KVO监听执行
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
+    if(context != LCIMBaseConversationViewControllerRefreshContext) {
+        [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
+        return;
+    }
+    if(context == LCIMBaseConversationViewControllerRefreshContext) {
+        //if ([keyPath isEqualToString:@"loadingMoreMessage"]) {
+        id newKey = change[NSKeyValueChangeNewKey];
+        BOOL boolValue = [newKey boolValue];
+        if (!boolValue) {
+            [self.tableView.mj_header endRefreshing];
+        }
+    }
+}
+
+- (void)dealloc {
+    // KVO反注册
+    [self removeObserver:self forKeyPath:@"loadingMoreMessage"];
 }
 
 - (void)loadMoreMessagesScrollTotop {
@@ -48,7 +81,6 @@
 }
 
 - (void)scrollToBottomAnimated:(BOOL)animated {
-
     NSInteger rows = [self.tableView numberOfRowsInSection:0];
     
     if (rows > 0) {

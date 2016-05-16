@@ -28,7 +28,7 @@
 		<true/>
 	</dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>IMKit想要获取您位置，方便在聊天中服务发送位置信息</string>
+	<string>ChatKit想要获取您位置，方便您在聊天服务中发送位置信息</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>location</string>

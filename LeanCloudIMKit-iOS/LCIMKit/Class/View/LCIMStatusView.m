@@ -7,6 +7,8 @@
 //
 
 #import "LCIMStatusView.h"
+#import "LCIMSessionService.h"
+#import "LCIMKit.h"
 
 static CGFloat LCIMStatusImageViewHeight = 20;
 static CGFloat LCIMHorizontalSpacing = 15;
@@ -32,6 +34,7 @@ static CGFloat LCIMHorizontalLittleSpacing = 5;
 
 - (void)setup {
     self.backgroundColor = [UIColor colorWithRed:255 / 255.0 green:199 / 255.0 blue:199 / 255.0 alpha:1];
+
     [self addSubview:self.statusImageView];
     [self addSubview:self.statusLabel];
 }
@@ -58,6 +61,12 @@ static CGFloat LCIMHorizontalLittleSpacing = 5;
         _statusLabel.text = @"会话断开，请检查网络";
     }
     return _statusLabel;
+}
+
+- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+    if ([self.delegate respondsToSelector:@selector(statusViewClicked:)]) {
+        [self.delegate statusViewClicked:self];
+    }
 }
 
 @end

@@ -46,9 +46,7 @@
  */
 FOUNDATION_EXTERN NSString *const LCIMUserSystemServiceErrorDomain;
 
-@interface LCIMUserSystemService : NSObject <LCIMUserSystemService>
-
-+ (instancetype)sharedInstance;
+@interface LCIMUserSystemService : LCCKSingleton <LCIMUserSystemService>
 
 - (NSArray<id<LCIMUserModelDelegate>> *)getProfilesForUserIds:(NSArray<NSString *> *)userIds error:(NSError * __autoreleasing *)theError;
 

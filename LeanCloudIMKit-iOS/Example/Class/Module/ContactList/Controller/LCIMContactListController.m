@@ -12,6 +12,9 @@
 #import "LCIMUser.h"
 #import "LCIMContactManager.h"
 #import "LCIMKitExample.h"
+#import "LCIMLoginViewController.h"
+#import "LCIMTabBarControllerConfig.h"
+#import "LCIMUtil.h"
 
 static NSString *const LCIMContactListControllerIdentifier = @"LCIMContactListControllerIdentifier";
 
@@ -41,11 +44,14 @@ static NSString *const LCIMContactListControllerIdentifier = @"LCIMContactListCo
     if (self.mode == LCIMContactListModeNormal) {
         self.navigationItem.title = @"联系人";
         //TODO:
-//        self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"搜索"
-//                                                                                 style:UIBarButtonItemStylePlain
-//                                                                                target:self
-//                                                                                action:@selector(searchBarButtonItemPressed:)];
-        
+        //        self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"搜索"
+        //                                                                                 style:UIBarButtonItemStylePlain
+        //                                                                                target:self
+        //                                                                                action:@selector(searchBarButtonItemPressed:)];
+        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"登出"
+                                                                                  style:UIBarButtonItemStylePlain
+                                                                                 target:self
+                                                                                 action:@selector(signOut)];
     } else {
         self.navigationItem.title = @"选择联系人";
         
@@ -58,6 +64,28 @@ static NSString *const LCIMContactListControllerIdentifier = @"LCIMContactListCo
     }
     
 }
+
+- (void)signOut {
+    [LCIMUtil showProgressText:@"close client ..." duration:10.0f];
+    [LCIMKitExample invokeThisMethodBeforeLogoutSuccess:^{
+        [LCIMUtil hideProgress];
+        LCIMLoginViewController *loginViewController = [[LCIMLoginViewController alloc] init];
+        [loginViewController setClientIDHandler:^(NSString *clientID) {
+            [[NSUserDefaults standardUserDefaults] setObject:clientID forKey:LCIM_KEY_USERID];
+            [LCIMKitExample invokeThisMethodAfterLoginSuccessWithClientId:clientID success:^{
+                LCIMTabBarControllerConfig *tabBarControllerConfig = [[LCIMTabBarControllerConfig alloc] init];
+                [self cyl_tabBarController].rootWindow.rootViewController = tabBarControllerConfig.tabBarController;
+            } failed:^(NSError *error) {
+                NSLog(@"%@",error);
+            }];
+        }];
+        [self presentViewController:loginViewController animated:YES completion:nil];
+    } failed:^(NSError *error) {
+        [LCIMUtil hideProgress];
+        NSLog(@"%@", error);
+    }];
+}
+
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
@@ -100,11 +128,9 @@ static NSString *const LCIMContactListControllerIdentifier = @"LCIMContactListCo
     return 64.0f;
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    
-    LCIMContactCell *cell = [tableView dequeueReusableCellWithIdentifier:LCIMContactListControllerIdentifier
-                                                         forIndexPath:indexPath];
-    
+- (UITableViewCell *)tableView:(UITableView *)tableView
+         cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    LCIMContactCell *cell = [tableView dequeueReusableCellWithIdentifier:LCIMContactListControllerIdentifier forIndexPath:indexPath];
     NSString *sectionKey = self.sortedSectionTitles[(NSUInteger)indexPath.section];
     NSArray *array = self.sections[sectionKey];
     NSString *peerId = array[(NSUInteger)indexPath.row];
@@ -116,7 +142,7 @@ static NSString *const LCIMContactListControllerIdentifier = @"LCIMContactListCo
     if (error) {
         NSLog(@"%@", error);
     }
-    if (!displayName) {
+    if (!displayName || !avatorURL) {
         displayName = peerId;
         __weak __typeof(self) weakSelf = self;
         __weak __typeof(cell) weakCell = cell;
@@ -146,6 +172,7 @@ static NSString *const LCIMContactListControllerIdentifier = @"LCIMContactListCo
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
     if (self.mode == LCIMContactListModeMultipleSelection) {
         return;
     }

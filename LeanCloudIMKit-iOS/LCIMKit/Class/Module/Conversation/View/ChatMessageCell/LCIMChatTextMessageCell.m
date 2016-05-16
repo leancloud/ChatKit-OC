@@ -84,4 +84,10 @@
     return _textStyle;
 }
 
+//-(void)prepareForReuse {
+//    [super prepareForReuse];
+//    self.nicknameLabel = @"";
+//    self.avatorButton = nil;
+//}
+
 @end

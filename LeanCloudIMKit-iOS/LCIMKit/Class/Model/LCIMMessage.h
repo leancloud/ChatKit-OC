@@ -16,6 +16,7 @@
 @property (nonatomic, copy, readonly) NSString *text;
 @property (nonatomic, copy, readonly) NSString *systemText;
 @property (nonatomic, strong, readwrite) UIImage *photo;
+@property (nonatomic, strong, readwrite) UIImage *thumbnailPhoto;
 @property (nonatomic, copy, readonly) NSString *photoPath;
 @property (nonatomic, strong, readonly) NSURL *thumbnailURL;
 @property (nonatomic, strong, readonly) NSURL *originPhotoURL;
@@ -82,6 +83,7 @@
  *  @return 返回Message model 对象
  */
 - (instancetype)initWithPhoto:(UIImage *)photo
+               thumbnailPhoto:(UIImage *)thumbnailPhoto
                     photoPath:(NSString *)photoPath
                  thumbnailURL:(NSURL *)thumbnailURL
                originPhotoURL:(NSURL *)originPhotoURL

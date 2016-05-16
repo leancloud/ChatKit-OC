@@ -15,9 +15,7 @@
  */
 FOUNDATION_EXTERN NSString *const LCIMUIServiceErrorDomain;
 
-@interface LCIMUIService : NSObject <LCIMUIService>
-
-+ (instancetype)sharedInstance;
+@interface LCIMUIService : LCCKSingleton <LCIMUIService>
 
 /**
  *  未读数发生变化

@@ -23,21 +23,11 @@ NSString *const LCIMSessionServiceErrorDemain = @"LCIMSessionServiceErrorDemain"
  */
 @property (nonatomic, strong) AVIMClient *client;
 @property (nonatomic, assign, readwrite) BOOL connect;
+@property (nonatomic, copy, readwrite) LCCKSessionNotOpenedHandler sessionNotOpenedHandler;
 
 @end
-@implementation LCIMSessionService
 
-/**
- * create a singleton instance of LCIMSessionService
- */
-+ (instancetype)sharedInstance {
-    static LCIMSessionService *_sharedLCIMSessionService = nil;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        _sharedLCIMSessionService = [[self alloc] init];
-    });
-    return _sharedLCIMSessionService;
-}
+@implementation LCIMSessionService
 
 - (void)openWithClientId:(NSString *)clientId callback:(LCIMBooleanResultBlock)callback {
     _clientId = clientId;
@@ -47,7 +37,7 @@ NSString *const LCIMSessionServiceErrorDemain = @"LCIMSessionServiceErrorDemain"
     self.client = [[AVIMClient alloc] initWithClientId:clientId];
     self.client.delegate = self;
     /* 实现了generateSignatureBlock，将对 im的 open ，start(create conv),kick,invite 操作签名，更安全
-     可以从你的服务器获得签名，这里从云代码获取，需要部署云代码，https://github.com/leancloud/leanchat-cloudcode
+     可以从你的服务器获得签名，这里从云代码获取，需要部署云代码
      */
     if ([[LCIMKit sharedInstance] generateSignatureBlock]) {
         self.client.signatureDataSource = self;
@@ -61,7 +51,16 @@ NSString *const LCIMSessionServiceErrorDemain = @"LCIMSessionServiceErrorDemain"
 - (void)closeWithCallback:(LCIMBooleanResultBlock)callback {
     [self.client closeWithCallback:^(BOOL succeeded, NSError *error) {
         !callback ?: callback(succeeded, error);
+        if (succeeded) {
+//            [LCIMConversationListService destroyInstance];
+            [LCIMConversationService destroyInstance];
+            [LCIMSessionService destroyInstance];
+        }
     }];
+}
+
+- (void)setSessionNotOpenedHandler:(LCCKSessionNotOpenedHandler)sessionNotOpenedHandler {
+    _sessionNotOpenedHandler = sessionNotOpenedHandler;
 }
 
 #pragma mark - AVIMClientDelegate

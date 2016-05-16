@@ -7,7 +7,9 @@
 //
 
 #import "LCIMLastMessageTypeManager.h"
-#import "AVIMTypedMessage.h"
+#import <AVOSCloudIM/AVIMTypedMessage.h>
+
+//#import "AVIMTypedMessage.h"
 #import <AVOSCloudIM/AVOSCloudIM.h>
 #import "LCIMUserSystemService.h"
 #import "AVIMConversation+LCIMAddition.h"
@@ -18,7 +20,6 @@ static NSMutableDictionary *attributedStringCache = nil;
 
 + (NSString *)getMessageTitle:(AVIMTypedMessage *)message {
     NSString *title;
-    AVIMLocationMessage *locationMessage;
     switch (message.mediaType) {
         case kAVIMMessageMediaTypeText:
             title = message.text;

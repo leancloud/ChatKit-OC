@@ -18,18 +18,6 @@ NSString *const LCIMSignatureServiceErrorDomain = @"LCIMSignatureServiceErrorDom
 
 @implementation LCIMSignatureService
 
-/**
- * create a singleton instance of LCIMSignatureService
- */
-+ (instancetype)sharedInstance {
-    static LCIMSignatureService *_sharedLCIMSignatureService = nil;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        _sharedLCIMSignatureService = [[self alloc] init];
-    });
-    return _sharedLCIMSignatureService;
-}
-
 - (void)setGenerateSignatureBlock:(LCIMGenerateSignatureBlock)generateSignatureBlock {
     _generateSignatureBlock = generateSignatureBlock;
 }

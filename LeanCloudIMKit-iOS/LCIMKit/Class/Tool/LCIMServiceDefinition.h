@@ -8,6 +8,8 @@
 
 #import <AVOSCloudIM/AVOSCloudIM.h>
 #import "LCIMConstants.h"
+#import "LCCKSingleton.h"
+
 @class LCIMConversationViewController;
 @class LCIMConversationListViewController;
 @class LCIMMessage;
@@ -19,7 +21,10 @@
 
 @protocol LCIMSessionService <NSObject>
 
+typedef void (^LCCKSessionNotOpenedHandler)(UIViewController *viewController, LCIMBooleanResultBlock callback);
+
 @property (nonatomic, copy, readonly) NSString *clientId;
+@property (nonatomic, copy, readonly) LCCKSessionNotOpenedHandler sessionNotOpenedHandler;
 
 /*!
  * @param clientId The peer id in your peer system, LeanCloudIMKit will get the current user's information by both this id and the method `-[LCIMChatService getProfilesForUserIds:callback:]`.
@@ -32,6 +37,8 @@
  * @param callback Callback
  */
 - (void)closeWithCallback:(LCIMBooleanResultBlock)callback;
+
+- (void)setSessionNotOpenedHandler:(LCCKSessionNotOpenedHandler)sessionNotOpenedHandler;
 
 @end
 
@@ -208,6 +215,16 @@ typedef void(^LCIMShowNotificationBlock)(UIViewController *viewController, NSStr
  */
 - (void)setShowNotificationBlock:(LCIMShowNotificationBlock)showNotificationBlock;
 
+typedef CGFloat (^LCIMAvatarImageViewCornerRadiusBlock)(CGSize avatarImageViewSize);
+
+@property (nonatomic, assign, readonly) LCIMAvatarImageViewCornerRadiusBlock avatarImageViewCornerRadiusBlock;
+
+/*!
+ *  设置会话列表和聊天界面头像ImageView的圆角弧度
+ *  注意，请在需要圆角矩形时设置，会话列表和聊天界面头像默认圆形。
+ */
+- (void)setAvatarImageViewCornerRadiusBlock:(LCIMAvatarImageViewCornerRadiusBlock)avatarImageViewCornerRadiusBlock;
+
 @end
 
 ///---------------------------------------------------------------------
@@ -272,6 +289,10 @@ typedef void (^LCIMConversationResultBlock)(AVIMConversation *conversation, NSEr
  *  @param conversation 相应的对话
  */
 - (void)updateUnreadCountToZeroWithConversation:(AVIMConversation *)conversation;
+/**
+ *  删除全部缓存，比如当切换用户时，如果同一个人显示的名称和头像需要变更
+ */
+- (void)removeAllCachedRecentConversations;
 
 @end
 

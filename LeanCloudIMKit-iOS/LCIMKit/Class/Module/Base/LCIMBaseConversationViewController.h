@@ -8,7 +8,7 @@
 
 #import "LCIMBaseViewController.h"
 #import "LCIMChatBar.h"
-#import "LCIMChatViewModel.h"
+#import "LCIMConversationViewModel.h"
 #import "LCIMBaseTableViewController.h"
 
 @interface LCIMBaseConversationViewController : LCIMBaseTableViewController
