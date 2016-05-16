@@ -39,6 +39,12 @@ do {                                       \
     }                                      \
 } while (0)
 
+#ifdef DEBUG
+#define DLog(fmt, ...) NSLog((@"%s [Line %d] " fmt), __PRETTY_FUNCTION__, __LINE__, ## __VA_ARGS__);
+#else
+#   define DLog(...)
+#endif
+
 /**
  *  未读数改变了。通知去服务器同步 installation 的badge
  */
@@ -65,6 +71,7 @@ static NSString *const LCIMNotificationConversationUpdated = @"LCIMNotificationC
 static NSString *const LCIMNotificationConnectivityUpdated = @"LCIMNotificationConnectivityUpdated";
 
 static NSString *const LCIM_KEY_USERNAME = @"LCIM_KEY_USERNAME";
+static NSString *const LCIM_KEY_USERID = @"LCIM_KEY_USERID";
 
 ///-----------------------------------------------------------------------------------
 ///---------------------用以产生Demo中的联系人数据的宏定义-------------------------------
@@ -73,7 +80,7 @@ static NSString *const LCIM_KEY_USERNAME = @"LCIM_KEY_USERNAME";
 #define LCIMProfileKeyPeerId        @"peerId"
 #define LCIMProfileKeyName          @"username"
 #define LCIMProfileKeyAvatarURL     @"avatarURL"
-#define LCIMDeveloperPeerId @"561b526160b2b52cdef2d9f9"
+#define LCIMDeveloperPeerId @"571dae7375c4cd3379024b2f"
 
 //TODO:add more friends
 #define LCIMContactProfiles \
@@ -178,7 +185,6 @@ typedef NS_ENUM(NSInteger, LCIMBubbleMessageType) {
 
 static NSInteger const kLCIMOnePageSize = 10;
 
-
 /**
  *  提示信息的类型定义
  */
@@ -226,6 +232,9 @@ typedef NS_ENUM(NSInteger, LCIMMessageNotificationType) {
 #define LCIMConversationTableDeleteSQL                           \
     @"DELETE FROM " LCIMConversationTableName                    \
     LCIMConversationTableWhereClause
+
+#define LCIMDeleteConversationTable                              \
+    @"DELETE FROM" LCIMConversationTableName                     \
 
 #define LCIMConversationTableIncreaseUnreadCountSQL              \
     @"UPDATE " LCIMConversationTableName         @" "            \

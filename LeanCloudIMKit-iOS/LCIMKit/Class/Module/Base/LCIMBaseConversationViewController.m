@@ -10,18 +10,15 @@
 #import <AVOSCloudIM/AVOSCloudIM.h>
 #import "LCIMCellRegisterController.h"
 #import "LCIMChatBar.h"
-// Categorys
-#import "UIScrollView+XHkeyboardControl.h"
 #import "MJRefresh.h"
 #import "LCIMConversationRefreshHeader.h"
+static void * const LCIMBaseConversationViewControllerRefreshContext = (void*)&LCIMBaseConversationViewControllerRefreshContext;
 
 @interface LCIMBaseConversationViewController ()
-//@property (nonatomic, strong) UIActivityIndicatorView *loadMoreActivityIndicatorView;
-//@property (nonatomic, strong) UIView *headerContainerView;
-
 @end
 
 @implementation LCIMBaseConversationViewController
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self initilzer];
@@ -31,6 +28,9 @@
     self.shouldLoadMoreMessagesScrollToTop = YES;
     self.automaticallyAdjustsScrollViewInsets = NO;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    // KVO注册监听
+    [self addObserver:self forKeyPath:@"loadingMoreMessage" options:NSKeyValueObservingOptionNew context:LCIMBaseConversationViewControllerRefreshContext];
+
     [LCIMCellRegisterController registerLCIMChatMessageCellClassForTableView:self.tableView];
     self.tableView.frame = ({
         CGRect frame = self.tableView.frame;
@@ -41,50 +41,39 @@
         if (self.shouldLoadMoreMessagesScrollToTop && !self.loadingMoreMessage) {
             // 进入刷新状态后会自动调用这个block
             [self loadMoreMessagesScrollTotop];
+        } else {
+            [self.tableView.mj_header endRefreshing];
         }
     }];
-//    [self setTableViewInsetsWithBottomValue:kLCIMChatBarMinHeight];
 }
 
-//- (UIView *)headerContainerView {
-//    if (!_headerContainerView) {
-//        _headerContainerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.view.bounds), 44)];
-//        _headerContainerView.backgroundColor = self.tableView.backgroundColor;
-//#ifdef LCIMDebugging
-//        _headerContainerView.backgroundColor = [UIColor redColor];
-//#endif
-//        [_headerContainerView addSubview:self.loadMoreActivityIndicatorView];
-//        self.loadMoreActivityIndicatorView.center = CGPointMake(CGRectGetWidth(_headerContainerView.bounds) / 2.0, CGRectGetHeight(_headerContainerView.bounds) / 2.0);
-//    }
-//    return _headerContainerView;
-//}
-
-- (void)setLoadingMoreMessage:(BOOL)loadingMoreMessage {
-    _loadingMoreMessage = loadingMoreMessage;
-//    if (loadingMoreMessage) {
-//        dispatch_async(dispatch_get_main_queue(),^{
-//            if (!self.loadMoreActivityIndicatorView.isAnimating) {
-//                [self.loadMoreActivityIndicatorView startAnimating];
-//            }
-//        });
-//    } else {
-//        dispatch_async(dispatch_get_main_queue(),^{
-//            if (self.loadMoreActivityIndicatorView.isAnimating) {
-//                [self.loadMoreActivityIndicatorView stopAnimating];
-//            }
-//        });
-//    }
+- (void)setShouldLoadMoreMessagesScrollToTop:(BOOL)shouldLoadMoreMessagesScrollToTop {
+    _shouldLoadMoreMessagesScrollToTop = shouldLoadMoreMessagesScrollToTop;
+    if (!_shouldLoadMoreMessagesScrollToTop) {
+        self.tableView.mj_header = nil;
+    }
 }
 
-//- (UIActivityIndicatorView *)loadMoreActivityIndicatorView {
-//    if (!_loadMoreActivityIndicatorView) {
-//        _loadMoreActivityIndicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-//#ifdef LCIMDebugging
-//        _loadMoreActivityIndicatorView.backgroundColor = [UIColor blueColor];
-//#endif
-//    }
-//    return _loadMoreActivityIndicatorView;
-//}
+// KVO监听执行
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
+    if(context != LCIMBaseConversationViewControllerRefreshContext) {
+        [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
+        return;
+    }
+    if(context == LCIMBaseConversationViewControllerRefreshContext) {
+        //if ([keyPath isEqualToString:@"loadingMoreMessage"]) {
+        id newKey = change[NSKeyValueChangeNewKey];
+        BOOL boolValue = [newKey boolValue];
+        if (!boolValue) {
+            [self.tableView.mj_header endRefreshing];
+        }
+    }
+}
+
+- (void)dealloc {
+    // KVO反注册
+    [self removeObserver:self forKeyPath:@"loadingMoreMessage"];
+}
 
 - (void)loadMoreMessagesScrollTotop {
     // This enforces implementing this method in subclasses
@@ -92,7 +81,6 @@
 }
 
 - (void)scrollToBottomAnimated:(BOOL)animated {
-
     NSInteger rows = [self.tableView numberOfRowsInSection:0];
     
     if (rows > 0) {

@@ -9,6 +9,7 @@
 #import "LCIMChatImageMessageCell.h"
 #import "Masonry.h"
 #import <SDWebImage/UIImageView+WebCache.h>
+#import "UIImage+LCCKExtension.h"
 
 @interface LCIMChatImageMessageCell ()
 
@@ -37,8 +38,7 @@
     [super updateConstraints];
     [self.messageImageView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.edges.equalTo(self.messageContentView);
-        make.height.mas_equalTo(@200);
-        make.width.mas_equalTo(@200);
+        make.height.lessThanOrEqualTo(@200);
     }];
 }
 
@@ -50,7 +50,6 @@
     UITapGestureRecognizer *recognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(singleTapMessageImageViewGestureRecognizerHandler:)];
     [self.messageContentView addGestureRecognizer:recognizer];
     [super setup];
-    
 }
 
 - (void)singleTapMessageImageViewGestureRecognizerHandler:(UITapGestureRecognizer *)tapGestureRecognizer {
@@ -60,20 +59,49 @@
         }
     }
 }
+
 - (void)configureCellWithData:(LCIMMessage *)message {
     [super configureCellWithData:message];
-    UIImage *image = message.photo;
-    if (image) {
-        self.messageImageView.image = image;
-        return;
-    }
-    [self.messageImageView  sd_setImageWithURL:message.originPhotoURL placeholderImage:[self imageInBundleForImageName:@"Placeholder_Image"]
-                                     completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
-                                         if (error) {
-                                             self.messageImageView.image = [self imageInBundleForImageName:@"Placeholder_Accept_Defeat"];
+    UIImage *thumbnailPhoto = message.thumbnailPhoto;
+    do {
+        if (thumbnailPhoto) {
+            self.messageImageView.image = thumbnailPhoto;
+            break;
+        }
+        NSString *imageLocalPath = message.photoPath;
+        BOOL isLocalPath = ![imageLocalPath hasPrefix:@"http"];
+        //note: this will ignore contentMode.
+        if (imageLocalPath && isLocalPath) {
+            NSData *imageData = [NSData dataWithContentsOfFile:imageLocalPath];
+            UIImage *image = [UIImage imageWithData:imageData];
+            CGSize size = ({
+                CGFloat width = image.size.width;
+                CGFloat height = image.size.height;
+                CGSize size = CGSizeMake(width, height);
+                size;
+            });
+            UIImage *resizedImage = [image lcck_imageByScalingAspectFillWithOriginSize:size];
+            self.messageImageView.image = resizedImage;
+            message.photo = image;
+            message.thumbnailPhoto = resizedImage;
+            break;
+        }
+        [self.messageImageView  sd_setImageWithURL:message.originPhotoURL placeholderImage:[self imageInBundleForImageName:@"Placeholder_Image"]
+                                         completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+                                             if (error) {
+                                                 self.messageImageView.image = [self imageInBundleForImageName:@"Placeholder_Accept_Defeat"];
+                                             } else {
+                                                 dispatch_async(dispatch_get_main_queue(),^{
+                                                     message.photo = image;
+                                                     [self.tableView reloadData];
+                                                 });
+                                             }
+                                             
                                          }
-                                     }
-     ];
+         ];
+        break;
+        
+    } while (NO);
 }
 
 - (UIImage *)imageInBundleForImageName:(NSString *)imageName {
@@ -101,7 +129,6 @@
     } else {
         [self.messageProgressView removeFromSuperview];
     }
-    
 }
 
 #pragma mark - Getters
@@ -130,11 +157,6 @@
         [_messageProgressView addSubview:self.messageProgressLabel = progressLabel];
     }
     return _messageProgressView;
-}
-
--(void)prepareForReuse {
-    [super prepareForReuse];
-    self.messageProgressLabel.text = @"0.0%";
 }
 
 @end

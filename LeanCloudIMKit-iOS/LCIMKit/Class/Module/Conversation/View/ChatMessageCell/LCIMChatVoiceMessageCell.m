@@ -92,7 +92,6 @@
     [super configureCellWithData:message];
     self.messageVoiceSecondsLabel.text = [NSString stringWithFormat:@"%@''",message.voiceDuration];
     CGFloat voiceDuration = [message.voiceDuration floatValue];
-    
     if (voiceDuration > 2) {
         __block CGFloat length;
         CGFloat lengthUnit = 10.f;
@@ -109,6 +108,10 @@
         } while (NO);
         [self.messageContentView mas_updateConstraints:^(MASConstraintMaker *make) {
             make.width.equalTo(@(80+length));
+        }];
+    } else {
+        [self.messageContentView mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.width.equalTo(@(80));
         }];
     }
 }

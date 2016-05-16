@@ -7,12 +7,13 @@
 //
 
 #import "LCIMTabBarControllerConfig.h"
-
+#import <AVOSCloud/AVOSCloud.h>
 // Base Class
 #import "LCIMBaseNavigationController.h"
 //View Controllers
 #import "LCIMConversationListViewController.h"
 #import "LCIMContactListController.h"
+#import "LCIMKit.h"
 
 @interface LCIMTabBarControllerConfig ()
 
@@ -30,11 +31,15 @@
 - (CYLTabBarController *)tabBarController {
     if (_tabBarController == nil) {
         LCIMConversationListViewController *firstViewController = [[LCIMConversationListViewController alloc] init];
-        UIViewController *firstNavigationController = [[LCIMBaseNavigationController alloc]
+        UINavigationController *firstNavigationController = [[LCIMBaseNavigationController alloc]
                                                        initWithRootViewController:firstViewController];
         
         LCIMContactListController *secondViewController = [[LCIMContactListController alloc] init];
-        UIViewController *secondNavigationController = [[LCIMBaseNavigationController alloc]
+        // 从系统偏好读取用户已经保存的信息
+        NSUserDefaults *defaultsGet = [NSUserDefaults standardUserDefaults];
+        NSString *currentClientID = [defaultsGet stringForKey:LCIM_KEY_USERID];
+        secondViewController.excludedPersonIDs = @[ currentClientID ];
+        UINavigationController *secondNavigationController = [[LCIMBaseNavigationController alloc]
                                                         initWithRootViewController:secondViewController];
         
         
@@ -76,11 +81,6 @@
                             CYLTabBarItemTitle : @"联系人",
                             CYLTabBarItemImage : @"tabbar_contacts_normal",
                             CYLTabBarItemSelectedImage : @"tabbar_contacts_active",
-                            };
-    NSDictionary *dict3 = @{
-                            CYLTabBarItemTitle : @"我",
-                            CYLTabBarItemImage : @"tabbar_me_normal",
-                            CYLTabBarItemSelectedImage : @"tabbar_me_active",
                             };
     
     NSArray *tabBarItemsAttributes = @[

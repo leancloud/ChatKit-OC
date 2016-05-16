@@ -30,37 +30,37 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.view.backgroundColor= [UIColor whiteColor];
-    !self.viewDidLoadBlock ?: self.viewDidLoadBlock();
+    self.view.backgroundColor = [UIColor whiteColor];
+    !self.viewDidLoadBlock ?: self.viewDidLoadBlock(self);
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    !self.viewWillAppearBlock ?: self.viewWillAppearBlock(animated);
+    !self.viewWillAppearBlock ?: self.viewWillAppearBlock(self, animated);
 }
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-    !self.viewDidAppearBlock ?: self.viewDidAppearBlock(animated);
+    !self.viewDidAppearBlock ?: self.viewDidAppearBlock(self, animated);
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
-    !self.viewWillDisappearBlock ?: self.viewWillDisappearBlock(animated);
+    !self.viewWillDisappearBlock ?: self.viewWillDisappearBlock(self, animated);
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
-    !self.viewDidDisappearBlock ?: self.viewDidDisappearBlock(animated);
+    !self.viewDidDisappearBlock ?: self.viewDidDisappearBlock(self, animated);
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
-    !self.didReceiveMemoryWarningBlock ?: self.didReceiveMemoryWarningBlock();
+    !self.didReceiveMemoryWarningBlock ?: self.didReceiveMemoryWarningBlock(self);
 }
 
 -(void)dealloc {
-    !self.viewControllerWillDeallocBlock ?: self.viewControllerWillDeallocBlock();
+    !self.viewControllerWillDeallocBlock ?: self.viewControllerWillDeallocBlock(self);
 }
 
 #pragma mark -

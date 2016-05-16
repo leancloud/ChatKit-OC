@@ -19,7 +19,7 @@
 
 #import "LCIMChatUntiles.h"
 
-#import "LCIMChatViewModel.h"
+#import "LCIMConversationViewModel.h"
 
 #import "LCIMAVAudioPlayer.h"
 

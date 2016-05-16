@@ -10,7 +10,6 @@
 #import "LCIMConversationListCell.h"
 #import <AVOSCloudIM/AVOSCloudIM.h>
 #import "LCIMUserModelDelegate.h"
-#import "YYKit.h"
 #import "LCIMUserSystemService.h"
 #import "LCIMConversationListViewController.h"
 #import "LCIMChatUntiles.h"
@@ -19,6 +18,7 @@
 #import "NSDate+DateTools.h"
 #import "MJRefresh.h"
 #import "LCIMConversationListService.h"
+#import <SDWebImage/UIImageView+WebCache.h>
 
 @interface LCIMConversationListViewModel ()
 
@@ -74,10 +74,11 @@
     } else {
         peerId = conversation.lcim_lastMessage.clientId;
     }
-    [self asyncCacheElseNetLoadCell:cell identifier:conversation.lcim_displayName peerId:peerId name:&displayName avatorURL:&avatorURL];
-    
+    if (peerId) {
+        [self asyncCacheElseNetLoadCell:cell identifier:conversation.lcim_displayName peerId:peerId name:&displayName avatorURL:&avatorURL];
+    }
     if (conversation.lcim_type == LCIMConversationTypeSingle) {
-        [cell.avatorImageView setImageWithURL:avatorURL placeholder:[self imageInBundleForImageName:@"Placeholder_Avator"]];
+        [cell.avatorImageView sd_setImageWithURL:avatorURL placeholderImage:[self imageInBundleForImageName:@"Placeholder_Avator" ]];
     } else {
         [cell.avatorImageView setImage:[self imageInBundleForImageName:@"Placeholder_Group"]];
     }
@@ -127,7 +128,7 @@
     if (error) {
         NSLog(@"%@", error);
     }
-    if (!name) {
+    if (!*name) {
         if (peerId != NULL) {
             *name = peerId;
         }

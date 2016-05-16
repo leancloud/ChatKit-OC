@@ -12,13 +12,12 @@
 
 @class AVIMConversation;
 
-typedef void(^LCIMPrepareConversationsWhenLoadBlock)(NSArray<AVIMConversation *> *conversations, LCIMBooleanResultBlock callback);
 typedef void (^LCIMRecentConversationsCallback)(NSArray *conversations, NSInteger totalUnreadCount,  NSError *error);
 
-@interface LCIMConversationListService : NSObject <LCIMConversationsListService>
+@interface LCIMConversationListService : LCCKSingleton <LCIMConversationsListService>
 
+typedef void(^LCIMPrepareConversationsWhenLoadBlock)(NSArray<AVIMConversation *> *conversations, LCIMBooleanResultBlock callback);
 @property (nonatomic, copy, readonly) LCIMPrepareConversationsWhenLoadBlock prepareConversationsWhenLoadBlock;
-
 - (void)setPrepareConversationsWhenLoadBlock:(LCIMPrepareConversationsWhenLoadBlock)prepareConversationsWhenLoadBlock;
 
 /**
@@ -44,7 +43,6 @@ typedef NSString *(^LCIMConversationsLatestMessageContent)(AVIMConversation *con
 // */
 //@property (nonatomic, strong) UIView *viewForNoData;
 
-+ (instancetype)sharedInstance;
 - (void)fetchConversationsWithConversationIds:(NSSet *)conversationIds callback:(LCIMArrayResultBlock)callback;
 - (void)findRecentConversationsWithBlock:(LCIMRecentConversationsCallback)block;
 

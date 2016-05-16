@@ -46,17 +46,13 @@
  */
 FOUNDATION_EXTERN NSString *const LCIMUserSystemServiceErrorDomain;
 
-@interface LCIMUserSystemService : NSObject <LCIMUserSystemService>
-
-+ (instancetype)sharedInstance;
+@interface LCIMUserSystemService : LCCKSingleton <LCIMUserSystemService>
 
 - (NSArray<id<LCIMUserModelDelegate>> *)getProfilesForUserIds:(NSArray<NSString *> *)userIds error:(NSError * __autoreleasing *)theError;
 
 - (void)getProfilesInBackgroundForUserIds:(NSArray<NSString *> *)userIds callback:(LCIMUserResultsCallBack)callback;
 
 - (id<LCIMUserModelDelegate>)getProfileForUserId:(NSString *)userId error:(NSError * __autoreleasing *)theError;
-
-- (void)getProfileInBackgroundForUserId:(NSString *)userId callback:(LCIMUserResultCallBack)callback;
 
 /*!
  * Firstly try memory cache, then fetch.
@@ -67,8 +63,6 @@ FOUNDATION_EXTERN NSString *const LCIMUserSystemServiceErrorDomain;
  * Firstly try memory cache, then fetch.
  */
 - (void)fetchCurrentUserInBackground:(LCIMUserResultCallBack)callback;
-
-- (void)getCachedProfileIfExists:(NSString *)userId name:(NSString **)name avatorURL:(NSURL **)avatorURL error:(NSError * __autoreleasing *)theError;
 
 - (void)cacheUsersWithIds:(NSSet<id<LCIMUserModelDelegate>> *)userIds callback:(LCIMBooleanResultBlock)callback;
 

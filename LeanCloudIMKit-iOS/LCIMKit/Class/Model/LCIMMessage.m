@@ -41,8 +41,8 @@
 
 @property (nonatomic, assign)  LCIMMessageReadState messageReadState;
 
-
 @property (nonatomic, assign)  BOOL isRead;
+
 @end
 
 @implementation LCIMMessage
@@ -70,8 +70,8 @@
     return self;
 }
 
-
 - (instancetype)initWithPhoto:(UIImage *)photo
+               thumbnailPhoto:(UIImage *)thumbnailPhoto
                     photoPath:(NSString *)photoPath
                  thumbnailURL:(NSURL *)thumbnailURL
                originPhotoURL:(NSURL *)originPhotoURL
@@ -80,6 +80,7 @@
     self = [super init];
     if (self) {
         _photo = photo;
+        _thumbnailPhoto = thumbnailPhoto;
         _photoPath = photoPath;
         _thumbnailURL = thumbnailURL;
         _originPhotoURL = originPhotoURL;
@@ -184,7 +185,7 @@
         
         _text = [aDecoder decodeObjectForKey:@"text"];
         _systemText = [aDecoder decodeObjectForKey:@"systemText"];
-
+        
         _photo = [aDecoder decodeObjectForKey:@"photo"];
         _thumbnailURL = [aDecoder decodeObjectForKey:@"thumbnailURL"];
         _originPhotoURL = [aDecoder decodeObjectForKey:@"originPhotoURL"];
@@ -213,9 +214,12 @@
         _messageMediaType = [aDecoder decodeIntForKey:@"messageMediaType"];
         _messageGroupType = [aDecoder decodeIntForKey:@"messageGroupType"];
         _messageReadState = [aDecoder decodeIntForKey:@"messageReadState"];
-
+        
         _status = [aDecoder decodeIntForKey:@"status"];
         _photoPath = [aDecoder decodeObjectForKey:@"photoPath"];
+        //TODO:        _imageSize = imageSize;
+//TODO:thumbnailPhoto
+        
     }
     return self;
 }
@@ -223,7 +227,7 @@
 - (void)encodeWithCoder:(NSCoder *)aCoder {
     [aCoder encodeObject:self.text forKey:@"text"];
     [aCoder encodeObject:self.systemText forKey:@"systemText"];
-
+    
     [aCoder encodeObject:self.photo forKey:@"photo"];
     [aCoder encodeObject:self.thumbnailURL forKey:@"thumbnailURL"];
     [aCoder encodeObject:self.originPhotoURL forKey:@"originPhotoURL"];
@@ -250,9 +254,12 @@
     [aCoder encodeInt:self.messageMediaType forKey:@"messageMediaType"];
     [aCoder encodeInt:self.messageGroupType forKey:@"messageGroupType"];
     [aCoder encodeInt:self.messageReadState forKey:@"messageReadState"];
-
+    
     [aCoder encodeInt:self.status forKey:@"status"];
     [aCoder encodeObject:self.photoPath forKey:@"photoPath"];
+    //TODO:        _imageSize = imageSize;
+    //TODO:thumbnailPhoto
+
 }
 
 #pragma mark - NSCopying
@@ -260,50 +267,69 @@
 - (id)copyWithZone:(NSZone *)zone {
     LCIMMessage *message;
     switch (self.messageMediaType) {
-        case LCIMMessageTypeText:
+        case LCIMMessageTypeText: {
             message = [[[self class] allocWithZone:zone] initWithText:[self.text copy]
                                                                sender:[self.sender copy]
                                                             timestamp:[self.timestamp copy]];
-        case LCIMMessageTypeImage:
+            
+        }
+            break;
+        case LCIMMessageTypeImage: {
             message =  [[[self class] allocWithZone:zone] initWithPhoto:[self.photo copy]
+                                                         thumbnailPhoto:[self.thumbnailPhoto copy]
                                                               photoPath:[self.photoPath copy]
                                                            thumbnailURL:[self.thumbnailURL copy]
                                                          originPhotoURL:[self.originPhotoURL copy]
                                                                  sender:[self.sender copy]
                                                               timestamp:[self.timestamp copy]];
-        case LCIMMessageTypeVideo:
+        }
+            break;
+        case LCIMMessageTypeVideo: {
             message = [[[self class] allocWithZone:zone] initWithVideoConverPhoto:[self.videoConverPhoto copy]
                                                                         videoPath:[self.videoPath copy]
                                                                          videoURL:[self.videoURL copy]
                                                                            sender:[self.sender copy]
                                                                         timestamp:[self.timestamp copy]];
-        case LCIMMessageTypeVoice:
+        }
+            break;
+        case LCIMMessageTypeVoice: {
             message =  [[[self class] allocWithZone:zone] initWithVoicePath:[self.voicePath copy]
                                                                    voiceURL:[self.voiceURL copy]
                                                               voiceDuration:[self.voiceDuration copy]
                                                                      sender:[self.sender copy]
                                                                   timestamp:[self.timestamp copy]];
-        case LCIMMessageTypeEmotion:
+        }
+            break;
+        case LCIMMessageTypeEmotion: {
             message =  [[[self class] allocWithZone:zone] initWithEmotionPath:[self.emotionPath copy]
                                                                   emotionName:[self.emotionName copy]
                                                                        sender:[self.sender copy]
                                                                     timestamp:[self.timestamp copy]];
-        case LCIMMessageTypeLocation:
+        }
+            break;
+        case LCIMMessageTypeLocation: {
             message =  [[[self class] allocWithZone:zone] initWithLocalPositionPhoto:[self.localPositionPhoto copy]
                                                                         geolocations:[self.geolocations copy]
                                                                             location:[self.location copy]
                                                                               sender:[self.sender copy]
                                                                            timestamp:[self.timestamp copy]];
-            case LCIMMessageTypeSystem:
+        }
+            break;
+        case LCIMMessageTypeSystem: {
             message = [[[self class] allocWithZone:zone] initWithSystemText:[self.systemText copy]];
-            case LCIMMessageTypeUnknow:
+        }
+            break;
+        case LCIMMessageTypeUnknow: {
             //TODO:
+        }
             break;
     }
     message.avator = [self.avator copy];
     message.avatorURL = [self.avatorURL copy];
-    message.photo = [self.photo copy];
-    message.photoPath = [self.photoPath copy];
+//    message.photo = [self.photo copy];
+//    message.photoPath = [self.photoPath copy];
+    //TODO:thumbnailPhoto
+
     message.messageId = [self.messageId copy];
     message.conversationId = [self.conversationId copy];
     message.messageMediaType = self.messageMediaType;

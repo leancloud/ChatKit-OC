@@ -55,7 +55,7 @@
  *
  *  用户即将退出登录时调用
  */
-+ (void)invokeThisMethodBeforeLogout;
++ (void)invokeThisMethodBeforeLogoutSuccess:(LCIMVoidBlock)success failed:(LCIMErrorBlock)failed;
 
 + (void)invokeThisMethodInApplicationWillResignActive:(UIApplication *)application;
 + (void)invokeThisMethodInApplicationWillTerminate:(UIApplication *)application;
@@ -66,17 +66,17 @@
 
 #pragma mark - basic
 
-/**
+/*!
  *  初始化的示例代码
  */
 - (void)exampleInit;
 
-/**
- *  打开某个会话
+/*!
+ *  打开某个会话，可以是群聊、也可以是单聊
  */
 + (void)exampleOpenConversationViewControllerWithConversaionId:(NSString *)conversationId fromNavigationController:(UINavigationController *)navigationController;
 
-/**
+/*!
  *  打开单聊页面
  */
 + (void)exampleOpenConversationViewControllerWithPeerId:(NSString *)peerId fromNavigationController:(UINavigationController *)navigationController;

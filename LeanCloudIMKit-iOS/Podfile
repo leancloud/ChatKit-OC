@@ -1,33 +1,44 @@
 platform :ios , 7.0 
 link_with 'LeanCloudIMKit-iOS', 'LeanCloudIMKit-iOSTests' 
 
+#=========================================================
+#======================== Lib Dependency ===================
+#=========================================================
+
 pod 'MJRefresh'
 pod 'CYLTabBarController'
-pod 'MBProgressHUD'
-pod 'TWMessageBarManager'
 pod 'Masonry'
-pod "FDStackView", "1.0"
-pod 'MWPhotoBrowser'
-#pod 'HJCornerRadius', :git => "https://github.com/panghaijiao/HJCornerRadius.git"
-
-#=========================================================
-#====== s.dependency ======
-#=========================================================
-
-pod "LKBadgeView", :git => 'https://github.com/lakesoft/LKBadgeView.git'
-pod 'SECoreTextView'
 pod 'SDWebImage'
 pod 'CYLDeallocBlockExecutor'
-pod 'FLAnimatedImage'
 pod 'AVOSCloud'
 pod 'AVOSCloudIM'
-pod 'YYKit'
-pod "Emoji", :git => 'https://github.com/jcccn/Emoji.git'
 pod 'FMDB'
 pod 'JSBadgeView'
 pod 'DateTools'
 pod 'UITableView+FDTemplateLayoutCell'
-pod 'NSData+MD5Digest'
 pod 'SwipeView'
-pod 'StitchingImage', :git => 'https://github.com/zhengjinghua/StitchingImage.git'
+pod 'ZYCornerRadius', '~> 0.9.1'
 
+#=========================================================
+#======================== Demo Dependency ===================
+#=========================================================
+
+pod 'MBProgressHUD'
+pod 'TWMessageBarManager'
+pod "FDStackView", "1.0"
+pod 'MWPhotoBrowser'
+pod 'MLPAutoCompleteTextField'
+
+#=========================================================
+#======================== DELETE =========================
+#=========================================================
+
+#pod 'StitchingImage', :git => 'https://github.com/zhengjinghua/StitchingImage.git'
+#pod 'NSData+MD5Digest'
+#pod "Emoji", :git => 'https://github.com/jcccn/Emoji.git'
+#pod 'FLAnimatedImage'
+#pod 'SECoreTextView'
+#pod "LKBadgeView", :git => 'https://github.com/lakesoft/LKBadgeView.git'
+#pod 'YYKit'
+
+#pod 'AWFileHash'

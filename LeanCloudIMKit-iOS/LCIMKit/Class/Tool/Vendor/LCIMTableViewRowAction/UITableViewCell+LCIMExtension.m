@@ -134,8 +134,12 @@
     {
         CGFloat fontSize = 12;
         for (UITableViewRowAction *action in rowActions) {
-            CGFloat actionTitleWidth = [action.title sizeWithFont:[UIFont systemFontOfSize:fontSize]].width;
-            CGFloat currentLongestStringWidth = [longestString sizeWithFont:[UIFont systemFontOfSize:fontSize]].width;
+            NSDictionary *attributes = @{ NSFontAttributeName:[UIFont systemFontOfSize: fontSize] };
+            CGSize size = [action.title sizeWithAttributes:attributes];
+            CGFloat actionTitleWidth = size.width;
+
+            CGSize longestStringSize = [longestString sizeWithAttributes:attributes];
+            CGFloat currentLongestStringWidth = longestStringSize.width;
             if (actionTitleWidth > currentLongestStringWidth) {
                 longestString = action.title;
             }

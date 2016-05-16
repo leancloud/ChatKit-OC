@@ -5,8 +5,8 @@
 //  Created by 陈宜龙 on 16/3/11.
 //  Copyright © 2016年 ElonChan. All rights reserved.
 //
-
-#import "AVIMConversation.h"
+#import <AVOSCloudIM/AVIMConversation.h>
+//#import "AVIMConversation.h"
 #import "LCIMConversationService.h"
 #import "LCIMConstants.h"
 #import "LCIMChatUntiles.h"

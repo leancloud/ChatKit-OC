@@ -16,6 +16,8 @@ NSString *const LCIMUIServiceErrorDomain = @"LCIMUIServiceErrorDomain";
 @property (nonatomic, copy) LCIMPreviewLocationMessageBlock previewLocationMessageBlock;
 @property (nonatomic, copy) LCIMOpenProfileBlock openProfileBlock;
 @property (nonatomic, copy) LCIMUnreadCountChangedBlock unreadCountChangedBlock;
+@property (nonatomic, assign, readwrite) LCIMAvatarImageViewCornerRadiusBlock avatarImageViewCornerRadiusBlock;
+
 @end
 
 @interface LCIMUIService ()
@@ -25,18 +27,6 @@ NSString *const LCIMUIServiceErrorDomain = @"LCIMUIServiceErrorDomain";
 @end
 
 @implementation LCIMUIService
-
-/**
- * create a singleton instance of LCIMUIService
- */
-+ (instancetype)sharedInstance {
-    static LCIMUIService *_sharedLCIMUIService = nil;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        _sharedLCIMUIService = [[self alloc] init];
-    });
-    return _sharedLCIMUIService;
-}
 
 - (void)setPreviewImageMessageBlock:(LCIMPreviewImageMessageBlock)previewImageMessageBlock {
     _previewImageMessageBlock = previewImageMessageBlock;
@@ -56,6 +46,10 @@ NSString *const LCIMUIServiceErrorDomain = @"LCIMUIServiceErrorDomain";
 
 - (void)setUnreadCountChangedBlock:(LCIMUnreadCountChangedBlock)unreadCountChangedBlock {
     _unreadCountChangedBlock = unreadCountChangedBlock;
+}
+
+- (void)setAvatarImageViewCornerRadiusBlock:(LCIMAvatarImageViewCornerRadiusBlock)avatarImageViewCornerRadiusBlock {
+    _avatarImageViewCornerRadiusBlock = avatarImageViewCornerRadiusBlock;
 }
 
 @end

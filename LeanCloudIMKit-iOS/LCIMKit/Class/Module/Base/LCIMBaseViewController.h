@@ -7,19 +7,19 @@
 //
 
 @import UIKit;
-
+@class LCIMBaseViewController;
 @protocol LCIMBaseViewController <NSObject>
 
 /**
  *  页面需要透出的通用事件，例如viewDidLoad，viewWillAppear，viewDidAppear等
  */
-typedef void(^LCIMViewDidLoadBlock)(void);
-typedef void(^LCIMViewWillAppearBlock)(BOOL aAnimated);
-typedef void(^LCIMViewDidAppearBlock)(BOOL aAnimated);
-typedef void(^LCIMViewWillDisappearBlock)(BOOL aAnimated);
-typedef void(^LCIMViewDidDisappearBlock)(BOOL aAnimated);
-typedef void(^LCIMViewControllerWillDeallocBlock) (void);
-typedef void(^LCIMViewDidReceiveMemoryWarningBlock)(void);
+typedef void(^LCIMViewDidLoadBlock)(LCIMBaseViewController *viewController);
+typedef void(^LCIMViewWillAppearBlock)(LCIMBaseViewController *viewController, BOOL aAnimated);
+typedef void(^LCIMViewDidAppearBlock)(LCIMBaseViewController *viewController, BOOL aAnimated);
+typedef void(^LCIMViewWillDisappearBlock)(LCIMBaseViewController *viewController, BOOL aAnimated);
+typedef void(^LCIMViewDidDisappearBlock)(LCIMBaseViewController *viewController, BOOL aAnimated);
+typedef void(^LCIMViewControllerWillDeallocBlock) (LCIMBaseViewController *viewController);
+typedef void(^LCIMViewDidReceiveMemoryWarningBlock)(LCIMBaseViewController *viewController);
 
 @property (nonatomic, copy, readonly) LCIMViewDidLoadBlock viewDidLoadBlock;
 @property (nonatomic, copy, readonly) LCIMViewWillAppearBlock viewWillAppearBlock;

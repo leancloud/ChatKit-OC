@@ -27,18 +27,6 @@
 
 @implementation LCIMConversationListService
 
-/**
- * create a singleton instance of LCIMConversationListService
- */
-+ (instancetype)sharedInstance {
-    static LCIMConversationListService *_sharedLCIMConversationListService = nil;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        _sharedLCIMConversationListService = [[self alloc] init];
-    });
-    return _sharedLCIMConversationListService;
-}
-
 - (void)findRecentConversationsWithBlock:(LCIMRecentConversationsCallback)block {
     [self selectOrRefreshConversationsWithBlock:^(NSArray *conversations, NSError *error) {
         NSMutableSet *userIds = [NSMutableSet set];
@@ -53,7 +41,7 @@
             } else {
                 if (conversation.lastMessageAt) {
                     NSString *userId = conversation.lcim_lastMessage.clientId;
-                    !userId ?: [userIds addObject:userId];
+                    (!userId || !conversation.lcim_lastMessage) ?: [userIds addObject:userId];
                 }
             }
             if (conversation.muted == NO) {
@@ -66,6 +54,11 @@
         dispatch_async(dispatch_get_main_queue(),^{
             !block ?: block(sortedRooms, totalUnreadCount, error);
         });
+        
+        if (userIds.count == 0) {
+            return;
+        }
+        
         [[LCIMUserSystemService sharedInstance] cacheUsersWithIds:userIds callback:^(BOOL succeeded, NSError *error) {
             if (error) {
                 NSLog(@"%@",error.localizedDescription);
@@ -100,8 +93,8 @@
     }
 }
 
-- (void)fetchConversationsWithConversationIds:(NSSet *)conversationIds callback:(LCIMArrayResultBlock)callback {
-
+- (void)fetchConversationsWithConversationIds:(NSSet *)conversationIds
+                                     callback:(LCIMArrayResultBlock)callback {
         AVIMConversationQuery *query = [[LCIMSessionService sharedInstance].client conversationQuery];
         [query whereKey:@"objectId" containedIn:[conversationIds allObjects]];
         query.cachePolicy = kAVCachePolicyNetworkElseCache;

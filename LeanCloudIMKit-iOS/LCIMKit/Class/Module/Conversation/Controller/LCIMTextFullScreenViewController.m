@@ -18,7 +18,7 @@ static void * const LCIMTextFullScreenViewContentSizeContext = (void*)&LCIMTextF
 @property (nonatomic, weak) UITextView *displayTextView;
 @property (nonatomic, copy) NSString *text;
 @property (nonatomic, copy, readonly) NSDictionary *textStyle;
-
+@property (nonatomic, copy) LCIMRemoveFromWindowHandler removeFromWindowHandler;
 @end
 
 @implementation LCIMTextFullScreenViewController
@@ -73,8 +73,13 @@ static void * const LCIMTextFullScreenViewContentSizeContext = (void*)&LCIMTextF
     return _backgroundView;
 }
 
+- (void)setRemoveFromWindowHandler:(LCIMRemoveFromWindowHandler)removeFromWindowHandler {
+    _removeFromWindowHandler = removeFromWindowHandler;
+}
+
 - (void)removeFromWindow:(UITapGestureRecognizer *)tapGestureRecognizer {
     [self.navigationController popViewControllerAnimated:NO];
+    !_removeFromWindowHandler ?: _removeFromWindowHandler();
 }
 
 - (instancetype)initWithText:(NSString *)text {

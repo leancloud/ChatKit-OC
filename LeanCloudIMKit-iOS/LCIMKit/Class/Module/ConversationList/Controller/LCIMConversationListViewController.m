@@ -12,6 +12,7 @@
 #import "MJRefresh.h"
 #import "LCIMConversationService.h"
 #import "LCIMConversationListViewModel.h"
+#import "LCIMKit.h"
 
 @interface LCIMConversationListViewController ()
 
@@ -27,13 +28,25 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    BOOL clientStatusOpened = [LCIMSessionService sharedInstance].client.status == AVIMClientStatusOpened;
+    //NSAssert([LCIMSessionService sharedInstance].client.status == AVIMClientStatusOpened, @"client not opened");
+    if (!clientStatusOpened) {
+        LCCKSessionNotOpenedHandler sessionNotOpenedHandler = [LCIMSessionService sharedInstance].sessionNotOpenedHandler;
+        !sessionNotOpenedHandler ?: sessionNotOpenedHandler(self, nil);
+    }
     self.navigationItem.title = @"消息";
     self.tableView.delegate = self.conversationListViewModel;
     self.tableView.dataSource = self.conversationListViewModel;
-    self.tableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
-        // 进入刷新状态后会自动调用这个block
-        [self.conversationListViewModel refresh];
-    }];
+    self.tableView.mj_header = ({
+        MJRefreshNormalHeader *header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
+            // 进入刷新状态后会自动调用这个 block
+            [self.conversationListViewModel refresh];
+            // 设置颜色
+        }];
+        header.stateLabel.textColor = [UIColor grayColor];
+        header.lastUpdatedTimeLabel.textColor = [UIColor grayColor];
+        header;
+    });
     [self.tableView.mj_header beginRefreshing];
     self.tableView.separatorInset = UIEdgeInsetsMake(0, 0, 0, 0);
 }
@@ -89,7 +102,7 @@
         self.tableView.tableHeaderView = nil ;
     } else {
         self.tableView.tableHeaderView = (UIView *)self.clientStatusView;
-   }
+    }
 }
 
 - (void)refresh {

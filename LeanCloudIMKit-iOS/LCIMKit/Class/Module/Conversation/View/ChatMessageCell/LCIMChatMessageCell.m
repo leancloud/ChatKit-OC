@@ -18,9 +18,16 @@
 #import <objc/runtime.h>
 #import "LCIMBubbleImageFactory.h"
 
-#import "YYKit.h"
+#import <SDWebImage/UIImageView+WebCache.h>
+#import "LCIMKit.h"
+#import "UIImageView+CornerRadius.h"
+
+static CGFloat const kAvatarImageViewWidth = 50.f;
+static CGFloat const kAvatarImageViewHeight = 50.f;
 
 @interface LCIMChatMessageCell ()
+
+@property (nonatomic, strong, readwrite) LCIMMessage *message;
 
 @end
 
@@ -51,22 +58,22 @@
         return;
     }
     if (self.messageOwner == LCIMMessageOwnerSelf) {
-        [self.avatorButton mas_makeConstraints:^(MASConstraintMaker *make) {
+        [self.avatarImageView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.right.equalTo(self.contentView.mas_right).with.offset(-16);
             make.top.equalTo(self.contentView.mas_top).with.offset(16);
-            make.width.equalTo(@50);
-            make.height.equalTo(@50);
+            make.width.equalTo(@(kAvatarImageViewWidth));
+            make.height.equalTo(@(kAvatarImageViewHeight));
         }];
         
         [self.nicknameLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.top.equalTo(self.avatorButton.mas_top);
-            make.right.equalTo(self.avatorButton.mas_left).with.offset(-16);
+            make.top.equalTo(self.avatarImageView.mas_top);
+            make.right.equalTo(self.avatarImageView.mas_left).with.offset(-16);
             make.width.mas_lessThanOrEqualTo(@120);
             make.height.equalTo(self.messageChatType == LCIMConversationTypeGroup ? @16 : @0);
         }];
         
         [self.messageContentView mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.right.equalTo(self.avatorButton.mas_left).with.offset(-16);
+            make.right.equalTo(self.avatarImageView.mas_left).with.offset(-16);
             make.top.equalTo(self.nicknameLabel.mas_bottom).with.offset(4);
             make.width.lessThanOrEqualTo(@LCIMMessageCellLimit).priorityHigh();
             make.bottom.equalTo(self.contentView.mas_bottom).with.offset(-16).priorityLow();
@@ -86,22 +93,22 @@
             make.height.equalTo(@10);
         }];
     } else if (self.messageOwner == LCIMMessageOwnerOther){
-        [self.avatorButton mas_makeConstraints:^(MASConstraintMaker *make) {
+        [self.avatarImageView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.equalTo(self.contentView.mas_left).with.offset(16);
             make.top.equalTo(self.contentView.mas_top).with.offset(16);
-            make.width.equalTo(@50);
-            make.height.equalTo(@50);
+            make.width.equalTo(@(kAvatarImageViewWidth));
+            make.height.equalTo(@(kAvatarImageViewHeight));
         }];
         
         [self.nicknameLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.top.equalTo(self.avatorButton.mas_top);
-            make.left.equalTo(self.avatorButton.mas_right).with.offset(16);
+            make.top.equalTo(self.avatarImageView.mas_top);
+            make.left.equalTo(self.avatarImageView.mas_right).with.offset(16);
             make.width.mas_lessThanOrEqualTo(@120);
             make.height.equalTo(self.messageChatType == LCIMConversationTypeGroup ? @16 : @0);
         }];
         
         [self.messageContentView mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.left.equalTo(self.avatorButton.mas_right).with.offset(16);
+            make.left.equalTo(self.avatarImageView.mas_right).with.offset(16);
             make.top.equalTo(self.nicknameLabel.mas_bottom).with.offset(4);
             make.width.lessThanOrEqualTo(@LCIMMessageCellLimit).priorityHigh();
             make.bottom.equalTo(self.contentView.mas_bottom).with.offset(-16).priorityLow();
@@ -130,6 +137,7 @@
             make.height.equalTo(@0);
         }];
     }
+    
 }
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
@@ -158,7 +166,7 @@
     self.selectionStyle = UITableViewCellSelectionStyleNone;
     self.backgroundColor = [UIColor clearColor];
     
-    [self.contentView addSubview:self.avatorButton];
+    [self.contentView addSubview:self.avatarImageView];
     [self.contentView addSubview:self.nicknameLabel];
     [self.contentView addSubview:self.messageContentView];
     [self.contentView addSubview:self.messageReadStateImageView];
@@ -177,42 +185,39 @@
     
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTap:)];
     [self.contentView addGestureRecognizer:tap];
+    
 }
 
 #pragma mark - Public Methods
 
 - (void)configureCellWithData:(LCIMMessage *)message {
-    _message = message;
-    self.nicknameLabel.text = message.sender;
-    [self.avatorButton setImageWithURL:message.avatorURL
-                              forState:UIControlStateNormal
-                           placeholder:({
+    self.message = message;
+    self.nicknameLabel.text = self.message.sender;
+    [self.avatarImageView sd_setImageWithURL:self.message.avatorURL
+                            placeholderImage:({
         NSString *imageName = @"Placeholder_Avator";
         NSString *imageNameWithBundlePath = [NSString stringWithFormat:@"Placeholder.bundle/%@", imageName];
         UIImage *image = [UIImage imageNamed:imageNameWithBundlePath];
         image;})
      ];
     if (message.messageReadState) {
-        self.messageReadState = message.messageReadState;
+        self.messageReadState = self.message.messageReadState;
     }
-    self.messageSendState = message.status;
+    self.messageSendState = self.message.status;
 }
 
 #pragma mark - Private Methods
-
-- (void)avatorButtonClicked:(id)sender {
-    [self.delegate messageCellTappedHead:self];
-}
 
 - (void)handleTap:(UITapGestureRecognizer *)tap {
     if (tap.state == UIGestureRecognizerStateEnded) {
         CGPoint tapPoint = [tap locationInView:self.contentView];
         if (CGRectContainsPoint(self.messageContentView.frame, tapPoint)) {
             [self.delegate messageCellTappedMessage:self];
-        } else if (!CGRectContainsPoint(self.avatorButton.frame, tapPoint))  {
+        }  else if (CGRectContainsPoint(self.avatarImageView.frame, tapPoint)) {
+            [self.delegate messageCellTappedHead:self];
+        } else {
             [self.delegate messageCellTappedBlank:self];
         }
-
     }
 }
 
@@ -232,7 +237,7 @@
         self.messageSendStateImageView.hidden = YES;
     }
     switch (_messageReadState) {
-        case LCIMMessageUnRead:
+            case LCIMMessageUnRead:
             self.messageReadStateImageView.hidden = NO;
             break;
         default:
@@ -243,16 +248,19 @@
 
 #pragma mark - Getters
 
-- (UIButton *)avatorButton {
-    if (!_avatorButton) {
-        _avatorButton = [[UIButton alloc] init];
-        //TODO:
-//        _avatorButton.layer.cornerRadius = 25.0f;
-//        _avatorButton.layer.masksToBounds = YES;
-        [self bringSubviewToFront:_avatorButton];
-        [_avatorButton addTarget:self action:@selector(avatorButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
+- (UIImageView *)avatarImageView {
+    if (!_avatarImageView) {
+        _avatarImageView = [[UIImageView alloc] init];
+        _avatarImageView.contentMode = UIViewContentModeScaleAspectFit;
+        LCIMAvatarImageViewCornerRadiusBlock avatarImageViewCornerRadiusBlock = [LCIMKit sharedInstance].avatarImageViewCornerRadiusBlock;
+        if (avatarImageViewCornerRadiusBlock) {
+            CGSize avatarImageViewSize = CGSizeMake(kAvatarImageViewWidth, kAvatarImageViewHeight);
+            CGFloat avatarImageViewCornerRadius = avatarImageViewCornerRadiusBlock(avatarImageViewSize);
+            [_avatarImageView zy_cornerRadiusAdvance:avatarImageViewCornerRadius rectCornerType:UIRectCornerAllCorners];
+        }
+        [self bringSubviewToFront:_avatarImageView];
     }
-    return _avatorButton;
+    return _avatarImageView;
 }
 
 - (UILabel *)nicknameLabel {
@@ -375,6 +383,7 @@ NSString * const kLCIMChatMessageCellMenuControllerKey;
     }
 }
 
+//TODO:
 - (void)menuCopyAction {
     if (self.delegate && [self.delegate respondsToSelector:@selector(messageCell:withActionType:)]) {
         [self.delegate messageCell:self withActionType:kLCIMChatMessageCellMenuControllerKey];
@@ -404,12 +413,6 @@ NSString * const kLCIMChatMessageCellMenuControllerKey;
         objc_setAssociatedObject(self, &kLCIMChatMessageCellMenuControllerKey, menuController, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     }
     return menuController;
-}
-
-- (void)prepareForReuse {
-    [super prepareForReuse];
-    self.avatorButton = nil;
-    self.nicknameLabel = nil;
 }
 
 @end

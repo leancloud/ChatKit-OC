@@ -8,11 +8,11 @@
 
 #import "LCIMBaseViewController.h"
 @class LCIMMessage;
-
+typedef void (^LCIMRemoveFromWindowHandler)(void);
 @interface LCIMTextFullScreenViewController : LCIMBaseViewController
 
 @property (nonatomic, copy, readonly) NSString *text;
 
 - (instancetype)initWithText:(NSString *)text;
-
+- (void)setRemoveFromWindowHandler:(LCIMRemoveFromWindowHandler)removeFromWindowHandler;
 @end

@@ -9,6 +9,8 @@
 #import "LCIMContactCell.h"
 #import "LCIMConstants.h"
 #import <SDWebImage/UIImageView+WebCache.h>
+#import "LCIMKit.h"
+#import "UIImageView+CornerRadius.h"
 
 @interface LCIMContactCell ()
 
@@ -20,21 +22,23 @@
 
 @implementation LCIMContactCell
 
-- (void)layoutSubviews {
-    [super layoutSubviews];
-    self.avatorImageView.layer.cornerRadius = CGRectGetHeight(self.avatorImageView.frame) * 0.5;
-    self.avatorImageView.clipsToBounds = YES;
+- (void)awakeFromNib {
+    [self setup];
+}
+
+- (void)setup {
+    LCIMAvatarImageViewCornerRadiusBlock avatarImageViewCornerRadiusBlock = [LCIMKit sharedInstance].avatarImageViewCornerRadiusBlock;
+    if (avatarImageViewCornerRadiusBlock) {
+        CGFloat avatarImageViewCornerRadius = avatarImageViewCornerRadiusBlock(self.avatorImageView.frame.size);
+        [self.avatorImageView zy_cornerRadiusAdvance:avatarImageViewCornerRadius rectCornerType:UIRectCornerAllCorners];
+    }
 }
 
 - (void)configureWithAvatorURL:(NSURL *)avatorURL title:(NSString *)title subtitle:(NSString *)subtitle {
     NSString *imageName = @"Placeholder_Avator";
     NSString *imageNameWithBundlePath = [NSString stringWithFormat:@"Placeholder.bundle/%@", imageName];
     UIImage *avatorImage = [UIImage imageNamed:imageNameWithBundlePath];
-    if (!avatorURL) {
-        self.avatorImageView.image = avatorImage;
-    } else {
-        [self.avatorImageView sd_setImageWithURL:avatorURL placeholderImage:avatorImage];
-    }
+    [self.avatorImageView sd_setImageWithURL:avatorURL placeholderImage:avatorImage];
     self.titleLabel.text = title;
     self.subtitleLabel.text = subtitle;
     if (subtitle.length == 0) {

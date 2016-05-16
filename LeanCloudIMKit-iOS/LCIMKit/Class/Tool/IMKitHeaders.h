@@ -9,6 +9,18 @@
 FOUNDATION_EXPORT double LCIMKitVersionNumber;
 FOUNDATION_EXPORT const unsigned char LCIMKitVersionString[];
 
+#if __has_include(<AVOSCloud/AVOSCloud.h>)
+#import <AVOSCloud/AVOSCloud.h>
+#else
+#import "AVOSCloud.h"
+#endif
+
+#if __has_include(<AVOSCloudIM/AVOSCloudIM.h>)
+#import <AVOSCloudIM/AVOSCloudIM.h>
+#else
+#import "AVOSCloudIM.h"
+#endif
+
 #if __has_include(<LCIMKit/LCIMKit.h>)
 
 #import <LCIMKit/LCIMConstants.h>
@@ -26,8 +38,6 @@ FOUNDATION_EXPORT const unsigned char LCIMKitVersionString[];
 
 #else
 
-#import "AVOSCloud.h"
-#import "AVOSCloudIM.h"
 #import "LCIMConstants.h"
 #import "LCIMSessionService.h"
 #import "LCIMUserSystemService.h"
@@ -44,10 +54,4 @@ FOUNDATION_EXPORT const unsigned char LCIMKitVersionString[];
 #endif
 
 
-#if __has_include(<AVOSCloud/AVOSCloud.h>)
-#import <AVOSCloud/AVOSCloud.h>
-#import <AVOSCloudIM/AVOSCloudIM.h>
-#else
-#import "AVOSCloud.h"
-#import "AVOSCloudIM.h"
-#endif
+

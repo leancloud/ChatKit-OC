@@ -19,7 +19,7 @@
  */
 FOUNDATION_EXTERN NSString *const LCIMConversationServiceErrorDomain;
 
-@interface LCIMConversationService : NSObject <LCIMConversationService>
+@interface LCIMConversationService : LCCKSingleton <LCIMConversationService>
 
 /**
  *  当前正在聊天的 conversationId
@@ -32,8 +32,6 @@ FOUNDATION_EXTERN NSString *const LCIMConversationServiceErrorDomain;
 @property (nonatomic, strong) NSString *remoteNotificationConversationId;
 
 @property (nonatomic, strong) AVIMConversation *currentConversation;
-
-+ (instancetype)sharedInstance;
 
 /*!
  *  根据 conversationId 获取对话
@@ -50,7 +48,9 @@ FOUNDATION_EXTERN NSString *const LCIMConversationServiceErrorDomain;
  */
 - (void)fecthConversationWithPeerId:(NSString *)peerId callback:(LCIMConversationResultBlock)callback;
 
-- (void)sendMessage:(AVIMTypedMessage*)message conversation:(AVIMConversation *)conversation callback:(LCIMBooleanResultBlock)block;
+- (void)sendMessage:(AVIMTypedMessage*)message conversation:(AVIMConversation *)conversation
+      progressBlock:(AVProgressBlock)progressBlock
+           callback:(LCIMBooleanResultBlock)block;
 - (void)sendWelcomeMessageToPeerId:(NSString *)peerId text:(NSString *)text block:(LCIMBooleanResultBlock)block;
 - (void)queryTypedMessagesWithConversation:(AVIMConversation *)conversation timestamp:(int64_t)timestamp limit:(NSInteger)limit block:(LCIMArrayResultBlock)block;
 
@@ -59,11 +59,6 @@ FOUNDATION_EXTERN NSString *const LCIMConversationServiceErrorDomain;
  *  @param  conversation 会话，可以是单聊，也可是群聊
  */
 - (void)removeCacheForConversation:(AVIMConversation *)conversation;
-
-/**
- *  删除全部缓存，比如当切换用户时，如果同一个人显示的名称和头像需要变更
- */
-- (void)removeAllCache;
 
 ///--------------------------------------------------------------------------------------------
 ///---------------------最近对话的本地缓存，最近对话将保存在本地数据库中-------------------------------
@@ -80,24 +75,6 @@ FOUNDATION_EXTERN NSString *const LCIMConversationServiceErrorDomain;
  *  @param conversation
  */
 - (void)insertRecentConversation:(AVIMConversation *)conversation;
-
-/**
- *  增加未读数
- *  @param conversation 相应对话
- */
-- (void)increaseUnreadCountWithConversation:(AVIMConversation *)conversation;
-
-/**
- *  最近对话列表左滑删除本地数据库的对话，将不显示在列表
- *  @param conversation
- */
-- (void)deleteRecentConversation:(AVIMConversation *)conversation;
-
-/**
- *  清空未读数
- *  @param conversation 相应的对话
- */
-- (void)updateUnreadCountToZeroWithConversation:(AVIMConversation *)conversation;
 
 /**
  *  更新 mentioned 值，当接收到消息发现 @了我的时候，设为 YES，进入聊天页面，设为 NO

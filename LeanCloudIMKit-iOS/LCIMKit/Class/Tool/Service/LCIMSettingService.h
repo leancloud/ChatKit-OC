@@ -15,7 +15,7 @@
  */
 FOUNDATION_EXTERN NSString *const LCIMSettingServiceErrorDomain;
 
-@interface LCIMSettingService : NSObject <LCIMSettingService>
+@interface LCIMSettingService : LCCKSingleton <LCIMSettingService>
 
 //TODO:
 /*!
@@ -24,7 +24,6 @@ FOUNDATION_EXTERN NSString *const LCIMSettingServiceErrorDomain;
  * 3. 推送相关设置
  * 4. Others
  */
-+ (instancetype)sharedInstance;
 
 /**
  *  图片消息，临时的压缩图片路径

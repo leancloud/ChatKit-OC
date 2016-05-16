@@ -142,7 +142,7 @@
         lame_init_params(lame);
         
         do {
-            read = fread(pcm_buffer, 2*sizeof(short int), PCM_SIZE, pcm);
+            read = (int)fread(pcm_buffer, 2*sizeof(short int), PCM_SIZE, pcm);
             if (read == 0)
                 write = lame_encode_flush(lame, mp3_buffer, MP3_SIZE);
             else

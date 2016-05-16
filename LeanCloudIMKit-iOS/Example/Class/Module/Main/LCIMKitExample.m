@@ -8,11 +8,12 @@
 #import "LCIMKit.h"
 #import "LCIMKitExample.h"
 #import "LCIMUtil.h"
-#import "MBProgressHUD+LCIMAddition.h"
+#import "NSObject+LCCKHUD.h"
 #import "LCIMTabBarControllerConfig.h"
 #import "LCIMUser.h"
-#import "LCIMChatController.h"
+#import "LCIMConversationViewController.h"
 #import "MWPhotoBrowser.h"
+#import <objc/runtime.h>
 
 //==================================================================================================================================
 //If you want to see the storage of this demo, log in public account of leancloud.cn, search for the app named `LeanCloudIMKit-iOS`.
@@ -20,10 +21,9 @@
 //==================================================================================================================================
 
 #warning TODO: CHANGE TO YOUR AppId and AppKey
-//static NSString *const LCIMAPPID = @"ykFkmeXIYRPiK2UfvGWXMWqV-gzGzoHsz";
-//static NSString *const LCIMAPPKEY = @"QgVhp43j6puGNQ0sAqNW64uH";
-static NSString *const LCIMAPPID = @"x3o016bxnkpyee7e9pa5pre6efx2dadyerdlcez0wbzhw25g";
-static NSString *const LCIMAPPKEY = @"057x24cfdzhffnl3dzk14jh9xo2rq6w1hy1fdzt5tv46ym78";
+
+static NSString *const LCIMAPPID = @"dYRQ8YfHRiILshUnfFJu2eQM-gzGzoHsz";
+static NSString *const LCIMAPPKEY = @"ye24iIK6ys8IvaISMC4Bs5WK";
 
 // Dictionary that holds all instances of Singleton include subclasses
 static NSMutableDictionary *_sharedInstances = nil;
@@ -32,7 +32,6 @@ static NSMutableDictionary *_sharedInstances = nil;
 
 @property (nonatomic, strong) NSMutableArray *photos;
 @property (nonatomic, strong) NSMutableArray *thumbs;
-
 @property (nonatomic, strong) NSMutableArray *selections;
 
 @end
@@ -83,18 +82,33 @@ static NSMutableDictionary *_sharedInstances = nil;
 #pragma mark - SDK Life Control
 
 + (void)invokeThisMethodInDidFinishLaunching {
-    [AVOSCloudIM registerForRemoteNotification];
+    [AVOSCloud registerForRemoteNotification];
+//    [AVOSCloud setStorageType:AVStorageTypeQCloud];
     [AVIMClient setTimeoutIntervalInSeconds:20];
     [[self sharedInstance] exampleInit];
 }
 
 + (void)invokeThisMethodInDidRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
-    [AVOSCloudIM handleRemoteNotificationsWithDeviceToken:deviceToken];
+    [AVOSCloud handleRemoteNotificationsWithDeviceToken:deviceToken];
 }
 
-+ (void)invokeThisMethodBeforeLogout {
-    [AVOSCloudIM handleRemoteNotificationsWithDeviceToken:nil];
++ (void)invokeThisMethodBeforeLogoutSuccess:(LCIMVoidBlock)success failed:(LCIMErrorBlock)failed {
+    //    [AVOSCloudIM handleRemoteNotificationsWithDeviceToken:nil];
     [[LCIMKit sharedInstance] removeAllCachedProfiles];
+    [[LCIMKit sharedInstance] removeAllCachedRecentConversations];
+    [[LCIMKit sharedInstance] closeWithCallback:^(BOOL succeeded, NSError *error) {
+        CGFloat seconds = arc4random_uniform(4)+arc4random_uniform(4); //normal distribution
+        NSLog(@"sleeping fetch of completions for %f", seconds);
+        sleep(seconds);
+        
+        if (succeeded) {
+            [LCIMUtil showNotificationWithTitle:@"退出成功" subtitle:nil type:LCIMMessageNotificationTypeSuccess];
+            !success ?: success();
+        } else {
+            [LCIMUtil showNotificationWithTitle:@"退出失败" subtitle:nil type:LCIMMessageNotificationTypeError];
+            !failed ?: failed(error);
+        }
+    }];
 }
 
 + (void)invokeThisMethodAfterLoginSuccessWithClientId:(NSString *)clientId success:(LCIMVoidBlock)success failed:(LCIMErrorBlock)failed  {
@@ -130,15 +144,15 @@ static NSMutableDictionary *_sharedInstances = nil;
 }
 
 + (void)invokeThisMethodInApplicationWillResignActive:(UIApplication *)application {
-    [[LCIMSettingService sharedInstance] syncBadge];
+    [[LCIMKit sharedInstance] syncBadge];
 }
 
 + (void)invokeThisMethodInApplicationWillTerminate:(UIApplication *)application {
-    [[LCIMSettingService sharedInstance] syncBadge];
+    [[LCIMKit sharedInstance] syncBadge];
 }
 
 #pragma -
-#pragma mark - LCIMSettingService Method
+#pragma mark - init Method
 
 /**
  *  初始化的示例代码
@@ -163,18 +177,13 @@ static NSMutableDictionary *_sharedInstances = nil;
             return;
         }
         
-//        AVQuery *query = [AVUser query];
-//        [query setCachePolicy:kAVCachePolicyNetworkElseCache];
-//        [query whereKey:@"objectId" containedIn:userIds];
-//        NSError *error;
-//        NSArray *array = [query findObjects:&error];
         NSMutableArray *users = [NSMutableArray arrayWithCapacity:userIds.count];;
         for (NSDictionary *user in LCIMContactProfiles) {
-            // MARK: - add new string named "avatar", custmizing LeanCloud storage
-//            AVFile *avator = [user objectForKey:@"avatar"];
-//            NSURL *avatorURL = [NSURL URLWithString:avator.url];
-            LCIMUser *user_ = [[LCIMUser alloc] initWithUserId:user[LCIMProfileKeyPeerId] name:user[LCIMProfileKeyName] avatorURL:user[LCIMProfileKeyAvatarURL]];
-            [users addObject:user_];
+            if ([userIds containsObject:user[LCIMProfileKeyPeerId]]) {
+                NSURL *avatorURL = [NSURL URLWithString:user[LCIMProfileKeyAvatarURL]];
+                LCIMUser *user_ = [[LCIMUser alloc] initWithUserId:user[LCIMProfileKeyPeerId] name:user[LCIMProfileKeyName] avatorURL:avatorURL];
+                [users addObject:user_];
+            }
         }
         !callback ?: callback([users copy], nil);
     }];
@@ -187,12 +196,19 @@ static NSMutableDictionary *_sharedInstances = nil;
         [self examplePreviewImageMessageWithIndex:index imageMessages:imageMessagesInfo];
     }];
     
-//    [[LCIMKit sharedInstance] setDidDeleteItemBlock:^(NSIndexPath *indexPath, AVIMConversation *conversation, LCIMConversationListViewController *controller) {
-//        //TODO:
-//    }];
+    //    [[LCIMKit sharedInstance] setDidDeleteItemBlock:^(NSIndexPath *indexPath, AVIMConversation *conversation, LCIMConversationListViewController *controller) {
+    //        //TODO:
+    //    }];
     
     [[LCIMKit sharedInstance] setOpenProfileBlock:^(NSString *userId, UIViewController *parentController) {
         [self exampleOpenProfileForUserId:userId];
+    }];
+    
+    [[LCIMKit sharedInstance] setAvatarImageViewCornerRadiusBlock:^CGFloat(CGSize avatarImageViewSize) {
+        if (avatarImageViewSize.height > 0) {
+            return avatarImageViewSize.height/2;
+        }
+        return 5;
     }];
     
     [[LCIMKit sharedInstance] setShowNotificationBlock:^(UIViewController *viewController, NSString *title, NSString *subtitle, LCIMMessageNotificationType type) {
@@ -211,12 +227,25 @@ static NSMutableDictionary *_sharedInstances = nil;
     [[LCIMKit sharedInstance] setPreviewLocationMessageBlock:^(CLLocation *location, NSString *geolocations, NSDictionary *userInfo) {
         [self examplePreViewLocationMessageWithLocation:location geolocations:geolocations];
     }];
+    
+    [[LCIMKit sharedInstance] setSessionNotOpenedHandler:^(UIViewController *viewController, LCIMBooleanResultBlock callback) {
+        [[self class] showMessage:@"正在重新连接聊天服务..." toView:viewController.view];
+        [[LCIMKit sharedInstance] openWithClientId:[LCIMKit sharedInstance].clientId callback:^(BOOL succeeded, NSError *error) {
+            [[self class] hideHUDForView:viewController.view];
+            if (succeeded) {
+                [[self class] showSuccess:@"连接成功"];
+                callback(succeeded, nil);
+            } else {
+                [[self class] showError:@"连接失败"];
+                callback(succeeded, error);
+            }
+        }];
+    }];
 }
 
 - (NSArray *)exampleConversationEditActionAtIndexPath:(NSIndexPath *)indexPath
-                              conversation:(AVIMConversation *)conversation
-                                controller:(LCIMConversationListViewController *)controller {
-
+                                         conversation:(AVIMConversation *)conversation
+                                           controller:(LCIMConversationListViewController *)controller {
     // 如果需要自定义其他会话的菜单，在此编辑
     return [self rightButtonsAtIndexPath:indexPath conversation:conversation controller:controller];
 }
@@ -228,30 +257,30 @@ typedef void (^UITableViewRowActionHandler)(UITableViewRowAction *action, NSInde
                            handle:(UITableViewRowActionHandler *)handler
                      conversation:(AVIMConversation *)conversation
                        controller:(LCIMConversationListViewController *)controller {
-        if (conversation.lcim_unreadCount > 0) {
-            if (*title == nil) {
-                *title = @"标记为已读";
-            }
-            *handler = ^(UITableViewRowAction *action, NSIndexPath *indexPath) {
-                [controller.tableView setEditing:NO animated:YES];
-                [[LCIMConversationService sharedInstance] updateUnreadCountToZeroWithConversation:conversation];
-                [controller refresh];
-            };
-        } else {
-            if (*title == nil) {
-                *title = @"标记为未读";
-            }
-            *handler = ^(UITableViewRowAction *action, NSIndexPath *indexPath) {
-                [controller.tableView setEditing:NO animated:YES];
-                [[LCIMConversationService sharedInstance] increaseUnreadCountWithConversation:conversation];
-                [controller refresh];
-            };
+    if (conversation.lcim_unreadCount > 0) {
+        if (*title == nil) {
+            *title = @"标记为已读";
         }
+        *handler = ^(UITableViewRowAction *action, NSIndexPath *indexPath) {
+            [controller.tableView setEditing:NO animated:YES];
+            [[LCIMKit sharedInstance] updateUnreadCountToZeroWithConversation:conversation];
+            [controller refresh];
+        };
+    } else {
+        if (*title == nil) {
+            *title = @"标记为未读";
+        }
+        *handler = ^(UITableViewRowAction *action, NSIndexPath *indexPath) {
+            [controller.tableView setEditing:NO animated:YES];
+            [[LCIMKit sharedInstance] increaseUnreadCountWithConversation:conversation];
+            [controller refresh];
+        };
+    }
 }
 
 - (NSArray *)rightButtonsAtIndexPath:(NSIndexPath *)indexPath
-             conversation:(AVIMConversation *)conversation
-               controller:(LCIMConversationListViewController *)controller {
+                        conversation:(AVIMConversation *)conversation
+                          controller:(LCIMConversationListViewController *)controller {
     NSString *title = nil;
     UITableViewRowActionHandler handler = nil;
     [self markReadStatusAtIndexPath:indexPath
@@ -268,7 +297,7 @@ typedef void (^UITableViewRowActionHandler)(UITableViewRowAction *action, NSInde
     UITableViewRowAction *actionItemDelete = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleDefault
                                                                                 title:@"Delete"
                                                                               handler:^(UITableViewRowAction *action, NSIndexPath *indexPath) {
-                                                                                          [[LCIMConversationService sharedInstance] deleteRecentConversation:conversation];
+                                                                                  [[LCIMKit sharedInstance] deleteRecentConversation:conversation];
                                                                                   [controller refresh];
                                                                               }];
     return @[ actionItemDelete, actionItemMore ];
@@ -281,19 +310,109 @@ typedef void (^UITableViewRowActionHandler)(UITableViewRowAction *action, NSInde
  *  打开单聊页面
  */
 + (void)exampleOpenConversationViewControllerWithPeerId:(NSString *)peerId fromNavigationController:(UINavigationController *)navigationController {
-    LCIMChatController *conversationViewController = [[LCIMChatController alloc] initWithPeerId:peerId];
+    LCIMConversationViewController *conversationViewController = [[LCIMConversationViewController alloc] initWithPeerId:peerId];
+    [conversationViewController setViewDidLoadBlock:^(LCIMBaseViewController *viewController) {
+        [self showMessage:@"加载历史记录..."];
+        [viewController configureBarButtonItemStyle:LCIMBarButtonItemStyleSingleProfile action:^{
+            NSString *title = @"打开用户详情";
+            NSString *subTitle = [NSString stringWithFormat:@"用户id：%@", peerId];
+            [LCIMUtil showNotificationWithTitle:title subtitle:subTitle type:LCIMMessageNotificationTypeMessage];
+        }];
+    }];
+    [conversationViewController setConversationHandler:^(AVIMConversation *conversation, LCIMConversationViewController *aConversationController) {
+        if (!conversation) {
+            [aConversationController.navigationController popViewControllerAnimated:YES];
+            return;
+        }
+    }];
+    [conversationViewController setLoadHistoryMessagesHandler:^(BOOL succeeded, NSError *error) {
+        [self hideHUD];
+        NSString *title;
+        LCIMMessageNotificationType type;
+        if (succeeded) {
+            title = @"聊天记录加载成功";
+            type = LCIMMessageNotificationTypeSuccess;
+        } else {
+            title = @"聊天记录加载失败";
+            type = LCIMMessageNotificationTypeError;
+        }
+        [LCIMUtil showNotificationWithTitle:title subtitle:nil type:type];
+    }];
     [self pushToViewController:conversationViewController];
 }
 
 + (void)exampleOpenConversationViewControllerWithConversaionId:(NSString *)conversationId fromNavigationController:(UINavigationController *)aNavigationController {
-    LCIMChatController *conversationViewController =[[LCIMChatController alloc] initWithConversationId:conversationId];
+    LCIMConversationViewController *conversationViewController = [[LCIMConversationViewController alloc] initWithConversationId:conversationId];
+    [conversationViewController setConversationHandler:^(AVIMConversation *conversation, LCIMConversationViewController *aConversationController) {
+        if (!conversation) {
+            [aConversationController.navigationController popViewControllerAnimated:YES];
+            return;
+        }
+        if (conversation.members.count > 2) {
+            [aConversationController configureBarButtonItemStyle:LCIMBarButtonItemStyleGroupProfile action:^{
+                NSString *title = @"打开群聊详情";
+                NSString *subTitle = [NSString stringWithFormat:@"群聊id：%@", conversationId];
+                [LCIMUtil showNotificationWithTitle:title subtitle:subTitle type:LCIMMessageNotificationTypeMessage];
+            }];
+        } else {
+            [aConversationController configureBarButtonItemStyle:LCIMBarButtonItemStyleSingleProfile action:^{
+                NSString *title = @"打开用户详情";
+                NSString *subTitle = [NSString stringWithFormat:@"单聊id：%@", conversationId];
+                [LCIMUtil showNotificationWithTitle:title subtitle:subTitle type:LCIMMessageNotificationTypeMessage];
+            }];
+        }
+        
+        if (conversation.members.count > 2 && (![conversation.members containsObject:[LCIMKit sharedInstance].clientId])) {
+            [self showMessage:@"正在加入聊天室..."];
+            [conversation joinWithCallback:^(BOOL succeeded, NSError *error) {
+                [self hideHUD];
+                NSString *title;
+                NSString *subtitle;
+                LCIMMessageNotificationType type;
+                if (error) {
+                    title = @"加入聊天室失败";
+                    subtitle = error.localizedDescription;
+                    type = LCIMMessageNotificationTypeError;
+                    [aConversationController.navigationController popViewControllerAnimated:YES];
+                } else {
+                    title = @"加入聊天室";
+                    type = LCIMMessageNotificationTypeSuccess;
+                }
+                [LCIMUtil showNotificationWithTitle:title subtitle:subtitle type:type];
+            }];
+        }
+    }];
+    
+    [conversationViewController setViewDidLoadBlock:^(LCIMBaseViewController *viewController) {
+        [self showMessage:@"加载历史记录..."];
+    }];
+    [conversationViewController setLoadHistoryMessagesHandler:^(BOOL succeeded, NSError *error) {
+        [self hideHUD];
+        NSString *title;
+        LCIMMessageNotificationType type;
+        if (succeeded) {
+            title = @"聊天记录加载成功";
+            type = LCIMMessageNotificationTypeSuccess;
+        } else {
+            title = @"聊天记录加载失败";
+            type = LCIMMessageNotificationTypeError;
+        }
+        [LCIMUtil showNotificationWithTitle:title subtitle:nil type:type];
+    }];
+    
+    [conversationViewController setViewWillDisappearBlock:^(LCIMBaseViewController *viewController, BOOL aAnimated) {
+        [self hideHUD];
+    }];
     [self pushToViewController:conversationViewController];
 }
 
 + (void)pushToViewController:(UIViewController *)viewController {
     UITabBarController *tabBarController = [self cyl_tabBarController];
     UINavigationController *navigationController = tabBarController.selectedViewController;
-    [navigationController pushViewController:viewController animated:YES];
+    [navigationController cyl_popSelectTabBarChildViewControllerAtIndex:0
+                                                             completion:^(__kindof UIViewController *selectedChildTabBarController) {
+                                                                 [selectedChildTabBarController.navigationController pushViewController:viewController animated:YES];
+                                                             }];
 }
 
 - (void)exampleMarkBadgeWithTotalUnreadCount:(NSInteger)totalUnreadCount controller:(UIViewController *)controller {
@@ -379,37 +498,22 @@ typedef void (^UITableViewRowActionHandler)(UITableViewRowAction *action, NSInde
 
 - (id <MWPhoto>)photoBrowser:(MWPhotoBrowser *)photoBrowser photoAtIndex:(NSUInteger)index {
     if (index < _photos.count)
-        return [_photos objectAtIndex:index];
+    return [_photos objectAtIndex:index];
     return nil;
 }
 
 - (id <MWPhoto>)photoBrowser:(MWPhotoBrowser *)photoBrowser thumbPhotoAtIndex:(NSUInteger)index {
     if (index < _thumbs.count)
-        return [_thumbs objectAtIndex:index];
+    return [_thumbs objectAtIndex:index];
     return nil;
-}
-
-- (void)photoBrowser:(MWPhotoBrowser *)photoBrowser didDisplayPhotoAtIndex:(NSUInteger)index {
-    NSLog(@"Did start viewing photo at index %lu", (unsigned long)index);
 }
 
 - (BOOL)photoBrowser:(MWPhotoBrowser *)photoBrowser isPhotoSelectedAtIndex:(NSUInteger)index {
     return [[_selections objectAtIndex:index] boolValue];
 }
 
-//- (NSString *)photoBrowser:(MWPhotoBrowser *)photoBrowser titleForPhotoAtIndex:(NSUInteger)index {
-//    return [NSString stringWithFormat:@"Photo %lu", (unsigned long)index+1];
-//}
-
 - (void)photoBrowser:(MWPhotoBrowser *)photoBrowser photoAtIndex:(NSUInteger)index selectedChanged:(BOOL)selected {
     [_selections replaceObjectAtIndex:index withObject:[NSNumber numberWithBool:selected]];
-    NSLog(@"Photo at index %lu selected %@", (unsigned long)index, selected ? @"YES" : @"NO");
-}
-
-- (void)photoBrowserDidFinishModalPresentation:(MWPhotoBrowser *)photoBrowser {
-    // If we subscribe to this method we must dismiss the view controller ourselves
-    NSLog(@"Did finish modal presentation");
-    //    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 @end
