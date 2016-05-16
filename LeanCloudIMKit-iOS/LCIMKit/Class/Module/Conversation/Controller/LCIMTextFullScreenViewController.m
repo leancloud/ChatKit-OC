@@ -7,7 +7,7 @@
 //
 
 #import "LCIMTextFullScreenViewController.h"
-#import "CYLDeallocBlockExecutor.h"
+#import "LCCKDeallocBlockExecutor.h"
 #import "LCIMFaceManager.h"
 #define kLCIMTextFont [UIFont systemFontOfSize:30.0f]
 static void * const LCIMTextFullScreenViewContentSizeContext = (void*)&LCIMTextFullScreenViewContentSizeContext;
@@ -29,7 +29,7 @@ static void * const LCIMTextFullScreenViewContentSizeContext = (void*)&LCIMTextF
         UITextView *displayTextView = [[UITextView alloc] initWithFrame:self.view.frame];
         [displayTextView addObserver:self forKeyPath:@"contentSize" options:(NSKeyValueObservingOptionNew) context:LCIMTextFullScreenViewContentSizeContext];
         __unsafe_unretained typeof(self) weakSelf = self;
-        [self cyl_executeAtDealloc:^{
+        [self lcck_executeAtDealloc:^{
             [displayTextView removeObserver:weakSelf forKeyPath:@"contentSize"];
         }];
         displayTextView.contentSize = self.view.bounds.size;

@@ -7,9 +7,9 @@
 //
 
 #import "LCIMConversationListCell.h"
-#import "JSBadgeView.h"
+#import "LCCKBadgeView.h"
 #import "LCIMKit.h"
-#import "UIImageView+CornerRadius.h"
+#import "UIImageView+LCCKExtension.h"
 
 static CGFloat LCIMImageSize = 45;
 static CGFloat LCIMVerticalSpacing = 8;
@@ -66,7 +66,7 @@ CGFloat const LCIMConversationListCellDefaultHeight = 61; //LCIMImageSize + LCIM
         LCIMAvatarImageViewCornerRadiusBlock avatarImageViewCornerRadiusBlock = [LCIMKit sharedInstance].avatarImageViewCornerRadiusBlock;
         if (avatarImageViewCornerRadiusBlock) {
             CGFloat avatarImageViewCornerRadius = avatarImageViewCornerRadiusBlock(avatorImageView.frame.size);
-            [avatorImageView zy_cornerRadiusAdvance:avatarImageViewCornerRadius rectCornerType:UIRectCornerAllCorners];
+            [avatorImageView lcck_cornerRadiusAdvance:avatarImageViewCornerRadius rectCornerType:UIRectCornerAllCorners];
 
         }
         _avatorImageView = avatorImageView;
@@ -116,10 +116,10 @@ CGFloat const LCIMConversationListCellDefaultHeight = 61; //LCIMImageSize + LCIM
     return _messageTextLabel;
 }
 
-- (JSBadgeView *)badgeView {
+- (LCCKBadgeView *)badgeView {
     if (_badgeView == nil) {
-        JSBadgeView *badgeView = [[JSBadgeView alloc] initWithParentView:self.avatorImageView
-                                                               alignment:JSBadgeViewAlignmentTopRight];
+        LCCKBadgeView *badgeView = [[LCCKBadgeView alloc] initWithParentView:self.avatorImageView
+                                                               alignment:LCCKBadgeViewAlignmentTopRight];
         [self.avatorImageView addSubview:(_badgeView = badgeView)];
         [self.avatorImageView bringSubviewToFront:_badgeView];
     }

@@ -15,7 +15,7 @@
 #import "LCIMChatUntiles.h"
 #import "AVIMConversation+LCIMAddition.h"
 #import "LCIMLastMessageTypeManager.h"
-#import "NSDate+DateTools.h"
+#import "NSDate+LCCKDateTools.h"
 #import "MJRefresh.h"
 #import "LCIMConversationListService.h"
 #import <SDWebImage/UIImageView+WebCache.h>
@@ -88,7 +88,7 @@
     
     if (conversation.lcim_lastMessage) {
         cell.messageTextLabel.attributedText = [LCIMLastMessageTypeManager attributedStringWithMessage:conversation.lcim_lastMessage conversation:conversation userName:displayName];
-        cell.timestampLabel.text = [[NSDate dateWithTimeIntervalSince1970:conversation.lcim_lastMessage.sendTimestamp / 1000] timeAgoSinceNow];
+        cell.timestampLabel.text = [[NSDate dateWithTimeIntervalSince1970:conversation.lcim_lastMessage.sendTimestamp / 1000] lcck_timeAgoSinceNow];
     }
     if (conversation.lcim_unreadCount > 0) {
         if (conversation.muted) {

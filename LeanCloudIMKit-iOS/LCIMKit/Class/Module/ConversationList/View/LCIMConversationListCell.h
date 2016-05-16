@@ -8,14 +8,14 @@
 
 #import <UIKit/UIKit.h>
 
-#import "JSBadgeView.h"
+#import "LCCKBadgeView.h"
 
 @interface LCIMConversationListCell : UITableViewCell
 
 @property (nonatomic, strong) UIImageView *avatorImageView;
 @property (nonatomic, strong) UILabel *nameLabel;
 @property (nonatomic, strong) UILabel  *messageTextLabel;
-@property (nonatomic, strong) JSBadgeView *badgeView;
+@property (nonatomic, strong) LCCKBadgeView *badgeView;
 @property (nonatomic, strong) UIView *litteBadgeView;
 @property (nonatomic, strong) UILabel *timestampLabel;
 @property (nonatomic, copy) NSString *identifier;
