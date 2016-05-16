@@ -1,19 +1,19 @@
 //
 //  AppDelegate.m
-//  LeanCloudIMKit-iOS
+//  LeanCloudChatKit-iOS
 //
 //  Created by ElonChan on 16/2/2.
 //  Copyright © 2016年 LeanCloud. All rights reserved.
 //
 
 #import "AppDelegate.h"
-#import "LCIMTabBarControllerConfig.h"
-#import "LCIMConstantsDefinition.h"
-#import "LCIMKitExample.h"
-#import "LCIMUtil.h"
-#import "LCIMKit.h"
-#import "LCIMLoginViewController.h"
-#import "LCIMConversationViewModel.h"
+#import "LCCKTabBarControllerConfig.h"
+#import "LCCKConstantsDefinition.h"
+#import "LCChatKitExample.h"
+#import "LCCKUtil.h"
+#import "LCChatKit.h"
+#import "LCCKLoginViewController.h"
+#import "LCCKConversationViewModel.h"
 
 @implementation NSData (GMNSDataHexAdditions)
 
@@ -45,19 +45,19 @@
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    [LCIMKitExample invokeThisMethodInDidFinishLaunching];
+    [LCChatKitExample invokeThisMethodInDidFinishLaunching];
     [self customizeNavigationBar];
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    LCIMLoginViewController *loginViewController = [[LCIMLoginViewController alloc] initWithNibName:@"LCIMLoginViewController" bundle:[NSBundle mainBundle]];
+    LCCKLoginViewController *loginViewController = [[LCCKLoginViewController alloc] initWithNibName:@"LCCKLoginViewController" bundle:[NSBundle mainBundle]];
     [loginViewController setClientIDHandler:^(NSString *clientID) {
-        [LCIMUtil showProgressText:@"open client ..." duration:10.0f];
-        [[NSUserDefaults standardUserDefaults] setObject:clientID forKey:LCIM_KEY_USERID];
-        [LCIMKitExample invokeThisMethodAfterLoginSuccessWithClientId:clientID success:^{
-            [LCIMUtil hideProgress];
-            LCIMTabBarControllerConfig *tabBarControllerConfig = [[LCIMTabBarControllerConfig alloc] init];
+        [LCCKUtil showProgressText:@"open client ..." duration:10.0f];
+        [[NSUserDefaults standardUserDefaults] setObject:clientID forKey:LCCK_KEY_USERID];
+        [LCChatKitExample invokeThisMethodAfterLoginSuccessWithClientId:clientID success:^{
+            [LCCKUtil hideProgress];
+            LCCKTabBarControllerConfig *tabBarControllerConfig = [[LCCKTabBarControllerConfig alloc] init];
             self.window.rootViewController = tabBarControllerConfig.tabBarController;
         } failed:^(NSError *error) {
-            [LCIMUtil hideProgress];
+            [LCCKUtil hideProgress];
             NSLog(@"%@",error);
         }];
     }];
@@ -68,7 +68,7 @@
 }
 
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
-    [LCIMKitExample invokeThisMethodInDidRegisterForRemoteNotificationsWithDeviceToken:deviceToken];
+    [LCChatKitExample invokeThisMethodInDidRegisterForRemoteNotificationsWithDeviceToken:deviceToken];
 }
 
 - (void)customizeNavigationBar {
@@ -81,15 +81,15 @@
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application {
-    [LCIMKitExample invokeThisMethodInApplicationWillResignActive:application];
+    [LCChatKitExample invokeThisMethodInApplicationWillResignActive:application];
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application {
-    [LCIMKitExample invokeThisMethodInApplicationWillTerminate:application];
+    [LCChatKitExample invokeThisMethodInApplicationWillTerminate:application];
 }
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
-    [LCIMKitExample invokeThisMethodInApplication:application didReceiveRemoteNotification:userInfo];
+    [LCChatKitExample invokeThisMethodInApplication:application didReceiveRemoteNotification:userInfo];
 }
 
 @end

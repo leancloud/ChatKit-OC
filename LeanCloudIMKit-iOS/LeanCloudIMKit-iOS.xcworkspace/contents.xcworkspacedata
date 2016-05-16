@@ -2,7 +2,7 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:LeanCloudIMKit-iOS.xcodeproj">
+      location = "group:/Users/chenyilong/Documents/Git/PR/LeanCloudIMKit-iOS/LeanCloudIMKit-iOS/LeanCloudChatKit-iOS.xcodeproj">
    </FileRef>
    <FileRef
       location = "group:Pods/Pods.xcodeproj">

@@ -1,5 +1,5 @@
 platform :ios , 7.0 
-link_with 'LeanCloudIMKit-iOS', 'LeanCloudIMKit-iOSTests' 
+link_with 'LeanCloudChatKit-iOS', 'LeanCloudChatKit-iOSTests' 
 
 #=========================================================
 #======================== Lib Dependency ===================
