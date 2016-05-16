@@ -8,12 +8,12 @@
 
 #import "LCIMChatFaceView.h"
 #import "LCIMFaceManager.h"
-#import "SwipeView.h"
+#import "LCCKSwipeView.h"
 #import "LCIMFacePageView.h"
 
-@interface LCIMChatFaceView ()<UIScrollViewDelegate,SwipeViewDelegate,SwipeViewDataSource,LCIMFacePageViewDelegate>
+@interface LCIMChatFaceView ()<UIScrollViewDelegate,LCCKSwipeViewDelegate,LCCKSwipeViewDataSource,LCIMFacePageViewDelegate>
 
-@property (nonatomic, strong) SwipeView *swipeView;
+@property (nonatomic, strong) LCCKSwipeView *swipeView;
 @property (strong, nonatomic) UIPageControl *pageControl;
 
 @property (strong, nonatomic) UIView *bottomView;
@@ -40,9 +40,9 @@
     return self;
 }
 
-#pragma mark - SwipeViewDelegate & SwipeViewDataSource
+#pragma mark - LCCKSwipeViewDelegate & LCCKSwipeViewDataSource
 
-- (UIView *)swipeView:(SwipeView *)swipeView viewForItemAtIndex:(NSInteger)index reusingView:(UIView *)view {
+- (UIView *)swipeView:(LCCKSwipeView *)swipeView viewForItemAtIndex:(NSInteger)index reusingView:(UIView *)view {
     LCIMFacePageView *facePageView = (LCIMFacePageView *)view;
     if (!view) {
         facePageView = [[LCIMFacePageView alloc] initWithFrame:swipeView.frame];
@@ -57,11 +57,11 @@
     return facePageView;
 }
 
-- (NSInteger)numberOfItemsInSwipeView:(SwipeView *)swipeView {
+- (NSInteger)numberOfItemsInLCCKSwipeView:(LCCKSwipeView *)swipeView {
     return self.pageCount ;
 }
 
-- (void)swipeViewCurrentItemIndexDidChange:(SwipeView *)swipeView {
+- (void)swipeViewCurrentItemIndexDidChange:(LCCKSwipeView *)swipeView {
     self.pageControl.currentPage = swipeView.currentPage;
 }
 
@@ -166,9 +166,9 @@
 
 #pragma mark - Getters
 
-- (SwipeView *)swipeView {
+- (LCCKSwipeView *)swipeView {
     if (!_swipeView) {
-        _swipeView = [[SwipeView alloc] initWithFrame:CGRectMake(0, 10, self.frame.size.width, self.frame.size.height - 60)];
+        _swipeView = [[LCCKSwipeView alloc] initWithFrame:CGRectMake(0, 10, self.frame.size.width, self.frame.size.height - 60)];
         _swipeView.delegate = self;
         _swipeView.dataSource = self;
     }

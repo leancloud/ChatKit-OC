@@ -8,8 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
-@interface NSString (MD5)
+@interface NSString (LCCKMD5)
 
-- (NSString *)MD5String;
+- (NSString *)lcck_MD5String;
 
 @end

@@ -14,7 +14,7 @@
 
 #import "LCIMChatUntiles.h"
 
-#import "NSString+MD5.h"
+#import "NSString+LCCKMD5.h"
 
 
 NSString *const kLCIMAudioDataKey;
@@ -108,7 +108,7 @@ NSString *const kLCIMAudioDataKey;
         });
     }];
     
-    [blockOperation setName:[[NSString stringWithFormat:@"%@_%ld",self.URLString, self.index] MD5String]];
+    [blockOperation setName:[[NSString stringWithFormat:@"%@_%ld",self.URLString, self.index] lcck_MD5String]];
     
     [_audioDataOperationQueue addOperation:blockOperation];
     
@@ -140,7 +140,7 @@ NSString *const kLCIMAudioDataKey;
     //1.检查URLString是本地文件还是网络文件
     if ([URLString hasPrefix:@"http"] || [URLString hasPrefix:@"https"]) {
         //2.来自网络,先检查本地缓存,缓存key是URLString的MD5编码
-        NSString *audioCacheKey = [URLString MD5String];
+        NSString *audioCacheKey = [URLString lcck_MD5String];
         
         //3.本地缓存存在->直接读取本地缓存   不存在->从网络获取数据,并且缓存
         if ([[NSFileManager defaultManager] fileExistsAtPath:[self.cachePath stringByAppendingPathComponent:audioCacheKey]]) {
@@ -155,7 +155,7 @@ NSString *const kLCIMAudioDataKey;
     
     //4.判断audioData是否读取成功,成功则添加对应的audioDataKey
     if (audioData) {
-        objc_setAssociatedObject(audioData, &kLCIMAudioDataKey, [[NSString stringWithFormat:@"%@_%ld",URLString,index] MD5String], OBJC_ASSOCIATION_COPY);
+        objc_setAssociatedObject(audioData, &kLCIMAudioDataKey, [[NSString stringWithFormat:@"%@_%ld",URLString,index] lcck_MD5String], OBJC_ASSOCIATION_COPY);
     }
 
     return audioData;
@@ -166,7 +166,7 @@ NSString *const kLCIMAudioDataKey;
     
     NSString *audioURLMD5String = objc_getAssociatedObject(audioData, &kLCIMAudioDataKey);
     
-    if (![[[NSString stringWithFormat:@"%@_%ld",self.URLString,self.index] MD5String] isEqualToString:audioURLMD5String]) {
+    if (![[[NSString stringWithFormat:@"%@_%ld",self.URLString,self.index] lcck_MD5String] isEqualToString:audioURLMD5String]) {
         return;
     }
 
@@ -188,7 +188,7 @@ NSString *const kLCIMAudioDataKey;
 
 - (void)cancelOperation {
     for (NSOperation *operation in _audioDataOperationQueue.operations) {
-        if ([operation.name isEqualToString:[[NSString stringWithFormat:@"%@_%ld",self.URLString,self.index] MD5String]]) {
+        if ([operation.name isEqualToString:[[NSString stringWithFormat:@"%@_%ld",self.URLString,self.index] lcck_MD5String]]) {
             [operation cancel];
             break;
         }

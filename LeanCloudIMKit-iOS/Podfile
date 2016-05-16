@@ -4,26 +4,20 @@ link_with 'LeanCloudIMKit-iOS', 'LeanCloudIMKit-iOSTests'
 #=========================================================
 #======================== Lib Dependency ===================
 #=========================================================
-
-pod 'MJRefresh'
-pod 'CYLTabBarController'
-pod 'Masonry'
-pod 'SDWebImage'
-pod 'CYLDeallocBlockExecutor'
 pod 'AVOSCloud'
 pod 'AVOSCloudIM'
+pod 'MJRefresh'
+pod 'Masonry'
+pod 'SDWebImage'
 pod 'FMDB'
-pod 'JSBadgeView'
-pod 'DateTools'
 pod 'UITableView+FDTemplateLayoutCell'
-pod 'SwipeView'
-pod 'ZYCornerRadius', '~> 0.9.1'
 
 #=========================================================
 #======================== Demo Dependency ===================
 #=========================================================
 
 pod 'MBProgressHUD'
+pod 'CYLTabBarController'
 pod 'TWMessageBarManager'
 pod "FDStackView", "1.0"
 pod 'MWPhotoBrowser'
@@ -40,5 +34,4 @@ pod 'MLPAutoCompleteTextField'
 #pod 'SECoreTextView'
 #pod "LKBadgeView", :git => 'https://github.com/lakesoft/LKBadgeView.git'
 #pod 'YYKit'
-
 #pod 'AWFileHash'

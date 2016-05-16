@@ -10,7 +10,7 @@
 #import "LCIMConstants.h"
 #import <SDWebImage/UIImageView+WebCache.h>
 #import "LCIMKit.h"
-#import "UIImageView+CornerRadius.h"
+#import "UIImageView+LCCKExtension.h"
 
 @interface LCIMContactCell ()
 
@@ -30,7 +30,7 @@
     LCIMAvatarImageViewCornerRadiusBlock avatarImageViewCornerRadiusBlock = [LCIMKit sharedInstance].avatarImageViewCornerRadiusBlock;
     if (avatarImageViewCornerRadiusBlock) {
         CGFloat avatarImageViewCornerRadius = avatarImageViewCornerRadiusBlock(self.avatorImageView.frame.size);
-        [self.avatorImageView zy_cornerRadiusAdvance:avatarImageViewCornerRadius rectCornerType:UIRectCornerAllCorners];
+        [self.avatorImageView lcck_cornerRadiusAdvance:avatarImageViewCornerRadius rectCornerType:UIRectCornerAllCorners];
     }
 }
 

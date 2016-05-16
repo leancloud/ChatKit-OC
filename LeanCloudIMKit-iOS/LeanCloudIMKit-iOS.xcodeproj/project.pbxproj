@@ -41,7 +41,7 @@
 		9A1530051CB4C24A00EF35B5 /* LCIMTextFullScreenViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A152F441CB4C24A00EF35B5 /* LCIMTextFullScreenViewController.m */; };
 		9A1530061CB4C24A00EF35B5 /* AVIMConversation+LCIMAddition.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A152F471CB4C24A00EF35B5 /* AVIMConversation+LCIMAddition.m */; };
 		9A1530071CB4C24A00EF35B5 /* LCIMConversationViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A152F491CB4C24A00EF35B5 /* LCIMConversationViewModel.m */; };
-		9A1530081CB4C24A00EF35B5 /* NSString+MD5.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A152F4D1CB4C24A00EF35B5 /* NSString+MD5.m */; };
+		9A1530081CB4C24A00EF35B5 /* NSString+LCCKMD5.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A152F4D1CB4C24A00EF35B5 /* NSString+LCCKMD5.m */; };
 		9A1530091CB4C24A00EF35B5 /* LCIMAVAudioPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A152F4F1CB4C24A00EF35B5 /* LCIMAVAudioPlayer.m */; };
 		9A15300A1CB4C24A00EF35B5 /* LCIMBubbleImageFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A152F511CB4C24A00EF35B5 /* LCIMBubbleImageFactory.m */; };
 		9A15300B1CB4C24A00EF35B5 /* LCIMCellIdentifierFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A152F531CB4C24A00EF35B5 /* LCIMCellIdentifierFactory.m */; };
@@ -86,6 +86,13 @@
 		9A1530381CB4C24A00EF35B5 /* LCIMConversationRefreshHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A152FB71CB4C24A00EF35B5 /* LCIMConversationRefreshHeader.m */; };
 		9A1530391CB4C24A00EF35B5 /* LCIMStatusView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A152FB91CB4C24A00EF35B5 /* LCIMStatusView.m */; };
 		9A15303A1CB4C24A00EF35B5 /* LCIMKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A152FBB1CB4C24A00EF35B5 /* LCIMKit.m */; };
+		9A23ADDB1CE9C41D009461C7 /* LCCKBadgeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A23ADDA1CE9C41D009461C7 /* LCCKBadgeView.m */; };
+		9A23ADDE1CE9C43F009461C7 /* NSDate+LCCKDateTools.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A23ADDD1CE9C43F009461C7 /* NSDate+LCCKDateTools.m */; };
+		9A23ADE31CE9CB03009461C7 /* LCCKError.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A23ADE21CE9CB03009461C7 /* LCCKError.m */; };
+		9A23ADE61CE9CDBC009461C7 /* UIImageView+LCCKExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A23ADE51CE9CDBC009461C7 /* UIImageView+LCCKExtension.m */; };
+		9A23ADED1CE9CE97009461C7 /* LCCKDeallocExecutor.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A23ADEA1CE9CE97009461C7 /* LCCKDeallocExecutor.m */; };
+		9A23ADEE1CE9CE97009461C7 /* NSObject+LCCKDeallocBlockExecutor.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A23ADEC1CE9CE97009461C7 /* NSObject+LCCKDeallocBlockExecutor.m */; };
+		9A23ADF11CE9D13A009461C7 /* LCCKSwipeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A23ADF01CE9D13A009461C7 /* LCCKSwipeView.m */; };
 		9A83AF0A1CD8A5BA001808A4 /* LCCKSingleton.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A83AF091CD8A5BA001808A4 /* LCCKSingleton.m */; };
 		9A8951241CCE8A0A00E295D0 /* LCIMLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A89511E1CCE8A0A00E295D0 /* LCIMLoginViewController.m */; };
 		9A8951251CCE8A0A00E295D0 /* LCIMLoginViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9A89511F1CCE8A0A00E295D0 /* LCIMLoginViewController.xib */; };
@@ -166,8 +173,8 @@
 		9A152F471CB4C24A00EF35B5 /* AVIMConversation+LCIMAddition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "AVIMConversation+LCIMAddition.m"; sourceTree = "<group>"; };
 		9A152F481CB4C24A00EF35B5 /* LCIMConversationViewModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMConversationViewModel.h; sourceTree = "<group>"; };
 		9A152F491CB4C24A00EF35B5 /* LCIMConversationViewModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCIMConversationViewModel.m; sourceTree = "<group>"; };
-		9A152F4C1CB4C24A00EF35B5 /* NSString+MD5.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+MD5.h"; sourceTree = "<group>"; };
-		9A152F4D1CB4C24A00EF35B5 /* NSString+MD5.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+MD5.m"; sourceTree = "<group>"; };
+		9A152F4C1CB4C24A00EF35B5 /* NSString+LCCKMD5.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+LCCKMD5.h"; sourceTree = "<group>"; };
+		9A152F4D1CB4C24A00EF35B5 /* NSString+LCCKMD5.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+LCCKMD5.m"; sourceTree = "<group>"; };
 		9A152F4E1CB4C24A00EF35B5 /* LCIMAVAudioPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMAVAudioPlayer.h; sourceTree = "<group>"; };
 		9A152F4F1CB4C24A00EF35B5 /* LCIMAVAudioPlayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCIMAVAudioPlayer.m; sourceTree = "<group>"; };
 		9A152F501CB4C24A00EF35B5 /* LCIMBubbleImageFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMBubbleImageFactory.h; sourceTree = "<group>"; };
@@ -251,6 +258,22 @@
 		9A152FB91CB4C24A00EF35B5 /* LCIMStatusView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCIMStatusView.m; sourceTree = "<group>"; };
 		9A152FBA1CB4C24A00EF35B5 /* LCIMKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMKit.h; sourceTree = "<group>"; };
 		9A152FBB1CB4C24A00EF35B5 /* LCIMKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCIMKit.m; sourceTree = "<group>"; };
+		9A23ADD91CE9C41D009461C7 /* LCCKBadgeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKBadgeView.h; sourceTree = "<group>"; };
+		9A23ADDA1CE9C41D009461C7 /* LCCKBadgeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCKBadgeView.m; sourceTree = "<group>"; };
+		9A23ADDC1CE9C43F009461C7 /* NSDate+LCCKDateTools.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+LCCKDateTools.h"; sourceTree = "<group>"; };
+		9A23ADDD1CE9C43F009461C7 /* NSDate+LCCKDateTools.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+LCCKDateTools.m"; sourceTree = "<group>"; };
+		9A23ADDF1CE9CA8D009461C7 /* LCCKDateToolsConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKDateToolsConstants.h; sourceTree = "<group>"; };
+		9A23ADE11CE9CB03009461C7 /* LCCKError.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKError.h; sourceTree = "<group>"; };
+		9A23ADE21CE9CB03009461C7 /* LCCKError.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCKError.m; sourceTree = "<group>"; };
+		9A23ADE41CE9CDBC009461C7 /* UIImageView+LCCKExtension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImageView+LCCKExtension.h"; sourceTree = "<group>"; };
+		9A23ADE51CE9CDBC009461C7 /* UIImageView+LCCKExtension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImageView+LCCKExtension.m"; sourceTree = "<group>"; };
+		9A23ADE81CE9CE97009461C7 /* LCCKDeallocBlockExecutor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKDeallocBlockExecutor.h; sourceTree = "<group>"; };
+		9A23ADE91CE9CE97009461C7 /* LCCKDeallocExecutor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKDeallocExecutor.h; sourceTree = "<group>"; };
+		9A23ADEA1CE9CE97009461C7 /* LCCKDeallocExecutor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCKDeallocExecutor.m; sourceTree = "<group>"; };
+		9A23ADEB1CE9CE97009461C7 /* NSObject+LCCKDeallocBlockExecutor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+LCCKDeallocBlockExecutor.h"; sourceTree = "<group>"; };
+		9A23ADEC1CE9CE97009461C7 /* NSObject+LCCKDeallocBlockExecutor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+LCCKDeallocBlockExecutor.m"; sourceTree = "<group>"; };
+		9A23ADEF1CE9D13A009461C7 /* LCCKSwipeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKSwipeView.h; sourceTree = "<group>"; };
+		9A23ADF01CE9D13A009461C7 /* LCCKSwipeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCKSwipeView.m; sourceTree = "<group>"; };
 		9A83AF081CD8A5BA001808A4 /* LCCKSingleton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKSingleton.h; sourceTree = "<group>"; };
 		9A83AF091CD8A5BA001808A4 /* LCCKSingleton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCKSingleton.m; sourceTree = "<group>"; };
 		9A89511D1CCE8A0A00E295D0 /* LCIMLoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMLoginViewController.h; sourceTree = "<group>"; };
@@ -569,10 +592,17 @@
 		9A152F4B1CB4C24A00EF35B5 /* Categories */ = {
 			isa = PBXGroup;
 			children = (
-				9A152F4C1CB4C24A00EF35B5 /* NSString+MD5.h */,
-				9A152F4D1CB4C24A00EF35B5 /* NSString+MD5.m */,
+				9A23ADE11CE9CB03009461C7 /* LCCKError.h */,
+				9A23ADE21CE9CB03009461C7 /* LCCKError.m */,
+				9A23ADDF1CE9CA8D009461C7 /* LCCKDateToolsConstants.h */,
+				9A23ADDC1CE9C43F009461C7 /* NSDate+LCCKDateTools.h */,
+				9A23ADDD1CE9C43F009461C7 /* NSDate+LCCKDateTools.m */,
+				9A152F4C1CB4C24A00EF35B5 /* NSString+LCCKMD5.h */,
+				9A152F4D1CB4C24A00EF35B5 /* NSString+LCCKMD5.m */,
 				9A11D34B1CDD1CC000B3814B /* UIImage+LCCKExtension.h */,
 				9A11D34C1CDD1CC000B3814B /* UIImage+LCCKExtension.m */,
+				9A23ADE41CE9CDBC009461C7 /* UIImageView+LCCKExtension.h */,
+				9A23ADE51CE9CDBC009461C7 /* UIImageView+LCCKExtension.m */,
 			);
 			path = Categories;
 			sourceTree = "<group>";
@@ -709,6 +739,7 @@
 		9A152FAB1CB4C24A00EF35B5 /* Vendor */ = {
 			isa = PBXGroup;
 			children = (
+				9A23ADE71CE9CE97009461C7 /* LCCKDeallocBlockExecutor */,
 				9A152FAC1CB4C24A00EF35B5 /* LCIMTableViewRowAction */,
 				9A152FB11CB4C24A00EF35B5 /* VoiceLib */,
 			);
@@ -739,12 +770,28 @@
 		9A152FB51CB4C24A00EF35B5 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				9A23ADEF1CE9D13A009461C7 /* LCCKSwipeView.h */,
+				9A23ADF01CE9D13A009461C7 /* LCCKSwipeView.m */,
 				9A152FB61CB4C24A00EF35B5 /* LCIMConversationRefreshHeader.h */,
 				9A152FB71CB4C24A00EF35B5 /* LCIMConversationRefreshHeader.m */,
 				9A152FB81CB4C24A00EF35B5 /* LCIMStatusView.h */,
 				9A152FB91CB4C24A00EF35B5 /* LCIMStatusView.m */,
+				9A23ADD91CE9C41D009461C7 /* LCCKBadgeView.h */,
+				9A23ADDA1CE9C41D009461C7 /* LCCKBadgeView.m */,
 			);
 			path = View;
+			sourceTree = "<group>";
+		};
+		9A23ADE71CE9CE97009461C7 /* LCCKDeallocBlockExecutor */ = {
+			isa = PBXGroup;
+			children = (
+				9A23ADE81CE9CE97009461C7 /* LCCKDeallocBlockExecutor.h */,
+				9A23ADE91CE9CE97009461C7 /* LCCKDeallocExecutor.h */,
+				9A23ADEA1CE9CE97009461C7 /* LCCKDeallocExecutor.m */,
+				9A23ADEB1CE9CE97009461C7 /* NSObject+LCCKDeallocBlockExecutor.h */,
+				9A23ADEC1CE9CE97009461C7 /* NSObject+LCCKDeallocBlockExecutor.m */,
+			);
+			path = LCCKDeallocBlockExecutor;
 			sourceTree = "<group>";
 		};
 		9A89511B1CCE8A0A00E295D0 /* Login */ = {
@@ -960,24 +1007,29 @@
 				9A8951261CCE8A0A00E295D0 /* LCIMLoginDataSource.m in Sources */,
 				9A1530021CB4C24A00EF35B5 /* LCIMConversationViewController.m in Sources */,
 				9A1530051CB4C24A00EF35B5 /* LCIMTextFullScreenViewController.m in Sources */,
-				9A1530081CB4C24A00EF35B5 /* NSString+MD5.m in Sources */,
+				9A1530081CB4C24A00EF35B5 /* NSString+LCCKMD5.m in Sources */,
 				9A11D3461CDCEF8900B3814B /* LCIMChatFaceView.m in Sources */,
 				9A15302F1CB4C24A00EF35B5 /* LCIMSettingService.m in Sources */,
 				9A1530341CB4C24A00EF35B5 /* UITableViewRowAction+LCIMExtension.m in Sources */,
 				9A1530351CB4C24A00EF35B5 /* UITableViewRowAction.m in Sources */,
 				9A10878F1CDC94510063432D /* LCIMBaseTableViewController.m in Sources */,
+				9A23ADF11CE9D13A009461C7 /* LCCKSwipeView.m in Sources */,
+				9A23ADDB1CE9C41D009461C7 /* LCCKBadgeView.m in Sources */,
 				9A152FFD1CB4C24A00EF35B5 /* AVIMEmotionMessage.m in Sources */,
 				9A83AF0A1CD8A5BA001808A4 /* LCCKSingleton.m in Sources */,
 				9A15300A1CB4C24A00EF35B5 /* LCIMBubbleImageFactory.m in Sources */,
 				9A1530061CB4C24A00EF35B5 /* AVIMConversation+LCIMAddition.m in Sources */,
+				9A23ADEE1CE9CE97009461C7 /* NSObject+LCCKDeallocBlockExecutor.m in Sources */,
 				9A15302C1CB4C24A00EF35B5 /* LCIMConversationListService.m in Sources */,
 				9A1530331CB4C24A00EF35B5 /* UITableViewCell+LCIMExtension.m in Sources */,
 				9A1530371CB4C24A00EF35B5 /* Mp3Recorder.m in Sources */,
+				9A23ADE31CE9CB03009461C7 /* LCCKError.m in Sources */,
 				9A1530121CB4C24A00EF35B5 /* LCIMChatImageMessageCell.m in Sources */,
 				9A15302E1CB4C24A00EF35B5 /* LCIMSessionService.m in Sources */,
 				9A15300E1CB4C24A00EF35B5 /* LCIMLastMessageTypeManager.m in Sources */,
 				9A15300C1CB4C24A00EF35B5 /* LCIMCellRegisterController.m in Sources */,
 				9A152E791CB4B03600EF35B5 /* NSObject+LCCKHUD.m in Sources */,
+				9A23ADE61CE9CDBC009461C7 /* UIImageView+LCCKExtension.m in Sources */,
 				9A1530321CB4C24A00EF35B5 /* LCIMUserSystemService.m in Sources */,
 				9A1530091CB4C24A00EF35B5 /* LCIMAVAudioPlayer.m in Sources */,
 				9A1530011CB4C24A00EF35B5 /* LCIMBaseViewController.m in Sources */,
@@ -995,6 +1047,7 @@
 				9A1530041CB4C24A00EF35B5 /* LCIMLocationController.m in Sources */,
 				9A15303A1CB4C24A00EF35B5 /* LCIMKit.m in Sources */,
 				9A1530221CB4C24A00EF35B5 /* LCIMConversationListCell.m in Sources */,
+				9A23ADED1CE9CE97009461C7 /* LCCKDeallocExecutor.m in Sources */,
 				9A152E731CB4B03600EF35B5 /* LCIMUtil.m in Sources */,
 				9A15300D1CB4C24A00EF35B5 /* LCIMFaceManager.m in Sources */,
 				9A152E781CB4B03600EF35B5 /* main.m in Sources */,
@@ -1024,6 +1077,7 @@
 				9A1530101CB4C24A00EF35B5 /* LCIMMessageVoiceFactory.m in Sources */,
 				9A1530211CB4C24A00EF35B5 /* LCIMConversationListViewModel.m in Sources */,
 				9A1530181CB4C24A00EF35B5 /* LCIMContentView.m in Sources */,
+				9A23ADDE1CE9C43F009461C7 /* NSDate+LCCKDateTools.m in Sources */,
 				9A1530161CB4C24A00EF35B5 /* LCIMChatTextMessageCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1148,63 +1202,6 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					"-ObjC",
-					"-l\"CYLDeallocBlockExecutor\"",
-					"-l\"CYLTabBarController\"",
-					"-l\"DACircularProgress\"",
-					"-l\"DateTools\"",
-					"-l\"FDStackView\"",
-					"-l\"FMDB\"",
-					"-l\"JSBadgeView\"",
-					"-l\"MBProgressHUD\"",
-					"-l\"MJRefresh\"",
-					"-l\"MLPAutoCompleteTextField\"",
-					"-l\"MWPhotoBrowser\"",
-					"-l\"Masonry\"",
-					"-l\"SDWebImage\"",
-					"-l\"SwipeView\"",
-					"-l\"TWMessageBarManager\"",
-					"-l\"UITableView+FDTemplateLayoutCell\"",
-					"-l\"icucore\"",
-					"-l\"sqlite3\"",
-					"-l\"z\"",
-					"-framework",
-					"\"Accelerate\"",
-					"-framework",
-					"\"AssetsLibrary\"",
-					"-framework",
-					"\"CFNetwork\"",
-					"-framework",
-					"\"CoreFoundation\"",
-					"-framework",
-					"\"CoreGraphics\"",
-					"-framework",
-					"\"CoreImage\"",
-					"-framework",
-					"\"CoreLocation\"",
-					"-framework",
-					"\"CoreTelephony\"",
-					"-framework",
-					"\"CoreText\"",
-					"-framework",
-					"\"Foundation\"",
-					"-framework",
-					"\"ImageIO\"",
-					"-framework",
-					"\"MediaPlayer\"",
-					"-framework",
-					"\"MobileCoreServices\"",
-					"-framework",
-					"\"QuartzCore\"",
-					"-framework",
-					"\"Security\"",
-					"-framework",
-					"\"SystemConfiguration\"",
-					"-framework",
-					"\"UIKit\"",
-				);
 				PRODUCT_BUNDLE_IDENTIFIER = "ElonChan.LeanCloudIMKit-iOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -1225,63 +1222,6 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					"-ObjC",
-					"-l\"CYLDeallocBlockExecutor\"",
-					"-l\"CYLTabBarController\"",
-					"-l\"DACircularProgress\"",
-					"-l\"DateTools\"",
-					"-l\"FDStackView\"",
-					"-l\"FMDB\"",
-					"-l\"JSBadgeView\"",
-					"-l\"MBProgressHUD\"",
-					"-l\"MJRefresh\"",
-					"-l\"MLPAutoCompleteTextField\"",
-					"-l\"MWPhotoBrowser\"",
-					"-l\"Masonry\"",
-					"-l\"SDWebImage\"",
-					"-l\"SwipeView\"",
-					"-l\"TWMessageBarManager\"",
-					"-l\"UITableView+FDTemplateLayoutCell\"",
-					"-l\"icucore\"",
-					"-l\"sqlite3\"",
-					"-l\"z\"",
-					"-framework",
-					"\"Accelerate\"",
-					"-framework",
-					"\"AssetsLibrary\"",
-					"-framework",
-					"\"CFNetwork\"",
-					"-framework",
-					"\"CoreFoundation\"",
-					"-framework",
-					"\"CoreGraphics\"",
-					"-framework",
-					"\"CoreImage\"",
-					"-framework",
-					"\"CoreLocation\"",
-					"-framework",
-					"\"CoreTelephony\"",
-					"-framework",
-					"\"CoreText\"",
-					"-framework",
-					"\"Foundation\"",
-					"-framework",
-					"\"ImageIO\"",
-					"-framework",
-					"\"MediaPlayer\"",
-					"-framework",
-					"\"MobileCoreServices\"",
-					"-framework",
-					"\"QuartzCore\"",
-					"-framework",
-					"\"Security\"",
-					"-framework",
-					"\"SystemConfiguration\"",
-					"-framework",
-					"\"UIKit\"",
-				);
 				PRODUCT_BUNDLE_IDENTIFIER = "ElonChan.LeanCloudIMKit-iOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};

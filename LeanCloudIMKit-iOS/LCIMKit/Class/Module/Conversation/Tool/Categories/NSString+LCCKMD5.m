@@ -6,13 +6,12 @@
 //  Copyright © 2015年 https://LeanCloud.cn . All rights reserved.
 //
 
-#import "NSString+MD5.h"
-
+#import "NSString+LCCKMD5.h"
 #import <CommonCrypto/CommonCrypto.h>
 
-@implementation NSString (MD5)
+@implementation NSString (LCCKMD5)
 
-- (NSString *)MD5String {
+- (NSString *)lcck_MD5String {
     const char* str = [self UTF8String];
     unsigned char result[CC_MD5_DIGEST_LENGTH];
     uint32_t length = (CC_LONG)strlen(str);

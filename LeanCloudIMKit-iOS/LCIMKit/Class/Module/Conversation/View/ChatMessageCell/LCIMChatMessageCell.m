@@ -20,7 +20,7 @@
 
 #import <SDWebImage/UIImageView+WebCache.h>
 #import "LCIMKit.h"
-#import "UIImageView+CornerRadius.h"
+#import "UIImageView+LCCKExtension.h"
 
 static CGFloat const kAvatarImageViewWidth = 50.f;
 static CGFloat const kAvatarImageViewHeight = 50.f;
@@ -256,7 +256,7 @@ static CGFloat const kAvatarImageViewHeight = 50.f;
         if (avatarImageViewCornerRadiusBlock) {
             CGSize avatarImageViewSize = CGSizeMake(kAvatarImageViewWidth, kAvatarImageViewHeight);
             CGFloat avatarImageViewCornerRadius = avatarImageViewCornerRadiusBlock(avatarImageViewSize);
-            [_avatarImageView zy_cornerRadiusAdvance:avatarImageViewCornerRadius rectCornerType:UIRectCornerAllCorners];
+            [_avatarImageView lcck_cornerRadiusAdvance:avatarImageViewCornerRadius rectCornerType:UIRectCornerAllCorners];
         }
         [self bringSubviewToFront:_avatarImageView];
     }
