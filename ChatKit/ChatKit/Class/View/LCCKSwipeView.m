@@ -772,7 +772,7 @@
         {
             wrappedDistance = -wrappedDistance;
         }
-        return (fabsf(directDistance) <= fabs(wrappedDistance))? directDistance: wrappedDistance;
+        return (fabs(directDistance) <= fabs(wrappedDistance))? directDistance: wrappedDistance;
     }
     return directDistance;
 }

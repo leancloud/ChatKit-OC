@@ -1,0 +1,26 @@
+platform :ios , '7.0' 
+target 'ChatKit' do
+
+#=========================================================
+#======================== Lib Dependency =================
+#=========================================================
+pod 'AVOSCloud'
+pod 'AVOSCloudIM'
+pod 'MJRefresh'
+pod 'Masonry'
+pod 'SDWebImage'
+pod 'FMDB'
+pod 'UITableView+FDTemplateLayoutCell'
+
+#=========================================================
+#======================== Demo Dependency ================
+#=========================================================
+
+pod 'MBProgressHUD'
+pod 'CYLTabBarController'
+pod 'TWMessageBarManager'
+pod "FDStackView", "1.0"
+pod 'MWPhotoBrowser'
+pod 'MLPAutoCompleteTextField'
+
+end
