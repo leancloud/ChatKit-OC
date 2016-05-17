@@ -361,6 +361,16 @@
     if (self.disableTextShowInFullScreen) {
         return;
     }
+    __block int a = 0;
+    __block int b = 0;
+    NSLog(@"定以前：a：%p\nb：%p", &a, &b);         //a在栈区
+    void (^foo)(void) = ^{
+        a = 1;
+        b = 1;
+        NSLog(@"block内部：a：%p\nb：%p", &a, &b); //a在堆区
+    };
+    foo();
+    NSLog(@"定以后：a：%p\nb：%p", &a, &b);          //a在堆区
     LCCKTextFullScreenViewController *textFullScreenViewController = [[LCCKTextFullScreenViewController alloc] initWithText:messageCell.message.text];
     [textFullScreenViewController setRemoveFromWindowHandler:^{
         [self scrollToBottomAnimated:NO];
