@@ -2,7 +2,6 @@ Pod::Spec.new do |s|
   s.name         = "ChatKit"
   s.version      = "0.0.1"
   s.summary      = "An IM App Framework, support sending text, pictures, audio, video, location messaging, managing address book, more interesting features."
-  s.description  = "ChatKit is iPad and iPhone compatible. Supports landscape and portrait orientations and can be used inside UINavigationController."
   s.homepage     = "https://github.com/ChenYilong/ChatKit-OC"
   s.license      = { :type => 'MIT', :file => 'LICENSE' }
   s.authors      = { "LeanCloud" => "support@leancloud.cn" }
@@ -20,5 +19,6 @@ Pod::Spec.new do |s|
   s.dependency 'SDWebImage'
   s.dependency 'FMDB'
   s.dependency 'UITableView+FDTemplateLayoutCell'
+  s.xcconfig = { 'LIBRARY_SEARCH_PATHS' => '"$(PODS_ROOT)/ChatKit/Chartboost"' }
 
 end
