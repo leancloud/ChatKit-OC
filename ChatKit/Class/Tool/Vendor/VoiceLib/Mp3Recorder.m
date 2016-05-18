@@ -7,7 +7,12 @@
 //
 
 #import "Mp3Recorder.h"
+#if __has_include(<lame/lame.h>)
 #import <lame/lame.h>
+#else
+#import "lame.h"
+#endif
+
 #import <AVFoundation/AVFoundation.h>
 
 @interface Mp3Recorder()<AVAudioRecorderDelegate>

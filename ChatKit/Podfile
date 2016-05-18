@@ -1,9 +1,10 @@
-platform :ios , '7.0' 
+# Uncomment this line to define a global platform for your project
+platform :ios, '7.0'
+# Uncomment this line if you're using Swift
+# use_frameworks!
+
 target 'ChatKit' do
 
-#=========================================================
-#======================== Lib Dependency =================
-#=========================================================
 pod 'AVOSCloud'
 pod 'AVOSCloudIM'
 pod 'MJRefresh'
@@ -12,15 +13,5 @@ pod 'SDWebImage'
 pod 'FMDB'
 pod 'UITableView+FDTemplateLayoutCell'
 
-#=========================================================
-#======================== Demo Dependency ================
-#=========================================================
-
-pod 'MBProgressHUD'
-pod 'CYLTabBarController'
-pod 'TWMessageBarManager'
-pod "FDStackView", "1.0"
-pod 'MWPhotoBrowser'
-pod 'MLPAutoCompleteTextField'
-
 end
+

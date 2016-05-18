@@ -1,2 +1,2 @@
-# LeanCloudIMKit-iOS
-LeanCloudIMKit-iOS
+# ChatKit-OC
+ChatKit-OC

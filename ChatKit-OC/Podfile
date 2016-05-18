@@ -1,0 +1,20 @@
+platform :ios , '7.0' 
+target 'ChatKit-OC’ do
+
+#=========================================================
+#======================== Lib Dependency =================
+#=========================================================
+pod 'ChatKit' , :path => '../'
+
+#=========================================================
+#======================== Demo Dependency ================
+#=========================================================
+
+pod 'MBProgressHUD'
+pod 'CYLTabBarController'
+pod 'TWMessageBarManager'
+pod "FDStackView", "1.0"
+pod 'MWPhotoBrowser'
+pod 'MLPAutoCompleteTextField'
+
+end
