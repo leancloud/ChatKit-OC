@@ -32,9 +32,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		9A47307D1CECCFDE00AEB86F /* PBXContainerItemProxy */ = {
+		9A0B71DC1CECFA39004FDACC /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 9A4730791CECCFDE00AEB86F /* ChatKit.xcodeproj */;
+			containerPortal = 9A0B71D81CECFA39004FDACC /* ChatKit.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = 9A6060821CEC831800D14D73;
 			remoteInfo = ChatKit;
@@ -43,6 +43,7 @@
 
 /* Begin PBXFileReference section */
 		32CE1421311C5D8D2D3C1C7E /* libPods-ChatKit-OC.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ChatKit-OC.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		9A0B71D81CECFA39004FDACC /* ChatKit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ChatKit.xcodeproj; path = ../ChatKit/ChatKit.xcodeproj; sourceTree = "<group>"; };
 		9A4730291CECAEC500AEB86F /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		9A47302A1CECAEC500AEB86F /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		9A47302D1CECAEC500AEB86F /* LCCKUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKUser.h; sourceTree = "<group>"; };
@@ -80,7 +81,6 @@
 		9A47305E1CECAEC500AEB86F /* NSObject+LCCKHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+LCCKHUD.m"; sourceTree = "<group>"; };
 		9A47305F1CECAEC500AEB86F /* LCCKTabBarControllerConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKTabBarControllerConfig.h; sourceTree = "<group>"; };
 		9A4730601CECAEC500AEB86F /* LCCKTabBarControllerConfig.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCKTabBarControllerConfig.m; sourceTree = "<group>"; };
-		9A4730791CECCFDE00AEB86F /* ChatKit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ChatKit.xcodeproj; path = ../ChatKit/ChatKit.xcodeproj; sourceTree = "<group>"; };
 		9A754D4B1CECAC3E000967F1 /* ChatKit-OC.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "ChatKit-OC.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A30F4A0DBE262BA6B04E1A7D /* Pods-ChatKit-OC.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChatKit-OC.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ChatKit-OC/Pods-ChatKit-OC.debug.xcconfig"; sourceTree = "<group>"; };
 		E6B1C0F2001D5983B279DC59 /* Pods-ChatKit-OC.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChatKit-OC.release.xcconfig"; path = "Pods/Target Support Files/Pods-ChatKit-OC/Pods-ChatKit-OC.release.xcconfig"; sourceTree = "<group>"; };
@@ -115,14 +115,22 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		9A0B71D91CECFA39004FDACC /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				9A0B71DD1CECFA39004FDACC /* ChatKit.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		9A4730281CECAEC500AEB86F /* Example */ = {
 			isa = PBXGroup;
 			children = (
 				9A4730291CECAEC500AEB86F /* AppDelegate.h */,
 				9A47302A1CECAEC500AEB86F /* AppDelegate.m */,
-				9A47302B1CECAEC500AEB86F /* Class */,
 				9A47305F1CECAEC500AEB86F /* LCCKTabBarControllerConfig.h */,
 				9A4730601CECAEC500AEB86F /* LCCKTabBarControllerConfig.m */,
+				9A47302B1CECAEC500AEB86F /* Class */,
 			);
 			path = Example;
 			sourceTree = "<group>";
@@ -295,18 +303,10 @@
 			path = MBProgressHUD;
 			sourceTree = "<group>";
 		};
-		9A47307A1CECCFDE00AEB86F /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				9A47307E1CECCFDE00AEB86F /* ChatKit.framework */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 		9A754D421CECAC3E000967F1 = {
 			isa = PBXGroup;
 			children = (
-				9A4730791CECCFDE00AEB86F /* ChatKit.xcodeproj */,
+				9A0B71D81CECFA39004FDACC /* ChatKit.xcodeproj */,
 				9A4730281CECAEC500AEB86F /* Example */,
 				9A754D4C1CECAC3E000967F1 /* Products */,
 				081E3E415D01F3B339E50FEE /* Pods */,
@@ -373,8 +373,8 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
-					ProductGroup = 9A47307A1CECCFDE00AEB86F /* Products */;
-					ProjectRef = 9A4730791CECCFDE00AEB86F /* ChatKit.xcodeproj */;
+					ProductGroup = 9A0B71D91CECFA39004FDACC /* Products */;
+					ProjectRef = 9A0B71D81CECFA39004FDACC /* ChatKit.xcodeproj */;
 				},
 			);
 			projectRoot = "";
@@ -385,11 +385,11 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		9A47307E1CECCFDE00AEB86F /* ChatKit.framework */ = {
+		9A0B71DD1CECFA39004FDACC /* ChatKit.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
 			path = ChatKit.framework;
-			remoteRef = 9A47307D1CECCFDE00AEB86F /* PBXContainerItemProxy */;
+			remoteRef = 9A0B71DC1CECFA39004FDACC /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
