@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		6C01834F672F5FFBB87B87DA /* libPods-ChatKit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A9601FCE9729A0FE4669D33E /* libPods-ChatKit.a */; };
+		9A0B71D41CECF6AA004FDACC /* DateTools.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 9A0B71D21CECF6AA004FDACC /* DateTools.bundle */; };
+		9A0B71D51CECF6AA004FDACC /* MBProgressHUD.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 9A0B71D31CECF6AA004FDACC /* MBProgressHUD.bundle */; };
 		9A6061351CEC947A00D14D73 /* AVIMEmotionMessage.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A6060901CEC947900D14D73 /* AVIMEmotionMessage.h */; };
 		9A6061361CEC947A00D14D73 /* AVIMEmotionMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A6060911CEC947900D14D73 /* AVIMEmotionMessage.m */; };
 		9A6061371CEC947A00D14D73 /* LCCKMessage.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A6060921CEC947900D14D73 /* LCCKMessage.h */; };
@@ -119,7 +121,6 @@
 		9A6061A11CEC947A00D14D73 /* LCCKUIService.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A6061101CEC947A00D14D73 /* LCCKUIService.m */; };
 		9A6061A21CEC947A00D14D73 /* LCCKUserSystemService.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A6061111CEC947A00D14D73 /* LCCKUserSystemService.h */; };
 		9A6061A31CEC947A00D14D73 /* LCCKUserSystemService.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A6061121CEC947A00D14D73 /* LCCKUserSystemService.m */; };
-		9A6061A41CEC947A00D14D73 /* DateTools.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 9A6061151CEC947A00D14D73 /* DateTools.bundle */; };
 		9A6061A51CEC947A00D14D73 /* LCCKDateToolsConstants.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A6061161CEC947A00D14D73 /* LCCKDateToolsConstants.h */; };
 		9A6061A61CEC947A00D14D73 /* LCCKError.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A6061171CEC947A00D14D73 /* LCCKError.h */; };
 		9A6061A71CEC947A00D14D73 /* LCCKError.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A6061181CEC947A00D14D73 /* LCCKError.m */; };
@@ -153,6 +154,8 @@
 /* Begin PBXFileReference section */
 		44B343625F3F83AFA1F15140 /* Pods-ChatKit.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChatKit.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ChatKit/Pods-ChatKit.debug.xcconfig"; sourceTree = "<group>"; };
 		5159CA305046AA97933FF01E /* Pods-ChatKit.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChatKit.release.xcconfig"; path = "Pods/Target Support Files/Pods-ChatKit/Pods-ChatKit.release.xcconfig"; sourceTree = "<group>"; };
+		9A0B71D21CECF6AA004FDACC /* DateTools.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = DateTools.bundle; sourceTree = "<group>"; };
+		9A0B71D31CECF6AA004FDACC /* MBProgressHUD.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = MBProgressHUD.bundle; sourceTree = "<group>"; };
 		9A6060821CEC831800D14D73 /* ChatKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ChatKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9A6060901CEC947900D14D73 /* AVIMEmotionMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVIMEmotionMessage.h; sourceTree = "<group>"; };
 		9A6060911CEC947900D14D73 /* AVIMEmotionMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVIMEmotionMessage.m; sourceTree = "<group>"; };
@@ -266,7 +269,6 @@
 		9A6061101CEC947A00D14D73 /* LCCKUIService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCKUIService.m; sourceTree = "<group>"; };
 		9A6061111CEC947A00D14D73 /* LCCKUserSystemService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKUserSystemService.h; sourceTree = "<group>"; };
 		9A6061121CEC947A00D14D73 /* LCCKUserSystemService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCKUserSystemService.m; sourceTree = "<group>"; };
-		9A6061151CEC947A00D14D73 /* DateTools.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = DateTools.bundle; sourceTree = "<group>"; };
 		9A6061161CEC947A00D14D73 /* LCCKDateToolsConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKDateToolsConstants.h; sourceTree = "<group>"; };
 		9A6061171CEC947A00D14D73 /* LCCKError.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKError.h; sourceTree = "<group>"; };
 		9A6061181CEC947A00D14D73 /* LCCKError.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCKError.m; sourceTree = "<group>"; };
@@ -326,6 +328,15 @@
 				5159CA305046AA97933FF01E /* Pods-ChatKit.release.xcconfig */,
 			);
 			name = Pods;
+			sourceTree = "<group>";
+		};
+		9A0B71D11CECF6AA004FDACC /* VendorResource */ = {
+			isa = PBXGroup;
+			children = (
+				9A0B71D21CECF6AA004FDACC /* DateTools.bundle */,
+				9A0B71D31CECF6AA004FDACC /* MBProgressHUD.bundle */,
+			);
+			path = VendorResource;
 			sourceTree = "<group>";
 		};
 		9A6060781CEC831800D14D73 = {
@@ -565,6 +576,7 @@
 		9A6060F11CEC947900D14D73 /* Resource */ = {
 			isa = PBXGroup;
 			children = (
+				9A0B71D11CECF6AA004FDACC /* VendorResource */,
 				9A6060F21CEC947900D14D73 /* BarButtonIcon.bundle */,
 				9A6060F31CEC947900D14D73 /* ChatKeyboard.bundle */,
 				9A6060F41CEC947900D14D73 /* Common.bundle */,
@@ -635,7 +647,6 @@
 		9A6061141CEC947A00D14D73 /* DateTools */ = {
 			isa = PBXGroup;
 			children = (
-				9A6061151CEC947A00D14D73 /* DateTools.bundle */,
 				9A6061161CEC947A00D14D73 /* LCCKDateToolsConstants.h */,
 				9A6061171CEC947A00D14D73 /* LCCKError.h */,
 				9A6061181CEC947A00D14D73 /* LCCKError.m */,
@@ -834,13 +845,14 @@
 				9A60618E1CEC947A00D14D73 /* Placeholder.bundle in Resources */,
 				9A60618B1CEC947A00D14D73 /* Emoji.bundle in Resources */,
 				9A60618C1CEC947A00D14D73 /* LCChatKitString.strings in Resources */,
+				9A0B71D51CECF6AA004FDACC /* MBProgressHUD.bundle in Resources */,
 				9A6061891CEC947A00D14D73 /* ChatKeyboard.bundle in Resources */,
 				9A60618D1CEC947A00D14D73 /* MessageBubble.bundle in Resources */,
 				9A60618F1CEC947A00D14D73 /* VoiceMessageSource.bundle in Resources */,
 				9A60618A1CEC947A00D14D73 /* Common.bundle in Resources */,
 				9A6061881CEC947A00D14D73 /* BarButtonIcon.bundle in Resources */,
 				9A6061C11CEC949E00D14D73 /* Info.plist in Resources */,
-				9A6061A41CEC947A00D14D73 /* DateTools.bundle in Resources */,
+				9A0B71D41CECF6AA004FDACC /* DateTools.bundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1067,6 +1079,7 @@
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = LeanCloud.ChatKit;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1088,6 +1101,7 @@
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = LeanCloud.ChatKit;
 				PRODUCT_NAME = "$(TARGET_NAME)";

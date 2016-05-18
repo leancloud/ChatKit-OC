@@ -362,9 +362,6 @@
         return;
     }
     LCCKTextFullScreenViewController *textFullScreenViewController = [[LCCKTextFullScreenViewController alloc] initWithText:messageCell.message.text];
-    [textFullScreenViewController setRemoveFromWindowHandler:^{
-        [self scrollToBottomAnimated:NO];
-    }];
     [self.navigationController pushViewController:textFullScreenViewController animated:NO];
 }
 

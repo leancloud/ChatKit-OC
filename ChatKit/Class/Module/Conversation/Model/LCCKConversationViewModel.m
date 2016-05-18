@@ -207,6 +207,7 @@
               success:^(NSString *messageUUID) {
                   message.status = LCCKMessageSendStateSuccess;
                   [[LCCKSoundManager defaultManager] playSendSoundIfNeed];
+                  [self.delegate messageSendStateChanged:LCCKMessageSendStateSuccess withProgress:1.0f forIndex:[self.dataArray indexOfObject:message]];
               } failed:^(NSString *messageUUID, NSError *error) {
                   __strong __typeof(wself)self = wself;
                   message.status = LCCKMessageSendStateFailed;
