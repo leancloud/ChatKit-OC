@@ -9,7 +9,7 @@
 #import "LCCKSessionService.h"
 #import "LCCKServiceDefinition.h"
 #import "LCChatKit.h"
-#import "LCChatKit_Internal.h"
+//#import "LCChatKit_Internal.h"
 #import "LCCKSoundManager.h"
 
 NSString *const LCCKSessionServiceErrorDemain = @"LCCKSessionServiceErrorDemain";

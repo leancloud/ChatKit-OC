@@ -7,7 +7,7 @@
 //
 
 #import "LCCKProgressHUD.h"
-
+#import "UIImage+LCCKExtension.h"
 
 @interface LCCKProgressHUD ()
 
@@ -173,8 +173,7 @@
     if (!_edgeImageView) {
         _edgeImageView = [[UIImageView alloc]initWithImage:({
             NSString *imageName = @"chat_bar_record_circle";
-            NSString *imageNameWithBundlePath = [NSString stringWithFormat:@"ChatKeyboard.bundle/%@", imageName];
-            UIImage *image = [UIImage imageNamed:imageNameWithBundlePath];
+            UIImage *image = [UIImage lcck_imageNamed:imageName bundleName:@"ChatKeyboard" bundleForClass:[self class]];
             image;})
                           ];
         _edgeImageView.center =  CGPointMake([[UIScreen mainScreen] bounds].size.width/2,[[UIScreen mainScreen] bounds].size.height/2);

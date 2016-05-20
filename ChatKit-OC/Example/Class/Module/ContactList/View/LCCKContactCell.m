@@ -7,10 +7,12 @@
 //
 
 #import "LCCKContactCell.h"
-#import "LCCKConstants.h"
 #import <SDWebImage/UIImageView+WebCache.h>
+#if __has_include(<ChatKit/LCChatKit.h>)
+#import <ChatKit/LCChatKit.h>
+#else
 #import "LCChatKit.h"
-#import "UIImageView+LCCKExtension.h"
+#endif
 
 @interface LCCKContactCell ()
 

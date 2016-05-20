@@ -3,7 +3,7 @@
 //  LeanCloudChatKit-iOS
 //
 //  Created by 陈宜龙 on 16/5/16.
-//  Copyright © 2016年 EloncChan. All rights reserved.
+//  Copyright © 2016年 ElonChan. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>

@@ -283,8 +283,7 @@
 - (void)chatBar:(LCCKChatBar *)chatBar sendLocation:(CLLocationCoordinate2D)locationCoordinate locationText:(NSString *)locationText{
     LCCKMessage *message = [[LCCKMessage alloc] initWithLocalPositionPhoto:({
         NSString *imageName = @"message_sender_location";
-        NSString *imageNameWithBundlePath = [NSString stringWithFormat:@"MessageBubble.bundle/%@", imageName];
-        UIImage *image = [UIImage imageNamed:imageNameWithBundlePath];
+        UIImage *image = [UIImage lcck_imageNamed:imageName bundleName:@"MessageBubble" bundleForClass:[self class]];
         image;})
                                                               geolocations:locationText
                                                                   location:[[CLLocation alloc] initWithLatitude:locationCoordinate.latitude

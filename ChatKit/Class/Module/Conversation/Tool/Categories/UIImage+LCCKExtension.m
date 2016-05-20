@@ -3,11 +3,44 @@
 //  LeanCloudChatKit-iOS
 //
 //  Created by 陈宜龙 on 16/5/7.
-//  Copyright © 2016年 EloncChan. All rights reserved.
+//  Copyright © 2016年 ElonChan. All rights reserved.
 //
 
 #import "UIImage+LCCKExtension.h"
 
+@implementation NSBundle (MyCategory)
+
++ (NSString *)lcck_pathForResource:(NSString *)name
+                            ofType:(NSString *)extension
+{
+    // First try with the main bundle
+    NSBundle * mainBundle = [NSBundle mainBundle];
+    NSString * path = [mainBundle pathForResource:name
+                                           ofType:extension];
+    if (path)
+    {
+        return path;
+    }
+    
+    // Otherwise try with other bundles
+    NSBundle * bundle;
+    for (NSString * bundlePath in [mainBundle pathsForResourcesOfType:@"bundle"
+                                                          inDirectory:nil])
+    {
+        bundle = [NSBundle bundleWithPath:bundlePath];
+        path = [bundle pathForResource:name
+                                ofType:extension];
+        if (path)
+        {
+            return path;
+        }
+    }
+    
+    NSLog(@"No path found for: %@ (.%@)", name, extension);
+    return nil;
+}
+
+@end
 
 @implementation UIImage (LCCKExtension)
 
@@ -33,7 +66,7 @@
 }
 
 - (UIImage *)lcck_imageByScalingAspectFillWithOriginSize:(CGSize)originSize
-                                           limitSize:(CGSize)limitSize {
+                                               limitSize:(CGSize)limitSize {
     if (originSize.width == 0 || originSize.height == 0) {
         return self;
     }
@@ -50,6 +83,14 @@
         height = limitSize.height;
     }
     return [self lcck_scaledToSize:CGSizeMake(width, height)];
+}
+
++ (UIImage *)lcck_imageNamed:(NSString *)imageName bundleName:(NSString *)bundleName bundleForClass:(Class)aClass {
+    NSString *bundlePath = [NSBundle lcck_bundlePathForbundleName:bundleName class:aClass];
+    UIImage *image = [UIImage imageNamed:imageName
+                                inBundle:[NSBundle bundleWithPath:bundlePath]
+           compatibleWithTraitCollection:nil];
+    return image;
 }
 
 #pragma mark -

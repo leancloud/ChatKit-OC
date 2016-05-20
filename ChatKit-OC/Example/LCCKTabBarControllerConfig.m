@@ -8,12 +8,12 @@
 
 #import "LCCKTabBarControllerConfig.h"
 #import <AVOSCloud/AVOSCloud.h>
-// Base Class
-#import "LCCKBaseNavigationController.h"
-//View Controllers
-#import "LCCKConversationListViewController.h"
-#import "LCCKContactListController.h"
+#if __has_include(<ChatKit/LCChatKit.h>)
+#import <ChatKit/LCChatKit.h>
+#else
 #import "LCChatKit.h"
+#endif
+#import "LCCKContactListController.h"
 
 @interface LCCKTabBarControllerConfig ()
 

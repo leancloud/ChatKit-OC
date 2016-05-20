@@ -178,8 +178,7 @@
 }
 
 #pragma mark - Path Utils
-- (NSString *)cafPath
-{
+- (NSString *)cafPath {
     NSString *cafPath = [NSTemporaryDirectory() stringByAppendingPathComponent:@"tmp.caf"];
     return cafPath;
 }

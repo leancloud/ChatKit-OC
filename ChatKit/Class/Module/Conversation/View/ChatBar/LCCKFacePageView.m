@@ -8,6 +8,7 @@
 
 #import "LCCKFacePageView.h"
 #import "LCCKFaceManager.h"
+#import "UIImage+LCCKExtension.h"
 
 /**
  *  预览表情显示的View
@@ -32,8 +33,7 @@
     
     UIImageView *backgroundImageView = [[UIImageView alloc] initWithImage:({
         NSString *imageName = @"preview_background";
-        NSString *imageNameWithBundlePath = [NSString stringWithFormat:@"ChatKeyboard.bundle/%@", imageName];
-        UIImage *image = [UIImage imageNamed:imageNameWithBundlePath];
+        UIImage *image = [UIImage lcck_imageNamed:imageName bundleName:@"ChatKeyboard" bundleForClass:[self class]];
         image;})
                                         ];
     [self addSubview:self.backgroundImageView = backgroundImageView];

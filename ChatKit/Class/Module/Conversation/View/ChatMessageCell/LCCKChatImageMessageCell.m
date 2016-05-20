@@ -8,7 +8,11 @@
 
 #import "LCCKChatImageMessageCell.h"
 #import "Masonry.h"
+#if __has_include(<SDWebImage/UIImageView+WebCache.h>)
 #import <SDWebImage/UIImageView+WebCache.h>
+#else
+#import "UIImageView+WebCache.h"
+#endif
 #import "UIImage+LCCKExtension.h"
 
 @interface LCCKChatImageMessageCell ()
@@ -102,8 +106,7 @@
 
 - (UIImage *)imageInBundleForImageName:(NSString *)imageName {
     return ({
-        NSString *imageNameWithBundlePath = [NSString stringWithFormat:@"Placeholder.bundle/%@", imageName];
-        UIImage *image = [UIImage imageNamed:imageNameWithBundlePath];
+        UIImage *image = [UIImage lcck_imageNamed:imageName bundleName:@"Placeholder" bundleForClass:[self class]];
         image;});
 }
 

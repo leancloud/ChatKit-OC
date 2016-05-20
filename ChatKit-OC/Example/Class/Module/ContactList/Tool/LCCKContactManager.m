@@ -7,7 +7,11 @@
 //
 
 #import "LCCKContactManager.h"
-#import "LCCKConstants.h"
+#if __has_include(<ChatKit/LCChatKit.h>)
+#import <ChatKit/LCChatKit.h>
+#else
+#import "LCChatKit.h"
+#endif
 
 #define __LCCKContactsOfDevelopers \
 @[ \

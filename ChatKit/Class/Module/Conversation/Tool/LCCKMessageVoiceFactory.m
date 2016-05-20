@@ -7,6 +7,7 @@
 //
 
 #import "LCCKMessageVoiceFactory.h"
+#import "UIImage+LCCKExtension.h"
 
 @implementation LCCKMessageVoiceFactory
 
@@ -43,8 +44,7 @@
 
 
 + (UIImage *)imageInBundleForImageName:(NSString *)imageName {
-    NSString *imageNameWithBundlePath = [NSString stringWithFormat:@"VoiceMessageSource.bundle/%@", imageName];
-    UIImage *image = [UIImage imageNamed:imageNameWithBundlePath];
+    UIImage *image = [UIImage lcck_imageNamed:imageName bundleName:@"VoiceMessageSource" bundleForClass:[self class]];
     return  image;
 }
 

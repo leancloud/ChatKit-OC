@@ -18,7 +18,13 @@
 #import "NSDate+LCCKDateTools.h"
 #import "MJRefresh.h"
 #import "LCCKConversationListService.h"
+#if __has_include(<SDWebImage/UIImageView+WebCache.h>)
 #import <SDWebImage/UIImageView+WebCache.h>
+#else
+#import "UIImageView+WebCache.h"
+#endif
+#import "UIImage+LCCKExtension.h"
+
 
 @interface LCCKConversationListViewModel ()
 
@@ -126,7 +132,7 @@
     cell.identifier = identifier;
     [[LCCKUserSystemService sharedInstance] getCachedProfileIfExists:peerId name:name avatorURL:avatorURL error:&error];
     if (error) {
-        NSLog(@"%@", error);
+//        NSLog(@"%@", error);
     }
     if (!*name) {
         if (peerId != NULL) {
@@ -248,8 +254,8 @@
 
 - (UIImage *)imageInBundleForImageName:(NSString *)imageName {
     return ({
-        NSString *imageNameWithBundlePath = [NSString stringWithFormat:@"Placeholder.bundle/%@", imageName];
-        UIImage *image = [UIImage imageNamed:imageNameWithBundlePath];
+//        NSString *imageNameWithBundlePath = [NSString stringWithFormat:@"Placeholder.bundle/%@", imageName];
+        UIImage *image = [UIImage lcck_imageNamed:imageName bundleName:@"Placeholder" bundleForClass:[self class]];
         image;});
 }
 

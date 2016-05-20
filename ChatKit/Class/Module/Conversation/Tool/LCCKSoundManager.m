@@ -8,6 +8,7 @@
 
 #import "LCCKSoundManager.h"
 #import <AudioToolbox/AudioToolbox.h>
+#import "NSBundle+LCCKExtension.h"
 
 #define STR_BY_SEL(sel) NSStringFromSelector(@selector(sel))
 
@@ -18,8 +19,8 @@
 @property (nonatomic, assign) SystemSoundID receiveSound;
 
 @end
-@implementation LCCKSoundManager
 
+@implementation LCCKSoundManager
 
 + (instancetype)defaultManager {
     static LCCKSoundManager *soundManager;
@@ -35,25 +36,22 @@
     self = [super init];
     if (self) {
         [self setDefaultSettings];
-        self.needPlaySoundWhenChatting =  [[[NSUserDefaults standardUserDefaults] objectForKey:STR_BY_SEL(needPlaySoundWhenChatting)] boolValue];
-        self.needPlaySoundWhenNotChatting  = [[[NSUserDefaults standardUserDefaults] objectForKey:STR_BY_SEL(needPlaySoundWhenNotChatting)] boolValue];
-        self.needVibrateWhenNotChatting = [[[NSUserDefaults standardUserDefaults] objectForKey:STR_BY_SEL(needVibrateWhenNotChatting)] boolValue];
-        [self createSoundWithName:[self soundNameWithBundlePath:@"loudReceive"] soundId:&_loudReceiveSound];
-        [self createSoundWithName:[self soundNameWithBundlePath:@"send"] soundId:&_sendSound];
-        [self createSoundWithName:[self soundNameWithBundlePath:@"receive"] soundId:&_receiveSound];
+        [self createSoundWithURL:[self soundURLWithName:@"loudReceive"] soundId:&_loudReceiveSound];
+        [self createSoundWithURL:[self soundURLWithName:@"send"] soundId:&_sendSound];
+        [self createSoundWithURL:[self soundURLWithName:@"receive"] soundId:&_receiveSound];
     }
     return self;
 }
 
-//FIXME:sound play failed
-- (NSString *)soundNameWithBundlePath:(NSString *)soundName {
-    NSString *soundNameWithBundlePath = [NSString stringWithFormat:@"VoiceMessageSource.bundle/%@", soundName];
-    return soundNameWithBundlePath;
+- (NSURL *)soundURLWithName:(NSString *)soundName {
+    NSString *bundlePath = [NSBundle lcck_bundlePathForbundleName:@"VoiceMessageSource" class:[self class]];
+    NSBundle *bundle = [NSBundle bundleWithPath:bundlePath];
+    NSURL *url = [bundle URLForResource:soundName withExtension:@"caf"];
+    return url;
 }
 
-- (void)createSoundWithName:(NSString *)name soundId:(SystemSoundID *)soundId {
-    NSURL *url = [[NSBundle mainBundle] URLForResource:name withExtension:@"caf"];
-    OSStatus errorCode = AudioServicesCreateSystemSoundID((__bridge CFURLRef)(url) , soundId);
+- (void)createSoundWithURL:(NSURL *)URL soundId:(SystemSoundID *)soundId {
+    OSStatus errorCode = AudioServicesCreateSystemSoundID((__bridge CFURLRef)(URL) , soundId);
     if (errorCode != 0) {
         NSLog(@"create sound failed");
     }
@@ -100,11 +98,14 @@
     [[NSUserDefaults standardUserDefaults] setObject:@(self.needVibrateWhenNotChatting) forKey:STR_BY_SEL(needVibrateWhenNotChatting)];
 }
 
-
 - (void)setDefaultSettings {
-    NSString *defaultSettingsFile = [[NSBundle mainBundle] pathForResource:@"defaultSettings" ofType:@"plist"];
+    NSBundle *bundle = [NSBundle lcck_bundleForbundleName:@"Common" class:[self class]];
+    NSString *defaultSettingsFile = [bundle pathForResource:@"LCChatKit-Settings" ofType:@"plist"];
     NSDictionary *defaultSettings = [[NSDictionary alloc] initWithContentsOfFile:defaultSettingsFile];
-    [[NSUserDefaults standardUserDefaults] registerDefaults:defaultSettings];
+    NSDictionary *conversationSettings = defaultSettings[@"Conversation"];
+    self.needPlaySoundWhenChatting =  [conversationSettings[STR_BY_SEL(needPlaySoundWhenChatting)] boolValue];
+    self.needPlaySoundWhenNotChatting  = [conversationSettings[STR_BY_SEL(needPlaySoundWhenNotChatting)] boolValue];
+    self.needVibrateWhenNotChatting = [conversationSettings[STR_BY_SEL(needVibrateWhenNotChatting)] boolValue];
 }
 
 @end

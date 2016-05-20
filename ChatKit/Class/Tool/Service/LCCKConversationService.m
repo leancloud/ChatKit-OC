@@ -8,7 +8,12 @@
 
 #import "LCCKConversationService.h"
 #import "LCChatKit.h"
+#if __has_include(<FMDB/FMDB.h>)
 #import <FMDB/FMDB.h>
+#else
+#import "FMDB.h"
+#endif
+
 #import "AVIMConversation+LCCKAddition.h"
 #import "LCCKConversationViewController.h"
 #import "LCCKConversationListViewController.h"

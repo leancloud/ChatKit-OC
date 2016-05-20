@@ -7,8 +7,8 @@
 //
 
 #import "LCCKChatLocationMessageCell.h"
-
 #import "Masonry.h"
+#import "UIImage+LCCKExtension.h"
 
 @interface LCCKChatLocationMessageCell ()
 
@@ -76,7 +76,6 @@
         _locationAddressLabel.numberOfLines = 3;
         _locationAddressLabel.textAlignment = NSTextAlignmentNatural;
         _locationAddressLabel.lineBreakMode = NSLineBreakByTruncatingTail;
-        _locationAddressLabel.text = @"上海市 试验费snap那就开动脑筋阿萨德你接啊三年级可 ";
     }
     return _locationAddressLabel;
 }
@@ -90,8 +89,7 @@
             imageName = @"message_receiver_location";
         }
         _locationImageView = [[UIImageView alloc] initWithImage:({
-            NSString *imageNameWithBundlePath = [NSString stringWithFormat:@"MessageBubble.bundle/%@", imageName];
-            UIImage *image = [UIImage imageNamed:imageNameWithBundlePath];
+            UIImage *image = [UIImage lcck_imageNamed:imageName bundleName:@"MessageBubble" bundleForClass:[self class]];
             image;})
                               ];
     }

@@ -5,13 +5,16 @@
 //  Created by ElonChan on 16/2/24.
 //  Copyright © 2016年 LeanCloud. All rights reserved.
 //
+#if __has_include(<ChatKit/LCChatKit.h>)
+#import <ChatKit/LCChatKit.h>
+#else
 #import "LCChatKit.h"
+#endif
 #import "LCChatKitExample.h"
 #import "LCCKUtil.h"
 #import "NSObject+LCCKHUD.h"
 #import "LCCKTabBarControllerConfig.h"
 #import "LCCKUser.h"
-#import "LCCKConversationViewController.h"
 #import "MWPhotoBrowser.h"
 #import <objc/runtime.h>
 

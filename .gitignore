@@ -29,6 +29,7 @@ xcuserdata
 # CocoaPods
 Pods/
 Podfile.lock
+Third-Lib-For-Debug/
 
 *.gcda
 *.gcno

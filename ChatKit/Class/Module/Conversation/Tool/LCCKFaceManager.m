@@ -7,6 +7,7 @@
 //
 
 #import "LCCKFaceManager.h"
+#import "UIImage+LCCKExtension.h"
 
 @interface LCCKFaceManager ()
 
@@ -122,7 +123,7 @@
                 //新建文字附件来存放我们的图片,iOS7才新加的对象
                 NSTextAttachment *textAttachment = [[NSTextAttachment alloc] init];
                 //给附件添加图片
-                textAttachment.image = [UIImage imageNamed:[self imageBundleNameForImage:dict[kFaceImageNameKey]]];
+                textAttachment.image = [UIImage lcck_imageNamed:dict[kFaceImageNameKey] bundleName:@"Emoji" bundleForClass:[self class]];
                 //调整一下图片的位置,如果你的图片偏上或者偏下，调整一下bounds的y值即可
                 textAttachment.bounds = CGRectMake(0, -8, textAttachment.image.size.width, textAttachment.image.size.height);
                 //把附件转换成可变字符串，用于替换掉源字符串中的表情文字

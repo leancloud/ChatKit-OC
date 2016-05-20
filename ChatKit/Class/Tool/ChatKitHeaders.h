@@ -21,20 +21,23 @@ FOUNDATION_EXPORT const unsigned char LCChatKitVersionString[];
 #import "AVOSCloudIM.h"
 #endif
 
-#if __has_include(<LCChatKit/LCChatKit.h>)
+#if __has_include(<ChatKit/LCChatKit.h>)
 
-#import <LCChatKit/LCCKConstants.h>
-#import <LCChatKit/LCCKSessionService.h>
-#import <LCChatKit/LCCKUserSystemService.h>
-#import <LCChatKit/LCCKSignatureService.h>
-#import <LCChatKit/LCCKSettingService.h>
-#import <LCChatKit/LCCKUIService.h>
-#import <LCChatKit/LCCKConversationService.h>
-#import <LCChatKit/LCCKConversationListService.h>
-#import <LCChatKit/LCCKServiceDefinition.h>
-#import <LCChatKit/LCCKConversationViewController.h>
-#import <LCChatKit/LCCKConversationListViewController.h>
-#import <LCChatKit/AVIMConversation+LCCKAddition.h>
+#import <ChatKit/LCCKConstants.h>
+#import <ChatKit/LCCKSessionService.h>
+#import <ChatKit/LCCKUserSystemService.h>
+#import <ChatKit/LCCKSignatureService.h>
+#import <ChatKit/LCCKSettingService.h>
+#import <ChatKit/LCCKUIService.h>
+#import <ChatKit/LCCKConversationService.h>
+#import <ChatKit/LCCKConversationListService.h>
+#import <ChatKit/LCCKServiceDefinition.h>
+#import <ChatKit/LCCKConversationViewController.h>
+#import <ChatKit/LCCKConversationListViewController.h>
+#import <ChatKit/AVIMConversation+LCCKAddition.h>
+#import <ChatKit/UIImageView+LCCKExtension.h>
+#import <ChatKit/LCCKBaseTableViewController.h>
+#import <ChatKit/LCCKBaseNavigationController.h>
 
 #else
 
@@ -50,6 +53,9 @@ FOUNDATION_EXPORT const unsigned char LCChatKitVersionString[];
 #import "LCCKConversationViewController.h"
 #import "LCCKConversationListViewController.h"
 #import "AVIMConversation+LCCKAddition.h"
+#import "UIImageView+LCCKExtension.h"
+#import "LCCKBaseTableViewController.h"
+#import "LCCKBaseNavigationController.h"
 
 #endif
 

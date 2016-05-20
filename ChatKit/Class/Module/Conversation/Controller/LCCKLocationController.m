@@ -8,6 +8,7 @@
 
 #import "LCCKLocationController.h"
 #import "Masonry.h"
+#import "UIImage+LCCKExtension.h"
 
 static CGFloat const LCCKLocationPOIListCellHeight = 40.f;
 
@@ -270,8 +271,7 @@ static CGFloat const LCCKLocationPOIListCellHeight = 40.f;
 
 - (UIImage *)imageInBundlePathForImageName:(NSString *)imageName {
     return   ({
-        NSString *imageNameWithBundlePath = [NSString stringWithFormat:@"ChatKeyboard.bundle/%@", imageName];
-        UIImage *image = [UIImage imageNamed:imageNameWithBundlePath];
+        UIImage *image = [UIImage lcck_imageNamed:imageName bundleName:@"ChatKeyboard" bundleForClass:[self class]];
         image;});
 }
 

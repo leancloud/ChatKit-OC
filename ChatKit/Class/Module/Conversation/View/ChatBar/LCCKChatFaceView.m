@@ -10,6 +10,7 @@
 #import "LCCKFaceManager.h"
 #import "LCCKSwipeView.h"
 #import "LCCKFacePageView.h"
+#import "UIImage+LCCKExtension.h"
 
 @interface LCCKChatFaceView ()<UIScrollViewDelegate,LCCKSwipeViewDelegate,LCCKSwipeViewDataSource,LCCKFacePageViewDelegate>
 
@@ -233,8 +234,7 @@
 
 - (UIImage *)imageInBundlePathForImageName:(NSString *)imageName {
     return   ({
-        NSString *imageNameWithBundlePath = [NSString stringWithFormat:@"ChatKeyboard.bundle/%@", imageName];
-        UIImage *image = [UIImage imageNamed:imageNameWithBundlePath];
+        UIImage *image = [UIImage lcck_imageNamed:imageName bundleName:@"ChatKeyboard" bundleForClass:[self class]];
         image;});
 }
 

@@ -7,8 +7,8 @@
 //
 
 #import "LCCKStatusView.h"
-#import "LCCKSessionService.h"
 #import "LCChatKit.h"
+#import "UIImage+LCCKExtension.h"
 
 static CGFloat LCCKStatusImageViewHeight = 20;
 static CGFloat LCCKHorizontalSpacing = 15;
@@ -46,8 +46,7 @@ static CGFloat LCCKHorizontalLittleSpacing = 5;
         _statusImageView = [[UIImageView alloc] initWithFrame:CGRectMake(LCCKHorizontalSpacing, (LCCKStatusViewHight - LCCKStatusImageViewHeight) / 2, LCCKStatusImageViewHeight, LCCKStatusImageViewHeight)];
         _statusImageView.image =  ({
             NSString *imageName = @"MessageSendFail";
-            NSString *imageNameWithBundlePath = [NSString stringWithFormat:@"MessageBubble.bundle/%@", imageName];
-            UIImage *image = [UIImage imageNamed:imageNameWithBundlePath];
+            UIImage *image = [UIImage lcck_imageNamed:imageName bundleName:@"MessageBubble" bundleForClass:[self class]];
             image;});
     }
     return _statusImageView;

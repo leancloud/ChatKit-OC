@@ -16,6 +16,7 @@
 #import "Mp3Recorder.h"
 #import "Masonry.h"
 #import "LCCKUIService.h"
+#import "UIImage+LCCKExtension.h"
 
 @interface LCCKChatBar () <UITextViewDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate, Mp3RecorderDelegate,LCCKChatMoreViewDelegate, LCCKChatMoreViewDataSource, LCCKChatFaceViewDelegate, LCCKLocationControllerDelegate>
 
@@ -610,8 +611,8 @@
 }
 
 - (UIImage *)imageInBundlePathForImageName:(NSString *)imageName {
-    NSString *imageNameWithBundlePath = [NSString stringWithFormat:@"ChatKeyboard.bundle/%@", imageName];
-    UIImage *image = [UIImage imageNamed:imageNameWithBundlePath];
+//    NSString *imageNameWithBundlePath = [NSString stringWithFormat:@"ChatKeyboard.bundle/%@", imageName];
+    UIImage *image = [UIImage lcck_imageNamed:imageName bundleName:@"ChatKeyboard" bundleForClass:[self class]];
     return image;
 }
 

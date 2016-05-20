@@ -8,7 +8,6 @@
 
 #import "LCCKContactListController.h"
 #import "LCCKContactCell.h"
-#import "LCChatKit_Internal.h"
 #import "LCCKUser.h"
 #import "LCCKContactManager.h"
 #import "LCChatKitExample.h"
@@ -76,13 +75,13 @@ static NSString *const LCCKContactListControllerIdentifier = @"LCCKContactListCo
                 LCCKTabBarControllerConfig *tabBarControllerConfig = [[LCCKTabBarControllerConfig alloc] init];
                 [self cyl_tabBarController].rootWindow.rootViewController = tabBarControllerConfig.tabBarController;
             } failed:^(NSError *error) {
-                NSLog(@"%@",error);
+//                NSLog(@"%@",error);
             }];
         }];
         [self presentViewController:loginViewController animated:YES completion:nil];
     } failed:^(NSError *error) {
         [LCCKUtil hideProgress];
-        NSLog(@"%@", error);
+//        NSLog(@"%@", error);
     }];
 }
 
@@ -140,7 +139,7 @@ static NSString *const LCCKContactListControllerIdentifier = @"LCCKContactListCo
     __block NSURL *avatorURL = nil;
     [[LCChatKit sharedInstance] getCachedProfileIfExists:peerId name:&displayName avatorURL:&avatorURL error:&error];
     if (error) {
-        NSLog(@"%@", error);
+//        NSLog(@"%@", error);
     }
     if (!displayName || !avatorURL) {
         displayName = peerId;

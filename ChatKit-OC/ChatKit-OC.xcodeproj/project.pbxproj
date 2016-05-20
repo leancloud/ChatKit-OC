@@ -28,22 +28,28 @@
 		9A4730731CECAEC500AEB86F /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A4730591CECAEC500AEB86F /* main.m */; };
 		9A4730751CECAEC500AEB86F /* NSObject+LCCKHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A47305E1CECAEC500AEB86F /* NSObject+LCCKHUD.m */; };
 		9A4730761CECAEC500AEB86F /* LCCKTabBarControllerConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A4730601CECAEC500AEB86F /* LCCKTabBarControllerConfig.m */; };
-		ECFB6DB0CADC1C37F2B28AE8 /* libPods-ChatKit-OC.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 32CE1421311C5D8D2D3C1C7E /* libPods-ChatKit-OC.a */; };
+		B1DBD0ABA79D5E00664CFA12 /* libPods-ChatKit-OC.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 32CE1421311C5D8D2D3C1C7E /* libPods-ChatKit-OC.a */; };
 /* End PBXBuildFile section */
 
-/* Begin PBXContainerItemProxy section */
-		9A0B71DC1CECFA39004FDACC /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 9A0B71D81CECFA39004FDACC /* ChatKit.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 9A6060821CEC831800D14D73;
-			remoteInfo = ChatKit;
+/* Begin PBXCopyFilesBuildPhase section */
+		9A1AD17B1CEDE640000FF26E /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
 		};
-/* End PBXContainerItemProxy section */
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		32CE1421311C5D8D2D3C1C7E /* libPods-ChatKit-OC.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ChatKit-OC.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		9A0B71D81CECFA39004FDACC /* ChatKit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ChatKit.xcodeproj; path = ../ChatKit/ChatKit.xcodeproj; sourceTree = "<group>"; };
+		9A0B721B1CED662D004FDACC /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		9A0B721D1CED6637004FDACC /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
+		9A0B721F1CED6644004FDACC /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
+		9A0B72211CED664D004FDACC /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		9A4730291CECAEC500AEB86F /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		9A47302A1CECAEC500AEB86F /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		9A47302D1CECAEC500AEB86F /* LCCKUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKUser.h; sourceTree = "<group>"; };
@@ -91,7 +97,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				ECFB6DB0CADC1C37F2B28AE8 /* libPods-ChatKit-OC.a in Frameworks */,
+				B1DBD0ABA79D5E00664CFA12 /* libPods-ChatKit-OC.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -110,17 +116,13 @@
 		578A4ED63A7AFF3EA27EF73A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				9A0B72211CED664D004FDACC /* CoreLocation.framework */,
+				9A0B721F1CED6644004FDACC /* CoreTelephony.framework */,
+				9A0B721D1CED6637004FDACC /* MobileCoreServices.framework */,
+				9A0B721B1CED662D004FDACC /* SystemConfiguration.framework */,
 				32CE1421311C5D8D2D3C1C7E /* libPods-ChatKit-OC.a */,
 			);
 			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		9A0B71D91CECFA39004FDACC /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				9A0B71DD1CECFA39004FDACC /* ChatKit.framework */,
-			);
-			name = Products;
 			sourceTree = "<group>";
 		};
 		9A4730281CECAEC500AEB86F /* Example */ = {
@@ -306,7 +308,6 @@
 		9A754D421CECAC3E000967F1 = {
 			isa = PBXGroup;
 			children = (
-				9A0B71D81CECFA39004FDACC /* ChatKit.xcodeproj */,
 				9A4730281CECAEC500AEB86F /* Example */,
 				9A754D4C1CECAC3E000967F1 /* Products */,
 				081E3E415D01F3B339E50FEE /* Pods */,
@@ -335,6 +336,7 @@
 				9A754D491CECAC3E000967F1 /* Resources */,
 				7D4E5DD1E716F14DBA58E5C1 /* Embed Pods Frameworks */,
 				C75D6AB5F3C0F200636AAAA5 /* Copy Pods Resources */,
+				9A1AD17B1CEDE640000FF26E /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -371,28 +373,12 @@
 			mainGroup = 9A754D421CECAC3E000967F1;
 			productRefGroup = 9A754D4C1CECAC3E000967F1 /* Products */;
 			projectDirPath = "";
-			projectReferences = (
-				{
-					ProductGroup = 9A0B71D91CECFA39004FDACC /* Products */;
-					ProjectRef = 9A0B71D81CECFA39004FDACC /* ChatKit.xcodeproj */;
-				},
-			);
 			projectRoot = "";
 			targets = (
 				9A754D4A1CECAC3E000967F1 /* ChatKit-OC */,
 			);
 		};
 /* End PBXProject section */
-
-/* Begin PBXReferenceProxy section */
-		9A0B71DD1CECFA39004FDACC /* ChatKit.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = ChatKit.framework;
-			remoteRef = 9A0B71DC1CECFA39004FDACC /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		9A754D491CECAC3E000967F1 /* Resources */ = {

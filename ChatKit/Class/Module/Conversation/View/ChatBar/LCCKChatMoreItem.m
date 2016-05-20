@@ -7,8 +7,8 @@
 //
 
 #import "LCCKChatMoreItem.h"
-
 #import "Masonry.h"
+#import "UIImage+LCCKExtension.h"
 
 @interface LCCKChatMoreItem   ()
 
@@ -55,8 +55,7 @@
 }
 
 - (UIImage *)imageInBundlePathForImageName:(NSString *)imageName {
-    NSString *imageNameWithBundlePath = [NSString stringWithFormat:@"ChatKeyboard.bundle/%@", imageName];
-    UIImage *image = [UIImage imageNamed:imageNameWithBundlePath];
+    UIImage *image = [UIImage lcck_imageNamed:imageName bundleName:@"ChatKeyboard" bundleForClass:[self class]];
     return image;
 }
 

@@ -18,9 +18,15 @@
 #import <objc/runtime.h>
 #import "LCCKBubbleImageFactory.h"
 
+#if __has_include(<SDWebImage/UIImageView+WebCache.h>)
 #import <SDWebImage/UIImageView+WebCache.h>
+#else
+#import "UIImageView+WebCache.h"
+#endif
+
 #import "LCChatKit.h"
 #import "UIImageView+LCCKExtension.h"
+#import "UIImage+LCCKExtension.h"
 
 static CGFloat const kAvatarImageViewWidth = 50.f;
 static CGFloat const kAvatarImageViewHeight = 50.f;
@@ -196,8 +202,7 @@ static CGFloat const kAvatarImageViewHeight = 50.f;
     [self.avatarImageView sd_setImageWithURL:self.message.avatorURL
                             placeholderImage:({
         NSString *imageName = @"Placeholder_Avator";
-        NSString *imageNameWithBundlePath = [NSString stringWithFormat:@"Placeholder.bundle/%@", imageName];
-        UIImage *image = [UIImage imageNamed:imageNameWithBundlePath];
+        UIImage *image = [UIImage lcck_imageNamed:imageName bundleName:@"Placeholder" bundleForClass:[self class]];
         image;})
      ];
     if (message.messageReadState) {

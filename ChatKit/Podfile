@@ -5,13 +5,12 @@ platform :ios, '7.0'
 
 target 'ChatKit' do
 
-pod 'AVOSCloud'
-pod 'AVOSCloudIM'
-pod 'MJRefresh'
-pod 'Masonry'
-pod 'SDWebImage'
-pod 'FMDB'
-pod 'UITableView+FDTemplateLayoutCell'
-
+#pod 'AVOSCloud'
+#pod 'AVOSCloudIM'
+#pod 'MJRefresh'
+#pod 'Masonry'
+#pod 'SDWebImage'
+#pod 'FMDB'
+#pod 'UITableView+FDTemplateLayoutCell'
 end
 

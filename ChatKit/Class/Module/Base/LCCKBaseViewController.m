@@ -9,6 +9,7 @@
 #import "LCCKBaseViewController.h"
 #import <AVOSCloudIM/AVOSCloudIM.h>
 #import "LCCKUIService.h"
+#import "UIImage+LCCKExtension.h"
 
 @interface LCCKBaseViewController ()
 
@@ -129,8 +130,8 @@
             icon = @"barbuttonicon_Operate";
             break;
     }
-    NSString *imgString = [NSString stringWithFormat:@"BarButtonIcon.bundle/%@", icon];
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:imgString] style:UIBarButtonItemStylePlain target:self action:@selector(clickedBarButtonItemAction)];
+//    NSString *imgString = [NSString stringWithFormat:@"BarButtonIcon.bundle/%@", icon];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage lcck_imageNamed:icon bundleName:@"BarButtonIcon" bundleForClass:[self class]] style:UIBarButtonItemStylePlain target:self action:@selector(clickedBarButtonItemAction)];
     self.barbuttonItemAction = action;
 }
 

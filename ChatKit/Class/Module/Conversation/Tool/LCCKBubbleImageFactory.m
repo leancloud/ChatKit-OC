@@ -8,6 +8,7 @@
 
 #import "LCCKBubbleImageFactory.h"
 #import "LCCKConstants.h"
+#import "UIImage+LCCKExtension.h"
 
 @implementation LCCKBubbleImageFactory
 
@@ -33,8 +34,7 @@
     } else {
         messageTypeString = [messageTypeString stringByAppendingString:@"normal"];
     }
-    NSString *imageNameWithBundlePath = [NSString stringWithFormat:@"MessageBubble.bundle/%@", messageTypeString];
-    UIImage *bublleImage = [UIImage imageNamed:imageNameWithBundlePath];
+    UIImage *bublleImage = [UIImage lcck_imageNamed:messageTypeString bundleName:@"MessageBubble" bundleForClass:[self class]];
     UIEdgeInsets bubbleImageEdgeInsets = UIEdgeInsetsMake(30, 16, 16, 24);
     return LCCK_STRETCH_IMAGE(bublleImage, bubbleImageEdgeInsets);
 }

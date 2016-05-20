@@ -31,6 +31,7 @@
 //#import "NSDate+LCCKDateTools.h"
 #import "LCCKUserSystemService.h"
 #import "LCCKSessionService.h"
+#import "UIImage+LCCKExtension.h"
 
 @interface LCCKConversationViewModel ()
 
@@ -350,8 +351,7 @@
             AVIMLocationMessage *locationMsg = (AVIMLocationMessage *)message;
             lcimMessage = [[LCCKMessage alloc] initWithLocalPositionPhoto:({
                 NSString *imageName = @"MessageBubble_Location";
-                NSString *imageNameWithBundlePath = [NSString stringWithFormat:@"MessageBubble.bundle/%@", imageName];
-                UIImage *image = [UIImage imageNamed:imageNameWithBundlePath];
+                UIImage *image = [UIImage lcck_imageNamed:imageName bundleName:@"MessageBubble" bundleForClass:[self class]];
                 image;})
                                                              geolocations:locationMsg.text location:[[CLLocation alloc] initWithLatitude:locationMsg.latitude longitude:locationMsg.longitude] sender:fromUser.name timestamp:time];
             break;
@@ -627,7 +627,7 @@
                 [allImageMessageImages_ addObject:({
                     NSString *imageName = @"Placeholder_Accept_Defeat";
                     NSString *imageNameWithBundlePath = [NSString stringWithFormat:@"Placeholder.bundle/%@", imageName];
-                    UIImage *image = [UIImage imageNamed:imageNameWithBundlePath];
+                    UIImage *image = [UIImage lcck_imageNamed:imageName bundleName:@"Placeholder"bundleForClass:[self class]];
                     image;})];
             }
             
