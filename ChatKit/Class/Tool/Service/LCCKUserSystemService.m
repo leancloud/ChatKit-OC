@@ -22,20 +22,6 @@ NSString *const LCCKUserSystemServiceErrorDomain = @"LCCKUserSystemServiceErrorD
 
 - (NSArray<id<LCCKUserModelDelegate>> *)getProfilesForUserIds:(NSArray<NSString *> *)userIds error:(NSError * __autoreleasing *)theError {
     __block NSArray<id<LCCKUserModelDelegate>> *blockUsers = [NSArray array];
-    //    __block BOOL hasCallback = NO;
-    //    __block NSError *blockError;
-    //    [self getProfilesInBackgroundForUserIds:userIds callback:^(NSArray<id<LCCKUserModelDelegate>> *users, NSError *error) {
-    //        if (error) {
-    //            blockError = error;
-    //        }
-    //        blockUsers = users;
-    //        hasCallback = YES;
-    //    }];
-    //    LCCK_WAIT_TIL_TRUE(hasCallback, 0.1);
-    //    if (theError != NULL) {
-    //        *theError = blockError;
-    //    }
-    //TODO:
     if (!_fetchProfilesBlock) {
         // This enforces implementing `-setFetchProfilesBlock:`.
         NSString *reason = [NSString stringWithFormat:@"You must implement `-setFetchProfilesBlock:` to allow LeanCloudChatKit to get user information by user id."];

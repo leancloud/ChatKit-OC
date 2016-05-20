@@ -136,7 +136,7 @@ static NSMutableDictionary *_sharedInstances = nil;
         //  当使用 https://github.com/leancloud/leanchat-cloudcode 云代码更改推送内容的时候
         //        {
         //            aps =     {
-        //                alert = "lcimkit : sdfsdf";
+        //                alert = "lcckkit : sdfsdf";
         //                badge = 4;
         //                sound = default;
         //            };
@@ -260,7 +260,7 @@ typedef void (^UITableViewRowActionHandler)(UITableViewRowAction *action, NSInde
                            handle:(UITableViewRowActionHandler *)handler
                      conversation:(AVIMConversation *)conversation
                        controller:(LCCKConversationListViewController *)controller {
-    if (conversation.lcim_unreadCount > 0) {
+    if (conversation.lcck_unreadCount > 0) {
         if (*title == nil) {
             *title = @"标记为已读";
         }

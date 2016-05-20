@@ -27,22 +27,11 @@ typedef void (^LCCKImageResultBlock)(UIImage * image, NSError *error);
 typedef void (^LCCKProgressBlock)(NSInteger percentDone);
 
 #define LCCK_DEPRECATED(explain) __attribute__((deprecated(explain)))
-//TODO: change to gcd semphore 
-#define LCCK_WAIT_TIL_TRUE(signal, interval) \
-do {                                       \
-    while(!(signal)) {                     \
-        @autoreleasepool {                 \
-            if (![[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate dateWithTimeIntervalSinceNow:(interval)]]) { \
-                [NSThread sleepForTimeInterval:(interval)]; \
-            }                              \
-        }                                  \
-    }                                      \
-} while (0)
 
 #ifdef DEBUG
-#define DLog(fmt, ...) NSLog((@"%s [Line %d] " fmt), __PRETTY_FUNCTION__, __LINE__, ## __VA_ARGS__);
+#define LCCKLog(fmt, ...) NSLog((@"%s [Line %d] " fmt), __PRETTY_FUNCTION__, __LINE__, ## __VA_ARGS__);
 #else
-#   define DLog(...)
+#   define LCCKLog(...)
 #endif
 
 /**

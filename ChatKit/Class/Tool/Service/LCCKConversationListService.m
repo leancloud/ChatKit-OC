@@ -34,22 +34,22 @@
         for (AVIMConversation *conversation in conversations) {
             NSArray *lastestMessages = [conversation queryMessagesFromCacheWithLimit:1];
             if (lastestMessages.count > 0) {
-                conversation.lcim_lastMessage = lastestMessages[0];
+                conversation.lcck_lastMessage = lastestMessages[0];
             }
-            if (conversation.lcim_type == LCCKConversationTypeSingle) {
-                [userIds addObject:conversation.lcim_peerId];
+            if (conversation.lcck_type == LCCKConversationTypeSingle) {
+                [userIds addObject:conversation.lcck_peerId];
             } else {
                 if (conversation.lastMessageAt) {
-                    NSString *userId = conversation.lcim_lastMessage.clientId;
-                    (!userId || !conversation.lcim_lastMessage) ?: [userIds addObject:userId];
+                    NSString *userId = conversation.lcck_lastMessage.clientId;
+                    (!userId || !conversation.lcck_lastMessage) ?: [userIds addObject:userId];
                 }
             }
             if (conversation.muted == NO) {
-                totalUnreadCount += conversation.lcim_unreadCount;
+                totalUnreadCount += conversation.lcck_unreadCount;
             }
         }
         NSArray *sortedRooms = [conversations sortedArrayUsingComparator:^NSComparisonResult(AVIMConversation *conv1, AVIMConversation *conv2) {
-            return (NSComparisonResult)(conv2.lcim_lastMessage.sendTimestamp - conv1.lcim_lastMessage.sendTimestamp);
+            return (NSComparisonResult)(conv2.lcck_lastMessage.sendTimestamp - conv1.lcck_lastMessage.sendTimestamp);
         }];
         dispatch_async(dispatch_get_main_queue(),^{
             !block ?: block(sortedRooms, totalUnreadCount, error);

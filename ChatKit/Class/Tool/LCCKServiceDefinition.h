@@ -68,7 +68,7 @@ typedef void(^LCCKFetchProfilesBlock)(NSArray<NSString *> *userIds, LCCKFetchPro
 
 /*!
  *  @brief Add the ablitity to fetch profiles.
- *  @attention  You could get peer information by peer id with either a synchronous or an asynchronous implementation.
+ *  @attention  You must get peer information by peer id with a synchronous implementation.
  *              If implemeted, this block will be invoked automatically by LeanCloudChatKit for fetching peer profile.
  */
 - (void)setFetchProfilesBlock:(LCCKFetchProfilesBlock)fetchProfilesBlock;

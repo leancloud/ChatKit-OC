@@ -54,7 +54,7 @@ typedef void (^LCCKSendMessageSuccessFailedBlock)(NSString *messageUUID, NSError
 
 - (LCCKMessage *)messageAtIndex:(NSUInteger)index;
 
-+ (NSMutableArray *)getAVIMMessages:(NSArray<LCCKMessage *> *)lcimMessages;
++ (NSMutableArray *)getAVIMMessages:(NSArray<LCCKMessage *> *)lcckMessages;
 + (AVIMTypedMessage *)getAVIMTypedMessageWithMessage:(LCCKMessage *)message;
 + (NSMutableArray *)getLCCKMessages:(NSArray<AVIMTypedMessage *> *)avimTypedMessage;
 - (void)loadMessagesWhenInitHandler:(LCCKBooleanResultBlock)handler;

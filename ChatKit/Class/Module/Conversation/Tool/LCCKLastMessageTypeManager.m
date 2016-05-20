@@ -8,8 +8,6 @@
 
 #import "LCCKLastMessageTypeManager.h"
 #import <AVOSCloudIM/AVIMTypedMessage.h>
-
-//#import "AVIMTypedMessage.h"
 #import <AVOSCloudIM/AVOSCloudIM.h>
 #import "LCCKUserSystemService.h"
 #import "AVIMConversation+LCCKAddition.h"
@@ -55,15 +53,15 @@ static NSMutableDictionary *attributedStringCache = nil;
 
 + (NSAttributedString *)attributedStringWithMessage:(AVIMTypedMessage *)message conversation:(AVIMConversation *)conversation userName:(NSString *)userName{
     NSString *title = [self getMessageTitle:message];
-    if (conversation.lcim_type == LCCKConversationTypeGroup) {
+    if (conversation.lcck_type == LCCKConversationTypeGroup) {
         title = [NSString stringWithFormat:@"%@: %@", userName, title];
     }
-    if (conversation.muted && conversation.lcim_unreadCount > 0) {
-        title = [NSString stringWithFormat:@"[%ld条] %@", conversation.lcim_unreadCount, title];
+    if (conversation.muted && conversation.lcck_unreadCount > 0) {
+        title = [NSString stringWithFormat:@"[%ld条] %@", conversation.lcck_unreadCount, title];
     }
     NSString *mentionText = @"[有人@你] ";
     NSString *finalText;
-    if (conversation.lcim_mentioned) {
+    if (conversation.lcck_mentioned) {
         finalText = [NSString stringWithFormat:@"%@%@", mentionText, title];
     } else {
         finalText = title;
@@ -78,7 +76,7 @@ static NSMutableDictionary *attributedStringCache = nil;
     NSDictionary *attributes = @{ NSForegroundColorAttributeName: [UIColor grayColor], (id)NSFontAttributeName:font};
     NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:finalText attributes:attributes];
     
-    if (conversation.lcim_mentioned) {
+    if (conversation.lcck_mentioned) {
         NSRange range = [finalText rangeOfString:mentionText];
         [attributedString setAttributes:@{NSForegroundColorAttributeName:[UIColor colorWithRed:183/255.0 green:20/255.0 blue:20/255.0 alpha:1], NSFontAttributeName : font} range:range];
     }

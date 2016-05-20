@@ -9,7 +9,6 @@
 #import "LCCKSessionService.h"
 #import "LCCKServiceDefinition.h"
 #import "LCChatKit.h"
-//#import "LCChatKit_Internal.h"
 #import "LCCKSoundManager.h"
 
 NSString *const LCCKSessionServiceErrorDemain = @"LCCKSessionServiceErrorDemain";
@@ -118,7 +117,7 @@ NSString *const LCCKSessionServiceErrorDemain = @"LCCKSessionServiceErrorDemain"
         if (conversation.creator == nil && [[LCCKConversationService sharedInstance] isRecentConversationExist:conversation] == NO) {
             [conversation fetchWithCallback:^(BOOL succeeded, NSError *error) {
                 if (error) {
-                    DLog(@"%@", error);
+                    LCCKLog(@"%@", error);
                 } else {
                     [self receiveMessage:message conversation:conversation];
                 }
@@ -127,12 +126,12 @@ NSString *const LCCKSessionServiceErrorDemain = @"LCCKSessionServiceErrorDemain"
             [self receiveMessage:message conversation:conversation];
         }
     } else {
-        DLog(@"Receive Message , but MessageId is nil");
+        LCCKLog(@"Receive Message , but MessageId is nil");
     }
 }
 
 - (void)conversation:(AVIMConversation *)conversation messageDelivered:(AVIMMessage *)message {
-    DLog();
+    LCCKLog();
     if (message != nil) {
         [[NSNotificationCenter defaultCenter] postNotificationName:LCCKNotificationMessageDelivered object:message];
     }

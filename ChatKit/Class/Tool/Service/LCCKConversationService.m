@@ -137,7 +137,7 @@ NSString *const LCCKConversationServiceErrorDomain = @"LCCKConversationServiceEr
 
 - (NSString *)databasePathWithUserId:(NSString *)userId{
     NSString *libPath = [NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) objectAtIndex:0];
-    return [libPath stringByAppendingPathComponent:[NSString stringWithFormat:@"com.leancloud.lcimkit.%@.db3", userId]];
+    return [libPath stringByAppendingPathComponent:[NSString stringWithFormat:@"com.leancloud.lcchatkit.%@.db3", userId]];
 }
 
 - (void)setupDatabaseWithUserId:(NSString *)userId {
@@ -149,7 +149,7 @@ NSString *const LCCKConversationServiceErrorDomain = @"LCCKConversationServiceEr
 - (void)setupSucceedMessageDatabaseWithPath:(NSString *)path {
     if (!self.databaseQueue) {
         //FIXME:when tom log out then jerry login , log this
-        DLog(@"database queue should not be nil !!!!");
+        LCCKLog(@"database queue should not be nil !!!!");
     }
     self.databaseQueue = [FMDatabaseQueue databaseQueueWithPath:path];
     [self.databaseQueue inDatabase:^(FMDatabase *db) {
@@ -222,8 +222,8 @@ NSString *const LCCKConversationServiceErrorDomain = @"LCCKConversationServiceEr
     NSInteger unreadCount = [resultSet intForColumn:LCCKConversationTableKeyUnreadCount];
     BOOL mentioned = [resultSet boolForColumn:LCCKConversationTableKeyMentioned];
     AVIMConversation *conversation = [self conversationFromData:data];
-    conversation.lcim_unreadCount = unreadCount;
-    conversation.lcim_mentioned = mentioned;
+    conversation.lcck_unreadCount = unreadCount;
+    conversation.lcck_mentioned = mentioned;
     return conversation;
 }
 
@@ -280,7 +280,7 @@ NSString *const LCCKConversationServiceErrorDomain = @"LCCKConversationServiceEr
 - (void)setupFailedMessagesDBWithDatabasePath:(NSString *)path {
     if (!self.databaseQueue) {
         //FIXME:when tom log out then jerry login , log this
-        DLog(@"database queue should not be nil !!!!");
+        LCCKLog(@"database queue should not be nil !!!!");
     }
     self.databaseQueue = [FMDatabaseQueue databaseQueueWithPath:path];
     [self.databaseQueue inDatabase:^(FMDatabase *db) {
@@ -429,7 +429,7 @@ NSString *const LCCKConversationServiceErrorDomain = @"LCCKConversationServiceEr
                     // 下载到本地
                     NSData *data = [file getData:&error];
                     if (error || data == nil) {
-                        DLog(@"download file error : %@", error);
+                        LCCKLog(@"download file error : %@", error);
                     }
                 }
             } else if (message.mediaType == kAVIMMessageMediaTypeVideo) {
@@ -438,7 +438,7 @@ NSString *const LCCKConversationServiceErrorDomain = @"LCCKConversationServiceEr
                     NSError *error;
                     NSData *data = [message.file getData:&error];
                     if (error) {
-                        DLog(@"download file error : %@", error);
+                        LCCKLog(@"download file error : %@", error);
                     } else {
                         [data writeToFile:path atomically:YES];
                     }

@@ -75,32 +75,32 @@
     __block NSString *displayName = nil;
     __block NSURL *avatorURL = nil;
     NSString *peerId = nil;
-    if (conversation.lcim_type == LCCKConversationTypeSingle) {
-        peerId = conversation.lcim_peerId;
+    if (conversation.lcck_type == LCCKConversationTypeSingle) {
+        peerId = conversation.lcck_peerId;
     } else {
-        peerId = conversation.lcim_lastMessage.clientId;
+        peerId = conversation.lcck_lastMessage.clientId;
     }
     if (peerId) {
-        [self asyncCacheElseNetLoadCell:cell identifier:conversation.lcim_displayName peerId:peerId name:&displayName avatorURL:&avatorURL];
+        [self asyncCacheElseNetLoadCell:cell identifier:conversation.lcck_displayName peerId:peerId name:&displayName avatorURL:&avatorURL];
     }
-    if (conversation.lcim_type == LCCKConversationTypeSingle) {
+    if (conversation.lcck_type == LCCKConversationTypeSingle) {
         [cell.avatorImageView sd_setImageWithURL:avatorURL placeholderImage:[self imageInBundleForImageName:@"Placeholder_Avator" ]];
     } else {
         [cell.avatorImageView setImage:[self imageInBundleForImageName:@"Placeholder_Group"]];
     }
     
-    cell.nameLabel.text = conversation.lcim_displayName;
+    cell.nameLabel.text = conversation.lcck_displayName;
     
     
-    if (conversation.lcim_lastMessage) {
-        cell.messageTextLabel.attributedText = [LCCKLastMessageTypeManager attributedStringWithMessage:conversation.lcim_lastMessage conversation:conversation userName:displayName];
-        cell.timestampLabel.text = [[NSDate dateWithTimeIntervalSince1970:conversation.lcim_lastMessage.sendTimestamp / 1000] lcck_timeAgoSinceNow];
+    if (conversation.lcck_lastMessage) {
+        cell.messageTextLabel.attributedText = [LCCKLastMessageTypeManager attributedStringWithMessage:conversation.lcck_lastMessage conversation:conversation userName:displayName];
+        cell.timestampLabel.text = [[NSDate dateWithTimeIntervalSince1970:conversation.lcck_lastMessage.sendTimestamp / 1000] lcck_timeAgoSinceNow];
     }
-    if (conversation.lcim_unreadCount > 0) {
+    if (conversation.lcck_unreadCount > 0) {
         if (conversation.muted) {
             cell.litteBadgeView.hidden = NO;
         } else {
-            cell.badgeView.badgeText = [NSString stringWithFormat:@"%@", @(conversation.lcim_unreadCount)];
+            cell.badgeView.badgeText = [NSString stringWithFormat:@"%@", @(conversation.lcck_unreadCount)];
         }
     }
     

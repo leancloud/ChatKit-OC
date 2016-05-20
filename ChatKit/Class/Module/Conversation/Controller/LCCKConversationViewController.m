@@ -205,7 +205,7 @@
 
 - (void)refreshConversation:(AVIMConversation *)conversation {
     _conversation = conversation;
-    self.navigationItem.title = conversation.lcim_title;
+    self.navigationItem.title = conversation.lcck_title;
     [LCCKConversationService sharedInstance].currentConversation = conversation;;
     [self.chatViewModel loadMessagesWhenInitHandler:^(BOOL succeeded, NSError *error) {
         !_loadHistoryMessagesHandler ?: _loadHistoryMessagesHandler(succeeded, error);
@@ -220,11 +220,11 @@
         return;
     }
     if ([message length] > 0 ) {
-        LCCKMessage *lcimMessage = [[LCCKMessage alloc] initWithText:message
+        LCCKMessage *lcckMessage = [[LCCKMessage alloc] initWithText:message
                                                               sender:self.userId
                                                            timestamp:[NSDate date]];
-        lcimMessage.messageGroupType = self.conversation.lcim_type;
-        [self.chatViewModel sendMessage:lcimMessage];
+        lcckMessage.messageGroupType = self.conversation.lcck_type;
+        [self.chatViewModel sendMessage:lcckMessage];
     }
 }
 
@@ -263,7 +263,7 @@
                                                    originPhotoURL:nil
                                                            sender:self.userId
                                                         timestamp:[NSDate date]];
-        message.messageGroupType = self.conversation.lcim_type;
+        message.messageGroupType = self.conversation.lcck_type;
         [self.chatViewModel sendMessage:message];
     } else {
         [self alert:@"write image to file error"];
@@ -276,7 +276,7 @@
                                                     voiceDuration:[NSString stringWithFormat:@"%@", @(seconds)]
                                                            sender:self.userId
                                                         timestamp:[NSDate date]];
-    message.messageGroupType =  self.conversation.lcim_type;
+    message.messageGroupType =  self.conversation.lcck_type;
     [self.chatViewModel sendMessage:message];
 }
 

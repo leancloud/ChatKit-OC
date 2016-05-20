@@ -14,42 +14,42 @@
 
 @implementation AVIMConversation (LCCKAddition)
 
-- (AVIMTypedMessage *)lcim_lastMessage {
-    return objc_getAssociatedObject(self, @selector(lcim_lastMessage));
+- (AVIMTypedMessage *)lcck_lastMessage {
+    return objc_getAssociatedObject(self, @selector(lcck_lastMessage));
 }
 
-- (void)setLcim_lastMessage:(AVIMTypedMessage *)lcim_lastMessage {
-    objc_setAssociatedObject(self, @selector(lcim_lastMessage), lcim_lastMessage, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+- (void)setLcck_lastMessage:(AVIMTypedMessage *)lcck_lastMessage {
+    objc_setAssociatedObject(self, @selector(lcck_lastMessage), lcck_lastMessage, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
-- (NSInteger)lcim_unreadCount {
-    NSNumber *lcim_unreadCountObject = objc_getAssociatedObject(self, @selector(lcim_unreadCount));
-    return [lcim_unreadCountObject intValue];
+- (NSInteger)lcck_unreadCount {
+    NSNumber *lcck_unreadCountObject = objc_getAssociatedObject(self, @selector(lcck_unreadCount));
+    return [lcck_unreadCountObject intValue];
 }
 
-- (void)setLcim_unreadCount:(NSInteger)lcim_unreadCount {
-    NSNumber *lcim_unreadCountObject = [NSNumber numberWithInteger:lcim_unreadCount];
-    objc_setAssociatedObject(self, @selector(lcim_unreadCount), lcim_unreadCountObject, OBJC_ASSOCIATION_ASSIGN);
+- (void)setLcck_unreadCount:(NSInteger)lcck_unreadCount {
+    NSNumber *lcck_unreadCountObject = [NSNumber numberWithInteger:lcck_unreadCount];
+    objc_setAssociatedObject(self, @selector(lcck_unreadCount), lcck_unreadCountObject, OBJC_ASSOCIATION_ASSIGN);
 }
 
-- (BOOL)lcim_mentioned {
-    NSNumber *lcim_mentionedObject = objc_getAssociatedObject(self, @selector(lcim_mentioned));
-    return [lcim_mentionedObject boolValue];
+- (BOOL)lcck_mentioned {
+    NSNumber *lcck_mentionedObject = objc_getAssociatedObject(self, @selector(lcck_mentioned));
+    return [lcck_mentionedObject boolValue];
 }
 
-- (void)setLcim_mentioned:(BOOL)lcim_mentioned {
-    NSNumber *lcim_mentionedObject = [NSNumber numberWithBool:lcim_mentioned];
-    objc_setAssociatedObject(self, @selector(lcim_mentioned), lcim_mentionedObject, OBJC_ASSOCIATION_ASSIGN);
+- (void)setLcck_mentioned:(BOOL)lcck_mentioned {
+    NSNumber *lcck_mentionedObject = [NSNumber numberWithBool:lcck_mentioned];
+    objc_setAssociatedObject(self, @selector(lcck_mentioned), lcck_mentionedObject, OBJC_ASSOCIATION_ASSIGN);
 }
 
-- (LCCKConversationType)lcim_type {
+- (LCCKConversationType)lcck_type {
     if (self.members.count > 2) {
         return LCCKConversationTypeGroup;
     }
     return LCCKConversationTypeSingle;
 }
 
-+ (NSString *)lcim_groupConversaionDefaultNameForUserIds:(NSArray *)userIds {
++ (NSString *)lcck_groupConversaionDefaultNameForUserIds:(NSArray *)userIds {
     NSError *error = nil;
     NSArray *array = [[LCCKUserSystemService sharedInstance] getProfilesForUserIds:userIds error:&error];
     if (error) {
@@ -63,9 +63,9 @@
     return [names componentsJoinedByString:@","];
 }
 
-- (NSString *)lcim_displayName {
-    if ([self lcim_type] == LCCKConversationTypeSingle) {
-        NSString *peerId = [self lcim_peerId];
+- (NSString *)lcck_displayName {
+    if ([self lcck_type] == LCCKConversationTypeSingle) {
+        NSString *peerId = [self lcck_peerId];
         NSError *error = nil;
         id<LCCKUserModelDelegate> peer = [[LCCKUserSystemService sharedInstance] getProfileForUserId:peerId error:&error];
         return peer.name ? peer.name : peerId;
@@ -74,7 +74,7 @@
     }
 }
 
-- (NSString *)lcim_peerId {
+- (NSString *)lcck_peerId {
     NSArray *members = self.members;
     if (members.count == 0) {
         [NSException raise:@"invalid conversation" format:@"invalid conversation"];
@@ -91,11 +91,11 @@
     return peerId;
 }
 
-- (NSString *)lcim_title {
-    if (self.lcim_type == LCCKConversationTypeSingle) {
-        return self.lcim_displayName;
+- (NSString *)lcck_title {
+    if (self.lcck_type == LCCKConversationTypeSingle) {
+        return self.lcck_displayName;
     } else {
-        return [NSString stringWithFormat:@"%@(%ld)", self.lcim_displayName, (long)self.members.count];
+        return [NSString stringWithFormat:@"%@(%ld)", self.lcck_displayName, (long)self.members.count];
     }
 }
 
