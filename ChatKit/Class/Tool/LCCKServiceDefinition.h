@@ -154,10 +154,10 @@ typedef void(^LCCKOpenProfileBlock)(NSString *userId, UIViewController *parentCo
 /*!
  *  当ChatKit需要预览图片消息时，会调用这个block
  *  @param index 用户点击的图片消息在imageMessages中的下标
- *  @param imageMessagesInfo 元素可能是图片，也可能是NSURL，以及混合。
+ *  @param allVisibleImages 元素可能是图片，也可能是NSURL，以及混合。
  *  @param userInfo 用来传递上下文信息，例如，从某个Controller触发，或者从某个view触发等，键值在下面定义
  */
-typedef void(^LCCKPreviewImageMessageBlock)(NSUInteger index, NSArray *imageMessagesInfo, NSDictionary *userInfo);
+typedef void(^LCCKPreviewImageMessageBlock)(NSUInteger index, NSArray *allVisibleImages, NSArray *allVisibleThumbs, NSDictionary *userInfo);
 
 @property (nonatomic, copy, readonly) LCCKPreviewImageMessageBlock previewImageMessageBlock;
 

@@ -82,7 +82,6 @@ static void * const LCCKBaseConversationViewControllerRefreshContext = (void*)&L
 
 - (void)scrollToBottomAnimated:(BOOL)animated {
     NSInteger rows = [self.tableView numberOfRowsInSection:0];
-    
     if (rows > 0) {
         [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:rows - 1 inSection:0]
                                      atScrollPosition:UITableViewScrollPositionBottom

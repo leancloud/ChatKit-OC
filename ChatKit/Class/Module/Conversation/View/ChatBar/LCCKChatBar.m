@@ -125,15 +125,11 @@
 }
 
 - (void)textViewDidChange:(UITextView *)textView{
-
     CGRect textViewFrame = self.textView.frame;
-    
     CGSize textSize = [self.textView sizeThatFits:CGSizeMake(CGRectGetWidth(textViewFrame), 1000.0f)];
-    
     CGFloat offset = 10;
     textView.scrollEnabled = (textSize.height + 0.1 > kLCCKChatBarMaxHeight-offset);
     textViewFrame.size.height = MAX(34, MIN(kLCCKChatBarMaxHeight, textSize.height));
-    
     CGRect addBarFrame = self.frame;
     addBarFrame.size.height = textViewFrame.size.height+offset;
     addBarFrame.origin.y = self.superViewHeight - self.bottomHeight - addBarFrame.size.height;
@@ -141,7 +137,6 @@
     if (textView.scrollEnabled) {
         [textView scrollRangeToVisible:NSMakeRange(textView.text.length - 2, 1)];
     }
-    
 }
 
 #pragma mark - UIImagePickerControllerDelegate
@@ -229,7 +224,7 @@
 }
 
 - (NSArray *)titlesOfMoreView:(LCCKChatMoreView *)moreView{
-    return @[@"拍摄",@"照片",@"位置"];
+    return @[ @"拍摄",@"照片",@"位置" ];
 }
 
 - (NSArray<NSString *> *)imageNamesOfMoreView:(LCCKChatMoreView *)moreView{

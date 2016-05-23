@@ -100,10 +100,6 @@ static NSMutableDictionary *_sharedInstances = nil;
     [[LCChatKit sharedInstance] removeAllCachedProfiles];
     [[LCChatKit sharedInstance] removeAllCachedRecentConversations];
     [[LCChatKit sharedInstance] closeWithCallback:^(BOOL succeeded, NSError *error) {
-        CGFloat seconds = arc4random_uniform(4)+arc4random_uniform(4); //normal distribution
-        NSLog(@"sleeping fetch of completions for %f", seconds);
-        sleep(seconds);
-        
         if (succeeded) {
             [LCCKUtil showNotificationWithTitle:@"退出成功" subtitle:nil type:LCCKMessageNotificationTypeSuccess];
             !success ?: success();
@@ -195,8 +191,8 @@ static NSMutableDictionary *_sharedInstances = nil;
         [[self class] exampleOpenConversationViewControllerWithConversaionId:conversation.conversationId fromNavigationController:nil];
     }];
     
-    [[LCChatKit sharedInstance] setPreviewImageMessageBlock:^(NSUInteger index, NSArray *imageMessagesInfo, NSDictionary *userInfo) {
-        [self examplePreviewImageMessageWithIndex:index imageMessages:imageMessagesInfo];
+    [[LCChatKit sharedInstance] setPreviewImageMessageBlock:^(NSUInteger index, NSArray *allVisibleImages, NSArray *allVisibleThumbs, NSDictionary *userInfo) {
+        [self examplePreviewImageMessageWithIndex:index allVisibleImages:allVisibleImages allVisibleThumbs:allVisibleThumbs];
     }];
     
     //    [[LCChatKit sharedInstance] setDidDeleteItemBlock:^(NSIndexPath *indexPath, AVIMConversation *conversation, LCCKConversationListViewController *controller) {
@@ -434,28 +430,34 @@ typedef void (^UITableViewRowActionHandler)(UITableViewRowAction *action, NSInde
     [LCCKUtil showNotificationWithTitle:title subtitle:subTitle type:LCCKMessageNotificationTypeMessage];
 }
 
-- (void)examplePreviewImageMessageWithIndex:(NSUInteger)index imageMessages:(NSArray *)imageMessageInfo {
+- (void)examplePreviewImageMessageWithIndex:(NSUInteger)index allVisibleImages:(NSArray *)allVisibleImages allVisibleThumbs:(NSArray *)allVisibleThumbs {
     // Browser
-    NSMutableArray *photos = [[NSMutableArray alloc] initWithCapacity:[imageMessageInfo count]];
-    NSMutableArray *thumbs = [[NSMutableArray alloc] initWithCapacity:[imageMessageInfo count]];
+    NSMutableArray *photos = [[NSMutableArray alloc] initWithCapacity:[allVisibleImages count]];
+    NSMutableArray *thumbs = [[NSMutableArray alloc] initWithCapacity:[allVisibleThumbs count]];
     MWPhoto *photo;
+    MWPhoto *thumb;
     BOOL displayActionButton = YES;
     BOOL displaySelectionButtons = NO;
     BOOL displayNavArrows = NO;
     BOOL enableGrid = YES;
     BOOL startOnGrid = NO;
     BOOL autoPlayOnAppear = NO;
-    for (id image in imageMessageInfo) {
-        if ([image isKindOfClass:[UIImage class]]) {
-            // Photos
-            photo = [MWPhoto photoWithImage:image];
-            [photos addObject:photo];
-            [thumbs addObject:photo];
+    for (NSUInteger index = 0; index < allVisibleImages.count; index++) {
+        id image_ = allVisibleImages[index];
+        if ([image_ isKindOfClass:[UIImage class]]) {
+            photo = [MWPhoto photoWithImage:image_];
         } else {
-            photo = [MWPhoto photoWithURL:image];
-            [photos addObject:photo];
-            [thumbs addObject:photo];
+            photo = [MWPhoto photoWithURL:image_];
         }
+        [photos addObject:photo];
+        
+        id thumb_ = allVisibleThumbs[index];
+        if ([thumb_ isKindOfClass:[UIImage class]]) {
+            thumb = [MWPhoto photoWithImage:thumb_];
+        } else {
+            thumb = [MWPhoto photoWithURL:thumb_];
+        }
+        [thumbs addObject:thumb];
     }
     // Options
     startOnGrid = NO;
@@ -476,7 +478,7 @@ typedef void (^UITableViewRowActionHandler)(UITableViewRowAction *action, NSInde
     [browser setCurrentPhotoIndex:index];
     // Reset selections
     if (displaySelectionButtons) {
-        _selections = [[NSMutableArray alloc] initWithCapacity:[imageMessageInfo count]];;
+        _selections = [[NSMutableArray alloc] initWithCapacity:[allVisibleImages count]];;
         for (int i = 0; i < photos.count; i++) {
             [_selections addObject:[NSNumber numberWithBool:NO]];
         }

@@ -218,8 +218,7 @@
         _status = [aDecoder decodeIntForKey:@"status"];
         _photoPath = [aDecoder decodeObjectForKey:@"photoPath"];
         //TODO:        _imageSize = imageSize;
-//TODO:thumbnailPhoto
-        
+        _thumbnailPhoto = [aDecoder decodeObjectForKey:@"thumbnailPhoto"];
     }
     return self;
 }
@@ -258,7 +257,7 @@
     [aCoder encodeInt:self.status forKey:@"status"];
     [aCoder encodeObject:self.photoPath forKey:@"photoPath"];
     //TODO:        _imageSize = imageSize;
-    //TODO:thumbnailPhoto
+    [aCoder encodeObject:self.thumbnailPhoto forKey:@"thumbnailPhoto"];
 
 }
 
@@ -328,7 +327,6 @@
     message.avatorURL = [self.avatorURL copy];
 //    message.photo = [self.photo copy];
 //    message.photoPath = [self.photoPath copy];
-    //TODO:thumbnailPhoto
 
     message.messageId = [self.messageId copy];
     message.conversationId = [self.conversationId copy];

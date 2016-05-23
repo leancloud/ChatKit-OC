@@ -60,6 +60,9 @@ typedef void (^LCCKSendMessageSuccessFailedBlock)(NSString *messageUUID, NSError
 - (void)loadMessagesWhenInitHandler:(LCCKBooleanResultBlock)handler;
 - (void)loadOldMessages;
 - (void)updateConversationAsRead;
-- (void)getAllImageMessagesForMessage:(LCCKMessage *)message allImageMessageImages:(NSArray **)allImageMessageImages selectedMessageIndex:(NSNumber **)selectedMessageIndex;
+- (void)getAllVisibleImagesForSelectedMessage:(LCCKMessage *)message
+                             allVisibleImages:(NSArray **)allVisibleImages
+                             allVisibleThumbs:(NSArray **)allVisibleThumbs
+                         selectedMessageIndex:(NSNumber **)selectedMessageIndex;
 
 @end

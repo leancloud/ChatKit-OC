@@ -472,7 +472,6 @@
 }
 
 - (void)loadMessagesWhenInitHandler:(LCCKBooleanResultBlock)handler {
-
     //queryMessagesFromServer
     [self queryAndCacheMessagesWithTimestamp:([[NSDate distantFuture] timeIntervalSince1970] * 1000) block:^(NSArray *avimTypedMessages, NSError *error) {
         BOOL succeed = [self.parentViewController filterAVIMError:error];
@@ -589,22 +588,37 @@
     [[NSNotificationCenter defaultCenter] postNotificationName:LCCKNotificationUnreadsUpdated object:nil];
 }
 
-- (void)getAllImageMessagesForMessage:(LCCKMessage *)message allImageMessageImages:(NSArray **)allImageMessageImages selectedMessageIndex:(NSNumber **)selectedMessageIndex {
-    NSMutableArray *allImageMessageImages_ = [[NSMutableArray alloc] initWithCapacity:0];
+- (void)getAllVisibleImagesForSelectedMessage:(LCCKMessage *)message
+                             allVisibleImages:(NSArray **)allVisibleImages
+                             allVisibleThumbs:(NSArray **)allVisibleThumbs
+                         selectedMessageIndex:(NSNumber **)selectedMessageIndex {
+    NSMutableArray *allVisibleImages_ = [[NSMutableArray alloc] initWithCapacity:0];
+    NSMutableArray *allVisibleThumbs_ = [[NSMutableArray alloc] initWithCapacity:0];
     NSUInteger idx = 0;
     for (LCCKMessage *message_ in self.dataArray) {
         BOOL isImageType = (message_.messageMediaType == LCCKMessageTypeImage || message_.photo || message_.originPhotoURL);
         if (isImageType) {
+            UIImage *placeholderImage = ({
+                NSString *imageName = @"Placeholder_Accept_Defeat";
+                UIImage *image = [UIImage lcck_imageNamed:imageName bundleName:@"Placeholder" bundleForClass:[self class]];
+                image;});
+            //大图设置
             UIImage *image = message_.photo;
             if (image) {
-                [allImageMessageImages_ addObject:image];
+                [allVisibleImages_ addObject:image];
             } else if (message_.originPhotoURL) {
-                [allImageMessageImages_ addObject:message_.originPhotoURL];
+                [allVisibleImages_ addObject:message_.originPhotoURL];
             } else {
-                [allImageMessageImages_ addObject:({
-                    NSString *imageName = @"Placeholder_Accept_Defeat";
-                    UIImage *image = [UIImage lcck_imageNamed:imageName bundleName:@"Placeholder"bundleForClass:[self class]];
-                    image;})];
+                [allVisibleImages_ addObject:placeholderImage];
+            }
+            //缩略图设置
+            UIImage *thumb = message_.thumbnailPhoto;
+            if (thumb) {
+                [allVisibleThumbs_ addObject:thumb];
+            } else if (message_.thumbnailURL) {
+                [allVisibleThumbs_ addObject:message_.thumbnailURL];
+            } else {
+                [allVisibleThumbs_ addObject:placeholderImage];
             }
             
             if ((message == message_) && (*selectedMessageIndex == nil)){
@@ -613,8 +627,11 @@
             idx++;
         }
     }
-    if (*allImageMessageImages == nil) {
-        *allImageMessageImages = allImageMessageImages_;
+    if (*allVisibleImages == nil) {
+        *allVisibleImages = [allVisibleImages_ copy];
+    }
+    if (*allVisibleThumbs == nil) {
+        *allVisibleThumbs = [allVisibleThumbs_ copy];
     }
 }
 
