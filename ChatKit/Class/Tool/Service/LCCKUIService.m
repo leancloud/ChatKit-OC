@@ -17,6 +17,7 @@ NSString *const LCCKUIServiceErrorDomain = @"LCCKUIServiceErrorDomain";
 @property (nonatomic, copy) LCCKOpenProfileBlock openProfileBlock;
 @property (nonatomic, copy) LCCKUnreadCountChangedBlock unreadCountChangedBlock;
 @property (nonatomic, assign, readwrite) LCCKAvatarImageViewCornerRadiusBlock avatarImageViewCornerRadiusBlock;
+@property (nonatomic, copy, readwrite) LCCKLongPressMessageBlock longPressMessageBlock;
 
 @end
 
@@ -50,6 +51,10 @@ NSString *const LCCKUIServiceErrorDomain = @"LCCKUIServiceErrorDomain";
 
 - (void)setAvatarImageViewCornerRadiusBlock:(LCCKAvatarImageViewCornerRadiusBlock)avatarImageViewCornerRadiusBlock {
     _avatarImageViewCornerRadiusBlock = avatarImageViewCornerRadiusBlock;
+}
+
+- (void)setLongPressMessageBlock:(LCCKLongPressMessageBlock)longPressMessageBlock {
+    _longPressMessageBlock = longPressMessageBlock;
 }
 
 @end

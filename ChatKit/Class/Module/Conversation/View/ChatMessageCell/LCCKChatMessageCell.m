@@ -46,6 +46,15 @@ static CGFloat const kAvatarImageViewHeight = 50.f;
     return self;
 }
 
+// add support for LCCKMenuItem. Needs to be called once per class.
++ (void)load {
+    [LCCKMenuItem installMenuHandlerForObject:self];
+}
+
++ (void)initialize {
+    [LCCKMenuItem installMenuHandlerForObject:self];
+}
+
 #pragma mark - Life Cycle
 
 - (instancetype)initWithFrame:(CGRect)frame {
@@ -191,6 +200,10 @@ static CGFloat const kAvatarImageViewHeight = 50.f;
     
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTap:)];
     [self.contentView addGestureRecognizer:tap];
+    
+    UILongPressGestureRecognizer *recognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleLongPress:)];
+    [recognizer setMinimumPressDuration:0.4f];
+    [self addGestureRecognizer:recognizer];
     
 }
 
@@ -343,35 +356,7 @@ static CGFloat const kAvatarImageViewHeight = 50.f;
 
 #pragma mark - LCCKChatMessageCellMenuActionCategory
 
-NSString * const kLCCKChatMessageCellMenuControllerKey;
-
-@interface LCCKChatMessageCell (LCCKChatMessageCellMenuAction)
-
-@property (nonatomic, strong, readonly) UIMenuController *menuController;
-
-@end
-
 @implementation LCCKChatMessageCell (LCCKChatMessageCellMenuAction)
-
-#pragma mark - Private Methods
-
-//以下两个方法必须有
-/*
- *  让UIView成为第一responser
- */
-- (BOOL)canBecomeFirstResponder{
-    return YES;
-}
-
-/*
- *  根据action,判断UIMenuController是否显示对应aciton的title
- */
-- (BOOL)canPerformAction:(SEL)action withSender:(id)sender{
-    if (action == @selector(menuRelayAction) || action == @selector(menuCopyAction)) {
-        return YES;
-    }
-    return NO;
-}
 
 - (void)handleLongPress:(UILongPressGestureRecognizer *)longPressGes {
     if (longPressGes.state == UIGestureRecognizerStateBegan) {
@@ -380,44 +365,56 @@ NSString * const kLCCKChatMessageCellMenuControllerKey;
             return;
         }
         [self becomeFirstResponder];
-        //TODO:
-        //!!!此处使用self.superview.superview 获得到cell所在的tableView,不是很严谨,有哪位知道更加好的方法请告知
-        CGRect targetRect = [self convertRect:self.messageContentView.frame toView:self.superview.superview];
-        [self.menuController setTargetRect:targetRect inView:self.superview.superview];
-        [self.menuController setMenuVisible:YES animated:YES];
-    }
-}
-
-//TODO:
-- (void)menuCopyAction {
-    if (self.delegate && [self.delegate respondsToSelector:@selector(messageCell:withActionType:)]) {
-        [self.delegate messageCell:self withActionType:kLCCKChatMessageCellMenuControllerKey];
-    }
-}
-
-- (void)menuRelayAction {
-    if (self.delegate && [self.delegate respondsToSelector:@selector(messageCell:withActionType:)]) {
-        [self.delegate messageCell:self withActionType:kLCCKChatMessageCellMenuControllerKey];
-    }
-}
-
-#pragma mark - Getters
-
-- (UIMenuController *)menuController{
-    UIMenuController *menuController = objc_getAssociatedObject(self,&kLCCKChatMessageCellMenuControllerKey);
-    if (!menuController) {
-        menuController = [UIMenuController sharedMenuController];
-        UIMenuItem *copyItem = [[UIMenuItem alloc] initWithTitle:@"复制" action:@selector(menuCopyAction)];
-        UIMenuItem *shareItem = [[UIMenuItem alloc] initWithTitle:@"转发" action:@selector(menuRelayAction)];
-        if (self.messageType == LCCKMessageTypeText) {
-            [menuController setMenuItems:@[copyItem,shareItem]];
-        } else{
-            [menuController setMenuItems:@[shareItem]];
+        LCCKLongPressMessageBlock longPressMessageBlock = [LCChatKit sharedInstance].longPressMessageBlock;
+        NSArray *menuItems = [NSArray array];
+        NSDictionary *userInfo = @{
+                                   LCCKLongPressMessageUserInfoKeyFromController : self,
+                                   LCCKLongPressMessageUserInfoKeyFromView : self.tableView,
+                                   };
+        if (longPressMessageBlock) {
+            menuItems = longPressMessageBlock(self.message, userInfo);
+        } else {
+            LCCKMenuItem *copyItem = [[LCCKMenuItem alloc] initWithTitle:NSLocalizedStringFromTable(@"copy", @"LCChatKitString", @"复制文本消息")
+                                                               block:^{
+                                                                   UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
+                                                                   [pasteboard setString:[self.message text]];
+                                                               }];
+            //TODO:添加“转发”
+            if (self.messageType == LCCKMessageTypeText) {
+                menuItems = @[ copyItem ];
+            }
         }
+        UIMenuController *menuController = [UIMenuController sharedMenuController];
+        [menuController setMenuItems:menuItems];
         [menuController setArrowDirection:UIMenuControllerArrowDown];
-        objc_setAssociatedObject(self, &kLCCKChatMessageCellMenuControllerKey, menuController, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+        UITableView *tableView = self.tableView;
+        CGRect targetRect = [self convertRect:self.messageContentView.frame toView:tableView];
+        [menuController setTargetRect:targetRect inView:tableView];
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(handleMenuWillShowNotification:)
+                                                     name:UIMenuControllerWillShowMenuNotification
+                                                   object:nil];
+        [menuController setMenuVisible:YES animated:YES];
     }
-    return menuController;
+}
+
+#pragma mark - Notifications
+
+- (void)handleMenuWillHideNotification:(NSNotification *)notification {
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                    name:UIMenuControllerWillHideMenuNotification
+                                                  object:nil];
+}
+
+- (void)handleMenuWillShowNotification:(NSNotification *)notification {
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                    name:UIMenuControllerWillShowMenuNotification
+                                                  object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(handleMenuWillHideNotification:)
+                                                 name:UIMenuControllerWillHideMenuNotification
+                                               object:nil];
 }
 
 @end

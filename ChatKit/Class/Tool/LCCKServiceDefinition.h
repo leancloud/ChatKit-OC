@@ -9,6 +9,7 @@
 #import <AVOSCloudIM/AVOSCloudIM.h>
 #import "LCCKConstants.h"
 #import "LCCKSingleton.h"
+#import "LCCKMenuItem.h"
 
 @class LCCKConversationViewController;
 @class LCCKConversationListViewController;
@@ -192,6 +193,26 @@ typedef void(^LCCKPreviewLocationMessageBlock)(CLLocation *location, NSString *g
  *  使用NSDictionary传递上下文信息，便于扩展
  */
 - (void)setPreviewLocationMessageBlock:(LCCKPreviewLocationMessageBlock)previewLocationMessageBlock;
+
+/*!
+ *  ChatKit会在长按消息时，调用这个block
+ *  @param message 被长按的消息
+ *  @param userInfo 用来传递上下文信息，例如，从某个Controller触发，或者从某个view触发等，键值在下面定义
+ */
+typedef NSArray<LCCKMenuItem *> *(^LCCKLongPressMessageBlock)(LCCKMessage *message, NSDictionary *userInfo);
+
+@property (nonatomic, copy, readonly) LCCKLongPressMessageBlock longPressMessageBlock;
+
+/// 传递触发的UIViewController对象
+#define LCCKLongPressMessageUserInfoKeyFromController    @"LCCKLongPressMessageUserInfoKeyFromController"
+/// 传递触发的UIView对象
+#define LCCKLongPressMessageUserInfoKeyFromView          @"LCCKLongPressMessageUserInfoKeyFromView"
+
+/*!
+ *  ChatKit会在长按消息时，调用这个block
+ *  使用NSDictionary传递上下文信息，便于扩展
+ */
+- (void)setLongPressMessageBlock:(LCCKLongPressMessageBlock)longPressMessageBlock;
 
 /**
  *  当IMUIKit需要显示通知时，会调用这个block。

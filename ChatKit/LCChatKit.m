@@ -185,6 +185,14 @@ static NSMutableDictionary *_sharedInstances = nil;
     return self.UIService.avatarImageViewCornerRadiusBlock;
 }
 
+- (void)setLongPressMessageBlock:(LCCKLongPressMessageBlock)longPressMessageBlock {
+    return [self.UIService setLongPressMessageBlock:longPressMessageBlock];
+}
+
+- (LCCKLongPressMessageBlock)longPressMessageBlock {
+    return self.UIService.longPressMessageBlock;
+}
+
 ///---------------------------------------------------------------------
 ///------------------LCCKSettingService---------------------------------
 ///---------------------------------------------------------------------

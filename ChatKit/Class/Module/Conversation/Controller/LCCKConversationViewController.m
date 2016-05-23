@@ -365,42 +365,6 @@
     [self.navigationController pushViewController:textFullScreenViewController animated:NO];
 }
 
-- (void)messageCell:(LCCKChatMessageCell *)messageCell withActionType:(LCCKChatMessageCellMenuActionType)actionType {
-    NSString *action = actionType ==LCCKChatMessageCellMenuActionTypeRelay ? @"转发" : @"复制";
-    NSLog(@"messageCell :%@ willDoAction :%@",messageCell,action);
-
-//    UIMenuItem *copy = [[UIMenuItem alloc] initWithTitle:NSLocalizedStringFromTable(@"copy", @"MessageDisplayKitString", @"复制文本消息") action:@selector(copied:)];
-//    UIMenuItem *transpond = [[UIMenuItem alloc] initWithTitle:NSLocalizedStringFromTable(@"transpond", @"MessageDisplayKitString", @"转发") action:@selector(transpond:)];
-//    UIMenuItem *favorites = [[UIMenuItem alloc] initWithTitle:NSLocalizedStringFromTable(@"favorites", @"MessageDisplayKitString", @"收藏") action:@selector(favorites:)];
-//    UIMenuItem *more = [[UIMenuItem alloc] initWithTitle:NSLocalizedStringFromTable(@"more", @"MessageDisplayKitString", @"更多") action:@selector(more:)];
-//    
-//    UIMenuController *menu = [UIMenuController sharedMenuController];
-//    switch (self.messageBubbleView.message.messageMediaType) {
-//        case XHBubbleMessageMediaTypeText:
-//        case XHBubbleMessageMediaTypePhoto:
-//        case XHBubbleMessageMediaTypeLocalPosition:
-//            [menu setMenuItems:[NSArray arrayWithObjects:copy, transpond, favorites, more, nil]];
-//            break;
-//        case XHBubbleMessageMediaTypeEmotion:
-//        case XHBubbleMessageMediaTypeVideo:
-//        case XHBubbleMessageMediaTypeVoice:
-//            [menu setMenuItems:[NSArray arrayWithObjects:transpond, favorites, more, nil]];
-//            break;
-//    }
-//    
-//    CGRect targetRect = [self convertRect:[self.messageBubbleView bubbleFrame]
-//                                 fromView:self.messageBubbleView];
-//    
-//    [menu setTargetRect:CGRectInset(targetRect, 0.0f, 4.0f) inView:self];
-//    
-//    
-//    [[NSNotificationCenter defaultCenter] addObserver:self
-//                                             selector:@selector(handleMenuWillShowNotification:)
-//                                                 name:UIMenuControllerWillShowMenuNotification
-//                                               object:nil];
-//    [menu setMenuVisible:YES animated:YES];
-}
-
 #pragma mark - LCCKConversationViewModelDelegate
 
 - (NSString *)chatterNickname {

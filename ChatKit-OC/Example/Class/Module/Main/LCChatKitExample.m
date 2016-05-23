@@ -195,6 +195,19 @@ static NSMutableDictionary *_sharedInstances = nil;
         [self examplePreviewImageMessageWithIndex:index allVisibleImages:allVisibleImages allVisibleThumbs:allVisibleThumbs];
     }];
     
+    [[LCChatKit sharedInstance] setLongPressMessageBlock:^NSArray<UIMenuItem *> *(LCCKMessage *message, NSDictionary *userInfo) {
+        LCCKMenuItem *copyItem = [[LCCKMenuItem alloc] initWithTitle:NSLocalizedStringFromTable(@"copy", @"LCChatKitString", @"复制文本消息")
+                                                           block:^{
+            UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
+            [pasteboard setString:[message text]];
+        }];
+        NSArray *menuItems = [NSArray array];
+        if (message.messageMediaType ==  LCCKMessageTypeText) {
+            menuItems = @[ copyItem ];
+        }
+        return menuItems;
+    }];
+    
     //    [[LCChatKit sharedInstance] setDidDeleteItemBlock:^(NSIndexPath *indexPath, AVIMConversation *conversation, LCCKConversationListViewController *controller) {
     //        //TODO:
     //    }];

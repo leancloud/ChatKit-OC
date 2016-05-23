@@ -21,7 +21,6 @@
 - (void)messageCellTappedBlank:(LCCKChatMessageCell *)messageCell;
 - (void)messageCellTappedHead:(LCCKChatMessageCell *)messageCell;
 - (void)messageCellTappedMessage:(LCCKChatMessageCell *)messageCell;
-- (void)messageCell:(LCCKChatMessageCell *)messageCell withActionType:(LCCKChatMessageCellMenuActionType)actionType;
 - (void)textMessageCellDoubleTapped:(LCCKChatMessageCell *)messageCell;
 
 @end

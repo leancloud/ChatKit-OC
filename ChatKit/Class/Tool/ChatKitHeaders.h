@@ -38,6 +38,7 @@ FOUNDATION_EXPORT const unsigned char LCChatKitVersionString[];
 #import <ChatKit/UIImageView+LCCKExtension.h>
 #import <ChatKit/LCCKBaseTableViewController.h>
 #import <ChatKit/LCCKBaseNavigationController.h>
+#import <ChatKit/LCCKMenuItem.h>
 
 #else
 
@@ -56,7 +57,7 @@ FOUNDATION_EXPORT const unsigned char LCChatKitVersionString[];
 #import "UIImageView+LCCKExtension.h"
 #import "LCCKBaseTableViewController.h"
 #import "LCCKBaseNavigationController.h"
-
+#import "LCCKMenuItem.h"
 #endif
 
 
