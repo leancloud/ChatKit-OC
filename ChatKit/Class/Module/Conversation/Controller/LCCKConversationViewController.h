@@ -2,7 +2,7 @@
 //  LCCKConversationViewController.h
 //  LCCKChatBarExample
 //
-//  Created by ElonChan ( https://github.com/leancloud/LeanCloudChatKit-iOS ) on 15/11/20.
+//  Created by ElonChan ( https://github.com/leancloud/ChatKit-OC ) on 15/11/20.
 //  Copyright © 2015年 https://LeanCloud.cn . All rights reserved.
 //
 

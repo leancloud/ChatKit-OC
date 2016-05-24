@@ -509,6 +509,7 @@
 
 - (void)queryAndCacheMessagesWithTimestamp:(int64_t)timestamp block:(AVIMArrayResultBlock)block {
     if (self.parentViewController.loadingMoreMessage) {
+        //TODO:if (self.parentViewController.dataSource == 0)
         return;
     }
     if (self.dataArray.count == 0) {

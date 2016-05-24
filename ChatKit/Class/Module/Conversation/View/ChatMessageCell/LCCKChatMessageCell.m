@@ -2,7 +2,7 @@
 //  LCCKChatMessageCell.m
 //  LCCKChatExample
 //
-//  Created by ElonChan ( https://github.com/leancloud/LeanCloudChatKit-iOS ) on 15/11/13.
+//  Created by ElonChan ( https://github.com/leancloud/ChatKit-OC ) on 15/11/13.
 //  Copyright © 2015年 https://LeanCloud.cn . All rights reserved.
 //
 
@@ -351,12 +351,6 @@ static CGFloat const kAvatarImageViewHeight = 50.f;
     }
     return LCCKMessageOwnerUnknown;
 }
-
-@end
-
-#pragma mark - LCCKChatMessageCellMenuActionCategory
-
-@implementation LCCKChatMessageCell (LCCKChatMessageCellMenuAction)
 
 - (void)handleLongPress:(UILongPressGestureRecognizer *)longPressGes {
     if (longPressGes.state == UIGestureRecognizerStateBegan) {

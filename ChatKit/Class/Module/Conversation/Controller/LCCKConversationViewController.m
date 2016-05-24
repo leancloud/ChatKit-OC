@@ -2,7 +2,7 @@
 //  LCCKConversationViewController.m
 //  LCCKChatBarExample
 //
-//  Created by ElonChan ( https://github.com/leancloud/LeanCloudChatKit-iOS ) on 15/11/20.
+//  Created by ElonChan ( https://github.com/leancloud/ChatKit-OC ) on 15/11/20.
 //  Copyright © 2015年 https://LeanCloud.cn . All rights reserved.
 //
 
@@ -332,7 +332,9 @@
         case LCCKMessageTypeImage: {
             LCCKPreviewImageMessageBlock previewImageMessageBlock = [LCCKUIService sharedInstance].previewImageMessageBlock;
             NSDictionary *userInfo = @{
+                                       /// 传递触发的UIViewController对象
                                        LCCKPreviewImageMessageUserInfoKeyFromController : self,
+                                       /// 传递触发的UIView对象
                                        LCCKPreviewImageMessageUserInfoKeyFromView : self.tableView,
                                        };
             NSArray *allVisibleImages = nil;
@@ -344,16 +346,18 @@
             break;
         case LCCKMessageTypeLocation: {
             NSDictionary *userInfo = @{
-                                       LCCKPreviewImageMessageUserInfoKeyFromController : self,
-                                       LCCKPreviewImageMessageUserInfoKeyFromView : self.tableView,
+                                       /// 传递触发的UIViewController对象
+                                       LCCKPreviewLocationMessageUserInfoKeyFromController : self,
+                                       /// 传递触发的UIView对象
+                                       LCCKPreviewLocationMessageUserInfoKeyFromView : self.tableView,
                                        };
             LCCKPreviewLocationMessageBlock previewLocationMessageBlock = [LCCKUIService sharedInstance].previewLocationMessageBlock;
             !previewLocationMessageBlock ?: previewLocationMessageBlock(message.location, message.geolocations, userInfo);
         }
             break;
             
-//        default:
-//            break;
+            //        default:
+            //            break;
     }
 }
 
