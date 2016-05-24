@@ -104,7 +104,7 @@ static CGFloat const LCCKLocationPOIListCellHeight = 40.f;
     }
     if (indexPath.row == self.selectedIndexPath.row) {
         cell.accessoryType = UITableViewCellAccessoryCheckmark;
-    } else{
+    } else {
         cell.accessoryType = UITableViewCellAccessoryNone;
     }
     if (indexPath.row >= self.placemarks.count) {
@@ -112,7 +112,7 @@ static CGFloat const LCCKLocationPOIListCellHeight = 40.f;
     }
     if (indexPath.row == 0) {
         cell.textLabel.text = [NSString stringWithFormat:@"[位置] \n%@",[self.placemarks[indexPath.row] name]];
-    } else{
+    } else {
         cell.textLabel.text = [self.placemarks[indexPath.row] name];
     }
     return cell;

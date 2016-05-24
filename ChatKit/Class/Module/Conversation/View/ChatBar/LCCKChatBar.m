@@ -170,7 +170,7 @@
     if (fileName) {
         [LCCKProgressHUD dismissWithProgressState:LCCKProgressSuccess];
         [self sendVoiceMessage:fileName seconds:[LCCKProgressHUD seconds]];
-    } else{
+    } else {
         [LCCKProgressHUD dismissWithProgressState:LCCKProgressError];
     }
 }
@@ -248,7 +248,7 @@
         self.textView.text = @"";
         [self setFrame:CGRectMake(0, self.superViewHeight - self.bottomHeight - kLCCKChatBarMinHeight, self.frame.size.width, kLCCKChatBarMinHeight) animated:NO];
         [self showViewWithType:LCCKFunctionViewShowFace];
-    } else{
+    } else {
         self.textView.text = [self.textView.text stringByAppendingString:faceName];
         [self textViewDidChange:self.textView];
     }
@@ -349,10 +349,8 @@
     
     switch (showType) {
         case LCCKFunctionViewShowNothing:
-        case LCCKFunctionViewShowVoice:
-        {
+        case LCCKFunctionViewShowVoice: {
             self.inputText = self.textView.text;
-            self.textView.text = nil;
             [self setFrame:CGRectMake(0, self.superViewHeight - kLCCKChatBarMinHeight, self.frame.size.width, kLCCKChatBarMinHeight) animated:NO];
             [self.textView resignFirstResponder];
         }
@@ -397,7 +395,7 @@
     if (!button.selected) {
         showType = LCCKFunctionViewShowKeyboard;
         [self.textView becomeFirstResponder];
-    } else{
+    } else {
         self.inputText = self.textView.text;
     }
     
@@ -406,12 +404,11 @@
 
 - (void)showFaceView:(BOOL)show{
     if (show) {
-       
         [self.superview addSubview:self.faceView];
         [UIView animateWithDuration:.3 animations:^{
             [self.faceView setFrame:CGRectMake(0, self.superViewHeight - kFunctionViewHeight, self.frame.size.width, kFunctionViewHeight)];
         } completion:nil];
-    } else{
+    } else {
         [UIView animateWithDuration:.3 animations:^{
             [self.faceView setFrame:CGRectMake(0, self.superViewHeight, self.frame.size.width, kFunctionViewHeight)];
         } completion:^(BOOL finished) {
@@ -430,7 +427,7 @@
         [UIView animateWithDuration:.3 animations:^{
             [self.moreView setFrame:CGRectMake(0, self.superViewHeight - kFunctionViewHeight, self.frame.size.width, kFunctionViewHeight)];
         } completion:nil];
-    } else{
+    } else {
         [UIView animateWithDuration:.3 animations:^{
             [self.moreView setFrame:CGRectMake(0, self.superViewHeight, self.frame.size.width, kFunctionViewHeight)];
         } completion:^(BOOL finished) {
@@ -580,7 +577,7 @@
     
     if (self.faceView.superview || self.moreView.superview) {
         return MAX(self.keyboardFrame.size.height, MAX(self.faceView.frame.size.height, self.moreView.frame.size.height));
-    } else{
+    } else {
         return MAX(self.keyboardFrame.size.height, CGFLOAT_MIN);
     }
     
@@ -597,7 +594,7 @@
         [UIView animateWithDuration:.3 animations:^{
             [self setFrame:frame];
         }];
-    } else{
+    } else {
         [self setFrame:frame];
     }
     if (self.delegate && [self.delegate respondsToSelector:@selector(chatBarFrameDidChange:frame:)]) {
@@ -606,7 +603,6 @@
 }
 
 - (UIImage *)imageInBundlePathForImageName:(NSString *)imageName {
-//    NSString *imageNameWithBundlePath = [NSString stringWithFormat:@"ChatKeyboard.bundle/%@", imageName];
     UIImage *image = [UIImage lcck_imageNamed:imageName bundleName:@"ChatKeyboard" bundleForClass:[self class]];
     return image;
 }

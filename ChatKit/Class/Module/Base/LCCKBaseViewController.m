@@ -130,7 +130,6 @@
             icon = @"barbuttonicon_Operate";
             break;
     }
-//    NSString *imgString = [NSString stringWithFormat:@"BarButtonIcon.bundle/%@", icon];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage lcck_imageNamed:icon bundleName:@"BarButtonIcon" bundleForClass:[self class]] style:UIBarButtonItemStylePlain target:self action:@selector(clickedBarButtonItemAction)];
     self.barbuttonItemAction = action;
 }

@@ -70,7 +70,7 @@
     float second = [self.centerLabel.text floatValue];
     if (second <= 10.0f) {
         self.centerLabel.textColor = [UIColor redColor];
-    } else{
+    } else {
         self.centerLabel.textColor = [UIColor yellowColor];
     }
     self.centerLabel.text = [NSString stringWithFormat:@"%.1f",second-0.1];
@@ -92,7 +92,7 @@
         CGFloat timeLonger;
         if (self.progressState == LCCKProgressShort) {
             timeLonger = 1;
-        } else{
+        } else {
             timeLonger = 0.6;
         }
         [UIView animateWithDuration:timeLonger

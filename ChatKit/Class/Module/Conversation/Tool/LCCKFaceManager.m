@@ -28,7 +28,7 @@
         NSArray *recentArrays = [[NSUserDefaults standardUserDefaults] arrayForKey:@"recentFaceArrays"];
         if (recentArrays) {
             _recentFaceArrays = [NSMutableArray arrayWithArray:recentArrays];
-        } else{
+        } else {
             _recentFaceArrays = [NSMutableArray array];
         }
         

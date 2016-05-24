@@ -138,7 +138,7 @@
     for (int i = 0; i < self.pageCount; i++) {
         if (self.pageCount - 1 == i) {
             [self.faceArray addObject:@{@"face_id":@"999",@"face_name":@"删除"}];
-        } else{
+        } else {
             [self.faceArray insertObject:@{@"face_id":@"999",@"face_name":@"删除"} atIndex:(i + 1) * pageItemCount + i];
         }
     }

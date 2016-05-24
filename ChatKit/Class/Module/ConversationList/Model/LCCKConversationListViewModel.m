@@ -254,7 +254,6 @@
 
 - (UIImage *)imageInBundleForImageName:(NSString *)imageName {
     return ({
-//        NSString *imageNameWithBundlePath = [NSString stringWithFormat:@"Placeholder.bundle/%@", imageName];
         UIImage *image = [UIImage lcck_imageNamed:imageName bundleName:@"Placeholder" bundleForClass:[self class]];
         image;});
 }
