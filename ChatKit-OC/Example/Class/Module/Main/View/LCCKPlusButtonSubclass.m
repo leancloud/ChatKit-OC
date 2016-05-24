@@ -25,7 +25,7 @@
 #pragma mark -
 #pragma mark - Life Cycle
 
--(instancetype)initWithFrame:(CGRect)frame{
+-(instancetype)initWithFrame:(CGRect)frame {
     
     if (self = [super initWithFrame:frame]) {
 //        self.titleLabel.textAlignment = NSTextAlignmentCenter;

@@ -145,7 +145,7 @@ NSString *const LCCKSessionServiceErrorDemain = @"LCCKSessionServiceErrorDemain"
 
 #pragma mark - receive message handle
 
-- (void)receiveMessage:(AVIMTypedMessage *)message conversation:(AVIMConversation *)conversation{
+- (void)receiveMessage:(AVIMTypedMessage *)message conversation:(AVIMConversation *)conversation {
     [[LCCKConversationService sharedInstance] insertRecentConversation:conversation];
     if (![[LCCKConversationService sharedInstance].chattingConversationId isEqualToString:conversation.conversationId]) {
         // 没有在聊天的时候才增加未读数和设置mentioned

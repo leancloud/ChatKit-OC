@@ -19,7 +19,7 @@
 
 @implementation LCCKChatMoreItem
 
-- (instancetype)initWithFrame:(CGRect)frame{
+- (instancetype)initWithFrame:(CGRect)frame {
     if ([super initWithFrame:frame]) {
         [self setup];
     }
@@ -48,7 +48,7 @@
 
 #pragma mark - Public Methods
 
-- (void)fillViewWithTitle:(NSString *)title imageName:(NSString *)imageName{
+- (void)fillViewWithTitle:(NSString *)title imageName:(NSString *)imageName {
     self.titleLabel.text = title;
     [self.button setBackgroundImage:[self imageInBundlePathForImageName:imageName] forState:UIControlStateNormal];
     [self updateConstraintsIfNeeded];
@@ -70,7 +70,7 @@
     
 }
 
-- (void)buttonAction{
+- (void)buttonAction {
     [self sendActionsForControlEvents:UIControlEventTouchUpInside];
 }
 
@@ -85,7 +85,7 @@
 }
 
 #pragma mark - Getters
-- (UIButton *)button{
+- (UIButton *)button {
     if (!_button) {
         _button = [UIButton buttonWithType:UIButtonTypeCustom];
         [_button addTarget:self action:@selector(buttonAction) forControlEvents:UIControlEventTouchUpInside];

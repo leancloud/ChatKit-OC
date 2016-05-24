@@ -526,7 +526,7 @@
                                                                                    self.parentViewController.shouldLoadMoreMessagesScrollToTop = NO;
                                                                                    return;
                                                                                }
-                                                                              
+                                                                               
                                                                                [LCCKConversationService cacheMessages:avimTypedMessages callback:^(BOOL succeeded, NSError *error) {
                                                                                    !block ?: block(avimTypedMessages, error);
                                                                                    if (avimTypedMessages.count < kLCCKOnePageSize) {
@@ -552,7 +552,7 @@
     }];
 }
 
-- (void)insertOldMessages:(NSArray *)oldMessages completion:(void (^)())completion{
+- (void)insertOldMessages:(NSArray *)oldMessages completion:(void (^)())completion {
     NSMutableArray *messages = [NSMutableArray arrayWithArray:oldMessages];
     [messages addObjectsFromArray:self.dataArray];
     CGSize beforeContentSize = self.parentViewController.tableView.contentSize;
@@ -634,6 +634,21 @@
     if (*allVisibleThumbs == nil) {
         *allVisibleThumbs = [allVisibleThumbs_ copy];
     }
+}
+
+#pragma mark - UIScrollView Delegate
+
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
+    self.parentViewController.isUserScrolling = YES;
+    UIMenuController *menu = [UIMenuController sharedMenuController];
+    if (menu.isMenuVisible) {
+        [menu setMenuVisible:NO animated:YES];
+    }
+    [self.parentViewController.chatBar endInputing];
+}
+
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
+    self.parentViewController.isUserScrolling = NO;
 }
 
 @end

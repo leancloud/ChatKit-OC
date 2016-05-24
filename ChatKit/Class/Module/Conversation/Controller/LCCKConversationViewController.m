@@ -154,6 +154,7 @@
     self.chatBar.delegate = self;
     [LCCKAVAudioPlayer sharePlayer].delegate = self;
     self.tableView.backgroundColor = [UIColor colorWithRed:234.0f/255.0f green:234/255.0f blue:234/255.f alpha:1.0f];
+    self.view.backgroundColor = self.tableView.backgroundColor;
     [self.view addSubview:self.chatBar];
     [self.view addSubview:self.clientStatusView];
     [self updateStatusView];
@@ -294,8 +295,10 @@
     
 }
 
-- (void)chatBarFrameDidChange:(LCCKChatBar *)chatBar frame:(CGRect)frame{
-    if (frame.origin.y == self.tableView.frame.size.height) {
+- (void)chatBarFrameDidChange:(LCCKChatBar *)chatBar frame:(CGRect)frame {
+    CGFloat chatBarY = frame.origin.y;
+    CGFloat tableViewHeight = self.tableView.frame.size.height;
+    if (chatBarY == tableViewHeight) {
         return;
     }
     [UIView animateWithDuration:.3f animations:^{

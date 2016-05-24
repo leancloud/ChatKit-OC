@@ -33,8 +33,8 @@ NSLocalizedStringFromTableInBundle(key, @"DateTools", [NSBundle bundleWithPath:[
 @interface NSDate (DateTools)
 
 #pragma mark - Time Ago
-+ (NSString *)lcck_timeAgoSinceDate:(NSDate*)date;
-+ (NSString *)lcck_shortTimeAgoSinceDate:(NSDate*)date;
++ (NSString *)lcck_timeAgoSinceDate:(NSDate *)date;
++ (NSString *)lcck_shortTimeAgoSinceDate:(NSDate *)date;
 - (NSString *)lcck_timeAgoSinceNow;
 - (NSString *)lcck_shortTimeAgoSinceNow;
 - (NSString *)lcck_timeAgoSinceDate:(NSDate *)date;

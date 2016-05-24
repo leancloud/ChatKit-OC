@@ -22,7 +22,7 @@
 
 @implementation LCCKFacePreviewView
 
-- (instancetype)initWithFrame:(CGRect)frame{
+- (instancetype)initWithFrame:(CGRect)frame {
     if ([super initWithFrame:frame]) {
         [self setup];
     }
@@ -49,7 +49,7 @@
  *
  *  @param image 需要显示的表情图片
  */
-- (void)setFaceImage:(UIImage *)image{
+- (void)setFaceImage:(UIImage *)image {
     if (self.faceImageView.image == image) {
         return;
     }
@@ -195,7 +195,7 @@
 
 #pragma mark - Getters
 
-- (LCCKFacePreviewView *)facePreviewView{
+- (LCCKFacePreviewView *)facePreviewView {
     if (!_facePreviewView) {
         _facePreviewView = [[LCCKFacePreviewView alloc] initWithFrame:CGRectZero];
     }

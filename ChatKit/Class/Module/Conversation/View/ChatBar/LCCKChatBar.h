@@ -29,7 +29,7 @@ typedef NS_ENUM(NSUInteger, LCCKFunctionViewShowType){
 @protocol LCCKChatBarDelegate;
 
 /**
- *  仿微信信息输入框,支持语音,文字,表情,选择照片,拍照
+ *  信息输入框,支持语音,文字,表情,选择照片,拍照
  */
 @interface LCCKChatBar : UIView
 

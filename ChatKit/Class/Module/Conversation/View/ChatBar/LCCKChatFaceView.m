@@ -34,7 +34,7 @@
 
 @implementation LCCKChatFaceView
 
-- (instancetype)initWithFrame:(CGRect)frame{
+- (instancetype)initWithFrame:(CGRect)frame {
     if ([super initWithFrame:frame]) {
         [self setup];
     }
@@ -91,7 +91,7 @@
     
 }
 
-- (void)setupFaceView{
+- (void)setupFaceView {
     [self.faceArray removeAllObjects];
     if (self.faceViewType == LCCKShowEmojiFace) {
         [self setupEmojiFaces];
@@ -144,13 +144,13 @@
     }
 }
 
-- (void)sendAction:(UIButton *)button{
+- (void)sendAction:(UIButton *)button {
     if (self.delegate && [self.delegate respondsToSelector:@selector(faceViewSendFace:)]) {
         [self.delegate faceViewSendFace:@"发送"];
     }
 }
 
-- (void)changeFaceType:(UIButton *)button{
+- (void)changeFaceType:(UIButton *)button {
     self.faceViewType = button.tag;
     [self setupFaceView];
 }

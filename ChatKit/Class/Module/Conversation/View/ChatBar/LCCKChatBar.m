@@ -42,7 +42,7 @@
 @implementation LCCKChatBar
 
 #pragma mark - Life Cycle
-- (instancetype)initWithFrame:(CGRect)frame{
+- (instancetype)initWithFrame:(CGRect)frame {
     if ([super initWithFrame:frame]) {
         [self setup];
     }
@@ -116,7 +116,7 @@
     return YES;
 }
 
-- (BOOL)textViewShouldBeginEditing:(UITextView *)textView{
+- (BOOL)textViewShouldBeginEditing:(UITextView *)textView {
     self.faceButton.selected = self.moreButton.selected = self.voiceButton.selected = NO;
     [self showFaceView:NO];
     [self showMoreView:NO];
@@ -124,7 +124,7 @@
     return YES;
 }
 
-- (void)textViewDidChange:(UITextView *)textView{
+- (void)textViewDidChange:(UITextView *)textView {
     CGRect textViewFrame = self.textView.frame;
     CGSize textSize = [self.textView sizeThatFits:CGSizeMake(CGRectGetWidth(textViewFrame), 1000.0f)];
     CGFloat offset = 10;
@@ -153,7 +153,7 @@
 
 #pragma mark - LCCKLocationControllerDelegate
 
-- (void)cancelLocation{
+- (void)cancelLocation {
     [self.rootViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
@@ -186,7 +186,7 @@
 
 #pragma mark - LCCKChatMoreViewDelegate & LCCKChatMoreViewDataSource
 
-- (void)moreView:(LCCKChatMoreView *)moreView selectIndex:(LCCKChatMoreItemType)itemType{
+- (void)moreView:(LCCKChatMoreView *)moreView selectIndex:(LCCKChatMoreItemType)itemType {
     switch (itemType) {
         case LCCKChatMoreItemAlbum: {
             //显示相册
@@ -223,17 +223,17 @@
 
 }
 
-- (NSArray *)titlesOfMoreView:(LCCKChatMoreView *)moreView{
+- (NSArray *)titlesOfMoreView:(LCCKChatMoreView *)moreView {
     return @[ @"拍摄",@"照片",@"位置" ];
 }
 
-- (NSArray<NSString *> *)imageNamesOfMoreView:(LCCKChatMoreView *)moreView{
+- (NSArray<NSString *> *)imageNamesOfMoreView:(LCCKChatMoreView *)moreView {
     return @[@"chat_bar_icons_camera", @"chat_bar_icons_pic", @"chat_bar_icons_location"];
 }
 
 #pragma mark - LCCKChatFaceViewDelegate
 
-- (void)faceViewSendFace:(NSString *)faceName{
+- (void)faceViewSendFace:(NSString *)faceName {
     if ([faceName isEqualToString:@"[删除]"]) {
         [self textView:self.textView shouldChangeTextInRange:NSMakeRange(self.textView.text.length - 1, 1) replacementText:@""];
     } else if ([faceName isEqualToString:@"发送"]){
@@ -256,23 +256,23 @@
 
 #pragma mark - Public Methods
 
-- (void)endInputing{
+- (void)endInputing {
     [self showViewWithType:LCCKFunctionViewShowNothing];
 }
 
 #pragma mark - Private Methods
 
-- (void)keyboardWillHide:(NSNotification *)notification{
+- (void)keyboardWillHide:(NSNotification *)notification {
     self.keyboardFrame = CGRectZero;
     [self textViewDidChange:self.textView];
 }
 
-- (void)keyboardFrameWillChange:(NSNotification *)notification{
+- (void)keyboardFrameWillChange:(NSNotification *)notification {
     self.keyboardFrame = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
     [self textViewDidChange:self.textView];
 }
 
-- (void)setup{
+- (void)setup {
     
     self.MP3 = [[Mp3Recorder alloc] initWithDelegate:self];
     [self addSubview:self.voiceButton];
@@ -280,7 +280,6 @@
     [self addSubview:self.faceButton];
     [self addSubview:self.textView];
     [self.textView addSubview:self.voiceRecordButton];
-    
     UIImageView *topLine = [[UIImageView alloc] init];
     topLine.backgroundColor = [UIColor colorWithRed:184/255.0f green:184/255.0f blue:184/255.0f alpha:1.0f];
     [self addSubview:topLine];
@@ -293,9 +292,10 @@
     }];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardFrameWillChange:) name:UIKeyboardWillChangeFrameNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardFrameWillChange:) name:UIKeyboardWillShowNotification object:nil];
     
     self.backgroundColor = [UIColor colorWithRed:235/255.0f green:236/255.0f blue:238/255.0f alpha:1.0f];
+
     [self updateConstraintsIfNeeded];
     
     //FIX 修复首次初始化页面 页面显示不正确 textView不显示bug
@@ -305,7 +305,7 @@
 /**
  *  开始录音
  */
-- (void)startRecordVoice{
+- (void)startRecordVoice {
     [LCCKProgressHUD show];
     [self.MP3 startRecord];
 }
@@ -313,7 +313,7 @@
 /**
  *  取消录音
  */
-- (void)cancelRecordVoice{
+- (void)cancelRecordVoice {
     [LCCKProgressHUD dismissWithMessage:@"取消录音"];
     [self.MP3 cancelRecord];
 }
@@ -321,34 +321,36 @@
 /**
  *  录音结束
  */
-- (void)confirmRecordVoice{
+- (void)confirmRecordVoice {
     [self.MP3 stopRecord];
 }
 
 /**
  *  更新录音显示状态,手指向上滑动后提示松开取消录音
  */
-- (void)updateCancelRecordVoice{
+- (void)updateCancelRecordVoice {
     [LCCKProgressHUD changeSubTitle:@"松开取消录音"];
 }
 
 /**
  *  更新录音状态,手指重新滑动到范围内,提示向上取消录音
  */
-- (void)updateContinueRecordVoice{
+- (void)updateContinueRecordVoice {
     [LCCKProgressHUD changeSubTitle:@"向上滑动取消录音"];
 }
 
-
-- (void)showViewWithType:(LCCKFunctionViewShowType)showType{
-    
+- (void)showViewWithType:(LCCKFunctionViewShowType)showType {
     //显示对应的View
     [self showMoreView:showType == LCCKFunctionViewShowMore && self.moreButton.selected];
     [self showVoiceView:showType == LCCKFunctionViewShowVoice && self.voiceButton.selected];
     [self showFaceView:showType == LCCKFunctionViewShowFace && self.faceButton.selected];
     
     switch (showType) {
-        case LCCKFunctionViewShowNothing:
+        case LCCKFunctionViewShowNothing: {
+            [self setFrame:CGRectMake(0, self.superViewHeight - kLCCKChatBarMinHeight, self.frame.size.width, kLCCKChatBarMinHeight) animated:NO];
+            [self.textView resignFirstResponder];
+        }
+            break;
         case LCCKFunctionViewShowVoice: {
             self.inputText = self.textView.text;
             [self setFrame:CGRectMake(0, self.superViewHeight - kLCCKChatBarMinHeight, self.frame.size.width, kLCCKChatBarMinHeight) animated:NO];
@@ -367,13 +369,10 @@
             [self textViewDidChange:self.textView];
             self.inputText = nil;
             break;
-        default:
-            break;
     }
-    
 }
 
-- (void)buttonAction:(UIButton *)button{
+- (void)buttonAction:(UIButton *)button {
     self.inputText = self.textView.text;
     LCCKFunctionViewShowType showType = button.tag;
     
@@ -402,7 +401,7 @@
     [self showViewWithType:showType];
 }
 
-- (void)showFaceView:(BOOL)show{
+- (void)showFaceView:(BOOL)show {
     if (show) {
         [self.superview addSubview:self.faceView];
         [UIView animateWithDuration:.3 animations:^{
@@ -421,7 +420,7 @@
  *  显示moreView
  *  @param show 要显示的moreView
  */
-- (void)showMoreView:(BOOL)show{
+- (void)showMoreView:(BOOL)show {
     if (show) {
         [self.superview addSubview:self.moreView];
         [UIView animateWithDuration:.3 animations:^{
@@ -436,7 +435,7 @@
     }
 }
 
-- (void)showVoiceView:(BOOL)show{
+- (void)showVoiceView:(BOOL)show {
     self.voiceButton.selected = show;
     self.voiceRecordButton.selected = show;
     self.voiceRecordButton.hidden = !show;
@@ -477,7 +476,7 @@
  *
  *  @param image 发送的图片
  */
-- (void)sendImageMessage:(UIImage *)image{
+- (void)sendImageMessage:(UIImage *)image {
     if (self.delegate && [self.delegate respondsToSelector:@selector(chatBar:sendPictures:)]) {
         [self.delegate chatBar:self sendPictures:@[image]];
     }
@@ -485,7 +484,7 @@
 
 #pragma mark - Getters
 
-- (LCCKChatFaceView *)faceView{
+- (LCCKChatFaceView *)faceView {
     if (!_faceView) {
         _faceView = [[LCCKChatFaceView alloc] initWithFrame:CGRectMake(0, self.superViewHeight , self.frame.size.width, kFunctionViewHeight)];
         _faceView.delegate = self;
@@ -494,7 +493,7 @@
     return _faceView;
 }
 
-- (LCCKChatMoreView *)moreView{
+- (LCCKChatMoreView *)moreView {
     if (!_moreView) {
         _moreView = [[LCCKChatMoreView alloc] initWithFrame:CGRectMake(0, self.superViewHeight, self.frame.size.width, kFunctionViewHeight)];
         _moreView.delegate = self;
@@ -504,7 +503,7 @@
     return _moreView;
 }
 
-- (UITextView *)textView{
+- (UITextView *)textView {
     if (!_textView) {
         _textView = [[UITextView alloc] init];
         _textView.font = [UIFont systemFontOfSize:16.0f];
@@ -519,7 +518,7 @@
     return _textView;
 }
 
-- (UIButton *)voiceButton{
+- (UIButton *)voiceButton {
     if (!_voiceButton) {
         _voiceButton = [UIButton buttonWithType:UIButtonTypeCustom];
         _voiceButton.tag = LCCKFunctionViewShowVoice;
@@ -531,7 +530,7 @@
     return _voiceButton;
 }
 
-- (UIButton *)voiceRecordButton{
+- (UIButton *)voiceRecordButton {
     if (!_voiceRecordButton) {
         _voiceRecordButton = [UIButton buttonWithType:UIButtonTypeCustom];
         _voiceRecordButton.hidden = YES;
@@ -549,7 +548,7 @@
     return _voiceRecordButton;
 }
 
-- (UIButton *)moreButton{
+- (UIButton *)moreButton {
     if (!_moreButton) {
         _moreButton = [UIButton buttonWithType:UIButtonTypeCustom];
         _moreButton.tag = LCCKFunctionViewShowMore;
@@ -561,7 +560,7 @@
     return _moreButton;
 }
 
-- (UIButton *)faceButton{
+- (UIButton *)faceButton {
     if (!_faceButton) {
         _faceButton = [UIButton buttonWithType:UIButtonTypeCustom];
         _faceButton.tag = LCCKFunctionViewShowFace;
@@ -574,13 +573,11 @@
 }
 
 - (CGFloat)bottomHeight{
-    
     if (self.faceView.superview || self.moreView.superview) {
         return MAX(self.keyboardFrame.size.height, MAX(self.faceView.frame.size.height, self.moreView.frame.size.height));
     } else {
         return MAX(self.keyboardFrame.size.height, CGFLOAT_MIN);
     }
-    
 }
 
 - (UIViewController *)rootViewController{
@@ -606,15 +603,5 @@
     UIImage *image = [UIImage lcck_imageNamed:imageName bundleName:@"ChatKeyboard" bundleForClass:[self class]];
     return image;
 }
-
-//- (void)setFrame:(CGRect)frame{
-//    [super setFrame:frame];
-//    [UIView animateWithDuration:.3 animations:^{
-//        [super setFrame:frame];
-//    }completion:nil];
-//    if (self.delegate && [self.delegate respondsToSelector:@selector(chatBarFrameDidChange:frame:)]) {
-//        [self.delegate chatBarFrameDidChange:self frame:frame];
-//    }
-//}
 
 @end

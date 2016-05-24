@@ -80,7 +80,7 @@ static NSCalendar *implicitCalendar = nil;
  *
  *  @return NSString - Formatted return string
  */
-+ (NSString *)lcck_timeAgoSinceDate:(NSDate*)date{
++ (NSString *)lcck_timeAgoSinceDate:(NSDate *)date {
     return [date lcck_timeAgoSinceDate:[NSDate date]];
 }
 
@@ -92,7 +92,7 @@ static NSCalendar *implicitCalendar = nil;
  *
  *  @return NSString - Formatted return string
  */
-+ (NSString *)lcck_shortTimeAgoSinceDate:(NSDate*)date{
++ (NSString *)lcck_shortTimeAgoSinceDate:(NSDate *)date {
     return [date lcck_shortTimeAgoSinceDate:[NSDate date]];
 }
 
@@ -102,7 +102,7 @@ static NSCalendar *implicitCalendar = nil;
  *
  *  @return NSString - Formatted return string
  */
-- (NSString *)lcck_timeAgoSinceNow{
+- (NSString *)lcck_timeAgoSinceNow {
     return [self lcck_timeAgoSinceDate:[NSDate date]];
 }
 
@@ -112,11 +112,11 @@ static NSCalendar *implicitCalendar = nil;
  *
  *  @return NSString - Formatted return string
  */
-- (NSString *)lcck_shortTimeAgoSinceNow{
+- (NSString *)lcck_shortTimeAgoSinceNow {
     return [self lcck_shortTimeAgoSinceDate:[NSDate date]];
 }
 
-- (NSString *)lcck_timeAgoSinceDate:(NSDate *)date{
+- (NSString *)lcck_timeAgoSinceDate:(NSDate *)date {
     return [self lcck_timeAgoSinceDate:date numericDates:NO];
 }
 
@@ -136,7 +136,7 @@ static NSCalendar *implicitCalendar = nil;
     }
 }
 
-- (NSString *)lcck_shortTimeAgoSinceDate:(NSDate *)date{
+- (NSString *)lcck_shortTimeAgoSinceDate:(NSDate *)date {
     return [self lcck_timeAgoSinceDate:date format:DateAgoShort];
 }
 
@@ -262,12 +262,12 @@ static NSCalendar *implicitCalendar = nil;
     return nil;
 }
 
-- (NSString *)lcck_logicLocalizedStringFromFormat:(NSString *)format withValue:(NSInteger)value{
+- (NSString *)lcck_logicLocalizedStringFromFormat:(NSString *)format withValue:(NSInteger)value {
     NSString * localeFormat = [NSString stringWithFormat:format, [self lcck_getLocaleFormatUnderscoresWithValue:value]];
     return [NSString stringWithFormat:DateToolsLocalizedStrings(localeFormat), value];
 }
 
-- (NSString *)lcck_getLocaleFormatUnderscoresWithValue:(double)value{
+- (NSString *)lcck_getLocaleFormatUnderscoresWithValue:(double)value {
     NSString *localeCode = [[[NSBundle mainBundle] preferredLocalizations] objectAtIndex:0];
     
     // Russian (ru) and Ukrainian (uk)
@@ -344,7 +344,7 @@ static NSCalendar *implicitCalendar = nil;
  *
  *  @return NSInteger
  */
-- (NSInteger)lcck_minute{
+- (NSInteger)lcck_minute {
     return [self lcck_componentForDate:self type:DTDateComponentMinute calendar:nil];
 }
 
@@ -1031,7 +1031,7 @@ static NSCalendar *implicitCalendar = nil;
  *
  *  @return NSInteger - The NSInteger representation of the years between receiver and provided date
  */
-- (NSInteger)lcck_yearsFrom:(NSDate *)date{
+- (NSInteger)lcck_yearsFrom:(NSDate *)date {
     return [self lcck_yearsFrom:date calendar:nil];
 }
 
@@ -1044,7 +1044,7 @@ static NSCalendar *implicitCalendar = nil;
  *
  *  @return NSInteger - The NSInteger representation of the years between receiver and provided date
  */
-- (NSInteger)lcck_monthsFrom:(NSDate *)date{
+- (NSInteger)lcck_monthsFrom:(NSDate *)date {
     return [self lcck_monthsFrom:date calendar:nil];
 }
 
@@ -1057,7 +1057,7 @@ static NSCalendar *implicitCalendar = nil;
  *
  *  @return NSInteger - The double representation of the weeks between receiver and provided date
  */
-- (NSInteger)lcck_weeksFrom:(NSDate *)date{
+- (NSInteger)lcck_weeksFrom:(NSDate *)date {
     return [self lcck_weeksFrom:date calendar:nil];
 }
 
@@ -1070,7 +1070,7 @@ static NSCalendar *implicitCalendar = nil;
  *
  *  @return NSInteger - The double representation of the days between receiver and provided date
  */
-- (NSInteger)lcck_daysFrom:(NSDate *)date{
+- (NSInteger)lcck_daysFrom:(NSDate *)date {
     return [self lcck_daysFrom:date calendar:nil];
 }
 
@@ -1082,7 +1082,7 @@ static NSCalendar *implicitCalendar = nil;
  *
  *  @return double - The double representation of the hours between receiver and provided date
  */
-- (double)lcck_hoursFrom:(NSDate *)date{
+- (double)lcck_hoursFrom:(NSDate *)date {
     return ([self timeIntervalSinceDate:date])/SECONDS_IN_HOUR;
 }
 
@@ -1094,7 +1094,7 @@ static NSCalendar *implicitCalendar = nil;
  *
  *  @return double - The double representation of the minutes between receiver and provided date
  */
-- (double)lcck_minutesFrom:(NSDate *)date{
+- (double)lcck_minutesFrom:(NSDate *)date {
     return ([self timeIntervalSinceDate:date])/SECONDS_IN_MINUTE;
 }
 
@@ -1106,7 +1106,7 @@ static NSCalendar *implicitCalendar = nil;
  *
  *  @return double - The double representation of the seconds between receiver and provided date
  */
-- (double)lcck_secondsFrom:(NSDate *)date{
+- (double)lcck_secondsFrom:(NSDate *)date {
     return [self timeIntervalSinceDate:date];
 }
 
@@ -1332,7 +1332,7 @@ static NSCalendar *implicitCalendar = nil;
  *
  *  @return NSInteger representing the number of years
  */
-- (NSInteger)lcck_yearsEarlierThan:(NSDate *)date{
+- (NSInteger)lcck_yearsEarlierThan:(NSDate *)date {
     return ABS(MIN([self lcck_yearsFrom:date], 0));
 }
 
@@ -1344,7 +1344,7 @@ static NSCalendar *implicitCalendar = nil;
  *
  *  @return NSInteger representing the number of months
  */
-- (NSInteger)lcck_monthsEarlierThan:(NSDate *)date{
+- (NSInteger)lcck_monthsEarlierThan:(NSDate *)date {
     return ABS(MIN([self lcck_monthsFrom:date], 0));
 }
 
@@ -1356,7 +1356,7 @@ static NSCalendar *implicitCalendar = nil;
  *
  *  @return NSInteger representing the number of weeks
  */
-- (NSInteger)lcck_weeksEarlierThan:(NSDate *)date{
+- (NSInteger)lcck_weeksEarlierThan:(NSDate *)date {
     return ABS(MIN([self lcck_weeksFrom:date], 0));
 }
 
@@ -1368,7 +1368,7 @@ static NSCalendar *implicitCalendar = nil;
  *
  *  @return NSInteger representing the number of days
  */
-- (NSInteger)lcck_daysEarlierThan:(NSDate *)date{
+- (NSInteger)lcck_daysEarlierThan:(NSDate *)date {
     return ABS(MIN([self lcck_daysFrom:date], 0));
 }
 
@@ -1380,7 +1380,7 @@ static NSCalendar *implicitCalendar = nil;
  *
  *  @return double representing the number of hours
  */
-- (double)lcck_hoursEarlierThan:(NSDate *)date{
+- (double)lcck_hoursEarlierThan:(NSDate *)date {
     return ABS(MIN([self lcck_hoursFrom:date], 0));
 }
 
@@ -1392,7 +1392,7 @@ static NSCalendar *implicitCalendar = nil;
  *
  *  @return double representing the number of minutes
  */
-- (double)lcck_minutesEarlierThan:(NSDate *)date{
+- (double)lcck_minutesEarlierThan:(NSDate *)date {
     return ABS(MIN([self lcck_minutesFrom:date], 0));
 }
 
@@ -1404,7 +1404,7 @@ static NSCalendar *implicitCalendar = nil;
  *
  *  @return double representing the number of seconds
  */
-- (double)lcck_secondsEarlierThan:(NSDate *)date{
+- (double)lcck_secondsEarlierThan:(NSDate *)date {
     return ABS(MIN([self lcck_secondsFrom:date], 0));
 }
 
@@ -1417,7 +1417,7 @@ static NSCalendar *implicitCalendar = nil;
  *
  *  @return NSInteger representing the number of years
  */
-- (NSInteger)lcck_yearsLaterThan:(NSDate *)date{
+- (NSInteger)lcck_yearsLaterThan:(NSDate *)date {
     return MAX([self lcck_yearsFrom:date], 0);
 }
 
@@ -1429,7 +1429,7 @@ static NSCalendar *implicitCalendar = nil;
  *
  *  @return NSInteger representing the number of months
  */
-- (NSInteger)lcck_monthsLaterThan:(NSDate *)date{
+- (NSInteger)lcck_monthsLaterThan:(NSDate *)date {
     return MAX([self lcck_monthsFrom:date], 0);
 }
 
@@ -1441,7 +1441,7 @@ static NSCalendar *implicitCalendar = nil;
  *
  *  @return NSInteger representing the number of weeks
  */
-- (NSInteger)lcck_weeksLaterThan:(NSDate *)date{
+- (NSInteger)lcck_weeksLaterThan:(NSDate *)date {
     return MAX([self lcck_weeksFrom:date], 0);
 }
 
@@ -1453,7 +1453,7 @@ static NSCalendar *implicitCalendar = nil;
  *
  *  @return NSInteger representing the number of days
  */
-- (NSInteger)lcck_daysLaterThan:(NSDate *)date{
+- (NSInteger)lcck_daysLaterThan:(NSDate *)date {
     return MAX([self lcck_daysFrom:date], 0);
 }
 
@@ -1465,7 +1465,7 @@ static NSCalendar *implicitCalendar = nil;
  *
  *  @return double representing the number of hours
  */
-- (double)lcck_hoursLaterThan:(NSDate *)date{
+- (double)lcck_hoursLaterThan:(NSDate *)date {
     return MAX([self lcck_hoursFrom:date], 0);
 }
 
@@ -1477,7 +1477,7 @@ static NSCalendar *implicitCalendar = nil;
  *
  *  @return double representing the number of minutes
  */
-- (double)lcck_minutesLaterThan:(NSDate *)date{
+- (double)lcck_minutesLaterThan:(NSDate *)date {
     return MAX([self lcck_minutesFrom:date], 0);
 }
 
@@ -1489,7 +1489,7 @@ static NSCalendar *implicitCalendar = nil;
  *
  *  @return double representing the number of seconds
  */
-- (double)lcck_secondsLaterThan:(NSDate *)date{
+- (double)lcck_secondsLaterThan:(NSDate *)date {
     return MAX([self lcck_secondsFrom:date], 0);
 }
 
@@ -1502,7 +1502,7 @@ static NSCalendar *implicitCalendar = nil;
  *
  *  @return BOOL representing comparison result
  */
-- (BOOL)lcck_isEarlierThan:(NSDate *)date{
+- (BOOL)lcck_isEarlierThan:(NSDate *)date {
     if (self.timeIntervalSince1970 < date.timeIntervalSince1970) {
         return YES;
     }
@@ -1516,7 +1516,7 @@ static NSCalendar *implicitCalendar = nil;
  *
  *  @return BOOL representing comparison result
  */
-- (BOOL)lcck_isLaterThan:(NSDate *)date{
+- (BOOL)lcck_isLaterThan:(NSDate *)date {
     if (self.timeIntervalSince1970 > date.timeIntervalSince1970) {
         return YES;
     }
@@ -1530,7 +1530,7 @@ static NSCalendar *implicitCalendar = nil;
  *
  *  @return BOOL representing comparison result
  */
-- (BOOL)lcck_isEarlierThanOrEqualTo:(NSDate *)date{
+- (BOOL)lcck_isEarlierThanOrEqualTo:(NSDate *)date {
     if (self.timeIntervalSince1970 <= date.timeIntervalSince1970) {
         return YES;
     }
@@ -1544,7 +1544,7 @@ static NSCalendar *implicitCalendar = nil;
  *
  *  @return BOOL representing comparison result
  */
-- (BOOL)lcck_isLaterThanOrEqualTo:(NSDate *)date{
+- (BOOL)lcck_isLaterThanOrEqualTo:(NSDate *)date {
     if (self.timeIntervalSince1970 >= date.timeIntervalSince1970) {
         return YES;
     }
@@ -1560,7 +1560,7 @@ static NSCalendar *implicitCalendar = nil;
  *
  *  @return NSString representing the formatted date string
  */
-- (NSString *)lcck_formattedDateWithStyle:(NSDateFormatterStyle)style{
+- (NSString *)lcck_formattedDateWithStyle:(NSDateFormatterStyle)style {
     return [self lcck_formattedDateWithStyle:style timeZone:[NSTimeZone systemTimeZone] locale:[NSLocale autoupdatingCurrentLocale]];
 }
 
@@ -1572,7 +1572,7 @@ static NSCalendar *implicitCalendar = nil;
  *
  *  @return NSString representing the formatted date string
  */
-- (NSString *)lcck_formattedDateWithStyle:(NSDateFormatterStyle)style timeZone:(NSTimeZone *)timeZone{
+- (NSString *)lcck_formattedDateWithStyle:(NSDateFormatterStyle)style timeZone:(NSTimeZone *)timeZone {
     return [self lcck_formattedDateWithStyle:style timeZone:timeZone locale:[NSLocale autoupdatingCurrentLocale]];
 }
 
@@ -1584,7 +1584,7 @@ static NSCalendar *implicitCalendar = nil;
  *
  *  @return NSString representing the formatted date string
  */
-- (NSString *)lcck_formattedDateWithStyle:(NSDateFormatterStyle)style locale:(NSLocale *)locale{
+- (NSString *)lcck_formattedDateWithStyle:(NSDateFormatterStyle)style locale:(NSLocale *)locale {
     return [self lcck_formattedDateWithStyle:style timeZone:[NSTimeZone systemTimeZone] locale:locale];
 }
 
@@ -1597,7 +1597,7 @@ static NSCalendar *implicitCalendar = nil;
  *
  *  @return NSString representing the formatted date string
  */
-- (NSString *)lcck_formattedDateWithStyle:(NSDateFormatterStyle)style timeZone:(NSTimeZone *)timeZone locale:(NSLocale *)locale{
+- (NSString *)lcck_formattedDateWithStyle:(NSDateFormatterStyle)style timeZone:(NSTimeZone *)timeZone locale:(NSLocale *)locale {
     static NSDateFormatter *formatter = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
@@ -1630,7 +1630,7 @@ static NSCalendar *implicitCalendar = nil;
  *
  *  @return NSString representing the formatted date string
  */
-- (NSString *)lcck_formattedDateWithFormat:(NSString *)format timeZone:(NSTimeZone *)timeZone{
+- (NSString *)lcck_formattedDateWithFormat:(NSString *)format timeZone:(NSTimeZone *)timeZone {
     return [self lcck_formattedDateWithFormat:format timeZone:timeZone locale:[NSLocale autoupdatingCurrentLocale]];
 }
 
@@ -1642,7 +1642,7 @@ static NSCalendar *implicitCalendar = nil;
  *
  *  @return NSString representing the formatted date string
  */
-- (NSString *)lcck_formattedDateWithFormat:(NSString *)format locale:(NSLocale *)locale{
+- (NSString *)lcck_formattedDateWithFormat:(NSString *)format locale:(NSLocale *)locale {
     return [self lcck_formattedDateWithFormat:format timeZone:[NSTimeZone systemTimeZone] locale:locale];
 }
 
@@ -1655,7 +1655,7 @@ static NSCalendar *implicitCalendar = nil;
  *
  *  @return NSString representing the formatted date string
  */
-- (NSString *)lcck_formattedDateWithFormat:(NSString *)format timeZone:(NSTimeZone *)timeZone locale:(NSLocale *)locale{
+- (NSString *)lcck_formattedDateWithFormat:(NSString *)format timeZone:(NSTimeZone *)timeZone locale:(NSLocale *)locale {
     static NSDateFormatter *formatter = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{

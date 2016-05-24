@@ -51,7 +51,7 @@ static NSMutableDictionary *attributedStringCache = nil;
     return title;
 }
 
-+ (NSAttributedString *)attributedStringWithMessage:(AVIMTypedMessage *)message conversation:(AVIMConversation *)conversation userName:(NSString *)userName{
++ (NSAttributedString *)attributedStringWithMessage:(AVIMTypedMessage *)message conversation:(AVIMConversation *)conversation userName:(NSString *)userName {
     NSString *title = [self getMessageTitle:message];
     if (conversation.lcck_type == LCCKConversationTypeGroup) {
         title = [NSString stringWithFormat:@"%@: %@", userName, title];

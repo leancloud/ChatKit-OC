@@ -34,5 +34,9 @@
 - (void)scrollToBottomAnimated:(BOOL)animated;
 
 - (void)loadMoreMessagesScrollTotop;
+/**
+ *  判断是否用户手指滚动
+ */
+@property (nonatomic, assign) BOOL isUserScrolling;
 
 @end

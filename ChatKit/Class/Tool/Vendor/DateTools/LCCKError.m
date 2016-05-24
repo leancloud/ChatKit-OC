@@ -51,7 +51,7 @@ NSString *const LCCKErrorDomain = @"com.mattyork.dateTools";
     [self printErrorWithCallStack:error];
 }
 
-+(void)throwBadTypeException:(id)obj expectedClass:(Class)classType{
++(void)throwBadTypeException:(id)obj expectedClass:(Class)classType {
     //Create info for error
     NSDictionary *userInfo = @{NSLocalizedDescriptionKey: NSLocalizedString(@"Operation was unsuccessful.", nil), NSLocalizedFailureReasonErrorKey: [NSString stringWithFormat:@"Attempted to insert object of class %@ when expecting object of class %@.", NSStringFromClass([obj class]), NSStringFromClass(classType)],NSLocalizedRecoverySuggestionErrorKey: NSLocalizedString(@"Please try again by inserting a DTTimePeriod object.", nil)};
     

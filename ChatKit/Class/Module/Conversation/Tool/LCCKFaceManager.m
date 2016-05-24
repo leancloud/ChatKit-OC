@@ -39,7 +39,7 @@
 
 #pragma mark - Class Methods
 
-+ (instancetype)shareInstance{
++ (instancetype)shareInstance {
     static dispatch_once_t onceToken;
     static id shareInstance;
     dispatch_once(&onceToken, ^{

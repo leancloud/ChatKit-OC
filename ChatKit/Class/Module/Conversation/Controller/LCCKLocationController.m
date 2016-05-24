@@ -87,11 +87,11 @@ static CGFloat const LCCKLocationPOIListCellHeight = 40.f;
 
 
 #pragma mark - UITableViewDelegate & UITableViewDataSource
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return 1;
 }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return self.placemarks.count;
 }
 
@@ -130,14 +130,14 @@ static CGFloat const LCCKLocationPOIListCellHeight = 40.f;
 
 #pragma mark - MKMapViewDelegate
 
-- (void)mapViewDidFinishLoadingMap:(MKMapView *)mapView{
+- (void)mapViewDidFinishLoadingMap:(MKMapView *)mapView {
     if (!self.firstLocateUser) {
         return;
     }
     [mapView setShowsUserLocation:YES];
 }
 
-- (void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation{
+- (void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation {
     self.firstLocateUser = NO;
     [self showUserLocation];
 }
@@ -157,7 +157,7 @@ static CGFloat const LCCKLocationPOIListCellHeight = 40.f;
  *
  *  @param coordinate 搜索的点
  */
-- (void)searchNearBy:(CLLocationCoordinate2D)coordinate{
+- (void)searchNearBy:(CLLocationCoordinate2D)coordinate {
     //创建一个位置信息对象，第一个参数为经纬度，第二个为纬度检索范围，单位为米，第三个为经度检索范围，单位为米
     MKCoordinateRegion region = MKCoordinateRegionMakeWithDistance(coordinate, 500, 500);
     //初始化一个检索请求对象
@@ -191,7 +191,7 @@ static CGFloat const LCCKLocationPOIListCellHeight = 40.f;
  *
  *  @param centerCoordinate 中心点经纬度
  */
-- (void)updateCenterLocation:(CLLocationCoordinate2D)centerCoordinate{
+- (void)updateCenterLocation:(CLLocationCoordinate2D)centerCoordinate {
     MKCoordinateSpan span;
     span.latitudeDelta=0.001;
     span.longitudeDelta=0.001;
@@ -210,7 +210,7 @@ static CGFloat const LCCKLocationPOIListCellHeight = 40.f;
 }
 
 
-- (void)showUserLocation{
+- (void)showUserLocation {
     self.showUserLocationButton.selected = YES;
     [self updateCenterLocation:self.mapView.userLocation.coordinate];
 }
@@ -222,7 +222,7 @@ static CGFloat const LCCKLocationPOIListCellHeight = 40.f;
     }
 }
 
-- (void)sendLocation{
+- (void)sendLocation {
     if (self.placemarks.count > self.selectedIndexPath.row) {
         if (self.delegate && [self.delegate respondsToSelector:@selector(sendLocation:)]) {
             [self.delegate sendLocation:self.placemarks[self.selectedIndexPath.row]];
@@ -232,7 +232,7 @@ static CGFloat const LCCKLocationPOIListCellHeight = 40.f;
 
 #pragma mark - Getters
 
-- (MKMapView *)mapView{
+- (MKMapView *)mapView {
     if (!_mapView) {
         _mapView = [[MKMapView alloc] init];
         _mapView.delegate = self;
@@ -240,7 +240,7 @@ static CGFloat const LCCKLocationPOIListCellHeight = 40.f;
     return _mapView;
 }
 
-- (UITableView *)tableView{
+- (UITableView *)tableView {
     if (!_tableView) {
         _tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
         _tableView.rowHeight = UITableViewAutomaticDimension;
@@ -251,7 +251,7 @@ static CGFloat const LCCKLocationPOIListCellHeight = 40.f;
     return _tableView;
 }
 
-- (UIButton *)showUserLocationButton{
+- (UIButton *)showUserLocationButton {
     if (!_showUserLocationButton) {
         _showUserLocationButton = [UIButton buttonWithType:UIButtonTypeCustom];
         [_showUserLocationButton setBackgroundImage:[self imageInBundlePathForImageName:@"show_user_location_normal"] forState:UIControlStateNormal];
@@ -262,7 +262,7 @@ static CGFloat const LCCKLocationPOIListCellHeight = 40.f;
     return _showUserLocationButton;
 }
 
-- (UIImageView *)locationImageView{
+- (UIImageView *)locationImageView {
     if (!_locationImageView) {
         _locationImageView = [[UIImageView alloc] initWithImage:[self imageInBundlePathForImageName:@"location_green_icon"]];
     }

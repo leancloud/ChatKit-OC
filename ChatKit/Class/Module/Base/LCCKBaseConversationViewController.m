@@ -15,6 +15,7 @@
 static void * const LCCKBaseConversationViewControllerRefreshContext = (void*)&LCCKBaseConversationViewControllerRefreshContext;
 
 @interface LCCKBaseConversationViewController ()
+
 @end
 
 @implementation LCCKBaseConversationViewController
@@ -30,7 +31,7 @@ static void * const LCCKBaseConversationViewControllerRefreshContext = (void*)&L
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     // KVO注册监听
     [self addObserver:self forKeyPath:@"loadingMoreMessage" options:NSKeyValueObservingOptionNew context:LCCKBaseConversationViewControllerRefreshContext];
-
+    
     [LCCKCellRegisterController registerLCCKChatMessageCellClassForTableView:self.tableView];
     self.tableView.frame = ({
         CGRect frame = self.tableView.frame;
@@ -81,11 +82,14 @@ static void * const LCCKBaseConversationViewControllerRefreshContext = (void*)&L
 }
 
 - (void)scrollToBottomAnimated:(BOOL)animated {
+    if (![self shouldAllowScroll]) {
+        return;
+    }
     NSInteger rows = [self.tableView numberOfRowsInSection:0];
     if (rows > 0) {
         [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:rows - 1 inSection:0]
-                                     atScrollPosition:UITableViewScrollPositionBottom
-                                             animated:animated];
+                              atScrollPosition:UITableViewScrollPositionBottom
+                                      animated:animated];
     }
 }
 
@@ -117,6 +121,15 @@ static void * const LCCKBaseConversationViewControllerRefreshContext = (void*)&L
     UIEdgeInsets insets = UIEdgeInsetsZero;
     insets.bottom = bottom;
     return insets;
+}
+
+#pragma mark - Previte Method
+
+- (BOOL)shouldAllowScroll {
+    if (self.isUserScrolling) {
+        return NO;
+    }
+    return YES;
 }
 
 @end

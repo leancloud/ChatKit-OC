@@ -25,7 +25,7 @@
 
 @implementation LCCKChatMoreView
 
-- (instancetype)initWithFrame:(CGRect)frame{
+- (instancetype)initWithFrame:(CGRect)frame {
     if ([super initWithFrame:frame]) {
         [self setup];
     }
@@ -35,7 +35,7 @@
 
 #pragma mark - UIScrollViewDelegate
 
-- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView{
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
     [self.pageControl setCurrentPage:scrollView.contentOffset.x / scrollView.frame.size.width];
 }
 
@@ -116,7 +116,7 @@
 
 #pragma mark - Setters
 
-- (void)setDataSource:(id<LCCKChatMoreViewDataSource>)dataSource{
+- (void)setDataSource:(id<LCCKChatMoreViewDataSource>)dataSource {
     _dataSource = dataSource;
     [self reloadData];
 }
@@ -127,14 +127,14 @@
     [self reloadData];
 }
 
-- (void)setNumberPerLine:(NSUInteger)numberPerLine{
+- (void)setNumberPerLine:(NSUInteger)numberPerLine {
     _numberPerLine = numberPerLine;
     [self reloadData];
 }
 
 #pragma mark - Getters
 
-- (UIScrollView *)scrollView{
+- (UIScrollView *)scrollView {
     if (!_scrollView) {
         _scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, self.edgeInsets.top, self.frame.size.width, self.frame.size.height - self.edgeInsets.top - self.edgeInsets.bottom)];
         _scrollView.showsHorizontalScrollIndicator = NO;

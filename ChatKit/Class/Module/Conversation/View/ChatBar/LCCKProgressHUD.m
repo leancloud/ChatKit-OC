@@ -27,7 +27,7 @@
 @implementation LCCKProgressHUD
 @synthesize overlayWindow = _overlayWindow;
 
-- (instancetype)initWithFrame:(CGRect)frame{
+- (instancetype)initWithFrame:(CGRect)frame {
     if ([super initWithFrame:frame]) {
         [self setup];
     }
@@ -43,7 +43,7 @@
 
 #pragma mark - Private Methods
 
-- (void)show{
+- (void)show {
     self.angle = 0.0f;
     self.seconds = 0;
     self.subTitleLabel.text = @"向上滑动取消";
@@ -60,7 +60,7 @@
     });
 }
 
-- (void)timerAction{
+- (void)timerAction {
     self.angle -= 3;
     self.seconds ++ ;
     [UIView beginAnimations:nil context:nil];
@@ -77,7 +77,7 @@
     [UIView commitAnimations];
 }
 
-- (void)setSubTitle:(NSString *)subTitle{
+- (void)setSubTitle:(NSString *)subTitle {
     self.subTitleLabel.text = subTitle;
 }
 
@@ -122,7 +122,7 @@
 
 #pragma mark - Setters
 
-- (void)setProgressState:(LCCKProgressState)progressState{
+- (void)setProgressState:(LCCKProgressState)progressState {
     switch (progressState) {
         case LCCKProgressSuccess:
             self.centerLabel.text = @"录音成功";
@@ -169,7 +169,7 @@
     return _centerLabel;
 }
 
-- (UIImageView *)edgeImageView{
+- (UIImageView *)edgeImageView {
     if (!_edgeImageView) {
         _edgeImageView = [[UIImageView alloc]initWithImage:({
             NSString *imageName = @"chat_bar_record_circle";
@@ -237,12 +237,12 @@
     [[LCCKProgressHUD sharedView] show];
 }
 
-+ (void)dismissWithProgressState:(LCCKProgressState)progressState{
++ (void)dismissWithProgressState:(LCCKProgressState)progressState {
     [[LCCKProgressHUD sharedView] setProgressState:progressState];
     [[LCCKProgressHUD sharedView] dismiss];
 }
 
-+ (void)dismissWithMessage:(NSString *)message{
++ (void)dismissWithMessage:(NSString *)message {
     [[LCCKProgressHUD sharedView] setProgressState:LCCKProgressMessage];
     [LCCKProgressHUD sharedView].centerLabel.text = message;
     [[LCCKProgressHUD sharedView] dismiss];

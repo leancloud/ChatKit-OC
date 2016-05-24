@@ -97,11 +97,11 @@
     
 }
 
-- (void)startLocation{
+- (void)startLocation {
     [self.locationManager startUpdatingLocation];
 }
 
-- (void)stopLocation{
+- (void)stopLocation {
     [self.locationManager stopUpdatingLocation];
 }
 
@@ -112,7 +112,7 @@
  *  @param success       成功block，返回pm
  *  @param failure       失败block
  */
-- (void)geocode:(NSString *)address success:(void(^)(CLPlacemark *pm))success failure:(void(^)())failure{
+- (void)geocode:(NSString *)address success:(void(^)(CLPlacemark *pm))success failure:(void(^)())failure {
     [self.geocoder geocodeAddressString:address completionHandler:^(NSArray *placemarks, NSError *error) {
         if (error) {
             if (failure) {
@@ -135,7 +135,7 @@
  *  @param success       成功block，返回pm
  *  @param failure       失败block
  */
-- (void)reverseGeocodeWithCoordinate2D:(CLLocationCoordinate2D)coordinate2D success:(void(^)(NSArray *placemarks))success failure:(void(^)())failure{
+- (void)reverseGeocodeWithCoordinate2D:(CLLocationCoordinate2D)coordinate2D success:(void(^)(NSArray *placemarks))success failure:(void(^)())failure {
     CLLocation *location = [[CLLocation alloc] initWithLatitude:coordinate2D.latitude longitude:coordinate2D.longitude];
     [self.geocoder reverseGeocodeLocation:location completionHandler:^(NSArray *placemarks, NSError *error) {
         if (error) {
@@ -210,11 +210,11 @@
     return _geocoder;
 }
 
-- (CGFloat)latitude{
+- (CGFloat)latitude {
     return self.locationManager.location.coordinate.latitude;
 }
 
-- (CGFloat)longitude{
+- (CGFloat)longitude {
     return self.locationManager.location.coordinate.longitude;
 }
 
