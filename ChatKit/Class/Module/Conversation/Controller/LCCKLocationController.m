@@ -216,7 +216,7 @@ static CGFloat const LCCKLocationPOIListCellHeight = 40.f;
 }
 
 
-- (void)cancel{
+- (void)cancel {
     if (self.delegate && [self.delegate respondsToSelector:@selector(cancelLocation)]) {
         [self.delegate cancelLocation];
     }

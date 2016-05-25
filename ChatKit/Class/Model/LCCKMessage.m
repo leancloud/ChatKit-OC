@@ -217,7 +217,6 @@
         
         _status = [aDecoder decodeIntForKey:@"status"];
         _photoPath = [aDecoder decodeObjectForKey:@"photoPath"];
-        //TODO:        _imageSize = imageSize;
         _thumbnailPhoto = [aDecoder decodeObjectForKey:@"thumbnailPhoto"];
     }
     return self;
@@ -256,7 +255,6 @@
     
     [aCoder encodeInt:self.status forKey:@"status"];
     [aCoder encodeObject:self.photoPath forKey:@"photoPath"];
-    //TODO:        _imageSize = imageSize;
     [aCoder encodeObject:self.thumbnailPhoto forKey:@"thumbnailPhoto"];
 
 }

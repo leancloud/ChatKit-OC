@@ -71,8 +71,7 @@
 //kCLAuthorizationStatusDenied ：用户已经明确禁止应用使用定位服务或者当前系统定位服务处于关闭状态
 //kCLAuthorizationStatusAuthorizedAlways： 应用获得授权可以一直使用定位服务，即使应用不在使用状态
 //kCLAuthorizationStatusAuthorizedWhenInUse： 使用此应用过程中允许访问定位服务
-- (void)requestAuthorization
-{
+- (void)requestAuthorization {
     if ([self.locationManager respondsToSelector:@selector(requestWhenInUseAuthorization)]) {
         
         switch ([CLLocationManager authorizationStatus]) {
@@ -84,8 +83,7 @@
                 [self.locationManager requestAlwaysAuthorization];
                 [self.locationManager requestWhenInUseAuthorization];
                 break;
-            case kCLAuthorizationStatusDenied:
-            {
+            case kCLAuthorizationStatusDenied: {
                 UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"提示" message:@"请在隐私设置中打开定位开关" delegate:self cancelButtonTitle:@"以后再说" otherButtonTitles:@"前往设置",nil];
                 [alertView show];
             }

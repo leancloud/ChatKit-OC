@@ -81,6 +81,4 @@
  */
 - (double)customDistanceWithEndCoordinate2D:(CLLocationCoordinate2D)endCoordinate2D fromStartCoordinate2D:(CLLocationCoordinate2D)startCoordinate2D;
 
-
-
 @end

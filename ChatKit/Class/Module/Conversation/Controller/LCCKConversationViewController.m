@@ -189,12 +189,10 @@
     if (self.chatViewModel.avimTypedMessage.count > 0) {
         [self.chatViewModel updateConversationAsRead];
     }
-    //TODO:
-    //    [[XHAudioPlayerHelper shareInstance] stopAudio];
 }
 
 - (void)dealloc {
-    //[[XHAudioPlayerHelper shareInstance] setDelegate:nil];
+    [[LCCKAVAudioPlayer sharePlayer] setDelegate:nil];
 }
 
 #pragma mark - UI init

@@ -51,7 +51,6 @@ NSString *const LCCKSessionServiceErrorDemain = @"LCCKSessionServiceErrorDemain"
     [self.client closeWithCallback:^(BOOL succeeded, NSError *error) {
         !callback ?: callback(succeeded, error);
         if (succeeded) {
-//            [LCCKConversationListService destroyInstance];
             [LCCKConversationService destroyInstance];
             [LCCKSessionService destroyInstance];
         }

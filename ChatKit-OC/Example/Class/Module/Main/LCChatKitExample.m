@@ -45,7 +45,7 @@ static NSMutableDictionary *_sharedInstances = nil;
 
 + (void)invokeThisMethodInDidFinishLaunching {
     [AVOSCloud registerForRemoteNotification];
-//    [AVOSCloud setStorageType:AVStorageTypeQCloud];
+    //    [AVOSCloud setStorageType:AVStorageTypeQCloud];
     [AVIMClient setTimeoutIntervalInSeconds:20];
     [[self sharedInstance] exampleInit];
 }
@@ -156,10 +156,10 @@ static NSMutableDictionary *_sharedInstances = nil;
     
     [[LCChatKit sharedInstance] setLongPressMessageBlock:^NSArray<UIMenuItem *> *(LCCKMessage *message, NSDictionary *userInfo) {
         LCCKMenuItem *copyItem = [[LCCKMenuItem alloc] initWithTitle:NSLocalizedStringFromTable(@"copy", @"LCChatKitString", @"复制文本消息")
-                                                           block:^{
-            UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
-            [pasteboard setString:[message text]];
-        }];
+                                                               block:^{
+                                                                   UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
+                                                                   [pasteboard setString:[message text]];
+                                                               }];
         NSArray *menuItems = [NSArray array];
         if (message.messageMediaType ==  LCCKMessageTypeText) {
             menuItems = @[ copyItem ];
@@ -328,7 +328,12 @@ typedef void (^UITableViewRowActionHandler)(UITableViewRowAction *action, NSInde
         } else {
             [aConversationController configureBarButtonItemStyle:LCCKBarButtonItemStyleSingleProfile action:^{
                 NSString *title = @"打开用户详情";
-                NSString *subTitle = [NSString stringWithFormat:@"单聊id：%@", conversationId];
+                
+                NSArray *members = conversation.members;
+                NSPredicate *predicate = [NSPredicate predicateWithFormat:@"NOT (SELF IN %@)", @[ conversation.clientId ]];
+                NSString *peerId = [members filteredArrayUsingPredicate:predicate][0];
+
+                NSString *subTitle = [NSString stringWithFormat:@"用户id：%@", peerId];
                 [LCCKUtil showNotificationWithTitle:title subtitle:subTitle type:LCCKMessageNotificationTypeMessage];
             }];
         }
@@ -475,13 +480,13 @@ typedef void (^UITableViewRowActionHandler)(UITableViewRowAction *action, NSInde
 
 - (id <MWPhoto>)photoBrowser:(MWPhotoBrowser *)photoBrowser photoAtIndex:(NSUInteger)index {
     if (index < _photos.count)
-    return [_photos objectAtIndex:index];
+        return [_photos objectAtIndex:index];
     return nil;
 }
 
 - (id <MWPhoto>)photoBrowser:(MWPhotoBrowser *)photoBrowser thumbPhotoAtIndex:(NSUInteger)index {
     if (index < _thumbs.count)
-    return [_thumbs objectAtIndex:index];
+        return [_thumbs objectAtIndex:index];
     return nil;
 }
 
