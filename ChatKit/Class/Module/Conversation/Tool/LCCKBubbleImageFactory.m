@@ -12,8 +12,18 @@
 
 @implementation LCCKBubbleImageFactory
 
-+ (UIImage *)bubbleImageViewForType:(LCCKMessageOwner)owner isHighlighted:(BOOL)isHighlighted {
++ (UIImage *)bubbleImageViewForType:(LCCKMessageOwner)owner
+                        messageType:(LCCKMessageType)messageType
+                      isHighlighted:(BOOL)isHighlighted {
     NSString *messageTypeString = @"message_";
+    switch (messageType) {
+        case LCCKMessageTypeImage:
+            messageTypeString = [messageTypeString stringByAppendingString:@"image_"];;
+            break;
+            
+        default:
+            break;
+    }
     switch (owner) {
         case LCCKMessageOwnerSelf:
             // 发送 ==> @"MessageBubble_Sender"
@@ -28,6 +38,7 @@
             //TODO:
             break;
     }
+   
     messageTypeString = [messageTypeString stringByAppendingString:@"background_"];
     if (isHighlighted) {
         messageTypeString = [messageTypeString stringByAppendingString:@"highlight"];

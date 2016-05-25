@@ -190,8 +190,8 @@ static CGFloat const kAvatarImageViewHeight = 50.f;
     self.messageSendStateImageView.hidden = YES;
     self.messageReadStateImageView.hidden = YES;
     
-    [self.messageContentBackgroundImageView setImage:[LCCKBubbleImageFactory bubbleImageViewForType:self.messageOwner isHighlighted:NO]];
-    [self.messageContentBackgroundImageView setHighlightedImage:[LCCKBubbleImageFactory bubbleImageViewForType:self.messageOwner isHighlighted:YES]];
+    [self.messageContentBackgroundImageView setImage:[LCCKBubbleImageFactory bubbleImageViewForType:self.messageOwner messageType:self.messageType isHighlighted:NO]];
+    [self.messageContentBackgroundImageView setHighlightedImage:[LCCKBubbleImageFactory bubbleImageViewForType:self.messageOwner messageType:self.messageType isHighlighted:YES]];
     
     self.messageContentView.layer.mask.contents = (__bridge id _Nullable)(self.messageContentBackgroundImageView.image.CGImage);
     [self.contentView insertSubview:self.messageContentBackgroundImageView belowSubview:self.messageContentView];
