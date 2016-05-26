@@ -67,9 +67,12 @@
 
 - (void)configureCellWithData:(LCCKMessage *)message {
     [super configureCellWithData:message];
-    self.messageImageView.image = [self imageInBundleForImageName:@"Placeholder_Accept_Defeat"];
+//    self.messageImageView.image = [self imageInBundleForImageName:@"Placeholder_Accept_Defeat"];
     UIImage *thumbnailPhoto = message.thumbnailPhoto;
     do {
+        if (self.messageImageView.image && (self.messageImageView.image == thumbnailPhoto)) {
+            break;
+        }
         if (thumbnailPhoto) {
             self.messageImageView.image = thumbnailPhoto;
             break;
@@ -87,7 +90,7 @@
             break;
         }
         if (message.originPhotoURL) {
-            [self.messageImageView  sd_setImageWithURL:message.originPhotoURL placeholderImage:[self imageInBundleForImageName:@"Placeholder_Image"]
+            [self.messageImageView  sd_setImageWithURL:message.originPhotoURL placeholderImage:[self imageInBundleForImageName:@"Placeholder_Accept_Defeat"]
                                              completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
                                                  dispatch_async(dispatch_get_main_queue(),^{
                                                      if (image){
