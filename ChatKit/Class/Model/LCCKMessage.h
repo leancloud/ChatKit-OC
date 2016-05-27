@@ -10,6 +10,7 @@
 #import <CoreLocation/CoreLocation.h>
 #import "LCCKConstants.h"
 #import "LCCKChatUntiles.h"
+@class AVIMTypedMessage;
 
 @interface LCCKMessage : NSObject <NSCoding, NSCopying>
 
@@ -69,6 +70,7 @@
                    timestamp:(NSDate *)timestamp;
 
 - (instancetype)initWithSystemText:(NSString *)text;
++ (instancetype)systemMessageWithTimestamp:(NSDate *)timestamp;
 
 /**
  *  初始化图片类型的消息
@@ -157,5 +159,7 @@
                                   location:(CLLocation *)location
                                     sender:(NSString *)sender
                                  timestamp:(NSDate *)timestamp;
-
+// 是否显示时间轴Label
+- (BOOL)shouldDisplayTimestampForMessages:(NSArray *)messages;
++ (LCCKMessage *)messageWithAVIMTypedMessage:(AVIMTypedMessage *)message;
 @end

@@ -59,7 +59,7 @@ FOUNDATION_EXTERN NSString *const LCCKConversationServiceErrorDomain;
  *  @param  conversation 会话，可以是单聊，也可是群聊
  */
 - (void)removeCacheForConversation:(AVIMConversation *)conversation;
-
+- (void)updateConversationAsRead;
 ///--------------------------------------------------------------------------------------------
 ///---------------------最近对话的本地缓存，最近对话将保存在本地数据库中-------------------------------
 ///--------------------------------------------------------------------------------------------

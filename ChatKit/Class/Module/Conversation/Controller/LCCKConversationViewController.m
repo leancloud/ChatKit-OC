@@ -25,6 +25,7 @@
 #import "LCCKUIService.h"
 #import <objc/runtime.h>
 #import "UIImage+LCCKExtension.h"
+#import "NSMutableArray+LCCKMessageExtention.h"
 
 @interface LCCKConversationViewController () <LCCKChatBarDelegate, LCCKAVAudioPlayerDelegate, LCCKChatMessageCellDelegate, LCCKConversationViewModelDelegate>
 
@@ -146,7 +147,6 @@
     return _chatViewModel;
 }
 
-
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.tableView.delegate = self.chatViewModel;
@@ -187,7 +187,7 @@
     [super viewDidDisappear:animated];
     [LCCKConversationService sharedInstance].chattingConversationId = nil;
     if (self.chatViewModel.avimTypedMessage.count > 0) {
-        [self.chatViewModel updateConversationAsRead];
+        [[LCCKConversationService sharedInstance] updateConversationAsRead];
     }
 }
 
@@ -204,7 +204,9 @@
 
 - (void)refreshConversation:(AVIMConversation *)conversation {
     _conversation = conversation;
-    self.navigationItem.title = conversation.lcck_title;
+    if (conversation.members > 0) {
+        self.navigationItem.title = conversation.lcck_title;
+    }
     [LCCKConversationService sharedInstance].currentConversation = conversation;;
     [self.chatViewModel loadMessagesWhenInitHandler:^(BOOL succeeded, NSError *error) {
         !_loadHistoryMessagesHandler ?: _loadHistoryMessagesHandler(succeeded, error);
@@ -323,7 +325,7 @@
         return;
     }
     NSIndexPath *indexPath = [self.tableView indexPathForCell:messageCell];
-    LCCKMessage *message = [self.chatViewModel messageAtIndex:indexPath.row];
+    LCCKMessage *message = [self.chatViewModel.dataArray lcck_messageAtIndex:indexPath.row];
     switch (messageCell.messageType) {
         case LCCKMessageTypeVoice: {
             NSString *voiceFileName = message.voicePath;//1、必须带后缀，.mp3；FIXME:2、接收到的语音消息无法播放

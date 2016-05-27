@@ -157,6 +157,18 @@ NSString *const LCCKConversationServiceErrorDomain = @"LCCKConversationServiceEr
     }];
 }
 
+- (void)updateConversationAsRead {
+    AVIMConversation *conversation = [LCCKConversationService sharedInstance].currentConversation;
+    if (!conversation) {
+        NSAssert(conversation, @"currentConversation is nil");
+        return;
+    }
+    [[LCCKConversationService sharedInstance] insertRecentConversation:conversation];
+    [[LCCKConversationService sharedInstance] updateUnreadCountToZeroWithConversation:conversation];
+    [[LCCKConversationService sharedInstance] updateMentioned:NO conversation:conversation];
+    [[NSNotificationCenter defaultCenter] postNotificationName:LCCKNotificationUnreadsUpdated object:nil];
+}
+
 #pragma mark - conversations local data
 
 - (NSData *)dataFromConversation:(AVIMConversation *)conversation {

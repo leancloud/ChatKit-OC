@@ -8,6 +8,15 @@
 
 #import "LCCKMessage.h"
 #import "LCCKSessionService.h"
+#import "LCCKUserSystemService.h"
+
+#if __has_include(<AVOSCloudIM/AVIMTypedMessage.h>)
+#import <AVOSCloudIM/AVIMTypedMessage.h>
+#else
+#import "AVIMTypedMessage.h"
+#endif
+#import "AVIMConversation+LCCKAddition.h"
+#import "UIImage+LCCKExtension.h"
 
 @interface LCCKMessage()
 
@@ -58,6 +67,14 @@
         _messageMediaType = LCCKMessageTypeText;
     }
     return self;
+}
+
++ (instancetype)systemMessageWithTimestamp:(NSDate *)timestamp {
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"MM-dd HH:mm"];
+    NSString *text = [dateFormatter stringFromDate:timestamp];
+    LCCKMessage *timeMessage = [[LCCKMessage alloc] initWithSystemText:text];
+    return timeMessage;
 }
 
 - (instancetype)initWithSystemText:(NSString *)text {
@@ -177,6 +194,126 @@
     return self;
 }
 
+// 是否显示时间轴Label
+- (BOOL)shouldDisplayTimestampForMessages:(NSArray *)messages {
+    BOOL containsMessage= [messages containsObject:self];
+    if (!containsMessage) {
+        return NO;
+    }
+    NSUInteger index = [messages indexOfObject:self];
+    if (index == 0) {
+        return YES;
+    }  else {
+        LCCKMessage *lastMessage = [messages objectAtIndex:index - 1];
+        int interval = [self.timestamp timeIntervalSinceDate:lastMessage.timestamp];
+        if (interval > 60 * 3) {
+            return YES;
+        } else {
+            return NO;
+        }
+    }
+}
+
++ (NSDate *)getTimestampDate:(int64_t)timestamp {
+    return [NSDate dateWithTimeIntervalSince1970:timestamp / 1000];
+}
+
++ (LCCKMessage *)messageWithAVIMTypedMessage:(AVIMTypedMessage *)message {
+    id<LCCKUserModelDelegate> fromUser = [[LCCKUserSystemService sharedInstance] getProfileForUserId:message.clientId error:nil];
+    LCCKMessage *lcckMessage;
+    NSDate *time = [self getTimestampDate:message.sendTimestamp];
+    //FIXME:
+    AVIMMessageMediaType mediaType = message.mediaType;
+    switch (mediaType) {
+        case kAVIMMessageMediaTypeText: {
+            AVIMTextMessage *textMsg = (AVIMTextMessage *)message;
+            lcckMessage = [[LCCKMessage alloc] initWithText:textMsg.text sender:fromUser.name timestamp:time];
+            break;
+        }
+        case kAVIMMessageMediaTypeAudio: {
+            AVIMAudioMessage *audioMsg = (AVIMAudioMessage *)message;
+            NSString *duration = [NSString stringWithFormat:@"%.0f", audioMsg.duration];
+            NSString *voicePath;
+            NSFileManager *fileManager = [NSFileManager defaultManager];
+            NSString *pathForFile = audioMsg.file.localPath;
+            if ([fileManager fileExistsAtPath:pathForFile]){
+                voicePath = audioMsg.file.localPath;
+            } else {
+                voicePath = audioMsg.file.url;
+            }
+            lcckMessage = [[LCCKMessage alloc] initWithVoicePath:voicePath voiceURL:nil voiceDuration:duration sender:fromUser.name timestamp:time];
+            break;
+        }
+            
+        case kAVIMMessageMediaTypeLocation: {
+            AVIMLocationMessage *locationMsg = (AVIMLocationMessage *)message;
+            lcckMessage = [[LCCKMessage alloc] initWithLocalPositionPhoto:({
+                NSString *imageName = @"MessageBubble_Location";
+                UIImage *image = [UIImage lcck_imageNamed:imageName bundleName:@"MessageBubble" bundleForClass:[self class]];
+                image;})
+                                                             geolocations:locationMsg.text location:[[CLLocation alloc] initWithLatitude:locationMsg.latitude longitude:locationMsg.longitude] sender:fromUser.name timestamp:time];
+            break;
+        }
+        case kAVIMMessageMediaTypeImage: {
+            AVIMImageMessage *imageMsg = (AVIMImageMessage *)message;
+            NSString *pathForFile = imageMsg.file.localPath;
+            NSFileManager *fileManager = [NSFileManager defaultManager];
+            NSString *imagePath;
+            if ([fileManager fileExistsAtPath:pathForFile]){
+                imagePath = imageMsg.file.localPath;
+            }
+            lcckMessage = [[LCCKMessage alloc] initWithPhoto:nil thumbnailPhoto:nil photoPath:imagePath thumbnailURL:nil originPhotoURL:[NSURL URLWithString:imageMsg.file.url] sender:fromUser.name timestamp:time];
+            break;
+        }
+            
+            //#import "AVIMEmotionMessage.h"
+            //        case kAVIMMessageMediaTypeEmotion: {
+            //            AVIMEmotionMessage *emotionMsg = (AVIMEmotionMessage *)message;
+            //            NSString *path = [[NSBundle mainBundle] pathForResource:emotionMsg.emotionPath ofType:@"gif"];
+            //            lcckMessage = [[LCCKMessage alloc] initWithEmotionPath:path sender:fromUser.name timestamp:time];
+            //            break;
+            //        }
+        case kAVIMMessageMediaTypeVideo: {
+            //TODO:
+            break;
+        }
+        default: {
+            lcckMessage = [[LCCKMessage alloc] initWithText:@"未知消息" sender:fromUser.name timestamp:time];
+            LCCKLog("unkonwMessage");
+            break;
+        }
+    }
+    [[LCCKConversationService sharedInstance] fecthConversationWithConversationId:message.conversationId callback:^(AVIMConversation *conversation, NSError *error) {
+        lcckMessage.messageGroupType = conversation.lcck_type;
+    }];
+    lcckMessage.avator = nil;
+    lcckMessage.avatorURL = [fromUser avatorURL];
+    
+    if ([[LCCKSessionService sharedInstance].clientId isEqualToString:message.clientId]) {
+        lcckMessage.bubbleMessageType = LCCKMessageOwnerSelf;
+    } else {
+        lcckMessage.bubbleMessageType = LCCKMessageOwnerOther;
+    }
+    
+    NSInteger msgStatuses[4] = { AVIMMessageStatusSending, AVIMMessageStatusSent, AVIMMessageStatusDelivered, AVIMMessageStatusFailed };
+    NSInteger lcckMessageStatuses[4] = { LCCKMessageSendStateSending, LCCKMessageSendStateSuccess, LCCKMessageSendStateReceived, LCCKMessageSendStateFailed };
+    
+    if (lcckMessage.bubbleMessageType == LCCKMessageOwnerSelf) {
+        LCCKMessageSendState status = LCCKMessageSendStateReceived;
+        int i;
+        for (i = 0; i < 4; i++) {
+            if (msgStatuses[i] == message.status) {
+                status = lcckMessageStatuses[i];
+                break;
+            }
+        }
+        lcckMessage.status = status;
+    } else {
+        lcckMessage.status = LCCKMessageSendStateReceived;
+    }
+    return lcckMessage;
+}
+
 #pragma mark - NSCoding
 
 - (id)initWithCoder:(NSCoder *)aDecoder {
@@ -256,7 +393,7 @@
     [aCoder encodeInt:self.status forKey:@"status"];
     [aCoder encodeObject:self.photoPath forKey:@"photoPath"];
     [aCoder encodeObject:self.thumbnailPhoto forKey:@"thumbnailPhoto"];
-
+    
 }
 
 #pragma mark - NSCopying
@@ -323,9 +460,9 @@
     }
     message.avator = [self.avator copy];
     message.avatorURL = [self.avatorURL copy];
-//    message.photo = [self.photo copy];
-//    message.photoPath = [self.photoPath copy];
-
+    //    message.photo = [self.photo copy];
+    //    message.photoPath = [self.photoPath copy];
+    
     message.messageId = [self.messageId copy];
     message.conversationId = [self.conversationId copy];
     message.messageMediaType = self.messageMediaType;

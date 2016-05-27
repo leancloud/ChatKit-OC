@@ -11,8 +11,6 @@
 #import "AVIMTypedMessage.h"
 #endif
 
-
-
 static AVIMMessageMediaType const kAVIMMessageMediaTypeEmotion = 1;
 
 @interface AVIMEmotionMessage : AVIMTypedMessage<AVIMTypedMessageSubclassing>

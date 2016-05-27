@@ -26,11 +26,12 @@
 #import "LCCKMessage.h"
 #import "AVIMConversation+LCCKAddition.h"
 #import <AVOSCloudIM/AVIMLocationMessage.h>
-#import "AVIMEmotionMessage.h"
 #import "LCCKConversationViewController.h"
 #import "LCCKUserSystemService.h"
 #import "LCCKSessionService.h"
 #import "UIImage+LCCKExtension.h"
+#import "AVIMTypedMessage+LCCKExtention.h"
+#import "NSMutableArray+LCCKMessageExtention.h"
 
 @interface LCCKConversationViewModel ()
 
@@ -60,42 +61,6 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return self.dataArray.count;
-}
-
-// 是否显示时间轴Label的回调方法
-- (BOOL)shouldDisplayTimestampForRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (indexPath.row == 0) {
-        return NO;
-    }  else {
-        LCCKMessage *msg = [self.dataArray objectAtIndex:indexPath.row];
-        LCCKMessage *lastMsg = [self.dataArray objectAtIndex:indexPath.row - 1];
-        int interval = [msg.timestamp timeIntervalSinceDate:lastMsg.timestamp];
-        if (interval > 60 * 3) {
-            return YES;
-        } else {
-            return NO;
-        }
-    }
-}
-
-// 是否显示时间轴Label
-- (BOOL)shouldDisplayTimestampForMessage:(LCCKMessage *)message forMessages:(NSArray *)messages {
-    BOOL containsMessage= [messages containsObject:message];
-    if (!containsMessage) {
-        return NO;
-    }
-    NSUInteger index = [messages indexOfObject:message];
-    if (index == 0) {
-        return YES;
-    }  else {
-        LCCKMessage *lastMessage = [messages objectAtIndex:index - 1];
-        int interval = [message.timestamp timeIntervalSinceDate:lastMessage.timestamp];
-        if (interval > 60 * 3) {
-            return YES;
-        } else {
-            return NO;
-        }
-    }
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -136,8 +101,7 @@
         if (currentConversation.muted == NO) {
             [[LCCKSoundManager defaultManager] playReceiveSoundIfNeed];
         }
-        
-        LCCKMessage *lcckMessage = [[self class] getLCCKMessageByMessage:message];
+        LCCKMessage *lcckMessage = [LCCKMessage messageWithAVIMTypedMessage:message];
         [self insertMessage:lcckMessage];
         //        [[LCCKChatManager manager] setZeroUnreadWithConversationId:self.conversation.conversationId];
         //        [[NSNotificationCenter defaultCenter] postNotificationName:LCCKNotificationMessageReceived object:nil];
@@ -151,14 +115,6 @@
     }
 }
 
-- (LCCKMessage *)timeMessage:(NSDate *)timestamp {
-    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    [dateFormatter setDateFormat:@"MM-dd HH:mm"];
-    NSString *text = [dateFormatter stringFromDate:timestamp];
-    LCCKMessage *timeMessage = [[LCCKMessage alloc] initWithSystemText:text];
-    return timeMessage;
-}
-
 - (void)addMessages:(NSArray<LCCKMessage *> *)messages {
     [self.dataArray addObjectsFromArray:[self messagesWithSystemMessages:messages]];
 }
@@ -167,9 +123,9 @@
     NSMutableArray *messageWithSystemMessages = [NSMutableArray arrayWithArray:self.dataArray];
     for (LCCKMessage *message in messages) {
         [messageWithSystemMessages addObject:message];
-        BOOL shouldDisplayTimestamp = [self shouldDisplayTimestampForMessage:message forMessages:messageWithSystemMessages];
+        BOOL shouldDisplayTimestamp = [message shouldDisplayTimestampForMessages:messageWithSystemMessages];
         if (shouldDisplayTimestamp) {
-            [messageWithSystemMessages insertObject:[self timeMessage:message.timestamp] atIndex:(messageWithSystemMessages.count - 1)];
+            [messageWithSystemMessages insertObject:[LCCKMessage systemMessageWithTimestamp:message.timestamp] atIndex:(messageWithSystemMessages.count - 1)];
         }
     }
     [messageWithSystemMessages removeObjectsInArray:self.dataArray];
@@ -180,9 +136,9 @@
     NSMutableArray *messageWithSystemMessages = [NSMutableArray arrayWithArray:messages];
     NSUInteger idx = 0;
     for (LCCKMessage *message in messages) {
-        BOOL shouldDisplayTimestamp = [self shouldDisplayTimestampForMessage:message forMessages:messageWithSystemMessages];
+        BOOL shouldDisplayTimestamp = [message shouldDisplayTimestampForMessages:messageWithSystemMessages];
         if (shouldDisplayTimestamp) {
-            [messageWithSystemMessages insertObject:[self timeMessage:message.timestamp] atIndex:idx];
+            [messageWithSystemMessages insertObject:[LCCKMessage systemMessageWithTimestamp:message.timestamp] atIndex:idx];
             idx++;
         }
         idx++;
@@ -225,7 +181,7 @@
     id<LCCKUserModelDelegate> sender = [[LCCKUserSystemService sharedInstance] fetchCurrentUser];
     message.avatorURL = sender.avatorURL;
     message.bubbleMessageType = LCCKMessageOwnerSelf;
-    AVIMTypedMessage *avimTypedMessage = [LCCKConversationViewModel getAVIMTypedMessageWithMessage:message];
+    AVIMTypedMessage *avimTypedMessage = [AVIMTypedMessage llck_messageWithLCCKMessage:message];
     [self.avimTypedMessage addObject:avimTypedMessage];
     [self preloadMessageToTableView:message];
     // if `message.messageId` is not nil, it is a failed message being resended.
@@ -254,8 +210,8 @@
 
 - (void)resendMessageAtIndexPath:(NSIndexPath *)indexPath discardIfFailed:(BOOL)discardIfFailed {
     LCCKMessage *lcckMessage =  self.dataArray[indexPath.row];
-    [self.dataArray removeObjectAtIndex:indexPath.row];
-    [self.avimTypedMessage removeObjectAtIndex:indexPath.row];
+    [self.dataArray lcck_removeMessageAtIndex:indexPath.row];
+    [self.avimTypedMessage lcck_removeMessageAtIndex:indexPath.row];
     [self.parentViewController.tableView reloadData];
     [self sendMessage:lcckMessage
         progressBlock:^(NSInteger percentDone) {
@@ -293,182 +249,10 @@
     });
 }
 
-- (void)removeMessageAtIndex:(NSUInteger)index {
-    if (index < self.dataArray.count) {
-        [self.dataArray removeObjectAtIndex:index];
-    }
-}
-
-- (LCCKMessage *)messageAtIndex:(NSUInteger)index {
-    if (index < self.dataArray.count) {
-        return self.dataArray[index];
-    }
-    return nil;
-}
-
 #pragma mark - Getters
 
 - (NSUInteger)messageCount {
     return self.dataArray.count;
-}
-
-#pragma mark - modal convert
-
-+ (NSDate *)getTimestampDate:(int64_t)timestamp {
-    return [NSDate dateWithTimeIntervalSince1970:timestamp / 1000];
-}
-
-+ (LCCKMessage *)getLCCKMessageByMessage:(AVIMTypedMessage *)message {
-    id<LCCKUserModelDelegate> fromUser = [[LCCKUserSystemService sharedInstance] getProfileForUserId:message.clientId error:nil];
-    LCCKMessage *lcckMessage;
-    NSDate *time = [self getTimestampDate:message.sendTimestamp];
-    //FIXME:
-    AVIMMessageMediaType mediaType = message.mediaType;
-    switch (mediaType) {
-        case kAVIMMessageMediaTypeText: {
-            AVIMTextMessage *textMsg = (AVIMTextMessage *)message;
-            lcckMessage = [[LCCKMessage alloc] initWithText:textMsg.text sender:fromUser.name timestamp:time];
-            break;
-        }
-        case kAVIMMessageMediaTypeAudio: {
-            AVIMAudioMessage *audioMsg = (AVIMAudioMessage *)message;
-            NSString *duration = [NSString stringWithFormat:@"%.0f", audioMsg.duration];
-            NSString *voicePath;
-            NSFileManager *fileManager = [NSFileManager defaultManager];
-            NSString *pathForFile = audioMsg.file.localPath;
-            if ([fileManager fileExistsAtPath:pathForFile]){
-                voicePath = audioMsg.file.localPath;
-            } else {
-                voicePath = audioMsg.file.url;
-            }
-            lcckMessage = [[LCCKMessage alloc] initWithVoicePath:voicePath voiceURL:nil voiceDuration:duration sender:fromUser.name timestamp:time];
-            break;
-        }
-            
-        case kAVIMMessageMediaTypeLocation: {
-            AVIMLocationMessage *locationMsg = (AVIMLocationMessage *)message;
-            lcckMessage = [[LCCKMessage alloc] initWithLocalPositionPhoto:({
-                NSString *imageName = @"MessageBubble_Location";
-                UIImage *image = [UIImage lcck_imageNamed:imageName bundleName:@"MessageBubble" bundleForClass:[self class]];
-                image;})
-                                                             geolocations:locationMsg.text location:[[CLLocation alloc] initWithLatitude:locationMsg.latitude longitude:locationMsg.longitude] sender:fromUser.name timestamp:time];
-            break;
-        }
-        case kAVIMMessageMediaTypeImage: {
-            AVIMImageMessage *imageMsg = (AVIMImageMessage *)message;
-            NSString *pathForFile = imageMsg.file.localPath;
-            NSFileManager *fileManager = [NSFileManager defaultManager];
-            NSString *imagePath;
-            if ([fileManager fileExistsAtPath:pathForFile]){
-                imagePath = imageMsg.file.localPath;
-            }
-            lcckMessage = [[LCCKMessage alloc] initWithPhoto:nil thumbnailPhoto:nil photoPath:imagePath thumbnailURL:nil originPhotoURL:[NSURL URLWithString:imageMsg.file.url] sender:fromUser.name timestamp:time];
-            break;
-        }
-        case kAVIMMessageMediaTypeEmotion: {
-            AVIMEmotionMessage *emotionMsg = (AVIMEmotionMessage *)message;
-            NSString *path = [[NSBundle mainBundle] pathForResource:emotionMsg.emotionPath ofType:@"gif"];
-            lcckMessage = [[LCCKMessage alloc] initWithEmotionPath:path sender:fromUser.name timestamp:time];
-            break;
-        }
-        case kAVIMMessageMediaTypeVideo: {
-            //TODO:
-            break;
-        }
-        default: {
-            lcckMessage = [[LCCKMessage alloc] initWithText:@"未知消息" sender:fromUser.name timestamp:time];
-            LCCKLog("unkonwMessage");
-            break;
-        }
-    }
-    [[LCCKConversationService sharedInstance] fecthConversationWithConversationId:message.conversationId callback:^(AVIMConversation *conversation, NSError *error) {
-        lcckMessage.messageGroupType = conversation.lcck_type;
-    }];
-    lcckMessage.avator = nil;
-    lcckMessage.avatorURL = [fromUser avatorURL];
-    
-    if ([[LCCKSessionService sharedInstance].clientId isEqualToString:message.clientId]) {
-        lcckMessage.bubbleMessageType = LCCKMessageOwnerSelf;
-    } else {
-        lcckMessage.bubbleMessageType = LCCKMessageOwnerOther;
-    }
-    
-    NSInteger msgStatuses[4] = { AVIMMessageStatusSending, AVIMMessageStatusSent, AVIMMessageStatusDelivered, AVIMMessageStatusFailed };
-    NSInteger lcckMessageStatuses[4] = { LCCKMessageSendStateSending, LCCKMessageSendStateSuccess, LCCKMessageSendStateReceived, LCCKMessageSendStateFailed };
-    
-    if (lcckMessage.bubbleMessageType == LCCKMessageOwnerSelf) {
-        LCCKMessageSendState status = LCCKMessageSendStateReceived;
-        int i;
-        for (i = 0; i < 4; i++) {
-            if (msgStatuses[i] == message.status) {
-                status = lcckMessageStatuses[i];
-                break;
-            }
-        }
-        lcckMessage.status = status;
-    } else {
-        lcckMessage.status = LCCKMessageSendStateReceived;
-    }
-    return lcckMessage;
-}
-
-+ (NSMutableArray *)getAVIMMessages:(NSArray<LCCKMessage *> *)lcckMessages {
-    NSMutableArray *messages = [[NSMutableArray alloc] init];
-    for (LCCKMessage *message in lcckMessages) {
-        AVIMTypedMessage *avimTypedMessage = [self getAVIMTypedMessageWithMessage:message];
-        if (avimTypedMessage) {
-            [messages addObject:avimTypedMessage];
-        }
-    }
-    return messages;
-}
-
-+ (NSMutableArray *)getLCCKMessages:(NSArray *)avimTypedMessage {
-    NSMutableArray *messages = [[NSMutableArray alloc] init];
-    for (AVIMTypedMessage *msg in avimTypedMessage) {
-        LCCKMessage *lcckMsg = [self getLCCKMessageByMessage:msg];
-        if (lcckMsg) {
-            [messages addObject:lcckMsg];
-        }
-    }
-    return messages;
-}
-
-+ (AVIMTypedMessage *)getAVIMTypedMessageWithMessage:(LCCKMessage *)message {
-    AVIMTypedMessage *avimTypedMessage;
-    switch (message.messageMediaType) {
-        case LCCKMessageTypeText: {
-            avimTypedMessage = [AVIMTextMessage messageWithText:message.text attributes:nil];
-            break;
-        }
-        case LCCKMessageTypeVideo:
-        case LCCKMessageTypeImage: {
-            avimTypedMessage = [AVIMImageMessage messageWithText:nil attachedFilePath:message.photoPath attributes:nil];
-            break;
-        }
-        case LCCKMessageTypeVoice: {
-            avimTypedMessage = [AVIMAudioMessage messageWithText:nil attachedFilePath:message.voicePath attributes:nil];
-            break;
-        }
-            
-        case LCCKMessageTypeEmotion:
-            avimTypedMessage = [AVIMEmotionMessage messageWithEmotionPath:message.emotionName];
-            break;
-            
-        case LCCKMessageTypeLocation: {
-            avimTypedMessage = [AVIMLocationMessage messageWithText:message.geolocations
-                                                           latitude:message.location.coordinate.latitude
-                                                          longitude:message.location.coordinate.longitude
-                                                         attributes:nil];
-            break;
-        case LCCKMessageTypeSystem:
-        case LCCKMessageTypeUnknow:
-            //TODO:
-            break;
-        }
-    }
-    avimTypedMessage.sendTimestamp = [[NSDate date] timeIntervalSince1970] * 1000;
-    return avimTypedMessage;
 }
 
 - (void)loadMessagesWhenInitHandler:(LCCKBooleanResultBlock)handler {
@@ -479,7 +263,7 @@
         if (succeed) {
             // 失败消息加到末尾，因为 SDK 缓存不保存它们
             //TODO: why only when the net is ok, can the failed messages load fast
-            NSMutableArray *lcckSucceedMessags = [LCCKConversationViewModel getLCCKMessages:avimTypedMessages];
+            NSMutableArray *lcckSucceedMessags = [NSMutableArray lcck_messagesWithAVIMMessages:avimTypedMessages];
             [self addMessages:lcckSucceedMessags];
             NSMutableArray *allMessages = [NSMutableArray arrayWithArray:avimTypedMessages];
             //TODO:
@@ -493,7 +277,7 @@
             });
             
             if (self.avimTypedMessage.count > 0) {
-                [self updateConversationAsRead];
+                [[LCCKConversationService sharedInstance] updateConversationAsRead];
             }
             
             // 如果连接上，则重发所有的失败消息。若夹杂在历史消息中间不好处理
@@ -537,11 +321,11 @@
 }
 
 - (void)loadOldMessages {
-    AVIMTypedMessage *msg = [self.avimTypedMessage objectAtIndex:0];
+    AVIMTypedMessage *msg = [self.avimTypedMessage lcck_messageAtIndex:0];
     int64_t timestamp = msg.sendTimestamp;
     [self queryAndCacheMessagesWithTimestamp:timestamp block:^(NSArray *avimTypedMessages, NSError *error) {
         if ([self.parentViewController filterAVIMError:error]) {
-            NSMutableArray *lcckMessages = [[[self class] getLCCKMessages:avimTypedMessages] mutableCopy];
+            NSMutableArray *lcckMessages = [[NSMutableArray lcck_messagesWithAVIMMessages:avimTypedMessages] mutableCopy];
             NSMutableArray *newMessages = [NSMutableArray arrayWithArray:avimTypedMessages];
             [newMessages addObjectsFromArray:self.avimTypedMessage];
             self.avimTypedMessage = newMessages;
@@ -573,20 +357,6 @@
     [self.parentViewController.tableView setContentOffset:newContentOffset animated:NO] ;
     [UIView setAnimationsEnabled:YES];
     completion();
-}
-
-#pragma mark - conversations store
-
-- (void)updateConversationAsRead {
-    AVIMConversation *conversation = [LCCKConversationService sharedInstance].currentConversation;
-    if (!conversation) {
-        NSAssert(conversation, @"currentConversation is nil");
-        return;
-    }
-    [[LCCKConversationService sharedInstance] insertRecentConversation:conversation];
-    [[LCCKConversationService sharedInstance] updateUnreadCountToZeroWithConversation:conversation];
-    [[LCCKConversationService sharedInstance] updateMentioned:NO conversation:conversation];
-    [[NSNotificationCenter defaultCenter] postNotificationName:LCCKNotificationUnreadsUpdated object:nil];
 }
 
 - (void)getAllVisibleImagesForSelectedMessage:(LCCKMessage *)message

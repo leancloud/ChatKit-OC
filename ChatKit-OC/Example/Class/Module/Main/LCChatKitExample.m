@@ -117,7 +117,7 @@ static NSMutableDictionary *_sharedInstances = nil;
  */
 - (void)exampleInit {
 #ifndef __OPTIMIZE__
-    [LCChatKit setAllLogsEnabled:YES];
+//    [LCChatKit setAllLogsEnabled:YES];
 #endif
     [LCChatKit setAppId:LCCKAPPID appKey:LCCKAPPKEY];
     [[LCChatKit sharedInstance] setFetchProfilesBlock:^(NSArray<NSString *> *userIds, LCCKFetchProfilesCallBack callback) {
