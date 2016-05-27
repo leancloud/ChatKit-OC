@@ -17,7 +17,6 @@
 
 @implementation LCCKFaceManager
 
-
 - (instancetype)init{
     if (self = [super init]) {
         _emojiFaceArrays = [NSMutableArray array];
@@ -56,7 +55,9 @@
 }
 
 + (NSString *)defaultEmojiFacePath {
-    return [[NSBundle mainBundle] pathForResource:@"Emoji.bundle/face" ofType:@"plist"];
+    NSBundle *bundle = [NSBundle lcck_bundleForbundleName:@"Emoji" class:[self class]];
+    NSString *defaultEmojiFacePath = [bundle pathForResource:@"face" ofType:@"plist"];
+    return defaultEmojiFacePath;
 }
 
 + (NSString *)faceImageNameWithFaceID:(NSUInteger)faceID {
@@ -69,12 +70,13 @@
             faceImageName = faceDict[kFaceImageNameKey];
         }
     }
-    return [self imageBundleNameForImage:faceImageName];
+    return faceImageName;
 }
 
-+ (NSString *)imageBundleNameForImage:(NSString *)imageName {
-    NSString *imageNameWithBundlePath = [NSString stringWithFormat:@"Emoji.bundle/%@", imageName];
-    return imageNameWithBundlePath;
++ (UIImage *)faceImageWithFaceID:(NSUInteger)faceID {
+    NSString *faceImageName = [self faceImageNameWithFaceID:faceID];
+    UIImage *faceImage = [UIImage lcck_imageNamed:faceImageName bundleName:@"Emoji" bundleForClass:[self class]];
+    return faceImage;
 }
 
 + (NSString *)faceNameWithFaceID:(NSUInteger)faceID{
@@ -89,7 +91,6 @@
     return @"";
 }
 
-
 + (NSMutableAttributedString *)emotionStrWithString:(NSString *)text {
     if (!text.length) {
         return [[NSMutableAttributedString alloc] initWithString:@"【此版本暂不支持该格式，请升级至最新版查看】"];
@@ -100,24 +101,31 @@
     NSString *regex_emoji = @"\\[[a-zA-Z0-9\\/\\u4e00-\\u9fa5]+\\]"; //匹配表情
     
     NSError *error = nil;
-    NSRegularExpression *re = [NSRegularExpression regularExpressionWithPattern:regex_emoji options:NSRegularExpressionCaseInsensitive error:&error];
-    if (!re) {
+    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:regex_emoji options:NSRegularExpressionCaseInsensitive error:&error];
+    if (!regex) {
         NSLog(@"%@", [error localizedDescription]);
         return attributeString;
     }
+    NSArray *matches = [regex matchesInString:text
+                                      options:0
+                                        range:NSMakeRange(0, text.length)];
+    NSUInteger emojiNumbers = matches.count;
+    //无表情
+    if (emojiNumbers == 0) {
+        return attributeString;
+    }
     
-    NSArray *resultArray = [re matchesInString:text options:0 range:NSMakeRange(0, text.length)];
     //3、获取所有的表情以及位置
     //用来存放字典，字典中存储的是图片和图片对应的位置
-    NSMutableArray *imageArray = [NSMutableArray arrayWithCapacity:resultArray.count];
+    NSMutableArray *imageArray = [NSMutableArray arrayWithCapacity:matches.count];
     //根据匹配范围来用图片进行相应的替换
-    for(NSTextCheckingResult *match in resultArray) {
+    for(NSTextCheckingResult *match in matches) {
         //获取数组元素中得到range
         NSRange range = [match range];
         //获取原字符串中对应的值
         NSString *subStr = [text substringWithRange:range];
-        
-        for (NSDictionary *dict in [[LCCKFaceManager shareInstance] emojiFaceArrays]) {
+        NSMutableArray *emojiFaceArrays = [[LCCKFaceManager shareInstance] emojiFaceArrays];
+        for (NSDictionary *dict in emojiFaceArrays) {
             if ([dict[kFaceNameKey]  isEqualToString:subStr]) {
                 //face[i][@"png"]就是我们要加载的图片
                 //新建文字附件来存放我们的图片,iOS7才新加的对象
@@ -149,8 +157,6 @@
     return attributeString;
 }
 
-
-
 #pragma mark - 最近使用表情相关方法
 /**
  *  获取最近使用的表情图片
@@ -160,7 +166,6 @@
 + (NSArray *)recentFaces{
     return [[LCCKFaceManager shareInstance] recentFaceArrays];
 }
-
 
 + (BOOL)saveRecentFace:(NSDictionary *)recentDict{
     for (NSDictionary *dict in [[LCCKFaceManager shareInstance] recentFaceArrays]) {

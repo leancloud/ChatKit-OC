@@ -24,8 +24,6 @@
 
 + (instancetype)shareInstance;
 
-
-
 #pragma mark - emoji表情相关
 
 /**
@@ -35,8 +33,7 @@
  */
 + (NSArray *)emojiFaces;
 
-+ (NSString *)faceImageNameWithFaceID:(NSUInteger)faceID;
-
++ (UIImage *)faceImageWithFaceID:(NSUInteger)faceID;
 + (NSString *)faceNameWithFaceID:(NSUInteger)faceID;
 /**
  *  将文字中带表情的字符处理换成图片显示
@@ -47,7 +44,6 @@
  */
 + (NSMutableAttributedString *)emotionStrWithString:(NSString *)text;
 
-
 #pragma mark - 最近表情相关处理
 
 /**
@@ -56,7 +52,6 @@
  *  @return
  */
 + (NSArray *)recentFaces;
-
 
 /**
  *  存储一个最近使用的face
@@ -67,6 +62,5 @@
  *  @return 是否存储成功
  */
 + (BOOL)saveRecentFace:(NSDictionary *)dict;
-
 
 @end

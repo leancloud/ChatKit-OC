@@ -100,9 +100,9 @@
             imageView.hidden = index >= self.datas.count;
             if (!imageView.hidden) {
                 NSDictionary *faceDict = self.datas[index];
-                NSString *faceImageName = [LCCKFaceManager faceImageNameWithFaceID:[faceDict[kFaceIDKey] integerValue]];
+                UIImage *faceImage = [LCCKFaceManager faceImageWithFaceID:[faceDict[kFaceIDKey] integerValue]];
                 imageView.tag = [faceDict[kFaceIDKey] integerValue];
-                imageView.image = [UIImage imageNamed:faceImageName];
+                imageView.image = faceImage;
             }
         }
     } else {
@@ -139,8 +139,8 @@
  */
 - (UIImageView *)faceImageViewWithID:(NSString *)faceID{
     
-    NSString *faceImageName = [LCCKFaceManager faceImageNameWithFaceID:[faceID integerValue]];
-    UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:faceImageName]];
+    UIImage *faceImage = [LCCKFaceManager faceImageWithFaceID:[faceID integerValue]];
+    UIImageView *imageView = [[UIImageView alloc] initWithImage:faceImage];
     imageView.userInteractionEnabled = YES;
     imageView.tag = [faceID integerValue];
     imageView.contentMode = UIViewContentModeCenter;
