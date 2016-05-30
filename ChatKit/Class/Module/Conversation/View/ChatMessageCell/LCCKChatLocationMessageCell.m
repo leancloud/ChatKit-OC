@@ -14,6 +14,7 @@
 
 @property (nonatomic, strong) UIImageView *locationImageView;
 @property (nonatomic, strong) UILabel *locationAddressLabel;
+@property (nonatomic, strong) UIView *locationAddressOverlay;
 
 @end
 
@@ -21,79 +22,77 @@
 
 #pragma mark - Override Methods
 
+- (void)configureCellWithData:(LCCKMessage *)message {
+    [super configureCellWithData:message];
+    self.locationAddressLabel.text = message.geolocations;
+}
+
 - (void)updateConstraints {
     [super updateConstraints];
-    
     [self.locationImageView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(self.messageContentView.mas_left).with.offset(16);
-        make.top.equalTo(self.messageContentView.mas_top).with.offset(8);
-        make.bottom.equalTo(self.messageContentView.mas_bottom).with.offset(-8);
-        make.width.equalTo(@60);
-        make.height.equalTo(@60);
+        make.edges.equalTo(self.messageContentView);
+        make.height.equalTo(@(128));
+        make.width.equalTo(@(227));
+    }];
+    CGFloat offset = 8.f;
+    [self.locationAddressOverlay mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.bottom.equalTo(self.messageContentView.mas_bottom);
+        make.left.equalTo(self.messageContentView.mas_left);
+        make.right.equalTo(self.messageContentView.mas_right);
+        make.height.equalTo(self.locationAddressLabel.mas_height).offset(2*offset);
     }];
     
     [self.locationAddressLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(self.locationImageView.mas_right).with.offset(8);
-        make.top.equalTo(self.locationImageView.mas_top);
-        make.right.equalTo(self.messageContentView.mas_right).with.offset(-16);
-        //        make.bottom.equalTo(self.messageContentView.mas_bottom).with.offset(-8);
+        make.edges.equalTo(self.locationAddressOverlay).with.insets(UIEdgeInsetsMake(offset, offset, -offset, offset));
     }];
-    
+
 }
 
 #pragma mark - Public Methods
 
 - (void)setup {
     [self.messageContentView addSubview:self.locationImageView];
-    [self.messageContentView addSubview:self.locationAddressLabel];
-    UITapGestureRecognizer *recognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(singleTapMessageImageViewGestureRecognizerHandler:)];
-    [self.messageContentView addGestureRecognizer:recognizer];
+    [self.messageContentView addSubview:self.locationAddressOverlay];   
     [super setup];
-    
 }
 
-- (void)singleTapMessageImageViewGestureRecognizerHandler:(UITapGestureRecognizer *)tapGestureRecognizer {
+- (void)singleTaplocationImageViewGestureRecognizerHandler:(UITapGestureRecognizer *)tapGestureRecognizer {
     if (tapGestureRecognizer.state == UIGestureRecognizerStateEnded) {
         if ([self.delegate respondsToSelector:@selector(messageCellTappedMessage:)]) {
             [self.delegate messageCellTappedMessage:self];
+            [[[UIApplication sharedApplication] keyWindow] endEditing:YES];
         }
     }
-}
-
-
-- (void)configureCellWithData:(LCCKMessage *)message {
-    [super configureCellWithData:message];
-    _locationAddressLabel.text = message.geolocations;
 }
 
 #pragma mark - Getters
 
-- (UILabel *)locationAddressLabel {
-    if (!_locationAddressLabel) {
-        _locationAddressLabel = [[UILabel alloc] init];
-        _locationAddressLabel.textColor = [UIColor blackColor];
-        _locationAddressLabel.font = [UIFont systemFontOfSize:16.0f];
-        _locationAddressLabel.numberOfLines = 3;
-        _locationAddressLabel.textAlignment = NSTextAlignmentNatural;
-        _locationAddressLabel.lineBreakMode = NSLineBreakByTruncatingTail;
-    }
-    return _locationAddressLabel;
-}
-
 - (UIImageView *)locationImageView {
     if (!_locationImageView) {
-        NSString *imageName;
-        if (self.messageOwner == LCCKMessageOwnerSelf) {
-            imageName = @"message_sender_location";
-        } else {
-            imageName = @"message_receiver_location";
-        }
-        _locationImageView = [[UIImageView alloc] initWithImage:({
-            UIImage *image = [UIImage lcck_imageNamed:imageName bundleName:@"MessageBubble" bundleForClass:[self class]];
-            image;})
-                              ];
+        _locationImageView = [[UIImageView alloc] init];
+        _locationImageView.contentMode = UIViewContentModeScaleAspectFill;
+        _locationImageView.image = ({
+            UIImage *image = [UIImage lcck_imageNamed:@"MessageBubble_Location" bundleName:@"MessageBubble" bundleForClass:[self class]];
+            image;
+        });
     }
     return _locationImageView;
+}
+
+- (UIView *)locationAddressOverlay {
+    if (!_locationAddressOverlay) {
+        _locationAddressOverlay = [[UIView alloc] init];
+        _locationAddressOverlay.backgroundColor = [UIColor colorWithRed:.0f green:.0f blue:.0f alpha:.6f];
+        UILabel *progressLabel = [[UILabel alloc] init];
+        progressLabel.numberOfLines = 0;
+        progressLabel.lineBreakMode = NSLineBreakByWordWrapping;
+        progressLabel.font = [UIFont systemFontOfSize:14.0f];
+        progressLabel.textColor = [UIColor whiteColor];
+        progressLabel.textAlignment = NSTextAlignmentCenter;
+        [progressLabel sizeToFit];
+        [_locationAddressOverlay addSubview:self.locationAddressLabel = progressLabel];
+    }
+    return _locationAddressOverlay;
 }
 
 @end
