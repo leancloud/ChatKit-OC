@@ -293,7 +293,6 @@
 
 - (void)queryAndCacheMessagesWithTimestamp:(int64_t)timestamp block:(AVIMArrayResultBlock)block {
     if (self.parentViewController.loadingMoreMessage) {
-        //TODO:if (self.parentViewController.dataSource == 0)
         return;
     }
     if (self.dataArray.count == 0) {
@@ -308,6 +307,7 @@
                                                                                if (avimTypedMessages.count == 0) {
                                                                                    self.parentViewController.loadingMoreMessage = NO;
                                                                                    self.parentViewController.shouldLoadMoreMessagesScrollToTop = NO;
+                                                                                   !block ?: block(avimTypedMessages, error);
                                                                                    return;
                                                                                }
                                                                                
@@ -391,7 +391,6 @@
             } else {
                 [allVisibleThumbs_ addObject:placeholderImage];
             }
-            
             if ((message == message_) && (*selectedMessageIndex == nil)){
                 *selectedMessageIndex = @(idx);
             }

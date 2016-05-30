@@ -21,4 +21,6 @@
                                                limitSize:(CGSize)limitSize;
 
 + (UIImage *)lcck_imageNamed:(NSString *)imageName bundleName:(NSString *)bundleName bundleForClass:(Class)aClass;
++ (UIImage *)lcck_imageNamed:(NSString *)name;
+
 @end

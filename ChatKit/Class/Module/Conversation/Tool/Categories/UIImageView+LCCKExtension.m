@@ -19,7 +19,10 @@ const char kProcessedImage;
 const char kBorderWidth;
 const char kBorderColor;
 
+static void * const LCCKUIImageViewExtensionContext = (void*)&LCCKUIImageViewExtensionContext;
+
 @implementation UIImageView (LCCKExtension)
+
 /**
  * @brief init the Rounding UIImageView, no off-screen-rendered
  */
@@ -46,11 +49,12 @@ const char kBorderColor;
  * @brief attach border for UIImageView with width & color
  */
 - (void)lcck_attachBorderWidth:(CGFloat)width color:(UIColor *)color {
-    self.borderWidth = width;
-    self.borderColor = color;
+    self.lcck_borderWidth = width;
+    self.lcck_borderColor = color;
 }
 
 #pragma mark - Kernel
+
 /**
  * @brief clip the cornerRadius with image, UIImageView must be setFrame before, no off-screen-rendered
  */
@@ -66,7 +70,7 @@ const char kBorderColor;
     UIBezierPath *cornerPath = [UIBezierPath bezierPathWithRoundedRect:self.bounds byRoundingCorners:rectCornerType cornerRadii:cornerRadii];
     [cornerPath addClip];
     [image drawInRect:self.bounds];
-    [self drawBorder:cornerPath];
+    [self lcck_drawBorder:cornerPath];
     UIImage *processedImage = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
     objc_setAssociatedObject(processedImage, &kProcessedImage, @(1), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
@@ -91,7 +95,7 @@ const char kBorderColor;
     [backgroundRect fill];
     [cornerPath addClip];
     [image drawInRect:self.bounds];
-    [self drawBorder:cornerPath];
+    [self lcck_drawBorder:cornerPath];
     UIImage *processedImage = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
     objc_setAssociatedObject(processedImage, &kProcessedImage, @(1), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
@@ -102,18 +106,18 @@ const char kBorderColor;
  * @brief set cornerRadius for UIImageView, no off-screen-rendered
  */
 - (void)lcck_cornerRadiusAdvance:(CGFloat)cornerRadius rectCornerType:(UIRectCorner)rectCornerType {
-    self.radius = cornerRadius;
-    self.roundingCorners = rectCornerType;
-    self.isRounding = NO;
+    self.lcck_radius = cornerRadius;
+    self.lcck_roundingCorners = rectCornerType;
+    self.lcck_isRounding = NO;
     
-    if (!self.hadAddObserver) {
-        [self addObserver:self forKeyPath:@"image" options:NSKeyValueObservingOptionNew context:nil];
+    if (!self.lcck_hadAddObserver) {
+        [self addObserver:self forKeyPath:@"image" options:NSKeyValueObservingOptionNew context:LCCKUIImageViewExtensionContext];
         [self lcck_executeAtDealloc:^{
-            if (self.hadAddObserver) {
+            if (self.lcck_hadAddObserver) {
                 [self removeObserver:self forKeyPath:@"image"];
             }
         }];
-        self.hadAddObserver = YES;
+        self.lcck_hadAddObserver = YES;
     }
 }
 
@@ -121,112 +125,122 @@ const char kBorderColor;
  * @brief become Rounding UIImageView, no off-screen-rendered
  */
 - (void)lcck_cornerRadiusRoundingRect {
-    self.isRounding = YES;
+    self.lcck_isRounding = YES;
     
-    if (!self.hadAddObserver) {
-        [self addObserver:self forKeyPath:@"image" options:NSKeyValueObservingOptionNew context:nil];
-        self.hadAddObserver = YES;
+    if (!self.lcck_hadAddObserver) {
+        [self addObserver:self forKeyPath:@"image" options:NSKeyValueObservingOptionNew context:LCCKUIImageViewExtensionContext];
+        [self lcck_executeAtDealloc:^{
+            if (self.lcck_hadAddObserver) {
+                [self removeObserver:self forKeyPath:@"image"];
+            }
+        }];
+        self.lcck_hadAddObserver = YES;
     }
 }
 
 #pragma mark - Private
-- (void)drawBorder:(UIBezierPath *)path {
-    if (0 != self.borderWidth && nil != self.borderColor) {
-        [path setLineWidth:2 * self.borderWidth];
-        [self.borderColor setStroke];
+- (void)lcck_drawBorder:(UIBezierPath *)path {
+    if (0 != self.lcck_borderWidth && nil != self.lcck_borderColor) {
+        [path setLineWidth:2 * self.lcck_borderWidth];
+        [self.lcck_borderColor setStroke];
         [path stroke];
     }
 }
 
-- (void)validateFrame {
+- (void)lcck_validateFrame {
     if (self.frame.size.width == 0) {
-        [self.class swizzleMethod:@selector(layoutSubviews) anotherMethod:@selector(lcck_LayoutSubviews)];
+        [self.class lcck_swizzleMethod:@selector(layoutSubviews) anotherMethod:@selector(lcck_layoutSubviews)];
     }
 }
 
-+ (void)swizzleMethod:(SEL)oneSel anotherMethod:(SEL)anotherSel {
++ (void)lcck_swizzleMethod:(SEL)oneSel anotherMethod:(SEL)anotherSel {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         Method oneMethod = class_getInstanceMethod(self, oneSel);
         Method anotherMethod = class_getInstanceMethod(self, anotherSel);
-        
         method_exchangeImplementations(oneMethod, anotherMethod);
     });
 }
 
-- (void)lcck_LayoutSubviews {
+- (void)lcck_layoutSubviews {
     [super layoutSubviews];
-    if (self.isRounding) {
+    if (self.lcck_isRounding) {
         [self lcck_cornerRadiusWithImage:self.image cornerRadius:self.frame.size.width/2 rectCornerType:UIRectCornerAllCorners];
-    } else if (0 != self.radius && 0 != self.roundingCorners && nil != self.image) {
-        [self lcck_cornerRadiusWithImage:self.image cornerRadius:self.radius rectCornerType:self.roundingCorners];
+    } else if (0 != self.lcck_radius && 0 != self.lcck_roundingCorners && nil != self.image) {
+        [self lcck_cornerRadiusWithImage:self.image cornerRadius:self.lcck_radius rectCornerType:self.lcck_roundingCorners];
     }
 }
 
 #pragma mark - KVO for .image
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
-    if ([keyPath isEqualToString:@"image"]) {
+    if(context != LCCKUIImageViewExtensionContext) {
+        [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
+        return;
+    }
+    if ((context == LCCKUIImageViewExtensionContext) && ([keyPath isEqualToString:@"image"])){
         UIImage *newImage = change[NSKeyValueChangeNewKey];
         if ([newImage isMemberOfClass:[NSNull class]]) {
             return;
-        } else if ([objc_getAssociatedObject(newImage, &kProcessedImage) intValue] == 1) {
+        }
+        
+        if ([objc_getAssociatedObject(newImage, &kProcessedImage) intValue] == 1) {
             return;
         }
-        [self validateFrame];
-        if (self.isRounding) {
+        [self lcck_validateFrame];
+        if (self.lcck_isRounding) {
             [self lcck_cornerRadiusWithImage:newImage cornerRadius:self.frame.size.width/2 rectCornerType:UIRectCornerAllCorners];
-        } else if (0 != self.radius && 0 != self.roundingCorners && nil != self.image) {
-            [self lcck_cornerRadiusWithImage:newImage cornerRadius:self.radius rectCornerType:self.roundingCorners];
+        } else if (0 != self.lcck_radius && 0 != self.lcck_roundingCorners && nil != self.image) {
+            [self lcck_cornerRadiusWithImage:newImage cornerRadius:self.lcck_radius rectCornerType:self.lcck_roundingCorners];
         }
     }
 }
 
 #pragma mark property
-- (CGFloat)borderWidth {
+- (CGFloat)lcck_borderWidth {
     return [objc_getAssociatedObject(self, &kBorderWidth) floatValue];
 }
 
-- (void)setBorderWidth:(CGFloat)borderWidth {
+- (void)setLcck_borderWidth:(CGFloat)borderWidth {
     objc_setAssociatedObject(self, &kBorderWidth, @(borderWidth), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
-- (UIColor *)borderColor {
+- (UIColor *)lcck_borderColor {
     return objc_getAssociatedObject(self, &kBorderColor);
 }
 
-- (void)setBorderColor:(UIColor *)borderColor {
+- (void)setLcck_borderColor:(UIColor *)borderColor {
     objc_setAssociatedObject(self, &kBorderColor, borderColor, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
-- (BOOL)hadAddObserver {
+- (BOOL)lcck_hadAddObserver {
     return [objc_getAssociatedObject(self, &kHadAddObserver) boolValue];
 }
 
-- (void)setHadAddObserver:(BOOL)hadAddObserver {
+- (void)setLcck_hadAddObserver:(BOOL)hadAddObserver {
     objc_setAssociatedObject(self, &kHadAddObserver, @(hadAddObserver), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
-- (BOOL)isRounding {
+- (BOOL)lcck_isRounding {
     return [objc_getAssociatedObject(self, &kIsRounding) boolValue];
 }
 
-- (void)setIsRounding:(BOOL)isRounding {
+- (void)setLcck_isRounding:(BOOL)isRounding {
     objc_setAssociatedObject(self, &kIsRounding, @(isRounding), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
-- (UIRectCorner)roundingCorners {
+- (UIRectCorner)lcck_roundingCorners {
     return [objc_getAssociatedObject(self, &kRoundingCorners) unsignedLongValue];
 }
 
-- (void)setRoundingCorners:(UIRectCorner)roundingCorners {
+- (void)setLcck_roundingCorners:(UIRectCorner)roundingCorners {
     objc_setAssociatedObject(self, &kRoundingCorners, @(roundingCorners), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
-- (CGFloat)radius {
+- (CGFloat)lcck_radius {
     return [objc_getAssociatedObject(self, &kRadius) floatValue];
 }
 
-- (void)setRadius:(CGFloat)radius {
+- (void)setLcck_radius:(CGFloat)radius {
     objc_setAssociatedObject(self, &kRadius, @(radius), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 

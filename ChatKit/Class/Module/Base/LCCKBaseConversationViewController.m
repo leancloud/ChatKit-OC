@@ -87,9 +87,20 @@ static void * const LCCKBaseConversationViewControllerRefreshContext = (void*)&L
     }
     NSInteger rows = [self.tableView numberOfRowsInSection:0];
     if (rows > 0) {
-        [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:rows - 1 inSection:0]
-                              atScrollPosition:UITableViewScrollPositionBottom
-                                      animated:animated];
+        dispatch_block_t scrollBottomBlock = ^ {
+            [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:rows - 1 inSection:0]
+                                  atScrollPosition:UITableViewScrollPositionBottom
+                                          animated:animated];
+        };
+        if (animated) {
+            //when use `estimatedRowHeight` and `scrollToRowAtIndexPath` at the same time, there are some issue.
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                scrollBottomBlock();
+            });
+        } else {
+            scrollBottomBlock();
+        }
+        
     }
 }
 

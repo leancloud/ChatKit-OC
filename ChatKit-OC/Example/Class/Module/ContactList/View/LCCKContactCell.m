@@ -38,8 +38,8 @@
 
 - (void)configureWithAvatorURL:(NSURL *)avatorURL title:(NSString *)title subtitle:(NSString *)subtitle {
     NSString *imageName = @"Placeholder_Avator";
-    NSString *imageNameWithBundlePath = [NSString stringWithFormat:@"Placeholder.bundle/%@", imageName];
-    UIImage *avatorImage = [UIImage imageNamed:imageNameWithBundlePath];
+    UIImage *image = [UIImage lcck_imageNamed:imageName bundleName:@"Placeholder" bundleForClass:[LCChatKit class]];
+    UIImage *avatorImage = image;
     [self.avatorImageView sd_setImageWithURL:avatorURL placeholderImage:avatorImage];
     self.titleLabel.text = title;
     self.subtitleLabel.text = subtitle;

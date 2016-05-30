@@ -7,18 +7,17 @@
 //
 
 #import "UIImage+LCCKExtension.h"
+#import "LCCKImageManager.h"
 
 @implementation NSBundle (MyCategory)
 
 + (NSString *)lcck_pathForResource:(NSString *)name
-                            ofType:(NSString *)extension
-{
+                            ofType:(NSString *)extension {
     // First try with the main bundle
     NSBundle * mainBundle = [NSBundle mainBundle];
     NSString * path = [mainBundle pathForResource:name
                                            ofType:extension];
-    if (path)
-    {
+    if (path) {
         return path;
     }
     
@@ -86,10 +85,23 @@
 }
 
 + (UIImage *)lcck_imageNamed:(NSString *)imageName bundleName:(NSString *)bundleName bundleForClass:(Class)aClass {
+    if (imageName.length == 0) return nil;
+    if ([imageName hasSuffix:@"/"]) return nil;
     NSString *bundlePath = [NSBundle lcck_bundlePathForbundleName:bundleName class:aClass];
-    UIImage *image = [UIImage imageNamed:imageName
-                                inBundle:[NSBundle bundleWithPath:bundlePath]
-           compatibleWithTraitCollection:nil];
+    NSBundle *bundle = [NSBundle bundleWithPath:bundlePath];
+    LCCKImageManager *manager = [LCCKImageManager defaultManager];
+    UIImage *image = [manager getImageWithName:imageName
+                                     inBundle:bundle];
+    return image;
+}
+
++ (UIImage *)lcck_imageNamed:(NSString *)imageName {
+    LCCKImageManager *manager = [LCCKImageManager defaultManager];
+    UIImage *image = [manager getImageWithName:imageName];
+    if (!image) {
+        //`-getImageWithName` not work for image in Access Asset Catalog
+        image = [UIImage imageNamed:imageName];
+    }
     return image;
 }
 

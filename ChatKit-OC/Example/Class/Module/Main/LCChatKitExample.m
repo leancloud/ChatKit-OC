@@ -117,7 +117,7 @@ static NSMutableDictionary *_sharedInstances = nil;
  */
 - (void)exampleInit {
 #ifndef __OPTIMIZE__
-//    [LCChatKit setAllLogsEnabled:YES];
+    //    [LCChatKit setAllLogsEnabled:YES];
 #endif
     [LCChatKit setAppId:LCCKAPPID appKey:LCCKAPPKEY];
     [[LCChatKit sharedInstance] setFetchProfilesBlock:^(NSArray<NSString *> *userIds, LCCKFetchProfilesCallBack callback) {
@@ -313,6 +313,39 @@ typedef void (^UITableViewRowActionHandler)(UITableViewRowAction *action, NSInde
 }
 
 + (void)exampleOpenConversationViewControllerWithConversaionId:(NSString *)conversationId fromNavigationController:(UINavigationController *)aNavigationController {
+    
+//    [[LCChatKit sharedInstance] fecthConversationWithConversationId:conversationId callback:^(AVIMConversation *conversation, NSError *error) {
+//        if (!error) {
+//            NSString *currentClientId = [LCCKSessionService sharedInstance].clientId;
+//            BOOL containsCurrentClientId = [conversation.members containsObject:currentClientId];
+//            if (!containsCurrentClientId) {
+//                [conversation joinWithCallback:nil];
+//            }
+//        }
+//        [self refreshConversation:conversation];
+//    }];
+//
+//    
+//    if (conversation.members.count > 2 && (![conversation.members containsObject:[LCChatKit sharedInstance].clientId])) {
+//        [self showMessage:@"正在加入聊天室..."];
+//        [conversation joinWithCallback:^(BOOL succeeded, NSError *error) {
+//            [self hideHUD];
+//            NSString *title;
+//            NSString *subtitle;
+//            LCCKMessageNotificationType type;
+//            if (error) {
+//                title = @"加入聊天室失败";
+//                subtitle = error.localizedDescription;
+//                type = LCCKMessageNotificationTypeError;
+//                [LCCKUtil showNotificationWithTitle:title subtitle:subtitle type:type];
+//                return;
+//            }
+//            title = @"加入聊天室";
+//            type = LCCKMessageNotificationTypeSuccess;
+//            [LCCKUtil showNotificationWithTitle:title subtitle:subtitle type:type];
+//        }];
+//    }
+    
     LCCKConversationViewController *conversationViewController = [[LCCKConversationViewController alloc] initWithConversationId:conversationId];
     [conversationViewController setConversationHandler:^(AVIMConversation *conversation, LCCKConversationViewController *aConversationController) {
         if (!conversation) {
@@ -328,33 +361,11 @@ typedef void (^UITableViewRowActionHandler)(UITableViewRowAction *action, NSInde
         } else {
             [aConversationController configureBarButtonItemStyle:LCCKBarButtonItemStyleSingleProfile action:^{
                 NSString *title = @"打开用户详情";
-                
                 NSArray *members = conversation.members;
                 NSPredicate *predicate = [NSPredicate predicateWithFormat:@"NOT (SELF IN %@)", @[ conversation.clientId ]];
                 NSString *peerId = [members filteredArrayUsingPredicate:predicate][0];
-
                 NSString *subTitle = [NSString stringWithFormat:@"用户id：%@", peerId];
                 [LCCKUtil showNotificationWithTitle:title subtitle:subTitle type:LCCKMessageNotificationTypeMessage];
-            }];
-        }
-        
-        if (conversation.members.count > 2 && (![conversation.members containsObject:[LCChatKit sharedInstance].clientId])) {
-            [self showMessage:@"正在加入聊天室..."];
-            [conversation joinWithCallback:^(BOOL succeeded, NSError *error) {
-                [self hideHUD];
-                NSString *title;
-                NSString *subtitle;
-                LCCKMessageNotificationType type;
-                if (error) {
-                    title = @"加入聊天室失败";
-                    subtitle = error.localizedDescription;
-                    type = LCCKMessageNotificationTypeError;
-                    [aConversationController.navigationController popViewControllerAnimated:YES];
-                } else {
-                    title = @"加入聊天室";
-                    type = LCCKMessageNotificationTypeSuccess;
-                }
-                [LCCKUtil showNotificationWithTitle:title subtitle:subtitle type:type];
             }];
         }
     }];

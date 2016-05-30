@@ -93,21 +93,26 @@
         /* If object is clean, ignore save request. */
         if (_peerId) {
             [[LCCKConversationService sharedInstance] fecthConversationWithPeerId:self.peerId callback:^(AVIMConversation *conversation, NSError *error) {
-                [self refreshConversation:conversation];
+                [self refreshConversation:conversation isJoined:YES];
             }];
             break;
         }
         /* If object is clean, ignore save request. */
         if (_conversationId) {
             [[LCCKConversationService sharedInstance] fecthConversationWithConversationId:self.conversationId callback:^(AVIMConversation *conversation, NSError *error) {
-                if (!error) {
-                    NSString *currentClientId = [LCCKSessionService sharedInstance].clientId;
-                    BOOL containsCurrentClientId = [conversation.members containsObject:currentClientId];
-                    if (!containsCurrentClientId) {
-                        [conversation joinWithCallback:nil];
-                    }
+                if (error) {
+                    [self refreshConversation:conversation isJoined:NO];
+                    return;
                 }
-                [self refreshConversation:conversation];
+                NSString *currentClientId = [LCCKSessionService sharedInstance].clientId;
+                BOOL containsCurrentClientId = [conversation.members containsObject:currentClientId];
+                if (containsCurrentClientId) {
+                    [self refreshConversation:conversation isJoined:YES];
+                    return;
+                }
+                [conversation joinWithCallback:^(BOOL succeeded, NSError *error) {
+                    [self refreshConversation:conversation isJoined:succeeded];
+                }];
             }];
             break;
         }
@@ -202,16 +207,36 @@
     [self.navigationItem setBackBarButtonItem:backBtn];
 }
 
-- (void)refreshConversation:(AVIMConversation *)conversation {
+- (void)refreshConversation:(AVIMConversation *)conversation isJoined:(BOOL)isJoined {
     _conversation = conversation;
     if (conversation.members > 0) {
         self.navigationItem.title = conversation.lcck_title;
     }
     [LCCKConversationService sharedInstance].currentConversation = conversation;;
+    [self handleLoadHistoryMessagesHandlerForIsJoined:isJoined];
+    !_conversationHandler ?: _conversationHandler(conversation, self);
+}
+
+- (void)handleLoadHistoryMessagesHandlerForIsJoined:(BOOL)isJoined {
+    if (!isJoined) {
+        BOOL succeeded = NO;
+        //错误码参考：https://leancloud.cn/docs/realtime_v2.html#服务器端错误码说明
+        NSInteger code = 4312;
+        NSString *errorReasonText = @"拉去对话消息记录被拒绝，当前用户不再对话中";
+        NSDictionary *errorInfo = @{
+                                    @"code":@(code),
+                                    NSLocalizedDescriptionKey : errorReasonText,
+                                    };
+        NSError *error = [NSError errorWithDomain:@"kAVErrorDomain"
+                                             code:code
+                                         userInfo:errorInfo];
+        
+        !_loadHistoryMessagesHandler ?: _loadHistoryMessagesHandler(succeeded, error);
+        return;
+    }
     [self.chatViewModel loadMessagesWhenInitHandler:^(BOOL succeeded, NSError *error) {
         !_loadHistoryMessagesHandler ?: _loadHistoryMessagesHandler(succeeded, error);
     }];
-    !_conversationHandler ?: _conversationHandler(conversation, self);
 }
 
 #pragma mark - LCCKChatBarDelegate
