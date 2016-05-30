@@ -358,37 +358,43 @@ static CGFloat const kAvatarImageViewHeight = 50.f;
         if (!CGRectContainsPoint(self.messageContentView.frame, longPressPoint)) {
             return;
         }
-        [self becomeFirstResponder];
-        LCCKLongPressMessageBlock longPressMessageBlock = [LCChatKit sharedInstance].longPressMessageBlock;
-        NSArray *menuItems = [NSArray array];
-        NSDictionary *userInfo = @{
-                                   LCCKLongPressMessageUserInfoKeyFromController : self,
-                                   LCCKLongPressMessageUserInfoKeyFromView : self.tableView,
-                                   };
-        if (longPressMessageBlock) {
-            menuItems = longPressMessageBlock(self.message, userInfo);
-        } else {
-            LCCKMenuItem *copyItem = [[LCCKMenuItem alloc] initWithTitle:NSLocalizedStringFromTable(@"copy", @"LCChatKitString", @"复制文本消息")
-                                                               block:^{
-                                                                   UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
-                                                                   [pasteboard setString:[self.message text]];
-                                                               }];
-            //TODO:添加“转发”
-            if (self.messageType == LCCKMessageTypeText) {
-                menuItems = @[ copyItem ];
+        [[[UIApplication sharedApplication] keyWindow] endEditing:YES];
+        NSUInteger delaySeconds = .3;
+        dispatch_time_t when = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delaySeconds * NSEC_PER_SEC));
+        dispatch_after(when, dispatch_get_main_queue(), ^{
+            [self becomeFirstResponder];
+            LCCKLongPressMessageBlock longPressMessageBlock = [LCChatKit sharedInstance].longPressMessageBlock;
+            NSArray *menuItems = [NSArray array];
+            NSDictionary *userInfo = @{
+                                       LCCKLongPressMessageUserInfoKeyFromController : self,
+                                       LCCKLongPressMessageUserInfoKeyFromView : self.tableView,
+                                       };
+            if (longPressMessageBlock) {
+                menuItems = longPressMessageBlock(self.message, userInfo);
+            } else {
+                LCCKMenuItem *copyItem = [[LCCKMenuItem alloc] initWithTitle:NSLocalizedStringFromTable(@"copy", @"LCChatKitString", @"复制文本消息")
+                                                                       block:^{
+                                                                           UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
+                                                                           [pasteboard setString:[self.message text]];
+                                                                       }];
+                //TODO:添加“转发”
+                if (self.messageType == LCCKMessageTypeText) {
+                    menuItems = @[ copyItem ];
+                }
             }
-        }
-        UIMenuController *menuController = [UIMenuController sharedMenuController];
-        [menuController setMenuItems:menuItems];
-        [menuController setArrowDirection:UIMenuControllerArrowDown];
-        UITableView *tableView = self.tableView;
-        CGRect targetRect = [self convertRect:self.messageContentView.frame toView:tableView];
-        [menuController setTargetRect:targetRect inView:tableView];
-        [[NSNotificationCenter defaultCenter] addObserver:self
-                                                 selector:@selector(handleMenuWillShowNotification:)
-                                                     name:UIMenuControllerWillShowMenuNotification
-                                                   object:nil];
-        [menuController setMenuVisible:YES animated:YES];
+            UIMenuController *menuController = [UIMenuController sharedMenuController];
+            [menuController setMenuItems:menuItems];
+            [menuController setArrowDirection:UIMenuControllerArrowDown];
+            UITableView *tableView = self.tableView;
+            CGRect targetRect = [self convertRect:self.messageContentView.frame toView:tableView];
+            [menuController setTargetRect:targetRect inView:tableView];
+            [[NSNotificationCenter defaultCenter] addObserver:self
+                                                     selector:@selector(handleMenuWillShowNotification:)
+                                                         name:UIMenuControllerWillShowMenuNotification
+                                                       object:nil];
+            [menuController setMenuVisible:YES animated:YES];
+        });
+        
     }
 }
 

@@ -80,7 +80,7 @@
 }
 
 - (void)dealloc{
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillChangeFrameNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
 }
 
@@ -397,7 +397,6 @@
 }
 
 - (void)buttonAction:(UIButton *)button {
-    //    self.inputText = self.textView.text;
     LCCKFunctionViewShowType showType = button.tag;
     
     //更改对应按钮的状态
@@ -418,8 +417,6 @@
     if (!button.selected) {
         showType = LCCKFunctionViewShowKeyboard;
         [self.textView becomeFirstResponder];
-    } else {
-        //        self.inputText = self.textView.text;
     }
     
     [self showViewWithType:showType];
