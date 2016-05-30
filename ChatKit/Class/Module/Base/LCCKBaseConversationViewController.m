@@ -110,10 +110,6 @@ static void * const LCCKBaseConversationViewControllerRefreshContext = (void*)&L
     if (!_chatBar) {
         LCCKChatBar *chatBar = [[LCCKChatBar alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height - kLCCKChatBarMinHeight - (self.navigationController.navigationBar.isTranslucent ? 0 : 64), self.view.frame.size.width, kLCCKChatBarMinHeight)];
         [chatBar setSuperViewHeight:[UIScreen mainScreen].bounds.size.height - (self.navigationController.navigationBar.isTranslucent ? 0 : 64)];
-#ifdef CYLDebugging
-        chatBar.backgroundColor = [UIColor redColor];
-#else
-#endif
         [self.view addSubview:(_chatBar = chatBar)];
         [self.view bringSubviewToFront:_chatBar];
     }

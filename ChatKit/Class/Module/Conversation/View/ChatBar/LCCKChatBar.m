@@ -35,6 +35,8 @@
 @property (strong, nonatomic, readonly) UIViewController *rootViewController;
 
 @property (assign, nonatomic) CGRect keyboardFrame;
+
+//缓存下输入框文字
 @property (copy, nonatomic) NSString *inputText;
 
 @end
@@ -84,7 +86,7 @@
 
 #pragma mark - UITextViewDelegate
 
-- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text{
+- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text {
     
     if ([text isEqualToString:@"\n"]) {
         [self sendTextMessage:textView.text];
@@ -125,15 +127,30 @@
 }
 
 - (void)textViewDidChange:(UITextView *)textView {
+    [self textViewDidChange:textView fitToTextView:NO];
+}
+
+- (void)textViewDidChange:(UITextView *)textView fitToTextView:(BOOL)fitToTextView {
+    if (self.textView.text.length > 0) {
+        self.inputText = self.textView.text;
+    }
     CGRect textViewFrame = self.textView.frame;
     CGSize textSize = [self.textView sizeThatFits:CGSizeMake(CGRectGetWidth(textViewFrame), 1000.0f)];
-    CGFloat offset = 10;
-    textView.scrollEnabled = (textSize.height + 0.1 > kLCCKChatBarMaxHeight-offset);
+    CGFloat offset = 14;
+    // from iOS 7, the content size will be accurate only if the scrolling is enabled.
+    textView.scrollEnabled = (textSize.height + 0.1 > kLCCKChatBarMaxHeight - offset);
     textViewFrame.size.height = MAX(34, MIN(kLCCKChatBarMaxHeight, textSize.height));
-    CGRect addBarFrame = self.frame;
-    addBarFrame.size.height = textViewFrame.size.height+offset;
-    addBarFrame.origin.y = self.superViewHeight - self.bottomHeight - addBarFrame.size.height;
-    [self setFrame:addBarFrame animated:NO];
+    CGRect frame = ({
+        CGRect frame = self.frame;
+        frame.size.height = textViewFrame.size.height+offset;
+        if (fitToTextView) {
+            frame.origin.y = self.superViewHeight - frame.size.height;
+        } else {
+            frame.origin.y = self.superViewHeight - self.bottomHeight - frame.size.height;
+        }
+        frame;
+    });
+    [self setFrame:frame animated:NO];
     if (textView.scrollEnabled) {
         [textView scrollRangeToVisible:NSMakeRange(textView.text.length - 2, 1)];
     }
@@ -141,7 +158,7 @@
 
 #pragma mark - UIImagePickerControllerDelegate
 
-- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info{
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
     UIImage *image = info[UIImagePickerControllerOriginalImage];
     [self sendImageMessage:image];
     [self.rootViewController dismissViewControllerAnimated:YES completion:nil];
@@ -157,7 +174,7 @@
     [self.rootViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
-- (void)sendLocation:(CLPlacemark *)placemark{
+- (void)sendLocation:(CLPlacemark *)placemark {
     [self cancelLocation];
     if (self.delegate && [self.delegate respondsToSelector:@selector(chatBar:sendLocation:locationText:)]) {
         [self.delegate chatBar:self sendLocation:placemark.location.coordinate locationText:placemark.name];
@@ -220,7 +237,7 @@
         default:
             break;
     }
-
+    
 }
 
 - (NSArray *)titlesOfMoreView:(LCCKChatMoreView *)moreView {
@@ -257,6 +274,9 @@
 #pragma mark - Public Methods
 
 - (void)endInputing {
+    if (self.voiceButton.selected) {
+        return;
+    }
     [self showViewWithType:LCCKFunctionViewShowNothing];
 }
 
@@ -267,7 +287,7 @@
     [self textViewDidChange:self.textView];
 }
 
-- (void)keyboardFrameWillChange:(NSNotification *)notification {
+- (void)keyboardWillShow:(NSNotification *)notification {
     self.keyboardFrame = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
     [self textViewDidChange:self.textView];
 }
@@ -292,10 +312,10 @@
     }];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardFrameWillChange:) name:UIKeyboardWillShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     
     self.backgroundColor = [UIColor colorWithRed:235/255.0f green:236/255.0f blue:238/255.0f alpha:1.0f];
-
+    
     [self updateConstraintsIfNeeded];
     
     //FIX 修复首次初始化页面 页面显示不正确 textView不显示bug
@@ -347,33 +367,37 @@
     
     switch (showType) {
         case LCCKFunctionViewShowNothing: {
+            self.textView.text = self.inputText;
             [self setFrame:CGRectMake(0, self.superViewHeight - kLCCKChatBarMinHeight, self.frame.size.width, kLCCKChatBarMinHeight) animated:NO];
+            [self textViewDidChange:self.textView fitToTextView:YES];
             [self.textView resignFirstResponder];
         }
             break;
         case LCCKFunctionViewShowVoice: {
             self.inputText = self.textView.text;
-            [self setFrame:CGRectMake(0, self.superViewHeight - kLCCKChatBarMinHeight, self.frame.size.width, kLCCKChatBarMinHeight) animated:NO];
+            self.textView.text = nil;
             [self.textView resignFirstResponder];
+            [self setFrame:CGRectMake(0, self.superViewHeight - kLCCKChatBarMinHeight, self.frame.size.width, kLCCKChatBarMinHeight) animated:NO];
+            [self textViewDidChange:self.textView fitToTextView:YES];
         }
             break;
         case LCCKFunctionViewShowMore:
         case LCCKFunctionViewShowFace:
-            self.inputText = self.textView.text;
-            [self setFrame:CGRectMake(0, self.superViewHeight - kFunctionViewHeight - self.textView.frame.size.height - 10, self.frame.size.width, self.textView.frame.size.height + 10) animated:NO];
+            self.textView.text = self.inputText;
+            [self setFrame:CGRectMake(0, self.superViewHeight - kFunctionViewHeight - self.textView.frame.size.height, self.frame.size.width, self.textView.frame.size.height) animated:NO];
             [self.textView resignFirstResponder];
             [self textViewDidChange:self.textView];
             break;
         case LCCKFunctionViewShowKeyboard:
             self.textView.text = self.inputText;
             [self textViewDidChange:self.textView];
-            self.inputText = nil;
+            //            self.inputText = nil;
             break;
     }
 }
 
 - (void)buttonAction:(UIButton *)button {
-    self.inputText = self.textView.text;
+    //    self.inputText = self.textView.text;
     LCCKFunctionViewShowType showType = button.tag;
     
     //更改对应按钮的状态
@@ -395,7 +419,7 @@
         showType = LCCKFunctionViewShowKeyboard;
         [self.textView becomeFirstResponder];
     } else {
-        self.inputText = self.textView.text;
+        //        self.inputText = self.textView.text;
     }
     
     [self showViewWithType:showType];

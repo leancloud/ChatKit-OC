@@ -166,5 +166,4 @@
     return _messageProgressView;
 }
 
-
 @end

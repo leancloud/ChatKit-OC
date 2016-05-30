@@ -170,7 +170,7 @@
 + (BOOL)saveRecentFace:(NSDictionary *)recentDict{
     for (NSDictionary *dict in [[LCCKFaceManager shareInstance] recentFaceArrays]) {
         if ([dict[@"face_id"] integerValue] == [recentDict[@"face_id"] integerValue]) {
-            NSLog(@"已经存在");
+            //NSLog(@"已经存在");
             return NO;
         }
     }
