@@ -61,8 +61,8 @@
     if (!self) {
         return nil;
     }
+    _conversationId = [conversationId copy];
     [self setup];
-    _conversationId = conversationId;
     return self;
 }
 
@@ -71,7 +71,7 @@
     if (!self) {
         return nil;
     }
-    _peerId = peerId;
+    _peerId = [peerId copy];
     [self setup];
     return self;
 }
@@ -83,12 +83,6 @@
  */
 - (AVIMConversation *)conversation {
     if (_conversation) { return _conversation; }
-    //在对象生命周期内，不添加 flag 属性的情况下，防止多次调进这个方法
-    if (objc_getAssociatedObject(self, _cmd)) {
-        return _conversation;
-    } else {
-        objc_setAssociatedObject(self, _cmd, @"isFetchingConversation", OBJC_ASSOCIATION_RETAIN);
-    }
     do {
         /* If object is clean, ignore save request. */
         if (_peerId) {
@@ -128,10 +122,11 @@
     BOOL clientStatusOpened = [LCCKSessionService sharedInstance].client.status == AVIMClientStatusOpened;
     //    NSAssert(clientStatusOpened, @"client not opened");
     if (!clientStatusOpened) {
+        [self refreshConversation:nil isJoined:NO];
         LCCKSessionNotOpenedHandler sessionNotOpenedHandler = [LCCKSessionService sharedInstance].sessionNotOpenedHandler;
         LCCKBooleanResultBlock callback = ^(BOOL succeeded, NSError *error) {
             if (!succeeded) {
-                [self.navigationController popViewControllerAnimated:YES];
+                //[self.navigationController popViewControllerAnimated:YES];
             }
         };
         !sessionNotOpenedHandler ?: sessionNotOpenedHandler(self, callback);
@@ -210,6 +205,7 @@
 - (void)refreshConversation:(AVIMConversation *)conversation isJoined:(BOOL)isJoined {
     _conversation = conversation;
     if (conversation.members > 0) {
+        NSAssert(_conversation.imClient, @"类名与方法名：%@（在第%@行），描述：%@", @(__PRETTY_FUNCTION__), @(__LINE__), @"imClient is nil");
         self.navigationItem.title = conversation.lcck_title;
     }
     [LCCKConversationService sharedInstance].currentConversation = conversation;;
@@ -326,10 +322,9 @@
     if (chatBarY == tableViewHeight) {
         return;
     }
-    [UIView animateWithDuration:.3f animations:^{
+    [UIView animateWithDuration:LCCKAnimateDuration animations:^{
         [self.tableView setFrame:CGRectMake(0, 0, self.view.frame.size.width, frame.origin.y)];
         [self scrollToBottomAnimated:NO];
-        
     } completion:nil];
 }
 
@@ -342,7 +337,7 @@
 }
 
 - (void)messageCellTappedBlank:(LCCKChatMessageCell *)messageCell {
-    [self.chatBar endInputing];
+    [[[UIApplication sharedApplication] keyWindow] endEditing:YES];
 }
 
 - (void)messageCellTappedMessage:(LCCKChatMessageCell *)messageCell {

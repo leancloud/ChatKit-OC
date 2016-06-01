@@ -305,7 +305,7 @@
     }
     self.parentViewController.loadingMoreMessage = YES;
     [[LCCKConversationService sharedInstance] queryTypedMessagesWithConversation:[LCCKConversationService sharedInstance].currentConversation
-                                                                       timestamp:0
+                                                                       timestamp:timestamp
                                                                            limit:kLCCKOnePageSize
                                                                            block:^(NSArray *avimTypedMessages, NSError *error) {
                                                                                self.parentViewController.shouldLoadMoreMessagesScrollToTop = YES;
