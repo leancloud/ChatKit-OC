@@ -284,7 +284,12 @@
         }
     }
     [[LCCKConversationService sharedInstance] fecthConversationWithConversationId:message.conversationId callback:^(AVIMConversation *conversation, NSError *error) {
-        lcckMessage.messageGroupType = conversation.lcck_type;
+        if (conversation) {
+            lcckMessage.messageGroupType = conversation.lcck_type;
+        } else {
+            // 消息默认为群聊
+            lcckMessage.messageGroupType = LCCKConversationTypeGroup;
+        }
     }];
     lcckMessage.avator = nil;
     lcckMessage.avatorURL = [fromUser avatorURL];
