@@ -45,9 +45,7 @@ static NSMutableDictionary *_sharedInstances = nil;
 
 + (void)invokeThisMethodInDidFinishLaunching {
     [AVOSCloud registerForRemoteNotification];
-    //    [AVOSCloud setStorageType:AVStorageTypeQCloud];
     [AVIMClient setTimeoutIntervalInSeconds:20];
-    [[self sharedInstance] exampleInit];
 }
 
 + (void)invokeThisMethodInDidRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
@@ -70,6 +68,7 @@ static NSMutableDictionary *_sharedInstances = nil;
 }
 
 + (void)invokeThisMethodAfterLoginSuccessWithClientId:(NSString *)clientId success:(LCCKVoidBlock)success failed:(LCCKErrorBlock)failed  {
+    [[self sharedInstance] exampleInit];
     [[LCChatKit sharedInstance] openWithClientId:clientId callback:^(BOOL succeeded, NSError *error) {
         if (succeeded) {
             NSString *subtitle = [NSString stringWithFormat:@"User Id 是 : %@", clientId];
