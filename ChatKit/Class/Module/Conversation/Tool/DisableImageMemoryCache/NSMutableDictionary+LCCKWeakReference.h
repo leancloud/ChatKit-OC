@@ -10,10 +10,10 @@
 
 @interface NSMutableDictionary (LCCKWeakReference)
 
-- (void)lcckweak_setObject:(id)anObject forKey:(NSString *)aKey;
+- (void)lcck_weak_setObject:(id)anObject forKey:(NSString *)aKey;
 
-- (void)lcckweak_setObjectWithDictionary:(NSDictionary *)dic;
+- (void)lcck_weak_setObjectWithDictionary:(NSDictionary *)dic;
 
-- (id)lcckweak_getObjectForKey:(NSString *)key;
+- (id)lcck_weak_getObjectForKey:(NSString *)key;
 
 @end

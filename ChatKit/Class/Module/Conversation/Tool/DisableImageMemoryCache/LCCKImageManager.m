@@ -34,7 +34,7 @@
 }
 
 - (UIImage *)getImageWithName:(NSString *)name inBundle:(NSBundle *)bundle {
-    UIImage *image = [self.imageBuff lcckweak_getObjectForKey:name];
+    UIImage *image = [self.imageBuff lcck_weak_getObjectForKey:name];
     if(image) {
         return image;
     }
@@ -58,7 +58,7 @@
     NSData *data = [NSData dataWithContentsOfFile:path];
     if (data.length == 0) return nil;
     UIImage *storeImage = [[UIImage alloc] initWithData:data scale:scale];
-    [self.imageBuff lcckweak_setObject:storeImage forKey:name];
+    [self.imageBuff lcck_weak_setObject:storeImage forKey:name];
     return storeImage;
 }
 

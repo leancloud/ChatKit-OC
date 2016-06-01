@@ -11,6 +11,6 @@
 
 @interface AVIMTypedMessage (LCCKExtention)
 
-+ (AVIMTypedMessage *)llck_messageWithLCCKMessage:(LCCKMessage *)message;
++ (AVIMTypedMessage *)lcck_messageWithLCCKMessage:(LCCKMessage *)message;
 
 @end

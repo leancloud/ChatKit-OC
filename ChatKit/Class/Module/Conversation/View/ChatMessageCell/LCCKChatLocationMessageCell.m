@@ -31,8 +31,8 @@
     [super updateConstraints];
     [self.locationImageView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.edges.equalTo(self.messageContentView);
-        make.height.equalTo(@(128));
-        make.width.equalTo(@(227));
+        make.height.equalTo(@(141));
+        make.width.equalTo(@(250));
     }];
     CGFloat offset = 8.f;
     [self.locationAddressOverlay mas_makeConstraints:^(MASConstraintMaker *make) {

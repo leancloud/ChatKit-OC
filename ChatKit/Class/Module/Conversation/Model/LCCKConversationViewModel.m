@@ -181,7 +181,7 @@
     id<LCCKUserModelDelegate> sender = [[LCCKUserSystemService sharedInstance] fetchCurrentUser];
     message.avatorURL = sender.avatorURL;
     message.bubbleMessageType = LCCKMessageOwnerSelf;
-    AVIMTypedMessage *avimTypedMessage = [AVIMTypedMessage llck_messageWithLCCKMessage:message];
+    AVIMTypedMessage *avimTypedMessage = [AVIMTypedMessage lcck_messageWithLCCKMessage:message];
     [self.avimTypedMessage addObject:avimTypedMessage];
     [self preloadMessageToTableView:message];
     // if `message.messageId` is not nil, it is a failed message being resended.
@@ -256,10 +256,11 @@
 }
 
 - (void)loadMessagesWhenInitHandler:(LCCKBooleanResultBlock)handler {
-    //queryMessagesFromServer
+    //为确保消息的连续性，首次加载聊天记录应适中queryMessagesFromServer，只需禁用message缓存即可达到该效果。
+    AVIMConversation *conversation = [LCCKConversationService sharedInstance].currentConversation;
+    conversation.imClient.messageQueryCacheEnabled = NO;
     [self queryAndCacheMessagesWithTimestamp:([[NSDate distantFuture] timeIntervalSince1970] * 1000) block:^(NSArray *avimTypedMessages, NSError *error) {
         BOOL succeed = [self.parentViewController filterAVIMError:error];
-        !handler ?: handler(succeed, error);
         if (succeed) {
             // 失败消息加到末尾，因为 SDK 缓存不保存它们
             //TODO: why only when the net is ok, can the failed messages load fast
@@ -271,6 +272,7 @@
             //                [self.dataArray addObjectsFromArray:failedMessages];
             self.avimTypedMessage = allMessages;
             dispatch_async(dispatch_get_main_queue(),^{
+                conversation.imClient.messageQueryCacheEnabled = YES;
                 [self.parentViewController.tableView reloadData];
                 [self.parentViewController scrollToBottomAnimated:NO];
                 self.parentViewController.loadingMoreMessage = NO;
@@ -287,7 +289,10 @@
                 //                        [self resendMessageAtIndexPath:[NSIndexPath indexPathForRow:row inSection:0] discardIfFailed:YES];
                 //                    }
             }
+        } else {
+            self.parentViewController.loadingMoreMessage = NO;
         }
+        !handler ?: handler(succeed, error);
     }];
 }
 
@@ -300,7 +305,7 @@
     }
     self.parentViewController.loadingMoreMessage = YES;
     [[LCCKConversationService sharedInstance] queryTypedMessagesWithConversation:[LCCKConversationService sharedInstance].currentConversation
-                                                                       timestamp:timestamp
+                                                                       timestamp:0
                                                                            limit:kLCCKOnePageSize
                                                                            block:^(NSArray *avimTypedMessages, NSError *error) {
                                                                                self.parentViewController.shouldLoadMoreMessagesScrollToTop = YES;

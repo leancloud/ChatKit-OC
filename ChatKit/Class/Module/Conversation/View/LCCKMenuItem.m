@@ -42,7 +42,7 @@ void LCCKReplaceMethod(Class c, SEL origSEL, SEL newSEL, IMP impl) {
     Method newMethod = class_getInstanceMethod(c, newSEL);
     if(class_addMethod(c, origSEL, method_getImplementation(newMethod), method_getTypeEncoding(newMethod))) {
         class_replaceMethod(c, newSEL, method_getImplementation(origMethod), method_getTypeEncoding(origMethod));
-    }else {
+    } else {
         method_exchangeImplementations(origMethod, newMethod);
     }
 }
@@ -101,7 +101,7 @@ BOOL LCCKPIsMenuItemSelector(SEL selector) {
                 IMP methodSignatureIMP = imp_implementationWithBlock(LCCKBlockImplCast(^(id _self, SEL selector) {
                     if (LCCKPIsMenuItemSelector(selector)) {
                         return [NSMethodSignature signatureWithObjCTypes:"v@:@"]; // fake it.
-                    }else {
+                    } else {
                         return ((NSMethodSignature * (*)(id, SEL, SEL))objc_msgSend)(_self, methodSignatureSEL, selector);
                     }
                 }));
@@ -116,7 +116,7 @@ BOOL LCCKPIsMenuItemSelector(SEL selector) {
                                 [menuItem performBlock]; break; // find corresponding MenuItem and forward
                             }
                         }
-                    }else {
+                    } else {
                         ((void (*)(id, SEL, NSInvocation *))objc_msgSend)(_self, forwardInvocationSEL, invocation);
                     }
                 }));

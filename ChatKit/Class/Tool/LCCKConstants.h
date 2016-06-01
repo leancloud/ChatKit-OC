@@ -34,6 +34,7 @@ typedef void (^LCCKProgressBlock)(NSInteger percentDone);
 #   define LCCKLog(...)
 #endif
 
+static CGFloat const LCCKAnimateDuration = .3f;
 /**
  *  未读数改变了。通知去服务器同步 installation 的badge
  */
@@ -187,7 +188,6 @@ typedef NS_ENUM(NSInteger, LCCKMessageNotificationType) {
     /// 成功
     LCCKMessageNotificationTypeSuccess
 };
-
 
 ///-------------------------------------------------------------------------
 ///---------------------Succeed Message Store-------------------------------

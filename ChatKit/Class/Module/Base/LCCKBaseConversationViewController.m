@@ -12,6 +12,7 @@
 #import "LCCKChatBar.h"
 #import "MJRefresh.h"
 #import "LCCKConversationRefreshHeader.h"
+
 static void * const LCCKBaseConversationViewControllerRefreshContext = (void*)&LCCKBaseConversationViewControllerRefreshContext;
 
 @interface LCCKBaseConversationViewController ()

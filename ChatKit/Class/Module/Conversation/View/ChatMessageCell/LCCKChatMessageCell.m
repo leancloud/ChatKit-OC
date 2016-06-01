@@ -359,7 +359,7 @@ static CGFloat const kAvatarImageViewHeight = 50.f;
             return;
         }
         [[[UIApplication sharedApplication] keyWindow] endEditing:YES];
-        NSUInteger delaySeconds = .3;
+        NSUInteger delaySeconds = LCCKAnimateDuration;
         dispatch_time_t when = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delaySeconds * NSEC_PER_SEC));
         dispatch_after(when, dispatch_get_main_queue(), ^{
             [self becomeFirstResponder];

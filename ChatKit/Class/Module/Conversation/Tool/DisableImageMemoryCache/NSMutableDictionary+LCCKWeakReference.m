@@ -11,17 +11,17 @@
 
 @implementation NSMutableDictionary (LCCKWeakReference)
 
-- (void)lcckweak_setObject:(id)anObject forKey:(NSString *)aKey {
+- (void)lcck_weak_setObject:(id)anObject forKey:(NSString *)aKey {
     [self setObject:makeLCCKWeakReference(anObject) forKey:aKey];
 }
 
-- (void)lcckweak_setObjectWithDictionary:(NSDictionary *)dictionary {
+- (void)lcck_weak_setObjectWithDictionary:(NSDictionary *)dictionary {
     for (NSString *key in dictionary.allKeys) {
         [self setObject:makeLCCKWeakReference(dictionary[key]) forKey:key];
     }
 }
 
-- (id)lcckweak_getObjectForKey:(NSString *)key {
+- (id)lcck_weak_getObjectForKey:(NSString *)key {
     return weakReferenceNonretainedObjectValue(self[key]);
 }
 

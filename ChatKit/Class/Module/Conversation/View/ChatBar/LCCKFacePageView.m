@@ -9,6 +9,7 @@
 #import "LCCKFacePageView.h"
 #import "LCCKFaceManager.h"
 #import "UIImage+LCCKExtension.h"
+#import "LCCKConstants.h"
 
 /**
  *  预览表情显示的View
@@ -56,7 +57,7 @@
     [self.faceImageView setImage:image];
     [self.faceImageView sizeToFit];
     self.faceImageView.center = self.backgroundImageView.center;
-    [UIView animateWithDuration:.3 animations:^{
+    [UIView animateWithDuration:LCCKAnimateDuration animations:^{
         self.faceImageView.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1.3, 1.3);
     } completion:^(BOOL finished) {
         [UIView animateWithDuration:.2 animations:^{

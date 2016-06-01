@@ -159,14 +159,18 @@ NSString *const LCCKConversationServiceErrorDomain = @"LCCKConversationServiceEr
 
 - (void)updateConversationAsRead {
     AVIMConversation *conversation = [LCCKConversationService sharedInstance].currentConversation;
-    if (!conversation) {
-        NSAssert(conversation, @"currentConversation is nil");
+    if (!conversation.creator) {
+        NSAssert(conversation.imClient, @"类名与方法名：%@（在第%@行），描述：%@", @(__PRETTY_FUNCTION__), @(__LINE__), @"imClient is nil");
         return;
     }
     [[LCCKConversationService sharedInstance] insertRecentConversation:conversation];
     [[LCCKConversationService sharedInstance] updateUnreadCountToZeroWithConversation:conversation];
     [[LCCKConversationService sharedInstance] updateMentioned:NO conversation:conversation];
     [[NSNotificationCenter defaultCenter] postNotificationName:LCCKNotificationUnreadsUpdated object:nil];
+}
+
+- (void)setCurrentConversation:(AVIMConversation *)currentConversation {
+    _currentConversation = currentConversation;
 }
 
 #pragma mark - conversations local data
@@ -196,7 +200,7 @@ NSString *const LCCKConversationServiceErrorDomain = @"LCCKConversationServiceEr
 }
 
 - (void)insertRecentConversation:(AVIMConversation *)conversation {
-    if (conversation.creator == nil) {
+    if (!conversation.creator) {
         return;
     }
     [self.databaseQueue inDatabase:^(FMDatabase *db) {
@@ -410,8 +414,13 @@ NSString *const LCCKConversationServiceErrorDomain = @"LCCKConversationServiceEr
 
 #pragma mark - query msgs
 
-- (void)queryTypedMessagesWithConversation:(AVIMConversation *)conversation timestamp:(int64_t)timestamp limit:(NSInteger)limit block:(AVIMArrayResultBlock)block {
+- (void)queryTypedMessagesWithConversation:(AVIMConversation *)conversation
+                                 timestamp:(int64_t)timestamp
+                                     limit:(NSInteger)limit
+                                     block:(AVIMArrayResultBlock)block {
     AVIMArrayResultBlock callback = ^(NSArray *messages, NSError *error) {
+        NSString *errorReason = [NSString stringWithFormat:@"类名与方法名：%@（在第%@行），描述：%@", @(__PRETTY_FUNCTION__), @(__LINE__), @"SDK处理异常，请联系SDK维护者修复luohanchenyilong@163.com"];
+        NSAssert(messages, errorReason);
         //以下过滤为了避免非法的消息，引起崩溃
         NSMutableArray *typedMessages = [NSMutableArray array];
         for (AVIMTypedMessage *message in messages) {

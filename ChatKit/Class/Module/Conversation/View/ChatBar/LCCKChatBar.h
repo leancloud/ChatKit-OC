@@ -10,6 +10,7 @@
 
 static CGFloat const kLCCKChatBarMaxHeight = 60.0f;
 static CGFloat const kLCCKChatBarMinHeight = 45.0f;
+static CGFloat const kLCCKChatBarTextViewFrameMAXHeight = 34.f;
 #define kFunctionViewHeight 210.0f
 
 #import <UIKit/UIKit.h>

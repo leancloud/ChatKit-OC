@@ -35,4 +35,5 @@ static const NSUInteger DTBadTypeException = 2;
 +(void)throwInsertOutOfBoundsException:(NSInteger)index array:(NSArray *)array;
 +(void)throwRemoveOutOfBoundsException:(NSInteger)index array:(NSArray *)array;
 +(void)throwBadTypeException:(id)obj expectedClass:(Class)classType;
+
 @end

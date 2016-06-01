@@ -162,4 +162,5 @@
 // 是否显示时间轴Label
 - (BOOL)shouldDisplayTimestampForMessages:(NSArray *)messages;
 + (LCCKMessage *)messageWithAVIMTypedMessage:(AVIMTypedMessage *)message;
+
 @end

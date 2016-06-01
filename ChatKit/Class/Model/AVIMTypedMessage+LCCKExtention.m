@@ -11,7 +11,7 @@
 
 @implementation AVIMTypedMessage (LCCKExtention)
 
-+ (AVIMTypedMessage *)llck_messageWithLCCKMessage:(LCCKMessage *)message {
++ (AVIMTypedMessage *)lcck_messageWithLCCKMessage:(LCCKMessage *)message {
     AVIMTypedMessage *avimTypedMessage;
     switch (message.messageMediaType) {
         case LCCKMessageTypeText: {
