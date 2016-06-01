@@ -18,6 +18,9 @@
 #import "LCCKUIService.h"
 #import "UIImage+LCCKExtension.h"
 
+static CGFloat const kChatBarTopOffset = 8.f;
+static CGFloat const kChatBarTextViewBottomOffset = 4.f;
+
 @interface LCCKChatBar () <UITextViewDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate, Mp3RecorderDelegate,LCCKChatMoreViewDelegate, LCCKChatMoreViewDataSource, LCCKChatFaceViewDelegate, LCCKLocationControllerDelegate>
 
 @property (strong, nonatomic) Mp3Recorder *MP3;
@@ -53,29 +56,30 @@
 
 - (void)updateConstraints{
     [super updateConstraints];
+    
     [self.voiceButton mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self.mas_left).with.offset(10);
-        make.top.equalTo(self.mas_top).with.offset(8);
+        make.top.equalTo(self.mas_top).with.offset(kChatBarTopOffset);
         make.width.equalTo(self.voiceButton.mas_height);
     }];
     
     [self.moreButton mas_makeConstraints:^(MASConstraintMaker *make) {
         make.right.equalTo(self.mas_right).with.offset(-10);
-        make.top.equalTo(self.mas_top).with.offset(8);
+        make.top.equalTo(self.mas_top).with.offset(kChatBarTopOffset);
         make.width.equalTo(self.moreButton.mas_height);
     }];
     
     [self.faceButton mas_makeConstraints:^(MASConstraintMaker *make) {
         make.right.equalTo(self.moreButton.mas_left).with.offset(-10);
-        make.top.equalTo(self.mas_top).with.offset(8);
+        make.top.equalTo(self.mas_top).with.offset(kChatBarTopOffset);
         make.width.equalTo(self.faceButton.mas_height);
     }];
     
     [self.textView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self.voiceButton.mas_right).with.offset(10);
         make.right.equalTo(self.faceButton.mas_left).with.offset(-10);
-        make.top.equalTo(self.mas_top).with.offset(4);
-        make.bottom.equalTo(self.mas_bottom).with.offset(-4);
+        make.top.equalTo(self.mas_top).with.offset(kChatBarTextViewBottomOffset);
+        make.bottom.equalTo(self.mas_bottom).with.offset(-kChatBarTextViewBottomOffset);
     }];
 }
 
@@ -127,23 +131,25 @@
 }
 
 - (void)textViewDidChange:(UITextView *)textView {
-    [self textViewDidChange:textView fitToTextView:NO];
+    [self textViewDidChange:textView shouldFitToTextView:NO shouldCacheText:YES];
 }
 
-- (void)textViewDidChange:(UITextView *)textView fitToTextView:(BOOL)fitToTextView {
-    if (self.textView.text.length > 0) {
+- (void)textViewDidChange:(UITextView *)textView
+      shouldFitToTextView:(BOOL)shouldFitToTextView
+          shouldCacheText:(BOOL)shouldCacheText{
+    if (shouldCacheText) {
         self.inputText = self.textView.text;
     }
     CGRect textViewFrame = self.textView.frame;
     CGSize textSize = [self.textView sizeThatFits:CGSizeMake(CGRectGetWidth(textViewFrame), 1000.0f)];
-    CGFloat offset = 14;
+    CGFloat offset = 10;
     // from iOS 7, the content size will be accurate only if the scrolling is enabled.
     textView.scrollEnabled = (textSize.height + 0.1 > kLCCKChatBarMaxHeight - offset);
-    textViewFrame.size.height = MAX(34, MIN(kLCCKChatBarMaxHeight, textSize.height));
+    textViewFrame.size.height = MAX(kLCCKChatBarTextViewFrameMAXHeight, MIN(kLCCKChatBarMaxHeight, textSize.height));
     CGRect frame = ({
         CGRect frame = self.frame;
         frame.size.height = textViewFrame.size.height+offset;
-        if (fitToTextView) {
+        if (shouldFitToTextView) {
             frame.origin.y = self.superViewHeight - frame.size.height;
         } else {
             frame.origin.y = self.superViewHeight - self.bottomHeight - frame.size.height;
@@ -369,7 +375,7 @@
         case LCCKFunctionViewShowNothing: {
             self.textView.text = self.inputText;
             [self setFrame:CGRectMake(0, self.superViewHeight - kLCCKChatBarMinHeight, self.frame.size.width, kLCCKChatBarMinHeight) animated:NO];
-            [self textViewDidChange:self.textView fitToTextView:YES];
+            [self textViewDidChange:self.textView shouldFitToTextView:YES shouldCacheText:YES];
             [self.textView resignFirstResponder];
         }
             break;
@@ -378,7 +384,7 @@
             self.textView.text = nil;
             [self.textView resignFirstResponder];
             [self setFrame:CGRectMake(0, self.superViewHeight - kLCCKChatBarMinHeight, self.frame.size.width, kLCCKChatBarMinHeight) animated:NO];
-            [self textViewDidChange:self.textView fitToTextView:YES];
+            [self textViewDidChange:self.textView shouldFitToTextView:YES shouldCacheText:NO];
         }
             break;
         case LCCKFunctionViewShowMore:
@@ -391,7 +397,6 @@
         case LCCKFunctionViewShowKeyboard:
             self.textView.text = self.inputText;
             [self textViewDidChange:self.textView];
-            //            self.inputText = nil;
             break;
     }
 }
@@ -425,11 +430,11 @@
 - (void)showFaceView:(BOOL)show {
     if (show) {
         [self.superview addSubview:self.faceView];
-        [UIView animateWithDuration:.3 animations:^{
+        [UIView animateWithDuration:LCCKAnimateDuration animations:^{
             [self.faceView setFrame:CGRectMake(0, self.superViewHeight - kFunctionViewHeight, self.frame.size.width, kFunctionViewHeight)];
         } completion:nil];
     } else {
-        [UIView animateWithDuration:.3 animations:^{
+        [UIView animateWithDuration:LCCKAnimateDuration animations:^{
             [self.faceView setFrame:CGRectMake(0, self.superViewHeight, self.frame.size.width, kFunctionViewHeight)];
         } completion:^(BOOL finished) {
             [self.faceView removeFromSuperview];
@@ -444,11 +449,11 @@
 - (void)showMoreView:(BOOL)show {
     if (show) {
         [self.superview addSubview:self.moreView];
-        [UIView animateWithDuration:.3 animations:^{
+        [UIView animateWithDuration:LCCKAnimateDuration animations:^{
             [self.moreView setFrame:CGRectMake(0, self.superViewHeight - kFunctionViewHeight, self.frame.size.width, kFunctionViewHeight)];
         } completion:nil];
     } else {
-        [UIView animateWithDuration:.3 animations:^{
+        [UIView animateWithDuration:LCCKAnimateDuration animations:^{
             [self.moreView setFrame:CGRectMake(0, self.superViewHeight, self.frame.size.width, kFunctionViewHeight)];
         } completion:^(BOOL finished) {
             [self.moreView removeFromSuperview];
@@ -609,7 +614,7 @@
 
 - (void)setFrame:(CGRect)frame animated:(BOOL)animated{
     if (animated) {
-        [UIView animateWithDuration:.3 animations:^{
+        [UIView animateWithDuration:LCCKAnimateDuration animations:^{
             [self setFrame:frame];
         }];
     } else {
