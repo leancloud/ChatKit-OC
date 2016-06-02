@@ -579,7 +579,7 @@ static CGFloat const kChatBarTextViewBottomOffset = 4.f;
         _moreButton = [UIButton buttonWithType:UIButtonTypeCustom];
         _moreButton.tag = LCCKFunctionViewShowMore;
         [_moreButton setBackgroundImage:[self imageInBundlePathForImageName:@"TypeSelectorBtn_Black"] forState:UIControlStateNormal];
-        [_moreButton setBackgroundImage:[self imageInBundlePathForImageName:@"ToolViewKeyboard"] forState:UIControlStateSelected];
+        [_moreButton setBackgroundImage:[self imageInBundlePathForImageName:@"TypeSelectorBtn_Black"] forState:UIControlStateSelected];
         [_moreButton addTarget:self action:@selector(buttonAction:) forControlEvents:UIControlEventTouchUpInside];
         [_moreButton sizeToFit];
     }

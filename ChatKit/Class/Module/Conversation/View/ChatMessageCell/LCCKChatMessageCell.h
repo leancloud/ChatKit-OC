@@ -9,7 +9,7 @@
 
 #import <UIKit/UIKit.h>
 
-#import "LCCKSendImageView.h"
+#import "LCCKMessageSendStateView.h"
 #import "LCCKContentView.h"
 #import "LCCKChatUntiles.h"
 #import "LCCKMessage.h"
@@ -22,6 +22,7 @@
 - (void)messageCellTappedHead:(LCCKChatMessageCell *)messageCell;
 - (void)messageCellTappedMessage:(LCCKChatMessageCell *)messageCell;
 - (void)textMessageCellDoubleTapped:(LCCKChatMessageCell *)messageCell;
+- (void)resendMessage:(LCCKChatMessageCell *)messageCell;
 
 @end
 
@@ -29,6 +30,7 @@
 
 @property (nonatomic, strong, readonly) LCCKMessage *message;
 
+//FIXME:retain cycle
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) NSIndexPath *indexPath;
 /**
@@ -54,7 +56,7 @@
 /**
  *  显示消息发送状态的UIImageView -> 用于消息发送不成功时显示
  */
-@property (nonatomic, strong) LCCKSendImageView *messageSendStateImageView;
+@property (nonatomic, strong) LCCKMessageSendStateView *messageSendStateView;
 
 /**
  *  messageContentView的背景层

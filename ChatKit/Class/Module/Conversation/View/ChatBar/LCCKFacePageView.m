@@ -31,7 +31,6 @@
 }
 
 - (void)setup{
-    
     UIImageView *backgroundImageView = [[UIImageView alloc] initWithImage:({
         NSString *imageName = @"preview_background";
         UIImage *image = [UIImage lcck_imageNamed:imageName bundleName:@"ChatKeyboard" bundleForClass:[self class]];
@@ -84,7 +83,13 @@
         UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleLongPress:)];
         [self addGestureRecognizer:longPress];
         self.userInteractionEnabled = YES;
-        
+        [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationWillResignActiveNotification
+                                                          object:nil
+                                                           queue:[NSOperationQueue mainQueue]
+                                                      usingBlock:^(NSNotification * _Nonnull note) {
+                                                          [self.facePreviewView removeFromSuperview];
+                                                      }];
+
         [self setup];
     }
     return self;

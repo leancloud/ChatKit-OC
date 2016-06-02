@@ -34,7 +34,7 @@ typedef void (^LCCKProgressBlock)(NSInteger percentDone);
 #   define LCCKLog(...)
 #endif
 
-static CGFloat const LCCKAnimateDuration = .3f;
+static CGFloat const LCCKAnimateDuration = .25f;
 /**
  *  未读数改变了。通知去服务器同步 installation 的badge
  */

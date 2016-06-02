@@ -238,9 +238,6 @@
 #pragma mark - LCCKChatBarDelegate
 
 - (void)chatBar:(LCCKChatBar *)chatBar sendMessage:(NSString *)message {
-    if ([LCCKSessionService sharedInstance].client.status != AVIMClientStatusOpened) {
-        return;
-    }
     if ([message length] > 0 ) {
         LCCKMessage *lcckMessage = [[LCCKMessage alloc] initWithText:message
                                                               sender:self.userId
@@ -251,16 +248,10 @@
 }
 
 - (void)chatBar:(LCCKChatBar *)chatBar sendVoice:(NSString *)voiceFileName seconds:(NSTimeInterval)seconds{
-    if ([LCCKSessionService sharedInstance].client.status != AVIMClientStatusOpened) {
-        return;
-    }
     [self sendVoiceWithPath:voiceFileName seconds:seconds];
 }
 
 - (void)chatBar:(LCCKChatBar *)chatBar sendPictures:(NSArray<UIImage *> *)pictures{
-    if ([LCCKSessionService sharedInstance].client.status != AVIMClientStatusOpened) {
-        return;
-    }
     [self sendImages:pictures];
 }
 
@@ -333,7 +324,6 @@
 - (void)messageCellTappedHead:(LCCKChatMessageCell *)messageCell {
     LCCKOpenProfileBlock openProfileBlock = [LCCKUIService sharedInstance].openProfileBlock;
     !openProfileBlock ?: openProfileBlock(messageCell.message.sender, self);
-    //    NSLog(@"tapHead :%@",indexPath);
 }
 
 - (void)messageCellTappedBlank:(LCCKChatMessageCell *)messageCell {
@@ -390,6 +380,10 @@
     }
     LCCKTextFullScreenViewController *textFullScreenViewController = [[LCCKTextFullScreenViewController alloc] initWithText:messageCell.message.text];
     [self.navigationController pushViewController:textFullScreenViewController animated:NO];
+}
+
+- (void)resendMessage:(LCCKChatMessageCell *)messageCell {
+    [self.chatViewModel resendMessageForMessageCell:messageCell];
 }
 
 #pragma mark - LCCKConversationViewModelDelegate

@@ -7,6 +7,8 @@
 "Delete" = "Delete";
 "copy" = "copy";
 "transpond" = "transpond";
+"resend" = "resend";
+"cancel" = "cancel";
 "favorites" = "favorites";
 "more" = "more";
 "Location" = "Location";

@@ -30,8 +30,10 @@
 
 static CGFloat const kAvatarImageViewWidth = 50.f;
 static CGFloat const kAvatarImageViewHeight = 50.f;
-
-@interface LCCKChatMessageCell ()
+static CGFloat const LCCKMessageSendStateViewWidthHeight = 30.f;
+static CGFloat const LCCKMessageSendStateViewLeftOrRightToMessageContentView = 2.f;
+static CGFloat const LCCKAvatarToMessageContent = 5.f;
+@interface LCCKChatMessageCell ()<LCCKSendImageViewDelegate>
 
 @property (nonatomic, strong, readwrite) LCCKMessage *message;
 
@@ -88,17 +90,17 @@ static CGFloat const kAvatarImageViewHeight = 50.f;
         }];
         
         [self.messageContentView mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.right.equalTo(self.avatarImageView.mas_left).with.offset(-16);
+            make.right.equalTo(self.avatarImageView.mas_left).with.offset(-LCCKAvatarToMessageContent);
             make.top.equalTo(self.nicknameLabel.mas_bottom).with.offset(4);
             make.width.lessThanOrEqualTo(@LCCKMessageCellLimit).priorityHigh();
             make.bottom.equalTo(self.contentView.mas_bottom).with.offset(-16).priorityLow();
         }];
         
-        [self.messageSendStateImageView mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.right.equalTo(self.messageContentView.mas_left).with.offset(-8);
+        [self.messageSendStateView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.right.equalTo(self.messageContentView.mas_left).with.offset(-LCCKMessageSendStateViewLeftOrRightToMessageContentView);
             make.centerY.equalTo(self.messageContentView.mas_centerY);
-            make.width.equalTo(@20);
-            make.height.equalTo(@20);
+            make.width.equalTo(@(LCCKMessageSendStateViewWidthHeight));
+            make.height.equalTo(@(LCCKMessageSendStateViewWidthHeight));
         }];
         
         [self.messageReadStateImageView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -123,17 +125,17 @@ static CGFloat const kAvatarImageViewHeight = 50.f;
         }];
         
         [self.messageContentView mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.left.equalTo(self.avatarImageView.mas_right).with.offset(16);
+            make.left.equalTo(self.avatarImageView.mas_right).with.offset(LCCKAvatarToMessageContent);
             make.top.equalTo(self.nicknameLabel.mas_bottom).with.offset(4);
             make.width.lessThanOrEqualTo(@LCCKMessageCellLimit).priorityHigh();
             make.bottom.equalTo(self.contentView.mas_bottom).with.offset(-16).priorityLow();
         }];
         
-        [self.messageSendStateImageView mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.left.equalTo(self.messageContentView.mas_right).with.offset(8);
+        [self.messageSendStateView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.left.equalTo(self.messageContentView.mas_right).with.offset(LCCKMessageSendStateViewLeftOrRightToMessageContentView);
             make.centerY.equalTo(self.messageContentView.mas_centerY);
-            make.width.equalTo(@20);
-            make.height.equalTo(@20);
+            make.width.equalTo(@(LCCKMessageSendStateViewWidthHeight));
+            make.height.equalTo(@(LCCKMessageSendStateViewWidthHeight));
         }];
         
         [self.messageReadStateImageView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -185,9 +187,9 @@ static CGFloat const kAvatarImageViewHeight = 50.f;
     [self.contentView addSubview:self.nicknameLabel];
     [self.contentView addSubview:self.messageContentView];
     [self.contentView addSubview:self.messageReadStateImageView];
-    [self.contentView addSubview:self.messageSendStateImageView];
+    [self.contentView addSubview:self.messageSendStateView];
     
-    self.messageSendStateImageView.hidden = YES;
+    self.messageSendStateView.hidden = YES;
     self.messageReadStateImageView.hidden = YES;
     
     [self.messageContentBackgroundImageView setImage:[LCCKBubbleImageFactory bubbleImageViewForType:self.messageOwner messageType:self.messageType isHighlighted:NO]];
@@ -244,15 +246,15 @@ static CGFloat const kAvatarImageViewHeight = 50.f;
 - (void)setMessageSendState:(LCCKMessageSendState)messageSendState {
     _messageSendState = messageSendState;
     if (self.messageOwner == LCCKMessageOwnerOther) {
-        self.messageSendStateImageView.hidden = YES;
+        self.messageSendStateView.hidden = YES;
     }
-    self.messageSendStateImageView.messageSendState = messageSendState;
+    self.messageSendStateView.messageSendState = messageSendState;
 }
 
 - (void)setMessageReadState:(LCCKMessageReadState)messageReadState {
     _messageReadState = messageReadState;
     if (self.messageOwner == LCCKMessageOwnerSelf) {
-        self.messageSendStateImageView.hidden = YES;
+        self.messageSendStateView.hidden = YES;
     }
     switch (_messageReadState) {
             case LCCKMessageUnRead:
@@ -305,11 +307,12 @@ static CGFloat const kAvatarImageViewHeight = 50.f;
     return _messageReadStateImageView;
 }
 
-- (LCCKSendImageView *)messageSendStateImageView {
-    if (!_messageSendStateImageView) {
-        _messageSendStateImageView = [[LCCKSendImageView alloc] init];
+- (LCCKMessageSendStateView *)messageSendStateView {
+    if (!_messageSendStateView) {
+        _messageSendStateView = [[LCCKMessageSendStateView alloc] init];
+        _messageSendStateView.delegate = self;
     }
-    return _messageSendStateImageView;
+    return _messageSendStateView;
 }
 
 - (UIImageView *)messageContentBackgroundImageView {
@@ -415,6 +418,15 @@ static CGFloat const kAvatarImageViewHeight = 50.f;
                                              selector:@selector(handleMenuWillHideNotification:)
                                                  name:UIMenuControllerWillHideMenuNotification
                                                object:nil];
+}
+
+#pragma mark -
+#pragma mark - LCCKSendImageViewDelegate Method
+
+- (void)resendMessage:(id)sender {
+    if ([self.delegate respondsToSelector:@selector(resendMessage:)]) {
+        [self.delegate resendMessage:self];
+    }
 }
 
 @end

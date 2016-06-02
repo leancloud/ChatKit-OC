@@ -32,6 +32,7 @@
 #import "UIImage+LCCKExtension.h"
 #import "AVIMTypedMessage+LCCKExtention.h"
 #import "NSMutableArray+LCCKMessageExtention.h"
+#import "LCCKAlertController.h"
 
 @interface LCCKConversationViewModel ()
 
@@ -154,7 +155,6 @@
 
 - (void)sendMessage:(LCCKMessage *)message {
     __weak __typeof(&*self) wself = self;
-    [self.delegate messageSendStateChanged:LCCKMessageSendStateSending withProgress:0.0f forIndex:[self.dataArray indexOfObject:message]];
     [self sendMessage:message
         progressBlock:^(NSInteger percentDone) {
             [self.delegate messageSendStateChanged:LCCKMessageSendStateSending withProgress:percentDone/100.f forIndex:[self.dataArray indexOfObject:message]];
@@ -176,6 +176,7 @@
       progressBlock:(AVProgressBlock)progressBlock
             success:(LCCKSendMessageSuccessBlock)success
              failed:(LCCKSendMessageSuccessFailedBlock)failed {
+    [self.delegate messageSendStateChanged:LCCKMessageSendStateSending withProgress:0.0f forIndex:[self.dataArray indexOfObject:message]];
     message.conversationId = [LCCKConversationService sharedInstance].currentConversation.conversationId;
     message.status = LCCKMessageSendStateSending;
     id<LCCKUserModelDelegate> sender = [[LCCKUserSystemService sharedInstance] fetchCurrentUser];
@@ -208,23 +209,32 @@
                                                  }];
 }
 
-- (void)resendMessageAtIndexPath:(NSIndexPath *)indexPath discardIfFailed:(BOOL)discardIfFailed {
+- (void)resendMessageForMessageCell:(LCCKChatMessageCell *)messageCell {
+    NSString *title = [NSString stringWithFormat:@"%@?", NSLocalizedStringFromTable(@"resend", @"LCChatKitString", @"重新发送？")];
+    LCCKAlertController *alert = [LCCKAlertController alertControllerWithTitle:title
+                                                                   message:@""
+                                                            preferredStyle:LCCKAlertControllerStyleAlert];
+    NSString *cancelActionTitle = NSLocalizedStringFromTable(@"cancel", @"LCChatKitString", @"取消");
+    LCCKAlertAction* cancelAction = [LCCKAlertAction actionWithTitle:cancelActionTitle style:LCCKAlertActionStyleDefault
+                                                          handler:^(LCCKAlertAction * action) {}];
+    [alert addAction:cancelAction];
+    
+    NSString *resendActionTitle = NSLocalizedStringFromTable(@"resend", @"LCChatKitString", @"重新发送");
+    LCCKAlertAction* resendAction = [LCCKAlertAction actionWithTitle:resendActionTitle style:LCCKAlertActionStyleDefault
+                                                          handler:^(LCCKAlertAction * action) {
+                                                              [self resendMessageAtIndexPath:messageCell.indexPath];
+                                                          }];
+    [alert addAction:resendAction];
+    [alert showWithSender:nil controller:self.parentViewController animated:YES completion:NULL];
+}
+
+- (void)resendMessageAtIndexPath:(NSIndexPath *)indexPath {
     LCCKMessage *lcckMessage =  self.dataArray[indexPath.row];
     [self.dataArray lcck_removeMessageAtIndex:indexPath.row];
     [self.avimTypedMessage lcck_removeMessageAtIndex:indexPath.row];
     [self.parentViewController.tableView reloadData];
-    [self sendMessage:lcckMessage
-        progressBlock:^(NSInteger percentDone) {
-            
-        }
-              success:^(NSString *messageUUID) {
-                  [[LCCKConversationService sharedInstance] deleteFailedMessageByRecordId:messageUUID];
-              } failed:^(NSString *messageUUID, NSError *error) {
-                  if (discardIfFailed) {
-                      // 服务器连通的情况下重发依然失败，说明消息有问题，如音频文件不存在，删掉这条消息
-                      [[LCCKConversationService sharedInstance] deleteFailedMessageByRecordId:messageUUID];
-                  }
-              }];
+    [self sendMessage:lcckMessage];
+    [[LCCKConversationService sharedInstance] deleteFailedMessageByRecordId:lcckMessage.messageId];
 }
 
 - (void)preloadMessageToTableView:(LCCKMessage *)message {

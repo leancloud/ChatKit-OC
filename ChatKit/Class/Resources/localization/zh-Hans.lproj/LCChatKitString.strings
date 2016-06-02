@@ -7,6 +7,8 @@
 
 "Delete" = "删除";
 "copy" = "复制";
+"resend" = "重新发送";
+"cancel" = "取消";
 "transpond" = "转发";
 "favorites" = "收藏";
 "more" = "更多";

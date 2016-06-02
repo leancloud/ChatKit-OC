@@ -15,6 +15,7 @@
 
 @class LCCKMessage;
 @class LCCKConversationViewController;
+@class LCCKChatMessageCell;
 
 @protocol LCCKConversationViewModelDelegate <NSObject>
 
@@ -57,5 +58,6 @@ typedef void (^LCCKSendMessageSuccessFailedBlock)(NSString *messageUUID, NSError
                              allVisibleImages:(NSArray **)allVisibleImages
                              allVisibleThumbs:(NSArray **)allVisibleThumbs
                          selectedMessageIndex:(NSNumber **)selectedMessageIndex;
+- (void)resendMessageForMessageCell:(LCCKChatMessageCell *)messageCell;
 
 @end

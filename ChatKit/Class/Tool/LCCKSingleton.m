@@ -39,7 +39,6 @@ static NSMutableDictionary *_sharedInstances = nil;
 + (instancetype)sharedInstance
 {
 	id sharedInstance = nil;
-	
 	@synchronized(self) {
 		NSString *instanceClass = NSStringFromClass(self);
 		
