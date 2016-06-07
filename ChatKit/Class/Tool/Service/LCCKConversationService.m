@@ -137,7 +137,8 @@ NSString *const LCCKConversationServiceErrorDomain = @"LCCKConversationServiceEr
 
 - (NSString *)databasePathWithUserId:(NSString *)userId {
     NSString *libPath = [NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) objectAtIndex:0];
-    return [libPath stringByAppendingPathComponent:[NSString stringWithFormat:@"com.leancloud.lcchatkit.%@.db3", userId]];
+    NSString *appId = [LCChatKit sharedInstance].appId;
+    return [libPath stringByAppendingPathComponent:[NSString stringWithFormat:@"com.leancloud.lcchatkit.%@.%@.db", appId, userId]];
 }
 
 - (void)setupDatabaseWithUserId:(NSString *)userId {
@@ -270,7 +271,6 @@ NSString *const LCCKConversationServiceErrorDomain = @"LCCKConversationServiceEr
  *  @param  conversation 会话，可以是单聊，也可是群聊
  */
 - (void)removeCacheForConversation:(AVIMConversation *)conversation {
- //TODO:
     [self deleteRecentConversation:conversation];
     
 }
@@ -278,11 +278,12 @@ NSString *const LCCKConversationServiceErrorDomain = @"LCCKConversationServiceEr
 /**
  *  删除全部缓存，比如当切换用户时，如果同一个人显示的名称和头像需要变更
  */
-- (void)removeAllCachedRecentConversations {
-    //TODO:
+- (BOOL)removeAllCachedRecentConversations {
+    __block BOOL removeAllCachedRecentConversationsSuccess = NO;
     [self.databaseQueue inDatabase:^(FMDatabase *db) {
-//        [db executeUpdate:LCCKDeleteConversationTable];
+        removeAllCachedRecentConversationsSuccess = [db executeUpdate:LCCKDeleteConversationTable];
     }];
+    return removeAllCachedRecentConversationsSuccess;
 }
 
 ///----------------------------------------------------------------------

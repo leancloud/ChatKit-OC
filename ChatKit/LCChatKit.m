@@ -255,8 +255,8 @@ static NSMutableDictionary *_sharedInstances = nil;
     [self.conversationService updateUnreadCountToZeroWithConversation:conversation];
 }
 
-- (void)removeAllCachedRecentConversations {
-    [self.conversationService removeAllCachedRecentConversations];
+- (BOOL)removeAllCachedRecentConversations {
+    return [self.conversationService removeAllCachedRecentConversations];
 }
 
 ///---------------------------------------------------------------------

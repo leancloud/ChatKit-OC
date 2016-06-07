@@ -313,7 +313,7 @@ typedef void (^LCCKConversationResultBlock)(AVIMConversation *conversation, NSEr
 /**
  *  删除全部缓存，比如当切换用户时，如果同一个人显示的名称和头像需要变更
  */
-- (void)removeAllCachedRecentConversations;
+- (BOOL)removeAllCachedRecentConversations;
 
 @end
 

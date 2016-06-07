@@ -224,7 +224,7 @@ typedef NS_ENUM(NSInteger, LCCKMessageNotificationType) {
     LCCKConversationTableWhereClause
 
 #define LCCKDeleteConversationTable                              \
-    @"DELETE FROM" LCCKConversationTableName                     \
+    @"DELETE FROM " LCCKConversationTableName                     \
 
 #define LCCKConversationTableIncreaseUnreadCountSQL              \
     @"UPDATE " LCCKConversationTableName         @" "            \

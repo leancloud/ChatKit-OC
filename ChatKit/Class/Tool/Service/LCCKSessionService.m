@@ -30,8 +30,13 @@ NSString *const LCCKSessionServiceErrorDemain = @"LCCKSessionServiceErrorDemain"
 
 - (void)openWithClientId:(NSString *)clientId callback:(LCCKBooleanResultBlock)callback {
     _clientId = clientId;
-
     [[LCCKConversationService sharedInstance] setupDatabaseWithUserId:_clientId];
+    //判断是否是第一次使用该appId
+    [[LCChatKit sharedInstance] lcck_isFirstLaunchToEvent:[LCChatKit sharedInstance].appId
+                                               evenUpdate:YES
+                                              firstLaunch:^BOOL(){
+                                                  return [[LCChatKit sharedInstance] removeAllCachedRecentConversations];
+                                              }];
     //    [[CDFailedMessageStore store] setupStoreWithDatabasePath:dbPath];
     self.client = [[AVIMClient alloc] initWithClientId:clientId];
     self.client.delegate = self;
