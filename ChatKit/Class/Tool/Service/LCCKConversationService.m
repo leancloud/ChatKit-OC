@@ -135,7 +135,7 @@ NSString *const LCCKConversationServiceErrorDomain = @"LCCKConversationServiceEr
     return [names componentsJoinedByString:@","];
 }
 
-- (NSString *)databasePathWithUserId:(NSString *)userId{
+- (NSString *)databasePathWithUserId:(NSString *)userId {
     NSString *libPath = [NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) objectAtIndex:0];
     return [libPath stringByAppendingPathComponent:[NSString stringWithFormat:@"com.leancloud.lcchatkit.%@.db3", userId]];
 }
@@ -295,7 +295,6 @@ NSString *const LCCKConversationServiceErrorDomain = @"LCCKConversationServiceEr
  */
 - (void)setupFailedMessagesDBWithDatabasePath:(NSString *)path {
     if (!self.databaseQueue) {
-        //FIXME:when tom log out then jerry login , log this
         LCCKLog(@"database queue should not be nil !!!!");
     }
     self.databaseQueue = [FMDatabaseQueue databaseQueueWithPath:path];
@@ -307,7 +306,10 @@ NSString *const LCCKConversationServiceErrorDomain = @"LCCKConversationServiceEr
 - (NSDictionary *)recordFromResultSet:(FMResultSet *)resultSet {
     NSMutableDictionary *record = [NSMutableDictionary dictionary];
     NSData *data = [resultSet dataForColumn:LCCKKeyMessage];
-    AVIMTypedMessage *message = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+    if (!data) {
+        return nil;
+    }
+    id message = [NSKeyedUnarchiver unarchiveObjectWithData:data];
     [record setObject:message forKey:LCCKKeyMessage];
     NSString *idValue = [resultSet stringForColumn:LCCKKeyId];
     [record setObject:idValue forKey:LCCKKeyId];
@@ -328,6 +330,42 @@ NSString *const LCCKConversationServiceErrorDomain = @"LCCKConversationServiceEr
 
 - (NSArray *)failedMessagesByConversationId:(NSString *)conversationId {
     NSArray *records = [self recordsByConversationId:conversationId];
+    NSMutableArray *messages = [NSMutableArray array];
+    for (NSDictionary *record in records) {
+        [messages addObject:record[LCCKKeyMessage]];
+    }
+    return messages;
+}
+
+- (NSArray *)failedMessageIdsByConversationId:(NSString *)conversationId {
+    NSArray *records = [self recordsByConversationId:conversationId];
+    NSMutableArray *failedMessageIds = [NSMutableArray array];
+    for (NSDictionary *record in records) {
+        [failedMessageIds addObject:record[LCCKKeyId]];
+    }
+    return failedMessageIds;
+}
+
+- (NSArray *)recordsByMessageIds:(NSArray<NSString *> *)messageIds {
+    NSString *messageIdsString = [messageIds componentsJoinedByString:@"','"];
+    NSMutableArray *records = [NSMutableArray array];
+    NSString *query = [NSString stringWithFormat:LCCKSelectMessagesByIDSQL, messageIdsString];
+    [self.databaseQueue inDatabase:^(FMDatabase *db) {
+        FMResultSet *resultSet = [db executeQuery:query];
+        while ([resultSet next]) {
+            [records addObject:[self recordFromResultSet:resultSet]];
+        }
+        [resultSet close];
+    }];
+    
+    return records;
+}
+
+- (NSArray *)failedMessagesByMessageIds:(NSArray *)messageIds {
+    NSArray *records = [self recordsByMessageIds:messageIds];
+    if (records.count == 0) {
+        return nil;
+    }
     NSMutableArray *messages = [NSMutableArray array];
     for (NSDictionary *record in records) {
         [messages addObject:record[LCCKKeyMessage]];
@@ -398,7 +436,7 @@ NSString *const LCCKConversationServiceErrorDomain = @"LCCKConversationServiceEr
         [attributes addEntriesFromDictionary:message.attributes];
         message.attributes = attributes;
     }
-    [conversation sendMessage:message options:AVIMMessageSendOptionRequestReceipt progressBlock:progressBlock callback:block];
+    [conversation sendMessage:message options:AVIMMessageSendOptionNone progressBlock:progressBlock callback:block];
 }
 
 - (void)sendWelcomeMessageToPeerId:(NSString *)peerId text:(NSString *)text block:(LCCKBooleanResultBlock)block {
@@ -438,7 +476,7 @@ NSString *const LCCKConversationServiceErrorDomain = @"LCCKConversationServiceEr
     }
 }
 
-+ (void)cacheMessages:(NSArray<AVIMTypedMessage *> *)messages callback:(AVBooleanResultBlock)callback {
++ (void)cacheFileTypeMessages:(NSArray<AVIMTypedMessage *> *)messages callback:(AVBooleanResultBlock)callback {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
         NSMutableSet *userIds = [[NSMutableSet alloc] init];
         for (AVIMTypedMessage *message in messages) {
@@ -476,8 +514,8 @@ NSString *const LCCKConversationServiceErrorDomain = @"LCCKConversationServiceEr
 }
 
 - (AVIMClient *)client {
-    _client = [LCCKSessionService sharedInstance].client;
-    return _client;
+    AVIMClient *client = [LCCKSessionService sharedInstance].client;
+    return client;
 }
 
 @end

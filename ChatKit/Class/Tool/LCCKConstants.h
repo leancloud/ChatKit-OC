@@ -98,7 +98,8 @@ static NSString *const LCCK_KEY_USERID = @"LCCK_KEY_USERID";
 #define LCCKTestPeerIds \
     [LCCKTestPersonProfiles valueForKeyPath:LCCKProfileKeyPeerId]
 
-#define localize(key, default) NSLocalizedStringWithDefaultValue(key, nil, [NSBundle mainBundle], default, nil)
+
+#define localize(key, default) NSLocalizedStringFromTable(key, @"LCChatKitString", default)
 
 #pragma mark - Message Bars
 
@@ -275,6 +276,14 @@ typedef NS_ENUM(NSInteger, LCCKMessageNotificationType) {
 #define LCCKSelectMessagesSQL                        \
     @"SELECT * FROM " LCCKFaildMessageTable          \
     LCCKWhereConversationId
+
+#define LCCKWhereKeyId \
+    @" WHERE " LCCKKeyId @" IN ('%@') "
+
+//SELECT * FROM failed_messages WHERE id IN ('%@')
+#define LCCKSelectMessagesByIDSQL                        \
+    @"SELECT * FROM " LCCKFaildMessageTable          \
+    LCCKWhereKeyId
 
 #define LCCKInsertMessageSQL                             \
     @"INSERT OR IGNORE INTO " LCCKFaildMessageTable @"(" \

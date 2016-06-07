@@ -18,7 +18,7 @@
     NSString *messageTypeString = @"message_";
     switch (messageType) {
         case LCCKMessageTypeImage:
-            messageTypeString = [messageTypeString stringByAppendingString:@"image_"];;
+            messageTypeString = [messageTypeString stringByAppendingString:@"image_"];
             break;
             
         default:

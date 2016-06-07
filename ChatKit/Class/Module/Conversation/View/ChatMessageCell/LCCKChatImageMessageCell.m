@@ -95,7 +95,7 @@
                                                  dispatch_async(dispatch_get_main_queue(),^{
                                                      if (image){
                                                          message.photo = image;
-                                                         message.thumbnailPhoto = [image lcck_imageByScalingAspectFill];;
+                                                         message.thumbnailPhoto = [image lcck_imageByScalingAspectFill];
                                                      }
                                                  });
                                                  

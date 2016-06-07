@@ -208,7 +208,7 @@
         NSAssert(_conversation.imClient, @"类名与方法名：%@（在第%@行），描述：%@", @(__PRETTY_FUNCTION__), @(__LINE__), @"imClient is nil");
         self.navigationItem.title = conversation.lcck_title;
     }
-    [LCCKConversationService sharedInstance].currentConversation = conversation;;
+    [LCCKConversationService sharedInstance].currentConversation = conversation;
     [self handleLoadHistoryMessagesHandlerForIsJoined:isJoined];
     !_conversationHandler ?: _conversationHandler(conversation, self);
 }
@@ -230,9 +230,14 @@
         !_loadHistoryMessagesHandler ?: _loadHistoryMessagesHandler(succeeded, error);
         return;
     }
-    [self.chatViewModel loadMessagesWhenInitHandler:^(BOOL succeeded, NSError *error) {
+    [self.chatViewModel loadMessagesFirstTimeWithHandler:^(BOOL succeeded, NSError *error) {
         !_loadHistoryMessagesHandler ?: _loadHistoryMessagesHandler(succeeded, error);
     }];
+}
+
++ (NSTimeInterval)currentTimestamp {
+    NSTimeInterval seconds = [[NSDate date] timeIntervalSince1970];
+    return seconds * 1000;
 }
 
 #pragma mark - LCCKChatBarDelegate
@@ -241,7 +246,7 @@
     if ([message length] > 0 ) {
         LCCKMessage *lcckMessage = [[LCCKMessage alloc] initWithText:message
                                                               sender:self.userId
-                                                           timestamp:[NSDate date]];
+                                                           timestamp:[[self class] currentTimestamp]];
         lcckMessage.messageGroupType = self.conversation.lcck_type;
         [self.chatViewModel sendMessage:lcckMessage];
     }
@@ -275,7 +280,7 @@
                                                      thumbnailURL:nil
                                                    originPhotoURL:nil
                                                            sender:self.userId
-                                                        timestamp:[NSDate date]];
+                                                        timestamp:[[self class] currentTimestamp]];
         message.messageGroupType = self.conversation.lcck_type;
         [self.chatViewModel sendMessage:message];
     } else {
@@ -288,7 +293,7 @@
                                                          voiceURL:nil
                                                     voiceDuration:[NSString stringWithFormat:@"%@", @(seconds)]
                                                            sender:self.userId
-                                                        timestamp:[NSDate date]];
+                                                        timestamp:[[self class] currentTimestamp]];
     message.messageGroupType =  self.conversation.lcck_type;
     [self.chatViewModel sendMessage:message];
 }
@@ -302,7 +307,7 @@
                                                                   location:[[CLLocation alloc] initWithLatitude:locationCoordinate.latitude
                                                                                                       longitude:locationCoordinate.longitude]
                                                                     sender:self.userId
-                                                                 timestamp:[NSDate date]];
+                                                                 timestamp:[[self class] currentTimestamp]];
     [self.chatViewModel sendMessage:message];
     
 }

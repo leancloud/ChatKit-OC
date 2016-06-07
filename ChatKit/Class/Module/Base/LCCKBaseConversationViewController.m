@@ -5,7 +5,7 @@
 //  Created by 陈宜龙 on 16/3/21.
 //  Copyright © 2016年 ElonChan. All rights reserved.
 //
-#define LCCKDebugging 1
+//#define LCCKDebugging 1
 #import "LCCKBaseConversationViewController.h"
 #import <AVOSCloudIM/AVOSCloudIM.h>
 #import "LCCKCellRegisterController.h"

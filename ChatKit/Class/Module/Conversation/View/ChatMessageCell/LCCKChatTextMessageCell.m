@@ -58,7 +58,7 @@
         _messageTextLabel.textColor = [UIColor blackColor];
         _messageTextLabel.font = [UIFont systemFontOfSize:16.0f];
         _messageTextLabel.numberOfLines = 0;
-        _messageTextLabel.lineBreakMode = NSLineBreakByWordWrapping;;
+        _messageTextLabel.lineBreakMode = NSLineBreakByWordWrapping;
     }
     return _messageTextLabel;
 }

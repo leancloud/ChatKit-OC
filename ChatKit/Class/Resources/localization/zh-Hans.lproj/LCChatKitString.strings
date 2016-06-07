@@ -39,3 +39,17 @@
 "Voice" = "声音";
 "Sight" = "表情";
 "Community" = "小区";
+
+
+"message.bar.error.title" = "错误";
+"message.bar.error.message" = "错误";
+"message.bar.success.title" = "成功";
+"message.bar.success.message" = "成功";
+"message.bar.info.title" = "--------";
+"message.bar.info.message" = "--------";
+
+
+"button.label.success.message" = "成功";
+"button.label.error.message" = "失败";
+"button.label.info.message" = "注意";
+"button.label.hide.all" = "隐藏";

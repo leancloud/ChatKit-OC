@@ -41,7 +41,7 @@
 
 @property (nonatomic, copy, readonly) NSString *sender;
 
-@property (nonatomic, strong, readonly) NSDate *timestamp;
+@property (nonatomic, assign, readonly) NSTimeInterval timestamp;
 
 @property (nonatomic, assign, readonly) BOOL sended;
 
@@ -67,11 +67,11 @@
 
 - (instancetype)initWithText:(NSString *)text
                       sender:(NSString *)sender
-                   timestamp:(NSDate *)timestamp;
+                   timestamp:(NSTimeInterval)timestamp;
 
 - (instancetype)initWithSystemText:(NSString *)text;
-+ (instancetype)systemMessageWithTimestamp:(NSDate *)timestamp;
-
++ (instancetype)systemMessageWithTimestamp:(NSTimeInterval)timestamp;
+- (NSString *)getTimestampString;
 /**
  *  初始化图片类型的消息
  *
@@ -90,7 +90,7 @@
                  thumbnailURL:(NSURL *)thumbnailURL
                originPhotoURL:(NSURL *)originPhotoURL
                        sender:(NSString *)sender
-                    timestamp:(NSDate *)timestamp;
+                    timestamp:(NSTimeInterval)timestamp;
 
 /**
  *  初始化视频类型的消息
@@ -107,7 +107,7 @@
                                videoPath:(NSString *)videoPath
                                 videoURL:(NSURL *)videoURL
                                   sender:(NSString *)sender
-                               timestamp:(NSDate *)timestamp;
+                               timestamp:(NSTimeInterval)timestamp;
 
 /**
  *  初始化语音类型的消息
@@ -124,7 +124,7 @@
                          voiceURL:(NSURL *)voiceURL
                     voiceDuration:(NSString *)voiceDuration
                            sender:(NSString *)sender
-                        timestamp:(NSDate *)timestamp;
+                        timestamp:(NSTimeInterval)timestamp;
 
 /**
  *  初始化语音类型的消息。增加已读未读标记
@@ -142,23 +142,23 @@
                          voiceURL:(NSURL *)voiceURL
                     voiceDuration:(NSString *)voiceDuration
                            sender:(NSString *)sender
-                        timestamp:(NSDate *)timestamp
+                        timestamp:(NSTimeInterval)timestamp
                            isRead:(BOOL)isRead;
 
 - (instancetype)initWithEmotionPath:(NSString *)emotionPath
                              sender:(NSString *)sender
-                          timestamp:(NSDate *)timestamp;
+                          timestamp:(NSTimeInterval)timestamp;
 
 - (instancetype)initWithEmotionPath:(NSString *)emotionPath
                         emotionName:(NSString *)emotionName
                              sender:(NSString *)sender
-                          timestamp:(NSDate *)timestamp;
+                          timestamp:(NSTimeInterval)timestamp;
 
 - (instancetype)initWithLocalPositionPhoto:(UIImage *)localPositionPhoto
                               geolocations:(NSString *)geolocations
                                   location:(CLLocation *)location
                                     sender:(NSString *)sender
-                                 timestamp:(NSDate *)timestamp;
+                                 timestamp:(NSTimeInterval)timestamp;
 // 是否显示时间轴Label
 - (BOOL)shouldDisplayTimestampForMessages:(NSArray *)messages;
 + (LCCKMessage *)messageWithAVIMTypedMessage:(AVIMTypedMessage *)message;

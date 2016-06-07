@@ -79,8 +79,8 @@
             type_ = TWMessageBarMessageTypeInfo;
             break;
     }
-    [[TWMessageBarManager sharedInstance] showMessageWithTitle:localize(@"message.bar.info.title", title)
-                                                   description:localize(@"message.bar.info.message", subtitle)
+    [[TWMessageBarManager sharedInstance] showMessageWithTitle:title
+                                                   description:subtitle
                                                           type:type_
                                                       duration:duration
                                                       callback:nil];

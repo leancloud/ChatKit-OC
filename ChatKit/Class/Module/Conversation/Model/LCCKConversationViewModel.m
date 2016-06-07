@@ -36,7 +36,7 @@
 
 @interface LCCKConversationViewModel ()
 
-@property (nonatomic, weak) LCCKConversationViewController *parentViewController;
+@property (nonatomic, strong) LCCKConversationViewController *parentConversationViewController;
 @property (nonatomic, strong) NSMutableArray<LCCKMessage *> *dataArray;
 @property (nonatomic, strong) NSMutableArray<AVIMTypedMessage *> *avimTypedMessage;
 
@@ -44,11 +44,11 @@
 
 @implementation LCCKConversationViewModel
 
-- (instancetype)initWithParentViewController:(LCCKConversationViewController *)parentViewController {
+- (instancetype)initWithParentViewController:(LCCKConversationViewController *)parentConversationViewController {
     if ([super init]) {
         _dataArray = [NSMutableArray array];
         _avimTypedMessage = [NSMutableArray array];
-        _parentViewController = parentViewController;
+        _parentConversationViewController = parentConversationViewController;
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveMessage:) name:LCCKNotificationMessageReceived object:nil];
     }
     return self;
@@ -68,10 +68,10 @@
     LCCKMessage *message = self.dataArray[indexPath.row];
     NSString *identifier = [LCCKCellIdentifierFactory cellIdentifierForMessageConfiguration:message];
     LCCKChatMessageCell *messageCell = [tableView dequeueReusableCellWithIdentifier:identifier forIndexPath:indexPath];
-    messageCell.tableView = self.parentViewController.tableView;
+    messageCell.tableView = self.parentConversationViewController.tableView;
     messageCell.indexPath = indexPath;
     [messageCell configureCellWithData:message];
-    messageCell.delegate = self.parentViewController;
+    messageCell.delegate = self.parentConversationViewController;
     return messageCell;
 }
 
@@ -119,7 +119,42 @@
 - (void)addMessages:(NSArray<LCCKMessage *> *)messages {
     [self.dataArray addObjectsFromArray:[self messagesWithSystemMessages:messages]];
 }
+/*!
+ * 与`-addMessages`方法的区别在于，第一次加载历史消息时需要查找最后一条消息之余还有没有消息。
+ */
+- (void)addMessagesFirstTime:(NSArray<LCCKMessage *> *)messages {
+    [self.dataArray addObjectsFromArray:[self messagesWithLocalMessages:messages]];
+    //  添加失败消息
+    LCCKMessage *lastMessage = messages.lastObject;
+    NSString *startDate = [lastMessage getTimestampString];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(SELF >= %@) AND (SELF MATCHES %@)", startDate, self.timestampStringRegex];
+    NSArray<LCCKMessage *> *failedLCCKMessages = [self failedMessagesWithPredicate:predicate];
+    if (failedLCCKMessages.count > 0) {
+        [self.dataArray addObjectsFromArray:[self messagesWithSystemMessages:failedLCCKMessages]];
+    }
+}
 
+- (NSArray<LCCKMessage *> *)failedMessagesWithPredicate:(NSPredicate *)predicate {
+    NSArray *allFailedMessageIdsByConversationId = [[LCCKConversationService sharedInstance] failedMessageIdsByConversationId:[LCCKConversationService sharedInstance].currentConversation.conversationId];
+    //整数或小数
+    //    NSString *regex = @"^[0-9]*(.)?[0-9]*$";
+    NSArray *failedMessageIds = [allFailedMessageIdsByConversationId filteredArrayUsingPredicate:predicate];
+    NSArray<LCCKMessage *> *failedLCCKMessages;
+    if (failedMessageIds.count > 0) {
+        failedLCCKMessages = [[LCCKConversationService sharedInstance] failedMessagesByMessageIds:failedMessageIds];
+    }
+    return failedLCCKMessages;
+}
+
+- (NSString *)timestampStringRegex {
+    //整数或小数
+    NSString *regex = @"^[0-9]*(.)?[0-9]*$";
+    return regex;
+}
+
+/*!
+ * 该方法能让preload时动态判断插入时间戳，同时也用在第一次加载时插入时间戳。
+ */
 - (NSArray *)messagesWithSystemMessages:(NSArray<LCCKMessage *> *)messages {
     NSMutableArray *messageWithSystemMessages = [NSMutableArray arrayWithArray:self.dataArray];
     for (LCCKMessage *message in messages) {
@@ -133,18 +168,44 @@
     return [messageWithSystemMessages copy];
 }
 
-- (NSArray *)topMessagesWithSystemMessages:(NSArray<LCCKMessage *> *)messages {
-    NSMutableArray *messageWithSystemMessages = [NSMutableArray arrayWithArray:messages];
-    NSUInteger idx = 0;
-    for (LCCKMessage *message in messages) {
-        BOOL shouldDisplayTimestamp = [message shouldDisplayTimestampForMessages:messageWithSystemMessages];
-        if (shouldDisplayTimestamp) {
-            [messageWithSystemMessages insertObject:[LCCKMessage systemMessageWithTimestamp:message.timestamp] atIndex:idx];
-            idx++;
-        }
-        idx++;
+- (NSArray *)oldestFailedMessagesBeforeMessage:(LCCKMessage *)message {
+    NSString *startDate = [message getTimestampString];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(SELF <= %@) AND (SELF MATCHES %@)", startDate, self.timestampStringRegex];
+    NSArray<LCCKMessage *> *failedLCCKMessages = [self failedMessagesWithPredicate:predicate];
+    return failedLCCKMessages;
+}
+
+- (NSArray *)messagesWithLocalMessages:(NSArray<LCCKMessage *> *)messages {
+    NSMutableArray<LCCKMessage *> *messagesWithLocalMessages = [NSMutableArray arrayWithCapacity:messages.count];
+    BOOL shouldLoadMoreMessagesScrollToTop = self.parentConversationViewController.shouldLoadMoreMessagesScrollToTop;
+    if (!shouldLoadMoreMessagesScrollToTop && messages.count == 0) {
+        NSArray *failedMessagesByConversationId = [[LCCKConversationService sharedInstance] failedMessagesByConversationId:[LCCKConversationService sharedInstance].currentConversation.conversationId];
+        messagesWithLocalMessages = [NSMutableArray arrayWithArray:failedMessagesByConversationId];
+        return [self messagesWithSystemMessages:messagesWithLocalMessages];
     }
-    return [messageWithSystemMessages copy];
+    if (!shouldLoadMoreMessagesScrollToTop) {
+        LCCKMessage *message = messages[0];
+        NSArray *oldestFailedMessagesBeforeMessage = [self oldestFailedMessagesBeforeMessage:message];
+        NSMutableArray *mutableArray = [NSMutableArray arrayWithArray:oldestFailedMessagesBeforeMessage];
+        [mutableArray addObjectsFromArray:[messagesWithLocalMessages copy]];
+        messagesWithLocalMessages = [mutableArray mutableCopy];
+    }
+    [messages enumerateObjectsUsingBlock:^(LCCKMessage * _Nonnull message, NSUInteger idx, BOOL * _Nonnull stop) {
+        if (idx == 0) {
+            [messagesWithLocalMessages addObject:message];
+            return;
+        }
+        LCCKMessage *lastMessage = [messages objectAtIndex:idx - 1];
+        NSString *startDate = [message getTimestampString];
+        NSString *endDate = [lastMessage getTimestampString];
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(SELF >= %@) AND (SELF <= %@) AND (SELF MATCHES %@)", endDate, startDate , self.timestampStringRegex];
+        NSArray<LCCKMessage *> *failedLCCKMessages = [self failedMessagesWithPredicate:predicate];
+        if (failedLCCKMessages.count > 0) {
+            [messagesWithLocalMessages addObjectsFromArray:failedLCCKMessages];
+        }
+        [messagesWithLocalMessages addObject:message];
+    }];
+    return [self messagesWithSystemMessages:messagesWithLocalMessages];
 }
 
 - (void)addMessage:(LCCKMessage *)message {
@@ -168,6 +229,7 @@
                   message.status = LCCKMessageSendStateFailed;
                   [self.delegate messageSendStateChanged:LCCKMessageSendStateFailed withProgress:0.0f forIndex:[self.dataArray indexOfObject:message]];
                   message.messageId = messageUUID;
+                  message.conversationId = [LCCKConversationService sharedInstance].currentConversation.conversationId;
                   [[LCCKConversationService sharedInstance] insertFailedLCCKMessage:message];
               }];
 }
@@ -185,8 +247,8 @@
     AVIMTypedMessage *avimTypedMessage = [AVIMTypedMessage lcck_messageWithLCCKMessage:message];
     [self.avimTypedMessage addObject:avimTypedMessage];
     [self preloadMessageToTableView:message];
-    // if `message.messageId` is not nil, it is a failed message being resended.
-    NSString *messageUUID = (message.messageId) ? message.messageId : [[NSUUID UUID] UUIDString];
+    NSTimeInterval date = [[NSDate date] timeIntervalSince1970] * 1000;
+    NSString *messageUUID =  [NSString stringWithFormat:@"%@", @(date)];
     [[LCCKConversationService sharedInstance] sendMessage:avimTypedMessage
                                              conversation:[LCCKConversationService sharedInstance].currentConversation
                                             progressBlock:progressBlock
@@ -198,41 +260,34 @@
                                                          message.status = LCCKMessageStatusSent;
                                                          !success ?: success(messageUUID);
                                                      }
-                                                     //TODO:
-                                                     //???:should I cache message even failed
-                                                     [LCCKConversationService cacheMessages:@[avimTypedMessage] callback:nil];
-                                                     dispatch_async(dispatch_get_main_queue(),^{
-                                                         NSUInteger index = [self.dataArray indexOfObject:message];
-                                                         NSIndexPath *indexPath = [NSIndexPath indexPathForRow:index inSection:0];
-                                                         [self.parentViewController.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
-                                                     });
+                                                     // cache file type messages even failed
+                                                     [LCCKConversationService cacheFileTypeMessages:@[avimTypedMessage] callback:nil];
                                                  }];
 }
 
 - (void)resendMessageForMessageCell:(LCCKChatMessageCell *)messageCell {
     NSString *title = [NSString stringWithFormat:@"%@?", NSLocalizedStringFromTable(@"resend", @"LCChatKitString", @"重新发送？")];
     LCCKAlertController *alert = [LCCKAlertController alertControllerWithTitle:title
-                                                                   message:@""
-                                                            preferredStyle:LCCKAlertControllerStyleAlert];
+                                                                       message:@""
+                                                                preferredStyle:LCCKAlertControllerStyleAlert];
     NSString *cancelActionTitle = NSLocalizedStringFromTable(@"cancel", @"LCChatKitString", @"取消");
     LCCKAlertAction* cancelAction = [LCCKAlertAction actionWithTitle:cancelActionTitle style:LCCKAlertActionStyleDefault
-                                                          handler:^(LCCKAlertAction * action) {}];
+                                                             handler:^(LCCKAlertAction * action) {}];
     [alert addAction:cancelAction];
-    
     NSString *resendActionTitle = NSLocalizedStringFromTable(@"resend", @"LCChatKitString", @"重新发送");
     LCCKAlertAction* resendAction = [LCCKAlertAction actionWithTitle:resendActionTitle style:LCCKAlertActionStyleDefault
-                                                          handler:^(LCCKAlertAction * action) {
-                                                              [self resendMessageAtIndexPath:messageCell.indexPath];
-                                                          }];
+                                                             handler:^(LCCKAlertAction * action) {
+                                                                 [self resendMessageAtIndexPath:messageCell.indexPath];
+                                                             }];
     [alert addAction:resendAction];
-    [alert showWithSender:nil controller:self.parentViewController animated:YES completion:NULL];
+    [alert showWithSender:nil controller:self.parentConversationViewController animated:YES completion:NULL];
 }
 
 - (void)resendMessageAtIndexPath:(NSIndexPath *)indexPath {
     LCCKMessage *lcckMessage =  self.dataArray[indexPath.row];
     [self.dataArray lcck_removeMessageAtIndex:indexPath.row];
     [self.avimTypedMessage lcck_removeMessageAtIndex:indexPath.row];
-    [self.parentViewController.tableView reloadData];
+    [self.parentConversationViewController.tableView reloadData];
     [self sendMessage:lcckMessage];
     [[LCCKConversationService sharedInstance] deleteFailedMessageByRecordId:lcckMessage.messageId];
 }
@@ -254,8 +309,8 @@
         }
     }
     dispatch_async(dispatch_get_main_queue(),^{
-        [self.parentViewController.tableView insertRowsAtIndexPaths:[indexPaths copy] withRowAnimation:UITableViewRowAnimationNone];
-        [self.parentViewController scrollToBottomAnimated:YES];
+        [self.parentConversationViewController.tableView insertRowsAtIndexPaths:[indexPaths copy] withRowAnimation:UITableViewRowAnimationNone];
+        [self.parentConversationViewController scrollToBottomAnimated:YES];
     });
 }
 
@@ -265,72 +320,62 @@
     return self.dataArray.count;
 }
 
-- (void)loadMessagesWhenInitHandler:(LCCKBooleanResultBlock)handler {
-    //为确保消息的连续性，首次加载聊天记录应适中queryMessagesFromServer，只需禁用message缓存即可达到该效果。
+- (void)loadMessagesFirstTimeWithHandler:(LCCKBooleanResultBlock)handler {
+    //为确保消息的连续性，首次加载聊天记录应始终queryMessagesFromServer，只需禁用message缓存即可达到该效果。
     AVIMConversation *conversation = [LCCKConversationService sharedInstance].currentConversation;
-    conversation.imClient.messageQueryCacheEnabled = NO;
+    BOOL socketOpened = [LCCKSessionService sharedInstance].connect;
+    //必须在socketOpened时禁用，否则，`queryAndCacheMessagesWithTimestamp` 会在socket not opened 状态时返回nil。
+    if (socketOpened) {
+        conversation.imClient.messageQueryCacheEnabled = NO;
+    }
     [self queryAndCacheMessagesWithTimestamp:([[NSDate distantFuture] timeIntervalSince1970] * 1000) block:^(NSArray *avimTypedMessages, NSError *error) {
-        BOOL succeed = [self.parentViewController filterAVIMError:error];
+        conversation.imClient.messageQueryCacheEnabled = YES;
+        BOOL succeed = [self.parentConversationViewController filterAVIMError:error];
         if (succeed) {
-            // 失败消息加到末尾，因为 SDK 缓存不保存它们
-            //TODO: why only when the net is ok, can the failed messages load fast
             NSMutableArray *lcckSucceedMessags = [NSMutableArray lcck_messagesWithAVIMMessages:avimTypedMessages];
-            [self addMessages:lcckSucceedMessags];
+            [self addMessagesFirstTime:lcckSucceedMessags];
             NSMutableArray *allMessages = [NSMutableArray arrayWithArray:avimTypedMessages];
-            //TODO:
-            //                [allMessages addObjectsFromArray:[allFailedAVIMMessages copy]];
-            //                [self.dataArray addObjectsFromArray:failedMessages];
             self.avimTypedMessage = allMessages;
             dispatch_async(dispatch_get_main_queue(),^{
-                conversation.imClient.messageQueryCacheEnabled = YES;
-                [self.parentViewController.tableView reloadData];
-                [self.parentViewController scrollToBottomAnimated:NO];
-                self.parentViewController.loadingMoreMessage = NO;
+                [self.parentConversationViewController.tableView reloadData];
+                [self.parentConversationViewController scrollToBottomAnimated:NO];
+                self.parentConversationViewController.loadingMoreMessage = NO;
             });
             
             if (self.avimTypedMessage.count > 0) {
                 [[LCCKConversationService sharedInstance] updateConversationAsRead];
             }
-            
-            // 如果连接上，则重发所有的失败消息。若夹杂在历史消息中间不好处理
-            if ([LCCKSessionService sharedInstance].connect) {
-                //TODO:
-                //                    for (NSInteger row = self.chatViewModel.dataArray.count; row < allMessages.count; row ++) {
-                //                        [self resendMessageAtIndexPath:[NSIndexPath indexPathForRow:row inSection:0] discardIfFailed:YES];
-                //                    }
-            }
         } else {
-            self.parentViewController.loadingMoreMessage = NO;
+            self.parentConversationViewController.loadingMoreMessage = NO;
         }
         !handler ?: handler(succeed, error);
     }];
 }
 
 - (void)queryAndCacheMessagesWithTimestamp:(int64_t)timestamp block:(AVIMArrayResultBlock)block {
-    if (self.parentViewController.loadingMoreMessage) {
+    if (self.parentConversationViewController.loadingMoreMessage) {
         return;
     }
     if (self.dataArray.count == 0) {
         timestamp = [[NSDate distantFuture] timeIntervalSince1970] * 1000;
     }
-    self.parentViewController.loadingMoreMessage = YES;
+    self.parentConversationViewController.loadingMoreMessage = YES;
     [[LCCKConversationService sharedInstance] queryTypedMessagesWithConversation:[LCCKConversationService sharedInstance].currentConversation
                                                                        timestamp:timestamp
                                                                            limit:kLCCKOnePageSize
                                                                            block:^(NSArray *avimTypedMessages, NSError *error) {
-                                                                               self.parentViewController.shouldLoadMoreMessagesScrollToTop = YES;
+                                                                               self.parentConversationViewController.shouldLoadMoreMessagesScrollToTop = YES;
                                                                                if (avimTypedMessages.count == 0) {
-                                                                                   self.parentViewController.loadingMoreMessage = NO;
-                                                                                   self.parentViewController.shouldLoadMoreMessagesScrollToTop = NO;
+                                                                                   self.parentConversationViewController.loadingMoreMessage = NO;
+                                                                                   self.parentConversationViewController.shouldLoadMoreMessagesScrollToTop = NO;
                                                                                    !block ?: block(avimTypedMessages, error);
                                                                                    return;
                                                                                }
-                                                                               
-                                                                               [LCCKConversationService cacheMessages:avimTypedMessages callback:^(BOOL succeeded, NSError *error) {
-                                                                                   !block ?: block(avimTypedMessages, error);
+                                                                               [LCCKConversationService cacheFileTypeMessages:avimTypedMessages callback:^(BOOL succeeded, NSError *error) {
                                                                                    if (avimTypedMessages.count < kLCCKOnePageSize) {
-                                                                                       self.parentViewController.shouldLoadMoreMessagesScrollToTop = NO;
+                                                                                       self.parentConversationViewController.shouldLoadMoreMessagesScrollToTop = NO;
                                                                                    }
+                                                                                   !block ?: block(avimTypedMessages, error);
                                                                                }];
                                                                            }];
 }
@@ -339,13 +384,13 @@
     AVIMTypedMessage *msg = [self.avimTypedMessage lcck_messageAtIndex:0];
     int64_t timestamp = msg.sendTimestamp;
     [self queryAndCacheMessagesWithTimestamp:timestamp block:^(NSArray *avimTypedMessages, NSError *error) {
-        if ([self.parentViewController filterAVIMError:error]) {
+        if ([self.parentConversationViewController filterAVIMError:error]) {
             NSMutableArray *lcckMessages = [[NSMutableArray lcck_messagesWithAVIMMessages:avimTypedMessages] mutableCopy];
             NSMutableArray *newMessages = [NSMutableArray arrayWithArray:avimTypedMessages];
             [newMessages addObjectsFromArray:self.avimTypedMessage];
             self.avimTypedMessage = newMessages;
-            [self insertOldMessages:[self topMessagesWithSystemMessages:lcckMessages] completion: ^{
-                self.parentViewController.loadingMoreMessage = NO;
+            [self insertOldMessages:[self messagesWithLocalMessages:lcckMessages] completion: ^{
+                self.parentConversationViewController.loadingMoreMessage = NO;
             }];
         }
     }];
@@ -354,22 +399,22 @@
 - (void)insertOldMessages:(NSArray *)oldMessages completion:(void (^)())completion {
     NSMutableArray *messages = [NSMutableArray arrayWithArray:oldMessages];
     [messages addObjectsFromArray:self.dataArray];
-    CGSize beforeContentSize = self.parentViewController.tableView.contentSize;
+    CGSize beforeContentSize = self.parentConversationViewController.tableView.contentSize;
     NSMutableArray *indexPaths = [NSMutableArray arrayWithCapacity:oldMessages.count];
     [oldMessages enumerateObjectsUsingBlock:^(LCCKMessage *message, NSUInteger idx, BOOL *stop) {
         NSIndexPath *indexPath = [NSIndexPath indexPathForRow:idx inSection:0];
         [indexPaths addObject:indexPath];
     }];
     [UIView setAnimationsEnabled:NO];
-    [self.parentViewController.tableView beginUpdates];
+    [self.parentConversationViewController.tableView beginUpdates];
     self.dataArray = [messages mutableCopy];
-    [self.parentViewController.tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationNone];
-    [self.parentViewController.tableView reloadData];
-    [self.parentViewController.tableView endUpdates];
-    CGSize afterContentSize = self.parentViewController.tableView.contentSize;
-    CGPoint afterContentOffset = self.parentViewController.tableView.contentOffset;
+    [self.parentConversationViewController.tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationNone];
+    [self.parentConversationViewController.tableView reloadData];
+    [self.parentConversationViewController.tableView endUpdates];
+    CGSize afterContentSize = self.parentConversationViewController.tableView.contentSize;
+    CGPoint afterContentOffset = self.parentConversationViewController.tableView.contentOffset;
     CGPoint newContentOffset = CGPointMake(afterContentOffset.x, afterContentOffset.y + afterContentSize.height - beforeContentSize.height);
-    [self.parentViewController.tableView setContentOffset:newContentOffset animated:NO] ;
+    [self.parentConversationViewController.tableView setContentOffset:newContentOffset animated:NO] ;
     [UIView setAnimationsEnabled:YES];
     completion();
 }
@@ -423,16 +468,16 @@
 #pragma mark - UIScrollView Delegate
 
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
-    self.parentViewController.isUserScrolling = YES;
+    self.parentConversationViewController.isUserScrolling = YES;
     UIMenuController *menu = [UIMenuController sharedMenuController];
     if (menu.isMenuVisible) {
         [menu setMenuVisible:NO animated:YES];
     }
-    [self.parentViewController.chatBar endInputing];
+    [self.parentConversationViewController.chatBar endInputing];
 }
 
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
-    self.parentViewController.isUserScrolling = NO;
+    self.parentConversationViewController.isUserScrolling = NO;
 }
 
 @end

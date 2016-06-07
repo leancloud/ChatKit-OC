@@ -134,7 +134,7 @@ static NSMutableDictionary *_sharedInstances = nil;
             return;
         }
         
-        NSMutableArray *users = [NSMutableArray arrayWithCapacity:userIds.count];;
+        NSMutableArray *users = [NSMutableArray arrayWithCapacity:userIds.count];
         for (NSDictionary *user in LCCKContactProfiles) {
             if ([userIds containsObject:user[LCCKProfileKeyPeerId]]) {
                 NSURL *avatorURL = [NSURL URLWithString:user[LCCKProfileKeyAvatarURL]];
@@ -298,6 +298,7 @@ typedef void (^UITableViewRowActionHandler)(UITableViewRowAction *action, NSInde
     [conversationViewController setLoadHistoryMessagesHandler:^(BOOL succeeded, NSError *error) {
         [self hideHUD];
         NSString *title;
+        NSString *subtitle;
         LCCKMessageNotificationType type;
         if (succeeded) {
             title = @"聊天记录加载成功";
@@ -305,8 +306,9 @@ typedef void (^UITableViewRowActionHandler)(UITableViewRowAction *action, NSInde
         } else {
             title = @"聊天记录加载失败";
             type = LCCKMessageNotificationTypeError;
+            subtitle = error.localizedDescription;
         }
-        [LCCKUtil showNotificationWithTitle:title subtitle:nil type:type];
+        [LCCKUtil showNotificationWithTitle:title subtitle:subtitle type:type];
     }];
     [self pushToViewController:conversationViewController];
 }
@@ -465,7 +467,7 @@ typedef void (^UITableViewRowActionHandler)(UITableViewRowAction *action, NSInde
     [browser setCurrentPhotoIndex:index];
     // Reset selections
     if (displaySelectionButtons) {
-        _selections = [[NSMutableArray alloc] initWithCapacity:[allVisibleImages count]];;
+        _selections = [[NSMutableArray alloc] initWithCapacity:[allVisibleImages count]];
         for (int i = 0; i < photos.count; i++) {
             [_selections addObject:[NSNumber numberWithBool:NO]];
         }

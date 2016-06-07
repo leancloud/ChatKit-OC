@@ -36,3 +36,16 @@
 "Voice" = "Voice";
 "Sight" = "Sight";
 "Community" = "Community";
+
+"message.bar.error.title" = "Error Title";
+"message.bar.error.message" = "This is an error message!";
+"message.bar.success.title" = "Success Title";
+"message.bar.success.message" = "This is a success message!";
+"message.bar.info.title" = "--------";
+"message.bar.info.message" = "--------";
+
+
+"button.label.success.message" = "Success Message";
+"button.label.error.message" = "Error Message";
+"button.label.info.message" = "Information Message";
+"button.label.hide.all" = "Hide All";

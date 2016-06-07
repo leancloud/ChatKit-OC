@@ -145,7 +145,12 @@ FOUNDATION_EXTERN NSString *const LCCKConversationServiceErrorDomain;
  *  @param conversationId 对话的 id
  *  @return 消息数组
  */
-- (NSArray *)failedMessagesByConversationId:(NSString *)conversationId;
-+ (void)cacheMessages:(NSArray<AVIMTypedMessage *> *)messages callback:(AVBooleanResultBlock)callback;
+- (NSArray<LCCKMessage *> *)failedMessagesByConversationId:(NSString *)conversationId;
+
+- (NSArray<LCCKMessage *> *)failedMessageIdsByConversationId:(NSString *)conversationId;
+
+- (NSArray<LCCKMessage *> *)failedMessagesByMessageIds:(NSArray *)messageIds;
+
++ (void)cacheFileTypeMessages:(NSArray<AVIMTypedMessage *> *)messages callback:(AVBooleanResultBlock)callback;
 
 @end
