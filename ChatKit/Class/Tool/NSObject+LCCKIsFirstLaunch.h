@@ -1,9 +1,9 @@
 //
 //  NSObject+IsFirstLaunch.h
-//  PiFuKeYiSheng
+//  ElonChan
 //
 //  Created by chenyilong on 15/6/15.
-//  Copyright © 2015年 com.pifukeyisheng. All rights reserved.
+//  Copyright © 2015年 ElonChan. All rights reserved.
 //
 
 //=========== how to use ===========================
@@ -28,7 +28,7 @@ typedef BOOL (^LCCKFirstLaunchBlock)(void);
  @details 适用场景比如，登陆、引导页面等等
  @param eventName 对于eventName 而言是第一次登陆
  @param evenUpdate 是否考虑更新的情况
- @param firstLaunch 只有CYLFirstLaunchBlock的 return 返回值为 YES 的时候，本方法的返回值才是 YES。
+ @param firstLaunch 只有LCCKFirstLaunchBlock的 return 返回值为 YES 的时候，本方法的返回值才是 YES。
  */
 - (BOOL)lcck_isFirstLaunchToEvent:(NSString *)eventName
                   evenUpdate:(BOOL)evenUpdate

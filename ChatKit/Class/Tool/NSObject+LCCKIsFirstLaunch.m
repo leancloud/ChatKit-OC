@@ -1,9 +1,9 @@
 //
 //  NSObject+IsFirstLaunch.m
-//  PiFuKeYiSheng
+//  ElonChan
 //
 //  Created by chenyilong on 15/6/15.
-//  Copyright © 2015年 com.pifukeyisheng. All rights reserved.
+//  Copyright © 2015年 ElonChan. All rights reserved.
 //
 
 #import "NSObject+LCCKIsFirstLaunch.h"
