@@ -75,23 +75,23 @@ git clone --depth=1 https://github.com/leancloud/ChatKit-OC
 │       └── View
 └── ChatKit-OC  # Demo演示
     ├── ChatKit-OC.xcodeproj
-    ├── Example
-    │   └── LCChatKitExample.h  #这是Demo演示的入口类，这个类中提供了很多胶水函数，可完成初步的集成
-    │   └── LCChatKitExample.m
-    │       ├── Model
-    │       ├── Module
-    │       │   ├── ContactList
-    │       │   │   ├── Controller
-    │       │   │   ├── Tool
-    │       │   │   └── View
-    │       │   ├── Login
-    │       │   │   ├── Controller
-    │       │   │   ├── Model
-    │       │   │   └── View
-    │       │   ├── Main
-    │       │   │   ├── Controller
-    │       │   │   └── View
-    │       │   └── Other
+    └── Example
+        └── LCChatKitExample.h  #这是Demo演示的入口类，这个类中提供了很多胶水函数，可完成初步的集成
+        └── LCChatKitExample.m
+            ├── Model
+            ├── Module
+            │   ├── ContactList
+            │   │   ├── Controller
+            │   │   ├── Tool
+            │   │   └── View
+            │   ├── Login
+            │   │   ├── Controller
+            │   │   ├── Model
+            │   │   └── View
+            │   ├── Main
+            │   │   ├── Controller
+            │   │   └── View
+            │   └── Other
  ```
  
  从上面可以看出，「ChatKit-OC」工程包分为两个部分：
@@ -154,9 +154,9 @@ ChatKit 提供了一个快速集成的演示类 LCChatKitExample ，路径如下
  ├── ChatKit  ＃核心库文件夹
  └──  ChatKit-OC  # Demo演示
     ├── ChatKit-OC.xcodeproj
-    ├── Example
-    │   └── LCChatKitExample.h  #这是Demo演示的入口类，这个类中提供了很多胶水函数，可完成初步的集成
-    │   └── LCChatKitExample.m
+    └── Example
+        └── LCChatKitExample.h  #这是Demo演示的入口类，这个类中提供了很多胶水函数，可完成初步的集成
+        └── LCChatKitExample.m
  ```
  
 使用 LCChatKitExample 提供的函数即可完成从程序启动到登录再到登出的完整流程：
@@ -234,8 +234,10 @@ LCCKConversationViewController *conversationViewController = [[LCCKConversationV
 ## Q-A 常见问题
 
  Q ： ChatKit 组件收费么？
+ 
  A ： ChatKit 是完全开源并且免费给开发者使用，使用聊天所产生的费用以账单为准。
 
 
  Q：接入 ChatKit 有什么好处？
+ 
  A：它可以减轻应用或者新功能研发初期的调研成本，直接引入使用即可。ChatKit 从底层到 UI 提供了一整套的聊天解决方案。
