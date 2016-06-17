@@ -1,12 +1,18 @@
 # ChatKit-OC
 
+<p align="center">
+![enter image description here](https://img.shields.io/badge/pod-v0.0.4-brightgreen.svg)  ![enter image description here](https://img.shields.io/badge/platform-iOS%207.0%2B-ff69b5618733984.svg) 
+<a href="https://github.com/leancloud/ChatKit-OC/blob/master/LICENSE"><img src="https://img.shields.io/badge/license-MIT-green.svg?style=flat"></a>
+</a>
 
 ## 集成效果
 
 最近联系人 | 语音消息，根据语音长度调整宽度 | 图片消息，尺寸自适应 
 -------------|-------------|-------------|-------------
 ![enter image description here](http://i63.tinypic.com/1zxqjns.jpg)|![enter image description here](http://i68.tinypic.com/2rx9sfq.jpg)  | ![enter image description here](http://i64.tinypic.com/aw87wl.jpg) 
+
  地理位置消息| 失败消息本地缓存，可重发 |上传图片，进度条提示 
+ -------------|-------------|-------------
 ![enter image description here](http://i65.tinypic.com/2vmuaf4.jpg) | ![enter image description here](http://i68.tinypic.com/n6b29v.jpg)| ![enter image description here](http://i66.tinypic.com/orrrxh.jpg)
 ## 项目结构
 
@@ -87,8 +93,8 @@
  3. 调用 `-[[LCChatKit sharedInstance] openWithClientId:callback:]` 开启 LeanCloud 的 IM 服务 LeanMessage，开始聊天。
  4. 调用 `-[[LCChatKit sharedInstance] closeWithCallback:]` 关闭 LeanCloud 的 IM 服务，结束聊天。
  5. 实现 `-[[LCChatKit sharedInstance] setFetchProfilesBlock:]`, 来让 ChatKit 能通过你的 user id 来获知用户信息. `LCCKUserSystemService.h` 文件中给出了例子，演示了如何集成 LeanCloud 原生的用户系统  AVUser。
- 6. 如果你实现了 `-[[LCChatKit sharedInstance] setGenerateSignatureBlock:]` 方法，那么 ChatKit会自动为以下行为添加签名：open（开启会话）, start(创建会话), kick（踢人）, invite（邀请）。
- 7. 使用
+ 6. 如果你实现了 `-[[LCChatKit sharedInstance] setGenerateSignatureBlock:]` 方法，那么 ChatKit会自动为以下行为添加签名：open（开启会话）, start（创建会话）, kick（踢人）, invite（邀请）。
+
 下面进行下详细的介绍：
 
 ### 第一步：使用CocoaPods导入ChatKit
@@ -122,7 +128,7 @@ gem install cocoapods
 
 ### 第二步：快速集成
 
-ChatKit提供了一个快速集成的演示类 LCChatKitExample ，路径如下：
+ChatKit 提供了一个快速集成的演示类 LCChatKitExample ，路径如下：
 
  ```Objective-C
  ── ChatKit-OC  # Demo演示
@@ -136,7 +142,7 @@ ChatKit提供了一个快速集成的演示类 LCChatKitExample ，路径如下�
  
 使用 LCChatKitExample 提供的函数即可完成从程序启动到登录再到登出的完整流程：
 
-在`-[AppDelegate didFinishLaunchingWithOptions:]` 等函数中调用下面这几个基础的入口胶水函数，可完成初步的集成。
+在 `-[AppDelegate didFinishLaunchingWithOptions:]` 等函数中调用下面这几个基础的入口胶水函数，可完成初步的集成。
 
 进一步地，胶水代码中包含了特地设置的#warning，请仔细阅读这些warning的注释，根据实际情况调整代码，以符合你的需求。
 
@@ -178,16 +184,18 @@ ChatKit提供了一个快速集成的演示类 LCChatKitExample ，路径如下�
 
 ### 配置聊天界面和最近联系人界面
 
-初始化方法非常简单分别是：
+初始化方法非常简单，分别是：
 
  ```Objective-C
 LCCKConversationListViewController *firstViewController = [[LCCKConversationListViewController alloc] init];
  ```
+ 
+因为最近联系人界面依赖与本地数据库，
 
 聊天界面有两种初始化方式：
 
  ```Objective-C
-// 用于单聊
+    // 用于单聊
 LCCKConversationViewController *conversationViewController = [[LCCKConversationViewController alloc] initWithPeerId:peerId];
  ```
 
@@ -198,7 +206,7 @@ LCCKConversationViewController *conversationViewController = [[LCCKConversationV
  ```
 
 这里注意，通过PeerId初始化，内部实现时，如果不是好友关系，会先建立好友关系、创建会话，所以调用该方法前请自行判断是否具有好友关系。
-同理，通过conversationId初始化群聊，内部实现时，如果不是群成员会先把当前用户加入群，再开始群聊。
+同理，通过 conversationId 初始化群聊，内部实现时，如果不是群成员会先把当前用户加入群、开启群聊。
 
 
 ### 
