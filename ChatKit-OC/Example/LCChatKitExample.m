@@ -23,11 +23,12 @@
 //======================================== username : leancloud@163.com , password : Public123 =====================================
 //==================================================================================================================================
 
-#warning TODO: CHANGE TO YOUR AppId and AppKey
+#warning TODO: CHANGE TO YOUR AppId and git
 
 static NSString *const LCCKAPPID = @"dYRQ8YfHRiILshUnfFJu2eQM-gzGzoHsz";
 static NSString *const LCCKAPPKEY = @"ye24iIK6ys8IvaISMC4Bs5WK";
-
+//static NSString *const LCCKAPPID = @"eBLWvezQIK0XbGoyhUAn614d-gzGzoHsz";
+//static NSString *const LCCKAPPKEY = @"cjAQu6MAIVbxwihONRX3Ulx6";
 // Dictionary that holds all instances of Singleton include subclasses
 static NSMutableDictionary *_sharedInstances = nil;
 
@@ -55,7 +56,6 @@ static NSMutableDictionary *_sharedInstances = nil;
 + (void)invokeThisMethodBeforeLogoutSuccess:(LCCKVoidBlock)success failed:(LCCKErrorBlock)failed {
     //    [AVOSCloudIM handleRemoteNotificationsWithDeviceToken:nil];
     [[LCChatKit sharedInstance] removeAllCachedProfiles];
-    [[LCChatKit sharedInstance] removeAllCachedRecentConversations];
     [[LCChatKit sharedInstance] closeWithCallback:^(BOOL succeeded, NSError *error) {
         if (succeeded) {
             [LCCKUtil showNotificationWithTitle:@"退出成功" subtitle:nil type:LCCKMessageNotificationTypeSuccess];
@@ -291,6 +291,7 @@ typedef void (^UITableViewRowActionHandler)(UITableViewRowAction *action, NSInde
     }];
     [conversationViewController setConversationHandler:^(AVIMConversation *conversation, LCCKConversationViewController *aConversationController) {
         if (!conversation) {
+            [self hideHUD];
             [aConversationController.navigationController popViewControllerAnimated:YES];
             return;
         }

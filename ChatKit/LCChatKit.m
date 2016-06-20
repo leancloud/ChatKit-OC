@@ -12,7 +12,15 @@
 static NSMutableDictionary *_sharedInstances = nil;
 
 @interface LCChatKit ()
+/*!
+ *  appId
+ */
+@property (nonatomic, copy, readwrite) NSString *appId;
 
+/*!
+ *  appkey
+ */
+@property (nonatomic, copy, readwrite) NSString *appKey;
 @end
 
 @implementation LCChatKit
@@ -59,6 +67,8 @@ static NSMutableDictionary *_sharedInstances = nil;
 
 + (void)setAppId:(NSString *)appId appKey:(NSString *)appKey {
     [AVOSCloud setApplicationId:appId clientKey:appKey];
+    [LCChatKit sharedInstance].appId = appId;
+    [LCChatKit sharedInstance].appKey = appKey;
     if ([LCCKSettingService allLogsEnabled]) {
         NSLog(@"LeanCloudKit Version is %@", [LCCKSettingService ChatKitVersion]);
     }

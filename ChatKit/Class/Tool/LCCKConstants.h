@@ -162,12 +162,12 @@ typedef NS_ENUM(NSInteger, LCCKBubbleMessageMenuSelectedType) {
     LCCKBubbleMessageMenuSelectedTypeVoiceMore = 14,
 };
 
-typedef NS_ENUM(NSInteger, LCCKMessageStatus){
-    LCCKMessageStatusSending,
-    LCCKMessageStatusSent,
-    LCCKMessageStatusReceived,
-    LCCKMessageStatusFailed,
-};
+//typedef NS_ENUM(NSInteger, LCCKMessageStatus){
+//    LCCKMessageStatusSending,
+//    LCCKMessageStatusSent,
+//    LCCKMessageStatusReceived,
+//    LCCKMessageStatusFailed,
+//};
 
 typedef NS_ENUM(NSInteger, LCCKBubbleMessageType) {
     LCCKBubbleMessageTypeSending = 0,

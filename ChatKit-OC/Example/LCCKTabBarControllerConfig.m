@@ -95,7 +95,7 @@
  */
 + (void)customizeTabBarAppearance {
     
-    //去除 TabBar 自带的顶部阴影
+    // 去除 TabBar 自带的顶部阴影
     [[UITabBar appearance] setShadowImage:[[UIImage alloc] init]];
     
     // set the text color for unselected state

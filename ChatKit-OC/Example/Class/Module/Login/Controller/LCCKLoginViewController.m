@@ -31,7 +31,7 @@
                         options:UIViewAnimationOptionCurveEaseOut
                      animations:^{
                          [self.view setAlpha:1.0];
-                     }completion:nil];
+                     } completion:nil];
 }
 
 - (void)viewDidLoad {

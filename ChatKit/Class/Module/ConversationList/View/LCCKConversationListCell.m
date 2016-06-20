@@ -15,7 +15,7 @@ static CGFloat LCCKImageSize = 45;
 static CGFloat LCCKVerticalSpacing = 8;
 static CGFloat LCCKHorizontalSpacing = 10;
 static CGFloat LCCKTimestampeLabelWidth = 100;
-
+static CGFloat LCCKAutoResizingDefaultScreenWidth = 320;
 static CGFloat LCCKNameLabelHeightProportion = 3.0 / 5;
 static CGFloat LCCKNameLabelHeight;
 static CGFloat LCCKMessageLabelHeight;
@@ -77,7 +77,6 @@ CGFloat const LCCKConversationListCellDefaultHeight = 61; //LCCKImageSize + LCCK
 - (UIView *)litteBadgeView {
     if (_litteBadgeView == nil) {
         UIView *litteBadgeView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, LCCKLittleBadgeSize, LCCKLittleBadgeSize)];
-        litteBadgeView.backgroundColor = [UIColor redColor];
         litteBadgeView.layer.masksToBounds = YES;
         litteBadgeView.layer.cornerRadius = LCCKLittleBadgeSize / 2;
         litteBadgeView.center = CGPointMake(CGRectGetMaxX(_avatorImageView.frame), CGRectGetMinY(_avatorImageView.frame));
@@ -89,10 +88,11 @@ CGFloat const LCCKConversationListCellDefaultHeight = 61; //LCCKImageSize + LCCK
 
 - (UILabel *)timestampLabel {
     if (_timestampLabel == nil) {
-        UILabel *timestampLabel = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetWidth([UIScreen mainScreen].bounds) - LCCKHorizontalSpacing - LCCKTimestampeLabelWidth, CGRectGetMinY(_avatorImageView.frame), LCCKTimestampeLabelWidth, LCCKNameLabelHeight)];
+        UILabel *timestampLabel = [[UILabel alloc] initWithFrame:CGRectMake(LCCKAutoResizingDefaultScreenWidth - LCCKHorizontalSpacing - LCCKTimestampeLabelWidth, CGRectGetMinY(_avatorImageView.frame), LCCKTimestampeLabelWidth, LCCKNameLabelHeight)];
         timestampLabel.font = [UIFont systemFontOfSize:13];
         timestampLabel.textAlignment = NSTextAlignmentRight;
         timestampLabel.textColor = [UIColor grayColor];
+        timestampLabel.autoresizingMask =  UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleBottomMargin;
         _timestampLabel = timestampLabel;
     }
     return _timestampLabel;
@@ -102,6 +102,7 @@ CGFloat const LCCKConversationListCellDefaultHeight = 61; //LCCKImageSize + LCCK
     if (_nameLabel == nil) {
         UILabel *nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(_avatorImageView.frame) + LCCKHorizontalSpacing, CGRectGetMinY(_avatorImageView.frame), CGRectGetMinX(_timestampLabel.frame) - LCCKHorizontalSpacing * 3 - LCCKImageSize, LCCKNameLabelHeight)];
         nameLabel.font = [UIFont systemFontOfSize:17];
+        nameLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         _nameLabel = nameLabel;
     }
     return _nameLabel;
@@ -109,8 +110,9 @@ CGFloat const LCCKConversationListCellDefaultHeight = 61; //LCCKImageSize + LCCK
 
 - (UILabel *)messageTextLabel {
     if (_messageTextLabel == nil) {
-        UILabel *messageTextLabel = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMinX(_nameLabel.frame), CGRectGetMaxY(_nameLabel.frame), CGRectGetWidth([UIScreen mainScreen].bounds)- 3 * LCCKHorizontalSpacing - LCCKImageSize, LCCKMessageLabelHeight)];
+        UILabel *messageTextLabel = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMinX(_nameLabel.frame), CGRectGetMaxY(_nameLabel.frame), LCCKAutoResizingDefaultScreenWidth - 3 * LCCKHorizontalSpacing - LCCKImageSize, LCCKMessageLabelHeight)];
         messageTextLabel.backgroundColor = [UIColor clearColor];
+        messageTextLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         _messageTextLabel = messageTextLabel;
     }
     return _messageTextLabel;

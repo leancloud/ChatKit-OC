@@ -23,7 +23,7 @@
 + (instancetype)sharedInstance;
 
 #pragma mark - SDK Life Control
-#pragma mark - quick start 使用下面三个函数即可完成从程序启动到登录再到登出的完整流程
+#pragma mark - quick start 使用下面的函数即可完成从程序启动到登录再到登出的完整流程
 
 /// ----------------------------------------------------------------------------------------------------------
 ///---注意：在`-[AppDelegate didFinishLaunchingWithOptions:]` 等函数中调用下面这几个基础的入口胶水函数，可完成初步的集成。

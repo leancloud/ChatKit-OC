@@ -35,7 +35,7 @@ NSString *const LCCKSessionServiceErrorDemain = @"LCCKSessionServiceErrorDemain"
     [[LCChatKit sharedInstance] lcck_isFirstLaunchToEvent:[LCChatKit sharedInstance].appId
                                                evenUpdate:YES
                                               firstLaunch:^BOOL(){
-                                                  return [[LCChatKit sharedInstance] removeAllCachedRecentConversations];
+                                                   return [[LCChatKit sharedInstance] removeAllCachedRecentConversations];
                                               }];
     //    [[CDFailedMessageStore store] setupStoreWithDatabasePath:dbPath];
     self.client = [[AVIMClient alloc] initWithClientId:clientId];
