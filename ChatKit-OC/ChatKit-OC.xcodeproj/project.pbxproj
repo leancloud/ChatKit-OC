@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2D3A40ABD266D4907DE5943D /* libPods-ChatKit-OC.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BA5CD9C65171B4B671044819 /* libPods-ChatKit-OC.a */; };
 		9A4730611CECAEC500AEB86F /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A47302A1CECAEC500AEB86F /* AppDelegate.m */; };
 		9A4730621CECAEC500AEB86F /* LCCKUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A47302E1CECAEC500AEB86F /* LCCKUser.m */; };
 		9A4730631CECAEC500AEB86F /* LCCKContactListController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A4730331CECAEC500AEB86F /* LCCKContactListController.m */; };
@@ -19,7 +20,6 @@
 		9A47306A1CECAEC500AEB86F /* DEMODataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A4730441CECAEC500AEB86F /* DEMODataSource.m */; };
 		9A47306B1CECAEC500AEB86F /* LCCKLoginDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A4730461CECAEC500AEB86F /* LCCKLoginDataSource.m */; };
 		9A47306C1CECAEC500AEB86F /* LCCKMapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A47304B1CECAEC500AEB86F /* LCCKMapViewController.m */; };
-		9A47306D1CECAEC500AEB86F /* LCChatKitExample.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A47304D1CECAEC500AEB86F /* LCChatKitExample.m */; };
 		9A47306E1CECAEC500AEB86F /* LCCKUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A4730501CECAEC500AEB86F /* LCCKUtil.m */; };
 		9A47306F1CECAEC500AEB86F /* LCCKPlusButtonSubclass.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A4730531CECAEC500AEB86F /* LCCKPlusButtonSubclass.m */; };
 		9A4730701CECAEC500AEB86F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9A4730551CECAEC500AEB86F /* Assets.xcassets */; };
@@ -28,7 +28,7 @@
 		9A4730731CECAEC500AEB86F /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A4730591CECAEC500AEB86F /* main.m */; };
 		9A4730751CECAEC500AEB86F /* NSObject+LCCKHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A47305E1CECAEC500AEB86F /* NSObject+LCCKHUD.m */; };
 		9A4730761CECAEC500AEB86F /* LCCKTabBarControllerConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A4730601CECAEC500AEB86F /* LCCKTabBarControllerConfig.m */; };
-		B1DBD0ABA79D5E00664CFA12 /* libPods-ChatKit-OC.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 32CE1421311C5D8D2D3C1C7E /* libPods-ChatKit-OC.a */; };
+		9A9E84511D13A66B008590B4 /* LCChatKitExample.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A9E84501D13A66B008590B4 /* LCChatKitExample.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -45,7 +45,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		32CE1421311C5D8D2D3C1C7E /* libPods-ChatKit-OC.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ChatKit-OC.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		5D845C2C6C7600912725AE71 /* Pods-ChatKit-OC.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChatKit-OC.release.xcconfig"; path = "Pods/Target Support Files/Pods-ChatKit-OC/Pods-ChatKit-OC.release.xcconfig"; sourceTree = "<group>"; };
 		9A0B721B1CED662D004FDACC /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		9A0B721D1CED6637004FDACC /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		9A0B721F1CED6644004FDACC /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
@@ -72,8 +72,6 @@
 		9A4730461CECAEC500AEB86F /* LCCKLoginDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCKLoginDataSource.m; sourceTree = "<group>"; };
 		9A47304A1CECAEC500AEB86F /* LCCKMapViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKMapViewController.h; sourceTree = "<group>"; };
 		9A47304B1CECAEC500AEB86F /* LCCKMapViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCKMapViewController.m; sourceTree = "<group>"; };
-		9A47304C1CECAEC500AEB86F /* LCChatKitExample.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCChatKitExample.h; sourceTree = "<group>"; };
-		9A47304D1CECAEC500AEB86F /* LCChatKitExample.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCChatKitExample.m; sourceTree = "<group>"; };
 		9A47304E1CECAEC500AEB86F /* LCCKConstantsDefinition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKConstantsDefinition.h; sourceTree = "<group>"; };
 		9A47304F1CECAEC500AEB86F /* LCCKUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKUtil.h; sourceTree = "<group>"; };
 		9A4730501CECAEC500AEB86F /* LCCKUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCKUtil.m; sourceTree = "<group>"; };
@@ -88,8 +86,10 @@
 		9A47305F1CECAEC500AEB86F /* LCCKTabBarControllerConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKTabBarControllerConfig.h; sourceTree = "<group>"; };
 		9A4730601CECAEC500AEB86F /* LCCKTabBarControllerConfig.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCKTabBarControllerConfig.m; sourceTree = "<group>"; };
 		9A754D4B1CECAC3E000967F1 /* ChatKit-OC.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "ChatKit-OC.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		A30F4A0DBE262BA6B04E1A7D /* Pods-ChatKit-OC.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChatKit-OC.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ChatKit-OC/Pods-ChatKit-OC.debug.xcconfig"; sourceTree = "<group>"; };
-		E6B1C0F2001D5983B279DC59 /* Pods-ChatKit-OC.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChatKit-OC.release.xcconfig"; path = "Pods/Target Support Files/Pods-ChatKit-OC/Pods-ChatKit-OC.release.xcconfig"; sourceTree = "<group>"; };
+		9A9E844F1D13A66B008590B4 /* LCChatKitExample.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCChatKitExample.h; sourceTree = "<group>"; };
+		9A9E84501D13A66B008590B4 /* LCChatKitExample.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCChatKitExample.m; sourceTree = "<group>"; };
+		BA5CD9C65171B4B671044819 /* libPods-ChatKit-OC.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ChatKit-OC.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		FE81801167FF7BEA287BEF15 /* Pods-ChatKit-OC.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChatKit-OC.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ChatKit-OC/Pods-ChatKit-OC.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -97,22 +97,13 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B1DBD0ABA79D5E00664CFA12 /* libPods-ChatKit-OC.a in Frameworks */,
+				2D3A40ABD266D4907DE5943D /* libPods-ChatKit-OC.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		081E3E415D01F3B339E50FEE /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				A30F4A0DBE262BA6B04E1A7D /* Pods-ChatKit-OC.debug.xcconfig */,
-				E6B1C0F2001D5983B279DC59 /* Pods-ChatKit-OC.release.xcconfig */,
-			);
-			name = Pods;
-			sourceTree = "<group>";
-		};
 		578A4ED63A7AFF3EA27EF73A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -120,7 +111,7 @@
 				9A0B721F1CED6644004FDACC /* CoreTelephony.framework */,
 				9A0B721D1CED6637004FDACC /* MobileCoreServices.framework */,
 				9A0B721B1CED662D004FDACC /* SystemConfiguration.framework */,
-				32CE1421311C5D8D2D3C1C7E /* libPods-ChatKit-OC.a */,
+				BA5CD9C65171B4B671044819 /* libPods-ChatKit-OC.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -130,6 +121,8 @@
 			children = (
 				9A4730291CECAEC500AEB86F /* AppDelegate.h */,
 				9A47302A1CECAEC500AEB86F /* AppDelegate.m */,
+				9A9E844F1D13A66B008590B4 /* LCChatKitExample.h */,
+				9A9E84501D13A66B008590B4 /* LCChatKitExample.m */,
 				9A47305F1CECAEC500AEB86F /* LCCKTabBarControllerConfig.h */,
 				9A4730601CECAEC500AEB86F /* LCCKTabBarControllerConfig.m */,
 				9A47302B1CECAEC500AEB86F /* Class */,
@@ -249,8 +242,6 @@
 			isa = PBXGroup;
 			children = (
 				9A4730491CECAEC500AEB86F /* Controller */,
-				9A47304C1CECAEC500AEB86F /* LCChatKitExample.h */,
-				9A47304D1CECAEC500AEB86F /* LCChatKitExample.m */,
 				9A47304E1CECAEC500AEB86F /* LCCKConstantsDefinition.h */,
 				9A47304F1CECAEC500AEB86F /* LCCKUtil.h */,
 				9A4730501CECAEC500AEB86F /* LCCKUtil.m */,
@@ -305,13 +296,22 @@
 			path = MBProgressHUD;
 			sourceTree = "<group>";
 		};
+		9A5D954BF3F04BFACA4121A6 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				FE81801167FF7BEA287BEF15 /* Pods-ChatKit-OC.debug.xcconfig */,
+				5D845C2C6C7600912725AE71 /* Pods-ChatKit-OC.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 		9A754D421CECAC3E000967F1 = {
 			isa = PBXGroup;
 			children = (
 				9A4730281CECAEC500AEB86F /* Example */,
 				9A754D4C1CECAC3E000967F1 /* Products */,
-				081E3E415D01F3B339E50FEE /* Pods */,
 				578A4ED63A7AFF3EA27EF73A /* Frameworks */,
+				9A5D954BF3F04BFACA4121A6 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -330,13 +330,13 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 9A754D621CECAC3E000967F1 /* Build configuration list for PBXNativeTarget "ChatKit-OC" */;
 			buildPhases = (
-				9A2FDA3CF0537FD9D0D886A9 /* Check Pods Manifest.lock */,
+				51C8BA06A1A0D09B5EDEEAB6 /* 📦 Check Pods Manifest.lock */,
 				9A754D471CECAC3E000967F1 /* Sources */,
 				9A754D481CECAC3E000967F1 /* Frameworks */,
 				9A754D491CECAC3E000967F1 /* Resources */,
-				7D4E5DD1E716F14DBA58E5C1 /* Embed Pods Frameworks */,
-				C75D6AB5F3C0F200636AAAA5 /* Copy Pods Resources */,
 				9A1AD17B1CEDE640000FF26E /* Embed Frameworks */,
+				B3D3A07CFC7415F038843CA3 /* 📦 Embed Pods Frameworks */,
+				51C852A69364ADDF3BC4A5BA /* 📦 Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -396,29 +396,29 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		7D4E5DD1E716F14DBA58E5C1 /* Embed Pods Frameworks */ = {
+		51C852A69364ADDF3BC4A5BA /* 📦 Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Embed Pods Frameworks";
+			name = "📦 Copy Pods Resources";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ChatKit-OC/Pods-ChatKit-OC-frameworks.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ChatKit-OC/Pods-ChatKit-OC-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		9A2FDA3CF0537FD9D0D886A9 /* Check Pods Manifest.lock */ = {
+		51C8BA06A1A0D09B5EDEEAB6 /* 📦 Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Check Pods Manifest.lock";
+			name = "📦 Check Pods Manifest.lock";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -426,19 +426,19 @@
 			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
-		C75D6AB5F3C0F200636AAAA5 /* Copy Pods Resources */ = {
+		B3D3A07CFC7415F038843CA3 /* 📦 Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Copy Pods Resources";
+			name = "📦 Embed Pods Frameworks";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ChatKit-OC/Pods-ChatKit-OC-resources.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ChatKit-OC/Pods-ChatKit-OC-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -448,6 +448,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9A9E84511D13A66B008590B4 /* LCChatKitExample.m in Sources */,
 				9A4730631CECAEC500AEB86F /* LCCKContactListController.m in Sources */,
 				9A47306F1CECAEC500AEB86F /* LCCKPlusButtonSubclass.m in Sources */,
 				9A4730671CECAEC500AEB86F /* LCCKLoginViewController.m in Sources */,
@@ -455,7 +456,6 @@
 				9A47306A1CECAEC500AEB86F /* DEMODataSource.m in Sources */,
 				9A47306C1CECAEC500AEB86F /* LCCKMapViewController.m in Sources */,
 				9A4730621CECAEC500AEB86F /* LCCKUser.m in Sources */,
-				9A47306D1CECAEC500AEB86F /* LCChatKitExample.m in Sources */,
 				9A4730651CECAEC500AEB86F /* LCCKContactCell.m in Sources */,
 				9A47306E1CECAEC500AEB86F /* LCCKUtil.m in Sources */,
 				9A4730761CECAEC500AEB86F /* LCCKTabBarControllerConfig.m in Sources */,
@@ -567,15 +567,12 @@
 		};
 		9A754D631CECAC3E000967F1 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = A30F4A0DBE262BA6B04E1A7D /* Pods-ChatKit-OC.debug.xcconfig */;
+			baseConfigurationReference = FE81801167FF7BEA287BEF15 /* Pods-ChatKit-OC.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Class/Tool/Vendor/VoiceLib",
-				);
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = "$(SRCROOT)/Example/Class/Module/Other/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -586,15 +583,12 @@
 		};
 		9A754D641CECAC3E000967F1 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = E6B1C0F2001D5983B279DC59 /* Pods-ChatKit-OC.release.xcconfig */;
+			baseConfigurationReference = 5D845C2C6C7600912725AE71 /* Pods-ChatKit-OC.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Class/Tool/Vendor/VoiceLib",
-				);
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = "$(SRCROOT)/Example/Class/Module/Other/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";

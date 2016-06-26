@@ -35,9 +35,10 @@
         CGFloat offset = 3;//8
         make.top.equalTo(self.contentView.mas_top).with.offset(offset);
         make.bottom.equalTo(self.contentView.mas_bottom).with.offset(-offset);
-        make.width.lessThanOrEqualTo(@LCCKMessageCellLimit);
-        //FIXME:
-        make.height.equalTo(@20);
+        CGFloat width = [UIApplication sharedApplication].keyWindow.frame.size.width;
+        CGFloat height = [UIApplication sharedApplication].keyWindow.frame.size.height;
+        CGFloat widthLimit = MIN(width, height)/5 * 3;
+        make.width.lessThanOrEqualTo(@(widthLimit));
         make.centerX.equalTo(self.contentView.mas_centerX);
     }];
 }
@@ -71,8 +72,8 @@
         
         [_systemmessageContentView addSubview:self.systemMessageLabel = systemMessageLabel];
         [systemMessageLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-            CGFloat offsetTopBottom = 3;//8
-            CGFloat offsetLeftRight = 2 * offsetTopBottom;//8
+            CGFloat offsetTopBottom = 0.5;//8
+            CGFloat offsetLeftRight = 8;//8
             make.edges.equalTo(_systemmessageContentView).with.insets(UIEdgeInsetsMake(offsetTopBottom, offsetLeftRight, offsetTopBottom, offsetLeftRight));
         }];
         systemMessageLabel.attributedText = [[NSAttributedString alloc] initWithString:@"2015-11-16" attributes:self.systemMessageStyle];

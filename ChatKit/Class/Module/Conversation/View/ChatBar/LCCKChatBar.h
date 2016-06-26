@@ -8,10 +8,12 @@
 
 @import UIKit;
 
-static CGFloat const kLCCKChatBarMaxHeight = 60.0f;
-static CGFloat const kLCCKChatBarMinHeight = 45.0f;
-static CGFloat const kLCCKChatBarTextViewFrameMAXHeight = 34.f;
-#define kFunctionViewHeight 210.0f
+static CGFloat const kChatBarBottomOffset = 8.f;
+static CGFloat const kChatBarTextViewBottomOffset = 6;
+static CGFloat const kLCCKChatBarTextViewFrameMinHeight = 37.f;;//kLCCKChatBarMinHeight - 2*kChatBarTextViewBottomOffset;
+static CGFloat const kLCCKChatBarTextViewFrameMaxHeight = 102.f;//kLCCKChatBarMaxHeight - 2*kChatBarTextViewBottomOffset;
+static CGFloat const kLCCKChatBarMaxHeight = kLCCKChatBarTextViewFrameMaxHeight + 2*kChatBarTextViewBottomOffset;//114.0f;
+static CGFloat const kLCCKChatBarMinHeight = kLCCKChatBarTextViewFrameMinHeight + 2*kChatBarTextViewBottomOffset;//49.0f;
 
 #import <UIKit/UIKit.h>
 #import <MapKit/MapKit.h>
@@ -58,8 +60,7 @@ typedef NS_ENUM(NSUInteger, LCCKFunctionViewShowType){
  *
  *  @param chatBar 
  */
-- (void)chatBarFrameDidChange:(LCCKChatBar *)chatBar frame:(CGRect)frame;
-
+- (void)chatBarFrameDidChange:(LCCKChatBar *)chatBar;
 
 /**
  *  发送图片信息,支持多张图片

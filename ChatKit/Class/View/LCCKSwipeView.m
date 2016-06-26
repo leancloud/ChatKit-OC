@@ -40,6 +40,7 @@
 #pragma GCC diagnostic ignored "-Wconversion"
 #pragma GCC diagnostic ignored "-Wselector"
 #pragma GCC diagnostic ignored "-Wgnu"
+#import "Masonry.h"
 
 
 #import <Availability.h>
@@ -140,7 +141,12 @@
         [self reloadData];
     }
 }
-
+//- (void)updateConstraints {
+//    [super updateConstraints];
+//    [_scrollView mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.edges.mas_equalTo(self);
+//    }];
+//}
 - (id)initWithCoder:(NSCoder *)aDecoder
 {
     if ((self = [super initWithCoder:aDecoder]))

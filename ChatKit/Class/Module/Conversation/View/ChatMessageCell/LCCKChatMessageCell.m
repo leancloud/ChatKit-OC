@@ -92,7 +92,11 @@ static CGFloat const LCCKAvatarToMessageContent = 5.f;
         [self.messageContentView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.right.equalTo(self.avatarImageView.mas_left).with.offset(-LCCKAvatarToMessageContent);
             make.top.equalTo(self.nicknameLabel.mas_bottom).with.offset(4);
-            make.width.lessThanOrEqualTo(@LCCKMessageCellLimit).priorityHigh();
+            CGFloat width = [UIApplication sharedApplication].keyWindow.frame.size.width;
+            CGFloat height = [UIApplication sharedApplication].keyWindow.frame.size.height;
+            CGFloat widthLimit = MIN(width, height)/5 * 3;
+            
+            make.width.lessThanOrEqualTo(@(widthLimit)).priorityHigh();
             make.bottom.equalTo(self.contentView.mas_bottom).with.offset(-16).priorityLow();
         }];
         
@@ -127,7 +131,10 @@ static CGFloat const LCCKAvatarToMessageContent = 5.f;
         [self.messageContentView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.equalTo(self.avatarImageView.mas_right).with.offset(LCCKAvatarToMessageContent);
             make.top.equalTo(self.nicknameLabel.mas_bottom).with.offset(4);
-            make.width.lessThanOrEqualTo(@LCCKMessageCellLimit).priorityHigh();
+            CGFloat width = [UIApplication sharedApplication].keyWindow.frame.size.width;
+            CGFloat height = [UIApplication sharedApplication].keyWindow.frame.size.height;
+            CGFloat widthLimit = MIN(width, height)/5 * 3;
+            make.width.lessThanOrEqualTo(@(widthLimit)).priorityHigh();
             make.bottom.equalTo(self.contentView.mas_bottom).with.offset(-16).priorityLow();
         }];
         
@@ -154,7 +161,6 @@ static CGFloat const LCCKAvatarToMessageContent = 5.f;
             make.height.equalTo(@0);
         }];
     }
-    
 }
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
@@ -174,7 +180,6 @@ static CGFloat const LCCKAvatarToMessageContent = 5.f;
     [super touchesEnded:touches withEvent:event];
     self.messageContentBackgroundImageView.highlighted = NO;
 }
-
 
 #pragma mark - Private Methods
 

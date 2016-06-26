@@ -43,7 +43,7 @@
     }];
     
     [self.locationAddressLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.edges.equalTo(self.locationAddressOverlay).with.insets(UIEdgeInsetsMake(offset, offset, -offset, offset));
+        make.edges.equalTo(self.locationAddressOverlay).with.insets(UIEdgeInsetsMake(offset, offset, offset, offset));
     }];
 
 }

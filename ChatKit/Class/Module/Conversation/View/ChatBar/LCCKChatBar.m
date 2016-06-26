@@ -18,12 +18,10 @@
 #import "LCCKUIService.h"
 #import "UIImage+LCCKExtension.h"
 
-static CGFloat const kChatBarTopOffset = 8.f;
-static CGFloat const kChatBarTextViewBottomOffset = 4.f;
-
 @interface LCCKChatBar () <UITextViewDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate, Mp3RecorderDelegate,LCCKChatMoreViewDelegate, LCCKChatMoreViewDataSource, LCCKChatFaceViewDelegate, LCCKLocationControllerDelegate>
 
 @property (strong, nonatomic) Mp3Recorder *MP3;
+@property (nonatomic, strong) UIView *inputBarBackgroundView; /**< 输入栏目背景视图 */
 @property (strong, nonatomic) UIButton *voiceButton; /**< 切换录音模式按钮 */
 @property (strong, nonatomic) UIButton *voiceRecordButton; /**< 录音按钮 */
 
@@ -39,8 +37,7 @@ static CGFloat const kChatBarTextViewBottomOffset = 4.f;
 
 @property (assign, nonatomic) CGRect keyboardFrame;
 
-//缓存下输入框文字
-@property (copy, nonatomic) NSString *inputText;
+@property (copy, nonatomic) NSString *inputText; /**< 缓存下输入框文字 */
 
 @end
 
@@ -54,36 +51,68 @@ static CGFloat const kChatBarTextViewBottomOffset = 4.f;
     return self;
 }
 
-- (void)updateConstraints{
+- (void)updateConstraints {
     [super updateConstraints];
     
+    [self.inputBarBackgroundView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.width.and.left.mas_equalTo(self).priorityLow();
+        make.height.mas_equalTo(kLCCKChatBarMinHeight).priorityLow();
+        make.bottom.mas_equalTo(self).priorityLow();
+        make.top.mas_equalTo(self);
+    }];
+    
     [self.voiceButton mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(self.mas_left).with.offset(10);
-        make.top.equalTo(self.mas_top).with.offset(kChatBarTopOffset);
+        make.left.equalTo(self.inputBarBackgroundView.mas_left).with.offset(10);
+        make.bottom.equalTo(self.inputBarBackgroundView.mas_bottom).with.offset(-kChatBarBottomOffset);
         make.width.equalTo(self.voiceButton.mas_height);
     }];
     
     [self.moreButton mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.right.equalTo(self.mas_right).with.offset(-10);
-        make.top.equalTo(self.mas_top).with.offset(kChatBarTopOffset);
+        make.right.equalTo(self.inputBarBackgroundView.mas_right).with.offset(-10);
+        make.bottom.equalTo(self.inputBarBackgroundView.mas_bottom).with.offset(-kChatBarBottomOffset);
         make.width.equalTo(self.moreButton.mas_height);
     }];
     
     [self.faceButton mas_makeConstraints:^(MASConstraintMaker *make) {
         make.right.equalTo(self.moreButton.mas_left).with.offset(-10);
-        make.top.equalTo(self.mas_top).with.offset(kChatBarTopOffset);
+        make.bottom.equalTo(self.inputBarBackgroundView.mas_bottom).with.offset(-kChatBarBottomOffset);
         make.width.equalTo(self.faceButton.mas_height);
     }];
     
     [self.textView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self.voiceButton.mas_right).with.offset(10);
         make.right.equalTo(self.faceButton.mas_left).with.offset(-10);
-        make.top.equalTo(self.mas_top).with.offset(kChatBarTextViewBottomOffset);
-        make.bottom.equalTo(self.mas_bottom).with.offset(-kChatBarTextViewBottomOffset);
+        make.top.equalTo(self.inputBarBackgroundView.mas_top).with.offset(kChatBarTextViewBottomOffset);
+        make.bottom.equalTo(self.inputBarBackgroundView.mas_bottom).with.offset(-kChatBarTextViewBottomOffset);
+    }];
+    
+    CGFloat offset = -5.f;
+    [self.voiceRecordButton mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.edges.mas_equalTo(self.textView).insets(UIEdgeInsetsMake(offset, offset, offset, offset));
     }];
 }
 
-- (void)dealloc{
+//TODO:
+- (void)makeTextViewConstraints {
+//    UIDeviceOrientation orientation = [[UIDevice currentDevice] orientation];
+//    if ((orientation == UIDeviceOrientationLandscapeLeft) || (orientation == UIDeviceOrientationLandscapeRight)) {
+//        NSLog(@"Landscape Left or Right !");
+//        [self.textView mas_remakeConstraints:^(MASConstraintMaker *make) {
+//            CGFloat offset = kChatBarTextViewBottomOffset;
+//            make.edges.mas_equalTo(self).insets(UIEdgeInsetsMake(offset, offset, offset, offset));
+//        }];
+//    } else if (orientation == UIDeviceOrientationPortrait) {
+        [self.textView mas_remakeConstraints:^(MASConstraintMaker *make) {
+            make.left.equalTo(self.voiceButton.mas_right).with.offset(10);
+            make.right.equalTo(self.faceButton.mas_left).with.offset(-10);
+            make.top.equalTo(self.inputBarBackgroundView.mas_top).with.offset(kChatBarTextViewBottomOffset);
+            make.bottom.equalTo(self.inputBarBackgroundView.mas_bottom).with.offset(-kChatBarTextViewBottomOffset);
+        }];
+//        NSLog(@"Landscape portrait!");
+//    }
+}
+
+- (void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
 }
@@ -131,35 +160,42 @@ static CGFloat const kChatBarTextViewBottomOffset = 4.f;
 }
 
 - (void)textViewDidChange:(UITextView *)textView {
-    [self textViewDidChange:textView shouldFitToTextView:NO shouldCacheText:YES];
+    [self textViewDidChange:textView shouldCacheText:YES];
 }
 
 - (void)textViewDidChange:(UITextView *)textView
-      shouldFitToTextView:(BOOL)shouldFitToTextView
-          shouldCacheText:(BOOL)shouldCacheText{
+          shouldCacheText:(BOOL)shouldCacheText {
     if (shouldCacheText) {
         self.inputText = self.textView.text;
     }
     CGRect textViewFrame = self.textView.frame;
     CGSize textSize = [self.textView sizeThatFits:CGSizeMake(CGRectGetWidth(textViewFrame), 1000.0f)];
-    CGFloat offset = 10;
     // from iOS 7, the content size will be accurate only if the scrolling is enabled.
-    textView.scrollEnabled = (textSize.height + 0.1 > kLCCKChatBarMaxHeight - offset);
-    textViewFrame.size.height = MAX(kLCCKChatBarTextViewFrameMAXHeight, MIN(kLCCKChatBarMaxHeight, textSize.height));
-    CGRect frame = ({
-        CGRect frame = self.frame;
-        frame.size.height = textViewFrame.size.height+offset;
-        if (shouldFitToTextView) {
-            frame.origin.y = self.superViewHeight - frame.size.height;
+    textView.scrollEnabled = (textSize.height > kLCCKChatBarTextViewFrameMinHeight);
+    // textView 控件的高度在 kLCCKChatBarTextViewFrameMinHeight 和 kLCCKChatBarMaxHeight-offset 之间
+    CGFloat textViewHeight = MAX(kLCCKChatBarTextViewFrameMinHeight, MIN(kLCCKChatBarTextViewFrameMaxHeight, textSize.height));
+    [self.textView mas_updateConstraints:^(MASConstraintMaker *make) {
+        CGFloat height = textViewHeight;
+        make.height.mas_equalTo(height);
+    }];
+    [self.textView layoutIfNeeded];
+    
+    [self mas_updateConstraints:^(MASConstraintMaker *make) {
+        if (self.keyboardFrame.size.height == 0) {
+            make.bottom.mas_equalTo(self.superview);
         } else {
-            frame.origin.y = self.superViewHeight - self.bottomHeight - frame.size.height;
+            make.bottom.mas_equalTo(self.superview).offset(-self.keyboardFrame.size.height);
         }
-        frame;
-    });
-    [self setFrame:frame animated:NO];
+    }];
+    [self layoutIfNeeded];
     if (textView.scrollEnabled) {
-        [textView scrollRangeToVisible:NSMakeRange(textView.text.length - 2, 1)];
+        if (textViewHeight == kLCCKChatBarTextViewFrameMaxHeight) {
+            [textView setContentOffset:CGPointMake(0, textView.contentSize.height - textViewHeight) animated:YES];
+        } else {
+            [textView setContentOffset:CGPointZero animated:YES];
+        }
     }
+    [self chatBarConstraintsDidChange];
 }
 
 #pragma mark - UIImagePickerControllerDelegate
@@ -198,7 +234,7 @@ static CGFloat const kChatBarTextViewBottomOffset = 4.f;
     }
 }
 
-- (void)failRecord{
+- (void)failRecord {
     [LCCKProgressHUD dismissWithProgressState:LCCKProgressError];
 }
 
@@ -243,7 +279,6 @@ static CGFloat const kChatBarTextViewBottomOffset = 4.f;
         default:
             break;
     }
-    
 }
 
 - (NSArray *)titlesOfMoreView:(LCCKChatMoreView *)moreView {
@@ -251,7 +286,11 @@ static CGFloat const kChatBarTextViewBottomOffset = 4.f;
 }
 
 - (NSArray<NSString *> *)imageNamesOfMoreView:(LCCKChatMoreView *)moreView {
-    return @[@"chat_bar_icons_camera", @"chat_bar_icons_pic", @"chat_bar_icons_location"];
+    return @[
+             @"chat_bar_icons_camera",
+             @"chat_bar_icons_pic",
+             @"chat_bar_icons_location"
+             ];
 }
 
 #pragma mark - LCCKChatFaceViewDelegate
@@ -259,7 +298,7 @@ static CGFloat const kChatBarTextViewBottomOffset = 4.f;
 - (void)faceViewSendFace:(NSString *)faceName {
     if ([faceName isEqualToString:@"[删除]"]) {
         [self textView:self.textView shouldChangeTextInRange:NSMakeRange(self.textView.text.length - 1, 1) replacementText:@""];
-    } else if ([faceName isEqualToString:@"发送"]){
+    } else if ([faceName isEqualToString:@"发送"]) {
         NSString *text = self.textView.text;
         if (!text || text.length == 0) {
             return;
@@ -269,7 +308,7 @@ static CGFloat const kChatBarTextViewBottomOffset = 4.f;
         }
         self.inputText = @"";
         self.textView.text = @"";
-        [self setFrame:CGRectMake(0, self.superViewHeight - self.bottomHeight - kLCCKChatBarMinHeight, self.frame.size.width, kLCCKChatBarMinHeight) animated:NO];
+        [self chatBarConstraintsDidChange];
         [self showViewWithType:LCCKFunctionViewShowFace];
     } else {
         self.textView.text = [self.textView.text stringByAppendingString:faceName];
@@ -283,6 +322,8 @@ static CGFloat const kChatBarTextViewBottomOffset = 4.f;
     if (self.voiceButton.selected) {
         return;
     }
+    self.faceButton.selected = self.moreButton.selected = self.voiceButton.selected = NO;
+
     [self showViewWithType:LCCKFunctionViewShowNothing];
 }
 
@@ -290,33 +331,52 @@ static CGFloat const kChatBarTextViewBottomOffset = 4.f;
 
 - (void)keyboardWillHide:(NSNotification *)notification {
     self.keyboardFrame = CGRectZero;
-    [self textViewDidChange:self.textView];
+    [self textViewDidChange:self.textView shouldCacheText:NO];
 }
 
 - (void)keyboardWillShow:(NSNotification *)notification {
     self.keyboardFrame = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
-    [self textViewDidChange:self.textView];
+    [self textViewDidChange:self.textView shouldCacheText:NO];
+}
+
+/**
+ *  lazy load inputBarBackgroundView
+ *
+ *  @return UIView
+ */
+- (UIView *)inputBarBackgroundView {
+    if (_inputBarBackgroundView == nil) {
+        UIView *inputBarBackgroundView = [[UIView alloc] init];
+        _inputBarBackgroundView = inputBarBackgroundView;
+    }
+    return _inputBarBackgroundView;
 }
 
 - (void)setup {
+//    void (^deviceOrientationDidChangeBlock)(NSNotification *) = ^(NSNotification *notification) {
+//        [self makeTextViewConstraints];
+//    };
+//    [[NSNotificationCenter defaultCenter] addObserverForName:UIDeviceOrientationDidChangeNotification
+//                                                      object:nil
+//                                                       queue:[NSOperationQueue mainQueue]
+//                                                  usingBlock:deviceOrientationDidChangeBlock];
     
     self.MP3 = [[Mp3Recorder alloc] initWithDelegate:self];
-    [self addSubview:self.voiceButton];
-    [self addSubview:self.moreButton];
-    [self addSubview:self.faceButton];
-    [self addSubview:self.textView];
-    [self.textView addSubview:self.voiceRecordButton];
+    [self addSubview:self.inputBarBackgroundView];
+    
+    [self.inputBarBackgroundView addSubview:self.voiceButton];
+    [self.inputBarBackgroundView addSubview:self.moreButton];
+    [self.inputBarBackgroundView addSubview:self.faceButton];
+    [self.inputBarBackgroundView addSubview:self.textView];
+    [self.inputBarBackgroundView addSubview:self.voiceRecordButton];
+
     UIImageView *topLine = [[UIImageView alloc] init];
-    topLine.backgroundColor = [UIColor colorWithRed:184/255.0f green:184/255.0f blue:184/255.0f alpha:1.0f];
-    [self addSubview:topLine];
-    
+    topLine.backgroundColor = kLCCKTopLineBackgroundColor;
+    [self.inputBarBackgroundView addSubview:topLine];
     [topLine mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(self.mas_left);
-        make.right.equalTo(self.mas_right);
-        make.top.equalTo(self.mas_top);
-        make.height.mas_equalTo(@.5f);
+        make.left.and.right.and.top.equalTo(self.inputBarBackgroundView);
+        make.height.mas_equalTo(.5f);
     }];
-    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     
@@ -324,7 +384,7 @@ static CGFloat const kChatBarTextViewBottomOffset = 4.f;
     
     [self updateConstraintsIfNeeded];
     
-    //FIX 修复首次初始化页面 页面显示不正确 textView不显示bug
+    //FIX 修复首次初始化页面 页面显示不正确, textView 不显示bug
     [self layoutIfNeeded];
 }
 
@@ -333,6 +393,7 @@ static CGFloat const kChatBarTextViewBottomOffset = 4.f;
  */
 - (void)startRecordVoice {
     [LCCKProgressHUD show];
+    self.voiceRecordButton.highlighted = YES;
     [self.MP3 startRecord];
 }
 
@@ -341,6 +402,7 @@ static CGFloat const kChatBarTextViewBottomOffset = 4.f;
  */
 - (void)cancelRecordVoice {
     [LCCKProgressHUD dismissWithMessage:@"取消录音"];
+    self.voiceRecordButton.highlighted = NO;
     [self.MP3 cancelRecord];
 }
 
@@ -370,27 +432,28 @@ static CGFloat const kChatBarTextViewBottomOffset = 4.f;
     [self showMoreView:showType == LCCKFunctionViewShowMore && self.moreButton.selected];
     [self showVoiceView:showType == LCCKFunctionViewShowVoice && self.voiceButton.selected];
     [self showFaceView:showType == LCCKFunctionViewShowFace && self.faceButton.selected];
+    [self chatBarConstraintsDidChange];
     
     switch (showType) {
         case LCCKFunctionViewShowNothing: {
             self.textView.text = self.inputText;
-            [self setFrame:CGRectMake(0, self.superViewHeight - kLCCKChatBarMinHeight, self.frame.size.width, kLCCKChatBarMinHeight) animated:NO];
-            [self textViewDidChange:self.textView shouldFitToTextView:YES shouldCacheText:YES];
+            //            self.textView.contentOffset = CGPointZero;
+            [self textViewDidChange:self.textView];
             [self.textView resignFirstResponder];
         }
             break;
         case LCCKFunctionViewShowVoice: {
             self.inputText = self.textView.text;
             self.textView.text = nil;
+            //            self.textView.contentOffset = CGPointZero;
             [self.textView resignFirstResponder];
-            [self setFrame:CGRectMake(0, self.superViewHeight - kLCCKChatBarMinHeight, self.frame.size.width, kLCCKChatBarMinHeight) animated:NO];
-            [self textViewDidChange:self.textView shouldFitToTextView:YES shouldCacheText:NO];
+            //            [self chatBarConstraintsDidChange];
+            [self textViewDidChange:self.textView shouldCacheText:NO];
         }
             break;
         case LCCKFunctionViewShowMore:
         case LCCKFunctionViewShowFace:
             self.textView.text = self.inputText;
-            [self setFrame:CGRectMake(0, self.superViewHeight - kFunctionViewHeight - self.textView.frame.size.height, self.frame.size.width, self.textView.frame.size.height) animated:NO];
             [self.textView resignFirstResponder];
             [self textViewDidChange:self.textView];
             break;
@@ -429,15 +492,36 @@ static CGFloat const kChatBarTextViewBottomOffset = 4.f;
 
 - (void)showFaceView:(BOOL)show {
     if (show) {
-        [self.superview addSubview:self.faceView];
+        [self addSubview:self.faceView];
+        [self.faceView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.width.and.left.mas_equalTo(self);
+            make.height.mas_equalTo(kFunctionViewHeight);
+            // hide blow screen
+            make.top.mas_equalTo(self.superview.mas_bottom);
+        }];
+        [self.faceView layoutIfNeeded];
+        
+        [self.faceView mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.top.mas_equalTo(self.superview.mas_bottom).offset(-kFunctionViewHeight);
+        }];
+        [self.inputBarBackgroundView mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.bottom.mas_equalTo(self.faceView.mas_top);
+        }];
         [UIView animateWithDuration:LCCKAnimateDuration animations:^{
-            [self.faceView setFrame:CGRectMake(0, self.superViewHeight - kFunctionViewHeight, self.frame.size.width, kFunctionViewHeight)];
+            // [self.faceView setFrame:CGRectMake(0, self.superViewHeight - kFunctionViewHeight, self.frame.size.width, kFunctionViewHeight)];
+            [self.faceView layoutIfNeeded];
+//            [self.inputBarBackgroundView layoutIfNeeded];
         } completion:nil];
-    } else {
+    } else if (self.faceView.superview) {
+        //        [self.faceView layoutIfNeeded];
+        //        [self.faceView mas_updateConstraints:^(MASConstraintMaker *make) {
+        //            make.top.mas_equalTo(self.superview.mas_bottom);
+        //        }];
         [UIView animateWithDuration:LCCKAnimateDuration animations:^{
-            [self.faceView setFrame:CGRectMake(0, self.superViewHeight, self.frame.size.width, kFunctionViewHeight)];
-        } completion:^(BOOL finished) {
+            // [self.faceView setFrame:CGRectMake(0, self.superViewHeight, self.frame.size.width, kFunctionViewHeight)];
+            //                        [self.faceView layoutIfNeeded];
             [self.faceView removeFromSuperview];
+        } completion:^(BOOL finished) {
         }];
     }
 }
@@ -448,15 +532,38 @@ static CGFloat const kChatBarTextViewBottomOffset = 4.f;
  */
 - (void)showMoreView:(BOOL)show {
     if (show) {
-        [self.superview addSubview:self.moreView];
+        [self addSubview:self.moreView];
+        [self.moreView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.width.and.left.mas_equalTo(self);
+            make.height.mas_equalTo(kFunctionViewHeight);
+            // hide blow screen
+            make.top.mas_equalTo(self.superview.mas_bottom);
+        }];
+        [self.moreView layoutIfNeeded];
+        
+        [self.moreView mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.top.mas_equalTo(self.superview.mas_bottom).offset(-kFunctionViewHeight);
+        }];
+        [self.inputBarBackgroundView mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.bottom.mas_equalTo(self.moreView.mas_top);
+        }];
         [UIView animateWithDuration:LCCKAnimateDuration animations:^{
-            [self.moreView setFrame:CGRectMake(0, self.superViewHeight - kFunctionViewHeight, self.frame.size.width, kFunctionViewHeight)];
+            //            [self.moreView setFrame:CGRectMake(0, self.superViewHeight - kFunctionViewHeight, self.frame.size.width, kFunctionViewHeight)];
+            [self.moreView layoutIfNeeded];
+//            [self.inputBarBackgroundView layoutIfNeeded];
+            // [self.inputBarBackgroundView layoutIfNeeded];
         } completion:nil];
-    } else {
+    } else if (self.moreView.superview) {
+        // [self.moreView layoutIfNeeded];
+        // [self.moreView mas_updateConstraints:^(MASConstraintMaker *make) {
+        // make.top.mas_equalTo(self.superview.mas_bottom);
+        // }];
         [UIView animateWithDuration:LCCKAnimateDuration animations:^{
-            [self.moreView setFrame:CGRectMake(0, self.superViewHeight, self.frame.size.width, kFunctionViewHeight)];
-        } completion:^(BOOL finished) {
+            // [self.moreView setFrame:CGRectMake(0, self.superViewHeight, self.frame.size.width, kFunctionViewHeight)];
+            // [self.moreView layoutIfNeeded];
+            // [self.moreView layoutIfNeeded];
             [self.moreView removeFromSuperview];
+        } completion:^(BOOL finished) {
         }];
     }
 }
@@ -465,6 +572,7 @@ static CGFloat const kChatBarTextViewBottomOffset = 4.f;
     self.voiceButton.selected = show;
     self.voiceRecordButton.selected = show;
     self.voiceRecordButton.hidden = !show;
+    self.textView.hidden = !self.voiceRecordButton.hidden;
 }
 
 /**
@@ -481,7 +589,7 @@ static CGFloat const kChatBarTextViewBottomOffset = 4.f;
     }
     self.inputText = @"";
     self.textView.text = @"";
-    [self setFrame:CGRectMake(0, self.superViewHeight - self.bottomHeight - kLCCKChatBarMinHeight, self.frame.size.width, kLCCKChatBarMinHeight) animated:NO];
+    [self chatBarConstraintsDidChange];
     [self showViewWithType:LCCKFunctionViewShowKeyboard];
 }
 
@@ -508,11 +616,22 @@ static CGFloat const kChatBarTextViewBottomOffset = 4.f;
     }
 }
 
+- (void)chatBarConstraintsDidChange {
+    if (self.delegate && [self.delegate respondsToSelector:@selector(chatBarFrameDidChange:)]) {
+        [self.delegate chatBarFrameDidChange:self];
+    }
+}
+
+- (UIImage *)imageInBundlePathForImageName:(NSString *)imageName {
+    UIImage *image = [UIImage lcck_imageNamed:imageName bundleName:@"ChatKeyboard" bundleForClass:[self class]];
+    return image;
+}
+
 #pragma mark - Getters
 
 - (LCCKChatFaceView *)faceView {
     if (!_faceView) {
-        _faceView = [[LCCKChatFaceView alloc] initWithFrame:CGRectMake(0, self.superViewHeight , self.frame.size.width, kFunctionViewHeight)];
+        _faceView = [[LCCKChatFaceView alloc] init];//WithFrame:CGRectMake(0, self.superViewHeight , self.frame.size.width, kFunctionViewHeight)];
         _faceView.delegate = self;
         _faceView.backgroundColor = self.backgroundColor;
     }
@@ -521,7 +640,7 @@ static CGFloat const kChatBarTextViewBottomOffset = 4.f;
 
 - (LCCKChatMoreView *)moreView {
     if (!_moreView) {
-        _moreView = [[LCCKChatMoreView alloc] initWithFrame:CGRectMake(0, self.superViewHeight, self.frame.size.width, kFunctionViewHeight)];
+        _moreView = [[LCCKChatMoreView alloc] init];//WithFrame:CGRectMake(0, self.superViewHeight, self.frame.size.width, kFunctionViewHeight)];
         _moreView.delegate = self;
         _moreView.dataSource = self;
         _moreView.backgroundColor = self.backgroundColor;
@@ -562,9 +681,16 @@ static CGFloat const kChatBarTextViewBottomOffset = 4.f;
         _voiceRecordButton.hidden = YES;
         _voiceRecordButton.frame = self.textView.bounds;
         _voiceRecordButton.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-        [_voiceRecordButton setBackgroundColor:[UIColor lightGrayColor]];
+        [_voiceRecordButton setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
+        //        [_voiceRecordButton setBackgroundColor:[UIColor lightGrayColor]];
+        UIEdgeInsets edgeInsets = UIEdgeInsetsMake(9, 9, 9, 9);
+        UIImage *voiceRecordButtonNormalBackgroundImage = [[self imageInBundlePathForImageName:@"VoiceBtn_Black"] resizableImageWithCapInsets:edgeInsets resizingMode:UIImageResizingModeStretch];
+        UIImage *voiceRecordButtonHighlightedBackgroundImage = [[self imageInBundlePathForImageName:@"VoiceBtn_BlackHL"] resizableImageWithCapInsets:edgeInsets resizingMode:UIImageResizingModeStretch];
+        [_voiceRecordButton setBackgroundImage:voiceRecordButtonNormalBackgroundImage forState:UIControlStateNormal];
+        [_voiceRecordButton setBackgroundImage:voiceRecordButtonHighlightedBackgroundImage forState:UIControlStateHighlighted];
         _voiceRecordButton.titleLabel.font = [UIFont systemFontOfSize:14.0f];
-        [_voiceRecordButton setTitle:@"按住录音" forState:UIControlStateNormal];
+        [_voiceRecordButton setTitle:@"按住 说话" forState:UIControlStateNormal];
+        [_voiceRecordButton setTitle:@"松开 结束" forState:UIControlStateHighlighted];
         [_voiceRecordButton addTarget:self action:@selector(startRecordVoice) forControlEvents:UIControlEventTouchDown];
         [_voiceRecordButton addTarget:self action:@selector(cancelRecordVoice) forControlEvents:UIControlEventTouchUpOutside];
         [_voiceRecordButton addTarget:self action:@selector(confirmRecordVoice) forControlEvents:UIControlEventTouchUpInside];
@@ -606,28 +732,8 @@ static CGFloat const kChatBarTextViewBottomOffset = 4.f;
     }
 }
 
-- (UIViewController *)rootViewController{
+- (UIViewController *)rootViewController {
     return [[UIApplication sharedApplication] keyWindow].rootViewController;
-}
-
-#pragma mark - Getters
-
-- (void)setFrame:(CGRect)frame animated:(BOOL)animated{
-    if (animated) {
-        [UIView animateWithDuration:LCCKAnimateDuration animations:^{
-            [self setFrame:frame];
-        }];
-    } else {
-        [self setFrame:frame];
-    }
-    if (self.delegate && [self.delegate respondsToSelector:@selector(chatBarFrameDidChange:frame:)]) {
-        [self.delegate chatBarFrameDidChange:self frame:frame];
-    }
-}
-
-- (UIImage *)imageInBundlePathForImageName:(NSString *)imageName {
-    UIImage *image = [UIImage lcck_imageNamed:imageName bundleName:@"ChatKeyboard" bundleForClass:[self class]];
-    return image;
 }
 
 @end

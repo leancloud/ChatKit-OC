@@ -34,7 +34,7 @@ static CGFloat LCCKHorizontalLittleSpacing = 5;
 
 - (void)setup {
     self.backgroundColor = [UIColor colorWithRed:255 / 255.0 green:199 / 255.0 blue:199 / 255.0 alpha:1];
-
+    self.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     [self addSubview:self.statusImageView];
     [self addSubview:self.statusLabel];
 }

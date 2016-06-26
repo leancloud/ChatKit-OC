@@ -34,8 +34,8 @@
     [super updateConstraints];
     
     [self.button mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.mas_top).with.offset(4);
-        make.centerX.equalTo(self.mas_centerX);
+        make.top.equalTo(self).with.offset(4);
+        make.centerX.equalTo(self);
         make.width.equalTo(@50);
         make.height.equalTo(@50);
     }];
@@ -62,10 +62,8 @@
 #pragma mark - Private Methods
 
 - (void)setup{
-    
     [self addSubview:self.button];
     [self addSubview:self.titleLabel];
-    
     [self updateConstraintsIfNeeded];
     
 }

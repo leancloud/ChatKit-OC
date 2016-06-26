@@ -227,9 +227,8 @@
               } failed:^(NSString *messageUUID, NSError *error) {
                   __strong __typeof(wself)self = wself;
                   message.status = LCCKMessageSendStateFailed;
-                  [self.delegate messageSendStateChanged:LCCKMessageSendStateFailed withProgress:0.0f forIndex:[self.dataArray indexOfObject:message]];
                   message.messageId = messageUUID;
-                  message.conversationId = [LCCKConversationService sharedInstance].currentConversation.conversationId;
+                  [self.delegate messageSendStateChanged:LCCKMessageSendStateFailed withProgress:0.0f forIndex:[self.dataArray indexOfObject:message]];
                   [[LCCKConversationService sharedInstance] insertFailedLCCKMessage:message];
               }];
 }
@@ -254,10 +253,8 @@
                                             progressBlock:progressBlock
                                                  callback:^(BOOL succeeded, NSError *error) {
                                                      if (error) {
-                                                         message.status = LCCKMessageStatusFailed;
                                                          !failed ?: failed(messageUUID, error);
                                                      } else {
-                                                         message.status = LCCKMessageStatusSent;
                                                          !success ?: success(messageUUID);
                                                      }
                                                      // cache file type messages even failed
@@ -285,8 +282,19 @@
 
 - (void)resendMessageAtIndexPath:(NSIndexPath *)indexPath {
     LCCKMessage *lcckMessage =  self.dataArray[indexPath.row];
-    [self.dataArray lcck_removeMessageAtIndex:indexPath.row];
-    [self.avimTypedMessage lcck_removeMessageAtIndex:indexPath.row];
+    NSUInteger row = indexPath.row;
+    @try {
+        LCCKMessage *message = self.dataArray[row - 1];
+        if (message.messageMediaType == LCCKMessageTypeSystem) {
+            [self.dataArray lcck_removeMessageAtIndex:row - 1];
+            [self.avimTypedMessage lcck_removeMessageAtIndex:row - 1];
+            row -= 1;
+        }
+    } @catch (NSException *exception) {}
+    
+    [self.dataArray lcck_removeMessageAtIndex:row];
+    [self.avimTypedMessage lcck_removeMessageAtIndex:row];
+
     [self.parentConversationViewController.tableView reloadData];
     [self sendMessage:lcckMessage];
     [[LCCKConversationService sharedInstance] deleteFailedMessageByRecordId:lcckMessage.messageId];

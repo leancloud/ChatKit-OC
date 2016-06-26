@@ -9,6 +9,9 @@
 #import "LCCKChatMoreView.h"
 
 #import "LCCKChatMoreItem.h"
+#import "Masonry.h"
+
+#define kLCCKTopLineBackgroundColor [UIColor colorWithRed:184/255.0f green:184/255.0f blue:184/255.0f alpha:1.0f]
 
 @interface LCCKChatMoreView ()<UIScrollViewDelegate>
 
@@ -32,7 +35,6 @@
     return self;
 }
 
-
 #pragma mark - UIScrollViewDelegate
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
@@ -41,10 +43,12 @@
 
 #pragma mark - Public Methods
 
-- (void)reloadData{
-    
-    CGFloat itemWidth = (self.scrollView.frame.size.width - self.edgeInsets.left - self.edgeInsets.right) / self.numberPerLine;
-    CGFloat itemHeight = self.scrollView.frame.size.height / 2;
+- (void)reloadData {
+    CGFloat width = [UIApplication sharedApplication].keyWindow.frame.size.width;
+    CGFloat height = [UIApplication sharedApplication].keyWindow.frame.size.height;
+    CGFloat widthLimit = MIN(width, height);
+    CGFloat itemWidth = (widthLimit - self.edgeInsets.left - self.edgeInsets.right) / self.numberPerLine;
+    CGFloat itemHeight = kFunctionViewHeight / 2;
     self.itemSize = CGSizeMake(itemWidth, itemHeight);
     
     self.titles = [self.dataSource titlesOfMoreView:self];
@@ -53,36 +57,41 @@
     [self.itemViews makeObjectsPerformSelector:@selector(removeFromSuperview) withObject:nil];
     [self.itemViews removeAllObjects];
     [self setupItems];
-    
 }
 
 #pragma mark - Private Methods
 
-
-- (void)itemClickAction:(LCCKChatMoreItem *)item{
+- (void)itemClickAction:(LCCKChatMoreItem *)item {
     if (self.delegate && [self.delegate respondsToSelector:@selector(moreView:selectIndex:)]) {
         [self.delegate moreView:self selectIndex:item.tag];
     }
 }
 
-- (void)setup{
-
+- (void)setup {
+    UIImageView *topLine = [[UIImageView alloc] init];
+    topLine.backgroundColor = kLCCKTopLineBackgroundColor;
+    [self addSubview:topLine];
+    [topLine mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.and.right.and.top.equalTo(self);
+        make.height.mas_equalTo(.5f);
+    }];
+    
     self.edgeInsets = UIEdgeInsetsMake(10, 10, 5, 10);
     self.itemViews = [NSMutableArray array];
     self.numberPerLine = 4;
     
     [self addSubview:self.scrollView];
     [self addSubview:self.pageControl];
-
+    
+    [self updateConstraintsIfNeeded];
+    [self layoutIfNeeded];
 }
 
-- (void)setupItems{
-    
+- (void)setupItems {
     __block NSUInteger line = 0;   //行数
     __block NSUInteger column = 0; //列数
     __block NSUInteger page = 0;
     [self.titles enumerateObjectsUsingBlock:^(NSString *obj, NSUInteger idx, BOOL *stop) {
-        
         if (column > 3) {
             line ++ ;
             column = 0;
@@ -92,7 +101,6 @@
             column = 0;
             page ++ ;
         }
-        
         CGFloat startX = self.edgeInsets.left + column * self.itemSize.width + page * self.frame.size.width;
         CGFloat startY = line * self.itemSize.height;
         
@@ -102,17 +110,29 @@
         [item addTarget:self action:@selector(itemClickAction:) forControlEvents:UIControlEventTouchUpInside];
         [self.scrollView addSubview:item];
         [self.itemViews addObject:item];
-        column ++ ;
+        column ++;
         
         if (idx == self.titles.count - 1) {
             [self.scrollView setContentSize:CGSizeMake(self.scrollView.frame.size.width * (page + 1), self.scrollView.frame.size.height)];
             self.pageControl.numberOfPages = page + 1;
             *stop = YES;
         }
-        
     }];
 }
 
+- (void)updateConstraints {
+    [super updateConstraints];
+    //WithFrame:CGRectMake(0, self.edgeInsets.top, self.frame.size.width, self.frame.size.height - self.edgeInsets.top - self.edgeInsets.bottom)]
+    [self.scrollView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.edges.equalTo(self).with.insets(_edgeInsets);
+    }];
+    //WithFrame:CGRectMake(0, self.frame.size.height - 30, self.frame.size.width, 20)];
+    [self.pageControl mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.and.width.mas_equalTo(self);
+        make.height.mas_equalTo(20);
+        make.top.mas_equalTo(self.mas_bottom).offset(-30);
+    }];
+}
 
 #pragma mark - Setters
 
@@ -123,7 +143,6 @@
 
 - (void)setEdgeInsets:(UIEdgeInsets)edgeInsets{
     _edgeInsets = edgeInsets;
-    [self.scrollView setFrame:CGRectMake(0, self.edgeInsets.top, self.frame.size.width, self.frame.size.height - self.edgeInsets.top - self.edgeInsets.bottom)];
     [self reloadData];
 }
 
@@ -136,7 +155,7 @@
 
 - (UIScrollView *)scrollView {
     if (!_scrollView) {
-        _scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, self.edgeInsets.top, self.frame.size.width, self.frame.size.height - self.edgeInsets.top - self.edgeInsets.bottom)];
+        _scrollView = [[UIScrollView alloc] init];//WithFrame:CGRectMake(0, self.edgeInsets.top, self.frame.size.width, self.frame.size.height - self.edgeInsets.top - self.edgeInsets.bottom)];
         _scrollView.showsHorizontalScrollIndicator = NO;
         _scrollView.pagingEnabled = YES;
         _scrollView.delegate = self;
@@ -146,7 +165,7 @@
 
 - (UIPageControl *)pageControl{
     if (!_pageControl) {
-        _pageControl = [[UIPageControl alloc] initWithFrame:CGRectMake(0, self.frame.size.height - 30, self.frame.size.width, 20)];
+        _pageControl = [[UIPageControl alloc] init];//WithFrame:CGRectMake(0, self.frame.size.height - 30, self.frame.size.width, 20)];
         _pageControl.pageIndicatorTintColor = [UIColor lightGrayColor];
         _pageControl.currentPageIndicatorTintColor = [UIColor darkGrayColor];
         _pageControl.hidesForSinglePage = YES;
@@ -155,3 +174,4 @@
 }
 
 @end
+

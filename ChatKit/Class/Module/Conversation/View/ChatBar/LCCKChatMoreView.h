@@ -17,6 +17,8 @@ typedef NS_ENUM(NSUInteger, LCCKChatMoreItemType){
     LCCKChatMoreItemLocation /**< 显示地理位置 */,
 };
 
+static CGFloat const kFunctionViewHeight = 210.0f;
+
 @protocol LCCKChatMoreViewDataSource;
 @protocol LCCKChatMoreViewDelegate;
 /**

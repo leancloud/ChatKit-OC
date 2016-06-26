@@ -71,6 +71,10 @@
     // Do any additional setup after loading the view.
 }
 
+- (BOOL)prefersStatusBarHidden {
+    return NO;
+}
+
 - (void)dealloc {
 //    self.dataSource = nil;
 //    self.tableView.delegate = nil;

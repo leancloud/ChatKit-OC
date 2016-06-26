@@ -12,8 +12,10 @@
 #import "LCCKChatBar.h"
 #import "MJRefresh.h"
 #import "LCCKConversationRefreshHeader.h"
+#import "Masonry.h"
 
 static void * const LCCKBaseConversationViewControllerRefreshContext = (void*)&LCCKBaseConversationViewControllerRefreshContext;
+static CGFloat const LCCKScrollViewInsetTop = 20.f;
 
 @interface LCCKBaseConversationViewController ()
 
@@ -24,6 +26,15 @@ static void * const LCCKBaseConversationViewControllerRefreshContext = (void*)&L
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self initilzer];
+    [self.tableView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.and.left.and.width.equalTo(self.view);
+        make.bottom.equalTo(self.chatBar.mas_top);
+    }];
+    [self.chatBar mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.and.right.and.bottom.equalTo(self.view);
+        make.height.mas_greaterThanOrEqualTo(@(kLCCKChatBarMinHeight));
+    }];
+    
 }
 
 - (void)initilzer {
@@ -34,11 +45,7 @@ static void * const LCCKBaseConversationViewControllerRefreshContext = (void*)&L
     [self addObserver:self forKeyPath:@"loadingMoreMessage" options:NSKeyValueObservingOptionNew context:LCCKBaseConversationViewControllerRefreshContext];
     
     [LCCKCellRegisterController registerLCCKChatMessageCellClassForTableView:self.tableView];
-    self.tableView.frame = ({
-        CGRect frame = self.tableView.frame;
-        frame.size.height = self.view.frame.size.height - kLCCKChatBarMinHeight;
-        frame;
-    });
+//    [self setTableViewInsetsWithBottomValue:kLCCKChatBarMinHeight];
     self.tableView.mj_header = [LCCKConversationRefreshHeader headerWithRefreshingBlock:^{
         if (self.shouldLoadMoreMessagesScrollToTop && !self.loadingMoreMessage) {
             // 进入刷新状态后会自动调用这个block
@@ -47,6 +54,21 @@ static void * const LCCKBaseConversationViewControllerRefreshContext = (void*)&L
             [self.tableView.mj_header endRefreshing];
         }
     }];
+}
+
+#pragma mark - Scroll Message TableView Helper Method
+
+- (void)setTableViewInsetsWithBottomValue:(CGFloat)bottom {
+    UIEdgeInsets insets = [self tableViewInsetsWithBottomValue:bottom];
+    self.tableView.contentInset = insets;
+    self.tableView.scrollIndicatorInsets = insets;
+}
+
+- (UIEdgeInsets)tableViewInsetsWithBottomValue:(CGFloat)bottom {
+    UIEdgeInsets insets = UIEdgeInsetsZero;
+    insets.top = LCCKScrollViewInsetTop;
+    insets.bottom = bottom;
+    return insets;
 }
 
 - (void)setShouldLoadMoreMessagesScrollToTop:(BOOL)shouldLoadMoreMessagesScrollToTop {
@@ -109,26 +131,13 @@ static void * const LCCKBaseConversationViewControllerRefreshContext = (void*)&L
 
 - (LCCKChatBar *)chatBar {
     if (!_chatBar) {
-        LCCKChatBar *chatBar = [[LCCKChatBar alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height - kLCCKChatBarMinHeight - (self.navigationController.navigationBar.isTranslucent ? 0 : 64), self.view.frame.size.width, kLCCKChatBarMinHeight)];
+        LCCKChatBar *chatBar = [[LCCKChatBar alloc] init];//WithFrame:CGRectMake(0, [UIScreen mainScreen].bounds.size.height - kLCCKChatBarMinHeight - (self.navigationController.navigationBar.isTranslucent ? 0 : 64), self.view.frame.size.width, kLCCKChatBarMinHeight)];
+//        chatBar.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleWidth;
         [chatBar setSuperViewHeight:[UIScreen mainScreen].bounds.size.height - (self.navigationController.navigationBar.isTranslucent ? 0 : 64)];
         [self.view addSubview:(_chatBar = chatBar)];
         [self.view bringSubviewToFront:_chatBar];
     }
     return _chatBar;
-}
-
-#pragma mark - Scroll Message TableView Helper Method
-
-- (void)setTableViewInsetsWithBottomValue:(CGFloat)bottom {
-    UIEdgeInsets insets = [self tableViewInsetsWithBottomValue:bottom];
-    self.tableView.contentInset = insets;
-    self.tableView.scrollIndicatorInsets = insets;
-}
-
-- (UIEdgeInsets)tableViewInsetsWithBottomValue:(CGFloat)bottom {
-    UIEdgeInsets insets = UIEdgeInsetsZero;
-    insets.bottom = bottom;
-    return insets;
 }
 
 #pragma mark - Previte Method

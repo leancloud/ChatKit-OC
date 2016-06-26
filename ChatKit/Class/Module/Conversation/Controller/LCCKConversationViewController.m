@@ -26,6 +26,7 @@
 #import <objc/runtime.h>
 #import "UIImage+LCCKExtension.h"
 #import "NSMutableArray+LCCKMessageExtention.h"
+#import "Masonry.h"
 
 @interface LCCKConversationViewController () <LCCKChatBarDelegate, LCCKAVAudioPlayerDelegate, LCCKChatMessageCellDelegate, LCCKConversationViewModelDelegate>
 
@@ -309,17 +310,11 @@
                                                                     sender:self.userId
                                                                  timestamp:[[self class] currentTimestamp]];
     [self.chatViewModel sendMessage:message];
-    
 }
 
-- (void)chatBarFrameDidChange:(LCCKChatBar *)chatBar frame:(CGRect)frame {
-    CGFloat chatBarY = frame.origin.y;
-    CGFloat tableViewHeight = self.tableView.frame.size.height;
-    if (chatBarY == tableViewHeight) {
-        return;
-    }
+- (void)chatBarFrameDidChange:(LCCKChatBar *)chatBar {
     [UIView animateWithDuration:LCCKAnimateDuration animations:^{
-        [self.tableView setFrame:CGRectMake(0, 0, self.view.frame.size.width, frame.origin.y)];
+        [self.tableView layoutIfNeeded];
         [self scrollToBottomAnimated:NO];
     } completion:nil];
 }
@@ -427,7 +422,7 @@
 - (void)reloadAfterReceiveMessage:(LCCKMessage *)message {
     [self.tableView reloadData];
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:self.chatViewModel.messageCount - 1 inSection:0];
-    [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:NO];
+    [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
 }
 
 #pragma mark - LCCKAVAudioPlayerDelegate

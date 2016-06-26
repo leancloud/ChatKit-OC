@@ -382,6 +382,14 @@ NSString *const LCCKConversationServiceErrorDomain = @"LCCKConversationServiceEr
     return result;
 }
 
+- (BOOL)deleteFile:(NSString *)pathOfFileToDelete error:(NSError **)error {
+    BOOL exists = [[NSFileManager defaultManager] fileExistsAtPath:pathOfFileToDelete];
+    if(exists) {
+        [[NSFileManager defaultManager] removeItemAtPath:pathOfFileToDelete error:error];
+    }
+    return exists;
+}
+
 - (void)insertFailedLCCKMessage:(LCCKMessage *)message {
     if (message.conversationId == nil) {
         @throw [NSException exceptionWithName:NSGenericException
@@ -458,8 +466,11 @@ NSString *const LCCKConversationServiceErrorDomain = @"LCCKConversationServiceEr
                                      limit:(NSInteger)limit
                                      block:(AVIMArrayResultBlock)block {
     AVIMArrayResultBlock callback = ^(NSArray *messages, NSError *error) {
-        NSString *errorReason = [NSString stringWithFormat:@"类名与方法名：%@（在第%@行），描述：%@", @(__PRETTY_FUNCTION__), @(__LINE__), @"SDK处理异常，请联系SDK维护者修复luohanchenyilong@163.com"];
-        NSAssert(messages, errorReason);
+        if (!messages) {
+            NSString *errorReason = [NSString stringWithFormat:@"类名与方法名：%@（在第%@行），描述：%@", @(__PRETTY_FUNCTION__), @(__LINE__), @"SDK处理异常，请联系SDK维护者修复luohanchenyilong@163.com"];
+            NSLog(@"🔴类名与方法名：%@（在第%@行），描述：%@", @(__PRETTY_FUNCTION__), @(__LINE__), errorReason);
+        }
+        //        NSAssert(messages, errorReason);
         //以下过滤为了避免非法的消息，引起崩溃
         NSMutableArray *typedMessages = [NSMutableArray array];
         for (AVIMTypedMessage *message in messages) {
@@ -481,7 +492,9 @@ NSString *const LCCKConversationServiceErrorDomain = @"LCCKConversationServiceEr
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
         NSMutableSet *userIds = [[NSMutableSet alloc] init];
         for (AVIMTypedMessage *message in messages) {
-            [userIds addObject:message.clientId];
+            if (message.clientId) {
+                [userIds addObject:message.clientId];
+            }
             if (message.mediaType == kAVIMMessageMediaTypeImage || message.mediaType == kAVIMMessageMediaTypeAudio) {
                 AVFile *file = message.file;
                 if (file && file.isDataAvailable == NO) {
