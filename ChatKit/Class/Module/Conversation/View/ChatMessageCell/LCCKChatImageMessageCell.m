@@ -38,15 +38,9 @@
 
 #pragma mark - Override Methods
 
-- (void)updateConstraints {
-    [super updateConstraints];
-
-}
-
 #pragma mark - Public Methods
 
 - (void)setup {
-    [super setup];
 
     [self.messageContentView addSubview:self.messageImageView];
     [self.messageContentView addSubview:self.messageProgressView];
@@ -56,6 +50,7 @@
     }];
     UITapGestureRecognizer *recognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(singleTapMessageImageViewGestureRecognizerHandler:)];
     [self.messageContentView addGestureRecognizer:recognizer];
+    [super setup];
 }
 
 - (void)singleTapMessageImageViewGestureRecognizerHandler:(UITapGestureRecognizer *)tapGestureRecognizer {
@@ -91,20 +86,22 @@
             message.thumbnailPhoto = resizedImage;
             break;
         }
-//        if (message.originPhotoURL) {
-//            [self.messageImageView  sd_setImageWithURL:message.originPhotoURL placeholderImage:[self imageInBundleForImageName:@"Placeholder_Accept_Defeat"]
-//                                             completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
-//                                                 dispatch_async(dispatch_get_main_queue(),^{
-//                                                     if (image){
-//                                                         message.photo = image;
-//                                                         message.thumbnailPhoto = [image lcck_imageByScalingAspectFill];
-//                                                     }
-//                                                 });
-//                                                 
-//                                             }
-//             ];
-//            break;
-//        }
+
+        // requied!
+        if (message.originPhotoURL) {
+            [self.messageImageView  sd_setImageWithURL:message.originPhotoURL placeholderImage:[self imageInBundleForImageName:@"Placeholder_Accept_Defeat"]
+                                             completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+                                                 dispatch_async(dispatch_get_main_queue(),^{
+                                                     if (image){
+                                                         message.photo = image;
+                                                         message.thumbnailPhoto = [image lcck_imageByScalingAspectFill];
+                                                     }
+                                                 });
+                                                 
+                                             }
+             ];
+            break;
+        }
         
     } while (NO);
 }
