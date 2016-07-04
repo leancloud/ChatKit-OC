@@ -241,15 +241,15 @@ LCCKConversationViewController *conversationViewController = [[LCCKConversationV
 
 第二步：
 
-添加 ChatKit 依赖的第三方库：
+添加 ChatKit 依赖的第三方库以及对应版本：
 
- - [AVOSCloud](https://leancloud.cn/docs/sdk_down.html) 
- - [AVOSCloudIM](https://leancloud.cn/docs/sdk_down.html)
- - [MJRefresh](https://github.com/CoderMJLee/MJRefresh) 
- - [Masonry](https://github.com/SnapKit/Masonry) 
- - [SDWebImage](https://github.com/rs/SDWebImage) 
- - [FMDB](https://github.com/ccgus/fmdb) 
- - [UITableView+FDTemplateLayoutCell](https://github.com/forkingdog/UITableView-FDTemplateLayoutCell) 
+ - [AVOSCloud](https://leancloud.cn/docs/sdk_down.html) v3.3.5
+ - [AVOSCloudIM](https://leancloud.cn/docs/sdk_down.html)v3.3.5
+ - [MJRefresh](https://github.com/CoderMJLee/MJRefresh)  3.1.9
+ - [Masonry](https://github.com/SnapKit/Masonry) v1.0.1 
+ - [SDWebImage](https://github.com/rs/SDWebImage) v3.8.0
+ - [FMDB](https://github.com/ccgus/fmdb) 2.6.2 
+ - [UITableView+FDTemplateLayoutCell](https://github.com/forkingdog/UITableView-FDTemplateLayoutCell) 1.5.beta
 
 
 ## Q-A 常见问题
