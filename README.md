@@ -231,6 +231,27 @@ LCCKConversationViewController *conversationViewController = [[LCCKConversationV
 这里注意，通过 peerId 初始化，内部实现时，如果不是好友关系，会先建立好友关系、创建会话，所以调用该方法前请自行判断是否具有好友关系。同理，通过 conversationId 初始化群聊，内部实现时，如果不是群成员会先把当前用户加入群、开启群聊。
 
 
+## 手动集成
+
+如果你不想使用 CocoaPods 进行集成，也可以选择使用源码集成。集成的步骤如下：
+
+第一步：
+
+将上文[「项目结构」](https://leancloud.cn/docs/chatkit-ios.html#项目结构)中提到的ChatKit 这个「核心库文件夹」拖拽到工程中。
+
+第二步：
+
+添加 ChatKit 依赖的第三方库：
+
+ - [AVOSCloud](https://leancloud.cn/docs/sdk_down.html) 
+ - [AVOSCloudIM](https://leancloud.cn/docs/sdk_down.html)
+ - [MJRefresh](https://github.com/CoderMJLee/MJRefresh) 
+ - [Masonry](https://github.com/SnapKit/Masonry) 
+ - [SDWebImage](https://github.com/rs/SDWebImage) 
+ - [FMDB](https://github.com/ccgus/fmdb) 
+ - [UITableView+FDTemplateLayoutCell](https://github.com/forkingdog/UITableView-FDTemplateLayoutCell) 
+
+
 ## Q-A 常见问题
 
  Q ： ChatKit 组件收费么？
