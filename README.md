@@ -25,6 +25,12 @@ git clone --depth=1 https://github.com/leancloud/ChatKit-OC
  -------------|-------------|-------------
 ![enter image description here](http://i65.tinypic.com/2vmuaf4.jpg) | ![enter image description here](http://i68.tinypic.com/n6b29v.jpg)| ![enter image description here](http://i66.tinypic.com/orrrxh.jpg)
 
+图片消息支持多图联播，支持多种分享 |文本消息支持图文混排| 文本消息支持双击全屏展示
+-------------|-------------|-------------
+![enter image description here](http://i65.tinypic.com/wmjuvs.jpg) | ![enter image description here](http://i63.tinypic.com/2eoa4j6.jpg) | ![enter image description here](http://i63.tinypic.com/1z1z5ur.jpg)
+
+
+
 
 ## 项目结构
 
@@ -237,7 +243,7 @@ LCCKConversationViewController *conversationViewController = [[LCCKConversationV
 
 第一步：
 
-将上文[「项目结构」](https://leancloud.cn/docs/chatkit-ios.html#项目结构)中提到的ChatKit 这个「核心库文件夹」拖拽到工程中。
+将上文[「项目结构」](https://leancloud.cn/docs/chatkit-ios.html#项目结构)中提到的 ChatKit 这个「核心库文件夹」拖拽到工程中。
 
 第二步：
 
