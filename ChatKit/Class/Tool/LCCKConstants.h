@@ -162,13 +162,6 @@ typedef NS_ENUM(NSInteger, LCCKBubbleMessageMenuSelectedType) {
     LCCKBubbleMessageMenuSelectedTypeVoiceMore = 14,
 };
 
-//typedef NS_ENUM(NSInteger, LCCKMessageStatus){
-//    LCCKMessageStatusSending,
-//    LCCKMessageStatusSent,
-//    LCCKMessageStatusReceived,
-//    LCCKMessageStatusFailed,
-//};
-
 typedef NS_ENUM(NSInteger, LCCKBubbleMessageType) {
     LCCKBubbleMessageTypeSending = 0,
     LCCKBubbleMessageTypeReceiving
@@ -176,10 +169,10 @@ typedef NS_ENUM(NSInteger, LCCKBubbleMessageType) {
 
 static NSInteger const kLCCKOnePageSize = 10;
 
-/**
+/*!
  *  提示信息的类型定义
  */
-typedef NS_ENUM(NSInteger, LCCKMessageNotificationType) {
+typedef enum : NSUInteger {
     /// 普通消息
     LCCKMessageNotificationTypeMessage = 0,
     /// 警告
@@ -188,7 +181,21 @@ typedef NS_ENUM(NSInteger, LCCKMessageNotificationType) {
     LCCKMessageNotificationTypeError,
     /// 成功
     LCCKMessageNotificationTypeSuccess
-};
+} LCCKMessageNotificationType;
+
+/*!
+ * HUD的行为
+ */
+typedef enum : NSUInteger {
+    /// 展示
+    LCCKMessageHUDActionTypeShow,
+    /// 隐藏
+    LCCKMessageHUDActionTypeHide,
+    /// 错误
+    LCCKMessageHUDActionTypeError,
+    /// 成功
+    LCCKMessageHUDActionTypeSuccess
+} LCCKMessageHUDActionType;
 
 ///-------------------------------------------------------------------------
 ///---------------------Succeed Message Store-------------------------------

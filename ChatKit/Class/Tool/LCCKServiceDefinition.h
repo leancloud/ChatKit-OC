@@ -215,7 +215,7 @@ typedef NSArray<LCCKMenuItem *> *(^LCCKLongPressMessageBlock)(LCCKMessage *messa
 - (void)setLongPressMessageBlock:(LCCKLongPressMessageBlock)longPressMessageBlock;
 
 /**
- *  当IMUIKit需要显示通知时，会调用这个block。
+ *  当ChatKit需要显示通知时，会调用这个block。
  *  开发者需要实现并设置这个block，以便给用户提示。
  *  @param viewController 当前的controller
  *  @param title 标题
@@ -227,7 +227,7 @@ typedef void(^LCCKShowNotificationBlock)(UIViewController *viewController, NSStr
 @property (nonatomic, copy, readonly) LCCKShowNotificationBlock showNotificationBlock;
 
 /**
- *  当IMUIKit需要显示通知时，会调用这个block。
+ *  当ChatKit需要显示通知时，会调用这个block。
  *  开发者需要实现并设置这个block，以便给用户提示。
  *  @param viewController 当前的controller
  *  @param title 标题
@@ -235,6 +235,27 @@ typedef void(^LCCKShowNotificationBlock)(UIViewController *viewController, NSStr
  *  @param type 类型
  */
 - (void)setShowNotificationBlock:(LCCKShowNotificationBlock)showNotificationBlock;
+
+/**
+ *  当ChatKit需要显示通知时，会调用这个block。
+ *  开发者需要实现并设置这个block，以便给用户提示。
+ *  @param viewController 当前的controller
+ *  @param title 标题
+ *  @param type 类型
+ */
+typedef void(^LCCKHUDActionBlock)(UIViewController *viewController, NSString *title, LCCKMessageHUDActionType type);
+
+@property (nonatomic, copy, readonly) LCCKHUDActionBlock HUDActionBlock;
+
+/**
+ *  当ChatKit需要显示通知时，会调用这个block。
+ *  开发者需要实现并设置这个block，以便给用户提示。
+ *  @param viewController 当前的controller
+ *  @param title 标题
+ *  @param subtitle 子标题
+ *  @param type 类型
+ */
+- (void)setHUDActionBlock:(LCCKHUDActionBlock)HUDActionBlock;
 
 typedef CGFloat (^LCCKAvatarImageViewCornerRadiusBlock)(CGSize avatarImageViewSize);
 

@@ -186,6 +186,9 @@ static NSMutableDictionary *_sharedInstances = nil;
 - (void)setShowNotificationBlock:(LCCKShowNotificationBlock)showNotificationBlock {
     [self.UIService setShowNotificationBlock:showNotificationBlock];
 }
+- (void)setHUDActionBlock:(LCCKHUDActionBlock)HUDActionBlock {
+    [self.UIService setHUDActionBlock:HUDActionBlock];
+}
 
 - (void)setAvatarImageViewCornerRadiusBlock:(LCCKAvatarImageViewCornerRadiusBlock)avatarImageViewCornerRadiusBlock {
     [self.UIService setAvatarImageViewCornerRadiusBlock:avatarImageViewCornerRadiusBlock];

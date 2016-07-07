@@ -18,12 +18,8 @@ NSString *const LCCKUIServiceErrorDomain = @"LCCKUIServiceErrorDomain";
 @property (nonatomic, copy) LCCKUnreadCountChangedBlock unreadCountChangedBlock;
 @property (nonatomic, assign, readwrite) LCCKAvatarImageViewCornerRadiusBlock avatarImageViewCornerRadiusBlock;
 @property (nonatomic, copy, readwrite) LCCKLongPressMessageBlock longPressMessageBlock;
-
-@end
-
-@interface LCCKUIService ()
-
 @property (nonatomic, copy) LCCKShowNotificationBlock showNotificationBlock;
+@property (nonatomic, copy) LCCKHUDActionBlock HUDActionBlock;
 
 @end
 
@@ -43,6 +39,10 @@ NSString *const LCCKUIServiceErrorDomain = @"LCCKUIServiceErrorDomain";
 
 - (void)setShowNotificationBlock:(LCCKShowNotificationBlock)showNotificationBlock {
     _showNotificationBlock = showNotificationBlock;
+}
+
+- (void)setHUDActionBlock:(LCCKHUDActionBlock)HUDActionBlock {
+    _HUDActionBlock = HUDActionBlock;
 }
 
 - (void)setUnreadCountChangedBlock:(LCCKUnreadCountChangedBlock)unreadCountChangedBlock {
