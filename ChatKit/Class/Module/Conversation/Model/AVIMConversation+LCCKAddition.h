@@ -22,6 +22,11 @@
  */
 @property (nonatomic, assign) NSInteger lcck_unreadCount;
 
+/*!
+ * 如果未读消息数未超出100，显示数字，否则消息省略号
+ */
+@property (nonatomic, copy) NSString *lcck_badgeText;
+
 /**
  *  是否有人提到了你，配合 @ 功能。不能看最后一条消息。
  *  因为可能倒数第二条消息提到了你，所以维护一个标记。

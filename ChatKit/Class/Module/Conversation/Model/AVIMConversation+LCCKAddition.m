@@ -27,6 +27,17 @@
     return [lcck_unreadCountObject intValue];
 }
 
+- (NSString *)lcck_badgeText {
+    NSString *badgeText;
+    NSUInteger unreadCount = self.lcck_unreadCount;
+    if (unreadCount > 99) {
+        badgeText = @"···";
+    } else {
+        badgeText = [NSString stringWithFormat:@"%@", @(unreadCount)];;
+    }
+    return badgeText;
+}
+
 - (void)setLcck_unreadCount:(NSInteger)lcck_unreadCount {
     NSNumber *lcck_unreadCountObject = [NSNumber numberWithInteger:lcck_unreadCount];
     objc_setAssociatedObject(self, @selector(lcck_unreadCount), lcck_unreadCountObject, OBJC_ASSOCIATION_ASSIGN);

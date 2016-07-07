@@ -428,7 +428,11 @@ typedef void (^UITableViewRowActionHandler)(UITableViewRowAction *action, NSInde
 
 - (void)exampleMarkBadgeWithTotalUnreadCount:(NSInteger)totalUnreadCount controller:(UIViewController *)controller {
     if (totalUnreadCount > 0) {
-        [controller tabBarItem].badgeValue = [NSString stringWithFormat:@"%ld", (long)totalUnreadCount];
+        NSString *badgeValue = [NSString stringWithFormat:@"%ld", (long)totalUnreadCount];
+        if (totalUnreadCount > 99) {
+            badgeValue = @"...";
+        }
+        [controller tabBarItem].badgeValue = badgeValue;
         [[UIApplication sharedApplication] setApplicationIconBadgeNumber:totalUnreadCount];
     } else {
         [controller tabBarItem].badgeValue = nil;
