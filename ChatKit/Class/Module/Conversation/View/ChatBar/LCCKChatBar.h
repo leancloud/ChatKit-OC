@@ -55,14 +55,14 @@ typedef NS_ENUM(NSUInteger, LCCKFunctionViewShowType){
 
 @optional
 
-/**
+/*!
  *  chatBarFrame改变回调
  *
  *  @param chatBar 
  */
 - (void)chatBarFrameDidChange:(LCCKChatBar *)chatBar;
 
-/**
+/*!
  *  发送图片信息,支持多张图片
  *
  *  @param chatBar
@@ -70,7 +70,7 @@ typedef NS_ENUM(NSUInteger, LCCKFunctionViewShowType){
  */
 - (void)chatBar:(LCCKChatBar *)chatBar sendPictures:(NSArray *)pictures;
 
-/**
+/*!
  *  发送地理位置信息
  *
  *  @param chatBar
@@ -79,7 +79,7 @@ typedef NS_ENUM(NSUInteger, LCCKFunctionViewShowType){
  */
 - (void)chatBar:(LCCKChatBar *)chatBar sendLocation:(CLLocationCoordinate2D)locationCoordinate locationText:(NSString *)locationText;
 
-/**
+/*!
  *  发送普通的文字信息,可能带有表情
  *
  *  @param chatBar
@@ -87,7 +87,7 @@ typedef NS_ENUM(NSUInteger, LCCKFunctionViewShowType){
  */
 - (void)chatBar:(LCCKChatBar *)chatBar sendMessage:(NSString *)message;
 
-/**
+/*!
  *  发送语音信息
  *
  *  @param chatBar
@@ -95,5 +95,11 @@ typedef NS_ENUM(NSUInteger, LCCKFunctionViewShowType){
  *  @param seconds   语音时长
  */
 - (void)chatBar:(LCCKChatBar *)chatBar sendVoice:(NSString *)voiceFileName seconds:(NSTimeInterval)seconds;
+
+/*!
+ *  输入了 @ 的时候
+ *
+ */
+- (void)didInputAtSign:(LCCKChatBar *)chatBar;
 
 @end

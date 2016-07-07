@@ -55,10 +55,9 @@
     [super updateConstraints];
     
     [self.inputBarBackgroundView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.width.and.left.mas_equalTo(self).priorityLow();
-        make.height.mas_equalTo(kLCCKChatBarMinHeight).priorityLow();
+        make.left.and.right.and.top.mas_equalTo(self);
+//        make.height.mas_equalTo(kLCCKChatBarMinHeight).priorityLow();
         make.bottom.mas_equalTo(self).priorityLow();
-        make.top.mas_equalTo(self);
     }];
     
     [self.voiceButton mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -147,6 +146,11 @@
             [self textViewDidChange:self.textView];
             return NO;
         }
+    } else if ([text isEqualToString:@"@"]) {
+        if ([self.delegate respondsToSelector:@selector(didInputAtSign:)]) {
+            [self.delegate didInputAtSign:self];
+        }
+        return YES;
     }
     return YES;
 }
@@ -258,7 +262,9 @@
             //显示拍照
             if (![UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
                 LCCKShowNotificationBlock showNotificationBlock = [LCCKUIService sharedInstance].showNotificationBlock;
-                !showNotificationBlock ?: showNotificationBlock(self, @"您的设备不支持拍照", nil, LCCKMessageNotificationTypeError);
+                id<UIApplicationDelegate> delegate = ((id<UIApplicationDelegate>)[[UIApplication sharedApplication] delegate]);
+                UIWindow *window = delegate.window;
+                !showNotificationBlock ?: showNotificationBlock(window.rootViewController, @"您的设备不支持拍照", nil, LCCKMessageNotificationTypeError);
                 break;
             }
             

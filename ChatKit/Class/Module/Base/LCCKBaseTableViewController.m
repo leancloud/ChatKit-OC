@@ -67,8 +67,15 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.view.backgroundColor = [UIColor whiteColor];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateStatusView) name:LCCKNotificationConnectivityUpdated object:nil];
-    // Do any additional setup after loading the view.
+    if (self.viewControllerStyle == LCCKViewControllerStylePresenting) {
+        self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"取消" style:UIBarButtonItemStylePlain target:self action:@selector(dismissViewController:)];
+    }
+}
+
+- (void)dismissViewController:(id)sender {
+    [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (BOOL)prefersStatusBarHidden {

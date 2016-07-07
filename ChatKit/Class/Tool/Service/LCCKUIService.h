@@ -17,7 +17,7 @@ FOUNDATION_EXTERN NSString *const LCCKUIServiceErrorDomain;
 
 @interface LCCKUIService : LCCKSingleton <LCCKUIService>
 
-/**
+/*!
  *  未读数发生变化
  *  @param aCount 总的未读数
  */

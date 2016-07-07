@@ -33,6 +33,7 @@ static CGFloat const kAvatarImageViewHeight = 50.f;
 static CGFloat const LCCKMessageSendStateViewWidthHeight = 30.f;
 static CGFloat const LCCKMessageSendStateViewLeftOrRightToMessageContentView = 2.f;
 static CGFloat const LCCKAvatarToMessageContent = 5.f;
+
 @interface LCCKChatMessageCell ()<LCCKSendImageViewDelegate>
 
 @property (nonatomic, strong, readwrite) LCCKMessage *message;

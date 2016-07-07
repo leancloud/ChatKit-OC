@@ -83,6 +83,17 @@
     [self addSubview:self.scrollView];
     [self addSubview:self.pageControl];
     
+    [self.scrollView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.edges.equalTo(self).with.insets(_edgeInsets);
+    }];
+    //WithFrame:CGRectMake(0, self.frame.size.height - 30, self.frame.size.width, 20)];
+    [self.pageControl mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.and.right.mas_equalTo(self);
+//        make.height.mas_equalTo(20);
+//        make.top.mas_equalTo(self.mas_bottom).offset(-30);
+        make.bottom.mas_equalTo(self).offset(-10);
+    }];
+    
     [self updateConstraintsIfNeeded];
     [self layoutIfNeeded];
 }
@@ -117,20 +128,6 @@
             self.pageControl.numberOfPages = page + 1;
             *stop = YES;
         }
-    }];
-}
-
-- (void)updateConstraints {
-    [super updateConstraints];
-    //WithFrame:CGRectMake(0, self.edgeInsets.top, self.frame.size.width, self.frame.size.height - self.edgeInsets.top - self.edgeInsets.bottom)]
-    [self.scrollView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.edges.equalTo(self).with.insets(_edgeInsets);
-    }];
-    //WithFrame:CGRectMake(0, self.frame.size.height - 30, self.frame.size.width, 20)];
-    [self.pageControl mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.and.width.mas_equalTo(self);
-        make.height.mas_equalTo(20);
-        make.top.mas_equalTo(self.mas_bottom).offset(-30);
     }];
 }
 

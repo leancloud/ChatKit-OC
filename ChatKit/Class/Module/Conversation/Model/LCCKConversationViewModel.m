@@ -305,7 +305,6 @@
     NSUInteger oldLastMessageCount = self.dataArray.count;
     [self addMessage:message];
     NSUInteger newLastMessageCout = self.dataArray.count;
-    
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:self.dataArray.count - 1 inSection:0];
     [self.delegate messageSendStateChanged:LCCKMessageSendStateSending withProgress:0.0f forIndex:indexPath.row];
     NSMutableArray *indexPaths = [NSMutableArray arrayWithObject:indexPath];

@@ -10,9 +10,15 @@
 #import "LCCKBaseViewController.h"
 @class LCCKStatusView;
 
+typedef enum : NSUInteger {
+    LCCKViewControllerStylePlain = 0,
+    LCCKViewControllerStylePresenting
+}LCCKViewControllerStyle;
+
 @interface LCCKBaseTableViewController : LCCKBaseViewController <UITableViewDelegate, UITableViewDataSource>
 
 @property (nonatomic, strong, readonly) LCCKStatusView *clientStatusView;
+@property (nonatomic, assign) LCCKViewControllerStyle viewControllerStyle;
 
 /**
  *  显示大量数据的控件
