@@ -18,6 +18,8 @@
 @property (nonatomic, strong) LCCKBadgeView *badgeView;
 @property (nonatomic, strong) UIView *litteBadgeView;
 @property (nonatomic, strong) UILabel *timestampLabel;
+@property (nonatomic, strong) UIButton *remindMuteImageView;
+
 @property (nonatomic, copy) NSString *identifier;
 
 + (instancetype)dequeueOrCreateCellByTableView:(UITableView *)tableView;

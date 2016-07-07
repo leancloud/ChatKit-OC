@@ -18,12 +18,14 @@
 #import "NSDate+LCCKDateTools.h"
 #import "MJRefresh.h"
 #import "LCCKConversationListService.h"
-#if __has_include(<SDWebImage/UIImageView+WebCache.h>)
-#import <SDWebImage/UIImageView+WebCache.h>
-#else
-#import "UIImageView+WebCache.h"
-#endif
 #import "UIImage+LCCKExtension.h"
+
+#if __has_include(<SDWebImage/UIImageView+WebCache.h>)
+    #import <SDWebImage/UIImageView+WebCache.h>
+#else
+    #import "UIImageView+WebCache.h"
+#endif
+
 
 
 @interface LCCKConversationListViewModel ()
@@ -42,7 +44,7 @@
     if (!self) {
         return nil;
     }
-    // 当在其它 Tab 的时候，收到消息 badge 增加，所以需要一直监听
+    // 当在其它 Tab 的时候，收到消息, badge 增加，所以需要一直监听
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refresh) name:LCCKNotificationMessageReceived object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refresh) name:LCCKNotificationUnreadsUpdated object:nil];
     _conversationListViewController = conversationListViewController;
@@ -90,8 +92,6 @@
     }
     
     cell.nameLabel.text = conversation.lcck_displayName;
-    
-    
     if (conversation.lcck_lastMessage) {
         cell.messageTextLabel.attributedText = [LCCKLastMessageTypeManager attributedStringWithMessage:conversation.lcck_lastMessage conversation:conversation userName:displayName];
         cell.timestampLabel.text = [[NSDate dateWithTimeIntervalSince1970:conversation.lcck_lastMessage.sendTimestamp / 1000] lcck_timeAgoSinceNow];
@@ -100,10 +100,12 @@
         if (conversation.muted) {
             cell.litteBadgeView.hidden = NO;
         } else {
-            cell.badgeView.badgeText = [NSString stringWithFormat:@"%@", @(conversation.lcck_unreadCount)];
+            cell.badgeView.badgeText = conversation.lcck_badgeText;
         }
     }
-    
+    if (conversation.muted == YES) {
+        cell.remindMuteImageView.hidden = NO;
+    }
     LCCKConfigureCellBlock configureCellBlock = [[LCCKConversationListService sharedInstance] configureCellBlock];
     if (configureCellBlock) {
         configureCellBlock(cell, tableView, indexPath, conversation);

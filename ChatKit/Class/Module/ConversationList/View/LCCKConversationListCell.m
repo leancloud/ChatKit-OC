@@ -20,6 +20,7 @@ static CGFloat LCCKNameLabelHeightProportion = 3.0 / 5;
 static CGFloat LCCKNameLabelHeight;
 static CGFloat LCCKMessageLabelHeight;
 static CGFloat LCCKLittleBadgeSize = 10;
+static CGFloat LCCKRemindMuteSize = 18;
 
 CGFloat const LCCKConversationListCellDefaultHeight = 61; //LCCKImageSize + LCCKVerticalSpacing * 2;
 
@@ -58,6 +59,7 @@ CGFloat const LCCKConversationListCellDefaultHeight = 61; //LCCKImageSize + LCCK
     [self.contentView addSubview:self.litteBadgeView];
     [self.contentView addSubview:self.nameLabel];
     [self.contentView addSubview:self.messageTextLabel];
+    [self.contentView addSubview:self.remindMuteImageView];
 }
 
 - (UIImageView *)avatorImageView {
@@ -109,13 +111,29 @@ CGFloat const LCCKConversationListCellDefaultHeight = 61; //LCCKImageSize + LCCK
 
 - (UILabel *)messageTextLabel {
     if (_messageTextLabel == nil) {
-        UILabel *messageTextLabel = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMinX(_nameLabel.frame), CGRectGetMaxY(_nameLabel.frame), LCCKAutoResizingDefaultScreenWidth - 3 * LCCKHorizontalSpacing - LCCKImageSize, LCCKMessageLabelHeight)];
+        UILabel *messageTextLabel = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMinX(_nameLabel.frame), CGRectGetMaxY(_nameLabel.frame), LCCKAutoResizingDefaultScreenWidth - 4 * LCCKHorizontalSpacing - LCCKImageSize - LCCKRemindMuteSize, LCCKMessageLabelHeight)];
         messageTextLabel.backgroundColor = [UIColor clearColor];
         messageTextLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         _messageTextLabel = messageTextLabel;
     }
     return _messageTextLabel;
 }
+
+- (UIButton *)remindMuteImageView {
+    if (_remindMuteImageView == nil) {
+        UIButton *remindMuteImageView = [UIButton buttonWithType:UIButtonTypeCustom];
+        remindMuteImageView.frame = CGRectMake(CGRectGetMaxX(_messageTextLabel.frame) + LCCKHorizontalSpacing, CGRectGetMinY(_messageTextLabel.frame), LCCKRemindMuteSize, LCCKRemindMuteSize);
+        NSString *remindMuteImageName = @"Remind_Mute";
+        remindMuteImageView.imageEdgeInsets = UIEdgeInsetsMake(2.5, 2.5, 2.5, 2.5);
+        UIImage *remindMuteImage = [UIImage lcck_imageNamed:remindMuteImageName bundleName:@"Common" bundleForClass:[LCChatKit class]];
+        [remindMuteImageView setImage:remindMuteImage forState:UIControlStateNormal];
+        remindMuteImageView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
+        remindMuteImageView.hidden = YES;
+        _remindMuteImageView = remindMuteImageView;
+    }
+    return _remindMuteImageView;
+}
+
 
 - (LCCKBadgeView *)badgeView {
     if (_badgeView == nil) {
