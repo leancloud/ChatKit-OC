@@ -5,11 +5,6 @@
 //  Created by ElonChan on 16/2/24.
 //  Copyright © 2016年 LeanCloud. All rights reserved.
 //
-#if __has_include(<ChatKit/LCChatKit.h>)
-#import <ChatKit/LCChatKit.h>
-#else
-#import "LCChatKit.h"
-#endif
 #import "LCChatKitExample.h"
 #import "LCCKUtil.h"
 #import "NSObject+LCCKHUD.h"
@@ -18,6 +13,11 @@
 #import "MWPhotoBrowser.h"
 #import <objc/runtime.h>
 
+#if __has_include(<ChatKit/LCChatKit.h>)
+#import <ChatKit/LCChatKit.h>
+#else
+#import "LCChatKit.h"
+#endif
 //==================================================================================================================================
 //If you want to see the storage of this demo, log in public account of leancloud.cn, search for the app named `LeanCloudChatKit-iOS`.
 //======================================== username : leancloud@163.com , password : Public123 =====================================
@@ -45,8 +45,10 @@ static NSMutableDictionary *_sharedInstances = nil;
 #pragma mark - SDK Life Control
 
 + (void)invokeThisMethodInDidFinishLaunching {
+    //    [AVOSCloud setServiceRegion:AVServiceRegionUS];
     [AVOSCloud registerForRemoteNotification];
     [AVIMClient setTimeoutIntervalInSeconds:20];
+    
 }
 
 + (void)invokeThisMethodInDidRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
@@ -116,7 +118,7 @@ static NSMutableDictionary *_sharedInstances = nil;
  */
 - (void)exampleInit {
 #ifndef __OPTIMIZE__
-    //    [LCChatKit setAllLogsEnabled:YES];
+    //        [LCChatKit setAllLogsEnabled:YES];
 #endif
     [LCChatKit setAppId:LCCKAPPID appKey:LCCKAPPKEY];
     [[LCChatKit sharedInstance] setFetchProfilesBlock:^(NSArray<NSString *> *userIds, LCCKFetchProfilesCallBack callback) {
@@ -166,6 +168,26 @@ static NSMutableDictionary *_sharedInstances = nil;
         return menuItems;
     }];
     
+    [[LCChatKit sharedInstance] setHUDActionBlock:^(UIViewController *viewController, NSString *title, LCCKMessageHUDActionType type) {
+        switch (type) {
+            case LCCKMessageHUDActionTypeShow:
+                [[self class] lcck_showMessage:title toView:viewController.view];
+                break;
+                
+            case LCCKMessageHUDActionTypeHide:
+                [[self class] lcck_hideHUDForView:viewController.view];
+                break;
+                
+            case LCCKMessageHUDActionTypeError:
+                [[self class] lcck_showError:title toView:viewController.view];
+                break;
+                
+            case LCCKMessageHUDActionTypeSuccess:
+                [[self class] lcck_showSuccess:title toView:viewController.view];
+                break;
+        }
+    }];
+    
     //    [[LCChatKit sharedInstance] setDidDeleteItemBlock:^(NSIndexPath *indexPath, AVIMConversation *conversation, LCCKConversationListViewController *controller) {
     //        //TODO:
     //    }];
@@ -199,14 +221,14 @@ static NSMutableDictionary *_sharedInstances = nil;
     }];
     
     [[LCChatKit sharedInstance] setSessionNotOpenedHandler:^(UIViewController *viewController, LCCKBooleanResultBlock callback) {
-        [[self class] showMessage:@"正在重新连接聊天服务..." toView:viewController.view];
+        [[self class] lcck_showMessage:@"正在重新连接聊天服务..." toView:viewController.view];
         [[LCChatKit sharedInstance] openWithClientId:[LCChatKit sharedInstance].clientId callback:^(BOOL succeeded, NSError *error) {
-            [[self class] hideHUDForView:viewController.view];
+            [[self class] lcck_hideHUDForView:viewController.view];
             if (succeeded) {
-                [[self class] showSuccess:@"连接成功"];
+                [[self class] lcck_showSuccess:@"连接成功"];
                 callback(succeeded, nil);
             } else {
-                [[self class] showError:@"连接失败"];
+                [[self class] lcck_showError:@"连接失败"];
                 callback(succeeded, error);
             }
         }];
@@ -282,7 +304,7 @@ typedef void (^UITableViewRowActionHandler)(UITableViewRowAction *action, NSInde
 + (void)exampleOpenConversationViewControllerWithPeerId:(NSString *)peerId fromNavigationController:(UINavigationController *)navigationController {
     LCCKConversationViewController *conversationViewController = [[LCCKConversationViewController alloc] initWithPeerId:peerId];
     [conversationViewController setViewDidLoadBlock:^(LCCKBaseViewController *viewController) {
-        [self showMessage:@"加载历史记录..."];
+        [self lcck_showMessage:@"加载历史记录..."];
         [viewController configureBarButtonItemStyle:LCCKBarButtonItemStyleSingleProfile action:^{
             NSString *title = @"打开用户详情";
             NSString *subTitle = [NSString stringWithFormat:@"用户id：%@", peerId];
@@ -291,13 +313,13 @@ typedef void (^UITableViewRowActionHandler)(UITableViewRowAction *action, NSInde
     }];
     [conversationViewController setConversationHandler:^(AVIMConversation *conversation, LCCKConversationViewController *aConversationController) {
         if (!conversation) {
-            [self hideHUD];
+            [self lcck_hideHUD];
             [aConversationController.navigationController popViewControllerAnimated:YES];
             return;
         }
     }];
     [conversationViewController setLoadHistoryMessagesHandler:^(BOOL succeeded, NSError *error) {
-        [self hideHUD];
+        [self lcck_hideHUD];
         NSString *title;
         NSString *subtitle;
         LCCKMessageNotificationType type;
@@ -316,37 +338,37 @@ typedef void (^UITableViewRowActionHandler)(UITableViewRowAction *action, NSInde
 
 + (void)exampleOpenConversationViewControllerWithConversaionId:(NSString *)conversationId fromNavigationController:(UINavigationController *)aNavigationController {
     
-//    [[LCChatKit sharedInstance] fecthConversationWithConversationId:conversationId callback:^(AVIMConversation *conversation, NSError *error) {
-//        if (!error) {
-//            NSString *currentClientId = [LCCKSessionService sharedInstance].clientId;
-//            BOOL containsCurrentClientId = [conversation.members containsObject:currentClientId];
-//            if (!containsCurrentClientId) {
-//                [conversation joinWithCallback:nil];
-//            }
-//        }
-//        [self refreshConversation:conversation];
-//    }];
-//
-//    
-//    if (conversation.members.count > 2 && (![conversation.members containsObject:[LCChatKit sharedInstance].clientId])) {
-//        [self showMessage:@"正在加入聊天室..."];
-//        [conversation joinWithCallback:^(BOOL succeeded, NSError *error) {
-//            [self hideHUD];
-//            NSString *title;
-//            NSString *subtitle;
-//            LCCKMessageNotificationType type;
-//            if (error) {
-//                title = @"加入聊天室失败";
-//                subtitle = error.localizedDescription;
-//                type = LCCKMessageNotificationTypeError;
-//                [LCCKUtil showNotificationWithTitle:title subtitle:subtitle type:type];
-//                return;
-//            }
-//            title = @"加入聊天室";
-//            type = LCCKMessageNotificationTypeSuccess;
-//            [LCCKUtil showNotificationWithTitle:title subtitle:subtitle type:type];
-//        }];
-//    }
+    //    [[LCChatKit sharedInstance] fecthConversationWithConversationId:conversationId callback:^(AVIMConversation *conversation, NSError *error) {
+    //        if (!error) {
+    //            NSString *currentClientId = [LCCKSessionService sharedInstance].clientId;
+    //            BOOL containsCurrentClientId = [conversation.members containsObject:currentClientId];
+    //            if (!containsCurrentClientId) {
+    //                [conversation joinWithCallback:nil];
+    //            }
+    //        }
+    //        [self refreshConversation:conversation];
+    //    }];
+    //
+    //
+    //    if (conversation.members.count > 2 && (![conversation.members containsObject:[LCChatKit sharedInstance].clientId])) {
+    //        [self showMessage:@"正在加入聊天室..."];
+    //        [conversation joinWithCallback:^(BOOL succeeded, NSError *error) {
+    //            [self hideHUD];
+    //            NSString *title;
+    //            NSString *subtitle;
+    //            LCCKMessageNotificationType type;
+    //            if (error) {
+    //                title = @"加入聊天室失败";
+    //                subtitle = error.localizedDescription;
+    //                type = LCCKMessageNotificationTypeError;
+    //                [LCCKUtil showNotificationWithTitle:title subtitle:subtitle type:type];
+    //                return;
+    //            }
+    //            title = @"加入聊天室";
+    //            type = LCCKMessageNotificationTypeSuccess;
+    //            [LCCKUtil showNotificationWithTitle:title subtitle:subtitle type:type];
+    //        }];
+    //    }
     
     LCCKConversationViewController *conversationViewController = [[LCCKConversationViewController alloc] initWithConversationId:conversationId];
     [conversationViewController setConversationHandler:^(AVIMConversation *conversation, LCCKConversationViewController *aConversationController) {
@@ -373,10 +395,10 @@ typedef void (^UITableViewRowActionHandler)(UITableViewRowAction *action, NSInde
     }];
     
     [conversationViewController setViewDidLoadBlock:^(LCCKBaseViewController *viewController) {
-        [self showMessage:@"加载历史记录..."];
+        [self lcck_showMessage:@"加载历史记录..."];
     }];
     [conversationViewController setLoadHistoryMessagesHandler:^(BOOL succeeded, NSError *error) {
-        [self hideHUD];
+        [self lcck_hideHUD];
         NSString *title;
         LCCKMessageNotificationType type;
         if (succeeded) {
@@ -390,7 +412,7 @@ typedef void (^UITableViewRowActionHandler)(UITableViewRowAction *action, NSInde
     }];
     
     [conversationViewController setViewWillDisappearBlock:^(LCCKBaseViewController *viewController, BOOL aAnimated) {
-        [self hideHUD];
+        [self lcck_hideHUD];
     }];
     [self pushToViewController:conversationViewController];
 }

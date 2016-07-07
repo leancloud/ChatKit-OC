@@ -18,47 +18,47 @@ static CGFloat const kFailureMessageTime = 0.3f;
 
 //---------------------显示成功,几秒后消失------------------------------------
 /** 显示成功文字和图片,几秒后消失 */
-+ (void)showSuccess:(NSString *)success {
-    [self showText:success icon:@"success.png" view:nil afterDelay:kSuccessMessageTime];
++ (void)lcck_showSuccess:(NSString *)success {
+    [self lcck_showText:success icon:@"success.png" view:nil afterDelay:kSuccessMessageTime];
 }
 /** 显示成功文字和图片,几秒后消失(放到指定view中) */
-+ (void)showSuccess:(NSString *)success toView:(UIView *)view {
-    [self showText:success icon:@"success.png" view:view afterDelay:kSuccessMessageTime];
++ (void)lcck_showSuccess:(NSString *)success toView:(UIView *)view {
+    [self lcck_showText:success icon:@"success.png" view:view afterDelay:kSuccessMessageTime];
 }
 
 //------------------------显示出错,几秒后消失---------------------------------
 /** 显示出错图片和文字,几秒后消失 */
-+ (void)showError:(NSString *)error {
-    [self showText:error icon:@"error.png" view:nil afterDelay:kFailureMessageTime];
++ (void)lcck_showError:(NSString *)error {
+    [self lcck_showText:error icon:@"error.png" view:nil afterDelay:kFailureMessageTime];
 }
 /** 显示出错图片和文字,几秒后消失(放到指定view中) */
-+ (void)showError:(NSString *)error toView:(UIView *)view {
-    [self showText:error icon:@"error.png" view:view afterDelay:kFailureMessageTime];
++ (void)lcck_showError:(NSString *)error toView:(UIView *)view {
+    [self lcck_showText:error icon:@"error.png" view:view afterDelay:kFailureMessageTime];
 }
 
 //--------------------------显示信息,几秒后消失-------------------------------
 /**  只显示文字,几秒后消失 */
-+ (void)showText:(NSString *)text {
-    [self showText:text icon:nil view:nil];
++ (void)lcck_showText:(NSString *)text {
+    [self lcck_showText:text icon:nil view:nil];
 }
 /**  只显示文字,几秒后消失(放到指定view中) */
-+ (void)showText:(NSString *)text view:(UIView *)view {
-    [self showText:text icon:nil view:view];
++ (void)lcck_showText:(NSString *)text view:(UIView *)view {
+    [self lcck_showText:text icon:nil view:view];
 }
 
 /**  只显示图片,几秒后消失 */
-+ (void)showIcon:(NSString *)icon {
-    [self showText:nil icon:icon view:nil];
++ (void)lcck_showIcon:(NSString *)icon {
+    [self lcck_showText:nil icon:icon view:nil];
 }
 
 /**  只显示图片,几秒后消失(放到指定view中) */
-+ (void)showIcon:(NSString *)icon view:(UIView *)view {
-    [self showText:nil icon:icon view:view];
++ (void)lcck_showIcon:(NSString *)icon view:(UIView *)view {
+    [self lcck_showText:nil icon:icon view:view];
 }
 
 /**  显示文字和图片,几秒后消失 */
-+ (void)showText:(NSString *)text icon:(NSString *)icon {
-    [self showText:text icon:icon view:nil];
++ (void)lcck_showText:(NSString *)text icon:(NSString *)icon {
+    [self lcck_showText:text icon:icon view:nil];
 }
 
 + (UIView *)rootWindowView {
@@ -66,12 +66,12 @@ static CGFloat const kFailureMessageTime = 0.3f;
     return view;
 }
 
-+ (void)showText:(NSString *)text icon:(NSString *)icon view:(UIView *)view {
-    [self showText:text icon:icon view:view afterDelay:kTime];
++ (void)lcck_showText:(NSString *)text icon:(NSString *)icon view:(UIView *)view {
+    [self lcck_showText:text icon:icon view:view afterDelay:kTime];
 }
 
 /**  显示文字和图片,几秒后消失(放到指定view中) */
-+ (void)showText:(NSString *)text icon:(NSString *)icon view:(UIView *)view afterDelay:(NSTimeInterval)delay {
++ (void)lcck_showText:(NSString *)text icon:(NSString *)icon view:(UIView *)view afterDelay:(NSTimeInterval)delay {
     if (view == nil) {
         view = [self rootWindowView];
     }
@@ -105,17 +105,17 @@ static CGFloat const kFailureMessageTime = 0.3f;
 //*******************************我是快乐的分割线*************************************/
 //--------------------------显示HUD-------------------------------
 /** 只显示菊花(需要主动让它消失,HUD放在Window中) */
-+ (MBProgressHUD *)showHUD {
-    return [self showMessage:nil toView:nil];
++ (MBProgressHUD *)lcck_showHUD {
+    return [self lcck_showMessage:nil toView:nil];
 }
 
 /** 显示菊花和文字(需要主动让它消失,HUD放在Window中) */
-+ (MBProgressHUD *)showMessage:(NSString *)message {
-    return [self showMessage:message toView:nil];
++ (MBProgressHUD *)lcck_showMessage:(NSString *)message {
+    return [self lcck_showMessage:message toView:nil];
 }
 
 /** 显示菊花和文字(需要主动让它消失，HUD放到指定view中) */
-+ (MBProgressHUD *)showMessage:(NSString *)message toView:(UIView *)view {
++ (MBProgressHUD *)lcck_showMessage:(NSString *)message toView:(UIView *)view {
     if (view == nil) {
         view = [[UIApplication sharedApplication].windows lastObject];
     }
@@ -137,12 +137,12 @@ static CGFloat const kFailureMessageTime = 0.3f;
 
 //--------------------------隐藏HUD-------------------------------
 /** 隐藏HUD(HUD在Window中) */
-+ (void)hideHUD {
-    [self hideHUDForView:nil];
++ (void)lcck_hideHUD {
+    [self lcck_hideHUDForView:nil];
 }
 
 /** 隐藏HUD(HUD在指定view中) */
-+ (void)hideHUDForView:(UIView *)view {
++ (void)lcck_hideHUDForView:(UIView *)view {
     if (view == nil) {
         view = [[UIApplication sharedApplication].windows lastObject];
     }
@@ -150,28 +150,25 @@ static CGFloat const kFailureMessageTime = 0.3f;
 }
 
 
-- (void)alert:(NSString*)text {
-    [[self class] showText:text];
+- (void)lcck_alert:(NSString*)text {
+    [[self class] lcck_showText:text];
 }
 
-- (BOOL)alertError:(NSError *)error {
-    if (error) {
-//        [AVAnalytics event:@"Alert Error" attributes:@{@"desc": error.description}];
-    }
+- (BOOL)lcck_alertError:(NSError *)error {
     if (error) {
 //        if (error.code == kAVIMErrorConnectionLost) {
 //            [self alert:@"未能连接聊天服务"];
 //        }
 //        else
             if ([error.domain isEqualToString:NSURLErrorDomain]) {
-            [self alert:@"网络连接发生错误"];
+            [self lcck_alert:@"网络连接发生错误"];
         }
         else {
 #ifndef DEBUG
             [self alert:[NSString stringWithFormat:@"%@", error]];
 #else
             NSString *info = error.localizedDescription;
-            [self alert:info ? info : [NSString stringWithFormat:@"%@", error]];
+            [self lcck_alert:info ? info : [NSString stringWithFormat:@"%@", error]];
 #endif
         }
         return YES;
@@ -179,19 +176,19 @@ static CGFloat const kFailureMessageTime = 0.3f;
     return NO;
 }
 
-- (BOOL)filterError:(NSError *)error {
-    return [self alertError:error] == NO;
+- (BOOL)lcck_filterError:(NSError *)error {
+    return [self lcck_alertError:error] == NO;
 }
 
-- (void)showErrorAlert:(NSString *)text {
-    [[self class] showError:text];
+- (void)lcck_showErrorAlert:(NSString *)text {
+    [[self class] lcck_showError:text];
 }
 
-- (void)showSuccessAlert:(NSString *)text {
-    [[self class] showSuccess:text];
+- (void)lcck_showSuccessAlert:(NSString *)text {
+    [[self class] lcck_showSuccess:text];
 }
 
-- (void)toast:(NSString *)text duration:(NSTimeInterval)duration {
+- (void)lcck_toast:(NSString *)text duration:(NSTimeInterval)duration {
     MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:[[self class] rootWindowView] animated:YES];
     //    hud.labelText=text;
     hud.detailsLabelFont = [UIFont systemFontOfSize:14];
@@ -202,30 +199,30 @@ static CGFloat const kFailureMessageTime = 0.3f;
     [hud hide:YES afterDelay:duration];
 }
 
--(void)showNetworkIndicator{
+-(void)lcck_showNetworkIndicator{
     UIApplication *app=[UIApplication sharedApplication];
     app.networkActivityIndicatorVisible=YES;
 }
 
-- (void)hideNetworkIndicator{
+- (void)lcck_hideNetworkIndicator{
     UIApplication *app=[UIApplication sharedApplication];
     app.networkActivityIndicatorVisible=NO;
 }
 
-- (void)showProgress {
+- (void)lcck_showProgress {
     [MBProgressHUD showHUDAddedTo:[[self class] rootWindowView] animated:YES];
 }
 
--(void)hideProgress {
+-(void)lcck_hideProgress {
     [MBProgressHUD hideHUDForView:[[self class] rootWindowView] animated:YES];
 }
 
--(void)showHUDText:(NSString*)text{
-    [self toast:text];
+-(void)lcck_showHUDText:(NSString*)text{
+    [self lcck_toast:text];
 }
 
-- (void)toast:(NSString *)text {
-    [self toast:text duration:2];
+- (void)lcck_toast:(NSString *)text {
+    [self lcck_toast:text duration:2];
 }
 
 @end
