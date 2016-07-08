@@ -113,6 +113,10 @@ static NSMutableDictionary *_sharedInstances = nil;
     return self.sessionService.clientId;
 }
 
+- (AVIMClient *)client {
+    return self.sessionService.client;
+}
+
 - (void)openWithClientId:(NSString *)clientId callback:(LCCKBooleanResultBlock)callback {
     [self.sessionService openWithClientId:clientId callback:callback];
 }
@@ -145,6 +149,14 @@ static NSMutableDictionary *_sharedInstances = nil;
 
 - (void)getProfileInBackgroundForUserId:(NSString *)userId callback:(LCCKUserResultCallBack)callback {
     [self.userSystemService getProfileInBackgroundForUserId:userId callback:callback];
+}
+
+- (void)getProfilesInBackgroundForUserIds:(NSArray<NSString *> *)userIds callback:(LCCKUserResultsCallBack)callback {
+    [self.userSystemService getProfilesInBackgroundForUserIds:userIds callback:callback];
+}
+
+- (NSArray<id<LCCKUserModelDelegate>> *)getProfilesForUserIds:(NSArray<NSString *> *)userIds error:(NSError * __autoreleasing *)error {
+    return [self.userSystemService getProfilesForUserIds:userIds error:error];
 }
 
 ///--------------------------------------------------------------------

@@ -25,6 +25,7 @@
 typedef void (^LCCKSessionNotOpenedHandler)(UIViewController *viewController, LCCKBooleanResultBlock callback);
 
 @property (nonatomic, copy, readonly) NSString *clientId;
+@property (nonatomic, strong, readonly) AVIMClient *client;
 @property (nonatomic, copy, readonly) LCCKSessionNotOpenedHandler sessionNotOpenedHandler;
 
 /*!
@@ -81,6 +82,8 @@ typedef void(^LCCKFetchProfilesBlock)(NSArray<NSString *> *userIds, LCCKFetchPro
 
 - (void)getCachedProfileIfExists:(NSString *)userId name:(NSString **)name avatorURL:(NSURL **)avatorURL error:(NSError * __autoreleasing *)error;
 - (void)getProfileInBackgroundForUserId:(NSString *)userId callback:(LCCKUserResultCallBack)callback;
+- (void)getProfilesInBackgroundForUserIds:(NSArray<NSString *> *)userIds callback:(LCCKUserResultsCallBack)callback;
+- (NSArray<id<LCCKUserModelDelegate>> *)getProfilesForUserIds:(NSArray<NSString *> *)userIds error:(NSError * __autoreleasing *)error;
 
 @end
 
