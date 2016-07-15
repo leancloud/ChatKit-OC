@@ -86,11 +86,8 @@
     [self.scrollView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.edges.equalTo(self).with.insets(_edgeInsets);
     }];
-    //WithFrame:CGRectMake(0, self.frame.size.height - 30, self.frame.size.width, 20)];
     [self.pageControl mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.and.right.mas_equalTo(self);
-//        make.height.mas_equalTo(20);
-//        make.top.mas_equalTo(self.mas_bottom).offset(-30);
         make.bottom.mas_equalTo(self).offset(-10);
     }];
     
@@ -112,7 +109,10 @@
             column = 0;
             page ++ ;
         }
-        CGFloat startX = self.edgeInsets.left + column * self.itemSize.width + page * self.frame.size.width;
+        CGFloat width = [UIApplication sharedApplication].keyWindow.frame.size.width;
+        CGFloat scrollViewWidth = width - self.edgeInsets.left - self.edgeInsets.right;
+        CGFloat scrollViewHeight = kFunctionViewHeight - self.edgeInsets.top - self.edgeInsets.bottom;
+        CGFloat startX = column * self.itemSize.width + page * scrollViewWidth;
         CGFloat startY = line * self.itemSize.height;
         
         LCCKChatMoreItem *item = [[LCCKChatMoreItem alloc] initWithFrame:CGRectMake(startX, startY, self.itemSize.width, self.itemSize.height)];
@@ -122,9 +122,8 @@
         [self.scrollView addSubview:item];
         [self.itemViews addObject:item];
         column ++;
-        
         if (idx == self.titles.count - 1) {
-            [self.scrollView setContentSize:CGSizeMake(self.scrollView.frame.size.width * (page + 1), self.scrollView.frame.size.height)];
+            [self.scrollView setContentSize:CGSizeMake(width * (page + 1), scrollViewHeight)];
             self.pageControl.numberOfPages = page + 1;
             *stop = YES;
         }
@@ -152,7 +151,7 @@
 
 - (UIScrollView *)scrollView {
     if (!_scrollView) {
-        _scrollView = [[UIScrollView alloc] init];//WithFrame:CGRectMake(0, self.edgeInsets.top, self.frame.size.width, self.frame.size.height - self.edgeInsets.top - self.edgeInsets.bottom)];
+        _scrollView = [[UIScrollView alloc] init];
         _scrollView.showsHorizontalScrollIndicator = NO;
         _scrollView.pagingEnabled = YES;
         _scrollView.delegate = self;

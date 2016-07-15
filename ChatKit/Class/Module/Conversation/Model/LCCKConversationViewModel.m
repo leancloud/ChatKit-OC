@@ -5,6 +5,11 @@
 //  Created by ElonChan ( https://github.com/leancloud/ChatKit-OC ) on 15/11/18.
 //  Copyright © 2015年 https://LeanCloud.cn . All rights reserved.
 //
+#if __has_include(<ChatKit/LCChatKit.h>)
+    #import <ChatKit/LCChatKit.h>
+#else
+    #import "LCChatKit.h"
+#endif
 
 #import "LCCKConversationViewModel.h"
 
@@ -119,6 +124,7 @@
 - (void)addMessages:(NSArray<LCCKMessage *> *)messages {
     [self.dataArray addObjectsFromArray:[self messagesWithSystemMessages:messages]];
 }
+
 /*!
  * 与`-addMessages`方法的区别在于，第一次加载历史消息时需要查找最后一条消息之余还有没有消息。
  */
@@ -240,8 +246,8 @@
     [self.delegate messageSendStateChanged:LCCKMessageSendStateSending withProgress:0.0f forIndex:[self.dataArray indexOfObject:message]];
     message.conversationId = [LCCKConversationService sharedInstance].currentConversation.conversationId;
     message.status = LCCKMessageSendStateSending;
-    id<LCCKUserModelDelegate> sender = [[LCCKUserSystemService sharedInstance] fetchCurrentUser];
-    message.avatorURL = sender.avatorURL;
+    id<LCCKUserDelegate> sender = [[LCCKUserSystemService sharedInstance] fetchCurrentUser];
+    message.user = sender;
     message.bubbleMessageType = LCCKMessageOwnerSelf;
     AVIMTypedMessage *avimTypedMessage = [AVIMTypedMessage lcck_messageWithLCCKMessage:message];
     [self.avimTypedMessage addObject:avimTypedMessage];

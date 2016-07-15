@@ -40,7 +40,7 @@ NSString *const kLCCKAudioDataKey;
 + (void)initialize {
     //配置播放器配置
     [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error: nil];
-//    [[AVAudioSession sharedInstance] setDelegate:self];
+    [[AVAudioSession sharedInstance] setDelegate:self];
 }
 
 + (instancetype)sharePlayer{

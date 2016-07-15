@@ -20,7 +20,7 @@
 @implementation LCCKChatMoreItem
 
 - (instancetype)initWithFrame:(CGRect)frame {
-    if ([super initWithFrame:frame]) {
+    if (self = [super initWithFrame:frame]) {
         [self setup];
     }
     return self;
@@ -32,7 +32,6 @@
 
 - (void)updateConstraints{
     [super updateConstraints];
-    
     [self.button mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self).with.offset(4);
         make.centerX.equalTo(self);

@@ -37,6 +37,7 @@ static NSMutableDictionary *attributedStringCache = nil;
             title = NSLocalizedStringFromTable(@"Location", @"LCChatKitString", @"位置");
             title = [NSString stringWithFormat:@"[%@]",title];
             break;
+            //TODO:
 //        case kAVIMMessageMediaTypeEmotion:
 //            title = NSLocalizedStringFromTable(@"Sight", @"LCChatKitString", @"表情");
 //            title = [NSString stringWithFormat:@"[%@]",title];
@@ -45,7 +46,6 @@ static NSMutableDictionary *attributedStringCache = nil;
         case kAVIMMessageMediaTypeVideo:
             title = NSLocalizedStringFromTable(@"Video", @"LCChatKitString", @"视频");
             title = [NSString stringWithFormat:@"[%@]",title];
-
 //TODO:
     }
     return title;
@@ -59,9 +59,20 @@ static NSMutableDictionary *attributedStringCache = nil;
     if (conversation.muted && conversation.lcck_unreadCount > 0) {
         title = [NSString stringWithFormat:@"[%ld条] %@", conversation.lcck_unreadCount, title];
     }
+    
     NSString *mentionText = @"[有人@你] ";
+    if (conversation.lcck_draft.length > 0) {
+        title = conversation.lcck_draft;
+        NSString *draftText = [NSString stringWithFormat:@"[%@]", NSLocalizedStringFromTable(@"draft", @"LCChatKitString", @"草稿")];
+        if (conversation.lcck_mentioned) {
+            mentionText = [mentionText stringByAppendingString:draftText];
+        } else {
+            mentionText = draftText;
+        }
+    }
+    
     NSString *finalText;
-    if (conversation.lcck_mentioned) {
+    if (conversation.lcck_mentioned || conversation.lcck_draft.length > 0) {
         finalText = [NSString stringWithFormat:@"%@%@", mentionText, title];
     } else {
         finalText = title;
@@ -76,10 +87,11 @@ static NSMutableDictionary *attributedStringCache = nil;
     NSDictionary *attributes = @{ NSForegroundColorAttributeName: [UIColor grayColor], (id)NSFontAttributeName:font};
     NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:finalText attributes:attributes];
     
-    if (conversation.lcck_mentioned) {
+    if (conversation.lcck_mentioned || conversation.lcck_draft.length > 0) {
         NSRange range = [finalText rangeOfString:mentionText];
         [attributedString setAttributes:@{NSForegroundColorAttributeName:[UIColor colorWithRed:183/255.0 green:20/255.0 blue:20/255.0 alpha:1], NSFontAttributeName : font} range:range];
     }
+    
     
     [attributedStringCache setObject:attributedString forKey:finalText];
     
