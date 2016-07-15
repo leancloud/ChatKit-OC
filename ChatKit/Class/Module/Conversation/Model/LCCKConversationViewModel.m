@@ -244,7 +244,8 @@
             success:(LCCKSendMessageSuccessBlock)success
              failed:(LCCKSendMessageSuccessFailedBlock)failed {
     [self.delegate messageSendStateChanged:LCCKMessageSendStateSending withProgress:0.0f forIndex:[self.dataArray indexOfObject:message]];
-    message.conversationId = [LCCKConversationService sharedInstance].currentConversation.conversationId;
+    message.conversationId = [LCCKConversationService sharedInstance].currentConversationId ?: [LCCKConversationService sharedInstance].currentConversation.conversationId;
+    NSAssert(message.conversationId, @"currentConversationId is nil");
     message.status = LCCKMessageSendStateSending;
     id<LCCKUserDelegate> sender = [[LCCKUserSystemService sharedInstance] fetchCurrentUser];
     message.user = sender;

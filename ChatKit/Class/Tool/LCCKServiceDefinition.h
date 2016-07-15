@@ -265,8 +265,8 @@ typedef CGFloat (^LCCKAvatarImageViewCornerRadiusBlock)(CGSize avatarImageViewSi
 @property (nonatomic, assign, readonly) LCCKAvatarImageViewCornerRadiusBlock avatarImageViewCornerRadiusBlock;
 
 /*!
- *  设置会话列表和聊天界面头像ImageView的圆角弧度
- *  注意，请在需要圆角矩形时设置，会话列表和聊天界面头像默认圆形。
+ *  设置对话列表和聊天界面头像ImageView的圆角弧度
+ *  注意，请在需要圆角矩形时设置，对话列表和聊天界面头像默认圆形。
  */
 - (void)setAvatarImageViewCornerRadiusBlock:(LCCKAvatarImageViewCornerRadiusBlock)avatarImageViewCornerRadiusBlock;
 
@@ -351,52 +351,52 @@ typedef void (^LCCKConversationResultBlock)(AVIMConversation *conversation, NSEr
 @protocol LCCKConversationsListService <NSObject>
 
 /*!
- *  选中某个会话后的回调
- *  @param conversation 被选中的会话
+ *  选中某个对话后的回调
+ *  @param conversation 被选中的对话
  */
 typedef void(^LCCKConversationsListDidSelectItemBlock)(NSIndexPath *indexPath, AVIMConversation *conversation, LCCKConversationListViewController *controller);
 
 /*!
- *  选中某个会话后的回调
+ *  选中某个对话后的回调
  */
 @property (nonatomic, copy, readonly) LCCKConversationsListDidSelectItemBlock didSelectConversationsListCellBlock;
 
 /*!
- *  设置选中某个会话后的回调
+ *  设置选中某个对话后的回调
  */
 - (void)setDidSelectConversationsListCellBlock:(LCCKConversationsListDidSelectItemBlock)didSelectConversationsListCellBlock;
 
 /*!
- *  删除某个会话后的回调
- *  @param conversation 被选中的会话
+ *  删除某个对话后的回调
+ *  @param conversation 被选中的对话
  */
 typedef void(^LCCKConversationsListDidDeleteItemBlock)(NSIndexPath *indexPath, AVIMConversation *conversation, LCCKConversationListViewController *controller);
 
 /*!
- *  删除某个会话后的回调
+ *  删除某个对话后的回调
  */
 @property (nonatomic, copy, readonly) LCCKConversationsListDidDeleteItemBlock didDeleteConversationsListCellBlock;
 
 /*!
- *  设置删除某个会话后的回调
+ *  设置删除某个对话后的回调
  */
 - (void)setDidDeleteConversationsListCellBlock:(LCCKConversationsListDidDeleteItemBlock)didDeleteConversationsListCellBlock;
 
 /*!
- *  会话左滑菜单设置block
+ *  对话左滑菜单设置block
  *  @return  需要显示的菜单数组
- *  @param conversation, 会话
+ *  @param conversation, 对话
  *  @param editActions, 默认的菜单数组，成员为 UITableViewRowAction 类型
  */
 typedef NSArray *(^LCCKConversationEditActionsBlock)(NSIndexPath *indexPath, NSArray<UITableViewRowAction *> *editActions, AVIMConversation *conversation, LCCKConversationListViewController *controller);
 
 /*!
- *  可以通过这个block设置会话列表中每个会话的左滑菜单，这个是同步调用的，需要尽快返回，否则会卡住UI
+ *  可以通过这个block设置对话列表中每个对话的左滑菜单，这个是同步调用的，需要尽快返回，否则会卡住UI
  */
 @property (nonatomic, copy, readonly) LCCKConversationEditActionsBlock conversationEditActionBlock;
 
 /*!
- *  设置会话列表中每个会话的左滑菜单，这个是同步调用的，需要尽快返回，否则会卡住UI
+ *  设置对话列表中每个对话的左滑菜单，这个是同步调用的，需要尽快返回，否则会卡住UI
  */
 - (void)setConversationEditActionBlock:(LCCKConversationEditActionsBlock)conversationEditActionBlock;
 

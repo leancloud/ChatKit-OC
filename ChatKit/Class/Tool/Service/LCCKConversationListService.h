@@ -45,10 +45,4 @@ typedef void (^LCCKConfigureCellBlock) (UITableViewCell *cell, UITableView *tabl
 @property (nonatomic, copy, readonly) LCCKConfigureCellBlock configureCellBlock;
 -(void)setConfigureCellBlock:(LCCKConfigureCellBlock)configureCellBlock;
 
-//TODO:
-///**
-// *  与会话列表关联的 UISearchBar
-// */
-//@property(nonatomic, readonly, strong) UISearchBar *searchBar;
-
 @end

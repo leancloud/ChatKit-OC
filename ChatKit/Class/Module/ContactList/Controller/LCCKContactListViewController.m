@@ -23,7 +23,6 @@ static NSString *const LCCKContactListViewControllerIdentifier = @"LCCKContactLi
 //================== origin TableView =====================
 //=========================================================
 @property (nonatomic, copy) NSDictionary *originSections;
-//@property (nonatomic, strong) NSArray *sortedSectionTitles;
 @property (nonatomic, copy) NSArray<NSString *> *userNames;
 
 //=========================================================
@@ -37,14 +36,9 @@ static NSString *const LCCKContactListViewControllerIdentifier = @"LCCKContactLi
 //=========================================================
 //================ TableView Contoller ====================
 //=========================================================
-//@property (nonatomic, strong) NSDictionary *currentSections;
 @property (nonatomic, strong) NSMutableDictionary *dictionaryTableRowCheckedState;
 @property (nonatomic, copy) NSString *selectedContact;
 @property (nonatomic, strong) NSMutableArray *selectedContacts;
-@property (nonatomic, copy) NSString *userNameselected;
-//@property (nonatomic, strong) NSIndexPath *indexPathSelected;
-//@property (nonatomic, strong) NSIndexPath *indexPathObjectFromArray;
-@property (nonatomic, copy) NSString *cellIdentifier;
 
 @property (nonatomic, copy, readwrite) NSArray<LCCKContact *> *contacts;
 
@@ -169,26 +163,6 @@ static NSString *const LCCKContactListViewControllerIdentifier = @"LCCKContactLi
         //        [self.tableView setEditing:YES animated:NO];
     }
 }
-
-//- (void)signOut {
-//    [LCCKUtil showProgressText:@"close client ..." duration:10.0f];
-//    [LCChatKitExample invokeThisMethodBeforeLogoutSuccess:^{
-//        [LCCKUtil hideProgress];
-//        LCCKLoginViewController *loginViewController = [[LCCKLoginViewController alloc] init];
-//        [loginViewController setClientIDHandler:^(NSString *clientID) {
-//            [LCChatKitExample invokeThisMethodAfterLoginSuccessWithClientId:clientID success:^{
-//                LCCKTabBarControllerConfig *tabBarControllerConfig = [[LCCKTabBarControllerConfig alloc] init];
-//                [self cyl_tabBarController].rootWindow.rootViewController = tabBarControllerConfig.tabBarController;
-//            } failed:^(NSError *error) {
-//                //                NSLog(@"%@",error);
-//            }];
-//        }];
-//        [self presentViewController:loginViewController animated:YES completion:nil];
-//    } failed:^(NSError *error) {
-//        [LCCKUtil hideProgress];
-//        //        NSLog(@"%@", error);
-//    }];
-//}
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
@@ -374,7 +348,7 @@ static NSString *const LCCKContactListViewControllerIdentifier = @"LCCKContactLi
     if (self.mode == LCCKContactListModeNormal) {
         NSString *peerId = [self currentClientIdAtIndexPath:indexPath tableView:tableView];
         if (editingStyle == UITableViewCellEditingStyleDelete) {
-            NSString *title = [NSString stringWithFormat:@"%@?", NSLocalizedStringFromTable(@"deleteFriend", @"LCChatKitString", @"解除好友关系吗？")];
+            NSString *title = [NSString stringWithFormat:@"%@?", NSLocalizedStringFromTable(@"deleteFriend", @"LCChatKitString", @"解除好友关系吗")];
             LCCKAlertController *alert = [LCCKAlertController alertControllerWithTitle:title
                                                                                message:@""
                                                                         preferredStyle:LCCKAlertControllerStyleAlert];
@@ -428,23 +402,12 @@ static NSString *const LCCKContactListViewControllerIdentifier = @"LCCKContactLi
 }
 
 - (NSArray *)contactsFromContactsOrUserIds:(NSArray *)contacts userIds:(NSArray *)userIds{
-    //    if (_userNames) { return _userNames; }
-    //    NSMutableArray *userNames = [NSMutableArray arrayWithCapacity:userIds.count];;
     if (contacts.count > 0) {
-        //        [contacts enumerateObjectsUsingBlock:^(LCCKContact * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        //            [userNames addObject:obj.name ?: obj.clientId];
-        //        }];
-        //        return [userNames copy];
         return contacts;
     } else {
         return userIds;
     }
 }
-
-//- (NSMutableDictionary *)sortedSectionForContacts:(NSArray<LCCKContact *> *)contacts {
-//    NSMutableDictionary *originSections = [NSMutableDictionary dictionary];
-//        return originSections;
-//}
 
 - (NSMutableDictionary *)sortedSectionForUserNames:(NSArray *)contactsOrUserNames {
     NSMutableDictionary *originSections = [NSMutableDictionary dictionary];

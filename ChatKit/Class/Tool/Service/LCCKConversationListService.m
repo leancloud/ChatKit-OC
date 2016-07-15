@@ -12,19 +12,19 @@
 // */
 //@property (nonatomic, strong) UIView *viewForNoData;
 ///**
-// *  设置某个会话的最近消息内容后的回调
-// *  @param conversation 需要设置最近消息内容的会话
+// *  设置某个对话的最近消息内容后的回调
+// *  @param conversation 需要设置最近消息内容的对话
 // *  @return 无需自定义最近消息内容返回nil
 // */
 //typedef NSString *(^LCCKConversationsLatestMessageContent)(AVIMConversation *conversation);
 //
 ///**
-// *  设置某个会话的最近消息内容后的回调
+// *  设置某个对话的最近消息内容后的回调
 // */
 //@property (nonatomic, copy, readonly) LCCKConversationsLatestMessageContent latestMessageContentBlock;
 //
 ///**
-// *  设置某个会话的最近消息内容后的回调
+// *  设置某个对话的最近消息内容后的回调
 // */
 //- (void)setLatestMessageContentBlock:(LCCKConversationsLatestMessageContent)latestMessageContentBlock;
 

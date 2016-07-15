@@ -287,8 +287,8 @@ NSString *const LCCKConversationServiceErrorDomain = @"LCCKConversationServiceEr
 }
 
 /**
- *  删除会话对应的UIProfile缓存，比如当用户信息发生变化时
- *  @param  conversation 会话，可以是单聊，也可是群聊
+ *  删除对话对应的UIProfile缓存，比如当用户信息发生变化时
+ *  @param  conversation 对话，可以是单聊，也可是群聊
  */
 - (void)removeCacheForConversationId:(NSString *)conversationId {
     [self deleteRecentConversationWithConversationId:conversationId];

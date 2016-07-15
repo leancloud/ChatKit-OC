@@ -38,7 +38,9 @@
 "Voice" = "Voice";
 "Sight" = "Sight";
 "Community" = "Community";
-"deleteFriend" = "Confirm to delete friend?";
+"deleteFriend" = "Confirm to delete friend";
+"netDisconnected" = "Net disconnected, make sure your net is ok";
+
 "message.bar.error.title" = "Error Title";
 "message.bar.error.message" = "This is an error message!";
 "message.bar.success.title" = "Success Title";

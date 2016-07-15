@@ -41,8 +41,8 @@
 "Voice" = "声音";
 "Sight" = "表情";
 "Community" = "小区";
-"deleteFriend" = "解除好友关系吗?";
-
+"deleteFriend" = "解除好友关系吗";
+"netDisconnected" = "当前网络不可用，请检查你的网络设置";
 "message.bar.error.title" = "错误";
 "message.bar.error.message" = "错误";
 "message.bar.success.title" = "成功";

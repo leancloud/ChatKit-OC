@@ -11,7 +11,7 @@
 #import <AVOSCloudIM/AVOSCloudIM.h>
 
 /**
- *  会话列表 Cell 的默认高度
+ *  对话列表 Cell 的默认高度
  */
 FOUNDATION_EXTERN const CGFloat LCCKConversationListCellDefaultHeight;
 

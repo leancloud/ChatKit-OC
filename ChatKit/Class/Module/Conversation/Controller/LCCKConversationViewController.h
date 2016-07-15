@@ -49,7 +49,7 @@ typedef void (^LCCKConversationHandler) (AVIMConversation *conversation, LCCKCon
  * @param conversationId Id of the conversation, group conversation should be initialized with this property.
  * @attention ConversationId can not be nil, if yes, LeanCloudKit will throw an exception to notice you.
  *            If LCCKConversationViewController is initialized with this method, the property named `peerId` will be nil.
- *            conversationId 与 peerId 并不等同。您一般不能自己构造一个conversationId，而是从 conversation 等特定接口中才能读取到 conversationId。如果需要使用 personId 来打开会话，应该使用 `-initWithPeerId:` 这个接口。
+ *            conversationId 与 peerId 并不等同。您一般不能自己构造一个conversationId，而是从 conversation 等特定接口中才能读取到 conversationId。如果需要使用 personId 来打开对话，应该使用 `-initWithPeerId:` 这个接口。
  * @return Initialized single or group chat type odject of LCCKConversationViewController
  */
 - (instancetype)initWithConversationId:(NSString *)conversationId;

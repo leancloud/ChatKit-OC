@@ -189,7 +189,6 @@
     if (self.chatViewModel.avimTypedMessage.count > 0) {
         [[LCCKConversationService sharedInstance] updateConversationAsRead];
     }
-    [self clearCurrentConversationInfo];
     !self.viewDidDisappearBlock ?: self.viewDidDisappearBlock(self, animated);
 }
 

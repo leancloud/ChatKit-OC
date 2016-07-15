@@ -317,7 +317,7 @@
         if (conversation) {
             lcckMessage.messageGroupType = conversation.lcck_type;
         } else {
-            // 消息默认与当前会话的单群聊类型一致
+            // 消息默认与当前对话的单群聊类型一致
             lcckMessage.messageGroupType = [LCCKConversationService sharedInstance].currentConversation.lcck_type;
         }
     }];
