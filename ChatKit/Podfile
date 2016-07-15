@@ -12,5 +12,7 @@ pod 'Masonry'
 pod 'SDWebImage'
 pod 'FMDB'
 pod 'UITableView+FDTemplateLayoutCell'
+pod "FDStackView", "1.0"
+
 end
 

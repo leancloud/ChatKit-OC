@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = "ChatKit"
-  s.version      = "0.0.5"
+  s.version      = "0.1.0"
   s.summary      = "An IM App Framework, support sending text, pictures, audio, video, location messaging, managing address book, more interesting features."
   s.homepage     = "https://github.com/LeanCloud/ChatKit-OC"
   s.license      = { :type => 'MIT', :file => 'LICENSE' }
@@ -10,7 +10,8 @@ Pod::Spec.new do |s|
   s.source       = { :git => "https://github.com/LeanCloud/ChatKit-OC.git", :tag => s.version.to_s }
   s.source_files  = 'ChatKit', 'ChatKit/**/*.{h,m}'
   s.vendored_frameworks = 'ChatKit/Class/Tool/Vendor/VoiceLib/lame.framework'
-  s.resources    = 'ChatKit/Class/Resources/*'
+  s.resources    = 'ChatKit/Class/Resources/*', 'ChatKit/**/*.xib'
+
   s.requires_arc = true
   s.dependency 'AVOSCloud'
   s.dependency 'AVOSCloudIM'
@@ -19,5 +20,6 @@ Pod::Spec.new do |s|
   s.dependency 'SDWebImage'
   s.dependency 'FMDB'
   s.dependency 'UITableView+FDTemplateLayoutCell'
+  s.dependency 'FDStackView'
 
 end

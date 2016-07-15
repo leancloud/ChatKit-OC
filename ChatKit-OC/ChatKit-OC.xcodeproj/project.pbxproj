@@ -24,37 +24,11 @@
 		9A4730751CECAEC500AEB86F /* NSObject+LCCKHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A47305E1CECAEC500AEB86F /* NSObject+LCCKHUD.m */; };
 		9A4730761CECAEC500AEB86F /* LCCKTabBarControllerConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A4730601CECAEC500AEB86F /* LCCKTabBarControllerConfig.m */; };
 		9A9E84511D13A66B008590B4 /* LCChatKitExample.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A9E84501D13A66B008590B4 /* LCChatKitExample.m */; };
-		9AD663E91D2276090040A4E3 /* ChatKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9AD663B51D2275920040A4E3 /* ChatKit.framework */; };
-		9AD663EA1D2276090040A4E3 /* ChatKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 9AD663B51D2275920040A4E3 /* ChatKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		9AD665CC1D2277830040A4E3 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A0B721B1CED662D004FDACC /* SystemConfiguration.framework */; };
 		9AD665CD1D22778B0040A4E3 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A0B721D1CED6637004FDACC /* MobileCoreServices.framework */; };
 		9AD665CE1D2277920040A4E3 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A0B721F1CED6644004FDACC /* CoreTelephony.framework */; };
 		9AD665CF1D22779A0040A4E3 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A0B72211CED664D004FDACC /* CoreLocation.framework */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXContainerItemProxy section */
-		9AD663B41D2275920040A4E3 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 9AD663B01D22758E0040A4E3 /* ChatKit.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 9A6060821CEC831800D14D73;
-			remoteInfo = ChatKit;
-		};
-		9AD663E71D2275F50040A4E3 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 9AD663B01D22758E0040A4E3 /* ChatKit.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 9A6060811CEC831800D14D73;
-			remoteInfo = ChatKit;
-		};
-		9AD663EB1D22760A0040A4E3 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 9AD663B01D22758E0040A4E3 /* ChatKit.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 9A6060811CEC831800D14D73;
-			remoteInfo = ChatKit;
-		};
-/* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
 		9A1AD17B1CEDE640000FF26E /* Embed Frameworks */ = {
@@ -63,7 +37,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				9AD663EA1D2276090040A4E3 /* ChatKit.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -107,7 +80,6 @@
 		9A754D4B1CECAC3E000967F1 /* ChatKit-OC.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "ChatKit-OC.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		9A9E844F1D13A66B008590B4 /* LCChatKitExample.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCChatKitExample.h; sourceTree = "<group>"; };
 		9A9E84501D13A66B008590B4 /* LCChatKitExample.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCChatKitExample.m; sourceTree = "<group>"; };
-		9AD663B01D22758E0040A4E3 /* ChatKit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ChatKit.xcodeproj; path = ../ChatKit/ChatKit.xcodeproj; sourceTree = "<group>"; };
 		BA5CD9C65171B4B671044819 /* libPods-ChatKit-OC.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ChatKit-OC.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		FE81801167FF7BEA287BEF15 /* Pods-ChatKit-OC.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChatKit-OC.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ChatKit-OC/Pods-ChatKit-OC.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -122,7 +94,6 @@
 				9AD665CD1D22778B0040A4E3 /* MobileCoreServices.framework in Frameworks */,
 				9AD665CC1D2277830040A4E3 /* SystemConfiguration.framework in Frameworks */,
 				2D3A40ABD266D4907DE5943D /* libPods-ChatKit-OC.a in Frameworks */,
-				9AD663E91D2276090040A4E3 /* ChatKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -294,7 +265,6 @@
 		9A754D421CECAC3E000967F1 = {
 			isa = PBXGroup;
 			children = (
-				9AD663B01D22758E0040A4E3 /* ChatKit.xcodeproj */,
 				9A4730281CECAEC500AEB86F /* Example */,
 				9A754D4C1CECAC3E000967F1 /* Products */,
 				578A4ED63A7AFF3EA27EF73A /* Frameworks */,
@@ -306,14 +276,6 @@
 			isa = PBXGroup;
 			children = (
 				9A754D4B1CECAC3E000967F1 /* ChatKit-OC.app */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
-		9AD663B11D22758E0040A4E3 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				9AD663B51D2275920040A4E3 /* ChatKit.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -336,8 +298,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				9AD663E81D2275F50040A4E3 /* PBXTargetDependency */,
-				9AD663EC1D22760A0040A4E3 /* PBXTargetDependency */,
 			);
 			name = "ChatKit-OC";
 			productName = "ChatKit-OC";
@@ -370,28 +330,12 @@
 			mainGroup = 9A754D421CECAC3E000967F1;
 			productRefGroup = 9A754D4C1CECAC3E000967F1 /* Products */;
 			projectDirPath = "";
-			projectReferences = (
-				{
-					ProductGroup = 9AD663B11D22758E0040A4E3 /* Products */;
-					ProjectRef = 9AD663B01D22758E0040A4E3 /* ChatKit.xcodeproj */;
-				},
-			);
 			projectRoot = "";
 			targets = (
 				9A754D4A1CECAC3E000967F1 /* ChatKit-OC */,
 			);
 		};
 /* End PBXProject section */
-
-/* Begin PBXReferenceProxy section */
-		9AD663B51D2275920040A4E3 /* ChatKit.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = ChatKit.framework;
-			remoteRef = 9AD663B41D2275920040A4E3 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		9A754D491CECAC3E000967F1 /* Resources */ = {
@@ -476,19 +420,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		9AD663E81D2275F50040A4E3 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = ChatKit;
-			targetProxy = 9AD663E71D2275F50040A4E3 /* PBXContainerItemProxy */;
-		};
-		9AD663EC1D22760A0040A4E3 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = ChatKit;
-			targetProxy = 9AD663EB1D22760A0040A4E3 /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		9A4730561CECAEC500AEB86F /* LaunchScreen.storyboard */ = {

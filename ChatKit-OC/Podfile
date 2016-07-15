@@ -13,7 +13,7 @@ pod 'ChatKit', :path => '../'
 pod 'MBProgressHUD'
 pod 'CYLTabBarController'
 pod 'TWMessageBarManager'
-pod "FDStackView", "1.0"
+#pod "FDStackView", "1.0"
 pod 'MWPhotoBrowser'
 pod 'MLPAutoCompleteTextField'
 

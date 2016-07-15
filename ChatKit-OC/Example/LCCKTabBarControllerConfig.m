@@ -8,12 +8,13 @@
 
 #import "LCCKTabBarControllerConfig.h"
 #import <AVOSCloud/AVOSCloud.h>
+#import "LCChatKitExample.h"
+
 #if __has_include(<ChatKit/LCChatKit.h>)
 #import <ChatKit/LCChatKit.h>
 #else
 #import "LCChatKit.h"
 #endif
-#import "LCCKContactListController.h"
 
 @interface LCCKTabBarControllerConfig ()
 
@@ -30,55 +31,50 @@
  */
 - (CYLTabBarController *)tabBarController {
     if (_tabBarController == nil) {
-        LCCKConversationListViewController *firstViewController = [[LCCKConversationListViewController alloc] init];
-        UINavigationController *firstNavigationController = [[LCCKBaseNavigationController alloc]
-                                                       initWithRootViewController:firstViewController];
-        
-        LCCKContactListController *secondViewController = [[LCCKContactListController alloc] init];
-        // 从系统偏好读取用户已经保存的信息
-        NSUserDefaults *defaultsGet = [NSUserDefaults standardUserDefaults];
-        NSString *currentClientID = [defaultsGet stringForKey:LCCK_KEY_USERID];
-        secondViewController.excludedPersonIDs = @[ currentClientID ];
-        UINavigationController *secondNavigationController = [[LCCKBaseNavigationController alloc]
-                                                        initWithRootViewController:secondViewController];
-        
-        
-        CYLTabBarController *tabBarController = [[CYLTabBarController alloc] init];
-        
-        /*
-         *
-         在`-setViewControllers:`之前设置TabBar的属性，设置TabBarItem的属性，包括 title、Image、selectedImage。
-         *
-         */
-        [self setUpTabBarItemsAttributesForController:tabBarController];
-        
-        [tabBarController setViewControllers:@[
-                                               firstNavigationController,
-                                               secondNavigationController,
-                                               ]];
-        /**
-         *  更多TabBar自定义设置：比如：tabBarItem 的选中和不选中文字和背景图片属性、tabbar 背景图片属性
-         */
-        // [[self class] customizeTabBarAppearance];
+        CYLTabBarController *tabBarController = [CYLTabBarController tabBarControllerWithViewControllers:self.viewControllers
+                                                                                   tabBarItemsAttributes:self.tabBarItemsAttributesForController];
+        [self customizeTabBarAppearance:tabBarController];
         _tabBarController = tabBarController;
     }
     return _tabBarController;
 }
 
-/*
- *
- 在`-setViewControllers:`之前设置TabBar的属性，设置TabBarItem的属性，包括 title、Image、selectedImage。
- *
- */
-- (void)setUpTabBarItemsAttributesForController:(CYLTabBarController *)tabBarController {
-    
+- (NSArray *)allPersonIds {
+    NSArray *allPersonIds = [[LCCKContactManager defaultManager] fetchContactPeerIds];
+    return allPersonIds;
+}
+
+- (NSArray *)viewControllers {
+    LCCKConversationListViewController *firstViewController = [[LCCKConversationListViewController alloc] init];
+    UINavigationController *firstNavigationController = [[LCCKBaseNavigationController alloc]
+                                                         initWithRootViewController:firstViewController];
+    //FIXME:
+    NSArray *users = [[LCChatKit sharedInstance] getProfilesForUserIds:self.allPersonIds error:nil];
+    NSString *currentClientID = [[LCChatKit sharedInstance] clientId];
+    LCCKContactListViewController *secondViewController = [[LCCKContactListViewController alloc] initWithContacts:users userIds:self.allPersonIds excludedUserIds:@[currentClientID] mode:LCCKContactListModeNormal];
+    [secondViewController setSelectedContactCallback:^(UIViewController *viewController, NSString *peerId) {
+        [LCChatKitExample exampleOpenConversationViewControllerWithPeerId:peerId fromNavigationController:self.tabBarController.navigationController];
+    }];
+    [secondViewController setDeleteContactCallback:^BOOL(UIViewController *viewController, NSString *peerId) {
+       return [[LCCKContactManager defaultManager] removeContactForPeerId:peerId];
+    }];
+    UINavigationController *secondNavigationController = [[LCCKBaseNavigationController alloc]
+                                                          initWithRootViewController:secondViewController];
+    NSArray *viewControllers = @[
+                                 firstNavigationController,
+                                 secondNavigationController,
+                                 ];
+    return viewControllers;
+}
+
+- (NSArray *)tabBarItemsAttributesForController {
     NSDictionary *dict1 = @{
-                            CYLTabBarItemTitle : @"消息",
+                            //                            CYLTabBarItemTitle : @"消息",
                             CYLTabBarItemImage : @"tabbar_chat_normal",
                             CYLTabBarItemSelectedImage : @"tabbar_chat_active",
                             };
     NSDictionary *dict2 = @{
-                            CYLTabBarItemTitle : @"联系人",
+                            //                            CYLTabBarItemTitle : @"联系人",
                             CYLTabBarItemImage : @"tabbar_contacts_normal",
                             CYLTabBarItemSelectedImage : @"tabbar_contacts_active",
                             };
@@ -87,21 +83,21 @@
                                        dict1,
                                        dict2,
                                        ];
-    tabBarController.tabBarItemsAttributes = tabBarItemsAttributes;
+    return tabBarItemsAttributes;
 }
 
 /**
- *  更多TabBar自定义设置：比如：tabBarItem 的选中和不选中文字和背景图片属性、tabbar 背景图片属性
+ *  更多TabBar自定义设置：比如：tabBarItem 的选中和不选中文字和背景图片属性、tabbar 背景图片属性等等
  */
-+ (void)customizeTabBarAppearance {
-    
-    // 去除 TabBar 自带的顶部阴影
-    [[UITabBar appearance] setShadowImage:[[UIImage alloc] init]];
+- (void)customizeTabBarAppearance:(CYLTabBarController *)tabBarController {
+    // Customize UITabBar height
+    // 自定义 TabBar 高度
+    tabBarController.tabBarHeight = 40.f;
     
     // set the text color for unselected state
     // 普通状态下的文字属性
     NSMutableDictionary *normalAttrs = [NSMutableDictionary dictionary];
-    normalAttrs[NSForegroundColorAttributeName] = [UIColor blackColor];
+    normalAttrs[NSForegroundColorAttributeName] = [UIColor grayColor];
     
     // set the text color for selected state
     // 选中状态下的文字属性
@@ -116,40 +112,72 @@
     
     // Set the dark color to selected tab (the dimmed background)
     // TabBarItem选中后的背景颜色
-    [[UITabBar appearance] setSelectionIndicatorImage:[self imageFromColor:[UIColor colorWithRed:26 / 255.0 green:163 / 255.0 blue:133 / 255.0 alpha:1] forSize:CGSizeMake([UIScreen mainScreen].bounds.size.width / 5.0f, 49) withCornerRadius:0]];
+    // [self customizeTabBarSelectionIndicatorImage];
     
-    // set the bar background color
+    // update TabBar when TabBarItem width did update
+    // If your app need support UIDeviceOrientationLandscapeLeft or UIDeviceOrientationLandscapeRight，
+    // remove the comment '//'
+    // 如果你的App需要支持横竖屏，请使用该方法移除注释 '//'
+    // [self updateTabBarCustomizationWhenTabBarItemWidthDidUpdate];
+    
+    // set the bar shadow image
+    // This shadow image attribute is ignored if the tab bar does not also have a custom background image.So at least set somthing.
+    [[UITabBar appearance] setBackgroundImage:[[UIImage alloc] init]];
+    [[UITabBar appearance] setBackgroundColor:[UIColor whiteColor]];
+    [[UITabBar appearance] setShadowImage:[UIImage imageNamed:@"tapbar_top_line"]];
+    
+    // set the bar background image
     // 设置背景图片
     // UITabBar *tabBarAppearance = [UITabBar appearance];
-    // [tabBarAppearance setBackgroundImage:[UIImage imageNamed:@"tabbar_background_ios7"]];
+    // [tabBarAppearance setBackgroundImage:[UIImage imageNamed:@"tabbar_background"]];
+    
+    // remove the bar system shadow image
+    // 去除 TabBar 自带的顶部阴影
+    // [[UITabBar appearance] setShadowImage:[[UIImage alloc] init]];
 }
 
-+ (UIImage *)imageFromColor:(UIColor *)color forSize:(CGSize)size withCornerRadius:(CGFloat)radius {
-    CGRect rect = CGRectMake(0, 0, size.width, size.height);
-    UIGraphicsBeginImageContext(rect.size);
-    
+- (void)updateTabBarCustomizationWhenTabBarItemWidthDidUpdate {
+    void (^deviceOrientationDidChangeBlock)(NSNotification *) = ^(NSNotification *notification) {
+        UIDeviceOrientation orientation = [[UIDevice currentDevice] orientation];
+        if ((orientation == UIDeviceOrientationLandscapeLeft) || (orientation == UIDeviceOrientationLandscapeRight)) {
+            NSLog(@"Landscape Left or Right !");
+        } else if (orientation == UIDeviceOrientationPortrait) {
+            NSLog(@"Landscape portrait!");
+        }
+        [self customizeTabBarSelectionIndicatorImage];
+    };
+    [[NSNotificationCenter defaultCenter] addObserverForName:CYLTabBarItemWidthDidChangeNotification
+                                                      object:nil
+                                                       queue:[NSOperationQueue mainQueue]
+                                                  usingBlock:deviceOrientationDidChangeBlock];
+}
+
+- (void)customizeTabBarSelectionIndicatorImage {
+    ///Get initialized TabBar Height if exists, otherwise get Default TabBar Height.
+    UITabBarController *tabBarController = [self cyl_tabBarController] ?: [[UITabBarController alloc] init];
+    CGFloat tabBarHeight = tabBarController.tabBar.frame.size.height;
+    CGSize selectionIndicatorImageSize = CGSizeMake(CYLTabBarItemWidth, tabBarHeight);
+    //Get initialized TabBar if exists.
+    UITabBar *tabBar = [self cyl_tabBarController].tabBar ?: [UITabBar appearance];
+    [tabBar setSelectionIndicatorImage:
+     [[self class] imageWithColor:[UIColor redColor]
+                             size:selectionIndicatorImageSize]];
+}
+
++ (UIImage *)imageWithColor:(UIColor *)color size:(CGSize)size {
+    if (!color || size.width <= 0 || size.height <= 0) return nil;
+    CGRect rect = CGRectMake(0.0f, 0.0f, size.width + 1, size.height);
+    UIGraphicsBeginImageContextWithOptions(rect.size, NO, 0);
     CGContextRef context = UIGraphicsGetCurrentContext();
-    CGContextSetFillColorWithColor(context, [color CGColor]);
+    CGContextSetFillColorWithColor(context, color.CGColor);
     CGContextFillRect(context, rect);
-    
     UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
-    
-    // Begin a new image that will be the new image with the rounded corners
-    // (here with the size of an UIImageView)
-    UIGraphicsBeginImageContext(size);
-    
-    // Add a clip before drawing anything, in the shape of an rounded rect
-    [[UIBezierPath bezierPathWithRoundedRect:rect cornerRadius:radius] addClip];
-    // Draw your image
-    [image drawInRect:rect];
-    
-    // Get the image, here setting the UIImageView image
-    image = UIGraphicsGetImageFromCurrentImageContext();
-    
-    // Lets forget about that we were drawing
-    UIGraphicsEndImageContext();
     return image;
+}
+
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 @end
