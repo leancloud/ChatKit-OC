@@ -12,7 +12,7 @@
 
 @interface LCCKConversationListCell : UITableViewCell
 
-@property (nonatomic, strong) UIImageView *avatorImageView;
+@property (nonatomic, strong) UIImageView *avatarImageView;
 @property (nonatomic, strong) UILabel *nameLabel;
 @property (nonatomic, strong) UILabel  *messageTextLabel;
 @property (nonatomic, strong) LCCKBadgeView *badgeView;

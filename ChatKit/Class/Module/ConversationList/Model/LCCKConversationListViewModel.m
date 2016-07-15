@@ -9,7 +9,7 @@
 #import "LCCKConversationListViewModel.h"
 #import "LCCKConversationListCell.h"
 #import <AVOSCloudIM/AVOSCloudIM.h>
-#import "LCCKUserModelDelegate.h"
+#import "LCCKUserDelegate.h"
 #import "LCCKUserSystemService.h"
 #import "LCCKConversationListViewController.h"
 #import "LCCKChatUntiles.h"
@@ -75,7 +75,7 @@
     }
     LCCKConversationListCell *cell = [LCCKConversationListCell dequeueOrCreateCellByTableView:tableView];
     __block NSString *displayName = nil;
-    __block NSURL *avatorURL = nil;
+    __block NSURL *avatarURL = nil;
     NSString *peerId = nil;
     if (conversation.lcck_type == LCCKConversationTypeSingle) {
         peerId = conversation.lcck_peerId;
@@ -83,12 +83,12 @@
         peerId = conversation.lcck_lastMessage.clientId;
     }
     if (peerId) {
-        [self asyncCacheElseNetLoadCell:cell identifier:conversation.lcck_displayName peerId:peerId name:&displayName avatorURL:&avatorURL];
+        [self asyncCacheElseNetLoadCell:cell identifier:conversation.lcck_displayName peerId:peerId name:&displayName avatarURL:&avatarURL];
     }
     if (conversation.lcck_type == LCCKConversationTypeSingle) {
-        [cell.avatorImageView sd_setImageWithURL:avatorURL placeholderImage:[self imageInBundleForImageName:@"Placeholder_Avator" ]];
+        [cell.avatarImageView sd_setImageWithURL:avatarURL placeholderImage:[self imageInBundleForImageName:@"Placeholder_Avatar" ]];
     } else {
-        [cell.avatorImageView setImage:[self imageInBundleForImageName:@"Placeholder_Group"]];
+        [cell.avatarImageView setImage:[self imageInBundleForImageName:@"Placeholder_Group"]];
     }
     
     cell.nameLabel.text = conversation.lcck_displayName;
@@ -129,10 +129,10 @@
     return editActions;
 }
 
-- (void)asyncCacheElseNetLoadCell:(LCCKConversationListCell *)cell identifier:(NSString *)identifier peerId:(NSString *)peerId name:(NSString **)name avatorURL:(NSURL **)avatorURL {
+- (void)asyncCacheElseNetLoadCell:(LCCKConversationListCell *)cell identifier:(NSString *)identifier peerId:(NSString *)peerId name:(NSString **)name avatarURL:(NSURL **)avatarURL {
     NSError *error = nil;
     cell.identifier = identifier;
-    [[LCCKUserSystemService sharedInstance] getCachedProfileIfExists:peerId name:name avatorURL:avatorURL error:&error];
+    [[LCCKUserSystemService sharedInstance] getCachedProfileIfExists:peerId name:name avatarURL:avatarURL error:&error];
     if (error) {
 //        NSLog(@"%@", error);
     }
@@ -142,7 +142,7 @@
         }
         __weak __typeof(self) weakSelf = self;
         __weak __typeof(cell) weakCell = cell;
-        [[LCCKUserSystemService sharedInstance] getProfileInBackgroundForUserId:peerId callback:^(id<LCCKUserModelDelegate> user, NSError *error) {
+        [[LCCKUserSystemService sharedInstance] getProfileInBackgroundForUserId:peerId callback:^(id<LCCKUserDelegate> user, NSError *error) {
             if (!error && [weakCell.identifier isEqualToString:user.userId]) {
                 NSIndexPath *indexPath_ = [weakSelf.conversationListViewController.tableView indexPathForCell:weakCell];
                 if (!indexPath_) {
@@ -162,9 +162,9 @@
                                               title:NSLocalizedStringFromTable(@"Delete", @"LCChatKitString", @"Delete")
                                               handler:^(UITableViewRowAction *action, NSIndexPath *indexPath) {
                                                   AVIMConversation *conversation = [self.dataArray objectAtIndex:indexPath.row];
-                                                  [[LCCKConversationService sharedInstance] deleteRecentConversation:conversation];
+                                                  [[LCCKConversationService sharedInstance] deleteRecentConversationWithConversationId:conversation.conversationId];
                                                   [self refresh];
-                                                  LCCKConversationsListDidDeleteItemBlock conversationsListDidDeleteItemBlock = [LCCKConversationListService sharedInstance].didDeleteItemBlock;
+                                                  LCCKConversationsListDidDeleteItemBlock conversationsListDidDeleteItemBlock = [LCCKConversationListService sharedInstance].didDeleteConversationsListCellBlock;
                                                   !conversationsListDidDeleteItemBlock ?: conversationsListDidDeleteItemBlock(indexPath, conversation, self.conversationListViewController);
                                               }];
     actionItemDelete.backgroundColor = [UIColor redColor];
@@ -176,7 +176,7 @@
     AVIMConversation *conversation = [self.dataArray objectAtIndex:indexPath.row];
     [conversation markAsReadInBackground];
     [self refresh];
-    ![LCCKConversationListService sharedInstance].didSelectItemBlock ?: [LCCKConversationListService sharedInstance].didSelectItemBlock(indexPath, conversation, self.conversationListViewController);
+    ![LCCKConversationListService sharedInstance].didSelectConversationsListCellBlock ?: [LCCKConversationListService sharedInstance].didSelectConversationsListCellBlock(indexPath, conversation, self.conversationListViewController);
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -224,7 +224,7 @@
             if ([conversation.conversationId isEqualToString:remoteNotificationConversationId]) {
                 //TODO: If has section.
                 NSIndexPath *indexPath = [NSIndexPath indexPathWithIndex:idx];
-                ![LCCKConversationListService sharedInstance].didSelectItemBlock ?: [LCCKConversationListService sharedInstance].didSelectItemBlock(indexPath, conversation, self.conversationListViewController);
+                ![LCCKConversationListService sharedInstance].didSelectConversationsListCellBlock ?: [LCCKConversationListService sharedInstance].didSelectConversationsListCellBlock(indexPath, conversation, self.conversationListViewController);
                 found = YES;
                 *stop = YES;
                 return;

@@ -43,7 +43,7 @@
 }
 
 - (NSURL *)soundURLWithName:(NSString *)soundName {
-    NSString *bundlePath = [NSBundle lcck_bundlePathForbundleName:@"VoiceMessageSource" class:[self class]];
+    NSString *bundlePath = [NSBundle lcck_bundlePathForBundleName:@"VoiceMessageSource" class:[self class]];
     NSBundle *bundle = [NSBundle bundleWithPath:bundlePath];
     NSURL *url = [bundle URLForResource:soundName withExtension:@"caf"];
     return url;

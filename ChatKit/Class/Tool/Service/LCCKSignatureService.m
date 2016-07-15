@@ -10,13 +10,8 @@
 
 NSString *const LCCKSignatureServiceErrorDomain = @"LCCKSignatureServiceErrorDomain";
 
-@interface LCCKSignatureService ()
-
-@property (nonatomic, copy, readwrite) LCCKGenerateSignatureBlock generateSignatureBlock;
-
-@end
-
 @implementation LCCKSignatureService
+@synthesize generateSignatureBlock = _generateSignatureBlock;
 
 - (void)setGenerateSignatureBlock:(LCCKGenerateSignatureBlock)generateSignatureBlock {
     _generateSignatureBlock = generateSignatureBlock;

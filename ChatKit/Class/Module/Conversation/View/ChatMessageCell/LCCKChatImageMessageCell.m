@@ -8,12 +8,13 @@
 
 #import "LCCKChatImageMessageCell.h"
 #import "Masonry.h"
-#if __has_include(<SDWebImage/UIImageView+WebCache.h>)
-#import <SDWebImage/UIImageView+WebCache.h>
-#else
-#import "UIImageView+WebCache.h"
-#endif
 #import "UIImage+LCCKExtension.h"
+
+#if __has_include(<SDWebImage/UIImageView+WebCache.h>)
+    #import <SDWebImage/UIImageView+WebCache.h>
+#else
+    #import "UIImageView+WebCache.h"
+#endif
 
 @interface LCCKChatImageMessageCell ()
 

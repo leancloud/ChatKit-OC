@@ -8,7 +8,12 @@
 
 #import <Foundation/Foundation.h>
 #import "LCCKServiceDefinition.h"
-#import <AVOSCloud/AVOSCloud.h>
+
+#if __has_include(<ChatKit/LCChatKit.h>)
+    #import <ChatKit/LCChatKit.h>
+#else
+    #import "LCChatKit.h"
+#endif
 
 @class LCCKMessage;
 
@@ -22,9 +27,9 @@ FOUNDATION_EXTERN NSString *const LCCKConversationServiceErrorDomain;
 @interface LCCKConversationService : LCCKSingleton <LCCKConversationService>
 
 /**
- *  当前正在聊天的 conversationId
+ *  当前正在聊天的 conversationId，当前不在聊天界面则为nil
  */
-@property (nonatomic, strong) NSString *chattingConversationId;
+@property (nonatomic, strong) NSString *currentConversationId;
 
 /**
  *  推送弹框点击时记录的 convid
@@ -58,7 +63,7 @@ FOUNDATION_EXTERN NSString *const LCCKConversationServiceErrorDomain;
  *  删除会话对应的UIProfile缓存，比如当用户信息发生变化时
  *  @param  conversation 会话，可以是单聊，也可是群聊
  */
-- (void)removeCacheForConversation:(AVIMConversation *)conversation;
+- (void)removeCacheForConversationId:(NSString *)conversationID;
 - (void)updateConversationAsRead;
 ///--------------------------------------------------------------------------------------------
 ///---------------------最近对话的本地缓存，最近对话将保存在本地数据库中-------------------------------
@@ -81,7 +86,14 @@ FOUNDATION_EXTERN NSString *const LCCKConversationServiceErrorDomain;
  *  @param mentioned  要更新的值
  *  @param conversation 相应对话
  */
-- (void)updateMentioned:(BOOL)mentioned conversation:(AVIMConversation *)conversation;
+- (void)updateMentioned:(BOOL)mentioned conversationId:(NSString *)conversationId;
+
+/**
+ *  更新 draft 值
+ *  @param draft  要更新的值
+ *  @param conversation 相应对话
+ */
+- (void)updateDraft:(NSString *)draft conversationId:(NSString *)conversationId;
 
 /**
  *  更新每条最近对话记录里的 conversation 值，也即某对话的名字、成员可能变了，需要更新应用打开时，第一次加载最近对话列表时，会去向服务器要对话的最新数据，然后更新
@@ -100,8 +112,9 @@ FOUNDATION_EXTERN NSString *const LCCKConversationServiceErrorDomain;
  *  @param conversation 某对话
  *  @return
  */
-- (BOOL)isRecentConversationExist:(AVIMConversation *)conversation;
+- (BOOL)isRecentConversationExistWithConversationId:(NSString *)conversationId;
 
+- (NSString *)draftWithConversationId:(NSString *)conversationId;
 
 ///---------------------------------------------------------------------
 ///---------------------FailedMessageStore-------------------------------

@@ -10,20 +10,14 @@
 
 NSString *const LCCKUIServiceErrorDomain = @"LCCKUIServiceErrorDomain";
 
-@interface LCCKUIService ()
-
-@property (nonatomic, copy) LCCKPreviewImageMessageBlock previewImageMessageBlock;
-@property (nonatomic, copy) LCCKPreviewLocationMessageBlock previewLocationMessageBlock;
-@property (nonatomic, copy) LCCKOpenProfileBlock openProfileBlock;
-@property (nonatomic, copy) LCCKUnreadCountChangedBlock unreadCountChangedBlock;
-@property (nonatomic, assign, readwrite) LCCKAvatarImageViewCornerRadiusBlock avatarImageViewCornerRadiusBlock;
-@property (nonatomic, copy, readwrite) LCCKLongPressMessageBlock longPressMessageBlock;
-@property (nonatomic, copy) LCCKShowNotificationBlock showNotificationBlock;
-@property (nonatomic, copy) LCCKHUDActionBlock HUDActionBlock;
-
-@end
-
 @implementation LCCKUIService
+@synthesize openProfileBlock = _openProfileBlock;
+@synthesize previewImageMessageBlock = _previewImageMessageBlock;
+@synthesize previewLocationMessageBlock = _previewLocationMessageBlock;
+@synthesize longPressMessageBlock = _longPressMessageBlock;
+@synthesize showNotificationBlock = _showNotificationBlock;
+@synthesize HUDActionBlock = _HUDActionBlock;
+@synthesize avatarImageViewCornerRadiusBlock = _avatarImageViewCornerRadiusBlock;
 
 - (void)setPreviewImageMessageBlock:(LCCKPreviewImageMessageBlock)previewImageMessageBlock {
     _previewImageMessageBlock = previewImageMessageBlock;

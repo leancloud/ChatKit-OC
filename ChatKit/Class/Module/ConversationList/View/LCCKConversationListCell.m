@@ -53,8 +53,8 @@ CGFloat const LCCKConversationListCellDefaultHeight = 61; //LCCKImageSize + LCCK
 - (void)setup {
     LCCKNameLabelHeight = LCCKImageSize * LCCKNameLabelHeightProportion;
     LCCKMessageLabelHeight = LCCKImageSize - LCCKNameLabelHeight;
-    [self addSubview:self.avatorImageView];
-    [self.avatorImageView addSubview:self.badgeView];
+    [self addSubview:self.avatarImageView];
+    [self.avatarImageView addSubview:self.badgeView];
     [self addSubview:self.timestampLabel];
     [self.contentView addSubview:self.litteBadgeView];
     [self.contentView addSubview:self.nameLabel];
@@ -62,17 +62,17 @@ CGFloat const LCCKConversationListCellDefaultHeight = 61; //LCCKImageSize + LCCK
     [self.contentView addSubview:self.remindMuteImageView];
 }
 
-- (UIImageView *)avatorImageView {
-    if (_avatorImageView == nil) {
-        UIImageView *avatorImageView = [[UIImageView alloc] initWithFrame:CGRectMake(LCCKHorizontalSpacing, LCCKVerticalSpacing, LCCKImageSize, LCCKImageSize)];
+- (UIImageView *)avatarImageView {
+    if (_avatarImageView == nil) {
+        UIImageView *avatarImageView = [[UIImageView alloc] initWithFrame:CGRectMake(LCCKHorizontalSpacing, LCCKVerticalSpacing, LCCKImageSize, LCCKImageSize)];
         LCCKAvatarImageViewCornerRadiusBlock avatarImageViewCornerRadiusBlock = [LCChatKit sharedInstance].avatarImageViewCornerRadiusBlock;
         if (avatarImageViewCornerRadiusBlock) {
-            CGFloat avatarImageViewCornerRadius = avatarImageViewCornerRadiusBlock(avatorImageView.frame.size);
-            [avatorImageView lcck_cornerRadiusAdvance:avatarImageViewCornerRadius rectCornerType:UIRectCornerAllCorners];
+            CGFloat avatarImageViewCornerRadius = avatarImageViewCornerRadiusBlock(avatarImageView.frame.size);
+            [avatarImageView lcck_cornerRadiusAdvance:avatarImageViewCornerRadius rectCornerType:UIRectCornerAllCorners];
         }
-        _avatorImageView = avatorImageView;
+        _avatarImageView = avatarImageView;
     }
-    return _avatorImageView;
+    return _avatarImageView;
 }
 
 - (UIView *)litteBadgeView {
@@ -80,7 +80,7 @@ CGFloat const LCCKConversationListCellDefaultHeight = 61; //LCCKImageSize + LCCK
         UIView *litteBadgeView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, LCCKLittleBadgeSize, LCCKLittleBadgeSize)];
         litteBadgeView.layer.masksToBounds = YES;
         litteBadgeView.layer.cornerRadius = LCCKLittleBadgeSize / 2;
-        litteBadgeView.center = CGPointMake(CGRectGetMaxX(_avatorImageView.frame), CGRectGetMinY(_avatorImageView.frame));
+        litteBadgeView.center = CGPointMake(CGRectGetMaxX(_avatarImageView.frame), CGRectGetMinY(_avatarImageView.frame));
         litteBadgeView.hidden = YES;
         _litteBadgeView = litteBadgeView;
     }
@@ -89,7 +89,7 @@ CGFloat const LCCKConversationListCellDefaultHeight = 61; //LCCKImageSize + LCCK
 
 - (UILabel *)timestampLabel {
     if (_timestampLabel == nil) {
-        UILabel *timestampLabel = [[UILabel alloc] initWithFrame:CGRectMake(LCCKAutoResizingDefaultScreenWidth - LCCKHorizontalSpacing - LCCKTimestampeLabelWidth, CGRectGetMinY(_avatorImageView.frame), LCCKTimestampeLabelWidth, LCCKNameLabelHeight)];
+        UILabel *timestampLabel = [[UILabel alloc] initWithFrame:CGRectMake(LCCKAutoResizingDefaultScreenWidth - LCCKHorizontalSpacing - LCCKTimestampeLabelWidth, CGRectGetMinY(_avatarImageView.frame), LCCKTimestampeLabelWidth, LCCKNameLabelHeight)];
         timestampLabel.font = [UIFont systemFontOfSize:13];
         timestampLabel.textAlignment = NSTextAlignmentRight;
         timestampLabel.textColor = [UIColor grayColor];
@@ -101,7 +101,7 @@ CGFloat const LCCKConversationListCellDefaultHeight = 61; //LCCKImageSize + LCCK
 
 - (UILabel *)nameLabel {
     if (_nameLabel == nil) {
-        UILabel *nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(_avatorImageView.frame) + LCCKHorizontalSpacing, CGRectGetMinY(_avatorImageView.frame), CGRectGetMinX(_timestampLabel.frame) - LCCKHorizontalSpacing * 3 - LCCKImageSize, LCCKNameLabelHeight)];
+        UILabel *nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(_avatarImageView.frame) + LCCKHorizontalSpacing, CGRectGetMinY(_avatarImageView.frame), CGRectGetMinX(_timestampLabel.frame) - LCCKHorizontalSpacing * 3 - LCCKImageSize, LCCKNameLabelHeight)];
         nameLabel.font = [UIFont systemFontOfSize:17];
         nameLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         _nameLabel = nameLabel;
@@ -137,10 +137,10 @@ CGFloat const LCCKConversationListCellDefaultHeight = 61; //LCCKImageSize + LCCK
 
 - (LCCKBadgeView *)badgeView {
     if (_badgeView == nil) {
-        LCCKBadgeView *badgeView = [[LCCKBadgeView alloc] initWithParentView:self.avatorImageView
+        LCCKBadgeView *badgeView = [[LCCKBadgeView alloc] initWithParentView:self.avatarImageView
                                                                alignment:LCCKBadgeViewAlignmentTopRight];
-        [self.avatorImageView addSubview:(_badgeView = badgeView)];
-        [self.avatorImageView bringSubviewToFront:_badgeView];
+        [self.avatarImageView addSubview:(_badgeView = badgeView)];
+        [self.avatarImageView bringSubviewToFront:_badgeView];
     }
     return _badgeView;
 }

@@ -219,10 +219,10 @@ static CGFloat const LCCKAvatarToMessageContent = 5.f;
 
 - (void)configureCellWithData:(LCCKMessage *)message {
     self.message = message;
-    self.nicknameLabel.text = self.message.sender;
-    [self.avatarImageView sd_setImageWithURL:self.message.avatorURL
+    self.nicknameLabel.text = self.message.user.name ?: self.message.userId;
+    [self.avatarImageView sd_setImageWithURL:self.message.user.avatarURL
                             placeholderImage:({
-        NSString *imageName = @"Placeholder_Avator";
+        NSString *imageName = @"Placeholder_Avatar";
         UIImage *image = [UIImage lcck_imageNamed:imageName bundleName:@"Placeholder" bundleForClass:[self class]];
         image;})
      ];
@@ -344,18 +344,18 @@ static CGFloat const LCCKAvatarToMessageContent = 5.f;
 }
 
 - (LCCKConversationType)messageChatType {
-    if ([self.reuseIdentifier containsString:@"GroupCell"]) {
+    if ([self.reuseIdentifier lcck_containsString:@"GroupCell"]) {
         return LCCKConversationTypeGroup;
     }
     return LCCKConversationTypeSingle;
 }
 
 - (LCCKMessageOwner)messageOwner {
-    if ([self.reuseIdentifier containsString:@"OwnerSelf"]) {
+    if ([self.reuseIdentifier lcck_containsString:@"OwnerSelf"]) {
         return LCCKMessageOwnerSelf;
-    } else if ([self.reuseIdentifier containsString:@"OwnerOther"]) {
+    } else if ([self.reuseIdentifier lcck_containsString:@"OwnerOther"]) {
         return LCCKMessageOwnerOther;
-    } else if ([self.reuseIdentifier containsString:@"OwnerSystem"]) {
+    } else if ([self.reuseIdentifier lcck_containsString:@"OwnerSystem"]) {
         return LCCKMessageOwnerSystem;
     }
     return LCCKMessageOwnerUnknown;
@@ -365,6 +365,11 @@ static CGFloat const LCCKAvatarToMessageContent = 5.f;
     if (longPressGes.state == UIGestureRecognizerStateBegan) {
         CGPoint longPressPoint = [longPressGes locationInView:self.contentView];
         if (!CGRectContainsPoint(self.messageContentView.frame, longPressPoint)) {
+            if (CGRectContainsPoint(self.avatarImageView.frame, longPressPoint)) {
+                if ([self.delegate respondsToSelector:@selector(avatarImageViewLongPressed:)]) {
+                    [self.delegate avatarImageViewLongPressed:self];
+                }
+            }
             return;
         }
         [[[UIApplication sharedApplication] keyWindow] endEditing:YES];

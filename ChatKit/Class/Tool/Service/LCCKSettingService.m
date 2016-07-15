@@ -14,6 +14,7 @@ NSString *const LCCKSettingServiceErrorDomain = @"LCCKSettingServiceErrorDomain"
 static BOOL LCCKAllLogsEnabled;
 
 @implementation LCCKSettingService
+@synthesize useDevPushCerticate = _useDevPushCerticate;
 
 + (void)setAllLogsEnabled:(BOOL)enabled {
     LCCKAllLogsEnabled = enabled;

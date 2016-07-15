@@ -6,7 +6,7 @@
 //  Copyright © 2016年 ElonChan. All rights reserved.
 //
 
-#import "LCCKBaseViewController.h"
+
 #import "LCCKChatBar.h"
 #import "LCCKConversationViewModel.h"
 #import "LCCKBaseTableViewController.h"

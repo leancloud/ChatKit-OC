@@ -18,8 +18,8 @@
 #pragma mark -
 #pragma mark - Life Cycle
 
-+(void)load {
-    [super registerSubclass];
++ (void)load {
+    [super registerPlusButton];
 }
 
 #pragma mark -

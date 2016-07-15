@@ -131,9 +131,7 @@ static CGFloat const LCCKScrollViewInsetTop = 20.f;
 
 - (LCCKChatBar *)chatBar {
     if (!_chatBar) {
-        LCCKChatBar *chatBar = [[LCCKChatBar alloc] init];//WithFrame:CGRectMake(0, [UIScreen mainScreen].bounds.size.height - kLCCKChatBarMinHeight - (self.navigationController.navigationBar.isTranslucent ? 0 : 64), self.view.frame.size.width, kLCCKChatBarMinHeight)];
-//        chatBar.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleWidth;
-        [chatBar setSuperViewHeight:[UIScreen mainScreen].bounds.size.height - (self.navigationController.navigationBar.isTranslucent ? 0 : 64)];
+        LCCKChatBar *chatBar = [[LCCKChatBar alloc] init];
         [self.view addSubview:(_chatBar = chatBar)];
         [self.view bringSubviewToFront:_chatBar];
     }

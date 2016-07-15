@@ -10,23 +10,20 @@
 #import "LCCKServiceDefinition.h"
 #import "LCChatKit.h"
 #import "LCCKSoundManager.h"
+#import "NSString+LCCKExtension.h"
 
 NSString *const LCCKSessionServiceErrorDemain = @"LCCKSessionServiceErrorDemain";
 
 @interface LCCKSessionService() <AVIMClientDelegate, AVIMSignatureDataSource>
 
-@property (nonatomic, copy, readwrite) NSString *clientId;
-
-/*!
- * AVIMClient 实例
- */
-@property (nonatomic, strong) AVIMClient *client;
 @property (nonatomic, assign, readwrite) BOOL connect;
-@property (nonatomic, copy, readwrite) LCCKSessionNotOpenedHandler sessionNotOpenedHandler;
 
 @end
 
 @implementation LCCKSessionService
+@synthesize clientId = _clientId;
+@synthesize client = _client;
+@synthesize sessionNotOpenedHandler = _sessionNotOpenedHandler;
 
 - (void)openWithClientId:(NSString *)clientId callback:(LCCKBooleanResultBlock)callback {
     _clientId = clientId;
@@ -38,22 +35,22 @@ NSString *const LCCKSessionServiceErrorDemain = @"LCCKSessionServiceErrorDemain"
                                                    return [[LCChatKit sharedInstance] removeAllCachedRecentConversations];
                                               }];
     //    [[CDFailedMessageStore store] setupStoreWithDatabasePath:dbPath];
-    self.client = [[AVIMClient alloc] initWithClientId:clientId];
-    self.client.delegate = self;
+    _client = [[AVIMClient alloc] initWithClientId:clientId];
+    _client.delegate = self;
     /* 实现了generateSignatureBlock，将对 im的 open ，start(create conv),kick,invite 操作签名，更安全
      可以从你的服务器获得签名，这里从云代码获取，需要部署云代码
      */
     if ([[LCChatKit sharedInstance] generateSignatureBlock]) {
-        self.client.signatureDataSource = self;
+        _client.signatureDataSource = self;
     }
-    [self.client openWithCallback:^(BOOL succeeded, NSError *error) {
+    [_client openWithCallback:^(BOOL succeeded, NSError *error) {
         [self updateConnectStatus];
         !callback ?: callback(succeeded, error);
     }];
 }
 
 - (void)closeWithCallback:(LCCKBooleanResultBlock)callback {
-    [self.client closeWithCallback:^(BOOL succeeded, NSError *error) {
+    [_client closeWithCallback:^(BOOL succeeded, NSError *error) {
         !callback ?: callback(succeeded, error);
         if (succeeded) {
             [LCCKConversationListService destroyInstance];
@@ -90,7 +87,7 @@ NSString *const LCCKSessionServiceErrorDemain = @"LCCKSessionServiceErrorDemain"
 
 // 除了 sdk 的上面三个回调调用了，还在 open client 的时候调用了，好统一处理
 - (void)updateConnectStatus {
-    self.connect = self.client.status == AVIMClientStatusOpened;
+    self.connect = _client.status == AVIMClientStatusOpened;
     [[NSNotificationCenter defaultCenter] postNotificationName:LCCKNotificationConnectivityUpdated object:@(self.connect)];
 }
 
@@ -124,7 +121,7 @@ NSString *const LCCKSessionServiceErrorDemain = @"LCCKSessionServiceErrorDemain"
 // content : "{\"_lctype\":-1,\"_lctext\":\"sdfdf\"}"  sdk 会解析好
 - (void)conversation:(AVIMConversation *)conversation didReceiveTypedMessage:(AVIMTypedMessage *)message {
     if (message.messageId) {
-        if (conversation.creator == nil && [[LCCKConversationService sharedInstance] isRecentConversationExist:conversation] == NO) {
+        if (conversation.creator == nil && [[LCCKConversationService sharedInstance] isRecentConversationExistWithConversationId:conversation.conversationId] == NO) {
             [conversation fetchWithCallback:^(BOOL succeeded, NSError *error) {
                 if (error) {
                     LCCKLog(@"%@", error);
@@ -147,6 +144,7 @@ NSString *const LCCKSessionServiceErrorDemain = @"LCCKSessionServiceErrorDemain"
     }
 }
 
+//TODO:推荐使用这种方式接收离线消息
 - (void)conversation:(AVIMConversation *)conversation didReceiveUnread:(NSInteger)unread {
     // 需要开启 AVIMUserOptionUseUnread 选项，见 init
     NSLog(@"conversatoin:%@ didReceiveUnread:%@", conversation, @(unread));
@@ -157,15 +155,15 @@ NSString *const LCCKSessionServiceErrorDemain = @"LCCKSessionServiceErrorDemain"
 
 - (void)receiveMessage:(AVIMTypedMessage *)message conversation:(AVIMConversation *)conversation {
     [[LCCKConversationService sharedInstance] insertRecentConversation:conversation];
-    if (![[LCCKConversationService sharedInstance].chattingConversationId isEqualToString:conversation.conversationId]) {
+    if (![[LCCKConversationService sharedInstance].currentConversationId isEqualToString:conversation.conversationId]) {
         // 没有在聊天的时候才增加未读数和设置mentioned
-        [[LCCKConversationService sharedInstance] increaseUnreadCountWithConversation:conversation];
+        [[LCCKConversationService sharedInstance] increaseUnreadCountWithConversationId:conversation.conversationId];
         if ([self isMentionedByMessage:message]) {
-            [[LCCKConversationService sharedInstance] updateMentioned:YES conversation:conversation];
+            [[LCCKConversationService sharedInstance] updateMentioned:YES conversationId:conversation.conversationId];
         }
         [[NSNotificationCenter defaultCenter] postNotificationName:LCCKNotificationUnreadsUpdated object:nil];
     }
-    if (![LCCKConversationService sharedInstance].chattingConversationId) {
+    if (![LCCKConversationService sharedInstance].currentConversationId) {
         if (!conversation.muted) {
             [[LCCKSoundManager defaultManager] playLoudReceiveSoundIfNeed];
             [[LCCKSoundManager defaultManager] vibrateIfNeed];
@@ -181,9 +179,12 @@ NSString *const LCCKSessionServiceErrorDemain = @"LCCKSessionServiceErrorDemain"
         return NO;
     } else {
         NSString *text = ((AVIMTextMessage *)message).text;
-        id<LCCKUserModelDelegate> currentUser = [[LCCKUserSystemService sharedInstance] fetchCurrentUser];
-        NSString *pattern = [NSString stringWithFormat:@"@%@ ",currentUser.name];
-        if([text rangeOfString:pattern].length > 0) {
+        id<LCCKUserDelegate> currentUser = [[LCCKUserSystemService sharedInstance] fetchCurrentUser];
+        NSString *patternWithUserName = [NSString stringWithFormat:@"@%@ ",currentUser.name ?: currentUser.clientId];
+        NSString *patternWithLowercaseAll = @"@all ";
+        NSString *patternWithUppercaseAll = @"@All ";
+        BOOL isMentioned = [text lcck_containsString:patternWithUserName] || [text lcck_containsString:patternWithLowercaseAll] || [text lcck_containsString:patternWithUppercaseAll];
+        if(isMentioned) {
             return YES;
         } else {
             return NO;

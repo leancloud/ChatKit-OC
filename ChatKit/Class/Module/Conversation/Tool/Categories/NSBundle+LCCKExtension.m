@@ -10,14 +10,14 @@
 
 @implementation NSBundle (LCCKExtension)
 
-+ (NSString *)lcck_bundlePathForbundleName:(NSString *)bundleName class:(Class)aClass {
++ (NSString *)lcck_bundlePathForBundleName:(NSString *)bundleName class:(Class)aClass {
     NSString *pathComponent = [NSString stringWithFormat:@"%@.bundle", bundleName];
     NSString *bundlePath =[[[NSBundle bundleForClass:aClass] resourcePath] stringByAppendingPathComponent:pathComponent];
     return bundlePath;
 }
 
 + (NSBundle *)lcck_bundleForbundleName:(NSString *)bundleName class:(Class)aClass {
-    NSString *bundlePath = [NSBundle lcck_bundlePathForbundleName:bundleName class:aClass];
+    NSString *bundlePath = [NSBundle lcck_bundlePathForBundleName:bundleName class:aClass];
     NSBundle *bundle = [NSBundle bundleWithPath:bundlePath];
     return bundle;
 }

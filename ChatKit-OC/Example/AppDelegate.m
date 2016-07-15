@@ -54,7 +54,6 @@
     LCCKLoginViewController *loginViewController = [[LCCKLoginViewController alloc] initWithNibName:@"LCCKLoginViewController" bundle:[NSBundle mainBundle]];
     [loginViewController setClientIDHandler:^(NSString *clientID) {
         [LCCKUtil showProgressText:@"open client ..." duration:10.0f];
-        [[NSUserDefaults standardUserDefaults] setObject:clientID forKey:LCCK_KEY_USERID];
         [LCChatKitExample invokeThisMethodAfterLoginSuccessWithClientId:clientID success:^{
             [LCCKUtil hideProgress];
             LCCKTabBarControllerConfig *tabBarControllerConfig = [[LCCKTabBarControllerConfig alloc] init];

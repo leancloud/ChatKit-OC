@@ -20,49 +20,11 @@
 @property (nonatomic, copy, readwrite) LCCKViewDidDisappearBlock viewDidDisappearBlock;
 @property (nonatomic, copy, readwrite) LCCKViewControllerWillDeallocBlock viewControllerWillDeallocBlock;
 @property (nonatomic, copy, readwrite) LCCKViewDidReceiveMemoryWarningBlock didReceiveMemoryWarningBlock;
-@property (nonatomic, copy) LCCKBarButtonItemActionBlock barbuttonItemAction;
+@property (nonatomic, copy) LCCKBarButtonItemActionBlock barButtonItemAction;
 
 @end
 
 @implementation LCCKBaseViewController
-
-#pragma mark -
-#pragma mark - UIViewController Life
-
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    self.view.backgroundColor = [UIColor whiteColor];
-    !self.viewDidLoadBlock ?: self.viewDidLoadBlock(self);
-}
-
-- (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-    !self.viewWillAppearBlock ?: self.viewWillAppearBlock(self, animated);
-}
-
-- (void)viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
-    !self.viewDidAppearBlock ?: self.viewDidAppearBlock(self, animated);
-}
-
-- (void)viewWillDisappear:(BOOL)animated {
-    [super viewWillDisappear:animated];
-    !self.viewWillDisappearBlock ?: self.viewWillDisappearBlock(self, animated);
-}
-
-- (void)viewDidDisappear:(BOOL)animated {
-    [super viewDidDisappear:animated];
-    !self.viewDidDisappearBlock ?: self.viewDidDisappearBlock(self, animated);
-}
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    !self.didReceiveMemoryWarningBlock ?: self.didReceiveMemoryWarningBlock(self);
-}
-
--(void)dealloc {
-    !self.viewControllerWillDeallocBlock ?: self.viewControllerWillDeallocBlock(self);
-}
 
 #pragma mark -
 #pragma mark - UIViewController Life Event Block
@@ -95,8 +57,8 @@
     _didReceiveMemoryWarningBlock = didReceiveMemoryWarningBlock;
 }
 - (void)clickedBarButtonItemAction {
-    if (self.barbuttonItemAction) {
-        self.barbuttonItemAction();
+    if (self.barButtonItemAction) {
+        self.barButtonItemAction();
     }
 }
 
@@ -131,7 +93,7 @@
             break;
     }
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage lcck_imageNamed:icon bundleName:@"BarButtonIcon" bundleForClass:[self class]] style:UIBarButtonItemStylePlain target:self action:@selector(clickedBarButtonItemAction)];
-    self.barbuttonItemAction = action;
+    self.barButtonItemAction = action;
 }
 
 - (void)setupBackgroundImage:(UIImage *)backgroundImage {

@@ -20,29 +20,6 @@ typedef void(^LCCKPrepareConversationsWhenLoadBlock)(NSArray<AVIMConversation *>
 @property (nonatomic, copy, readonly) LCCKPrepareConversationsWhenLoadBlock prepareConversationsWhenLoadBlock;
 - (void)setPrepareConversationsWhenLoadBlock:(LCCKPrepareConversationsWhenLoadBlock)prepareConversationsWhenLoadBlock;
 
-/**
- *  设置某个会话的最近消息内容后的回调
- *  @param conversation 需要设置最近消息内容的会话
- *  @return 无需自定义最近消息内容返回nil
- */
-typedef NSString *(^LCCKConversationsLatestMessageContent)(AVIMConversation *conversation);
-
-/**
- *  设置某个会话的最近消息内容后的回调
- */
-@property (nonatomic, copy, readonly) LCCKConversationsLatestMessageContent latestMessageContentBlock;
-
-/**
- *  设置某个会话的最近消息内容后的回调
- */
-- (void)setLatestMessageContentBlock:(LCCKConversationsLatestMessageContent)latestMessageContentBlock;
-
-//TODO:
-///**
-// *  在没有数据时显示该view，占据Controller的View整个页面
-// */
-//@property (nonatomic, strong) UIView *viewForNoData;
-
 - (void)fetchConversationsWithConversationIds:(NSSet *)conversationIds callback:(LCCKArrayResultBlock)callback;
 - (void)findRecentConversationsWithBlock:(LCCKRecentConversationsCallback)block;
 

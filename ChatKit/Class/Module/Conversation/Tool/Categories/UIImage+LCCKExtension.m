@@ -87,7 +87,7 @@
 + (UIImage *)lcck_imageNamed:(NSString *)imageName bundleName:(NSString *)bundleName bundleForClass:(Class)aClass {
     if (imageName.length == 0) return nil;
     if ([imageName hasSuffix:@"/"]) return nil;
-    NSString *bundlePath = [NSBundle lcck_bundlePathForbundleName:bundleName class:aClass];
+    NSString *bundlePath = [NSBundle lcck_bundlePathForBundleName:bundleName class:aClass];
     NSBundle *bundle = [NSBundle bundleWithPath:bundlePath];
     LCCKImageManager *manager = [LCCKImageManager defaultManager];
     UIImage *image = [manager getImageWithName:imageName

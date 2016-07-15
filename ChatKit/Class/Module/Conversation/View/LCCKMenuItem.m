@@ -77,12 +77,18 @@ BOOL LCCKPIsMenuItemSelector(SEL selector) {
             Class objectClass = class_isMetaClass(object_getClass(object)) ? object : [object class];
 
             // check if menu handler has been already installed.
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wundeclared-selector"
             SEL canPerformActionSEL = @selector(lcck_canPerformAction:withSender:);
+#pragma clang diagnostic pop
             if (!class_getInstanceMethod(objectClass, canPerformActionSEL)) {
 
                 // add canBecomeFirstResponder if it is not returning YES. (or if we don't know)
                 if (object == objectClass || ![object canBecomeFirstResponder]) {
-                    SEL canBecomeFRSEL = @selector(lcck_canBecomeFirstResponder);
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wundeclared-selector"
+                    SEL canBecomeFRSEL = @selector(lcck_canBecomeFirstResponder); 
+#pragma clang diagnostic pop
                     IMP canBecomeFRIMP = imp_implementationWithBlock(LCCKBlockImplCast(^(id _self) {
                         return YES;
                     }));
@@ -97,7 +103,10 @@ BOOL LCCKPIsMenuItemSelector(SEL selector) {
                 LCCKReplaceMethod(objectClass, @selector(canPerformAction:withSender:), canPerformActionSEL, canPerformActionIMP);
 
                 // swizzle methodSignatureForSelector:.
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wundeclared-selector"
                 SEL methodSignatureSEL = @selector(lcck_methodSignatureForSelector:);
+#pragma clang diagnostic pop
                 IMP methodSignatureIMP = imp_implementationWithBlock(LCCKBlockImplCast(^(id _self, SEL selector) {
                     if (LCCKPIsMenuItemSelector(selector)) {
                         return [NSMethodSignature signatureWithObjCTypes:"v@:@"]; // fake it.
@@ -108,7 +117,10 @@ BOOL LCCKPIsMenuItemSelector(SEL selector) {
                 LCCKReplaceMethod(objectClass, @selector(methodSignatureForSelector:), methodSignatureSEL, methodSignatureIMP);
 
                 // swizzle forwardInvocation:
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wundeclared-selector"
                 SEL forwardInvocationSEL = @selector(lcck_forwardInvocation:);
+#pragma clang diagnostic pop
                 IMP forwardInvocationIMP = imp_implementationWithBlock(LCCKBlockImplCast(^(id _self, NSInvocation *invocation) {
                     if (LCCKPIsMenuItemSelector([invocation selector])) {
                         for (LCCKMenuItem *menuItem in [UIMenuController sharedMenuController].menuItems) {

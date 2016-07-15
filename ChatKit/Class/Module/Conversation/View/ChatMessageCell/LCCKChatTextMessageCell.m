@@ -87,7 +87,7 @@
 //-(void)prepareForReuse {
 //    [super prepareForReuse];
 //    self.nicknameLabel = @"";
-//    self.avatorButton = nil;
+//    self.avatarButton = nil;
 //}
 
 @end

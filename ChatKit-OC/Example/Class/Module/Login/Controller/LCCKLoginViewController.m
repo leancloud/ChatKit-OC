@@ -62,14 +62,14 @@
         forAutoCompleteObject:(id<MLPAutoCompletionObject>)autocompleteObject
             forRowAtIndexPath:(NSIndexPath *)indexPath {
     //This is your chance to customize an autocomplete tableview cell before it appears in the autocomplete tableview
-    NSURL *avatorURL;
+    NSURL *avatarURL;
     for (NSDictionary *user in LCCKContactProfiles) {
         if ([autocompleteString isEqualToString:user[LCCKProfileKeyPeerId]]) {
-            avatorURL = [NSURL URLWithString:user[LCCKProfileKeyAvatarURL]];
+            avatarURL = [NSURL URLWithString:user[LCCKProfileKeyAvatarURL]];
         }
     }
     UIImage *image = [UIImage imageNamed:@"image_placeholder"];
-    [cell.imageView sd_setImageWithURL:avatorURL placeholderImage:image];
+    [cell.imageView sd_setImageWithURL:avatarURL placeholderImage:image];
     return YES;
 }
 

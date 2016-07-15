@@ -25,6 +25,23 @@ static NSMutableDictionary *_sharedInstances = nil;
 
 @implementation LCChatKit
 @synthesize sessionNotOpenedHandler = _sessionNotOpenedHandler;
+@synthesize clientId = _clientId;
+@synthesize client = _client;
+@synthesize fetchProfilesBlock = _fetchProfilesBlock;
+@synthesize generateSignatureBlock = _generateSignatureBlock;
+@synthesize openProfileBlock = _openProfileBlock;
+@synthesize previewImageMessageBlock = _previewImageMessageBlock;
+@synthesize previewLocationMessageBlock = _previewLocationMessageBlock;
+@synthesize longPressMessageBlock = _longPressMessageBlock;
+@synthesize showNotificationBlock = _showNotificationBlock;
+@synthesize HUDActionBlock = _HUDActionBlock;
+@synthesize avatarImageViewCornerRadiusBlock = _avatarImageViewCornerRadiusBlock;
+@synthesize useDevPushCerticate = _useDevPushCerticate;
+@synthesize didSelectConversationsListCellBlock = _didSelectConversationsListCellBlock;
+@synthesize didDeleteConversationsListCellBlock = _didDeleteConversationsListCellBlock;
+@synthesize conversationEditActionBlock = _conversationEditActionBlock;
+@synthesize markBadgeWithTotalUnreadCountBlock = _markBadgeWithTotalUnreadCountBlock;
+
 #pragma mark -
 
 + (void)initialize {
@@ -143,8 +160,8 @@ static NSMutableDictionary *_sharedInstances = nil;
     [self.userSystemService removeAllCachedProfiles];
 }
 
-- (void)getCachedProfileIfExists:(NSString *)userId name:(NSString **)name avatorURL:(NSURL **)avatorURL error:(NSError * __autoreleasing *)error {
-    [self.userSystemService getCachedProfileIfExists:userId name:name avatorURL:avatorURL error:error];
+- (void)getCachedProfileIfExists:(NSString *)userId name:(NSString **)name avatarURL:(NSURL **)avatarURL error:(NSError * __autoreleasing *)error {
+    [self.userSystemService getCachedProfileIfExists:userId name:name avatarURL:avatarURL error:error];
 }
 
 - (void)getProfileInBackgroundForUserId:(NSString *)userId callback:(LCCKUserResultCallBack)callback {
@@ -155,7 +172,7 @@ static NSMutableDictionary *_sharedInstances = nil;
     [self.userSystemService getProfilesInBackgroundForUserIds:userIds callback:callback];
 }
 
-- (NSArray<id<LCCKUserModelDelegate>> *)getProfilesForUserIds:(NSArray<NSString *> *)userIds error:(NSError * __autoreleasing *)error {
+- (NSArray<id<LCCKUserDelegate>> *)getProfilesForUserIds:(NSArray<NSString *> *)userIds error:(NSError * __autoreleasing *)error {
     return [self.userSystemService getProfilesForUserIds:userIds error:error];
 }
 
@@ -268,16 +285,16 @@ static NSMutableDictionary *_sharedInstances = nil;
     [self.conversationService didReceiveRemoteNotification:userInfo];
 }
 
-- (void)increaseUnreadCountWithConversation:(AVIMConversation *)conversation {
-    [self.conversationService increaseUnreadCountWithConversation:conversation];
+- (void)increaseUnreadCountWithConversationId:(NSString *)conversationId {
+    [self.conversationService increaseUnreadCountWithConversationId:conversationId];
 }
 
-- (void)deleteRecentConversation:(AVIMConversation *)conversation {
-    [self.conversationService deleteRecentConversation:conversation];
+- (void)deleteRecentConversationWithConversationId:(NSString *)conversationId {
+    [self.conversationService deleteRecentConversationWithConversationId:conversationId];
 }
 
-- (void)updateUnreadCountToZeroWithConversation:(AVIMConversation *)conversation {
-    [self.conversationService updateUnreadCountToZeroWithConversation:conversation];
+- (void)updateUnreadCountToZeroWithConversationId:(NSString *)conversationId {
+    [self.conversationService updateUnreadCountToZeroWithConversationId:conversationId];
 }
 
 - (BOOL)removeAllCachedRecentConversations {
@@ -288,12 +305,12 @@ static NSMutableDictionary *_sharedInstances = nil;
 ///---------------------LCCKConversationsListService--------------------
 ///---------------------------------------------------------------------
 
-- (void)setDidSelectItemBlock:(LCCKConversationsListDidSelectItemBlock)didSelectItemBlock {
-    [self.conversationListService setDidSelectItemBlock:didSelectItemBlock];
+- (void)setDidSelectConversationsListCellBlock:(LCCKConversationsListDidSelectItemBlock)didSelectConversationsListCellBlock {
+    [self.conversationListService setDidSelectConversationsListCellBlock:didSelectConversationsListCellBlock];
 }
 
-- (void)setDidDeleteItemBlock:(LCCKConversationsListDidDeleteItemBlock)didDeleteItemBlock {
-    [self.conversationListService setDidDeleteItemBlock:didDeleteItemBlock];
+- (void)setDidDeleteConversationsListCellBlock:(LCCKConversationsListDidDeleteItemBlock)didDeleteConversationsListCellBlock {
+    [self.conversationListService setDidDeleteConversationsListCellBlock:didDeleteConversationsListCellBlock];
 }
 
 - (void)setConversationEditActionBlock:(LCCKConversationEditActionsBlock)conversationEditActionBlock {

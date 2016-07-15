@@ -9,8 +9,6 @@
 #import <UIKit/UIKit.h>
 
 #import "LCCKMessage.h"
-#import <AVOSCloudIM/AVOSCloudIM.h>
-#import <AVOSCloud/AVOSCloud.h>
 #import "LCCKConstants.h"
 
 @class LCCKMessage;
@@ -53,7 +51,6 @@ typedef void (^LCCKSendMessageSuccessFailedBlock)(NSString *messageUUID, NSError
 
 - (void)loadMessagesFirstTimeWithHandler:(LCCKBooleanResultBlock)handler;
 - (void)loadOldMessages;
-- (void)updateConversationAsRead;
 - (void)getAllVisibleImagesForSelectedMessage:(LCCKMessage *)message
                              allVisibleImages:(NSArray **)allVisibleImages
                              allVisibleThumbs:(NSArray **)allVisibleThumbs
