@@ -11,28 +11,46 @@
 
 @interface LCCKUser ()
 
-@property (nonatomic, copy, readwrite) NSString *userId;
-@property (nonatomic, copy, readwrite) NSString *name;
-@property (nonatomic, copy, readwrite) NSURL *avatorURL;
-
 @end
 
 @implementation LCCKUser
 
-- (instancetype)initWithUserId:(NSString *)userId name:(NSString *)name avatorURL:(NSURL *)avatorURL {
+@synthesize userId = _userId;
+@synthesize name = _name;
+@synthesize avatarURL = _avatarURL;
+@synthesize clientId = _clientId;
+
+- (instancetype)initWithUserId:(NSString *)userId name:(NSString *)name avatarURL:(NSURL *)avatarURL clientId:(NSString *)clientId {
     self = [super init];
     if (!self) {
         return nil;
     }
     _userId = userId;
     _name = name;
-    _avatorURL = avatorURL;
+    _avatarURL = avatarURL;
+    _clientId = clientId;
     return self;
 }
 
-+ (instancetype)initWithUserId:(NSString *)userId name:(NSString *)name avatorURL:(NSURL *)avatorURL {
-    LCCKUser *user = [[LCCKUser alloc] initWithUserId:userId name:name avatorURL:avatorURL];
++ (instancetype)userWithUserId:(NSString *)userId name:(NSString *)name avatarURL:(NSURL *)avatarURL clientId:(NSString *)clientId{
+    LCCKUser *user = [[LCCKUser alloc] initWithUserId:userId name:name avatarURL:avatarURL clientId:clientId];
     return user;
+}
+
+- (instancetype)initWithUserId:(NSString *)userId name:(NSString *)name avatarURL:(NSURL *)avatarURL {
+    return [self initWithUserId:userId name:name avatarURL:avatarURL clientId:userId];
+}
+
++ (instancetype)userWithUserId:(NSString *)userId name:(NSString *)name avatarURL:(NSURL *)avatarURL {
+    return [self userWithUserId:userId name:name avatarURL:avatarURL clientId:userId];
+}
+
+- (instancetype)initWithClientId:(NSString *)clientId {
+    return [self initWithUserId:nil name:nil avatarURL:nil clientId:clientId];
+}
+
++ (instancetype)userWithClientId:(NSString *)clientId {
+    return [self userWithUserId:nil name:nil avatarURL:nil clientId:clientId];
 }
 
 - (BOOL)isEqualToUer:(LCCKUser *)user {
@@ -42,7 +60,8 @@
 - (id)copyWithZone:(NSZone *)zone {
     return [[LCCKUser alloc] initWithUserId:self.userId
                                        name:self.name
-                                  avatorURL:self.avatorURL
+                                  avatarURL:self.avatarURL
+                                   clientId:self.clientId
             ];
 }
 

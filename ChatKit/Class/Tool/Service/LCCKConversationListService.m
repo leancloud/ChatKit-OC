@@ -6,26 +6,40 @@
 //  Copyright © 2016年 ElonChan. All rights reserved.
 //
 
+//TODO:
+///**
+// *  在没有数据时显示该view，占据Controller的View整个页面
+// */
+//@property (nonatomic, strong) UIView *viewForNoData;
+///**
+// *  设置某个会话的最近消息内容后的回调
+// *  @param conversation 需要设置最近消息内容的会话
+// *  @return 无需自定义最近消息内容返回nil
+// */
+//typedef NSString *(^LCCKConversationsLatestMessageContent)(AVIMConversation *conversation);
+//
+///**
+// *  设置某个会话的最近消息内容后的回调
+// */
+//@property (nonatomic, copy, readonly) LCCKConversationsLatestMessageContent latestMessageContentBlock;
+//
+///**
+// *  设置某个会话的最近消息内容后的回调
+// */
+//- (void)setLatestMessageContentBlock:(LCCKConversationsLatestMessageContent)latestMessageContentBlock;
+
+
 #import "LCCKConversationListService.h"
 #import "AVIMConversation+LCCKAddition.h"
 #import <AVOSCloudIM/AVOSCloudIM.h>
 #import "LCCKUserSystemService.h"
 #import "LCCKSessionService.h"
 
-@interface LCCKConversationListService()
-
-@property (nonatomic, copy, readwrite) LCCKConversationsListDidSelectItemBlock didSelectItemBlock;
-@property (nonatomic, copy, readwrite) LCCKConversationsListDidDeleteItemBlock didDeleteItemBlock;
-@property (nonatomic, copy, readwrite) LCCKMarkBadgeWithTotalUnreadCountBlock markBadgeWithTotalUnreadCountBlock;
-@property (nonatomic, copy, readwrite) LCCKPrepareConversationsWhenLoadBlock prepareConversationsWhenLoadBlock;
-@property (nonatomic, copy, readwrite) LCCKConversationEditActionsBlock conversationEditActionBlock;
-@property (nonatomic, copy, readwrite) LCCKHeightForRowBlock heightForRowBlock;
-@property (nonatomic, copy, readwrite) LCCKCellForRowBlock cellForRowBlock;
-@property (nonatomic, copy, readwrite) LCCKConfigureCellBlock configureCellBlock;
-
-@end
-
 @implementation LCCKConversationListService
+@synthesize didSelectConversationsListCellBlock = _didSelectConversationsListCellBlock;
+@synthesize didDeleteConversationsListCellBlock = _didDeleteConversationsListCellBlock;
+@synthesize conversationEditActionBlock = _conversationEditActionBlock;
+@synthesize markBadgeWithTotalUnreadCountBlock = _markBadgeWithTotalUnreadCountBlock;
 
 - (void)findRecentConversationsWithBlock:(LCCKRecentConversationsCallback)block {
     [self selectOrRefreshConversationsWithBlock:^(NSArray *conversations, NSError *error) {
@@ -124,8 +138,8 @@
 #pragma mark -
 #pragma mark - Setter Method
 
-- (void)setDidSelectItemBlock:(LCCKConversationsListDidSelectItemBlock)didSelectItemBlock {
-    _didSelectItemBlock = didSelectItemBlock;
+- (void)setDidSelectConversationsListCellBlock:(LCCKConversationsListDidSelectItemBlock)didSelectConversationsListCellBlock {
+    _didSelectConversationsListCellBlock = didSelectConversationsListCellBlock;
 }
 
 - (void)setMarkBadgeWithTotalUnreadCountBlock:(LCCKMarkBadgeWithTotalUnreadCountBlock)markBadgeWithTotalUnreadCountBlock {
@@ -136,8 +150,8 @@
     _prepareConversationsWhenLoadBlock = prepareConversationsWhenLoadBlock;
 }
 
-- (void)setDidDeleteItemBlock:(LCCKConversationsListDidDeleteItemBlock)didDeleteItemBlock {
-    _didDeleteItemBlock = didDeleteItemBlock;
+- (void)setDidDeleteConversationsListCellBlock:(LCCKConversationsListDidDeleteItemBlock)didDeleteConversationsListCellBlock {
+    _didDeleteConversationsListCellBlock = didDeleteConversationsListCellBlock;
 }
 
 - (void)setConversationEditActionBlock:(LCCKConversationEditActionsBlock)conversationEditActionBlock {
@@ -152,7 +166,7 @@
     _cellForRowBlock = cellForRowBlock;
 }
 
--(void)setConfigureCellBlock:(LCCKConfigureCellBlock)configureCellBlock {
+- (void)setConfigureCellBlock:(LCCKConfigureCellBlock)configureCellBlock {
     _configureCellBlock = configureCellBlock;
 }
 

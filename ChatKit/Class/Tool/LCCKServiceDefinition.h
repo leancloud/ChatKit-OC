@@ -57,7 +57,7 @@ typedef void (^LCCKSessionNotOpenedHandler)(UIViewController *viewController, LC
  *  @brief When fetching profiles completes, this callback will be invoked to notice LeanCloudChatKit
  *  @attention If you fetch users fails, you should reture nil, meanwhile, give the error reason. 
  */
-typedef void(^LCCKFetchProfilesCallBack)(NSArray<id<LCCKUserModelDelegate>> *users, NSError *error);
+typedef void(^LCCKFetchProfilesCallBack)(NSArray<id<LCCKUserDelegate>> *users, NSError *error);
 
 /*!
  *  @brief When LeanCloudChatKit wants to fetch profiles, this block will be invoked.
@@ -80,10 +80,10 @@ typedef void(^LCCKFetchProfilesBlock)(NSArray<NSString *> *userIds, LCCKFetchPro
  */
 - (void)removeAllCachedProfiles;
 
-- (void)getCachedProfileIfExists:(NSString *)userId name:(NSString **)name avatorURL:(NSURL **)avatorURL error:(NSError * __autoreleasing *)error;
+- (void)getCachedProfileIfExists:(NSString *)userId name:(NSString **)name avatarURL:(NSURL **)avatarURL error:(NSError * __autoreleasing *)error;
 - (void)getProfileInBackgroundForUserId:(NSString *)userId callback:(LCCKUserResultCallBack)callback;
 - (void)getProfilesInBackgroundForUserIds:(NSArray<NSString *> *)userIds callback:(LCCKUserResultsCallBack)callback;
-- (NSArray<id<LCCKUserModelDelegate>> *)getProfilesForUserIds:(NSArray<NSString *> *)userIds error:(NSError * __autoreleasing *)error;
+- (NSArray<id<LCCKUserDelegate>> *)getProfilesForUserIds:(NSArray<NSString *> *)userIds error:(NSError * __autoreleasing *)error;
 
 @end
 
@@ -141,10 +141,10 @@ typedef void(^LCCKGenerateSignatureBlock)(NSString *clientId, NSString *conversa
 
 /*!
  *  打开某个profile的回调block
- *  @param userId 某个userId
+ *  @param userId 被点击的user 的 userId (clientId) ，与 user 属性中 clientId 的区别在于，本属性永远不为空，但 user可能为空。
  *  @param parentController 用于打开的顶层控制器
  */
-typedef void(^LCCKOpenProfileBlock)(NSString *userId, UIViewController *parentController);
+typedef void(^LCCKOpenProfileBlock)(NSString *userId, id<LCCKUserDelegate> user, UIViewController *parentController);
 
 @property (nonatomic, copy, readonly) LCCKOpenProfileBlock openProfileBlock;
 
@@ -321,19 +321,19 @@ typedef void (^LCCKConversationResultBlock)(AVIMConversation *conversation, NSEr
  *  增加未读数
  *  @param conversation 相应对话
  */
-- (void)increaseUnreadCountWithConversation:(AVIMConversation *)conversation;
+- (void)increaseUnreadCountWithConversationId:(NSString *)conversationId;
 
 /**
  *  最近对话列表左滑删除本地数据库的对话，将不显示在列表
  *  @param conversation
  */
-- (void)deleteRecentConversation:(AVIMConversation *)conversation;
+- (void)deleteRecentConversationWithConversationId:(NSString *)conversationId;
 
 /**
  *  清空未读数
  *  @param conversation 相应的对话
  */
-- (void)updateUnreadCountToZeroWithConversation:(AVIMConversation *)conversation;
+- (void)updateUnreadCountToZeroWithConversationId:(NSString *)conversationId;
 /**
  *  删除全部缓存，比如当切换用户时，如果同一个人显示的名称和头像需要变更
  */
@@ -359,12 +359,12 @@ typedef void(^LCCKConversationsListDidSelectItemBlock)(NSIndexPath *indexPath, A
 /*!
  *  选中某个会话后的回调
  */
-@property (nonatomic, copy, readonly) LCCKConversationsListDidSelectItemBlock didSelectItemBlock;
+@property (nonatomic, copy, readonly) LCCKConversationsListDidSelectItemBlock didSelectConversationsListCellBlock;
 
 /*!
  *  设置选中某个会话后的回调
  */
-- (void)setDidSelectItemBlock:(LCCKConversationsListDidSelectItemBlock)didSelectItemBlock;
+- (void)setDidSelectConversationsListCellBlock:(LCCKConversationsListDidSelectItemBlock)didSelectConversationsListCellBlock;
 
 /*!
  *  删除某个会话后的回调
@@ -375,12 +375,12 @@ typedef void(^LCCKConversationsListDidDeleteItemBlock)(NSIndexPath *indexPath, A
 /*!
  *  删除某个会话后的回调
  */
-@property (nonatomic, copy, readonly) LCCKConversationsListDidDeleteItemBlock didDeleteItemBlock;
+@property (nonatomic, copy, readonly) LCCKConversationsListDidDeleteItemBlock didDeleteConversationsListCellBlock;
 
 /*!
  *  设置删除某个会话后的回调
  */
-- (void)setDidDeleteItemBlock:(LCCKConversationsListDidDeleteItemBlock)didDeleteItemBlock;
+- (void)setDidDeleteConversationsListCellBlock:(LCCKConversationsListDidDeleteItemBlock)didDeleteConversationsListCellBlock;
 
 /*!
  *  会话左滑菜单设置block

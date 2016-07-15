@@ -129,7 +129,7 @@ NSString *const LCCKConversationServiceErrorDomain = @"LCCKConversationServiceEr
     }
     
     NSMutableArray *names = [NSMutableArray array];
-    [array enumerateObjectsUsingBlock:^(id<LCCKUserModelDelegate>  _Nonnull user, NSUInteger idx, BOOL * _Nonnull stop) {
+    [array enumerateObjectsUsingBlock:^(id<LCCKUserDelegate>  _Nonnull user, NSUInteger idx, BOOL * _Nonnull stop) {
         [names addObject:user.name];
     }];
     return [names componentsJoinedByString:@","];
@@ -143,8 +143,8 @@ NSString *const LCCKConversationServiceErrorDomain = @"LCCKConversationServiceEr
 
 - (void)setupDatabaseWithUserId:(NSString *)userId {
     NSString *dbPath = [self databasePathWithUserId:userId];
-    [[LCCKConversationService sharedInstance] setupSucceedMessageDatabaseWithPath:dbPath];
-    [[LCCKConversationService sharedInstance] setupFailedMessagesDBWithDatabasePath:dbPath];
+    [self setupSucceedMessageDatabaseWithPath:dbPath];
+    [self setupFailedMessagesDBWithDatabasePath:dbPath];
 }
 
 - (void)setupSucceedMessageDatabaseWithPath:(NSString *)path {
@@ -159,14 +159,15 @@ NSString *const LCCKConversationServiceErrorDomain = @"LCCKConversationServiceEr
 }
 
 - (void)updateConversationAsRead {
-    AVIMConversation *conversation = [LCCKConversationService sharedInstance].currentConversation;
+    AVIMConversation *conversation = self.currentConversation;
+    NSString *conversationId = conversation.conversationId;
     if (!conversation.creator) {
         NSAssert(conversation.imClient, @"类名与方法名：%@（在第%@行），描述：%@", @(__PRETTY_FUNCTION__), @(__LINE__), @"imClient is nil");
         return;
     }
-    [[LCCKConversationService sharedInstance] insertRecentConversation:conversation];
-    [[LCCKConversationService sharedInstance] updateUnreadCountToZeroWithConversation:conversation];
-    [[LCCKConversationService sharedInstance] updateMentioned:NO conversation:conversation];
+    [self insertRecentConversation:conversation];
+    [self updateUnreadCountToZeroWithConversationId:conversationId];
+    [self updateMentioned:NO conversationId:conversationId];
     [[NSNotificationCenter defaultCenter] postNotificationName:LCCKNotificationUnreadsUpdated object:nil];
 }
 
@@ -188,15 +189,15 @@ NSString *const LCCKConversationServiceErrorDomain = @"LCCKConversationServiceEr
     return [[LCCKSessionService sharedInstance].client conversationWithKeyedConversation:keyedConversation];
 }
 
-- (void)updateUnreadCountToZeroWithConversation:(AVIMConversation *)conversation {
+- (void)updateUnreadCountToZeroWithConversationId:(NSString *)conversationId {
     [self.databaseQueue inDatabase:^(FMDatabase *db) {
-        [db executeUpdate:LCCKConversationTableUpdateUnreadCountSQL  withArgumentsInArray:@[@0, conversation.conversationId]];
+        [db executeUpdate:LCCKConversationTableUpdateUnreadCountSQL  withArgumentsInArray:@[@0, conversationId]];
     }];
 }
 
-- (void)deleteRecentConversation:(AVIMConversation *)conversation {
+- (void)deleteRecentConversationWithConversationId:(NSString *)conversationId {
     [self.databaseQueue inDatabase:^(FMDatabase *db) {
-        [db executeUpdate:LCCKConversationTableDeleteSQL withArgumentsInArray:@[conversation.conversationId]];
+        [db executeUpdate:LCCKConversationTableDeleteSQL withArgumentsInArray:@[conversationId]];
     }];
 }
 
@@ -206,14 +207,14 @@ NSString *const LCCKConversationServiceErrorDomain = @"LCCKConversationServiceEr
     }
     [self.databaseQueue inDatabase:^(FMDatabase *db) {
         NSData *data = [self dataFromConversation:conversation];
-        [db executeUpdate:LCCKConversationTableInsertSQL withArgumentsInArray:@[conversation.conversationId, data, @0, @(NO)]];
+        [db executeUpdate:LCCKConversationTableInsertSQL withArgumentsInArray:@[conversation.conversationId, data, @0, @(NO), @""]];
     }];
 }
 
-- (BOOL)isRecentConversationExist:(AVIMConversation *)conversation {
+- (BOOL)isRecentConversationExistWithConversationId:(NSString *)conversationId {
     __block BOOL exists = NO;
     [self.databaseQueue inDatabase:^(FMDatabase *db) {
-        FMResultSet *resultSet = [db executeQuery:LCCKConversationTableSelectOneSQL withArgumentsInArray:@[conversation.conversationId]];
+        FMResultSet *resultSet = [db executeQuery:LCCKConversationTableSelectOneSQL withArgumentsInArray:@[conversationId]];
         if ([resultSet next]) {
             exists = YES;
         }
@@ -222,25 +223,44 @@ NSString *const LCCKConversationServiceErrorDomain = @"LCCKConversationServiceEr
     return exists;
 }
 
-- (void)increaseUnreadCountWithConversation:(AVIMConversation *)conversation {
+- (void)increaseUnreadCountWithConversationId:(NSString *)conversationId {
     [self.databaseQueue inDatabase:^(FMDatabase *db) {
-        [db executeUpdate:LCCKConversationTableIncreaseUnreadCountSQL withArgumentsInArray:@[conversation.conversationId]];
+        [db executeUpdate:LCCKConversationTableIncreaseUnreadCountSQL withArgumentsInArray:@[conversationId]];
     }];
 }
 
-- (void)updateMentioned:(BOOL)mentioned conversation:(AVIMConversation *)conversation {
+- (void)updateMentioned:(BOOL)mentioned conversationId:(NSString *)conversationId {
     [self.databaseQueue inDatabase:^(FMDatabase *db) {
-        [db executeUpdate:LCCKConversationTableUpdateMentionedSQL withArgumentsInArray:@[@(mentioned), conversation.conversationId]];
+        [db executeUpdate:LCCKConversationTableUpdateMentionedSQL withArgumentsInArray:@[@(mentioned), conversationId]];
     }];
 }
 
+- (NSString *)draftWithConversationId:(NSString *)conversationId {
+    __block NSString *draft = nil;
+    [self.databaseQueue inDatabase:^(FMDatabase *db) {
+       FMResultSet *resultSet = [db executeQuery:LCCKConversationTableSelectDraftSQL withArgumentsInArray:@[conversationId]];
+        if ([resultSet next]) {
+            draft = [resultSet stringForColumn:LCCKConversationTableKeyDraft];
+        }
+        [resultSet close];
+    }];
+    return draft;
+}
+             
+- (void)updateDraft:(NSString *)draft conversationId:(NSString *)conversationId {
+    [self.databaseQueue inDatabase:^(FMDatabase *db) {
+        [db executeUpdate:LCCKConversationTableUpdateDraftSQL withArgumentsInArray:@[draft ?: @"", conversationId]];
+    }];
+}
 - (AVIMConversation *)createConversationFromResultSet:(FMResultSet *)resultSet {
     NSData *data = [resultSet dataForColumn:LCCKConversationTableKeyData];
     NSInteger unreadCount = [resultSet intForColumn:LCCKConversationTableKeyUnreadCount];
     BOOL mentioned = [resultSet boolForColumn:LCCKConversationTableKeyMentioned];
+    NSString *draft = [resultSet stringForColumn:LCCKConversationTableKeyDraft];
     AVIMConversation *conversation = [self conversationFromData:data];
     conversation.lcck_unreadCount = unreadCount;
     conversation.lcck_mentioned = mentioned;
+    conversation.lcck_draft = draft;
     return conversation;
 }
 
@@ -270,8 +290,8 @@ NSString *const LCCKConversationServiceErrorDomain = @"LCCKConversationServiceEr
  *  删除会话对应的UIProfile缓存，比如当用户信息发生变化时
  *  @param  conversation 会话，可以是单聊，也可是群聊
  */
-- (void)removeCacheForConversation:(AVIMConversation *)conversation {
-    [self deleteRecentConversation:conversation];
+- (void)removeCacheForConversationId:(NSString *)conversationId {
+    [self deleteRecentConversationWithConversationId:conversationId];
     
 }
 
@@ -429,7 +449,7 @@ NSString *const LCCKConversationServiceErrorDomain = @"LCCKConversationServiceEr
        conversation:(AVIMConversation *)conversation
       progressBlock:(AVProgressBlock)progressBlock
            callback:(LCCKBooleanResultBlock)block {
-    id<LCCKUserModelDelegate> currentUser = [[LCCKUserSystemService sharedInstance] fetchCurrentUser];
+    id<LCCKUserDelegate> currentUser = [[LCCKUserSystemService sharedInstance] fetchCurrentUser];
     NSMutableDictionary *attributes = [NSMutableDictionary dictionary];
     // 云代码中获取到用户名，来设置推送消息, 老王:今晚约吗？
     if (currentUser.name) {

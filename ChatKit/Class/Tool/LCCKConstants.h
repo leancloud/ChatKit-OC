@@ -6,13 +6,15 @@
 //  Copyright © 2016年 LeanCloud. All rights reserved.
 //  Common typdef and constants, and so on.
 
-#import "LCCKUserModelDelegate.h"
+#import "LCCKUserDelegate.h"
 
 //Callback with Custom type
-typedef void (^LCCKUserResultsCallBack)(NSArray<id<LCCKUserModelDelegate>> *users, NSError *error);
-typedef void (^LCCKUserResultCallBack)(id<LCCKUserModelDelegate> user, NSError *error);
+typedef void (^LCCKUserResultsCallBack)(NSArray<id<LCCKUserDelegate>> *users, NSError *error);
+typedef void (^LCCKUserResultCallBack)(id<LCCKUserDelegate> user, NSError *error);
 //Callback with Foundation type
 typedef void (^LCCKBooleanResultBlock)(BOOL succeeded, NSError *error);
+typedef void (^LCCKViewControllerBooleanResultBlock)(__kindof UIViewController *viewController, BOOL succeeded, NSError *error);
+
 typedef void (^LCCKIntegerResultBlock)(NSInteger number, NSError *error);
 typedef void (^LCCKStringResultBlock)(NSString *string, NSError *error);
 typedef void (^LCCKDictionaryResultBlock)(NSDictionary * dict, NSError *error);
@@ -60,8 +62,8 @@ static NSString *const LCCKNotificationConversationUpdated = @"LCCKNotificationC
  */
 static NSString *const LCCKNotificationConnectivityUpdated = @"LCCKNotificationConnectivityUpdated";
 
-static NSString *const LCCK_KEY_USERNAME = @"LCCK_KEY_USERNAME";
-static NSString *const LCCK_KEY_USERID = @"LCCK_KEY_USERID";
+//static NSString *const LCCK_KEY_USERNAME = @"LCCK_KEY_USERNAME";
+//static NSString *const LCCK_KEY_USERID = @"LCCK_KEY_USERID";
 
 ///-----------------------------------------------------------------------------------
 ///---------------------用以产生Demo中的联系人数据的宏定义-------------------------------
@@ -206,13 +208,15 @@ typedef enum : NSUInteger {
 #define LCCKConversationTableKeyData        @"data"
 #define LCCKConversationTableKeyUnreadCount @"unreadCount"
 #define LCCKConversationTableKeyMentioned   @"mentioned"
+#define LCCKConversationTableKeyDraft       @"draft"
 
 #define LCCKConversatoinTableCreateSQL                                       \
     @"CREATE TABLE IF NOT EXISTS " LCCKConversationTableName @" ("           \
         LCCKConversationTableKeyId           @" VARCHAR(63) PRIMARY KEY, "   \
         LCCKConversationTableKeyData         @" BLOB NOT NULL, "             \
         LCCKConversationTableKeyUnreadCount  @" INTEGER DEFAULT 0, "         \
-        LCCKConversationTableKeyMentioned    @" BOOL DEFAULT FALSE "         \
+        LCCKConversationTableKeyMentioned    @" BOOL DEFAULT FALSE, "        \
+        LCCKConversationTableKeyDraft        @" VARCHAR(63)"                 \
     @")"
 
 #define LCCKConversationTableInsertSQL                           \
@@ -220,8 +224,9 @@ typedef enum : NSUInteger {
         LCCKConversationTableKeyId               @", "           \
         LCCKConversationTableKeyData             @", "           \
         LCCKConversationTableKeyUnreadCount      @", "           \
-        LCCKConversationTableKeyMentioned                        \
-    @") VALUES(?, ?, ?, ?)"
+        LCCKConversationTableKeyMentioned        @", "           \
+        LCCKConversationTableKeyDraft                            \
+    @") VALUES(?, ?, ?, ?, ?)"
 
 #define LCCKConversationTableWhereClause                         \
     @" WHERE " LCCKConversationTableKeyId         @" = ?"
@@ -249,8 +254,18 @@ typedef enum : NSUInteger {
     @"SET " LCCKConversationTableKeyMentioned    @" = ? "        \
     LCCKConversationTableWhereClause
 
+#define LCCKConversationTableUpdateDraftSQL                      \
+    @"UPDATE " LCCKConversationTableName         @" "            \
+    @"SET " LCCKConversationTableKeyDraft        @" = ? "        \
+    LCCKConversationTableWhereClause
+
+
 #define LCCKConversationTableSelectSQL                           \
     @"SELECT * FROM " LCCKConversationTableName                  \
+
+#define LCCKConversationTableSelectDraftSQL                           \
+    @"SELECT draft FROM " LCCKConversationTableName                  \
+    LCCKConversationTableWhereClause
 
 #define LCCKConversationTableSelectOneSQL                        \
     @"SELECT * FROM " LCCKConversationTableName                  \

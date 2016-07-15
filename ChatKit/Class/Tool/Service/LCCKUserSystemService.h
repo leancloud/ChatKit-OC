@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "LCCKServiceDefinition.h"
-#import "LCCKUserModelDelegate.h"
+#import "LCCKUserDelegate.h"
 
 /**
  *  You must implement `-setFetchProfilesBlock:` to allow LeanCloudChatKit to get user information by user id.
@@ -16,9 +16,9 @@
 
  ```
     [[LCChatKit sharedInstance] setFetchProfilesBlock:^(NSArray<NSString *> *userIds, LCCKFetchProfilesCallBack callback) {
-        NSMutableArray<id<LCCKUserModelDelegate>> *userList = [NSMutableArray array];
+        NSMutableArray<id<LCCKUserDelegate>> *userList = [NSMutableArray array];
         for (NSString *userId in userIds) {
-            //MyUser is a subclass of AVUser, conforming to the LCCKUserModelDelegate protocol.
+            //MyUser is a subclass of AVUser, conforming to the LCCKUserDelegate protocol.
             AVQuery *query = [LCCKUser query];
             NSError *error = nil;
             LCCKUser *object = (LCCKUser *)[query getObjectWithId:userId error:&error];
@@ -48,25 +48,25 @@ FOUNDATION_EXTERN NSString *const LCCKUserSystemServiceErrorDomain;
 
 @interface LCCKUserSystemService : LCCKSingleton <LCCKUserSystemService>
 
-- (NSArray<id<LCCKUserModelDelegate>> *)getProfilesForUserIds:(NSArray<NSString *> *)userIds error:(NSError * __autoreleasing *)theError;
+- (NSArray<id<LCCKUserDelegate>> *)getProfilesForUserIds:(NSArray<NSString *> *)userIds error:(NSError * __autoreleasing *)theError;
 
 - (void)getProfilesInBackgroundForUserIds:(NSArray<NSString *> *)userIds callback:(LCCKUserResultsCallBack)callback;
 
-- (id<LCCKUserModelDelegate>)getProfileForUserId:(NSString *)userId error:(NSError * __autoreleasing *)theError;
+- (id<LCCKUserDelegate>)getProfileForUserId:(NSString *)userId error:(NSError * __autoreleasing *)theError;
 
 /*!
  * Firstly try memory cache, then fetch.
  */
-- (id<LCCKUserModelDelegate>)fetchCurrentUser;
+- (id<LCCKUserDelegate>)fetchCurrentUser;
 
 /*!
  * Firstly try memory cache, then fetch.
  */
 - (void)fetchCurrentUserInBackground:(LCCKUserResultCallBack)callback;
 
-- (void)cacheUsersWithIds:(NSSet<id<LCCKUserModelDelegate>> *)userIds callback:(LCCKBooleanResultBlock)callback;
+- (void)cacheUsersWithIds:(NSSet<id<LCCKUserDelegate>> *)userIds callback:(LCCKBooleanResultBlock)callback;
 
-- (void)cacheUsers:(NSArray<id<LCCKUserModelDelegate>> *)users;
+- (void)cacheUsers:(NSArray<id<LCCKUserDelegate>> *)users;
 
 /**
  *  清除对指定 person 的 profile 缓存

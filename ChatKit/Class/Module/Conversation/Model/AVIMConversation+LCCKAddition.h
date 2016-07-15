@@ -25,13 +25,18 @@
 /*!
  * 如果未读消息数未超出100，显示数字，否则消息省略号
  */
-@property (nonatomic, copy) NSString *lcck_badgeText;
+- (NSString *)lcck_badgeText;
 
 /**
  *  是否有人提到了你，配合 @ 功能。不能看最后一条消息。
  *  因为可能倒数第二条消息提到了你，所以维护一个标记。
  */
 @property (nonatomic, assign) BOOL lcck_mentioned;
+
+/*!
+ * 草稿
+ */
+@property (nonatomic, copy) NSString *lcck_draft;
 
 /**
  *  对话的类型，因为可能是两个人的群聊。所以不能通过成员数量来判断
@@ -54,14 +59,5 @@
  *  对话的标题。如 兴趣群(30)
  */
 - (NSString *)lcck_title;
-
-/**
- *  组合多个用户的名字。如 小王、老李
- *
- *  @param userIds 用户的 userId 集合
- *
- *  @return 拼成的名字
- */
-+ (NSString *)lcck_groupConversaionDefaultNameForUserIds:(NSArray *)userIds;
 
 @end

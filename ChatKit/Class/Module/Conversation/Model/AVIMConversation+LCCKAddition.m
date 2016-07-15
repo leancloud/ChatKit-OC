@@ -10,7 +10,7 @@
 #import <objc/runtime.h>
 #import "LCCKUserSystemService.h"
 #import "LCCKSessionService.h"
-#import "LCCKUserModelDelegate.h"
+#import "LCCKUserDelegate.h"
 
 @implementation AVIMConversation (LCCKAddition)
 
@@ -53,6 +53,14 @@
     objc_setAssociatedObject(self, @selector(lcck_mentioned), lcck_mentionedObject, OBJC_ASSOCIATION_ASSIGN);
 }
 
+- (NSString *)lcck_draft {
+    return objc_getAssociatedObject(self, @selector(lcck_draft));
+}
+
+- (void)setLcck_draft:(NSString *)lcck_draft {
+    objc_setAssociatedObject(self, @selector(lcck_draft), lcck_draft, OBJC_ASSOCIATION_COPY_NONATOMIC);
+}
+
 - (LCCKConversationType)lcck_type {
     if (self.members.count > 2) {
         return LCCKConversationTypeGroup;
@@ -68,7 +76,7 @@
     }
     
     NSMutableArray *names = [NSMutableArray array];
-    [array enumerateObjectsUsingBlock:^(id<LCCKUserModelDelegate>  _Nonnull user, NSUInteger idx, BOOL * _Nonnull stop) {
+    [array enumerateObjectsUsingBlock:^(id<LCCKUserDelegate>  _Nonnull user, NSUInteger idx, BOOL * _Nonnull stop) {
         [names addObject:user.name];
     }];
     return [names componentsJoinedByString:@","];
@@ -78,7 +86,7 @@
     if ([self lcck_type] == LCCKConversationTypeSingle) {
         NSString *peerId = [self lcck_peerId];
         NSError *error = nil;
-        id<LCCKUserModelDelegate> peer = [[LCCKUserSystemService sharedInstance] getProfileForUserId:peerId error:&error];
+        id<LCCKUserDelegate> peer = [[LCCKUserSystemService sharedInstance] getProfileForUserId:peerId error:&error];
         return peer.name ? peer.name : peerId;
     } else {
         return self.name;
