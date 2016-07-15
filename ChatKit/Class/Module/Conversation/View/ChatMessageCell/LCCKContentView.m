@@ -28,7 +28,10 @@
 
 - (void)layoutSublayersOfLayer:(CALayer *)layer {
     [super layoutSublayersOfLayer:layer];
+    [CATransaction begin];
+    [CATransaction setDisableActions:YES];
     self.layer.mask.frame = CGRectInset(self.bounds, 0, 0);
+    [CATransaction commit];
 }
 
 @end
