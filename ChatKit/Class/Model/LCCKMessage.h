@@ -10,6 +10,8 @@
 #import <CoreLocation/CoreLocation.h>
 #import "LCCKConstants.h"
 #import "LCCKChatUntiles.h"
+#import "LCCKUserDelegate.h"
+
 @class AVIMTypedMessage;
 
 @interface LCCKMessage : NSObject <NSCoding, NSCopying>
@@ -36,10 +38,11 @@
 @property (nonatomic, copy, readonly) NSString *geolocations;
 @property (nonatomic, strong, readonly) CLLocation *location;
 
-@property (nonatomic, strong, readwrite) UIImage *avator;
-@property (nonatomic, strong, readwrite) NSURL *avatorURL;
-
-@property (nonatomic, copy, readonly) NSString *sender;
+@property (nonatomic, strong) id<LCCKUserDelegate> user;
+/*!
+ * 与 user 属性中 clientId 的区别在于，本属性永远不为空，但前者可能为空。
+ */
+@property (nonatomic, copy) NSString *userId;
 
 @property (nonatomic, assign, readonly) NSTimeInterval timestamp;
 
@@ -66,7 +69,8 @@
 @property (nonatomic, copy, readwrite) NSString *conversationId;
 
 - (instancetype)initWithText:(NSString *)text
-                      sender:(NSString *)sender
+                      userId:(NSString *)userId
+                       user:(id<LCCKUserDelegate>)user
                    timestamp:(NSTimeInterval)timestamp;
 
 - (instancetype)initWithSystemText:(NSString *)text;
@@ -89,7 +93,8 @@
                     photoPath:(NSString *)photoPath
                  thumbnailURL:(NSURL *)thumbnailURL
                originPhotoURL:(NSURL *)originPhotoURL
-                       sender:(NSString *)sender
+                       userId:(NSString *)userId
+                       user:(id<LCCKUserDelegate>)user
                     timestamp:(NSTimeInterval)timestamp;
 
 /**
@@ -106,7 +111,8 @@
 - (instancetype)initWithVideoConverPhoto:(UIImage *)videoConverPhoto
                                videoPath:(NSString *)videoPath
                                 videoURL:(NSURL *)videoURL
-                                  sender:(NSString *)sender
+                                  userId:(NSString *)userId
+                                   user:(id<LCCKUserDelegate>)user
                                timestamp:(NSTimeInterval)timestamp;
 
 /**
@@ -123,7 +129,8 @@
 - (instancetype)initWithVoicePath:(NSString *)voicePath
                          voiceURL:(NSURL *)voiceURL
                     voiceDuration:(NSString *)voiceDuration
-                           sender:(NSString *)sender
+                           userId:(NSString *)userId
+                            user:(id<LCCKUserDelegate>)user
                         timestamp:(NSTimeInterval)timestamp;
 
 /**
@@ -141,23 +148,16 @@
 - (instancetype)initWithVoicePath:(NSString *)voicePath
                          voiceURL:(NSURL *)voiceURL
                     voiceDuration:(NSString *)voiceDuration
-                           sender:(NSString *)sender
+                           userId:(NSString *)userId
+                            user:(id<LCCKUserDelegate>)user
                         timestamp:(NSTimeInterval)timestamp
                            isRead:(BOOL)isRead;
-
-- (instancetype)initWithEmotionPath:(NSString *)emotionPath
-                             sender:(NSString *)sender
-                          timestamp:(NSTimeInterval)timestamp;
-
-- (instancetype)initWithEmotionPath:(NSString *)emotionPath
-                        emotionName:(NSString *)emotionName
-                             sender:(NSString *)sender
-                          timestamp:(NSTimeInterval)timestamp;
 
 - (instancetype)initWithLocalPositionPhoto:(UIImage *)localPositionPhoto
                               geolocations:(NSString *)geolocations
                                   location:(CLLocation *)location
-                                    sender:(NSString *)sender
+                                    userId:(NSString *)userId
+                                     user:(id<LCCKUserDelegate>)user
                                  timestamp:(NSTimeInterval)timestamp;
 // 是否显示时间轴Label
 - (BOOL)shouldDisplayTimestampForMessages:(NSArray *)messages;
