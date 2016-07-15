@@ -7,8 +7,10 @@
 
 "Delete" = "删除";
 "copy" = "复制";
+"draft" = "草稿";
 "resend" = "重新发送";
 "cancel" = "取消";
+"ok" = "确定";
 "transpond" = "转发";
 "favorites" = "收藏";
 "more" = "更多";
@@ -39,7 +41,7 @@
 "Voice" = "声音";
 "Sight" = "表情";
 "Community" = "小区";
-
+"deleteFriend" = "解除好友关系吗?";
 
 "message.bar.error.title" = "错误";
 "message.bar.error.message" = "错误";

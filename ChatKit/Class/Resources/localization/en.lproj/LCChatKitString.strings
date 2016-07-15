@@ -5,10 +5,12 @@
 //  Copyright © 2016年 LeanCloud. All rights reserved.
 //
 "Delete" = "Delete";
+"draft" = "draft";
 "copy" = "copy";
 "transpond" = "transpond";
 "resend" = "resend";
 "cancel" = "cancel";
+"ok" = "ok";
 "favorites" = "favorites";
 "more" = "more";
 "Location" = "Location";
@@ -36,7 +38,7 @@
 "Voice" = "Voice";
 "Sight" = "Sight";
 "Community" = "Community";
-
+"deleteFriend" = "Confirm to delete friend?";
 "message.bar.error.title" = "Error Title";
 "message.bar.error.message" = "This is an error message!";
 "message.bar.success.title" = "Success Title";
