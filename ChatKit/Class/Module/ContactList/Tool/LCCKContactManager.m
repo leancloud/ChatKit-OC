@@ -8,21 +8,21 @@
 
 #import "LCCKContactManager.h"
 #if __has_include(<ChatKit/LCChatKit.h>)
-#import <ChatKit/LCChatKit.h>
+    #import <ChatKit/LCChatKit.h>
 #else
-#import "LCChatKit.h"
+    #import "LCChatKit.h"
 #endif
 
 #define __LCCKContactsOfDevelopers \
-@[ \
-    LCCKDeveloperPeerId, \
-]
+@[                                 \
+    LCCKDeveloperPeerId,           \
+ ]
 
 #define __LCCKContactsOfSections \
-@[ \
-    LCCKTestPeerIds, \
-    __LCCKContactsOfDevelopers, \
-]
+@[                               \
+    LCCKTestPeerIds,             \
+    __LCCKContactsOfDevelopers,  \
+ ]
 
 @interface LCCKContactManager ()
 
@@ -44,7 +44,6 @@
     return _sharedLCCKContactManager;
 }
 
-
 - (NSMutableArray *)contactIDs {
     if (!_contactIDs) {
         _contactIDs = [NSMutableArray arrayWithContentsOfFile:[self storeFilePath]];
@@ -62,6 +61,7 @@
 - (NSArray *)fetchContactPeerIds {
     return self.contactIDs;
 }
+
 - (BOOL)existContactForPeerId:(NSString *)peerId {
     return [self.contactIDs containsObject:peerId];
 }
@@ -73,6 +73,7 @@
     [self.contactIDs addObject:peerId];
     return [self saveContactIDs];
 }
+
 - (BOOL)removeContactForPeerId:(NSString *)peerId {
     if (!peerId) {
         return NO;
@@ -94,7 +95,8 @@
 }
 
 - (NSString *)storeFilePath {
-    NSString* path = [[NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) objectAtIndex:0] stringByAppendingPathComponent:@"LCCKContacts.plist"];
+    NSString *fileName = [NSString stringWithFormat:@"LCCKContacts%@.plist", [LCChatKit sharedInstance].clientId];
+    NSString* path = [[NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) objectAtIndex:0] stringByAppendingPathComponent:fileName];
     return path;
 }
 

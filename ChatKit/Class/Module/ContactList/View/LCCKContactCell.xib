@@ -18,24 +18,32 @@
                     <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="ADn-eD-sMY">
                         <rect key="frame" x="11" y="11" width="298" height="41"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Placeholder_Avator.png" translatesAutoresizingMaskIntoConstraints="NO" id="2kY-gg-uKM">
-                                <rect key="frame" x="0.0" y="1" width="40" height="40"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="QUA-Fr-lGb">
+                                <rect key="frame" x="0.0" y="6" width="30" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="QUA-Fr-lGb" secondAttribute="height" multiplier="1:1" id="IU2-Ni-VFh"/>
+                                    <constraint firstAttribute="width" constant="30" id="QNn-hn-AUB"/>
+                                </constraints>
+                                <state key="normal" title="Button"/>
+                            </button>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="2kY-gg-uKM">
+                                <rect key="frame" x="38" y="1" width="40" height="40"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="2kY-gg-uKM" secondAttribute="height" multiplier="1:1" id="fME-AN-vVD"/>
                                     <constraint firstAttribute="width" constant="40" id="ldL-Xc-0qM"/>
                                 </constraints>
                             </imageView>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="4" translatesAutoresizingMaskIntoConstraints="NO" id="LKm-ZU-nBM">
-                                <rect key="frame" x="48" y="0.0" width="250" height="41"/>
+                                <rect key="frame" x="86" y="0.0" width="212" height="41"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jtS-me-wWB">
-                                        <rect key="frame" x="0.0" y="0.0" width="250" height="16"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="212" height="16"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="751" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="h8p-7S-Fs8">
-                                        <rect key="frame" x="0.0" y="20" width="250" height="21"/>
+                                        <rect key="frame" x="0.0" y="20" width="212" height="21"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
@@ -53,14 +61,12 @@
                 </constraints>
             </tableViewCellContentView>
             <connections>
-                <outlet property="avatorImageView" destination="2kY-gg-uKM" id="HcO-FD-AiQ"/>
+                <outlet property="avatarImageView" destination="2kY-gg-uKM" id="SLJ-vK-NUi"/>
+                <outlet property="selectionStatusButton" destination="QUA-Fr-lGb" id="kaD-B1-dim"/>
                 <outlet property="subtitleLabel" destination="h8p-7S-Fs8" id="K9q-Zm-UBN"/>
                 <outlet property="titleLabel" destination="jtS-me-wWB" id="XWw-M6-P1e"/>
             </connections>
             <point key="canvasLocation" x="237" y="309"/>
         </tableViewCell>
     </objects>
-    <resources>
-        <image name="Placeholder_Avator.png" width="68" height="68"/>
-    </resources>
 </document>
