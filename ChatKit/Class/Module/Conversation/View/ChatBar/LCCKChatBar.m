@@ -9,7 +9,6 @@
 #import "LCCKChatBar.h"
 
 #import "LCCKLocationController.h"
-
 #import "LCCKChatMoreView.h"
 #import "LCCKChatFaceView.h"
 #import "LCCKProgressHUD.h"
@@ -17,6 +16,10 @@
 #import "Masonry.h"
 #import "LCCKUIService.h"
 #import "UIImage+LCCKExtension.h"
+#import "NSString+LCCKExtension.h"
+
+NSString *const kLCCKBatchDeleteTextPrefix = @"kLCCKBatchDeleteTextPrefix";
+NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
 
 @interface LCCKChatBar () <UITextViewDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate, Mp3RecorderDelegate,LCCKChatMoreViewDelegate, LCCKChatMoreViewDataSource, LCCKChatFaceViewDelegate, LCCKLocationControllerDelegate>
 
@@ -30,14 +33,12 @@
 @property (strong, nonatomic) LCCKChatFaceView *faceView; /**< 当前活跃的底部view,用来指向faceView */
 @property (strong, nonatomic) LCCKChatMoreView *moreView; /**< 当前活跃的底部view,用来指向moreView */
 
-@property (strong, nonatomic) UITextView *textView;
-
 @property (assign, nonatomic, readonly) CGFloat bottomHeight;
 @property (strong, nonatomic, readonly) UIViewController *rootViewController;
 
 @property (assign, nonatomic) CGRect keyboardFrame;
 
-@property (copy, nonatomic) NSString *inputText; /**< 缓存下输入框文字 */
+@property (strong, nonatomic) UITextView *textView;
 
 @end
 
@@ -56,7 +57,7 @@
     
     [self.inputBarBackgroundView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.and.right.and.top.mas_equalTo(self);
-//        make.height.mas_equalTo(kLCCKChatBarMinHeight).priorityLow();
+        //        make.height.mas_equalTo(kLCCKChatBarMinHeight).priorityLow();
         make.bottom.mas_equalTo(self).priorityLow();
     }];
     
@@ -93,22 +94,22 @@
 
 //TODO:
 - (void)makeTextViewConstraints {
-//    UIDeviceOrientation orientation = [[UIDevice currentDevice] orientation];
-//    if ((orientation == UIDeviceOrientationLandscapeLeft) || (orientation == UIDeviceOrientationLandscapeRight)) {
-//        NSLog(@"Landscape Left or Right !");
-//        [self.textView mas_remakeConstraints:^(MASConstraintMaker *make) {
-//            CGFloat offset = kChatBarTextViewBottomOffset;
-//            make.edges.mas_equalTo(self).insets(UIEdgeInsetsMake(offset, offset, offset, offset));
-//        }];
-//    } else if (orientation == UIDeviceOrientationPortrait) {
-        [self.textView mas_remakeConstraints:^(MASConstraintMaker *make) {
-            make.left.equalTo(self.voiceButton.mas_right).with.offset(10);
-            make.right.equalTo(self.faceButton.mas_left).with.offset(-10);
-            make.top.equalTo(self.inputBarBackgroundView.mas_top).with.offset(kChatBarTextViewBottomOffset);
-            make.bottom.equalTo(self.inputBarBackgroundView.mas_bottom).with.offset(-kChatBarTextViewBottomOffset);
-        }];
-//        NSLog(@"Landscape portrait!");
-//    }
+    //    UIDeviceOrientation orientation = [[UIDevice currentDevice] orientation];
+    //    if ((orientation == UIDeviceOrientationLandscapeLeft) || (orientation == UIDeviceOrientationLandscapeRight)) {
+    //        NSLog(@"Landscape Left or Right !");
+    //        [self.textView mas_remakeConstraints:^(MASConstraintMaker *make) {
+    //            CGFloat offset = kChatBarTextViewBottomOffset;
+    //            make.edges.mas_equalTo(self).insets(UIEdgeInsetsMake(offset, offset, offset, offset));
+    //        }];
+    //    } else if (orientation == UIDeviceOrientationPortrait) {
+    [self.textView mas_remakeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(self.voiceButton.mas_right).with.offset(10);
+        make.right.equalTo(self.faceButton.mas_left).with.offset(-10);
+        make.top.equalTo(self.inputBarBackgroundView.mas_top).with.offset(kChatBarTextViewBottomOffset);
+        make.bottom.equalTo(self.inputBarBackgroundView.mas_bottom).with.offset(-kChatBarTextViewBottomOffset);
+    }];
+    //        NSLog(@"Landscape portrait!");
+    //    }
 }
 
 - (void)dealloc {
@@ -119,38 +120,74 @@
 #pragma mark - UITextViewDelegate
 
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text {
-    
     if ([text isEqualToString:@"\n"]) {
         [self sendTextMessage:textView.text];
         return NO;
     } else if (text.length == 0){
-        //判断删除的文字是否符合表情文字规则
-        NSString *deleteText = [textView.text substringWithRange:range];
-        if ([deleteText isEqualToString:@"]"]) {
-            NSUInteger location = range.location;
-            NSUInteger length = range.length;
-            NSString *subText;
-            while (YES) {
-                if (location == 0) {
-                    return YES;
-                }
-                location -- ;
-                length ++ ;
-                subText = [textView.text substringWithRange:NSMakeRange(location, length)];
-                if (([subText hasPrefix:@"["] && [subText hasSuffix:@"]"])) {
-                    break;
-                }
-            }
-            textView.text = [textView.text stringByReplacingCharactersInRange:NSMakeRange(location, length) withString:@""];
-            [textView setSelectedRange:NSMakeRange(location, 0)];
-            [self textViewDidChange:self.textView];
-            return NO;
+        //构造元素需要使用两个空格来进行缩进，右括号]或者}写在新的一行，并且与调用语法糖那行代码的第一个非空字符对齐：
+        NSArray *defaultRegulations = @[
+                                        //判断删除的文字是否符合表情文字规则
+                                        @{
+                                            kLCCKBatchDeleteTextPrefix : @"[",
+                                            kLCCKBatchDeleteTextSuffix : @"]",
+                                            },
+                                        //判断删除的文字是否符合提醒群成员的文字规则
+                                        @{
+                                            kLCCKBatchDeleteTextPrefix : @"@",
+                                            kLCCKBatchDeleteTextSuffix : @" ",
+                                            },
+                                        ];
+        NSArray *additionRegulation;
+        if ([self.delegate respondsToSelector:@selector(regulationForBatchDeleteText)]) {
+            additionRegulation = [self.delegate regulationForBatchDeleteText];
         }
+        if (additionRegulation.count > 0) {
+            defaultRegulations = [defaultRegulations arrayByAddingObjectsFromArray:additionRegulation];
+        }
+        for (NSDictionary *regulation in defaultRegulations) {
+            NSString *prefix = regulation[kLCCKBatchDeleteTextPrefix];
+            NSString *suffix = regulation[kLCCKBatchDeleteTextSuffix];
+            if (![self textView:textView shouldChangeTextInRange:range deleteBatchOfTextWithPrefix:prefix suffix:suffix]) {
+                return  NO;
+            }
+        }
+        return YES;
     } else if ([text isEqualToString:@"@"]) {
         if ([self.delegate respondsToSelector:@selector(didInputAtSign:)]) {
             [self.delegate didInputAtSign:self];
         }
         return YES;
+    }
+    return YES;
+}
+
+- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range deleteBatchOfTextWithPrefix:(NSString *)prefix
+          suffix:(NSString *)suffix {
+    NSString *substringOfText = [textView.text substringWithRange:range];
+    if ([substringOfText isEqualToString:suffix]) {
+        NSUInteger location = range.location;
+        NSUInteger length = range.length;
+        NSString *subText;
+        while (YES) {
+            if (location == 0) {
+                return YES;
+            }
+            location -- ;
+            length ++ ;
+            subText = [textView.text substringWithRange:NSMakeRange(location, length)];
+            if (([subText hasPrefix:prefix] && [subText hasSuffix:suffix])) {
+                //这里注意，批量删除的字符串，除了前缀和后缀，中间不能有空格出现
+                NSString *string = [textView.text substringWithRange:NSMakeRange(location, length-1)];
+                if (![string lcck_containsString:@" "]) {
+                    break;
+                }
+            }
+        }
+        
+        textView.text = [textView.text stringByReplacingCharactersInRange:NSMakeRange(location, length) withString:@""];
+        [textView setSelectedRange:NSMakeRange(location, 0)];
+        [self textViewDidChange:self.textView];
+        return NO;
     }
     return YES;
 }
@@ -170,7 +207,7 @@
 - (void)textViewDidChange:(UITextView *)textView
           shouldCacheText:(BOOL)shouldCacheText {
     if (shouldCacheText) {
-        self.inputText = self.textView.text;
+        self.cachedText = self.textView.text;
     }
     CGRect textViewFrame = self.textView.frame;
     CGSize textSize = [self.textView sizeThatFits:CGSizeMake(CGRectGetWidth(textViewFrame), 1000.0f)];
@@ -312,13 +349,12 @@
         if (self.delegate && [self.delegate respondsToSelector:@selector(chatBar:sendMessage:)]) {
             [self.delegate chatBar:self sendMessage:text];
         }
-        self.inputText = @"";
+        self.cachedText = @"";
         self.textView.text = @"";
         [self chatBarConstraintsDidChange];
         [self showViewWithType:LCCKFunctionViewShowFace];
     } else {
-        self.textView.text = [self.textView.text stringByAppendingString:faceName];
-        [self textViewDidChange:self.textView];
+        [self appendString:faceName beginInputing:NO];
     }
 }
 
@@ -329,8 +365,24 @@
         return;
     }
     self.faceButton.selected = self.moreButton.selected = self.voiceButton.selected = NO;
-
+    
     [self showViewWithType:LCCKFunctionViewShowNothing];
+}
+
+- (void)appendString:(NSString *)string beginInputing:(BOOL)beginInputing {
+    self.textView.text = [self.textView.text stringByAppendingString:string];
+    [self textViewDidChange:self.textView];
+    if (beginInputing) {
+        [self beginInputing];
+    }
+}
+
+- (void)appendString:(NSString *)string {
+    [self appendString:string beginInputing:YES];
+}
+
+- (void)beginInputing {
+    [self.textView becomeFirstResponder];
 }
 
 #pragma mark - Private Methods
@@ -359,13 +411,13 @@
 }
 
 - (void)setup {
-//    void (^deviceOrientationDidChangeBlock)(NSNotification *) = ^(NSNotification *notification) {
-//        [self makeTextViewConstraints];
-//    };
-//    [[NSNotificationCenter defaultCenter] addObserverForName:UIDeviceOrientationDidChangeNotification
-//                                                      object:nil
-//                                                       queue:[NSOperationQueue mainQueue]
-//                                                  usingBlock:deviceOrientationDidChangeBlock];
+    //    void (^deviceOrientationDidChangeBlock)(NSNotification *) = ^(NSNotification *notification) {
+    //        [self makeTextViewConstraints];
+    //    };
+    //    [[NSNotificationCenter defaultCenter] addObserverForName:UIDeviceOrientationDidChangeNotification
+    //                                                      object:nil
+    //                                                       queue:[NSOperationQueue mainQueue]
+    //                                                  usingBlock:deviceOrientationDidChangeBlock];
     
     self.MP3 = [[Mp3Recorder alloc] initWithDelegate:self];
     [self addSubview:self.inputBarBackgroundView];
@@ -375,7 +427,7 @@
     [self.inputBarBackgroundView addSubview:self.faceButton];
     [self.inputBarBackgroundView addSubview:self.textView];
     [self.inputBarBackgroundView addSubview:self.voiceRecordButton];
-
+    
     UIImageView *topLine = [[UIImageView alloc] init];
     topLine.backgroundColor = kLCCKTopLineBackgroundColor;
     [self.inputBarBackgroundView addSubview:topLine];
@@ -442,14 +494,14 @@
     
     switch (showType) {
         case LCCKFunctionViewShowNothing: {
-            self.textView.text = self.inputText;
+            self.textView.text = self.cachedText;
             //            self.textView.contentOffset = CGPointZero;
             [self textViewDidChange:self.textView];
             [self.textView resignFirstResponder];
         }
             break;
         case LCCKFunctionViewShowVoice: {
-            self.inputText = self.textView.text;
+            self.cachedText = self.textView.text;
             self.textView.text = nil;
             //            self.textView.contentOffset = CGPointZero;
             [self.textView resignFirstResponder];
@@ -459,12 +511,12 @@
             break;
         case LCCKFunctionViewShowMore:
         case LCCKFunctionViewShowFace:
-            self.textView.text = self.inputText;
+            self.textView.text = self.cachedText;
             [self.textView resignFirstResponder];
             [self textViewDidChange:self.textView];
             break;
         case LCCKFunctionViewShowKeyboard:
-            self.textView.text = self.inputText;
+            self.textView.text = self.cachedText;
             [self textViewDidChange:self.textView];
             break;
     }
@@ -516,7 +568,7 @@
         [UIView animateWithDuration:LCCKAnimateDuration animations:^{
             // [self.faceView setFrame:CGRectMake(0, self.superViewHeight - kFunctionViewHeight, self.frame.size.width, kFunctionViewHeight)];
             [self.faceView layoutIfNeeded];
-//            [self.inputBarBackgroundView layoutIfNeeded];
+            //            [self.inputBarBackgroundView layoutIfNeeded];
         } completion:nil];
     } else if (self.faceView.superview) {
         //        [self.faceView layoutIfNeeded];
@@ -556,7 +608,7 @@
         [UIView animateWithDuration:LCCKAnimateDuration animations:^{
             //            [self.moreView setFrame:CGRectMake(0, self.superViewHeight - kFunctionViewHeight, self.frame.size.width, kFunctionViewHeight)];
             [self.moreView layoutIfNeeded];
-//            [self.inputBarBackgroundView layoutIfNeeded];
+            //            [self.inputBarBackgroundView layoutIfNeeded];
             // [self.inputBarBackgroundView layoutIfNeeded];
         } completion:nil];
     } else if (self.moreView.superview) {
@@ -593,7 +645,7 @@
     if (self.delegate && [self.delegate respondsToSelector:@selector(chatBar:sendMessage:)]) {
         [self.delegate chatBar:self sendMessage:text];
     }
-    self.inputText = @"";
+    self.cachedText = @"";
     self.textView.text = @"";
     [self chatBarConstraintsDidChange];
     [self showViewWithType:LCCKFunctionViewShowKeyboard];
@@ -637,7 +689,7 @@
 
 - (LCCKChatFaceView *)faceView {
     if (!_faceView) {
-        _faceView = [[LCCKChatFaceView alloc] init];//WithFrame:CGRectMake(0, self.superViewHeight , self.frame.size.width, kFunctionViewHeight)];
+        _faceView = [[LCCKChatFaceView alloc] init];
         _faceView.delegate = self;
         _faceView.backgroundColor = self.backgroundColor;
     }
@@ -646,7 +698,7 @@
 
 - (LCCKChatMoreView *)moreView {
     if (!_moreView) {
-        _moreView = [[LCCKChatMoreView alloc] init];//WithFrame:CGRectMake(0, self.superViewHeight, self.frame.size.width, kFunctionViewHeight)];
+        _moreView = [[LCCKChatMoreView alloc] init];
         _moreView.delegate = self;
         _moreView.dataSource = self;
         _moreView.backgroundColor = self.backgroundColor;
@@ -688,7 +740,6 @@
         _voiceRecordButton.frame = self.textView.bounds;
         _voiceRecordButton.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         [_voiceRecordButton setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
-        //        [_voiceRecordButton setBackgroundColor:[UIColor lightGrayColor]];
         UIEdgeInsets edgeInsets = UIEdgeInsetsMake(9, 9, 9, 9);
         UIImage *voiceRecordButtonNormalBackgroundImage = [[self imageInBundlePathForImageName:@"VoiceBtn_Black"] resizableImageWithCapInsets:edgeInsets resizingMode:UIImageResizingModeStretch];
         UIImage *voiceRecordButtonHighlightedBackgroundImage = [[self imageInBundlePathForImageName:@"VoiceBtn_BlackHL"] resizableImageWithCapInsets:edgeInsets resizingMode:UIImageResizingModeStretch];

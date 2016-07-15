@@ -15,6 +15,9 @@ static CGFloat const kLCCKChatBarTextViewFrameMaxHeight = 102.f;//kLCCKChatBarMa
 static CGFloat const kLCCKChatBarMaxHeight = kLCCKChatBarTextViewFrameMaxHeight + 2*kChatBarTextViewBottomOffset;//114.0f;
 static CGFloat const kLCCKChatBarMinHeight = kLCCKChatBarTextViewFrameMinHeight + 2*kChatBarTextViewBottomOffset;//49.0f;
 
+FOUNDATION_EXTERN NSString *const kLCCKBatchDeleteTextPrefix;
+FOUNDATION_EXTERN NSString *const kLCCKBatchDeleteTextSuffix;
+
 #import <UIKit/UIKit.h>
 #import <MapKit/MapKit.h>
 
@@ -36,14 +39,25 @@ typedef NS_ENUM(NSUInteger, LCCKFunctionViewShowType){
  */
 @interface LCCKChatBar : UIView
 
-@property (assign, nonatomic) CGFloat superViewHeight;
-
 @property (weak, nonatomic) id<LCCKChatBarDelegate> delegate;
+@property (copy, nonatomic) NSString *cachedText; /**< 缓存下输入框文字，兼具内存缓存和本地数据库缓存的作用 */
+
+/*!
+ * 追加后，输入框默认开启编辑模式
+ */
+- (void)appendString:(NSString *)string;
+
+- (void)appendString:(NSString *)string beginInputing:(BOOL)beginInputing;
 
 /**
  *  结束输入状态
  */
 - (void)endInputing;
+
+/**
+ *  进入输入状态
+ */
+- (void)beginInputing;
 
 @end
 
@@ -101,5 +115,7 @@ typedef NS_ENUM(NSUInteger, LCCKFunctionViewShowType){
  *
  */
 - (void)didInputAtSign:(LCCKChatBar *)chatBar;
+
+- (NSArray *)regulationForBatchDeleteText;
 
 @end

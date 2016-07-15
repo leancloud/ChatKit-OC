@@ -9,22 +9,21 @@
 //CYLDebugging定义为1表示【debugging】 ，注释、不定义或者0 表示【debugging】
 //#define CYLDebugging 1
 
+
 #import "LCCKConversationViewController.h"
+
+#if __has_include(<ChatKit/LCChatKit.h>)
+    #import <ChatKit/LCChatKit.h>
+#else
+    #import "LCChatKit.h"
+#endif
+
 #import "UITableView+FDTemplateLayoutCell.h"
 #import "LCCKCellRegisterController.h"
-#import <AVOSCloudIM/AVOSCloudIM.h>
-#import "LCCKConversationService.h"
-#import "LCCKUserSystemService.h"
-#import "AVIMConversation+LCCKAddition.h"
 #import "LCCKStatusView.h"
-#import "LCCKSessionService.h"
-#import "LCCKConversationService.h"
-#import "LCCKSettingService.h"
 #import "LCCKSoundManager.h"
 #import "LCCKTextFullScreenViewController.h"
-#import "LCCKUIService.h"
 #import <objc/runtime.h>
-#import "UIImage+LCCKExtension.h"
 #import "NSMutableArray+LCCKMessageExtention.h"
 #import "Masonry.h"
 
@@ -32,15 +31,16 @@
 
 @property (nonatomic, strong, readwrite) AVIMConversation *conversation;
 //@property (copy, nonatomic) NSString *messageSender /**< 正在聊天的用户昵称 */;
-//@property (copy, nonatomic) NSString *avatorURL /**< 正在聊天的用户头像 */;
-/**< 正在聊天的用户昵称 */
+//@property (copy, nonatomic) NSString *avatarURL /**< 正在聊天的用户头像 */;
+/**< 正在聊天的用户 */
+@property (nonatomic, copy) id<LCCKUserDelegate> user;
+/**< 正在聊天的用户clientId */
 @property (nonatomic, copy) NSString *userId;
 /**< 正在聊天的用户头像 */
-@property (nonatomic, copy) NSURL *avatorURL;
-//@property (assign, nonatomic) LCCKConversationType messageChatType;
+//@property (nonatomic, copy) NSURL *avatarURL;
 @property (nonatomic, strong) LCCKConversationViewModel *chatViewModel;
 @property (nonatomic, copy) LCCKConversationHandler conversationHandler;
-@property (nonatomic, copy) LCCKBooleanResultBlock loadHistoryMessagesHandler;
+@property (nonatomic, copy) LCCKViewControllerBooleanResultBlock loadHistoryMessagesHandler;
 
 @end
 
@@ -50,7 +50,7 @@
     _conversationHandler = conversationHandler;
 }
 
-- (void)setLoadHistoryMessagesHandler:(LCCKBooleanResultBlock)loadHistoryMessagesHandler {
+- (void)setLoadHistoryMessagesHandler:(LCCKViewControllerBooleanResultBlock)loadHistoryMessagesHandler {
     _loadHistoryMessagesHandler = loadHistoryMessagesHandler;
 }
 
@@ -160,40 +160,52 @@
     [self.view addSubview:self.clientStatusView];
     [self updateStatusView];
     [self initBarButton];
-    [[LCCKUserSystemService sharedInstance] fetchCurrentUserInBackground:^(id<LCCKUserModelDelegate> user, NSError *error) {
-        self.userId = user.userId;
-        self.avatorURL = user.avatorURL;
+    [[LCCKUserSystemService sharedInstance] fetchCurrentUserInBackground:^(id<LCCKUserDelegate> user, NSError *error) {
+        self.user = user;
     }];
-    if (self.conversation.conversationId) {
-        [LCCKConversationService sharedInstance].chattingConversationId = self.conversation.conversationId;
-    }
+    [self conversation];
+    !self.viewDidLoadBlock ?: self.viewDidLoadBlock(self);
 }
 
 - (void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
-    if (self.conversation.conversationId) {
-        [LCCKConversationService sharedInstance].chattingConversationId = self.conversation.conversationId;
-    }
+    [self markCurrentConversationInfo];
+    !self.viewDidAppearBlock ?: self.viewDidAppearBlock(self, animated);
 }
 
-//TODO:push 到比如图片浏览器，然后pop回来，tableview有偏移，似乎与屏幕作为最低端，而非chatBar最顶端。
 - (void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
+    if (self.conversationId) {
+        [[LCCKConversationService sharedInstance] updateDraft:self.chatBar.cachedText conversationId:self.conversationId];
+    }
     [[LCCKAVAudioPlayer sharePlayer] stopAudioPlayer];
     [LCCKAVAudioPlayer sharePlayer].index = NSUIntegerMax;
     [LCCKAVAudioPlayer sharePlayer].URLString = nil;
+    !self.viewWillDisappearBlock ?: self.viewWillDisappearBlock(self, animated);
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
-    [LCCKConversationService sharedInstance].chattingConversationId = nil;
     if (self.chatViewModel.avimTypedMessage.count > 0) {
         [[LCCKConversationService sharedInstance] updateConversationAsRead];
     }
+    [self clearCurrentConversationInfo];
+    !self.viewDidDisappearBlock ?: self.viewDidDisappearBlock(self, animated);
 }
 
 - (void)dealloc {
     [[LCCKAVAudioPlayer sharePlayer] setDelegate:nil];
+    !self.viewControllerWillDeallocBlock ?: self.viewControllerWillDeallocBlock(self);
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    !self.viewWillAppearBlock ?: self.viewWillAppearBlock(self, animated);
+}
+
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    !self.didReceiveMemoryWarningBlock ?: self.didReceiveMemoryWarningBlock(self);
 }
 
 #pragma mark - UI init
@@ -203,15 +215,42 @@
     [self.navigationItem setBackBarButtonItem:backBtn];
 }
 
+- (void)clearCurrentConversationInfo {
+        [LCCKConversationService sharedInstance].currentConversationId = nil;
+        [LCCKConversationService sharedInstance].currentConversation = nil;
+}
+
+- (void)markCurrentConversationInfo {
+    if (self.conversationId) {
+        [LCCKConversationService sharedInstance].currentConversationId = self.conversationId;
+    } else if (self.conversation.conversationId) {
+        [LCCKConversationService sharedInstance].currentConversationId = self.conversation.conversationId;
+    }
+    
+    if (self.conversation) {
+        [LCCKConversationService sharedInstance].currentConversation = self.conversation;
+    }
+}
+/*!
+ * conversation 不一定有值，可能为 nil，
+ */
 - (void)refreshConversation:(AVIMConversation *)conversation isJoined:(BOOL)isJoined {
     _conversation = conversation;
     if (conversation.members > 0) {
         NSAssert(_conversation.imClient, @"类名与方法名：%@（在第%@行），描述：%@", @(__PRETTY_FUNCTION__), @(__LINE__), @"imClient is nil");
         self.navigationItem.title = conversation.lcck_title;
+        [[LCChatKit sharedInstance] getProfilesInBackgroundForUserIds:conversation.members callback:^(NSArray<id<LCCKUserDelegate>> *users, NSError *error) {
+            !_conversationHandler ?: _conversationHandler(conversation, self);
+        }];
+        if (self.conversation.lcck_draft.length > 0) {
+            [self.chatBar appendString:self.conversation.lcck_draft];
+        }
+    } else {
+        !_conversationHandler ?: _conversationHandler(conversation, self);
     }
+    [self markCurrentConversationInfo];
     [LCCKConversationService sharedInstance].currentConversation = conversation;
     [self handleLoadHistoryMessagesHandlerForIsJoined:isJoined];
-    !_conversationHandler ?: _conversationHandler(conversation, self);
 }
 
 - (void)handleLoadHistoryMessagesHandlerForIsJoined:(BOOL)isJoined {
@@ -228,11 +267,11 @@
                                              code:code
                                          userInfo:errorInfo];
         
-        !_loadHistoryMessagesHandler ?: _loadHistoryMessagesHandler(succeeded, error);
+        !_loadHistoryMessagesHandler ?: _loadHistoryMessagesHandler(self, succeeded, error);
         return;
     }
     [self.chatViewModel loadMessagesFirstTimeWithHandler:^(BOOL succeeded, NSError *error) {
-        !_loadHistoryMessagesHandler ?: _loadHistoryMessagesHandler(succeeded, error);
+        !_loadHistoryMessagesHandler ?: _loadHistoryMessagesHandler(self, succeeded, error);
     }];
 }
 
@@ -241,12 +280,17 @@
     return seconds * 1000;
 }
 
+- (NSString *)userId {
+    return [LCChatKit sharedInstance].clientId;
+}
+
 #pragma mark - LCCKChatBarDelegate
 
 - (void)chatBar:(LCCKChatBar *)chatBar sendMessage:(NSString *)message {
     if ([message length] > 0 ) {
         LCCKMessage *lcckMessage = [[LCCKMessage alloc] initWithText:message
-                                                              sender:self.userId
+                                                              userId:self.userId
+                                                              user:self.user
                                                            timestamp:[[self class] currentTimestamp]];
         lcckMessage.messageGroupType = self.conversation.lcck_type;
         [self.chatViewModel sendMessage:lcckMessage];
@@ -259,6 +303,56 @@
 
 - (void)chatBar:(LCCKChatBar *)chatBar sendPictures:(NSArray<UIImage *> *)pictures{
     [self sendImages:pictures];
+}
+
+- (void)didInputAtSign:(LCCKChatBar *)chatBar {
+    if (self.conversation.lcck_type == LCCKConversationTypeGroup) {
+        [self presentSelectMemberViewController];
+    }
+}
+
+- (void)presentSelectMemberViewController {
+   NSString *cuttentClientId = [LCCKSessionService sharedInstance].clientId;
+    [[LCCKUserSystemService sharedInstance] getProfilesInBackgroundForUserIds:self.conversation.members callback:^(NSArray<id<LCCKUserDelegate>> *users, NSError *error) {
+        LCCKContactListViewController *contactListViewController = [[LCCKContactListViewController alloc] initWithContacts:users userIds:self.conversation.members excludedUserIds:@[cuttentClientId] mode:LCCKContactListModeMultipleSelection];
+        [contactListViewController setSelectedContactCallback:^(UIViewController *viewController, NSString *peerId) {
+//            [viewController dismissViewControllerAnimated:YES completion:nil];
+            if (peerId.length > 0) {
+               NSArray *peerNames = [[LCChatKit sharedInstance] getProfilesForUserIds:@[peerId] error:nil];
+                NSString *peerName;
+                @try {
+                    id<LCCKUserDelegate> user = peerNames[0];
+                    peerName = [NSString stringWithFormat:@"%@ ",user.name];
+                } @catch (NSException *exception) {
+                    peerName = [NSString stringWithFormat:@"%@ ", peerId];
+                }
+                [self.chatBar appendString:[NSString stringWithFormat:@"%@ ",peerName]];
+            }
+        }];
+        [contactListViewController setSelectedContactsCallback:^(UIViewController *viewController, NSArray<NSString *> *peerIds) {
+            if (peerIds.count > 0) {
+                NSArray<id<LCCKUserDelegate>> *peers = [[LCChatKit sharedInstance] getProfilesForUserIds:peerIds error:nil];
+                NSMutableArray *peerNames = [NSMutableArray arrayWithCapacity:peers.count];
+                [peers enumerateObjectsUsingBlock:^(id<LCCKUserDelegate>  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                    if (obj.name) {
+                        [peerNames addObject:obj.name];
+                    } else {
+                        [peerNames addObject:obj.clientId];
+                    }
+                }];
+                NSString *peerName;
+                if (peerNames.count > 0) {
+                    peerName = [[peerNames valueForKey:@"description"] componentsJoinedByString:@" @"];
+                } else {
+                    peerName = [[peerIds valueForKey:@"description"] componentsJoinedByString:@" @"];
+                }
+                peerName = [peerName stringByAppendingString:@" "];
+                [self.chatBar appendString:peerName];
+            }
+        }];
+        UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:contactListViewController];
+        [self presentViewController:navigationController animated:YES completion:nil];
+    }];
 }
 
 - (void)sendImages:(NSArray<UIImage *> *)pictures {
@@ -280,7 +374,8 @@
                                                         photoPath:path
                                                      thumbnailURL:nil
                                                    originPhotoURL:nil
-                                                           sender:self.userId
+                                                           userId:self.userId
+                                                           user:self.user
                                                         timestamp:[[self class] currentTimestamp]];
         message.messageGroupType = self.conversation.lcck_type;
         [self.chatViewModel sendMessage:message];
@@ -293,7 +388,8 @@
     LCCKMessage *message = [[LCCKMessage alloc] initWithVoicePath:voicePath
                                                          voiceURL:nil
                                                     voiceDuration:[NSString stringWithFormat:@"%@", @(seconds)]
-                                                           sender:self.userId
+                                                           userId:self.userId
+                                                           user:self.user
                                                         timestamp:[[self class] currentTimestamp]];
     message.messageGroupType =  self.conversation.lcck_type;
     [self.chatViewModel sendMessage:message];
@@ -307,7 +403,8 @@
                                                               geolocations:locationText
                                                                   location:[[CLLocation alloc] initWithLatitude:locationCoordinate.latitude
                                                                                                       longitude:locationCoordinate.longitude]
-                                                                    sender:self.userId
+                                                                    userId:self.userId
+                                                                    user:self.user
                                                                  timestamp:[[self class] currentTimestamp]];
     [self.chatViewModel sendMessage:message];
 }
@@ -323,7 +420,7 @@
 
 - (void)messageCellTappedHead:(LCCKChatMessageCell *)messageCell {
     LCCKOpenProfileBlock openProfileBlock = [LCCKUIService sharedInstance].openProfileBlock;
-    !openProfileBlock ?: openProfileBlock(messageCell.message.sender, self);
+    !openProfileBlock ?: openProfileBlock(messageCell.message.userId, messageCell.message.user, self);
 }
 
 - (void)messageCellTappedBlank:(LCCKChatMessageCell *)messageCell {
@@ -368,10 +465,32 @@
             !previewLocationMessageBlock ?: previewLocationMessageBlock(message.location, message.geolocations, userInfo);
         }
             break;
-            
-            //        default:
-            //            break;
+        case LCCKMessageTypeText:
+            break;
+        default: {
+            NSString *formatString = @"\n\n\
+            ------ BEGIN NSException Log ---------------\n \
+            class name: %@                              \n \
+            ------line: %@                              \n \
+            ----reason: %@                              \n \
+            ------ END -------------------------------- \n\n";
+            NSString *reason = [NSString stringWithFormat:formatString,
+                                @(__PRETTY_FUNCTION__),
+                                @(__LINE__),
+                                @"messageCell.messageType not handled"];
+            //手动创建一个异常导致的崩溃事件 http://is.gd/EfVfN0
+            @throw [NSException exceptionWithName:NSGenericException
+                                           reason:reason
+                                         userInfo:nil];
+        }
+                        break;
     }
+}
+
+- (void)avatarImageViewLongPressed:(LCCKChatMessageCell *)messageCell {
+    NSString *userName = messageCell.message.user.name ?: messageCell.message.userId;
+    NSString *appendString = [NSString stringWithFormat:@"@%@ ", userName];
+    [self.chatBar appendString:appendString];
 }
 
 - (void)textMessageCellDoubleTapped:(LCCKChatMessageCell *)messageCell {
@@ -387,14 +506,6 @@
 }
 
 #pragma mark - LCCKConversationViewModelDelegate
-
-- (NSString *)chatterNickname {
-    return self.userId;
-}
-
-- (NSURL *)chatterHeadAvator {
-    return self.avatorURL;
-}
 
 - (void)messageReadStateChanged:(LCCKMessageReadState)readState withProgress:(CGFloat)progress forIndex:(NSUInteger)index {
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:index inSection:0];

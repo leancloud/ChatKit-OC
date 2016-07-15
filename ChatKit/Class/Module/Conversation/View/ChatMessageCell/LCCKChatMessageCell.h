@@ -23,6 +23,7 @@
 - (void)messageCellTappedMessage:(LCCKChatMessageCell *)messageCell;
 - (void)textMessageCellDoubleTapped:(LCCKChatMessageCell *)messageCell;
 - (void)resendMessage:(LCCKChatMessageCell *)messageCell;
+- (void)avatarImageViewLongPressed:(LCCKChatMessageCell *)messageCell;
 
 @end
 
@@ -33,6 +34,7 @@
 //FIXME:retain cycle
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) NSIndexPath *indexPath;
+
 /**
  *  显示用户头像
  */
