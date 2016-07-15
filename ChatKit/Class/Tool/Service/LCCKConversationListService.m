@@ -138,7 +138,7 @@
 #pragma mark -
 #pragma mark - Setter Method
 
-- (void)setDidSelectConversationsListCellBlock:(LCCKConversationsListDidSelectItemBlock)didSelectConversationsListCellBlock {
+- (void)setDidSelectConversationsListCellBlock:(LCCKDidSelectConversationsListCellBlock)didSelectConversationsListCellBlock {
     _didSelectConversationsListCellBlock = didSelectConversationsListCellBlock;
 }
 
@@ -150,7 +150,7 @@
     _prepareConversationsWhenLoadBlock = prepareConversationsWhenLoadBlock;
 }
 
-- (void)setDidDeleteConversationsListCellBlock:(LCCKConversationsListDidDeleteItemBlock)didDeleteConversationsListCellBlock {
+- (void)setDidDeleteConversationsListCellBlock:(LCCKDidDeleteConversationsListCellBlock)didDeleteConversationsListCellBlock {
     _didDeleteConversationsListCellBlock = didDeleteConversationsListCellBlock;
 }
 

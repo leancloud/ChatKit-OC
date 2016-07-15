@@ -305,11 +305,11 @@ static NSMutableDictionary *_sharedInstances = nil;
 ///---------------------LCCKConversationsListService--------------------
 ///---------------------------------------------------------------------
 
-- (void)setDidSelectConversationsListCellBlock:(LCCKConversationsListDidSelectItemBlock)didSelectConversationsListCellBlock {
+- (void)setDidSelectConversationsListCellBlock:(LCCKDidSelectConversationsListCellBlock)didSelectConversationsListCellBlock {
     [self.conversationListService setDidSelectConversationsListCellBlock:didSelectConversationsListCellBlock];
 }
 
-- (void)setDidDeleteConversationsListCellBlock:(LCCKConversationsListDidDeleteItemBlock)didDeleteConversationsListCellBlock {
+- (void)setDidDeleteConversationsListCellBlock:(LCCKDidDeleteConversationsListCellBlock)didDeleteConversationsListCellBlock {
     [self.conversationListService setDidDeleteConversationsListCellBlock:didDeleteConversationsListCellBlock];
 }
 

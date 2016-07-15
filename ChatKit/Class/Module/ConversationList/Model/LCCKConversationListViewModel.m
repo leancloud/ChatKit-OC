@@ -164,7 +164,7 @@
                                                   AVIMConversation *conversation = [self.dataArray objectAtIndex:indexPath.row];
                                                   [[LCCKConversationService sharedInstance] deleteRecentConversationWithConversationId:conversation.conversationId];
                                                   [self refresh];
-                                                  LCCKConversationsListDidDeleteItemBlock conversationsListDidDeleteItemBlock = [LCCKConversationListService sharedInstance].didDeleteConversationsListCellBlock;
+                                                  LCCKDidDeleteConversationsListCellBlock conversationsListDidDeleteItemBlock = [LCCKConversationListService sharedInstance].didDeleteConversationsListCellBlock;
                                                   !conversationsListDidDeleteItemBlock ?: conversationsListDidDeleteItemBlock(indexPath, conversation, self.conversationListViewController);
                                               }];
     actionItemDelete.backgroundColor = [UIColor redColor];

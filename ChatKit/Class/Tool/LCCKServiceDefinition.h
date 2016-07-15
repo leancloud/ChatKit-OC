@@ -354,33 +354,33 @@ typedef void (^LCCKConversationResultBlock)(AVIMConversation *conversation, NSEr
  *  选中某个对话后的回调
  *  @param conversation 被选中的对话
  */
-typedef void(^LCCKConversationsListDidSelectItemBlock)(NSIndexPath *indexPath, AVIMConversation *conversation, LCCKConversationListViewController *controller);
+typedef void(^LCCKDidSelectConversationsListCellBlock)(NSIndexPath *indexPath, AVIMConversation *conversation, LCCKConversationListViewController *controller);
 
 /*!
  *  选中某个对话后的回调
  */
-@property (nonatomic, copy, readonly) LCCKConversationsListDidSelectItemBlock didSelectConversationsListCellBlock;
+@property (nonatomic, copy, readonly) LCCKDidSelectConversationsListCellBlock didSelectConversationsListCellBlock;
 
 /*!
  *  设置选中某个对话后的回调
  */
-- (void)setDidSelectConversationsListCellBlock:(LCCKConversationsListDidSelectItemBlock)didSelectConversationsListCellBlock;
+- (void)setDidSelectConversationsListCellBlock:(LCCKDidSelectConversationsListCellBlock)didSelectConversationsListCellBlock;
 
 /*!
  *  删除某个对话后的回调
  *  @param conversation 被选中的对话
  */
-typedef void(^LCCKConversationsListDidDeleteItemBlock)(NSIndexPath *indexPath, AVIMConversation *conversation, LCCKConversationListViewController *controller);
+typedef void(^LCCKDidDeleteConversationsListCellBlock)(NSIndexPath *indexPath, AVIMConversation *conversation, LCCKConversationListViewController *controller);
 
 /*!
  *  删除某个对话后的回调
  */
-@property (nonatomic, copy, readonly) LCCKConversationsListDidDeleteItemBlock didDeleteConversationsListCellBlock;
+@property (nonatomic, copy, readonly) LCCKDidDeleteConversationsListCellBlock didDeleteConversationsListCellBlock;
 
 /*!
  *  设置删除某个对话后的回调
  */
-- (void)setDidDeleteConversationsListCellBlock:(LCCKConversationsListDidDeleteItemBlock)didDeleteConversationsListCellBlock;
+- (void)setDidDeleteConversationsListCellBlock:(LCCKDidDeleteConversationsListCellBlock)didDeleteConversationsListCellBlock;
 
 /*!
  *  对话左滑菜单设置block
