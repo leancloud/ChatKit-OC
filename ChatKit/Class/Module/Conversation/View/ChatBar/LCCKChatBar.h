@@ -41,7 +41,7 @@ typedef NS_ENUM(NSUInteger, LCCKFunctionViewShowType){
 
 @property (weak, nonatomic) id<LCCKChatBarDelegate> delegate;
 @property (copy, nonatomic) NSString *cachedText; /**< 缓存下输入框文字，兼具内存缓存和本地数据库缓存的作用 */
-
+@property (nonatomic, assign) LCCKFunctionViewShowType showType;
 /*!
  * 追加后，输入框默认开启编辑模式
  */
@@ -74,7 +74,7 @@ typedef NS_ENUM(NSUInteger, LCCKFunctionViewShowType){
  *
  *  @param chatBar 
  */
-- (void)chatBarFrameDidChange:(LCCKChatBar *)chatBar;
+- (void)chatBarFrameDidChange:(LCCKChatBar *)chatBar shouldScrollToBottom:(BOOL)shouldScrollToBottom;
 
 /*!
  *  发送图片信息,支持多张图片

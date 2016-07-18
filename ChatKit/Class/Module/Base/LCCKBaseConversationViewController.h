@@ -6,7 +6,6 @@
 //  Copyright © 2016年 ElonChan. All rights reserved.
 //
 
-
 #import "LCCKChatBar.h"
 #import "LCCKConversationViewModel.h"
 #import "LCCKBaseTableViewController.h"
@@ -25,6 +24,9 @@
  *  @return 返回BOOL值，判定是否拥有这个功能
  */
 @property (nonatomic, assign) BOOL shouldLoadMoreMessagesScrollToTop;
+@property (nonatomic, assign) BOOL allowScrollToBottom;
+//somewhere in the header
+@property (nonatomic, assign) CGFloat tableViewLastContentOffset;
 
 /**
  *  是否滚动到底部

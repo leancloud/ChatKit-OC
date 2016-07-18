@@ -7,7 +7,7 @@
 //
 //#define LCCKDebugging 1
 #import "LCCKBaseConversationViewController.h"
-#import <AVOSCloudIM/AVOSCloudIM.h>
+
 #import "LCCKCellRegisterController.h"
 #import "LCCKChatBar.h"
 #import "MJRefresh.h"
@@ -105,7 +105,7 @@ static CGFloat const LCCKScrollViewInsetTop = 20.f;
 }
 
 - (void)scrollToBottomAnimated:(BOOL)animated {
-    if (![self shouldAllowScroll]) {
+    if (!self.allowScrollToBottom || self.isUserScrolling) {
         return;
     }
     NSInteger rows = [self.tableView numberOfRowsInSection:0];
@@ -140,11 +140,11 @@ static CGFloat const LCCKScrollViewInsetTop = 20.f;
 
 #pragma mark - Previte Method
 
-- (BOOL)shouldAllowScroll {
-    if (self.isUserScrolling) {
-        return NO;
-    }
-    return YES;
-}
+//- (void)setIsUserScrolling:(BOOL)isUserScrolling {
+//    _isUserScrolling = isUserScrolling;
+//    if (isUserScrolling) {
+////        _allowScrollToBottom = NO;
+//    }
+//}
 
 @end
