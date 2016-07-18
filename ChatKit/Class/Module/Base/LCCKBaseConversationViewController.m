@@ -105,7 +105,7 @@ static CGFloat const LCCKScrollViewInsetTop = 20.f;
 }
 
 - (void)scrollToBottomAnimated:(BOOL)animated {
-    if (!self.allowScrollToBottom || self.isUserScrolling) {
+    if (!self.allowScrollToBottom) {
         return;
     }
     NSInteger rows = [self.tableView numberOfRowsInSection:0];

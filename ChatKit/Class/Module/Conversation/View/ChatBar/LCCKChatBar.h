@@ -40,7 +40,13 @@ typedef NS_ENUM(NSUInteger, LCCKFunctionViewShowType){
 @interface LCCKChatBar : UIView
 
 @property (weak, nonatomic) id<LCCKChatBarDelegate> delegate;
-@property (copy, nonatomic) NSString *cachedText; /**< 缓存下输入框文字，兼具内存缓存和本地数据库缓存的作用 */
+
+/*!
+ *
+ 缓存输入框文字，兼具内存缓存和本地数据库缓存的作用。同时也负责着输入框内容被清空时的监听，收缩键盘。内部重写了setter方法，self.cachedText 就相当于self.textView.text，使用最重要的场景：为了显示voiceButton，self.textView.text = nil;
+
+ */
+@property (copy, nonatomic) NSString *cachedText;
 @property (nonatomic, assign) LCCKFunctionViewShowType showType;
 /*!
  * 追加后，输入框默认开启编辑模式

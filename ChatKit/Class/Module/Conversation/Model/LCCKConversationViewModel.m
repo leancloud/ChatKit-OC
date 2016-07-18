@@ -495,7 +495,7 @@
     [self.parentConversationViewController.chatBar endInputing];
 }
 
-- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
     self.parentConversationViewController.isUserScrolling = NO;
     BOOL allowScrollToBottom = self.parentConversationViewController.allowScrollToBottom;
     CGFloat frameBottomToContentBottom = scrollView.contentSize.height - scrollView.frame.size.height - scrollView.contentOffset.y;
