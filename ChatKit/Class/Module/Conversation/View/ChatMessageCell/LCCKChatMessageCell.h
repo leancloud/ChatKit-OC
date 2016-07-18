@@ -24,7 +24,8 @@
 - (void)textMessageCellDoubleTapped:(LCCKChatMessageCell *)messageCell;
 - (void)resendMessage:(LCCKChatMessageCell *)messageCell;
 - (void)avatarImageViewLongPressed:(LCCKChatMessageCell *)messageCell;
-
+- (void)messageCell:(LCCKChatMessageCell *)messageCell didTapLinkText:(NSString *)linkText;
+- (void)fileMessageDidDownload:(LCCKChatMessageCell *)messageCell;
 @end
 
 @interface LCCKChatMessageCell : UITableViewCell
@@ -32,8 +33,8 @@
 @property (nonatomic, strong, readonly) LCCKMessage *message;
 
 //FIXME:retain cycle
-@property (nonatomic, strong) UITableView *tableView;
-@property (nonatomic, strong) NSIndexPath *indexPath;
+@property (nonatomic, weak) UITableView *tableView;
+@property (nonatomic, weak) NSIndexPath *indexPath;
 
 /**
  *  显示用户头像

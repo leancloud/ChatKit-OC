@@ -6,10 +6,13 @@
 //  Copyright © 2016年 LeanCloud. All rights reserved.
 //  All the Typedefine for all kinds of services.
 
-#import <AVOSCloudIM/AVOSCloudIM.h>
+//#import <AVOSCloudIM/AVOSCloudIM.h>
 #import "LCCKConstants.h"
 #import "LCCKSingleton.h"
 #import "LCCKMenuItem.h"
+@class AVIMClient;
+@class AVIMConversation;
+@class AVIMSignature;
 
 @class LCCKConversationViewController;
 @class LCCKConversationListViewController;
@@ -81,6 +84,7 @@ typedef void(^LCCKFetchProfilesBlock)(NSArray<NSString *> *userIds, LCCKFetchPro
 - (void)removeAllCachedProfiles;
 
 - (void)getCachedProfileIfExists:(NSString *)userId name:(NSString **)name avatarURL:(NSURL **)avatarURL error:(NSError * __autoreleasing *)error;
+- (NSArray<id<LCCKUserDelegate>> *)getCachedProfilesIfExists:(NSArray<NSString *> *)userIds error:(NSError * __autoreleasing *)error;
 - (void)getProfileInBackgroundForUserId:(NSString *)userId callback:(LCCKUserResultCallBack)callback;
 - (void)getProfilesInBackgroundForUserIds:(NSArray<NSString *> *)userIds callback:(LCCKUserResultsCallBack)callback;
 - (NSArray<id<LCCKUserDelegate>> *)getProfilesForUserIds:(NSArray<NSString *> *)userIds error:(NSError * __autoreleasing *)error;

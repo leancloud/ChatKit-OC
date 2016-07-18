@@ -40,7 +40,7 @@
 
 - (void)setLcck_unreadCount:(NSInteger)lcck_unreadCount {
     NSNumber *lcck_unreadCountObject = [NSNumber numberWithInteger:lcck_unreadCount];
-    objc_setAssociatedObject(self, @selector(lcck_unreadCount), lcck_unreadCountObject, OBJC_ASSOCIATION_ASSIGN);
+    objc_setAssociatedObject(self, @selector(lcck_unreadCount), lcck_unreadCountObject, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
 - (BOOL)lcck_mentioned {
