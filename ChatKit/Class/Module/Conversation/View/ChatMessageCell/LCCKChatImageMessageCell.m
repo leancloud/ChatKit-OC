@@ -90,12 +90,15 @@
 
         // requied!
         if (message.originPhotoURL) {
-            [self.messageImageView  sd_setImageWithURL:message.originPhotoURL placeholderImage:[self imageInBundleForImageName:@"Placeholder_Accept_Defeat"]
+            [self.messageImageView  sd_setImageWithURL:message.originPhotoURL placeholderImage:[self imageInBundleForImageName:@"Placeholder_Image"]
                                              completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
                                                  dispatch_async(dispatch_get_main_queue(),^{
                                                      if (image){
                                                          message.photo = image;
                                                          message.thumbnailPhoto = [image lcck_imageByScalingAspectFill];
+                                                         if ([self.delegate respondsToSelector:@selector(fileMessageDidDownload:)]) {
+                                                             [self.delegate fileMessageDidDownload:self];
+                                                         }
                                                      }
                                                  });
                                                  
