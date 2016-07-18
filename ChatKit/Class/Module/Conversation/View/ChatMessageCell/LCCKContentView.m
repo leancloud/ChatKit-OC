@@ -11,7 +11,7 @@
 @implementation LCCKContentView
 
 - (instancetype)init {
-    if ([super init]) {
+    if (self = [super init]) {
         CAShapeLayer *maskLayer = [CAShapeLayer layer];
         maskLayer.fillColor = [UIColor grayColor].CGColor;
         maskLayer.contentsCenter = CGRectMake(.7f, .7f, .1f, .1f);

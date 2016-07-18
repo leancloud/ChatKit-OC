@@ -24,17 +24,17 @@ static NSMutableDictionary *attributedStringCache = nil;
             break;
             
         case kAVIMMessageMediaTypeAudio:
-            title = NSLocalizedStringFromTable(@"Voice", @"LCChatKitString", @"声音");
+            title = LCCKLocalizedStrings(@"Voice");
             title = [NSString stringWithFormat:@"[%@]",title];
             break;
             
         case kAVIMMessageMediaTypeImage:
-            title = NSLocalizedStringFromTable(@"Photo", @"LCChatKitString", @"图片");
+            title = LCCKLocalizedStrings(@"Photo");
             title = [NSString stringWithFormat:@"[%@]",title];
             break;
             
         case kAVIMMessageMediaTypeLocation:
-            title = NSLocalizedStringFromTable(@"Location", @"LCChatKitString", @"位置");
+            title = LCCKLocalizedStrings(@"Location");
             title = [NSString stringWithFormat:@"[%@]",title];
             break;
             //TODO:
@@ -44,7 +44,7 @@ static NSMutableDictionary *attributedStringCache = nil;
 
 //            break;
         case kAVIMMessageMediaTypeVideo:
-            title = NSLocalizedStringFromTable(@"Video", @"LCChatKitString", @"视频");
+            title = LCCKLocalizedStrings(@"Video");
             title = [NSString stringWithFormat:@"[%@]",title];
 //TODO:
     }
@@ -57,13 +57,13 @@ static NSMutableDictionary *attributedStringCache = nil;
         title = [NSString stringWithFormat:@"%@: %@", userName, title];
     }
     if (conversation.muted && conversation.lcck_unreadCount > 0) {
-        title = [NSString stringWithFormat:@"[%ld条] %@", conversation.lcck_unreadCount, title];
+        title = [NSString stringWithFormat:@"[%@条] %@", @(conversation.lcck_unreadCount), title];
     }
     
     NSString *mentionText = @"[有人@你] ";
     if (conversation.lcck_draft.length > 0) {
         title = conversation.lcck_draft;
-        NSString *draftText = [NSString stringWithFormat:@"[%@]", NSLocalizedStringFromTable(@"draft", @"LCChatKitString", @"草稿")];
+        NSString *draftText = [NSString stringWithFormat:@"[%@]", LCCKLocalizedStrings(@"draft")];
         if (conversation.lcck_mentioned) {
             mentionText = [mentionText stringByAppendingString:draftText];
         } else {

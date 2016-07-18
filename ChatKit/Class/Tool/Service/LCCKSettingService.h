@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "LCCKServiceDefinition.h"
 #import <AVOSCloud/AVOSCloud.h>
-
+@class AVIMVideoMessage;
 /*!
  * LCCKSettingService Error Domain
  */

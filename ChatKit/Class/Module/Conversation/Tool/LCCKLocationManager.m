@@ -208,11 +208,11 @@
     return _geocoder;
 }
 
-- (CGFloat)latitude {
+- (CLLocationDegrees)latitude {
     return self.locationManager.location.coordinate.latitude;
 }
 
-- (CGFloat)longitude {
+- (CLLocationDegrees)longitude {
     return self.locationManager.location.coordinate.longitude;
 }
 

@@ -171,7 +171,7 @@ static NSMutableDictionary *_sharedInstances = nil;
     }];
     
     [[LCChatKit sharedInstance] setLongPressMessageBlock:^NSArray<UIMenuItem *> *(LCCKMessage *message, NSDictionary *userInfo) {
-        LCCKMenuItem *copyItem = [[LCCKMenuItem alloc] initWithTitle:NSLocalizedStringFromTable(@"copy", @"LCChatKitString", @"复制文本消息")
+        LCCKMenuItem *copyItem = [[LCCKMenuItem alloc] initWithTitle:LCCKLocalizedStrings(@"copy")
                                                                block:^{
                                                                    UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
                                                                    [pasteboard setString:[message text]];
@@ -207,12 +207,12 @@ static NSMutableDictionary *_sharedInstances = nil;
         [self exampleOpenProfileForUser:user userId:userId];
     }];
     
-    [[LCChatKit sharedInstance] setAvatarImageViewCornerRadiusBlock:^CGFloat(CGSize avatarImageViewSize) {
-        if (avatarImageViewSize.height > 0) {
-            return avatarImageViewSize.height/2;
-        }
-        return 5;
-    }];
+//    [[LCChatKit sharedInstance] setAvatarImageViewCornerRadiusBlock:^CGFloat(CGSize avatarImageViewSize) {
+//        if (avatarImageViewSize.height > 0) {
+//            return avatarImageViewSize.height/2;
+//        }
+//        return 5;
+//    }];
     
     [[LCChatKit sharedInstance] setShowNotificationBlock:^(UIViewController *viewController, NSString *title, NSString *subtitle, LCCKMessageNotificationType type) {
         [self exampleShowNotificationWithTitle:title subtitle:subtitle type:type];

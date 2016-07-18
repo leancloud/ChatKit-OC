@@ -120,7 +120,7 @@
 - (NSArray<UITableViewRowAction *> *)tableView:(UITableView *)tableView editActionsForRowAtIndexPath:(NSIndexPath *)indexPath {
     LCCKConversationEditActionsBlock conversationEditActionBlock = [[LCCKConversationListService sharedInstance] conversationEditActionBlock];
     AVIMConversation *conversation = [self.dataArray objectAtIndex:indexPath.row];
-    NSArray *editActions = [NSArray array];
+    NSArray *editActions;
     if (conversationEditActionBlock) {
         editActions = conversationEditActionBlock(indexPath, [self defaultRightButtons], conversation, self.conversationListViewController);
     } else {
@@ -159,7 +159,7 @@
 - (NSArray *)defaultRightButtons {
     UITableViewRowAction *actionItemDelete = [UITableViewRowAction
                                               rowActionWithStyle:UITableViewRowActionStyleNormal
-                                              title:NSLocalizedStringFromTable(@"Delete", @"LCChatKitString", @"Delete")
+                                              title:LCCKLocalizedStrings(@"Delete")
                                               handler:^(UITableViewRowAction *action, NSIndexPath *indexPath) {
                                                   AVIMConversation *conversation = [self.dataArray objectAtIndex:indexPath.row];
                                                   [[LCCKConversationService sharedInstance] deleteRecentConversationWithConversationId:conversation.conversationId];

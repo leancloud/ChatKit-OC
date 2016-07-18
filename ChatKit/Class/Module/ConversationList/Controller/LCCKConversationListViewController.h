@@ -8,7 +8,6 @@
 
 #import <UIKit/UIKit.h>
 #import "LCCKBaseTableViewController.h"
-#import <AVOSCloudIM/AVOSCloudIM.h>
 
 /**
  *  对话列表 Cell 的默认高度

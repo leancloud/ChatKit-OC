@@ -32,6 +32,7 @@
  *  @return 所有的表情图片名称
  */
 + (NSArray *)emojiFaces;
+@property (strong, nonatomic, readonly) NSMutableArray *emojiFaceArrays;
 
 + (UIImage *)faceImageWithFaceID:(NSUInteger)faceID;
 + (NSString *)faceNameWithFaceID:(NSUInteger)faceID;
@@ -43,7 +44,7 @@
  *  @return 处理后的文字
  */
 + (NSMutableAttributedString *)emotionStrWithString:(NSString *)text;
-
++ (void)configEmotionWithMutableAttributedString:(NSMutableAttributedString *)attributeString;
 #pragma mark - 最近表情相关处理
 
 /**

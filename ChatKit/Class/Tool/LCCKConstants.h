@@ -30,6 +30,13 @@ typedef void (^LCCKProgressBlock)(NSInteger percentDone);
 
 #define LCCK_DEPRECATED(explain) __attribute__((deprecated(explain)))
 
+
+#ifndef LCCKLocalizedStrings
+#define LCCKLocalizedStrings(key) \
+    NSLocalizedStringFromTableInBundle(key, @"LCChatKitString", [NSBundle bundleWithPath:[[[NSBundle bundleForClass:[LCChatKit class]] resourcePath] stringByAppendingPathComponent:@"Common.bundle"]], nil)
+#endif
+
+
 #ifdef DEBUG
 #define LCCKLog(fmt, ...) NSLog((@"%s [Line %d] " fmt), __PRETTY_FUNCTION__, __LINE__, ## __VA_ARGS__);
 #else
@@ -101,23 +108,23 @@ static NSString *const LCCKNotificationConnectivityUpdated = @"LCCKNotificationC
     [LCCKTestPersonProfiles valueForKeyPath:LCCKProfileKeyPeerId]
 
 
-#define localize(key, default) NSLocalizedStringFromTable(key, @"LCChatKitString", default)
+#define localize(key, default) LCCKLocalizedStrings(key)
 
 #pragma mark - Message Bars
 
-#define kStringMessageBarErrorTitle localize(@"message.bar.error.title", @"Error Title")
-#define kStringMessageBarErrorMessage localize(@"message.bar.error.message", @"This is an error message!")
-#define kStringMessageBarSuccessTitle localize(@"message.bar.success.title", @"Success Title")
-#define kStringMessageBarSuccessMessage localize(@"message.bar.success.message", @"This is a success message!")
-#define kStringMessageBarInfoTitle localize(@"message.bar.info.title", @"--------")
-#define kStringMessageBarInfoMessage localize(@"message.bar.info.message", @"--------")
+#define kStringMessageBarErrorTitle localize(@"message.bar.error.title")
+#define kStringMessageBarErrorMessage localize(@"message.bar.error.message")
+#define kStringMessageBarSuccessTitle localize(@"message.bar.success.title")
+#define kStringMessageBarSuccessMessage localize(@"message.bar.success.message")
+#define kStringMessageBarInfoTitle localize(@"message.bar.info.title")
+#define kStringMessageBarInfoMessage localize(@"message.bar.info.message")
 
 #pragma mark - Buttons
 
-#define kStringButtonLabelSuccessMessage localize(@"button.label.success.message", @"Success Message")
-#define kStringButtonLabelErrorMessage localize(@"button.label.error.message", @"Error Message")
-#define kStringButtonLabelInfoMessage localize(@"button.label.info.message", @"Information Message")
-#define kStringButtonLabelHideAll localize(@"button.label.hide.all", @"Hide All")
+#define kStringButtonLabelSuccessMessage localize(@"button.label.success.message")
+#define kStringButtonLabelErrorMessage localize(@"button.label.error.message")
+#define kStringButtonLabelInfoMessage localize(@"button.label.info.message")
+#define kStringButtonLabelHideAll localize(@"button.label.hide.all")
 
 static NSString *const LCCK_CONVERSATION_TYPE = @"type";
 
@@ -198,6 +205,15 @@ typedef enum : NSUInteger {
     /// 成功
     LCCKMessageHUDActionTypeSuccess
 } LCCKMessageHUDActionType;
+
+typedef enum : NSUInteger {
+    LCCKScrollDirectionNone,
+    LCCKScrollDirectionRight,
+    LCCKScrollDirectionLeft,
+    LCCKScrollDirectionUp,
+    LCCKScrollDirectionDown,
+    LCCKScrollDirectionCrazy,
+} LCCKScrollDirection;
 
 ///-------------------------------------------------------------------------
 ///---------------------Succeed Message Store-------------------------------

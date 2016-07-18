@@ -156,16 +156,11 @@ static CGFloat const kFailureMessageTime = 0.3f;
 
 - (BOOL)lcck_alertError:(NSError *)error {
     if (error) {
-//        if (error.code == kAVIMErrorConnectionLost) {
-//            [self alert:@"未能连接聊天服务"];
-//        }
-//        else
             if ([error.domain isEqualToString:NSURLErrorDomain]) {
             [self lcck_alert:@"网络连接发生错误"];
-        }
-        else {
+        } else {
 #ifndef DEBUG
-            [self alert:[NSString stringWithFormat:@"%@", error]];
+            [self lcck_alert:[NSString stringWithFormat:@"%@", error]];
 #else
             NSString *info = error.localizedDescription;
             [self lcck_alert:info ? info : [NSString stringWithFormat:@"%@", error]];

@@ -50,7 +50,7 @@
 @implementation LCCKConversationViewModel
 
 - (instancetype)initWithParentViewController:(LCCKConversationViewController *)parentConversationViewController {
-    if ([super init]) {
+    if (self = [super init]) {
         _dataArray = [NSMutableArray array];
         _avimTypedMessage = [NSMutableArray array];
         _parentConversationViewController = parentConversationViewController;
@@ -90,19 +90,20 @@
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
     //设置正确的voiceMessageCell播放状态
-    LCCKMessage *message = self.dataArray[indexPath.row];
-    if (message.messageMediaType == LCCKMessageTypeVoice) {
-        if (indexPath.row == [[LCCKAVAudioPlayer sharePlayer] index]) {
+    if (indexPath.row == [[LCCKAVAudioPlayer sharePlayer] index]) {
+        LCCKMessage *message = self.dataArray[indexPath.row];
+        if (message.messageMediaType == LCCKMessageTypeVoice) {
             [(LCCKChatVoiceMessageCell *)cell setVoiceMessageState:[[LCCKAVAudioPlayer sharePlayer] audioPlayerState]];
         }
     }
 }
 
 #pragma mark - LCCKChatServerDelegate
-
+//FIXME:because of Memory Leak ,this method will be invoked for many times
 - (void)receiveMessage:(NSNotification *)notification {
     AVIMTypedMessage *message = notification.object;
     AVIMConversation *currentConversation = [LCCKConversationService sharedInstance].currentConversation;
+//    AVIMConversation *currentConversation = self.parentConversationViewController.conversation;
     if ([message.conversationId isEqualToString:currentConversation.conversationId]) {
         if (currentConversation.muted == NO) {
             [[LCCKSoundManager defaultManager] playReceiveSoundIfNeed];
@@ -270,15 +271,15 @@
 }
 
 - (void)resendMessageForMessageCell:(LCCKChatMessageCell *)messageCell {
-    NSString *title = [NSString stringWithFormat:@"%@?", NSLocalizedStringFromTable(@"resend", @"LCChatKitString", @"重新发送？")];
+    NSString *title = [NSString stringWithFormat:@"%@?", LCCKLocalizedStrings(@"resend")];
     LCCKAlertController *alert = [LCCKAlertController alertControllerWithTitle:title
                                                                        message:@""
                                                                 preferredStyle:LCCKAlertControllerStyleAlert];
-    NSString *cancelActionTitle = NSLocalizedStringFromTable(@"cancel", @"LCChatKitString", @"取消");
+    NSString *cancelActionTitle = LCCKLocalizedStrings(@"cancel");
     LCCKAlertAction* cancelAction = [LCCKAlertAction actionWithTitle:cancelActionTitle style:LCCKAlertActionStyleDefault
                                                              handler:^(LCCKAlertAction * action) {}];
     [alert addAction:cancelAction];
-    NSString *resendActionTitle = NSLocalizedStringFromTable(@"resend", @"LCChatKitString", @"重新发送");
+    NSString *resendActionTitle = LCCKLocalizedStrings(@"resend");
     LCCKAlertAction* resendAction = [LCCKAlertAction actionWithTitle:resendActionTitle style:LCCKAlertActionStyleDefault
                                                              handler:^(LCCKAlertAction * action) {
                                                                  [self resendMessageAtIndexPath:messageCell.indexPath];
@@ -411,26 +412,30 @@
 }
 
 - (void)insertOldMessages:(NSArray *)oldMessages completion:(void (^)())completion {
-    NSMutableArray *messages = [NSMutableArray arrayWithArray:oldMessages];
-    [messages addObjectsFromArray:self.dataArray];
-    CGSize beforeContentSize = self.parentConversationViewController.tableView.contentSize;
-    NSMutableArray *indexPaths = [NSMutableArray arrayWithCapacity:oldMessages.count];
-    [oldMessages enumerateObjectsUsingBlock:^(LCCKMessage *message, NSUInteger idx, BOOL *stop) {
-        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:idx inSection:0];
-        [indexPaths addObject:indexPath];
-    }];
-    [UIView setAnimationsEnabled:NO];
-    [self.parentConversationViewController.tableView beginUpdates];
-    self.dataArray = [messages mutableCopy];
-    [self.parentConversationViewController.tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationNone];
-    [self.parentConversationViewController.tableView reloadData];
-    [self.parentConversationViewController.tableView endUpdates];
-    CGSize afterContentSize = self.parentConversationViewController.tableView.contentSize;
-    CGPoint afterContentOffset = self.parentConversationViewController.tableView.contentOffset;
-    CGPoint newContentOffset = CGPointMake(afterContentOffset.x, afterContentOffset.y + afterContentSize.height - beforeContentSize.height);
-    [self.parentConversationViewController.tableView setContentOffset:newContentOffset animated:NO] ;
-    [UIView setAnimationsEnabled:YES];
-    completion();
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
+        NSMutableArray *messages = [NSMutableArray arrayWithArray:oldMessages];
+        [messages addObjectsFromArray:self.dataArray];
+        CGSize beforeContentSize = self.parentConversationViewController.tableView.contentSize;
+        NSMutableArray *indexPaths = [NSMutableArray arrayWithCapacity:oldMessages.count];
+        [oldMessages enumerateObjectsUsingBlock:^(LCCKMessage *message, NSUInteger idx, BOOL *stop) {
+            NSIndexPath *indexPath = [NSIndexPath indexPathForRow:idx inSection:0];
+            [indexPaths addObject:indexPath];
+        }];
+        dispatch_async(dispatch_get_main_queue(),^{
+            [UIView setAnimationsEnabled:NO];
+            [self.parentConversationViewController.tableView beginUpdates];
+            self.dataArray = [messages mutableCopy];
+            [self.parentConversationViewController.tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationNone];
+            [self.parentConversationViewController.tableView reloadData];
+            [self.parentConversationViewController.tableView endUpdates];
+            CGSize afterContentSize = self.parentConversationViewController.tableView.contentSize;
+            CGPoint afterContentOffset = self.parentConversationViewController.tableView.contentOffset;
+            CGPoint newContentOffset = CGPointMake(afterContentOffset.x, afterContentOffset.y + afterContentSize.height - beforeContentSize.height);
+            [self.parentConversationViewController.tableView setContentOffset:newContentOffset animated:NO] ;
+            [UIView setAnimationsEnabled:YES];
+            completion();
+        });
+    });
 }
 
 - (void)getAllVisibleImagesForSelectedMessage:(LCCKMessage *)message
@@ -492,6 +497,15 @@
 
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
     self.parentConversationViewController.isUserScrolling = NO;
+    BOOL allowScrollToBottom = self.parentConversationViewController.allowScrollToBottom;
+    CGFloat frameBottomToContentBottom = scrollView.contentSize.height - scrollView.frame.size.height - scrollView.contentOffset.y;
+    //200：差不多是两行
+    if (frameBottomToContentBottom < 200) {
+        allowScrollToBottom = YES;
+    } else {
+        allowScrollToBottom = NO;
+    }
+    self.parentConversationViewController.allowScrollToBottom = allowScrollToBottom;
 }
 
 @end

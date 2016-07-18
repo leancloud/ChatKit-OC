@@ -57,7 +57,7 @@ static CGFloat LCCKHorizontalLittleSpacing = 5;
         _statusLabel = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(_statusImageView.frame) + LCCKHorizontalLittleSpacing, 0, self.frame.size.width - CGRectGetMaxX(_statusImageView.frame) - LCCKHorizontalSpacing - LCCKHorizontalLittleSpacing, LCCKStatusViewHight)];
         _statusLabel.font = [UIFont systemFontOfSize:15.0];
         _statusLabel.textColor = [UIColor grayColor];
-        _statusLabel.text = NSLocalizedStringFromTable(@"netDisconnected", @"LCChatKitString", @"当前网络不可用，请检查你的网络设置");
+        _statusLabel.text = LCCKLocalizedStrings(@"netDisconnected");
     }
     return _statusLabel;
 }

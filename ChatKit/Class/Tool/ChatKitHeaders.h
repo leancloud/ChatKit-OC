@@ -1,5 +1,5 @@
 //
-//  IMKitHeaders.h
+//  ChatKitHeaders.h
 //  LeanCloudIMKit-iOS
 //
 //  Created by 陈宜龙 on 16/3/11.

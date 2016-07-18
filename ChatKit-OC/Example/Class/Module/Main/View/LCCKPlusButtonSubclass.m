@@ -73,12 +73,6 @@
     [LCChatKitExample exampleOpenConversationViewControllerWithConversaionId:@"570da6a9daeb3a63ca5b07b0" fromNavigationController:nil];
 }
 
-#pragma mark - UIActionSheetDelegate
-
-- (void)actionSheet:(UIActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger)buttonIndex {
-    NSLog(@"buttonIndex = %ld", buttonIndex);
-}
-
 //+ (NSUInteger)indexOfPlusButtonInTabBar {
 //    return 3;
 //}

@@ -24,7 +24,7 @@
 @implementation LCCKFacePreviewView
 
 - (instancetype)initWithFrame:(CGRect)frame {
-    if ([super initWithFrame:frame]) {
+    if (self = [super initWithFrame:frame]) {
         [self setup];
     }
     return self;
@@ -77,7 +77,7 @@
 @implementation LCCKFacePageView
 
 - (instancetype)initWithFrame:(CGRect)frame {
-    if ([super initWithFrame:frame]) {
+    if (self = [super initWithFrame:frame]) {
         self.imageViews = [NSMutableArray array];
         
         UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleLongPress:)];

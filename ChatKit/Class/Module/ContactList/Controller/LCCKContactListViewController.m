@@ -28,7 +28,10 @@ static NSString *const LCCKContactListViewControllerIdentifier = @"LCCKContactLi
 //=========================================================
 //================ searchResults TableView ================
 //=========================================================
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
 @property (nonatomic, strong) UISearchDisplayController *searchController;
+#pragma clang diagnostic pop
 @property (nonatomic, copy) NSArray *searchContacts;
 @property (nonatomic, copy) NSDictionary *searchSections;
 @property (nonatomic, copy) NSArray<NSString *> *searchUserIds;
@@ -120,22 +123,13 @@ static NSString *const LCCKContactListViewControllerIdentifier = @"LCCKContactLi
     [super viewDidLoad];
     self.navigationItem.title = @"联系人";
     UISearchBar *searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, 44)];
-    [searchBar sizeToFit];
+//    [searchBar sizeToFit];
     searchBar.delegate = self;
     searchBar.placeholder = @"搜索";
     self.tableView.tableHeaderView = searchBar;
     self.tableView.tableFooterView = [[UIView alloc] init];
-    UISearchDisplayController *searchDisplayController = [[UISearchDisplayController alloc] initWithSearchBar:searchBar contentsController:self];
-    // searchResultsDataSource 就是 UITableViewDataSource
-    searchDisplayController.searchResultsDataSource = self;
-    // searchResultsDelegate 就是 UITableViewDelegate
-    searchDisplayController.searchResultsDelegate = self;
-    searchDisplayController.delegate = self;
-    self.searchController = searchDisplayController;
-    searchDisplayController.searchResultsTableView.tableFooterView = [[UIView alloc] init];
     NSBundle *bundle = [NSBundle bundleForClass:[LCChatKit class]];
-    [searchDisplayController.searchResultsTableView registerNib:[UINib nibWithNibName:@"LCCKContactCell" bundle:bundle]
-                                         forCellReuseIdentifier:LCCKContactListViewControllerIdentifier];
+    [self setupSearchBarControllerWithSearchBar:searchBar bundle:bundle];
     [self.tableView registerNib:[UINib nibWithNibName:@"LCCKContactCell" bundle:bundle]
          forCellReuseIdentifier:LCCKContactListViewControllerIdentifier];
     self.tableView.separatorColor = [UIColor colorWithWhite:1.f*0xdf/0xff alpha:1.f];
@@ -163,6 +157,23 @@ static NSString *const LCCKContactListViewControllerIdentifier = @"LCCKContactLi
         //        [self.tableView setEditing:YES animated:NO];
     }
 }
+
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+- (void)setupSearchBarControllerWithSearchBar:(UISearchBar *)searchBar bundle:(NSBundle *)bundle {
+    UISearchDisplayController *searchDisplayController = [[UISearchDisplayController alloc] initWithSearchBar:searchBar contentsController:self];
+    // searchResultsDataSource 就是 UITableViewDataSource
+    searchDisplayController.searchResultsDataSource = self;
+    // searchResultsDelegate 就是 UITableViewDelegate
+    searchDisplayController.searchResultsDelegate = self;
+    searchDisplayController.delegate = self;
+    self.searchController = searchDisplayController;
+    searchDisplayController.searchResultsTableView.tableFooterView = [[UIView alloc] init];
+    [searchDisplayController.searchResultsTableView registerNib:[UINib nibWithNibName:@"LCCKContactCell" bundle:bundle]
+                                         forCellReuseIdentifier:LCCKContactListViewControllerIdentifier];
+}
+
+#pragma clang diagnostic pop
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
@@ -323,9 +334,12 @@ static NSString *const LCCKContactListViewControllerIdentifier = @"LCCKContactLi
 }
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
     if ([tableView isEqual:self.searchDisplayController.searchResultsTableView]) {
         return NO;
     }
+#pragma clang diagnostic pop
     if (self.mode == LCCKContactListModeNormal) {
         return YES;
     }
@@ -348,16 +362,16 @@ static NSString *const LCCKContactListViewControllerIdentifier = @"LCCKContactLi
     if (self.mode == LCCKContactListModeNormal) {
         NSString *peerId = [self currentClientIdAtIndexPath:indexPath tableView:tableView];
         if (editingStyle == UITableViewCellEditingStyleDelete) {
-            NSString *title = [NSString stringWithFormat:@"%@?", NSLocalizedStringFromTable(@"deleteFriend", @"LCChatKitString", @"解除好友关系吗")];
+            NSString *title = [NSString stringWithFormat:@"%@?",
+                               LCCKLocalizedStrings(@"ConfirmDeletion")
+                               ];
             LCCKAlertController *alert = [LCCKAlertController alertControllerWithTitle:title
                                                                                message:@""
                                                                         preferredStyle:LCCKAlertControllerStyleAlert];
-            NSString *cancelActionTitle = NSLocalizedStringFromTable(@"cancel", @"LCChatKitString", @"取消");
-            LCCKAlertAction* cancelAction = [LCCKAlertAction actionWithTitle:cancelActionTitle style:LCCKAlertActionStyleDefault
+            NSString *cancelActionTitle = LCCKLocalizedStrings(@"cancel");            LCCKAlertAction* cancelAction = [LCCKAlertAction actionWithTitle:cancelActionTitle style:LCCKAlertActionStyleDefault
                                                                      handler:^(LCCKAlertAction * action) {}];
             [alert addAction:cancelAction];
-            NSString *resendActionTitle = NSLocalizedStringFromTable(@"ok", @"LCChatKitString", @"确定");
-            LCCKAlertAction* resendAction = [LCCKAlertAction actionWithTitle:resendActionTitle style:LCCKAlertActionStyleDefault
+            NSString *resendActionTitle = LCCKLocalizedStrings(@"ok");            LCCKAlertAction* resendAction = [LCCKAlertAction actionWithTitle:resendActionTitle style:LCCKAlertActionStyleDefault
                                                                      handler:^(LCCKAlertAction * action) {
                                                                          if (self.deleteContactCallback) {
                                                                              BOOL delegateSuccess = self.deleteContactCallback(self, peerId);
@@ -376,9 +390,12 @@ static NSString *const LCCKContactListViewControllerIdentifier = @"LCCKContactLi
 #pragma mark - Data
 
 - (NSDictionary *)currentSectionsForTableView:(UITableView *)tableView {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
     if ([tableView isEqual:self.searchDisplayController.searchResultsTableView]) {
         return self.searchSections;
     }
+#pragma clang diagnostic pop
     return self.originSections;
 }
 
@@ -435,7 +452,10 @@ static NSString *const LCCKContactListViewControllerIdentifier = @"LCCKContactLi
 }
 
 - (NSDictionary *)searchSections {
-    return  [self sortedSectionForUserNames:[self contactsFromContactsOrUserIds:self.searchContacts userIds:self.searchUserIds]];
+    if (!_searchSections) {
+        _searchSections = [self sortedSectionForUserNames:[self contactsFromContactsOrUserIds:self.searchContacts userIds:self.searchUserIds]];
+    }
+    return _searchSections;
 }
 
 - (NSDictionary *)originSections {
@@ -498,6 +518,8 @@ static NSString *const LCCKContactListViewControllerIdentifier = @"LCCKContactLi
     [self reloadData:self.tableView];
 }
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
 #pragma mark - UISearchBarDelegate
 
 - (BOOL)searchBarShouldBeginEditing:(UISearchBar *)searchBar {
@@ -521,7 +543,10 @@ static NSString *const LCCKContactListViewControllerIdentifier = @"LCCKContactLi
     return YES;
 }
 
+#pragma clang diagnostic pop
+
 - (void)filterContentForSearchText:(NSString *)searchString {
+    self.searchSections = nil;
     //  for (NSString *searchString in searchItems) {
     // each searchString creates an OR predicate for: name, id
     //

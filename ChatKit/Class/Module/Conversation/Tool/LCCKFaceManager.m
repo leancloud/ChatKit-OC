@@ -23,7 +23,7 @@
         
         NSArray *faceArray = [NSArray arrayWithContentsOfFile:[LCCKFaceManager defaultEmojiFacePath]];
         [_emojiFaceArrays addObjectsFromArray:faceArray];
-
+        
         NSArray *recentArrays = [[NSUserDefaults standardUserDefaults] arrayForKey:@"recentFaceArrays"];
         if (recentArrays) {
             _recentFaceArrays = [NSMutableArray arrayWithArray:recentArrays];
@@ -91,6 +91,71 @@
     return @"";
 }
 
++ (void)configEmotionWithMutableAttributedString:(NSMutableAttributedString *)attributeString {
+    NSString *text = [attributeString string];
+    if (!text.length) {
+        //            return [[NSMutableAttributedString alloc] initWithString:@"【此版本暂不支持该格式，请升级至最新版查看】"];
+        return;
+    }
+    //2、通过正则表达式来匹配字符串
+    NSString *regex_emoji = @"\\[[a-zA-Z0-9\\/\\u4e00-\\u9fa5]+\\]"; //匹配表情
+    
+    NSError *error = nil;
+    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:regex_emoji options:NSRegularExpressionCaseInsensitive error:&error];
+    if (!regex) {
+        NSLog(@"%@", [error localizedDescription]);
+        return;
+    }
+    NSArray *matches = [regex matchesInString:text
+                                      options:0
+                                        range:NSMakeRange(0, text.length)];
+    NSUInteger emojiNumbers = matches.count;
+    //无表情
+    if (emojiNumbers == 0) {
+        return;
+    }
+    
+    //3、获取所有的表情以及位置
+    //用来存放字典，字典中存储的是图片和图片对应的位置
+    NSMutableArray *imageArray = [NSMutableArray arrayWithCapacity:matches.count];
+    //根据匹配范围来用图片进行相应的替换
+    for(NSTextCheckingResult *match in matches) {
+        //获取数组元素中得到range
+        NSRange range = [match range];
+        //获取原字符串中对应的值
+        NSString *subStr = [text substringWithRange:range];
+        NSMutableArray *emojiFaceArrays = [[LCCKFaceManager shareInstance] emojiFaceArrays];
+        for (NSDictionary *dict in emojiFaceArrays) {
+            if ([dict[kFaceNameKey]  isEqualToString:subStr]) {
+                //face[i][@"png"]就是我们要加载的图片
+                //新建文字附件来存放我们的图片,iOS7才新加的对象
+                NSTextAttachment *textAttachment = [[NSTextAttachment alloc] init];
+                //给附件添加图片
+                textAttachment.image = [UIImage lcck_imageNamed:dict[kFaceImageNameKey] bundleName:@"Emoji" bundleForClass:[self class]];
+                //调整一下图片的位置,如果你的图片偏上或者偏下，调整一下bounds的y值即可
+                textAttachment.bounds = CGRectMake(0, -8, textAttachment.image.size.width, textAttachment.image.size.height);
+                //把附件转换成可变字符串，用于替换掉源字符串中的表情文字
+                NSAttributedString *imageStr = [NSAttributedString attributedStringWithAttachment:textAttachment];
+                //把图片和图片对应的位置存入字典中
+                NSMutableDictionary *imageDic = [NSMutableDictionary dictionaryWithCapacity:2];
+                [imageDic setObject:imageStr forKey:@"image"];
+                [imageDic setObject:[NSValue valueWithRange:range] forKey:@"range"];
+                //把字典存入数组中
+                [imageArray addObject:imageDic];
+                break;
+            }
+        }
+    }
+    
+    //4、从后往前替换，否则会引起位置问题
+    for (int i = (int)imageArray.count -1; i >= 0; i--) {
+        NSRange range;
+        [imageArray[i][@"range"] getValue:&range];
+        //进行替换
+        [attributeString replaceCharactersInRange:range withAttributedString:imageArray[i][@"image"]];
+    }
+}
+
 + (NSMutableAttributedString *)emotionStrWithString:(NSString *)text {
     if (!text.length) {
         return [[NSMutableAttributedString alloc] initWithString:@"【此版本暂不支持该格式，请升级至最新版查看】"];
@@ -146,7 +211,7 @@
             }
         }
     }
-     
+    
     //4、从后往前替换，否则会引起位置问题
     for (int i = (int)imageArray.count -1; i >= 0; i--) {
         NSRange range;

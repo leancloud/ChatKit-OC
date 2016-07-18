@@ -18,29 +18,6 @@
 #endif
 #import "LCCKLoginViewController.h"
 
-@implementation NSData (GMNSDataHexAdditions)
-
-- (NSString *)gm_hexadecimalEncodedString {
-    static const char *hexChars = "0123456789ABCDEF";
-    NSUInteger slen = [self length];
-    NSUInteger dlen = slen * 2;
-    const unsigned char	*src = (const unsigned char *)[self bytes];
-    char *dst = (char *)NSZoneMalloc(NSDefaultMallocZone(), dlen);
-    NSUInteger spos = 0;
-    NSUInteger dpos = 0;
-    unsigned char	c;
-    while (spos < slen) {
-        c = src[spos++];
-        dst[dpos++] = hexChars[(c >> 4) & 0x0f];
-        dst[dpos++] = hexChars[c & 0x0f];
-    }
-    NSData *data = [[NSData alloc] initWithBytesNoCopy:dst length:dlen];
-    NSString *string = [[NSString alloc] initWithData:data encoding:NSASCIIStringEncoding];
-    //    [data release];
-    return string;
-}
-
-@end
 @interface AppDelegate ()
 
 @end

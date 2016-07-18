@@ -43,7 +43,7 @@ static CGFloat const LCCKAvatarToMessageContent = 5.f;
 @implementation LCCKChatMessageCell
 
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
-    if ([super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
+    if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
         [self setup];
     }
     return self;
@@ -61,7 +61,7 @@ static CGFloat const LCCKAvatarToMessageContent = 5.f;
 #pragma mark - Life Cycle
 
 - (instancetype)initWithFrame:(CGRect)frame {
-    if ([super initWithFrame:frame]) {
+    if (self = [super initWithFrame:frame]) {
         [self setup];
     }
     return self;
@@ -206,9 +206,16 @@ static CGFloat const LCCKAvatarToMessageContent = 5.f;
     
     [self updateConstraintsIfNeeded];
     
-    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTap:)];
-    [self.contentView addGestureRecognizer:tap];
-    
+    //For Link handle
+    if (![self isKindOfClass:[LCCKChatTextMessageCell class]]) {
+        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTap:)];
+        [self.contentView addGestureRecognizer:tap];
+    }
+    UITapGestureRecognizer *avatarImageViewTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(avatarImageViewHandleTap:)];
+    self.avatarImageView.userInteractionEnabled = YES;
+    [self.avatarImageView addGestureRecognizer:avatarImageViewTap];
+    //    }
+
     UILongPressGestureRecognizer *recognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleLongPress:)];
     [recognizer setMinimumPressDuration:0.4f];
     [self addGestureRecognizer:recognizer];
@@ -239,14 +246,16 @@ static CGFloat const LCCKAvatarToMessageContent = 5.f;
         CGPoint tapPoint = [tap locationInView:self.contentView];
         if (CGRectContainsPoint(self.messageContentView.frame, tapPoint)) {
             [self.delegate messageCellTappedMessage:self];
-        }  else if (CGRectContainsPoint(self.avatarImageView.frame, tapPoint)) {
-            [self.delegate messageCellTappedHead:self];
-        } else {
+        }  else if (!CGRectContainsPoint(self.avatarImageView.frame, tapPoint)) {
             [self.delegate messageCellTappedBlank:self];
         }
     }
 }
-
+- (void)avatarImageViewHandleTap:(UITapGestureRecognizer *)tap {
+    if (tap.state == UIGestureRecognizerStateEnded) {
+        [self.delegate messageCellTappedHead:self];
+    }
+}
 #pragma mark - Setters
 
 - (void)setMessageSendState:(LCCKMessageSendState)messageSendState {
@@ -386,7 +395,7 @@ static CGFloat const LCCKAvatarToMessageContent = 5.f;
             if (longPressMessageBlock) {
                 menuItems = longPressMessageBlock(self.message, userInfo);
             } else {
-                LCCKMenuItem *copyItem = [[LCCKMenuItem alloc] initWithTitle:NSLocalizedStringFromTable(@"copy", @"LCChatKitString", @"复制文本消息")
+                LCCKMenuItem *copyItem = [[LCCKMenuItem alloc] initWithTitle:LCCKLocalizedStrings(@"copy")
                                                                        block:^{
                                                                            UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
                                                                            [pasteboard setString:[self.message text]];
@@ -408,7 +417,6 @@ static CGFloat const LCCKAvatarToMessageContent = 5.f;
                                                        object:nil];
             [menuController setMenuVisible:YES animated:YES];
         });
-        
     }
 }
 

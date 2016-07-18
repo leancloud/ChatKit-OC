@@ -69,8 +69,7 @@ NSString *const kLCCKAudioDataKey;
  */
 - (NSOperationQueue *)audioDataOperationQueue {
     if (_audioDataOperationQueue == nil) {
-        NSOperationQueue *audioDataOperationQueue = [[NSOperationQueue alloc] init];
-        audioDataOperationQueue = [[NSOperationQueue alloc] init];
+        NSOperationQueue *audioDataOperationQueue  = [[NSOperationQueue alloc] init];
         audioDataOperationQueue.name = @"com.LeanCloud.LCCKAVAudipPlayer.loadAudioDataQueue";
         _audioDataOperationQueue = audioDataOperationQueue;
     }
@@ -238,7 +237,6 @@ NSString *const kLCCKAudioDataKey;
 #pragma mark - Getters
 
 - (NSString *)cachePath {
-    
     if (!_cachePath) {
         _cachePath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject] stringByAppendingPathComponent:@"com.LeanCloud.LCCKChat.audioCache"];
         if (![[NSFileManager defaultManager] fileExistsAtPath:_cachePath]) {
@@ -252,7 +250,7 @@ NSString *const kLCCKAudioDataKey;
 
 - (void)setURLString:(NSString *)URLString {
     if (_URLString) {
-        //说明当前有正在播放,或者正在加载的视频,取消operation(如果没有在执行任务),停止播放
+        //说明当前有正在播放, 或者正在加载的视频,取消 operation(如果没有在执行任务),停止播放
         [self cancelOperation];
         [self stopAudioPlayer];
         [self setAudioPlayerState:LCCKVoiceMessageStateCancel];

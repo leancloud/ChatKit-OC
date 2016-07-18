@@ -7,7 +7,7 @@
 //
 
 #import "LCCKSettingService.h"
-#import "AVOSCloud/AVOSCloud.h"
+#import "AVOSCloudIM/AVIMVideoMessage.h"
 
 NSString *const LCCKSettingServiceErrorDomain = @"LCCKSettingServiceErrorDomain";
 
