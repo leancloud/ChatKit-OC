@@ -10,6 +10,7 @@
 #import "Masonry.h"
 #import "LCCKMessageVoiceFactory.h"
 #import "LCCKAVAudioPlayer.h"
+static void * const LCCKChatVoiceMessageCellVoiceMessageStateContext = (void*)&LCCKChatVoiceMessageCellVoiceMessageStateContext;
 
 @interface LCCKChatVoiceMessageCell ()
 
@@ -78,6 +79,34 @@
     [self.messageContentView addGestureRecognizer:recognizer];
     [super setup];
     self.voiceMessageState = LCCKVoiceMessageStateNormal;
+    [[LCCKAVAudioPlayer sharePlayer]  addObserver:self forKeyPath:@"audioPlayerState" options:NSKeyValueObservingOptionNew context:LCCKChatVoiceMessageCellVoiceMessageStateContext];
+}
+
+- (void)dealloc {
+    // KVO反注册
+    [[LCCKAVAudioPlayer sharePlayer] removeObserver:self forKeyPath:@"audioPlayerState"];
+}
+
+// KVO监听执行
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
+    if(context != LCCKChatVoiceMessageCellVoiceMessageStateContext) {
+        [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
+        return;
+    }
+    if(context == LCCKChatVoiceMessageCellVoiceMessageStateContext) {
+        //if ([keyPath isEqualToString:@"audioPlayerState"]) {
+        NSNumber *audioPlayerStateNumber = change[NSKeyValueChangeNewKey];
+        LCCKVoiceMessageState audioPlayerState = [audioPlayerStateNumber intValue];
+        switch (audioPlayerState) {
+            case LCCKVoiceMessageStateCancel:
+                self.voiceMessageState = LCCKVoiceMessageStateCancel;
+                break;
+            default:
+                break;
+        }
+        
+        
+    }
 }
 
 - (void)singleTapMessageImageViewGestureRecognizerHandler:(UITapGestureRecognizer *)tapGestureRecognizer {
