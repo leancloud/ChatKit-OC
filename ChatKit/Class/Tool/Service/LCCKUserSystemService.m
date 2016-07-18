@@ -12,7 +12,7 @@
 NSString *const LCCKUserSystemServiceErrorDomain = @"LCCKUserSystemServiceErrorDomain";
 
 @interface LCCKUserSystemService ()
-@property (nonatomic, strong) NSMutableDictionary *cachedUsers;
+@property (nonatomic, strong) NSMutableDictionary<NSString *, id<LCCKUserDelegate>> *cachedUsers;
 @end
 
 @implementation LCCKUserSystemService
@@ -119,6 +119,32 @@ NSString *const LCCKUserSystemServiceErrorDomain = @"LCCKUserSystemServiceErrorD
         }
         !callback ?: callback(nil, error);
     }];
+}
+
+- (NSArray<id<LCCKUserDelegate>> *)getCachedProfilesIfExists:(NSArray<NSString *> *)userIds error:(NSError * __autoreleasing *)theError {
+    if (!userIds || userIds.count == 0) {
+        NSInteger code = 0;
+        NSString *errorReasonText = @"UserIds is nil";
+        NSDictionary *errorInfo = @{
+                                    @"code":@(code),
+                                    NSLocalizedDescriptionKey : errorReasonText,
+                                    };
+        NSError *error = [NSError errorWithDomain:LCCKUserSystemServiceErrorDomain
+                                             code:code
+                                         userInfo:errorInfo];
+        if (*theError == nil) {
+            *theError = error;
+        }
+        return nil;
+    }
+    NSMutableArray *cachedProfiles = [NSMutableArray arrayWithCapacity:self.cachedUsers.count * 0.5];
+    NSArray *allCachedUserIds = [self.cachedUsers allKeys];
+    [userIds enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        if ([allCachedUserIds containsObject:obj]) {
+            [cachedProfiles addObject:self.cachedUsers[obj]];
+        }
+    }];
+    return [cachedProfiles copy];
 }
 
 - (void)getCachedProfileIfExists:(NSString *)userId name:(NSString **)name avatarURL:(NSURL **)avatarURL error:(NSError * __autoreleasing *)theError {
