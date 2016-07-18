@@ -27,6 +27,8 @@ typedef void (^LCCKConversationHandler) (AVIMConversation *conversation, LCCKCon
  */
 @property (nonatomic, copy, readonly) NSString *peerId;
 
+@property (nonatomic, strong, readonly) AVIMConversation *conversation;
+
 ///---------------------------------------------------------------------------------------------
 ///---- Initialize a unique single chat type object of LCCKConversationViewController ----------
 ///---------------------------------------------------------------------------------------------
