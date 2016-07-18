@@ -62,10 +62,12 @@
     self.titleLabel.text = title;
     self.subtitleLabel.text = subtitle;
     if (subtitle.length == 0) {
-        [self.subtitleLabel removeFromSuperview];
+        self.subtitleLabel.hidden = YES;
+//        [self.subtitleLabel removeFromSuperview];
     }
-    if (model == LCCKContactListModeNormal) {
-        [self.selectionStatusButton removeFromSuperview];
+    if (model != LCCKContactListModeMultipleSelection) {
+//        [self.selectionStatusButton removeFromSuperview];
+        self.selectionStatusButton.hidden = YES;
     }
 }
 
