@@ -44,7 +44,7 @@ static NSString *const LCCKContactListViewControllerIdentifier = @"LCCKContactLi
 @property (nonatomic, strong) NSMutableArray *selectedContacts;
 
 @property (nonatomic, copy, readwrite) NSArray<LCCKContact *> *contacts;
-
+@property (nonatomic, strong) UISearchBar *searchBar;
 @end
 
 @implementation LCCKContactListViewController
@@ -115,21 +115,26 @@ static NSString *const LCCKContactListViewControllerIdentifier = @"LCCKContactLi
         [self selectedContactCallback](self, selectedContact); //Callback callback to update parent TVC
     }
 }
-
+- (UISearchBar *)searchBar {
+    if (!_searchBar) {
+        UISearchBar *searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, 44)];
+        searchBar.delegate = self;
+        searchBar.placeholder = @"搜索";
+        _searchBar = searchBar;
+        self.tableView.tableHeaderView = _searchBar;
+    }
+    return _searchBar;
+}
 #pragma mark -
 #pragma mark - UIViewController Life
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.navigationItem.title = @"联系人";
-    UISearchBar *searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, 44)];
-//    [searchBar sizeToFit];
-    searchBar.delegate = self;
-    searchBar.placeholder = @"搜索";
-    self.tableView.tableHeaderView = searchBar;
+    self.tableView.tableHeaderView = self.searchBar;
     self.tableView.tableFooterView = [[UIView alloc] init];
     NSBundle *bundle = [NSBundle bundleForClass:[LCChatKit class]];
-    [self setupSearchBarControllerWithSearchBar:searchBar bundle:bundle];
+    [self setupSearchBarControllerWithSearchBar:self.searchBar bundle:bundle];
     [self.tableView registerNib:[UINib nibWithNibName:@"LCCKContactCell" bundle:bundle]
          forCellReuseIdentifier:LCCKContactListViewControllerIdentifier];
     self.tableView.separatorColor = [UIColor colorWithWhite:1.f*0xdf/0xff alpha:1.f];
@@ -524,6 +529,11 @@ static NSString *const LCCKContactListViewControllerIdentifier = @"LCCKContactLi
 
 - (BOOL)searchBarShouldBeginEditing:(UISearchBar *)searchBar {
     [self.searchController setActive:YES animated:YES];
+    return YES;
+}
+
+- (BOOL)searchBarShouldEndEditing:(UISearchBar *)searchBar {
+    [self.searchController setActive:NO animated:YES];
     return YES;
 }
 

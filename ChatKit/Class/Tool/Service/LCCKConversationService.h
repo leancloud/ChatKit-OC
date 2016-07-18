@@ -38,6 +38,8 @@ FOUNDATION_EXTERN NSString *const LCCKConversationServiceErrorDomain;
 
 @property (nonatomic, strong) AVIMConversation *currentConversation;
 
+@property (nonatomic, assign, getter=isContactListViewControllerActivce) BOOL contactListViewControllerActivce;
+
 /*!
  *  根据 conversationId 获取对话
  *  @param conversationId   对话的 id

@@ -423,23 +423,29 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
 
 #pragma mark - Private Methods
 
+- (BOOL)isContactListViewControllerActivce {
+    return [LCCKConversationService sharedInstance].isContactListViewControllerActivce;;
+}
+
 - (void)keyboardWillHide:(NSNotification *)notification {
+    if (self.isContactListViewControllerActivce) {
+        return;
+    }
     self.keyboardFrame = CGRectZero;
-//    self.showType = LCCKFunctionViewShowNothing;
-//    [self updateChatBarConstraints];
     [self textViewDidChange:self.textView shouldCacheText:NO];
     [self chatBarFrameDidChangeShouldScrollToBottom:NO];
 
 }
 
 - (void)keyboardWillShow:(NSNotification *)notification {
+    if (self.isContactListViewControllerActivce) {
+        return;
+    }
     self.showType = LCCKFunctionViewShowKeyboard;
     self.allowTextViewContentOffset = YES;
     self.keyboardFrame = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
-//    [self updateChatBarConstraints];
     [self textViewDidChange:self.textView shouldCacheText:NO];
     [self chatBarFrameDidChangeShouldScrollToBottom:YES];
-
 }
 
 /**
@@ -457,7 +463,6 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
 
 - (void)setup {
     self.allowTextViewContentOffset = YES;
-    self.oldTextViewHeight = kLCCKChatBarTextViewFrameMinHeight;
     self.MP3 = [[Mp3Recorder alloc] initWithDelegate:self];
     [self addSubview:self.inputBarBackgroundView];
     

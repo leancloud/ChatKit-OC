@@ -41,7 +41,6 @@
 @property (nonatomic, copy) LCCKConversationHandler conversationHandler;
 @property (nonatomic, copy) LCCKViewControllerBooleanResultBlock loadHistoryMessagesHandler;
 @property (nonatomic, copy, readwrite) NSString *conversationId;
-
 @end
 
 @implementation LCCKConversationViewController
@@ -326,7 +325,9 @@
     NSArray<id<LCCKUserDelegate>> *users = [[LCCKUserSystemService sharedInstance] getCachedProfilesIfExists:self.conversation.members error:nil];
         LCCKContactListViewController *contactListViewController = [[LCCKContactListViewController alloc] initWithContacts:users userIds:self.conversation.members excludedUserIds:@[cuttentClientId] mode:LCCKContactListModeMultipleSelection];
         [contactListViewController setSelectedContactCallback:^(UIViewController *viewController, NSString *peerId) {
-            [viewController dismissViewControllerAnimated:YES completion:nil];
+            [viewController dismissViewControllerAnimated:YES completion:^{
+                [LCCKConversationService sharedInstance].contactListViewControllerActivce = NO;
+            }];
             if (peerId.length > 0) {
                NSArray *peerNames = [[LCChatKit sharedInstance] getProfilesForUserIds:@[peerId] error:nil];
                 NSString *peerName;
@@ -341,6 +342,7 @@
             }
         }];
         [contactListViewController setSelectedContactsCallback:^(UIViewController *viewController, NSArray<NSString *> *peerIds) {
+             [LCCKConversationService sharedInstance].contactListViewControllerActivce = NO;
             if (peerIds.count > 0) {
                 NSArray<id<LCCKUserDelegate>> *peers = [[LCCKUserSystemService sharedInstance] getCachedProfilesIfExists:peerIds error:nil];
                 NSMutableArray *peerNames;
@@ -363,7 +365,9 @@
             }
         }];
         UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:contactListViewController];
-        [self presentViewController:navigationController animated:YES completion:nil];
+        [self presentViewController:navigationController animated:YES completion:^{
+             [LCCKConversationService sharedInstance].contactListViewControllerActivce = YES;
+        }];
 }
 
 - (void)sendImages:(NSArray<UIImage *> *)pictures {
@@ -428,6 +432,7 @@
         
     } completion:nil];
 }
+
 
 #pragma mark - LCCKChatMessageCellDelegate
 

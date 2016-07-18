@@ -124,4 +124,6 @@ typedef NS_ENUM(NSUInteger, LCCKFunctionViewShowType){
 
 - (NSArray *)regulationForBatchDeleteText;
 
+- (BOOL)isContactListViewControllerActivceForChatBar:(LCCKChatBar *)chatBar;
+
 @end
