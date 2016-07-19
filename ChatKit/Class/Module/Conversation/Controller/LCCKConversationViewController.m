@@ -25,6 +25,7 @@
 #import <objc/runtime.h>
 #import "NSMutableArray+LCCKMessageExtention.h"
 #import "Masonry.h"
+#import "LCCKConversationNavigationTitleView.h"
 
 @interface LCCKConversationViewController () <LCCKChatBarDelegate, LCCKAVAudioPlayerDelegate, LCCKChatMessageCellDelegate, LCCKConversationViewModelDelegate>
 
@@ -234,6 +235,21 @@
     }
 }
 
+- (void)setupNavigationItemTitleWithConversation:(AVIMConversation *)conversation {
+    LCCKConversationNavigationTitleView *navigationItemTitle = [[LCCKConversationNavigationTitleView alloc] initWithConversation:conversation navigationController:self.navigationController];
+    navigationItemTitle.frame = CGRectZero;
+    //仅修高度,xyw值不变
+    navigationItemTitle.frame = ({
+        CGRect frame = navigationItemTitle.frame;
+        CGFloat containerViewHeight = self.navigationController.navigationBar.frame.size.height;
+        CGFloat containerViewWidth = self.navigationController.navigationBar.frame.size.width - 130;
+        frame.size.width = containerViewWidth;
+        frame.size.height = containerViewHeight;
+        frame;
+    });
+    self.navigationItem.titleView = navigationItemTitle;
+}
+
 /*!
  * conversation 不一定有值，可能为 nil
  */
@@ -245,7 +261,7 @@
     if (conversation.members > 0) {
         NSAssert(_conversation.imClient, @"类名与方法名：%@（在第%@行），描述：%@", @(__PRETTY_FUNCTION__), @(__LINE__), @"imClient is nil");
         self.conversationId = conversation.conversationId;
-        self.navigationItem.title = conversation.lcck_title;
+        [self setupNavigationItemTitleWithConversation:conversation];
         [[LCChatKit sharedInstance] getProfilesInBackgroundForUserIds:conversation.members callback:^(NSArray<id<LCCKUserDelegate>> *users, NSError *error) {
             !_conversationHandler ?: _conversationHandler(conversation, self);
         }];
