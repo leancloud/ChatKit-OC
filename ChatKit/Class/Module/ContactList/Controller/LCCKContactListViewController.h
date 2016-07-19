@@ -38,7 +38,7 @@ typedef BOOL (^LCCKDeleteContactCallback)(UIViewController *viewController, NSSt
 @property (nonatomic, copy) NSArray *excludedUserIds;
 
 @property (nonatomic, assign, readonly) LCCKContactListMode mode;
-
+@property (nonatomic, copy) NSString *title;
 @property (nonatomic, copy, readonly) NSArray<LCCKContact *> *contacts;
 - (void)setDeleteContactCallback:(LCCKDeleteContactCallback)deleteContactCallback;
 - (LCCKDeleteContactCallback)deleteContactCallback;

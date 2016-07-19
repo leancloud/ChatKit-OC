@@ -78,4 +78,9 @@
  */
 + (void)exampleOpenConversationViewControllerWithPeerId:(NSString *)peerId fromNavigationController:(UINavigationController *)navigationController;
 
+/*!
+ * 拉群
+ */
++ (void)exampleCreateGroupConversationFromViewController:(UIViewController *)viewController;
+
 @end

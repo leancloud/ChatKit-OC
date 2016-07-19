@@ -19,7 +19,7 @@
 @interface LCCKTabBarControllerConfig ()
 
 @property (nonatomic, readwrite, strong) CYLTabBarController *tabBarController;
-
+@property (nonatomic, strong) LCCKConversationListViewController *firstViewController;
 @end
 
 @implementation LCCKTabBarControllerConfig
@@ -48,6 +48,14 @@
     LCCKConversationListViewController *firstViewController = [[LCCKConversationListViewController alloc] init];
     UINavigationController *firstNavigationController = [[LCCKBaseNavigationController alloc]
                                                          initWithRootViewController:firstViewController];
+    firstViewController.navigationItem.rightBarButtonItem = ({
+        UIButton *createGroupConversationButton = [UIButton buttonWithType:UIButtonTypeContactAdd];
+        [createGroupConversationButton addTarget:self action:@selector(createGroupConversation:) forControlEvents:UIControlEventTouchUpInside];
+        UIBarButtonItem *rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:createGroupConversationButton];
+        rightBarButtonItem;
+    }
+                                                             );
+    self.firstViewController = firstViewController;
     //FIXME:
     NSArray *users = [[LCChatKit sharedInstance] getProfilesForUserIds:self.allPersonIds error:nil];
     NSString *currentClientID = [[LCChatKit sharedInstance] clientId];
@@ -178,6 +186,10 @@
 
 - (void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+- (void)createGroupConversation:(id)sender {
+    [LCChatKitExample exampleCreateGroupConversationFromViewController:self.firstViewController];
 }
 
 @end

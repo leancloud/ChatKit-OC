@@ -143,7 +143,7 @@ static NSString *const LCCKContactListViewControllerIdentifier = @"LCCKContactLi
     }
     [self.navigationItem setTitle:@"联系人"];
     if (self.mode == LCCKContactListModeNormal) {
-        self.navigationItem.title = @"联系人";
+        self.navigationItem.title = self.title ?: @"联系人";
         //TODO:
         //        self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"搜索"
         //                                                                                  style:UIBarButtonItemStylePlain
@@ -154,7 +154,7 @@ static NSString *const LCCKContactListViewControllerIdentifier = @"LCCKContactLi
         //                                                                                 target:self
         //                                                                                 action:@selector(signOut)];
     } else {
-        self.navigationItem.title = @"选择联系人";
+        self.navigationItem.title = self.title ?: @"选择联系人";
         UIBarButtonItem *doneButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone
                                                                                         target:self
                                                                                         action:@selector(doneBarButtonItemPressed:)];

@@ -123,9 +123,14 @@ NSString *const LCCKConversationServiceErrorDomain = @"LCCKConversationServiceEr
 
 - (NSString *)groupConversaionDefaultNameForUserIds:(NSArray *)userIds {
     NSError *error = nil;
-    NSArray *array = [[LCCKUserSystemService sharedInstance] getProfilesForUserIds:userIds error:&error];
-    if (error) {
-        return nil;
+    NSMutableArray *mutableArray = [NSMutableArray arrayWithArray:userIds];
+    NSString *currentClientId = [LCChatKit sharedInstance].clientId;
+    [mutableArray addObject:currentClientId];
+    userIds = [mutableArray copy];
+    NSArray *array = [[LCCKUserSystemService sharedInstance] getCachedProfilesIfExists:userIds error:&error];
+    if (error || (array.count == 0)) {
+        NSString *groupName = [userIds componentsJoinedByString:@","];
+        return groupName;
     }
     
     NSMutableArray *names = [NSMutableArray array];
@@ -171,8 +176,11 @@ NSString *const LCCKConversationServiceErrorDomain = @"LCCKConversationServiceEr
     [[NSNotificationCenter defaultCenter] postNotificationName:LCCKNotificationUnreadsUpdated object:nil];
 }
 
-- (void)setCurrentConversation:(AVIMConversation *)currentConversation {
-    _currentConversation = currentConversation;
+- (AVIMConversation *)currentConversation {
+    if (!_currentConversation.imClient) {
+        [_currentConversation setValue:[LCChatKit sharedInstance].client forKey:@"imClient"];
+    }
+    return _currentConversation;
 }
 
 #pragma mark - conversations local data
@@ -183,10 +191,10 @@ NSString *const LCCKConversationServiceErrorDomain = @"LCCKConversationServiceEr
     return data;
 }
 
-- (AVIMConversation *)conversationFromData:(NSData *)data{
-
+- (AVIMConversation *)conversationFromData:(NSData *)data {
     AVIMKeyedConversation *keyedConversation = [NSKeyedUnarchiver unarchiveObjectWithData:data];
-    return [[LCCKSessionService sharedInstance].client conversationWithKeyedConversation:keyedConversation];
+    AVIMConversation *conversation = [[LCCKSessionService sharedInstance].client conversationWithKeyedConversation:keyedConversation];
+    return conversation;
 }
 
 - (void)updateUnreadCountToZeroWithConversationId:(NSString *)conversationId {
@@ -500,12 +508,16 @@ NSString *const LCCKConversationServiceErrorDomain = @"LCCKConversationServiceEr
         }
         !block ?: block(typedMessages, error);
     };
-    if(timestamp == 0) {
-        // sdk 会设置好 timestamp
-        [conversation queryMessagesWithLimit:limit callback:callback];
-    } else {
-        [conversation queryMessagesBeforeId:nil timestamp:timestamp limit:limit callback:callback];
-    }
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
+        if(timestamp == 0) {
+            // sdk 会设置好 timestamp
+            [conversation queryMessagesWithLimit:limit callback:callback];
+        } else {
+            [conversation queryMessagesBeforeId:nil timestamp:timestamp limit:limit callback:callback];
+        }
+    });
+
+  
 }
 
 + (void)cacheFileTypeMessages:(NSArray<AVIMTypedMessage *> *)messages callback:(AVBooleanResultBlock)callback {

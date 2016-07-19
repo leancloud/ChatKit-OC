@@ -6,7 +6,7 @@
 //  Copyright © 2016年 LeanCloud. All rights reserved.
 //  All the Typedefine for all kinds of services.
 
-//#import <AVOSCloudIM/AVOSCloudIM.h>
+#import <AVOSCloudIM/AVOSCloudIM.h>
 #import "LCCKConstants.h"
 #import "LCCKSingleton.h"
 #import "LCCKMenuItem.h"
@@ -318,6 +318,8 @@ typedef CGFloat (^LCCKAvatarImageViewCornerRadiusBlock)(CGSize avatarImageViewSi
 typedef void (^LCCKConversationResultBlock)(AVIMConversation *conversation, NSError *error);
 
 @protocol LCCKConversationService <NSObject>
+
+- (void)createConversationWithMembers:(NSArray *)members type:(LCCKConversationType)type unique:(BOOL)unique callback:(AVIMConversationResultBlock)callback;
 
 - (void)didReceiveRemoteNotification:(NSDictionary *)userInfo;
 

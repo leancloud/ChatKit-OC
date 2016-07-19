@@ -396,6 +396,28 @@ typedef void (^UITableViewRowActionHandler)(UITableViewRowAction *action, NSInde
     [self pushToViewController:conversationViewController];
 }
 
++ (void)exampleCreateGroupConversationFromViewController:(UIViewController *)fromViewController {
+    //FIXME: add more to allPersonIds
+    NSArray *allPersonIds = [[LCCKContactManager defaultManager] fetchContactPeerIds];
+    NSArray *users = [[LCChatKit sharedInstance] getProfilesForUserIds:allPersonIds error:nil];
+    NSString *currentClientID = [[LCChatKit sharedInstance] clientId];
+    LCCKContactListViewController *contactListViewController = [[LCCKContactListViewController alloc] initWithContacts:users userIds:allPersonIds excludedUserIds:@[currentClientID] mode:LCCKContactListModeMultipleSelection];
+    contactListViewController.title = @"创建群聊";
+    [contactListViewController setSelectedContactsCallback:^(UIViewController *viewController, NSArray<NSString *> *peerIds) {
+        if (!peerIds || peerIds.count == 0) {
+            return;
+        }
+        [self lcck_showText:@"创建群聊..." view:fromViewController.view];
+        [[LCChatKit sharedInstance] createConversationWithMembers:peerIds type:LCCKConversationTypeGroup unique:YES callback:^(AVIMConversation *conversation, NSError *error) {
+            [self lcck_hideHUDForView:fromViewController.view];
+            [self lcck_showSuccess:@"创建成功" toView:fromViewController.view];
+            [self exampleOpenConversationViewControllerWithConversaionId:conversation.conversationId fromNavigationController:viewController.navigationController];
+        }];
+    }];
+    UINavigationController *navigationViewController = [[UINavigationController alloc] initWithRootViewController:contactListViewController];
+    [fromViewController presentViewController:navigationViewController animated:YES completion:nil];
+}
+
 + (void)pushToViewController:(UIViewController *)viewController {
     UITabBarController *tabBarController = [self cyl_tabBarController];
     UINavigationController *navigationController = tabBarController.selectedViewController;

@@ -68,26 +68,16 @@
     return LCCKConversationTypeSingle;
 }
 
-+ (NSString *)lcck_groupConversaionDefaultNameForUserIds:(NSArray *)userIds {
-    NSError *error = nil;
-    NSArray *array = [[LCCKUserSystemService sharedInstance] getProfilesForUserIds:userIds error:&error];
-    if (error) {
-        return nil;
-    }
-    
-    NSMutableArray *names = [NSMutableArray array];
-    [array enumerateObjectsUsingBlock:^(id<LCCKUserDelegate>  _Nonnull user, NSUInteger idx, BOOL * _Nonnull stop) {
-        [names addObject:user.name];
-    }];
-    return [names componentsJoinedByString:@","];
-}
-
 - (NSString *)lcck_displayName {
     if ([self lcck_type] == LCCKConversationTypeSingle) {
         NSString *peerId = [self lcck_peerId];
         NSError *error = nil;
-        id<LCCKUserDelegate> peer = [[LCCKUserSystemService sharedInstance] getProfileForUserId:peerId error:&error];
-        return peer.name ? peer.name : peerId;
+       NSArray *peers = [[LCCKUserSystemService sharedInstance] getCachedProfilesIfExists:@[peerId] error:&error];
+        id<LCCKUserDelegate> peer;
+        if (peers.count > 0) {
+            peer = peers[0];
+        }
+        return peer.name ?: peerId;
     } else {
         return self.name;
     }

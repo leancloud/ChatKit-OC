@@ -277,6 +277,10 @@ static NSMutableDictionary *_sharedInstances = nil;
 #pragma mark -
 #pragma mark - LCCKConversationService
 
+- (void)createConversationWithMembers:(NSArray *)members type:(LCCKConversationType)type unique:(BOOL)unique callback:(AVIMConversationResultBlock)callback {
+    [self.conversationService createConversationWithMembers:members type:type unique:unique callback:callback];
+}
+
 - (void)fecthConversationWithConversationId:(NSString *)conversationId callback:(AVIMConversationResultBlock)callback {
     [self.conversationService fecthConversationWithConversationId:conversationId callback:callback];
 }
