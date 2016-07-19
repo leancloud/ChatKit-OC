@@ -175,7 +175,7 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     AVIMConversation *conversation = [self.dataArray objectAtIndex:indexPath.row];
     [conversation markAsReadInBackground];
-    [self refresh];
+//    [self refresh];
     ![LCCKConversationListService sharedInstance].didSelectConversationsListCellBlock ?: [LCCKConversationListService sharedInstance].didSelectConversationsListCellBlock(indexPath, conversation, self.conversationListViewController);
 }
 
