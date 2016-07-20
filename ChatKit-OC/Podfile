@@ -1,5 +1,7 @@
 platform :ios , '7.0' 
 target 'ChatKit-OC' do
+# ignoring warning from pods
+inhibit_all_warnings!
 
 #=========================================================
 #======================== Lib Dependency =================

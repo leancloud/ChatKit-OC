@@ -8,7 +8,7 @@
 
 @import UIKit;
 
-@protocol LCCKUserDelegate <NSObject, NSCopying>
+@protocol LCCKUserDelegate <NSObject, NSCopying, NSCoding>
 
 @required
 

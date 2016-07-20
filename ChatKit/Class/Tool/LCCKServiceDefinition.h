@@ -250,7 +250,8 @@ typedef void(^LCCKShowNotificationBlock)(UIViewController *viewController, NSStr
  *  @param title 标题
  *  @param type 类型
  */
-typedef void(^LCCKHUDActionBlock)(UIViewController *viewController, NSString *title, LCCKMessageHUDActionType type);
+
+typedef void(^LCCKHUDActionBlock)(UIViewController *viewController, UIView *view, NSString *title, LCCKMessageHUDActionType type);
 
 @property (nonatomic, copy, readonly) LCCKHUDActionBlock HUDActionBlock;
 

@@ -141,12 +141,7 @@
         [self reloadData];
     }
 }
-//- (void)updateConstraints {
-//    [super updateConstraints];
-//    [_scrollView mas_makeConstraints:^(MASConstraintMaker *make) {
-//        make.edges.mas_equalTo(self);
-//    }];
-//}
+
 - (id)initWithCoder:(NSCoder *)aDecoder
 {
     if ((self = [super initWithCoder:aDecoder]))
