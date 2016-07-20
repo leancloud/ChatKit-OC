@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = "ChatKit"
-  s.version      = "0.1.6"
+  s.version      = "0.1.7"
   s.summary      = "An IM App Framework, support sending text, pictures, audio, video, location messaging, managing address book, more interesting features."
   s.homepage     = "https://github.com/LeanCloud/ChatKit-OC"
   s.license      = { :type => 'MIT', :file => 'LICENSE' }
@@ -21,7 +21,5 @@ Pod::Spec.new do |s|
   s.dependency "FMDB" , "~> 2.6.2"
   s.dependency "UITableView+FDTemplateLayoutCell" , "~> 1.5.beta"
   s.dependency "FDStackView" , "~> 1.0"
-
-
 
 end
