@@ -73,9 +73,7 @@ static CGFloat const LCCKScrollViewInsetTop = 20.f;
 
 - (void)setShouldLoadMoreMessagesScrollToTop:(BOOL)shouldLoadMoreMessagesScrollToTop {
     _shouldLoadMoreMessagesScrollToTop = shouldLoadMoreMessagesScrollToTop;
-    if (!_shouldLoadMoreMessagesScrollToTop) {
-        self.tableView.mj_header = nil;
-    }
+    
 }
 
 // KVO监听执行
@@ -90,6 +88,9 @@ static CGFloat const LCCKScrollViewInsetTop = 20.f;
         BOOL boolValue = [newKey boolValue];
         if (!boolValue) {
             [self.tableView.mj_header endRefreshing];
+            if (!_shouldLoadMoreMessagesScrollToTop) {
+                self.tableView.mj_header = nil;
+            }
         }
     }
 }
