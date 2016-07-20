@@ -11,15 +11,16 @@
 #import "LCChatKitExample.h"
 
 #if __has_include(<ChatKit/LCChatKit.h>)
-#import <ChatKit/LCChatKit.h>
+    #import <ChatKit/LCChatKit.h>
 #else
-#import "LCChatKit.h"
+    #import "LCChatKit.h"
 #endif
 
 @interface LCCKTabBarControllerConfig ()
 
 @property (nonatomic, readwrite, strong) CYLTabBarController *tabBarController;
 @property (nonatomic, strong) LCCKConversationListViewController *firstViewController;
+@property (nonatomic, strong) LCCKContactListViewController *secondViewController;
 @end
 
 @implementation LCCKTabBarControllerConfig
@@ -57,17 +58,22 @@
                                                              );
     self.firstViewController = firstViewController;
     //FIXME:
-    NSArray *users = [[LCChatKit sharedInstance] getProfilesForUserIds:self.allPersonIds error:nil];
+    NSArray *users = [[LCChatKit sharedInstance] getCachedProfilesIfExists:self.allPersonIds error:nil];
     NSString *currentClientID = [[LCChatKit sharedInstance] clientId];
     LCCKContactListViewController *secondViewController = [[LCCKContactListViewController alloc] initWithContacts:users userIds:self.allPersonIds excludedUserIds:@[currentClientID] mode:LCCKContactListModeNormal];
     [secondViewController setSelectedContactCallback:^(UIViewController *viewController, NSString *peerId) {
         [LCChatKitExample exampleOpenConversationViewControllerWithPeerId:peerId fromNavigationController:self.tabBarController.navigationController];
     }];
     [secondViewController setDeleteContactCallback:^BOOL(UIViewController *viewController, NSString *peerId) {
-       return [[LCCKContactManager defaultManager] removeContactForPeerId:peerId];
+        return [[LCCKContactManager defaultManager] removeContactForPeerId:peerId];
     }];
+    self.secondViewController = secondViewController;
     UINavigationController *secondNavigationController = [[LCCKBaseNavigationController alloc]
                                                           initWithRootViewController:secondViewController];
+    secondViewController.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"退出"
+                                                                                              style:UIBarButtonItemStylePlain
+                                                                                             target:self
+                                                                                             action:@selector(signOut)];
     NSArray *viewControllers = @[
                                  firstNavigationController,
                                  secondNavigationController,
@@ -190,6 +196,9 @@
 
 - (void)createGroupConversation:(id)sender {
     [LCChatKitExample exampleCreateGroupConversationFromViewController:self.firstViewController];
+}
+- (void)signOut {
+    [LCChatKitExample signOutFromViewController:self.secondViewController];
 }
 
 @end

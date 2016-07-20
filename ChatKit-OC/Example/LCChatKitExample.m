@@ -17,6 +17,8 @@
 #else
     #import "LCChatKit.h"
 #endif
+#import "LCCKLoginViewController.h"
+
 //==================================================================================================================================
 //If you want to see the storage of this demo, log in public account of leancloud.cn, search for the app named `LeanCloudChatKit-iOS`.
 //======================================== username : leancloud@163.com , password : Public123 =====================================
@@ -123,6 +125,7 @@ static NSMutableDictionary *_sharedInstances = nil;
 #endif
     [LCChatKit setAppId:LCCKAPPID appKey:LCCKAPPKEY];
     [[LCChatKit sharedInstance] setFetchProfilesBlock:^(NSArray<NSString *> *userIds, LCCKFetchProfilesCallBack callback) {
+        
         if (userIds.count == 0) {
             NSInteger code = 0;
             NSString *errorReasonText = @"User ids is nil";
@@ -139,7 +142,8 @@ static NSMutableDictionary *_sharedInstances = nil;
         
         NSMutableArray *users = [NSMutableArray arrayWithCapacity:userIds.count];
 #warning 注意：以下方法循环模拟了通过 userIds 同步查询 user 信息的过程，这里需要替换为 App 的 API 同步查询
-            [userIds enumerateObjectsUsingBlock:^(NSString * _Nonnull clientId, NSUInteger idx, BOOL * _Nonnull stop) {
+        
+        [userIds enumerateObjectsUsingBlock:^(NSString * _Nonnull clientId, NSUInteger idx, BOOL * _Nonnull stop) {
             NSPredicate *predicate = [NSPredicate predicateWithFormat:@"peerId like %@", clientId ];
             NSArray *searchedUsers = [LCCKContactProfiles filteredArrayUsingPredicate:predicate];
             if (searchedUsers.count > 0) {
@@ -156,6 +160,8 @@ static NSMutableDictionary *_sharedInstances = nil;
                 [users addObject:user_];
             }
         }];
+        //模拟延时3秒
+        sleep(3);
         !callback ?: callback([users copy], nil);
     }];
     
@@ -184,22 +190,22 @@ static NSMutableDictionary *_sharedInstances = nil;
         return menuItems;
     }];
     
-    [[LCChatKit sharedInstance] setHUDActionBlock:^(UIViewController *viewController, NSString *title, LCCKMessageHUDActionType type) {
+    [[LCChatKit sharedInstance] setHUDActionBlock:^(UIViewController *viewController, UIView *view, NSString *title, LCCKMessageHUDActionType type) {
         switch (type) {
             case LCCKMessageHUDActionTypeShow:
-                [[self class] lcck_showMessage:title toView:viewController.view];
+                [[self class] lcck_showMessage:title toView:view];
                 break;
                 
             case LCCKMessageHUDActionTypeHide:
-                [[self class] lcck_hideHUDForView:viewController.view];
+                [[self class] lcck_hideHUDForView:view];
                 break;
                 
             case LCCKMessageHUDActionTypeError:
-                [[self class] lcck_showError:title toView:viewController.view];
+                [[self class] lcck_showError:title toView:view];
                 break;
                 
             case LCCKMessageHUDActionTypeSuccess:
-                [[self class] lcck_showSuccess:title toView:viewController.view];
+                [[self class] lcck_showSuccess:title toView:view];
                 break;
         }
     }];
@@ -400,7 +406,7 @@ typedef void (^UITableViewRowActionHandler)(UITableViewRowAction *action, NSInde
 + (void)exampleCreateGroupConversationFromViewController:(UIViewController *)fromViewController {
     //FIXME: add more to allPersonIds
     NSArray *allPersonIds = [[LCCKContactManager defaultManager] fetchContactPeerIds];
-    NSArray *users = [[LCChatKit sharedInstance] getProfilesForUserIds:allPersonIds error:nil];
+    NSArray *users = [[LCChatKit sharedInstance] getCachedProfilesIfExists:allPersonIds error:nil];
     NSString *currentClientID = [[LCChatKit sharedInstance] clientId];
     LCCKContactListViewController *contactListViewController = [[LCCKContactListViewController alloc] initWithContacts:users userIds:allPersonIds excludedUserIds:@[currentClientID] mode:LCCKContactListModeMultipleSelection];
     contactListViewController.title = @"创建群聊";
@@ -411,8 +417,12 @@ typedef void (^UITableViewRowActionHandler)(UITableViewRowAction *action, NSInde
         [self lcck_showText:@"创建群聊..." view:fromViewController.view];
         [[LCChatKit sharedInstance] createConversationWithMembers:peerIds type:LCCKConversationTypeGroup unique:YES callback:^(AVIMConversation *conversation, NSError *error) {
             [self lcck_hideHUDForView:fromViewController.view];
-            [self lcck_showSuccess:@"创建成功" toView:fromViewController.view];
-            [self exampleOpenConversationViewControllerWithConversaionId:conversation.conversationId fromNavigationController:viewController.navigationController];
+            if (conversation) {
+                [self lcck_showSuccess:@"创建成功" toView:fromViewController.view];
+                [self exampleOpenConversationViewControllerWithConversaionId:conversation.conversationId fromNavigationController:viewController.navigationController];
+            } else {
+                [self lcck_showError:@"创建失败" toView:fromViewController.view];
+            }
         }];
     }];
     UINavigationController *navigationViewController = [[UINavigationController alloc] initWithRootViewController:contactListViewController];
@@ -446,6 +456,26 @@ typedef void (^UITableViewRowActionHandler)(UITableViewRowAction *action, NSInde
     NSString *title = [NSString stringWithFormat:@"打开地理位置：%@", geolocations];
     NSString *subTitle = [NSString stringWithFormat:@"纬度：%@\n经度：%@",@(location.coordinate.latitude), @(location.coordinate.longitude)];
     [LCCKUtil showNotificationWithTitle:title subtitle:subTitle type:LCCKMessageNotificationTypeMessage];
+}
+
++ (void)signOutFromViewController:(UIViewController *)viewController {
+    [LCCKUtil showProgressText:@"close client ..." duration:10.0f];
+    [LCChatKitExample invokeThisMethodBeforeLogoutSuccess:^{
+        [LCCKUtil hideProgress];
+        LCCKLoginViewController *loginViewController = [[LCCKLoginViewController alloc] init];
+        [loginViewController setClientIDHandler:^(NSString *clientID) {
+            [LCChatKitExample invokeThisMethodAfterLoginSuccessWithClientId:clientID success:^{
+                LCCKTabBarControllerConfig *tabBarControllerConfig = [[LCCKTabBarControllerConfig alloc] init];
+                [self cyl_tabBarController].rootWindow.rootViewController = tabBarControllerConfig.tabBarController;
+            } failed:^(NSError *error) {
+                //                NSLog(@"%@",error);
+            }];
+        }];
+        [viewController presentViewController:loginViewController animated:YES completion:nil];
+    } failed:^(NSError *error) {
+        [LCCKUtil hideProgress];
+        //        NSLog(@"%@", error);
+    }];
 }
 
 - (void)examplePreviewImageMessageWithIndex:(NSUInteger)index allVisibleImages:(NSArray *)allVisibleImages allVisibleThumbs:(NSArray *)allVisibleThumbs {

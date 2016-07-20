@@ -10,6 +10,7 @@
 #import "LCCKContactCell.h"
 #import "LCCKContactManager.h"
 #import "LCCKAlertController.h"
+#import "LCCKUIService.h"
 
 static NSString *const LCCKContactListViewControllerIdentifier = @"LCCKContactListViewControllerIdentifier";
 
@@ -45,6 +46,7 @@ static NSString *const LCCKContactListViewControllerIdentifier = @"LCCKContactLi
 
 @property (nonatomic, copy, readwrite) NSArray<LCCKContact *> *contacts;
 @property (nonatomic, strong) UISearchBar *searchBar;
+@property (nonatomic, copy) NSArray *excludedUserNames;
 @end
 
 @implementation LCCKContactListViewController
@@ -161,6 +163,31 @@ static NSString *const LCCKContactListViewControllerIdentifier = @"LCCKContactLi
         self.navigationItem.rightBarButtonItem = doneButtonItem;
         //        [self.tableView setEditing:YES animated:NO];
     }
+    if (!self.contacts || self.contacts.count == 0) {
+       LCCKHUDActionBlock theHUDActionBlock = [LCCKUIService sharedInstance].HUDActionBlock;
+        if (theHUDActionBlock) {
+            theHUDActionBlock(self, nil, @"获取联系人信息...", LCCKMessageHUDActionTypeShow);
+        }
+        [[LCChatKit sharedInstance] getProfilesInBackgroundForUserIds:self.userIds callback:^(NSArray<id<LCCKUserDelegate>> *users, NSError *error) {
+            if (theHUDActionBlock) {
+                theHUDActionBlock(self, nil, nil, LCCKMessageHUDActionTypeHide);
+            }
+            if (users.count > 0) {
+                if (theHUDActionBlock) {
+                    theHUDActionBlock(self, nil, @"获取成功", LCCKMessageHUDActionTypeSuccess);
+                }
+                self.contacts = [NSArray arrayWithArray:users];
+                self.originSections = nil;
+                dispatch_async(dispatch_get_main_queue(),^{
+                    [self.tableView reloadData];
+                });
+            } else {
+                if (theHUDActionBlock) {
+                    theHUDActionBlock(self, nil, @"获取失败", LCCKMessageHUDActionTypeError);
+                }
+            }
+        }];
+    }
 }
 
 #pragma clang diagnostic push
@@ -258,7 +285,7 @@ static NSString *const LCCKContactListViewControllerIdentifier = @"LCCKContactLi
         self.dictionaryTableRowCheckedState[indexPath] = @(isChecked);
         cell.checked = isChecked;
     } else {
-        NSLog(@"%@ - %@ - has (possible undefined) E~R~R~O~R attempting to set UITableViewCellAccessory at indexPath: %@_", NSStringFromClass(self.class), NSStringFromSelector(_cmd), indexPath);
+        // NSLog(@"%@ - %@ - has (possible undefined) E~R~R~O~R attempting to set UITableViewCellAccessory at indexPath: %@_", NSStringFromClass(self.class), NSStringFromSelector(_cmd), indexPath);
     }
     return cell;
 }
@@ -405,22 +432,43 @@ static NSString *const LCCKContactListViewControllerIdentifier = @"LCCKContactLi
 }
 
 - (NSArray *)excludedUserNames {
-    NSArray<id<LCCKUserDelegate>> *excludedUsers = [[LCChatKit sharedInstance] getProfilesForUserIds:self.excludedUserIds error:nil];
-    NSMutableArray *excludedUserNames = [NSMutableArray arrayWithCapacity:excludedUsers.count];
-    [excludedUsers enumerateObjectsUsingBlock:^(id<LCCKUserDelegate>  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        @try {
-            if (obj.name) {
-                [excludedUserNames addObject:obj.name];
+    if (!_excludedUserNames) {
+        NSArray<id<LCCKUserDelegate>> *excludedUsers = [[LCChatKit sharedInstance] getCachedProfilesIfExists:self.excludedUserIds error:nil];
+//        if (excludedUsers.count > 0) {
+            NSMutableArray *excludedUserNames = [NSMutableArray arrayWithCapacity:excludedUsers.count];
+            [excludedUsers enumerateObjectsUsingBlock:^(id<LCCKUserDelegate>  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                @try {
+                    if (obj.name) {
+                        [excludedUserNames addObject:obj.name];
+                    } else {
+                        [excludedUserNames addObject:obj.clientId];
+                    }
+                    
+                } @catch (NSException *exception) {}
+            }];
+            if (excludedUsers.count > 0) {
+                _excludedUserNames = [excludedUserNames copy];
             } else {
-                [excludedUserNames addObject:obj.clientId];
+                _excludedUserNames = [_excludedUserIds copy];
             }
-            
-        } @catch (NSException *exception) {        }
-    }];
-    if (excludedUsers.count > 0) {
-        return [excludedUserNames copy];
+//        } else {
+//            NSString *formatString = @"\n\n\
+//            ------ BEGIN NSException Log ---------------\n \
+//            class name: %@                              \n \
+//            ------line: %@                              \n \
+//            ----reason: %@                              \n \
+//            ------ END -------------------------------- \n\n";
+//            NSString *reason = [NSString stringWithFormat:formatString,
+//                                @(__PRETTY_FUNCTION__),
+//                                @(__LINE__),
+//                                @"Before init LCCKContactListViewController, You should make sure all the user profiles are prepared."];
+//            //手动创建一个异常导致的崩溃事件 http://is.gd/EfVfN0
+//            @throw [NSException exceptionWithName:NSGenericException
+//                                           reason:reason
+//                                         userInfo:nil];
+//        }
     }
-    return [self.excludedUserIds copy];
+    return _excludedUserNames;
 }
 
 - (NSArray *)contactsFromContactsOrUserIds:(NSArray *)contacts userIds:(NSArray *)userIds{

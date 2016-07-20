@@ -258,6 +258,7 @@
         return;
     }
     _conversation = conversation;
+    [LCCKConversationService sharedInstance].currentConversation = conversation;
     if (conversation.members > 0) {
         NSAssert(_conversation.imClient, @"类名与方法名：%@（在第%@行），描述：%@", @(__PRETTY_FUNCTION__), @(__LINE__), @"imClient is nil");
         self.conversationId = conversation.conversationId;
@@ -269,7 +270,6 @@
         !_conversationHandler ?: _conversationHandler(conversation, self);
     }
     [self markCurrentConversationInfo];
-    [LCCKConversationService sharedInstance].currentConversation = conversation;
     [self handleLoadHistoryMessagesHandlerForIsJoined:isJoined];
 }
 
@@ -361,7 +361,7 @@
              [LCCKConversationService sharedInstance].contactListViewControllerActivce = NO;
             if (peerIds.count > 0) {
                 NSArray<id<LCCKUserDelegate>> *peers = [[LCCKUserSystemService sharedInstance] getCachedProfilesIfExists:peerIds error:nil];
-                NSMutableArray *peerNames;
+                NSMutableArray *peerNames = [NSMutableArray arrayWithCapacity:peers.count];
                 [peers enumerateObjectsUsingBlock:^(id<LCCKUserDelegate>  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
                     if (obj.name) {
                         [peerNames addObject:obj.name];
@@ -469,6 +469,7 @@
     LCCKMessage *message = [self.chatViewModel.dataArray lcck_messageAtIndex:indexPath.row];
     switch (messageCell.messageType) {
         case LCCKMessageTypeVoice: {
+//            [(LCCKChatVoiceMessageCell *)messageCell setVoiceMessageState:[[LCCKAVAudioPlayer sharePlayer] audioPlayerState]];
             NSString *voiceFileName = message.voicePath;//必须带后缀，.mp3；
             [[LCCKAVAudioPlayer sharePlayer] playAudioWithURLString:voiceFileName atIndex:indexPath.row];
         }
