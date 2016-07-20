@@ -5,6 +5,8 @@
 <a href="https://github.com/leancloud/ChatKit-OC/blob/master/LICENSE"><img src="https://img.shields.io/badge/license-MIT-green.svg?style=flat"></a>
 </a>
 
+在使用中有任何问题都可以到[我们的官方论坛](https://forum.leancloud.cn/c/jing-xuan-faq)提问题，会有专业工程师回复，平均响应时间在24小时内。
+
 ## 简介
 
 [ChatKit](https://github.com/leancloud/ChatKit-OC) 是一个免费且开源的 UI 聊天组件，由 LeanCloud 官方推出，底层聊天服务基于 LeanCloud 的 IM 实时通信服务「LeanMessage」而开发。它可以帮助开发者快速集成 IM 服务，轻松实现聊天功能，提供完全自由的授权协议，支持二次开发。其最大特点是把聊天常用的一些功能配合 UI 一起提供给开发者。
@@ -16,6 +18,22 @@ git clone --depth=1 https://github.com/leancloud/ChatKit-OC
 ```
 
 ## 集成效果
+
+从大量的使用场景来看，「最近联系人列表」和「聊天界面」这两个页面是开发者最常使用的，同时也是比较难处理的。
+
+最近联系人页面实现的难点在于：
+
+- 要根据最近打开的聊天窗口排序联系人列表；
+- 对每一个最近聊天人／组需要显示最新的一条消息及时间；
+- 需要实时更新未读消息的计数；
+
+而聊天页面的实现难点则在于：
+
+- 消息种类繁多，要有比较好的用户体验，界面以及异步处理方面有大量的开发工作；
+- 音视频消息的录制和发送，需要对系统以及 LeanCloud 实时通信 API 比较熟悉；
+- 推、拉展示本对话中的最新消息，需要对 LeanCloud 实时通信接口比较熟悉；
+
+我们在 ChatKit 中重点完成了这两个页面的开发，大家可以看看效果：
 
 最近联系人 | 语音消息，根据语音长度调整宽度 | 图片消息，尺寸自适应 
 -------------|-------------|-------------|-------------
@@ -31,10 +49,9 @@ git clone --depth=1 https://github.com/leancloud/ChatKit-OC
 
 
 
-
 ## 项目结构
 
- ```
+```
 ├── ChatKit  ＃核心库文件夹
 │   ├── LCChatKit.h  # 这是整个库的入口，也是中枢，相当于”组件化方案“中的 Mediator。
 │   ├── LCChatKit.m
@@ -46,38 +63,15 @@ git clone --depth=1 https://github.com/leancloud/ChatKit-OC
 │       │   │   ├── Controller
 │       │   │   ├── Model
 │       │   │   ├── Tool
-│       │   │   │   ├── Categories
-│       │   │   │   └── DisableImageMemoryCache
 │       │   │   └── View
-│       │   │       ├── ChatBar
-│       │   │       └── ChatMessageCell
 │       │   └── ConversationList
 │       │       ├── Controller
 │       │       ├── Model
 │       │       └── View
 │       ├── Resources  # 资源文件，如图片、音频等
-│       │   ├── BarButtonIcon.bundle
-│       │   ├── ChatKeyboard.bundle
-│       │   ├── Common.bundle
-│       │   ├── DateTools.bundle
-│       │   ├── Emoji.bundle
-│       │   ├── MBProgressHUD.bundle
-│       │   ├── MessageBubble.bundle
-│       │   ├── Placeholder.bundle
-│       │   ├── VoiceMessageSource.bundle
-│       │   └── localization
-│       │       ├── en.lproj
-│       │       └── zh-Hans.lproj
 │       ├── Tool
 │       │   ├── Service
 │       │   └── Vendor
-│       │       ├── DateTools
-│       │       ├── LCCKAlertController
-│       │       ├── LCCKDeallocBlockExecutor
-│       │       ├── LCCKTableViewRowAction
-│       │       └── VoiceLib
-│       │           └── lame.framework
-│       │               └── Headers
 │       └── View
 └── ChatKit-OC  # Demo演示
     ├── ChatKit-OC.xcodeproj
@@ -98,85 +92,77 @@ git clone --depth=1 https://github.com/leancloud/ChatKit-OC
             │   │   ├── Controller
             │   │   └── View
             │   └── Other
- ```
- 
- 从上面可以看出，「ChatKit-OC」工程包分为两个部分：
- 
- * ChatKit 
-   ChatKit 是库的核心库文件夹
- * ChatKit-OC
-   Demo 演示部分，其中 `LCChatKitExample` 这个类提供了很多胶水函数，可完成初步的集成。
- 
- 
- ## 使用 ChatKit
- 
- 为了让这个库更易入手，避免引入过多公开的类，以及概念，我们采用了类似 “组件化” 的思想：将你在使用 ChatKit 库中所需要的所有方法都放在了这一个类中，类的名字叫做 `LCChatKit`，是一个 Mediator，是整个库的入口，也是中枢。
- 
+```
+
+ 从上面可以看出，`ChatKit-OC` 项目包分为两个部分：
+
+* `ChatKit` 是库的核心库文件夹。
+* `ChatKit-OC` 为Demo 演示部分，其中 `LCChatKitExample` 这个类提供了很多胶水函数，可完成初步的集成。
+
+
+ ## 使用方法
+
+为了让这个库更易入手，避免引入过多公开的类和概念，我们采用了类似「组件化」的方式进行构建，即将你在使用 ChatKit 库时所需要用到的所有方法都放在了 `LCChatKit` 这一个类中。它是一个 Mediator，是整个库的入口，也是中枢。
+
  使用 ChatKit 大体有几个步骤：
 
- 1. 在 `-[AppDelegate application:didFinishLaunchingWithOptions:]` 中调用 `-[LCChatKit setAppId:appKey:]`  来开启 LeanCloud 服务。
+ 1. 在 `-[AppDelegate application:didFinishLaunchingWithOptions:]` 中调用 `-[LCChatKit setAppId:appKey:]` 来开启 LeanCloud 服务。
  2. 调用 `-[LCChatKit sharedInstance]` 来初始化一个单例对象。
  3. 调用 `-[[LCChatKit sharedInstance] openWithClientId:callback:]` 开启 LeanCloud 的 IM 服务 LeanMessage，开始聊天。
  4. 调用 `-[[LCChatKit sharedInstance] closeWithCallback:]` 关闭 LeanCloud 的 IM 服务，结束聊天。
- 5. 实现 `-[[LCChatKit sharedInstance] setFetchProfilesBlock:]`,  设置用户体系，里面要实现如何根据 userId 获取到一个 User 对象的逻辑。 ChatKit 会在需要用到 User 信息时调用你设置的这个逻辑。 `LCCKUserSystemService.h` 文件中给出了例子，演示了如何集成 LeanCloud 原生的用户系统 `AVUser`。
- 6. 如果你实现了 `-[[LCChatKit sharedInstance] setGenerateSignatureBlock:]` 方法，那么  ChatKit 会自动为以下行为添加签名：open（开启会话）, start（创建会话）, kick（踢人）, invite（邀请）。反之不会。
+ 5. 实现 `-[[LCChatKit sharedInstance] setFetchProfilesBlock:]`，设置用户体系，里面要实现如何根据 userId 获取到一个 User 对象的逻辑。ChatKit 会在需要用到 User 信息时调用你设置的这个逻辑。 `LCCKUserSystemService.h` 文件中给出了例子，演示了如何集成 LeanCloud 原生的用户系统 `AVUser`。
+ 6. 如果你实现了 `-[[LCChatKit sharedInstance] setGenerateSignatureBlock:]` 方法，那么 ChatKit 会自动为以下行为添加签名：`open`（开启聊天）、`start`（创建对话）、`kick`（踢人）、`invite`（邀请）。反之不会。
 
-下面进行下详细的介绍：
+下面按步骤进行详细的介绍。
 
-### 第一步：使用CocoaPods导入ChatKit
+### CocoaPods 导入
 
-在 `Podfile` 中进行如下导入：
+在文件 `Podfile` 中加入以下内容：
 
- ```
+```shell
 pod 'ChatKit'
- ```
-然后使用 `cocoaPods` 进行安装：
+```
 
-如果尚未安装 CocoaPods, 运行以下命令进行安装:
+然后使用 CocoaPods 进行安装。如果尚未安装 CocoaPods，运行以下命令进行安装：
 
-
- ```Objective-C
+```shell
 gem install cocoapods
- ```
+```
 
+安装成功后就可以安装依赖了。建议使用如下方式：
 
-安装成功后就可以安装依赖了：
-
-建议使用如下方式：
-
-
- ```Objective-C
- # 禁止升级CocoaPods的spec仓库，否则会卡在 Analyzing dependencies ，非常慢 
+```shell
+ # 禁止升级 CocoaPods 的 spec 仓库，否则会卡在 Analyzing dependencies，非常慢
  pod update --verbose --no-repo-update
- ```
- 
-如果提示找不到库，则可去掉 --no-repo-update
+```
 
-### 第二步：快速集成
+如果提示找不到库，则可去掉 `--no-repo-update`。
 
-ChatKit 提供了一个快速集成的演示类 LCChatKitExample ，路径如下：
+如果不想使用 CocoaPods 进行集成，也可以选择使用 [源码集成](https://github.com/leancloud/ChatKit-OC#手动集成)。
 
- ```Objective-C
+### 胶水函数快速集成
+
+ChatKit 提供了一个快速集成的演示类 `LCChatKitExample`，路径如下：
+
+```Objective-C
  ├── ChatKit  ＃核心库文件夹
  └──  ChatKit-OC  # Demo演示
     ├── ChatKit-OC.xcodeproj
     └── Example
-        └── LCChatKitExample.h  #这是Demo演示的入口类，这个类中提供了很多胶水函数，可完成初步的集成
+        └── LCChatKitExample.h  # 这是 Demo 演示的入口类，这个类中提供了很多胶水函数，可完成初步的集成。
         └── LCChatKitExample.m
- ```
- 
-使用 LCChatKitExample 提供的函数即可完成从程序启动到登录再到登出的完整流程：
+```
 
-在 `-[AppDelegate didFinishLaunchingWithOptions:]` 等函数中调用下面这几个基础的入口胶水函数，可完成初步的集成。
+使用 `LCChatKitExample` 提供的函数即可完成从程序启动到登录再到登出的完整流程。
 
-进一步地，胶水代码中包含了特地设置的#warning，请仔细阅读这些warning的注释，根据实际情况调整代码，以符合你的需求。
+- 在 `-[AppDelegate didFinishLaunchingWithOptions:]` 等函数中调用下面这几个基础的入口胶水函数，可完成初步的集成。
+- 胶水代码中包含了特地设置的 `#warning`，请仔细阅读这些 warning 的注释，根据实际情况调整代码，以符合你的需求。
 
- ```Objective-C
-
+```Objective-C
 /*!
  *  入口胶水函数：初始化入口函数
  *
- *  程序完成启动，在appdelegate中的 `-[AppDelegate didFinishLaunchingWithOptions:]` 一开始的地方调用.
+ *  程序完成启动，在 appdelegate 中的 `-[AppDelegate didFinishLaunchingWithOptions:]` 一开始的地方调用.
  */
 + (void)invokeThisMethodInDidFinishLaunching;
 
@@ -205,66 +191,167 @@ ChatKit 提供了一个快速集成的演示类 LCChatKitExample ，路径如下
 + (void)invokeThisMethodBeforeLogoutSuccess:(LCCKVoidBlock)success failed:(LCCKErrorBlock)failed;
 + (void)invokeThisMethodInApplicationWillResignActive:(UIApplication *)application;
 + (void)invokeThisMethodInApplicationWillTerminate:(UIApplication *)application;
- ```
+```
 
-### 使用最近联系人界面和聊天界面
+### 最近联系人界面
 
-主流的社交聊天软件，例如微信、QQ，都会选择把最近联系人界面作为登录后的首页，可见其重要性。
+主流的社交聊天软件，例如微信和 QQ 都会把最近联系人界面作为登录后的首页，可见其重要性。因此我们在 ChatKit 也提供了对话列表 `LCIMConversationListController` 页面，初始化方法非常简单：
 
-因此我们在 ChatKit 也提供了对话列表 `LCIMConversationListController` 页面，初始化方法非常简单：
-
- ```Objective-C
+```Objective-C
 LCCKConversationListViewController *firstViewController = [[LCCKConversationListViewController alloc] init];
- ```
- 
-最近联系人界面的数据，依赖于本地数据库，这些数据会在聊天过程中自动进行更新，你无需进行繁琐的数据库操作。
+```
 
-这里注意：ChatKit 中的对话是一个 `AVIMConversation` 对象， LeanMessage
-用它来管理对话成员，发送消息，不区分群聊、单聊；Demo 中采用了判断会话人数的方式来区分群聊、单聊。
+因为最近联系人的所有信息都由 ChatKit 内部维护，不需要传入额外数据，所以直接展示这个 ViewController 即可。最近联系人界面的数据，依赖于本地数据库。这些数据会在聊天过程中自动进行更新，你无需进行繁琐的数据库操作。
+
+#### 由最近联系人进入聊天界面
+
+按照上面的步骤，我们可以非常方便地打开最近联系人页面。但是我们会发现，点击其中的某个联系人／聊天群组，我们并不能直接进入聊天界面。要做到这一点，我们需要给 LCChatKit 设置上事件响应函数，示例代码如下：
+
+```objective-c
+[[LCChatKit sharedInstance] setDidSelectConversationsListCellBlock:^(NSIndexPath *indexPath, AVIMConversation *conversation, LCCKConversationListViewController *controller) {
+    NSLog(@"conversation selected");
+    LCCKConversationViewController *conversationVC = [[LCCKConversationViewController alloc] initWithConversationId:conversation.conversationId];
+    [controller.navigationController pushViewController:conversationVC animated:YES];
+}];
+```
+
+对于联系人列表页面，我们在 LCChatKit 可以响应如下四种操作：
+
+```objective-c
+/*!
+ *  选中某个对话后的回调 (比较常见的需求)
+ *  @param conversation 被选中的对话
+ */
+typedef void(^LCCKConversationsListDidSelectItemBlock)(NSIndexPath *indexPath, AVIMConversation *conversation, LCCKConversationListViewController *controller);
+/*!
+ *  设置选中某个对话后的回调
+ */
+- (void)setDidSelectConversationsListCellBlock:(LCCKConversationsListDidSelectItemBlock)didSelectItemBlock;
+
+/*!
+ *  删除某个对话后的回调 (一般不需要做处理)
+ *  @param conversation 被选中的对话
+ */
+typedef void(^LCCKConversationsListDidDeleteItemBlock)(NSIndexPath *indexPath, AVIMConversation *conversation, LCCKConversationListViewController *controller);
+/*!
+ *  设置删除某个对话后的回调
+ */
+- (void)setDidDeleteConversationsListCellBlock:(LCCKConversationsListDidDeleteItemBlock)didDeleteItemBlock;
+
+/*!
+ *  对话左滑菜单设置block (最近联系人页面有复杂的手势操作时，可以通过这里扩展实现)
+ *  @return  需要显示的菜单数组
+ *  @param conversation, 对话
+ *  @param editActions, 默认的菜单数组，成员为 UITableViewRowAction 类型
+ */
+typedef NSArray *(^LCCKConversationEditActionsBlock)(NSIndexPath *indexPath, NSArray<UITableViewRowAction *> *editActions, AVIMConversation *conversation, LCCKConversationListViewController *controller);
+/*!
+ *  可以通过这个block设置对话列表中每个对话的左滑菜单，这个是同步调用的，需要尽快返回，否则会卡住UI
+ */
+- (void)setConversationEditActionBlock:(LCCKConversationEditActionsBlock)conversationEditActionBlock;
+```
+
+
+
+### 聊天界面
+
+<div class="callout callout-info">ChatKit 中的对话是一个 `AVIMConversation` 对象， LeanMessage
+用它来管理对话成员，发送消息，不区分群聊、单聊。Demo 中采用了判断对话人数的方式来区分群聊、单聊。</div>
 
 聊天界面有两种初始化方式：
 
- ```Objective-C
-    // 用于单聊
+```Objective-C
+// 用于单聊，默认会创建一个只包含两个成员的 unique 对话(如果已经存在则直接进入，不会重复创建)
 LCCKConversationViewController *conversationViewController = [[LCCKConversationViewController alloc] initWithPeerId:peerId];
- ```
+```
 
- ```Objective-C
-// 单聊或群聊
+```Objective-C
+// 单聊或群聊，用于已经获取到一个对话基本信息的场合。
 LCCKConversationViewController *conversationViewController = [[LCCKConversationViewController alloc] initWithConversationId:conversationId];
- ```
+```
 
-这里注意，通过 peerId 初始化，内部实现时，如果不是好友关系，会先建立好友关系、创建会话，所以调用该方法前请自行判断是否具有好友关系。同理，通过 conversationId 初始化群聊，内部实现时，如果不是群成员会先把当前用户加入群、开启群聊。
+这里注意，通过 `peerId` 初始化，内部实现时，如果没有一个 unique 对话刚好包含这两个成员，则会先创建一个 unique 对话，所以调用该方法时可能会导致 _Conversation 表中自动增加一条记录。同理，通过 `conversationId` 初始化群聊，内部实现时，如果不是对话成员会先把当前用户加入对话，并开启群聊。
+
+#### 响应聊天界面的几类操作
+
+由于有了 ChatKit 的帮助，聊天界面的初始化和展示非常简单，但是这里面交互上还有很多地方需要自定义扩展。
+
+- 内部异常对话无法创建
+
+如果通过 peerId 打开对话，或者通过 conversationId 打开对话时，网络出现问题或 传入参数有误，那么对话根本无法进行，这时候我们可以通过给 LCCKConversationViewController 设定 conversationHandler 进行处理。示例代码如下：
+
+```objective-c
+[conversationVC setConversationHandler:^(AVIMConversation *conversation, LCCKConversationViewController *conversationController) {
+    if (!conversation) {
+        // 显示错误提示信息
+        [conversationController alert:@"failed to create/load conversation."];
+    } else {
+        // 正常处理
+    }
+}];
+```
+
+- 对话详情页展示
+
+在 QQ／微信之类的聊天应用中，聊天界面右上角会提供一个显示对话详细信息的按钮，点击可以打开对话详情页面，在那里可以进行改名、拉人、踢人、静音等操作。LCCKConversationViewController 中通过调用以下 API 也支持这一功能：
+
+```objective-c
+typedef void(^LCCKBarButtonItemActionBlock)(void);
+
+typedef NS_ENUM(NSInteger, LCCKBarButtonItemStyle) {
+    LCCKBarButtonItemStyleSetting = 0,
+    LCCKBarButtonItemStyleMore,
+    LCCKBarButtonItemStyleAdd,
+    LCCKBarButtonItemStyleAddFriends,
+    LCCKBarButtonItemStyleShare,
+    LCCKBarButtonItemStyleSingleProfile,
+    LCCKBarButtonItemStyleGroupProfile,
+};
+
+- (void)configureBarButtonItemStyle:(LCCKBarButtonItemStyle)style action:(LCCKBarButtonItemActionBlock)action;
+```
+
+示例代码如下：
+
+```objective-c
+[conversationController configureBarButtonItemStyle:LCCKBarButtonItemStyleGroupProfile action:^{
+    ConversationDetailViewController *detailVC = [[ConversationDetailViewController alloc] init];// 自己实现的对话详情页
+    detailVC.conversation = conversation;
+    [conversationController.navigationController pushViewController:detailVC animated:YES];
+}];
+```
 
 
-## 手动集成
 
-如果你不想使用 CocoaPods 进行集成，也可以选择使用源码集成。集成的步骤如下：
+### 手动集成
+
+如果你不想使用 CocoaPods 进行集成，也可以选择使用源码集成。步骤如下：
 
 第一步：
 
-将上文[「项目结构」](https://leancloud.cn/docs/chatkit-ios.html#项目结构)中提到的 ChatKit 这个「核心库文件夹」拖拽到工程中。
+将 [项目结构](https://github.com/leancloud/ChatKit-OC#项目结构) 中提到的 ChatKit 这个「核心库文件夹」拖拽到项目中。
 
 第二步：
 
 添加 ChatKit 依赖的第三方库以及对应版本：
 
- - [AVOSCloud](https://leancloud.cn/docs/sdk_down.html) v3.3.5
- - [AVOSCloudIM](https://leancloud.cn/docs/sdk_down.html) v3.3.5
- - [MJRefresh](https://github.com/CoderMJLee/MJRefresh) 3.1.9
- - [Masonry](https://github.com/SnapKit/Masonry) v1.0.1 
- - [SDWebImage](https://github.com/rs/SDWebImage) v3.8.0
- - [FMDB](https://github.com/ccgus/fmdb) 2.6.2 
- - [UITableView+FDTemplateLayoutCell](https://github.com/forkingdog/UITableView-FDTemplateLayoutCell) 1.5.beta
+- [AVOSCloud](sdk_down.html) v3.3.5
+- [AVOSCloudIM](sdk_down.html) v3.3.5
+- [MJRefresh](https://github.com/CoderMJLee/MJRefresh) 3.1.9
+- [Masonry](https://github.com/SnapKit/Masonry) v1.0.1 
+- [SDWebImage](https://github.com/rs/SDWebImage) v3.8.0
+- [FMDB](https://github.com/ccgus/fmdb) 2.6.2 
+- [UITableView+FDTemplateLayoutCell](https://github.com/forkingdog/UITableView-FDTemplateLayoutCell) 1.5.beta
 
 
-## Q-A 常见问题
+## 常见问题
 
- Q ： ChatKit 组件收费么？
- 
- A ： ChatKit 是完全开源并且免费给开发者使用，使用聊天所产生的费用以账单为准。
+**ChatKit 组件收费么？**<br/>
+ChatKit 是完全开源并且免费给开发者使用，使用聊天所产生的费用以账单为准。
+
+**接入 ChatKit 有什么好处？**<br/>
+它可以减轻应用或者新功能研发初期的调研成本，直接引入使用即可。ChatKit 从底层到 UI 提供了一整套的聊天解决方案。
 
 
- Q：接入 ChatKit 有什么好处？
- 
- A：它可以减轻应用或者新功能研发初期的调研成本，直接引入使用即可。ChatKit 从底层到 UI 提供了一整套的聊天解决方案。
+
+在使用中有任何问题都可以到[我们的官方论坛](https://forum.leancloud.cn/c/jing-xuan-faq)提问题，会有专业工程师回复，平均响应时间在24小时内。
