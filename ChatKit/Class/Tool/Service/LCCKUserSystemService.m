@@ -45,6 +45,15 @@ NSString *const LCCKUserSystemServiceErrorDomain = @"LCCKUserSystemServiceErrorD
     if (userIds.count == 0) {
         return;
     }
+    NSError *error = nil;
+    NSArray *cachedProfiles = [self getCachedProfilesIfExists:userIds error:&error];
+    if (cachedProfiles.count == userIds.count) {
+        dispatch_async(dispatch_get_main_queue(),^{
+            !callback ?: callback(cachedProfiles, nil);
+        });
+        return;
+    }
+    NSMutableArray *usersMutableArray = [NSMutableArray arrayWithCapacity:userIds.count];
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
         if (!_fetchProfilesBlock) {
             // This enforces implementing `-setFetchProfilesBlock:`.
@@ -54,9 +63,8 @@ NSString *const LCCKUserSystemServiceErrorDomain = @"LCCKUserSystemServiceErrorD
                                          userInfo:nil];
             return;
         }
-        
         _fetchProfilesBlock(userIds, ^(NSArray<id<LCCKUserDelegate>> *users, NSError *error) {
-            if (!error && (users.count > 0)) {
+            if (!error && users && (users.count > 0)) {
                 [self cacheUsers:users];
                 dispatch_async(dispatch_get_main_queue(),^{
                     !callback ?: callback(users, nil);
@@ -113,7 +121,7 @@ NSString *const LCCKUserSystemServiceErrorDomain = @"LCCKUserSystemServiceErrorD
         return;
     }
     [self getProfilesInBackgroundForUserIds:@[userId] callback:^(NSArray<id<LCCKUserDelegate>> *users, NSError *error) {
-        if (!error && (users.count > 0)) {
+        if (!error && users && (users.count > 0)) {
             !callback ?: callback(users[0], nil);
             return;
         }
@@ -198,7 +206,7 @@ NSString *const LCCKUserSystemServiceErrorDomain = @"LCCKUserSystemServiceErrorD
     if (!error) {
         return currentUser;
     }
-//    NSLog(@"%@", error);
+    //    NSLog(@"%@", error);
     return nil;
 }
 
@@ -255,18 +263,20 @@ NSString *const LCCKUserSystemServiceErrorDomain = @"LCCKUserSystemServiceErrorD
             if (users) {
                 [self cacheUsers:users];
             }
-            callback(YES, error);
+            !callback ?: callback(YES, error);
         }];
     } else {
-        callback(YES, nil);
+       !callback ?: callback(YES, nil);
     }
 }
 
 - (void)cacheUsers:(NSArray<id<LCCKUserDelegate>> *)users {
-    for (id<LCCKUserDelegate> user in users) {
-        @try {
-            self.cachedUsers[user.clientId] = user;
-        } @catch (NSException *exception) { }
+    if (users.count > 0) {
+        for (id<LCCKUserDelegate> user in users) {
+            @try {
+                self.cachedUsers[user.clientId] = user;
+            } @catch (NSException *exception) {}
+        }
     }
 }
 
