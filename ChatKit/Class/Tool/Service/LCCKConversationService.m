@@ -30,6 +30,7 @@ NSString *const LCCKConversationServiceErrorDomain = @"LCCKConversationServiceEr
 @end
 
 @implementation LCCKConversationService
+@synthesize currentConversation = _currentConversation;
 
 /**
  *  根据 conversationId 获取对话
@@ -174,6 +175,13 @@ NSString *const LCCKConversationServiceErrorDomain = @"LCCKConversationServiceEr
     [self updateUnreadCountToZeroWithConversationId:conversationId];
     [self updateMentioned:NO conversationId:conversationId];
     [[NSNotificationCenter defaultCenter] postNotificationName:LCCKNotificationUnreadsUpdated object:nil];
+}
+
+- (void)setCurrentConversation:(AVIMConversation *)currentConversation {
+    _currentConversation = currentConversation;
+    if (!_currentConversation.imClient) {
+        [_currentConversation setValue:[LCChatKit sharedInstance].client forKey:@"imClient"];
+    }
 }
 
 - (AVIMConversation *)currentConversation {
@@ -516,17 +524,14 @@ NSString *const LCCKConversationServiceErrorDomain = @"LCCKConversationServiceEr
             [conversation queryMessagesBeforeId:nil timestamp:timestamp limit:limit callback:callback];
         }
     });
-
-  
 }
 
 + (void)cacheFileTypeMessages:(NSArray<AVIMTypedMessage *> *)messages callback:(AVBooleanResultBlock)callback {
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
-        NSMutableSet *userIds = [[NSMutableSet alloc] init];
-        for (AVIMTypedMessage *message in messages) {
-            if (message.clientId) {
-                [userIds addObject:message.clientId];
-            }
+    NSMutableSet *userIds = [[NSMutableSet alloc] init];
+    dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+    dispatch_group_t group = dispatch_group_create();
+    for (AVIMTypedMessage *message in messages) {
+        dispatch_group_async(group, queue, ^{
             if (message.mediaType == kAVIMMessageMediaTypeImage || message.mediaType == kAVIMMessageMediaTypeAudio) {
                 AVFile *file = message.file;
                 if (file && file.isDataAvailable == NO) {
@@ -549,13 +554,11 @@ NSString *const LCCKConversationServiceErrorDomain = @"LCCKConversationServiceEr
                     }
                 }
             }
-        }
+        });
         
-        [[LCCKUserSystemService sharedInstance] cacheUsersWithIds:userIds callback:^(BOOL succeeded, NSError *error) {
-            dispatch_async(dispatch_get_main_queue(),^{
-                !callback ?: callback(succeeded, error);
-            });
-        }];
+    }
+    dispatch_group_notify(group, queue, ^{
+        !callback ?: callback(YES, nil);
     });
 }
 
