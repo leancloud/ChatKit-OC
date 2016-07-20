@@ -529,32 +529,7 @@
 				INFOPLIST_FILE = "$(SRCROOT)/Example/Class/Module/Other/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					"-ObjC",
-					"-l\"CYLTabBarController\"",
-					"-l\"DACircularProgress\"",
-					"-l\"MBProgressHUD\"",
-					"-l\"MLPAutoCompleteTextField\"",
-					"-l\"MWPhotoBrowser\"",
-					"-l\"SDWebImage\"",
-					"-l\"TWMessageBarManager\"",
-					"-framework",
-					"\"AssetsLibrary\"",
-					"-framework",
-					"\"CoreGraphics\"",
-					"-framework",
-					"\"ImageIO\"",
-					"-framework",
-					"\"MediaPlayer\"",
-					"-framework",
-					"\"QuartzCore\"",
-					"-weak_framework",
-					"\"Photos\"",
-					"-lsqlite3",
-					"-licucore",
-					"-lz",
-				);
+				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = LeanCloud.ChatKit.OC;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
@@ -573,32 +548,7 @@
 				INFOPLIST_FILE = "$(SRCROOT)/Example/Class/Module/Other/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					"-ObjC",
-					"-l\"CYLTabBarController\"",
-					"-l\"DACircularProgress\"",
-					"-l\"MBProgressHUD\"",
-					"-l\"MLPAutoCompleteTextField\"",
-					"-l\"MWPhotoBrowser\"",
-					"-l\"SDWebImage\"",
-					"-l\"TWMessageBarManager\"",
-					"-framework",
-					"\"AssetsLibrary\"",
-					"-framework",
-					"\"CoreGraphics\"",
-					"-framework",
-					"\"ImageIO\"",
-					"-framework",
-					"\"MediaPlayer\"",
-					"-framework",
-					"\"QuartzCore\"",
-					"-weak_framework",
-					"\"Photos\"",
-					"-lsqlite3",
-					"-licucore",
-					"-lz",
-				);
+				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = LeanCloud.ChatKit.OC;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";

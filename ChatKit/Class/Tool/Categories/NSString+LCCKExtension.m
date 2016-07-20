@@ -21,6 +21,13 @@ static NSString *const LCCKPhoneRegex =  @"\\d{3,4}[- ]?\\d{7,8}";
     return YES;
 }
 
+- (BOOL)lcck_onlyContainsLetterAndNumber {
+    if (![[self stringByTrimmingCharactersInSet:[NSCharacterSet decimalDigitCharacterSet]] isEqualToString:self]
+        && ![[self stringByTrimmingCharactersInSet:[NSCharacterSet letterCharacterSet]] isEqualToString:self]) {
+        return YES;
+    }
+    return NO;
+}
 - (BOOL)lcck_isLink {
     return [self lcck_isType:NSTextCheckingTypeLink];
 }

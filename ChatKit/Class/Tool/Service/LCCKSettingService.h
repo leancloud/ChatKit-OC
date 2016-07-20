@@ -55,6 +55,4 @@ FOUNDATION_EXTERN NSString *const LCCKSettingServiceErrorDomain;
 //save the local applicationIconBadgeNumber to the server
 - (void)syncBadge;
 
-@property (nonatomic, assign) BOOL useDevPushCerticate;
-
 @end

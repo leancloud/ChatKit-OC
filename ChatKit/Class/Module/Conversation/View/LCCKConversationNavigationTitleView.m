@@ -26,21 +26,6 @@ static void * const LCCKConversationNavigationTitleViewShowRemindMuteImageViewCo
 
 @implementation LCCKConversationNavigationTitleView
 
-- (instancetype)initWithFrame:(CGRect)frame {
-    self = [super initWithFrame:frame];
-    if (self) {
-        //        self = [self sharedInit];
-    }
-    return self;
-}
-- (instancetype)initWithCoder:(NSCoder *)aDecoder {
-    self = [super initWithCoder:aDecoder];
-    if (self) {
-        //        self = [self sharedInit];
-    }
-    return self;
-}
-
 - (UIStackView *)containerView {
     if (!_containerView) {
         UIStackView *containerView = [[UIStackView alloc] initWithFrame:CGRectZero];
@@ -64,7 +49,6 @@ static void * const LCCKConversationNavigationTitleViewShowRemindMuteImageViewCo
     return _containerView;
 }
 
-// KVO监听执行
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
     if(context != LCCKConversationNavigationTitleViewShowRemindMuteImageViewContext) {
         [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
@@ -80,7 +64,6 @@ static void * const LCCKConversationNavigationTitleViewShowRemindMuteImageViewCo
 }
 
 - (void)dealloc {
-    // KVO反注册
     [self removeObserver:self forKeyPath:@"showRemindMuteImageView"];
 }
 
@@ -103,9 +86,7 @@ static void * const LCCKConversationNavigationTitleViewShowRemindMuteImageViewCo
             conversationName = conversation.lcck_title;
         }
         [self setupWithConversationName:conversationName membersCount:membersCount navigationController:navigationController];
-        if (conversation.muted) {
-            self.showRemindMuteImageView = !conversation.muted;
-        }
+        self.remindMuteImageView.hidden = !conversation.muted;
     }
     return self;
 }

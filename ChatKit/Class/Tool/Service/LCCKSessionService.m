@@ -47,6 +47,11 @@ NSString *const LCCKSessionServiceErrorDemain = @"LCCKSessionServiceErrorDemain"
         [self updateConnectStatus];
         !callback ?: callback(succeeded, error);
     }];
+    // 当用户表示喜欢 Giants，则为其订阅该频道。
+    AVInstallation *currentInstallation = [AVInstallation currentInstallation];
+    
+    [currentInstallation addUniqueObject:clientId forKey:@"channels"];
+    [currentInstallation saveInBackground];
 }
 
 - (void)closeWithCallback:(LCCKBooleanResultBlock)callback {

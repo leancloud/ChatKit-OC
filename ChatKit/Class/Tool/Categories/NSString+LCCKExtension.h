@@ -12,6 +12,11 @@
 
 - (BOOL)lcck_containsString:(NSString *)string;
 
+/*!
+ * 含标点符号，也返回NO
+ */
+- (BOOL)lcck_onlyContainsLetterAndNumber;
+
 - (BOOL)lcck_isLink;
 
 - (BOOL)lcck_isPhoneNumber;

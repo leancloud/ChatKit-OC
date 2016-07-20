@@ -14,7 +14,7 @@ pod 'MBProgressHUD'
 pod 'CYLTabBarController'
 pod 'TWMessageBarManager'
 #pod "FDStackView", "1.0"
-pod 'MWPhotoBrowser'
+pod "MWPhotoBrowser", "2.1.2"
 pod 'MLPAutoCompleteTextField'
 
 end

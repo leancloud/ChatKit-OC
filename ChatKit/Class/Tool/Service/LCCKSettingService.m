@@ -106,4 +106,9 @@ static BOOL LCCKAllLogsEnabled;
     }
 }
 
+- (void)setUseDevPushCerticate:(BOOL)useDevPushCerticate {
+    _useDevPushCerticate = useDevPushCerticate;
+    [AVPush setProductionMode:!_useDevPushCerticate];
+}
+
 @end

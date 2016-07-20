@@ -13,14 +13,14 @@ Pod::Spec.new do |s|
   s.resources    = 'ChatKit/Class/Resources/*', 'ChatKit/**/*.xib'
 
   s.requires_arc = true
-  s.dependency 'AVOSCloud'
-  s.dependency 'AVOSCloudIM'
-  s.dependency 'MJRefresh'
-  s.dependency 'Masonry'
-  s.dependency 'SDWebImage'
-  s.dependency 'FMDB'
-  s.dependency 'UITableView+FDTemplateLayoutCell'
-  s.dependency 'FDStackView'
+  s.dependency "AVOSCloud" , "~> 3.3.5"
+  s.dependency "AVOSCloudIM", "~> 3.3.5"
+  s.dependency "MJRefresh" , "~> 3.1.9"
+  s.dependency "Masonry" , "~> 1.0.1"
+  s.dependency "SDWebImage" , "~> 3.8.0"
+  s.dependency "FMDB" , "~> 2.6.2"
+  s.dependency "UITableView+FDTemplateLayoutCell" , "~> 1.5.beta"
+  s.dependency "FDStackView" , "~> 1.0"
 
 
 
