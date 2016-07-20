@@ -81,7 +81,7 @@ NSString *const kLCCKAudioDataKey;
     [[NSNotificationCenter defaultCenter] removeObserver:self forKeyPath:UIApplicationWillResignActiveNotification];
     
     [[UIDevice currentDevice] setProximityMonitoringEnabled:NO];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIDeviceProximityStateDidChangeNotification object:nil];
+//    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIDeviceProximityStateDidChangeNotification object:nil];
     
 }
 
@@ -219,7 +219,8 @@ NSString *const kLCCKAudioDataKey;
 
 - (void)applicationWillResignActive:(UIApplication *)application {
     [self cancelOperation];
-    [self stopAudioPlayer];
+    // no need to stop player
+//    [self stopAudioPlayer];
     [self setAudioPlayerState:LCCKVoiceMessageStateCancel];
 }
 
