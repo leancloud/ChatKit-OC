@@ -96,6 +96,18 @@
     return self;
 }
 
+- (instancetype)initWithMoney:(NSInteger)money userId:(NSString *)userId user:(id<LCCKUserDelegate>)user
+{
+    if (self = [super init])
+    {
+        _money = money;
+        _user = user;
+        _userId = userId;
+        _messageMediaType = LCCKMessageTypePacket;
+    }
+    return self;
+}
+
 - (instancetype)initWithPhoto:(UIImage *)photo
                thumbnailPhoto:(UIImage *)thumbnailPhoto
                     photoPath:(NSString *)photoPath

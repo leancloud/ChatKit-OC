@@ -50,6 +50,9 @@
         case LCCKMessageTypeText:
             typeKey = @"TextMessage";
             break;
+        case LCCKMessageTypePacket:
+            typeKey = @"TypePacket";
+            break;
         case LCCKMessageTypeEmotion:
         case LCCKMessageTypeVideo:
         case LCCKMessageTypeUnknow:

@@ -15,6 +15,7 @@ typedef NS_ENUM(NSUInteger, LCCKChatMoreItemType){
     LCCKChatMoreItemCamera = 0 /**< 显示拍照 */,
     LCCKChatMoreItemAlbum /**< 显示相册 */,
     LCCKChatMoreItemLocation /**< 显示地理位置 */,
+    LCCKChatMoreItemPacket /**< 显示红包 */,
 };
 
 static CGFloat const kFunctionViewHeight = 210.0f;

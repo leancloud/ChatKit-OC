@@ -1006,6 +1006,8 @@
 				TargetAttributes = {
 					9A6060811CEC831800D14D73 = {
 						CreatedOnToolsVersion = 7.3;
+						DevelopmentTeam = R7E46N38Q6;
+						DevelopmentTeamName = "Modern Mobile Digital Media Company Limited";
 					};
 				};
 			};

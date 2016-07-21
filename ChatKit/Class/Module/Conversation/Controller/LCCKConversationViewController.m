@@ -440,6 +440,12 @@
     [self.chatViewModel sendMessage:message];
 }
 
+- (void)chatBar:(LCCKChatBar *)chatBar sendPacket:(NSInteger)money
+{
+    LCCKMessage *message = [[LCCKMessage alloc] initWithMoney:money userId:self.userId user:self.user];
+    [self.chatViewModel sendMessage:message];
+}
+
 - (void)chatBarFrameDidChange:(LCCKChatBar *)chatBar shouldScrollToBottom:(BOOL)shouldScrollToBottom; {
     [UIView animateWithDuration:LCCKAnimateDuration animations:^{
         [self.tableView layoutIfNeeded];

@@ -91,6 +91,14 @@ typedef NS_ENUM(NSUInteger, LCCKFunctionViewShowType){
 - (void)chatBar:(LCCKChatBar *)chatBar sendPictures:(NSArray *)pictures;
 
 /*!
+ *  发送红包信息
+ *
+ *  @param chatBar
+ *  @param money    需要发送的红包信息
+ */
+- (void)chatBar:(LCCKChatBar *)chatBar sendPacket:(NSInteger)money;
+
+/*!
  *  发送地理位置信息
  *
  *  @param chatBar

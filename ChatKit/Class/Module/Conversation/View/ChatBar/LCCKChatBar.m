@@ -18,11 +18,12 @@
 #import "UIImage+LCCKExtension.h"
 #import "NSString+LCCKExtension.h"
 #import "LCCKConversationService.h"
+#import "MMPacketViewController.h"
 
 NSString *const kLCCKBatchDeleteTextPrefix = @"kLCCKBatchDeleteTextPrefix";
 NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
 
-@interface LCCKChatBar () <UITextViewDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate, Mp3RecorderDelegate,LCCKChatMoreViewDelegate, LCCKChatMoreViewDataSource, LCCKChatFaceViewDelegate, LCCKLocationControllerDelegate>
+@interface LCCKChatBar () <UITextViewDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate, Mp3RecorderDelegate,LCCKChatMoreViewDelegate, LCCKChatMoreViewDataSource, LCCKChatFaceViewDelegate, LCCKLocationControllerDelegate, MMPacketViewControllerDelegate>
 
 @property (strong, nonatomic) Mp3Recorder *MP3;
 @property (nonatomic, strong) UIView *inputBarBackgroundView; /**< 输入栏目背景视图 */
@@ -265,6 +266,11 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
     }
 }
 
+- (void)cancelPacket
+{
+    [self.rootViewController dismissViewControllerAnimated:YES completion:nil];
+}
+
 #pragma mark - UIImagePickerControllerDelegate
 
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
@@ -275,6 +281,14 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
 
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker{
     [self.rootViewController dismissViewControllerAnimated:YES completion:nil];
+}
+
+#pragma mark - MMPacketViewControllerDelegate
+- (void)sendPacket:(NSInteger)money
+{
+    if (self.delegate && [self.delegate respondsToSelector:@selector(chatBar:sendPacket:)]) {
+        [self.delegate chatBar:self sendPacket:money];
+    }
 }
 
 #pragma mark - LCCKLocationControllerDelegate
@@ -345,19 +359,28 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
             [self.rootViewController presentViewController:locationNav animated:YES completion:nil];
         }
             break;
+        case LCCKChatMoreItemPacket: {
+            //显示红包
+            MMPacketViewController *packetC = [[MMPacketViewController alloc] init];
+            packetC.delegate = self;
+            UINavigationController *locationNav = [[UINavigationController alloc] initWithRootViewController:packetC];
+            [self.rootViewController presentViewController:locationNav animated:YES completion:nil];
+        }
+            break;
         default:
             break;
     }
 }
 
 - (NSArray *)titlesOfMoreView:(LCCKChatMoreView *)moreView {
-    return @[ @"拍摄",@"照片",@"位置" ];
+    return @[ @"拍摄",@"照片",@"位置" ,@"红包"];
 }
 
 - (NSArray<NSString *> *)imageNamesOfMoreView:(LCCKChatMoreView *)moreView {
     return @[
              @"chat_bar_icons_camera",
              @"chat_bar_icons_pic",
+             @"chat_bar_icons_location",
              @"chat_bar_icons_location"
              ];
 }
@@ -695,6 +718,17 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
 - (void)sendImageMessage:(UIImage *)image {
     if (self.delegate && [self.delegate respondsToSelector:@selector(chatBar:sendPictures:)]) {
         [self.delegate chatBar:self sendPictures:@[image]];
+    }
+}
+
+/**
+ *  通知代理发送图片信息
+ *
+ *  @param image 发送的图片
+ */
+- (void)sendPacketMessage:(NSInteger)money {
+    if (self.delegate && [self.delegate respondsToSelector:@selector(chatBar:sendPacket:)]) {
+        [self.delegate chatBar:self sendPacket:money];
     }
 }
 

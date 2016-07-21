@@ -13,6 +13,7 @@
 #import "LCCKChatVoiceMessageCell.h"
 #import "LCCKChatSystemMessageCell.h"
 #import "LCCKChatLocationMessageCell.h"
+#import "MMPacketCell.h"
 
 @implementation LCCKCellRegisterController
 
@@ -40,6 +41,11 @@
     [tableView registerClass:[LCCKChatSystemMessageCell class] forCellReuseIdentifier:@"LCCKChatMessageCell_OwnerSystem_SystemMessage_"];
     [tableView registerClass:[LCCKChatSystemMessageCell class] forCellReuseIdentifier:@"LCCKChatMessageCell_OwnerSystem_SystemMessage_SingleCell"];
     [tableView registerClass:[LCCKChatSystemMessageCell class] forCellReuseIdentifier:@"LCCKChatMessageCell_OwnerSystem_SystemMessage_GroupCell"];
+    
+    [tableView registerClass:[MMPacketCell class] forCellReuseIdentifier:@"LCCKChatMessageCell_OwnerSystem_TypePacket_GroupCell"];
+    [tableView registerClass:[MMPacketCell class] forCellReuseIdentifier:@"LCCKChatMessageCell_OwnerSystem_TypePacket_SingleCell"];
+    [tableView registerClass:[MMPacketCell class] forCellReuseIdentifier:@"LCCKChatMessageCell_OwnerSelf_TypePacket_GroupCell"];
+    [tableView registerClass:[MMPacketCell class] forCellReuseIdentifier:@"LCCKChatMessageCell_OwnerSelf_TypePacket_SingleCell"];
 }
 
 @end

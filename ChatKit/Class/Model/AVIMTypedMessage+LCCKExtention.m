@@ -8,6 +8,7 @@
 
 #import "AVIMTypedMessage+LCCKExtention.h"
 #import "LCCKMessage.h"
+#import "MMPacketMessage.h"
 
 @implementation AVIMTypedMessage (LCCKExtention)
 
@@ -39,11 +40,17 @@
                                                           longitude:message.location.coordinate.longitude
                                                          attributes:nil];
             break;
+        }
+        case LCCKMessageTypePacket: {
+            avimTypedMessage = [MMPacketMessage messageWithText:@"恭喜发财大吉大利" file:nil attributes:@{@"money":@(message.money)}];
+        
+            break;
+        }
         case LCCKMessageTypeSystem:
         case LCCKMessageTypeUnknow:
             //TODO:
             break;
-        }
+        
     }
     avimTypedMessage.sendTimestamp = [[NSDate date] timeIntervalSince1970] * 1000;
     return avimTypedMessage;
