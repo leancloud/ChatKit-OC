@@ -60,18 +60,22 @@
 
 @property (nonatomic, assign, readonly) BOOL isRead;
 
+@property (nonatomic, copy, readonly) NSString *messageId;
+
+@property (nonatomic, copy, readonly) NSString *serverMessageId;
 
 /*!
  * just for failed message store, not meaning messageId
  */
-@property (nonatomic, copy, readwrite) NSString *messageId;
+@property (nonatomic, copy, readwrite) NSString *localMessageId;
 
 @property (nonatomic, copy, readwrite) NSString *conversationId;
 
 - (instancetype)initWithText:(NSString *)text
                       userId:(NSString *)userId
                        user:(id<LCCKUserDelegate>)user
-                   timestamp:(NSTimeInterval)timestamp;
+                   timestamp:(NSTimeInterval)timestamp
+             serverMessageId:(NSString *)serverMessageId;
 
 - (instancetype)initWithSystemText:(NSString *)text;
 + (instancetype)systemMessageWithTimestamp:(NSTimeInterval)timestamp;
@@ -95,7 +99,9 @@
                originPhotoURL:(NSURL *)originPhotoURL
                        userId:(NSString *)userId
                        user:(id<LCCKUserDelegate>)user
-                    timestamp:(NSTimeInterval)timestamp;
+                    timestamp:(NSTimeInterval)timestamp
+              serverMessageId:(NSString *)serverMessageId;
+
 
 /**
  *  初始化视频类型的消息
@@ -113,7 +119,9 @@
                                 videoURL:(NSURL *)videoURL
                                   userId:(NSString *)userId
                                    user:(id<LCCKUserDelegate>)user
-                               timestamp:(NSTimeInterval)timestamp;
+                               timestamp:(NSTimeInterval)timestamp
+                         serverMessageId:(NSString *)serverMessageId;
+
 
 /**
  *  初始化语音类型的消息
@@ -131,7 +139,9 @@
                     voiceDuration:(NSString *)voiceDuration
                            userId:(NSString *)userId
                             user:(id<LCCKUserDelegate>)user
-                        timestamp:(NSTimeInterval)timestamp;
+                        timestamp:(NSTimeInterval)timestamp
+                  serverMessageId:(NSString *)serverMessageId;
+
 
 /**
  *  初始化语音类型的消息。增加已读未读标记
@@ -151,14 +161,18 @@
                            userId:(NSString *)userId
                             user:(id<LCCKUserDelegate>)user
                         timestamp:(NSTimeInterval)timestamp
-                           isRead:(BOOL)isRead;
+                           isRead:(BOOL)isRead
+                  serverMessageId:(NSString *)serverMessageId;
+
 
 - (instancetype)initWithLocalPositionPhoto:(UIImage *)localPositionPhoto
                               geolocations:(NSString *)geolocations
                                   location:(CLLocation *)location
                                     userId:(NSString *)userId
                                      user:(id<LCCKUserDelegate>)user
-                                 timestamp:(NSTimeInterval)timestamp;
+                                 timestamp:(NSTimeInterval)timestamp
+                           serverMessageId:(NSString *)serverMessageId;
+
 // 是否显示时间轴Label
 - (BOOL)shouldDisplayTimestampForMessages:(NSArray *)messages;
 + (LCCKMessage *)messageWithAVIMTypedMessage:(AVIMTypedMessage *)message;

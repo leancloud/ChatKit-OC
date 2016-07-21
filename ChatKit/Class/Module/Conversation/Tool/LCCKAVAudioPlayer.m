@@ -57,7 +57,6 @@ NSString *const kLCCKAudioDataKey;
         //添加应用进入后台通知
         UIApplication *app = [UIApplication sharedApplication];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationWillResignActive:) name:UIApplicationWillResignActiveNotification object:app];
-               _index = NSUIntegerMax;
     }
     return self;
 }
@@ -87,14 +86,14 @@ NSString *const kLCCKAudioDataKey;
 
 #pragma mark - Public Methods
 
-- (void)playAudioWithURLString:(NSString *)URLString atIndex:(NSUInteger)index{
+- (void)playAudioWithURLString:(NSString *)URLString identifier:(NSString *)identifier {
     
     if (!URLString) {
         return;
     }
     
     //如果来自同一个URLString并且index相同,则直接取消
-    if ([self.URLString isEqualToString:URLString] && self.index == index) {
+    if ([self.URLString isEqualToString:URLString] && self.identifier == identifier) {
         [self stopAudioPlayer];
         [self setAudioPlayerState:LCCKVoiceMessageStateCancel];
         return;
@@ -102,11 +101,11 @@ NSString *const kLCCKAudioDataKey;
     
     //TODO 从URL中读取音频data
     self.URLString = URLString;
-    self.index = index;
+    self.identifier = identifier;
     
     NSBlockOperation *blockOperation = [NSBlockOperation blockOperationWithBlock:^{
         [self setAudioPlayerState:LCCKVoiceMessageStateDownloading];
-        NSData *audioData = [self audioDataFromURLString:URLString atIndex:index];
+        NSData *audioData = [self audioDataFromURLString:URLString identifier:identifier];
         if (!audioData) {
             [self setAudioPlayerState:LCCKVoiceMessageStateCancel];
             return;
@@ -116,7 +115,7 @@ NSString *const kLCCKAudioDataKey;
         });
     }];
     
-    [blockOperation setName:[[NSString stringWithFormat:@"%@_%ld",self.URLString, self.index] lcck_MD5String]];
+    [blockOperation setName:[[NSString stringWithFormat:@"%@_%@",self.URLString, self.identifier] lcck_MD5String]];
     
     [self.audioDataOperationQueue addOperation:blockOperation];
     
@@ -142,7 +141,7 @@ NSString *const kLCCKAudioDataKey;
 
 #pragma mark - Private Methods
 
-- (NSData *)audioDataFromURLString:(NSString *)URLString atIndex:(NSUInteger)index{
+- (NSData *)audioDataFromURLString:(NSString *)URLString identifier:(NSString *)identifier {
     NSData *audioData;
     
     //1.检查URLString是本地文件还是网络文件
@@ -163,7 +162,7 @@ NSString *const kLCCKAudioDataKey;
     
     //4.判断audioData是否读取成功,成功则添加对应的audioDataKey
     if (audioData) {
-        objc_setAssociatedObject(audioData, &kLCCKAudioDataKey, [[NSString stringWithFormat:@"%@_%ld",URLString,index] lcck_MD5String], OBJC_ASSOCIATION_COPY);
+        objc_setAssociatedObject(audioData, &kLCCKAudioDataKey, [[NSString stringWithFormat:@"%@_%@",URLString,identifier] lcck_MD5String], OBJC_ASSOCIATION_COPY);
     }
 
     return audioData;
@@ -174,7 +173,7 @@ NSString *const kLCCKAudioDataKey;
     
     NSString *audioURLMD5String = objc_getAssociatedObject(audioData, &kLCCKAudioDataKey);
     
-    if (![[[NSString stringWithFormat:@"%@_%ld",self.URLString,self.index] lcck_MD5String] isEqualToString:audioURLMD5String]) {
+    if (![[[NSString stringWithFormat:@"%@_%@",self.URLString,self.identifier] lcck_MD5String] isEqualToString:audioURLMD5String]) {
         return;
     }
 
@@ -195,7 +194,7 @@ NSString *const kLCCKAudioDataKey;
 
 - (void)cancelOperation {
     for (NSOperation *operation in self.audioDataOperationQueue.operations) {
-        if ([operation.name isEqualToString:[[NSString stringWithFormat:@"%@_%ld",self.URLString,self.index] lcck_MD5String]]) {
+        if ([operation.name isEqualToString:[[NSString stringWithFormat:@"%@_%@",self.URLString, self.identifier] lcck_MD5String]]) {
             [operation cancel];
             break;
         }
@@ -219,9 +218,6 @@ NSString *const kLCCKAudioDataKey;
 
 - (void)applicationWillResignActive:(UIApplication *)application {
     [self cancelOperation];
-    // no need to stop player
-//    [self stopAudioPlayer];
-    [self setAudioPlayerState:LCCKVoiceMessageStateCancel];
 }
 
 - (void)proximityStateChanged:(NSNotification *)notification {
@@ -261,12 +257,12 @@ NSString *const kLCCKAudioDataKey;
 
 - (void)setAudioPlayerState:(LCCKVoiceMessageState)audioPlayerState {
     _audioPlayerState = audioPlayerState;
-    if (self.delegate && [self.delegate respondsToSelector:@selector(audioPlayerStateDidChanged:forIndex:)]) {
-        [self.delegate audioPlayerStateDidChanged:_audioPlayerState forIndex:self.index];
+    if (self.delegate && [self.delegate respondsToSelector:@selector(audioPlayerStateDidChanged:identifier:)]) {
+        [self.delegate audioPlayerStateDidChanged:_audioPlayerState identifier:self.identifier];
     }
     if (_audioPlayerState == LCCKVoiceMessageStateCancel || _audioPlayerState == LCCKVoiceMessageStateNormal) {
         _URLString = nil;
-        _index = NSUIntegerMax;
+        _identifier = nil;
     }
 }
 

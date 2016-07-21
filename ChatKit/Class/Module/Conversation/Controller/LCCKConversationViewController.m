@@ -183,7 +183,7 @@
         [[LCCKConversationService sharedInstance] updateDraft:self.chatBar.cachedText conversationId:self.conversationId];
     }
     [[LCCKAVAudioPlayer sharePlayer] stopAudioPlayer];
-    [LCCKAVAudioPlayer sharePlayer].index = NSUIntegerMax;
+    [LCCKAVAudioPlayer sharePlayer].identifier = nil;
     [LCCKAVAudioPlayer sharePlayer].URLString = nil;
     !self.viewWillDisappearBlock ?: self.viewWillDisappearBlock(self, animated);
 }
@@ -315,7 +315,8 @@
         LCCKMessage *lcckMessage = [[LCCKMessage alloc] initWithText:message
                                                               userId:self.userId
                                                               user:self.user
-                                                           timestamp:[[self class] currentTimestamp]];
+                                                           timestamp:[[self class] currentTimestamp]
+                                                     serverMessageId:nil];
         lcckMessage.messageGroupType = self.conversation.lcck_type;
         [self.chatViewModel sendMessage:lcckMessage];
     }
@@ -407,7 +408,9 @@
                                                    originPhotoURL:nil
                                                            userId:self.userId
                                                            user:self.user
-                                                        timestamp:[[self class] currentTimestamp]];
+                                                        timestamp:[[self class] currentTimestamp]
+                                serverMessageId:nil
+                                ];
         message.messageGroupType = self.conversation.lcck_type;
         [self.chatViewModel sendMessage:message];
     } else {
@@ -421,7 +424,8 @@
                                                     voiceDuration:[NSString stringWithFormat:@"%@", @(seconds)]
                                                            userId:self.userId
                                                            user:self.user
-                                                        timestamp:[[self class] currentTimestamp]];
+                                                        timestamp:[[self class] currentTimestamp]
+                                                  serverMessageId:nil];
     message.messageGroupType =  self.conversation.lcck_type;
     [self.chatViewModel sendMessage:message];
 }
@@ -436,7 +440,8 @@
                                                                                                       longitude:locationCoordinate.longitude]
                                                                     userId:self.userId
                                                                     user:self.user
-                                                                 timestamp:[[self class] currentTimestamp]];
+                                                                 timestamp:[[self class] currentTimestamp]
+                                                           serverMessageId:nil];
     [self.chatViewModel sendMessage:message];
 }
 
@@ -471,7 +476,7 @@
         case LCCKMessageTypeVoice: {
 //            [(LCCKChatVoiceMessageCell *)messageCell setVoiceMessageState:[[LCCKAVAudioPlayer sharePlayer] audioPlayerState]];
             NSString *voiceFileName = message.voicePath;//必须带后缀，.mp3；
-            [[LCCKAVAudioPlayer sharePlayer] playAudioWithURLString:voiceFileName atIndex:indexPath.row];
+            [[LCCKAVAudioPlayer sharePlayer] playAudioWithURLString:voiceFileName identifier:message.messageId];
         }
             break;
         case LCCKMessageTypeImage: {
@@ -522,7 +527,7 @@
 
 - (void)avatarImageViewLongPressed:(LCCKChatMessageCell *)messageCell {
     NSString *userName = messageCell.message.user.name ?: messageCell.message.userId;
-    NSString *appendString = [NSString stringWithFormat:@"@%@ ", userName];
+    NSString *appendString = [NSString stringWithFormat:@" @%@ ", userName];
     [self.chatBar appendString:appendString];
 }
 
@@ -574,15 +579,15 @@
 
 #pragma mark - LCCKAVAudioPlayerDelegate
 
-- (void)audioPlayerStateDidChanged:(LCCKVoiceMessageState)audioPlayerState forIndex:(NSUInteger)index {
-    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:index inSection:0];
-    LCCKChatVoiceMessageCell *voiceMessageCell = [self.tableView cellForRowAtIndexPath:indexPath];
-    dispatch_async(dispatch_get_main_queue(), ^{
-        if ([voiceMessageCell respondsToSelector:@selector(setVoiceMessageState:)]) {
-            [voiceMessageCell setVoiceMessageState:audioPlayerState];
-        }
-    });
-}
+//- (void)audioPlayerStateDidChanged:(LCCKVoiceMessageState)audioPlayerState identifier:(NSString *)identifier {
+//    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:index inSection:0];
+//    LCCKChatVoiceMessageCell *voiceMessageCell = [self.tableView cellForRowAtIndexPath:indexPath];
+//    dispatch_async(dispatch_get_main_queue(), ^{
+//        if ([voiceMessageCell respondsToSelector:@selector(setVoiceMessageState:)]) {
+//            [voiceMessageCell setVoiceMessageState:audioPlayerState];
+//        }
+//    });
+//}
 
 - (void)loadMoreMessagesScrollTotop {
     [self.chatViewModel loadOldMessages];

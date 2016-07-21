@@ -18,7 +18,7 @@
 
 @protocol LCCKAVAudioPlayerDelegate <NSObject>
 
-- (void)audioPlayerStateDidChanged:(LCCKVoiceMessageState)audioPlayerState forIndex:(NSUInteger)index;
+- (void)audioPlayerStateDidChanged:(LCCKVoiceMessageState)audioPlayerState identifier:(NSString *)identifier;
 
 @end
 
@@ -29,9 +29,9 @@
 @property (nonatomic, copy) NSString *URLString;
 
 /**
- *  index -> 主要作用是提供记录,用来控制对应的tableViewCell的状态
+ *  identifier -> 主要作用是提供记录,用来控制对应的tableViewCell的状态
  */
-@property (nonatomic, assign) NSUInteger index;
+@property (nonatomic, copy) NSString *identifier;
 
 /**
  *  当前播放器播放的状态,当tableView滚动时,匹配index来设置对应的audioPlayerState
@@ -40,7 +40,7 @@
 
 + (instancetype)sharePlayer;
 
-- (void)playAudioWithURLString:(NSString *)URLString atIndex:(NSUInteger)index;
+- (void)playAudioWithURLString:(NSString *)URLString identifier:(NSString *)identifier;
 
 - (void)stopAudioPlayer;
 

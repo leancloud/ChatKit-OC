@@ -99,13 +99,21 @@ static void * const LCCKChatVoiceMessageCellVoiceMessageStateContext = (void*)&L
         LCCKVoiceMessageState audioPlayerState = [audioPlayerStateNumber intValue];
         switch (audioPlayerState) {
             case LCCKVoiceMessageStateCancel:
+            case LCCKVoiceMessageStateNormal:
                 self.voiceMessageState = LCCKVoiceMessageStateCancel;
                 break;
-            default:
+
+            default: {
+                NSString *playerIdentifier = [[LCCKAVAudioPlayer sharePlayer] identifier];
+                if (playerIdentifier) {
+                    NSString *messageId = self.message.messageId;
+                    if (playerIdentifier && [messageId isEqualToString:playerIdentifier]) {
+                        self.voiceMessageState = audioPlayerState;
+                    }
+                }
+            }
                 break;
         }
-        
-        
     }
 }
 
@@ -119,8 +127,20 @@ static void * const LCCKChatVoiceMessageCellVoiceMessageStateContext = (void*)&L
 
 - (void)configureCellWithData:(LCCKMessage *)message {
     [super configureCellWithData:message];
-    self.messageVoiceSecondsLabel.text = [NSString stringWithFormat:@"%@''",message.voiceDuration];
-    CGFloat voiceDuration = [message.voiceDuration floatValue];
+    NSUInteger voiceDuration = [message.voiceDuration integerValue];
+    NSString *voiceDurationString = [NSString stringWithFormat:@"%@", @(voiceDuration)];
+    self.messageVoiceSecondsLabel.text = [NSString stringWithFormat:@"%@''", voiceDurationString];
+        //设置正确的voiceMessageCell播放状态
+        NSString *identifier = [[LCCKAVAudioPlayer sharePlayer] identifier];
+        if (identifier) {
+            NSString *messageId = message.messageId;
+            if (messageId == identifier) {
+                if (message.messageMediaType == LCCKMessageTypeVoice) {
+                    [self setVoiceMessageState:[[LCCKAVAudioPlayer sharePlayer] audioPlayerState]];
+                }
+            }
+        }
+
     if (voiceDuration > 2) {
         __block CGFloat length;
         CGFloat lengthUnit = 10.f;
