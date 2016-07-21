@@ -143,7 +143,7 @@
         __weak __typeof(self) weakSelf = self;
         __weak __typeof(cell) weakCell = cell;
         [[LCCKUserSystemService sharedInstance] getProfileInBackgroundForUserId:peerId callback:^(id<LCCKUserDelegate> user, NSError *error) {
-            if (!error && [weakCell.identifier isEqualToString:user.userId]) {
+            if (!error) {
                 NSIndexPath *indexPath_ = [weakSelf.conversationListViewController.tableView indexPathForCell:weakCell];
                 if (!indexPath_) {
                     return;
