@@ -47,10 +47,8 @@ static CGFloat const LCCKLocationPOIListCellHeight = 40.f;
     [[LCCKLocationManager shareManager] startLocation];
     [self.mapView setUserTrackingMode:MKUserTrackingModeFollow animated:YES];
 
-    [self.view updateConstraintsIfNeeded];
-    
+    [self.view updateConstraintsIfNeeded];    
 }
-
 
 - (void)updateViewConstraints{
     [super updateViewConstraints];

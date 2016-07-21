@@ -32,6 +32,7 @@ typedef NS_ENUM(NSUInteger, LCCKMessageType){
     LCCKMessageTypeLocation = 5 /**< 地理位置消息 */,
     LCCKMessageTypeEmotion = 6 /**< GIF表情消息 */,
     LCCKMessageTypeVideo = 7 /**< 视频文件消息 */,
+    LCCKMessageTypePacket = 8 /**< 红包消息 */,
 };
 
 /**

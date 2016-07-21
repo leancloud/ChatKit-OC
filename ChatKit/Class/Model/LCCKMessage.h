@@ -24,6 +24,7 @@
 @property (nonatomic, strong, readonly) NSURL *thumbnailURL;
 @property (nonatomic, strong, readonly) NSURL *originPhotoURL;
 @property (nonatomic, strong, readonly) UIImage *videoConverPhoto;
+
 @property (nonatomic, copy, readonly) NSString *videoPath;
 @property (nonatomic, strong, readonly) NSURL *videoURL;
 
@@ -59,7 +60,7 @@
 @property (nonatomic,assign) LCCKMessageSendState status;
 
 @property (nonatomic, assign, readonly) BOOL isRead;
-
+@property (nonatomic, assign, readonly) NSInteger money;
 
 /*!
  * just for failed message store, not meaning messageId
@@ -76,6 +77,9 @@
 - (instancetype)initWithSystemText:(NSString *)text;
 + (instancetype)systemMessageWithTimestamp:(NSTimeInterval)timestamp;
 - (NSString *)getTimestampString;
+
+- (instancetype)initWithMoney:(NSInteger)money userId:(NSString *)userId user:(id<LCCKUserDelegate>)user;
+
 /**
  *  初始化图片类型的消息
  *
