@@ -29,6 +29,12 @@
 	</dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>ChatKit想要获取您位置，方便您在聊天服务中发送位置信息</string>
+	<key>NSCameraUsageDescription</key>
+	<string></string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string></string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string></string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>location</string>
