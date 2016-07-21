@@ -25,12 +25,6 @@
 
 - (void)updateConstraints {
     [super updateConstraints];
-//    [self.systemmessageContentView mas_makeConstraints:^(MASConstraintMaker *make) {
-//        make.top.equalTo(self.contentView.mas_top).with.offset(8);
-//        make.bottom.equalTo(self.contentView.mas_bottom).with.offset(-8);
-//        make.width.lessThanOrEqualTo(@LCCKMessageCellLimit);
-//        make.centerX.equalTo(self.contentView.mas_centerX);
-//    }];
     [self.systemmessageContentView mas_makeConstraints:^(MASConstraintMaker *make) {
         CGFloat offset = 3;//8
         make.top.equalTo(self.contentView.mas_top).with.offset(offset);

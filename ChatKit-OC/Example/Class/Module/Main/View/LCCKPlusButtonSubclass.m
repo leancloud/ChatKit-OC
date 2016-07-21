@@ -73,12 +73,9 @@
     [LCChatKitExample exampleOpenConversationViewControllerWithConversaionId:@"570da6a9daeb3a63ca5b07b0" fromNavigationController:nil];
 }
 
-//+ (NSUInteger)indexOfPlusButtonInTabBar {
-//    return 3;
-//}
++ (CGFloat)constantOfPlusButtonCenterYOffsetForTabBarHeight:(CGFloat)tabBarHeight {
+    return 2;
+}
 
-//+ (CGFloat)multiplerInCenterY {
-//    return  0.5;
-//}
 
 @end

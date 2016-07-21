@@ -56,41 +56,40 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
 
 - (void)updateConstraints {
     [super updateConstraints];
-    
+    CGFloat offset = 5;
     [self.inputBarBackgroundView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.and.right.and.top.mas_equalTo(self);
-        //        make.height.mas_equalTo(kLCCKChatBarMinHeight).priorityLow();
         make.bottom.mas_equalTo(self).priorityLow();
     }];
     
     [self.voiceButton mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(self.inputBarBackgroundView.mas_left).with.offset(10);
+        make.left.equalTo(self.inputBarBackgroundView.mas_left).with.offset(offset);
         make.bottom.equalTo(self.inputBarBackgroundView.mas_bottom).with.offset(-kChatBarBottomOffset);
         make.width.equalTo(self.voiceButton.mas_height);
     }];
     
     [self.moreButton mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.right.equalTo(self.inputBarBackgroundView.mas_right).with.offset(-10);
+        make.right.equalTo(self.inputBarBackgroundView.mas_right).with.offset(-offset);
         make.bottom.equalTo(self.inputBarBackgroundView.mas_bottom).with.offset(-kChatBarBottomOffset);
         make.width.equalTo(self.moreButton.mas_height);
     }];
     
     [self.faceButton mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.right.equalTo(self.moreButton.mas_left).with.offset(-10);
+        make.right.equalTo(self.moreButton.mas_left).with.offset(-offset);
         make.bottom.equalTo(self.inputBarBackgroundView.mas_bottom).with.offset(-kChatBarBottomOffset);
         make.width.equalTo(self.faceButton.mas_height);
     }];
     
     [self.textView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(self.voiceButton.mas_right).with.offset(10);
-        make.right.equalTo(self.faceButton.mas_left).with.offset(-10);
+        make.left.equalTo(self.voiceButton.mas_right).with.offset(offset);
+        make.right.equalTo(self.faceButton.mas_left).with.offset(-offset);
         make.top.equalTo(self.inputBarBackgroundView.mas_top).with.offset(kChatBarTextViewBottomOffset);
         make.bottom.equalTo(self.inputBarBackgroundView.mas_bottom).with.offset(-kChatBarTextViewBottomOffset);
     }];
     
-    CGFloat offset = -5.f;
+    CGFloat voiceRecordButtoInsets = -5.f;
     [self.voiceRecordButton mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.edges.mas_equalTo(self.textView).insets(UIEdgeInsetsMake(offset, offset, offset, offset));
+        make.edges.mas_equalTo(self.textView).insets(UIEdgeInsetsMake(voiceRecordButtoInsets, voiceRecordButtoInsets, voiceRecordButtoInsets, voiceRecordButtoInsets));
     }];
 }
 

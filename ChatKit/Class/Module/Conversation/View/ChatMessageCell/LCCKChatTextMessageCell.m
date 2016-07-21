@@ -6,6 +6,11 @@
 //  Copyright © 2015年 https://LeanCloud.cn . All rights reserved.
 //
 
+static CGFloat LCCK_MSG_SPACE_TOP = 16;
+static CGFloat LCCK_MSG_SPACE_BTM = 16;
+static CGFloat LCCK_MSG_SPACE_LEFT = 16;
+static CGFloat LCCK_MSG_SPACE_RIGHT = 16;
+
 #import "LCCKChatTextMessageCell.h"
 
 #import "Masonry.h"
@@ -29,7 +34,7 @@
 - (void)updateConstraints {
     [super updateConstraints];
     [self.messageTextLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.edges.equalTo(self.messageContentView).with.insets(UIEdgeInsetsMake(8, 16, 8, 16));
+        make.edges.equalTo(self.messageContentView).with.insets(UIEdgeInsetsMake(LCCK_MSG_SPACE_TOP, LCCK_MSG_SPACE_LEFT, LCCK_MSG_SPACE_BTM, LCCK_MSG_SPACE_RIGHT));
     }];
 }
 

@@ -153,7 +153,7 @@
     CGFloat width = [UIApplication sharedApplication].keyWindow.frame.size.width;
     CGFloat height = [UIApplication sharedApplication].keyWindow.frame.size.height;
 
-    self.maxRows =  4;
+    self.maxRows =  height > 480 ? 3 : 4;
     self.columnPerRow = width > 320 ? 8 : 7;
     
     //计算每一页最多显示多少个表情  - 1(删除按钮)

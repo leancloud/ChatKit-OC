@@ -435,7 +435,7 @@ NSString *const LCCKConversationServiceErrorDomain = @"LCCKConversationServiceEr
     NSData *data = [NSKeyedArchiver archivedDataWithRootObject:message];
     NSAssert(data, @"You can not insert nil message to DB");
     [self.databaseQueue inDatabase:^(FMDatabase *db) {
-        [db executeUpdate:LCCKInsertMessageSQL, message.messageId, message.conversationId, data];
+        [db executeUpdate:LCCKInsertMessageSQL, message.localMessageId, message.conversationId, data];
     }];
 }
 

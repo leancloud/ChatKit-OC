@@ -69,7 +69,6 @@ static CGFloat const LCCKAvatarToMessageContent = 5.f;
 
 #pragma mark - Override Methods
 
-
 - (void)updateConstraints {
     [super updateConstraints];
     if (self.messageOwner == LCCKMessageOwnerSystem || self.messageOwner == LCCKMessageOwnerUnknown) {
