@@ -69,8 +69,8 @@ static NSString *const LCCKNotificationConversationUpdated = @"LCCKNotificationC
  */
 static NSString *const LCCKNotificationConnectivityUpdated = @"LCCKNotificationConnectivityUpdated";
 
-//static NSString *const LCCK_KEY_USERNAME = @"LCCK_KEY_USERNAME";
-//static NSString *const LCCK_KEY_USERID = @"LCCK_KEY_USERID";
+static NSString *const LCCK_KEY_USERNAME = @"LCCK_KEY_USERNAME";
+static NSString *const LCCK_KEY_USERID = @"LCCK_KEY_USERID";
 
 ///-----------------------------------------------------------------------------------
 ///---------------------用以产生Demo中的联系人数据的宏定义-------------------------------
@@ -84,7 +84,7 @@ static NSString *const LCCKNotificationConnectivityUpdated = @"LCCKNotificationC
 //TODO:add more friends
 #define LCCKContactProfiles \
 @[ \
-    @{ LCCKProfileKeyPeerId:LCCKDeveloperPeerId, LCCKProfileKeyName:@"LCChatKit小秘书", LCCKProfileKeyAvatarURL:@"http://image17-c.poco.cn/mypoco/myphoto/20151211/16/17338872420151211164742047.png" },\
+    @{ LCCKProfileKeyPeerId:LCCKDeveloperPeerId, LCCKProfileKeyName:@"ChatKit-iOS小秘书", LCCKProfileKeyAvatarURL:@"http://image17-c.poco.cn/mypoco/myphoto/20151211/16/17338872420151211164742047.png" },\
     @{ LCCKProfileKeyPeerId:@"Tom", LCCKProfileKeyName:@"Tom", LCCKProfileKeyAvatarURL:@"http://www.avatarsdb.com/avatars/tom_and_jerry2.jpg" },\
     @{ LCCKProfileKeyPeerId:@"Jerry", LCCKProfileKeyName:@"Jerry", LCCKProfileKeyAvatarURL:@"http://www.avatarsdb.com/avatars/jerry.jpg" },\
     @{ LCCKProfileKeyPeerId:@"Harry", LCCKProfileKeyName:@"Harry", LCCKProfileKeyAvatarURL:@"http://www.avatarsdb.com/avatars/young_harry.jpg" },\

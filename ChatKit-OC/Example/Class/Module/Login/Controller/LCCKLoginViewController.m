@@ -37,10 +37,17 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    // 从系统偏好读取用户已经保存的信息
+    NSUserDefaults *defaultsGet = [NSUserDefaults standardUserDefaults];
+    NSString *clientId = [defaultsGet stringForKey:LCCK_KEY_USERID];
+    self.autocompleteTextField.text = clientId;
     [self.autocompleteTextField setBorderStyle:UITextBorderStyleRoundedRect];
     [self.autocompleteTextField becomeFirstResponder];
     [[NSNotificationCenter defaultCenter] postNotificationName:UITextFieldTextDidChangeNotification object:self.autocompleteTextField];
     self.autocompleteTextField.autoCompleteTableViewHidden = NO;
+    if (clientId) {
+        !_clientIDHandler ?: _clientIDHandler(clientId);
+    }
 }
 
 - (void)setClientIDHandler:(LCCKClientIDHandler)clientIDHandler {

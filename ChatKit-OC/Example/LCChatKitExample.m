@@ -75,6 +75,10 @@ static NSMutableDictionary *_sharedInstances = nil;
     
     [[LCChatKit sharedInstance] openWithClientId:clientId callback:^(BOOL succeeded, NSError *error) {
         if (succeeded) {
+            // 在系统偏好保存信息
+            NSUserDefaults *defaultsSet = [NSUserDefaults standardUserDefaults];
+            [defaultsSet setObject:clientId forKey:LCCK_KEY_USERID];
+            [defaultsSet synchronize];
             NSString *subtitle = [NSString stringWithFormat:@"User Id 是 : %@", clientId];
             [LCCKUtil showNotificationWithTitle:@"登陆成功" subtitle:subtitle type:LCCKMessageNotificationTypeSuccess];
             !success ?: success();
@@ -214,12 +218,13 @@ static NSMutableDictionary *_sharedInstances = nil;
         [self exampleOpenProfileForUser:user userId:userId];
     }];
     
-//    [[LCChatKit sharedInstance] setAvatarImageViewCornerRadiusBlock:^CGFloat(CGSize avatarImageViewSize) {
-//        if (avatarImageViewSize.height > 0) {
-//            return avatarImageViewSize.height/2;
-//        }
-//        return 5;
-//    }];
+    //    开启圆角可能导致4S等低端机型卡顿，谨慎开启。
+    //    [[LCChatKit sharedInstance] setAvatarImageViewCornerRadiusBlock:^CGFloat(CGSize avatarImageViewSize) {
+    //        if (avatarImageViewSize.height > 0) {
+    //            return avatarImageViewSize.height/2;
+    //        }
+    //        return 5;
+    //    }];
     
     [[LCChatKit sharedInstance] setShowNotificationBlock:^(UIViewController *viewController, NSString *title, NSString *subtitle, LCCKMessageNotificationType type) {
         [self exampleShowNotificationWithTitle:title subtitle:subtitle type:type];
@@ -230,9 +235,10 @@ static NSMutableDictionary *_sharedInstances = nil;
         return [self exampleConversationEditActionAtIndexPath:indexPath conversation:conversation controller:controller];
     }];
     
-    [[LCChatKit sharedInstance] setMarkBadgeWithTotalUnreadCountBlock:^(NSInteger totalUnreadCount, UIViewController *controller) {
-        [self exampleMarkBadgeWithTotalUnreadCount:totalUnreadCount controller:controller];
-    }];
+    //    如果不是TabBar样式，请实现该 Blcok 来设置 Badge 红标。
+    //    [[LCChatKit sharedInstance] setMarkBadgeWithTotalUnreadCountBlock:^(NSInteger totalUnreadCount, UIViewController *controller) {
+    //        [self exampleMarkBadgeWithTotalUnreadCount:totalUnreadCount controller:controller];
+    //    }];
     
     [[LCChatKit sharedInstance] setPreviewLocationMessageBlock:^(CLLocation *location, NSString *geolocations, NSDictionary *userInfo) {
         [self examplePreViewLocationMessageWithLocation:location geolocations:geolocations];
@@ -406,7 +412,7 @@ typedef void (^UITableViewRowActionHandler)(UITableViewRowAction *action, NSInde
 + (void)exampleCreateGroupConversationFromViewController:(UIViewController *)fromViewController {
     //FIXME: add more to allPersonIds
     NSArray *allPersonIds = [[LCCKContactManager defaultManager] fetchContactPeerIds];
-    NSArray *users = [[LCChatKit sharedInstance] getCachedProfilesIfExists:allPersonIds error:nil];
+    NSArray *users = [[LCChatKit sharedInstance] getCachedProfilesIfExists:allPersonIds shouldSameCount:YES error:nil];
     NSString *currentClientID = [[LCChatKit sharedInstance] clientId];
     LCCKContactListViewController *contactListViewController = [[LCCKContactListViewController alloc] initWithContacts:users userIds:allPersonIds excludedUserIds:@[currentClientID] mode:LCCKContactListModeMultipleSelection];
     contactListViewController.title = @"创建群聊";
