@@ -83,7 +83,7 @@
         peerId = conversation.lcck_lastMessage.clientId;
     }
     if (peerId) {
-        [self asyncCacheElseNetLoadCell:cell identifier:conversation.lcck_displayName peerId:peerId name:&displayName avatarURL:&avatarURL];
+        [self asyncCacheElseNetLoadCell:cell peerId:peerId name:&displayName avatarURL:&avatarURL];
     }
     if (conversation.lcck_type == LCCKConversationTypeSingle) {
         [cell.avatarImageView sd_setImageWithURL:avatarURL placeholderImage:[self imageInBundleForImageName:@"Placeholder_Avatar" ]];
@@ -120,7 +120,7 @@
 - (NSArray<UITableViewRowAction *> *)tableView:(UITableView *)tableView editActionsForRowAtIndexPath:(NSIndexPath *)indexPath {
     LCCKConversationEditActionsBlock conversationEditActionBlock = [[LCCKConversationListService sharedInstance] conversationEditActionBlock];
     AVIMConversation *conversation = [self.dataArray objectAtIndex:indexPath.row];
-    NSArray *editActions;
+    NSArray *editActions = [NSArray array];
     if (conversationEditActionBlock) {
         editActions = conversationEditActionBlock(indexPath, [self defaultRightButtons], conversation, self.conversationListViewController);
     } else {
@@ -129,13 +129,14 @@
     return editActions;
 }
 
-- (void)asyncCacheElseNetLoadCell:(LCCKConversationListCell *)cell identifier:(NSString *)identifier peerId:(NSString *)peerId name:(NSString **)name avatarURL:(NSURL **)avatarURL {
+- (void)asyncCacheElseNetLoadCell:(LCCKConversationListCell *)cell peerId:(NSString *)peerId name:(NSString **)name avatarURL:(NSURL **)avatarURL {
     NSError *error = nil;
-    cell.identifier = identifier;
+    cell.identifier = peerId;
     [[LCCKUserSystemService sharedInstance] getCachedProfileIfExists:peerId name:name avatarURL:avatarURL error:&error];
     if (error) {
 //        NSLog(@"%@", error);
     }
+    //头像消息一般和昵称消息一同返回，故假设如果服务端返回了昵称，那么如果该用户有头像就一定会返回头像。反之，没返回昵称，一定是还未缓存用户信息。如果你的App中，不是这样的逻辑，可联系维护者将这一逻辑修改得严谨些，邮箱luohanchenyilong@163.com.
     if (!*name) {
         if (peerId != NULL) {
             *name = peerId;
@@ -143,7 +144,8 @@
         __weak __typeof(self) weakSelf = self;
         __weak __typeof(cell) weakCell = cell;
         [[LCCKUserSystemService sharedInstance] getProfileInBackgroundForUserId:peerId callback:^(id<LCCKUserDelegate> user, NSError *error) {
-            if (!error) {
+            BOOL hasData = user.name;
+            if (hasData && [weakCell.identifier isEqualToString:user.clientId]) {
                 NSIndexPath *indexPath_ = [weakSelf.conversationListViewController.tableView indexPathForCell:weakCell];
                 if (!indexPath_) {
                     return;
@@ -197,8 +199,23 @@
             if ([self.conversationListViewController filterAVIMError:error]) {
                 self.dataArray = [NSMutableArray arrayWithArray:conversations];
                 [self.conversationListViewController.tableView reloadData];
-                ![LCCKConversationListService sharedInstance].markBadgeWithTotalUnreadCountBlock ?: [LCCKConversationListService sharedInstance].markBadgeWithTotalUnreadCountBlock(totalUnreadCount, self.conversationListViewController.navigationController);
                 [self selectConversationIfHasRemoteNotificatoinConvid];
+                LCCKMarkBadgeWithTotalUnreadCountBlock markBadgeWithTotalUnreadCountBlock = [LCCKConversationListService sharedInstance].markBadgeWithTotalUnreadCountBlock;
+                if (markBadgeWithTotalUnreadCountBlock) {
+                    [LCCKConversationListService sharedInstance].markBadgeWithTotalUnreadCountBlock(totalUnreadCount, self.conversationListViewController.navigationController);
+                    return;
+                }
+                if (totalUnreadCount > 0) {
+                    NSString *badgeValue = [NSString stringWithFormat:@"%ld", (long)totalUnreadCount];
+                    if (totalUnreadCount > 99) {
+                        badgeValue = @"...";
+                    }
+                    [self.conversationListViewController.navigationController tabBarItem].badgeValue = badgeValue;
+                    [[UIApplication sharedApplication] setApplicationIconBadgeNumber:totalUnreadCount];
+                } else {
+                    [self.conversationListViewController.navigationController tabBarItem].badgeValue = nil;
+                    [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
+                }
             }
         };
         if([LCCKConversationListService sharedInstance].prepareConversationsWhenLoadBlock) {
