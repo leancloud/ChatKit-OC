@@ -41,6 +41,7 @@
 "ConfirmDeletion" = "Confirm deletion";
 "netDisconnected" = "Network unavailable, Check network";
 "call" = "call";
+"unknownMessage" = "unknown message type, please update your APP";
 "message.bar.error.title" = "Error Title";
 "message.bar.error.message" = "This is an error message!";
 "message.bar.success.title" = "Success Title";

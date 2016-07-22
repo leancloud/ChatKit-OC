@@ -8,6 +8,10 @@
 
 #import "LCCKChatMessageCell.h"
 
+#define kLCCKMessageTextColor UIColorHex(292F33)
+#define kT1TextHighlightedBackgroundColor UIColorHex(ebeef0)
+#define kT1TextHighlightedColor UIColorHex(1A91DA)
+
 @interface LCCKChatTextMessageCell : LCCKChatMessageCell
 
 

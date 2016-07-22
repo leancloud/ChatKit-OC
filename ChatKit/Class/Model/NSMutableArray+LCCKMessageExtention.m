@@ -34,7 +34,8 @@
     if (index < self.count) {
         return self[index];
     }
-    NSAssert(valid, @" `self.avimTypedMessage` in `-loadOldMessages` has no object");
+    NSLog(@" `self.avimTypedMessage` in `-loadOldMessages` has no object");
+//    NSAssert(valid, @" `self.avimTypedMessage` in `-loadOldMessages` has no object");
     return nil;
 }
 

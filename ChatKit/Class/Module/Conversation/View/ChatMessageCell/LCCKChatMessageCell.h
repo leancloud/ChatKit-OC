@@ -13,6 +13,14 @@
 #import "LCCKContentView.h"
 #import "LCCKChatUntiles.h"
 #import "LCCKMessage.h"
+#if __has_include(<MLLinkLabel/MLLinkLabel>)
+#import <MLLinkLabel/MLLinkLabel>
+//    #import <MLLabel/NSString+MLExpression.h>
+
+#else
+#import "MLLinkLabel.h"
+//    #import "MLExpression.h"
+#endif
 
 @class LCCKChatMessageCell;
 
@@ -24,7 +32,7 @@
 - (void)textMessageCellDoubleTapped:(LCCKChatMessageCell *)messageCell;
 - (void)resendMessage:(LCCKChatMessageCell *)messageCell;
 - (void)avatarImageViewLongPressed:(LCCKChatMessageCell *)messageCell;
-- (void)messageCell:(LCCKChatMessageCell *)messageCell didTapLinkText:(NSString *)linkText;
+- (void)messageCell:(LCCKChatMessageCell *)messageCell didTapLinkText:(NSString *)linkText linkType:(MLLinkType)linkType;
 - (void)fileMessageDidDownload:(LCCKChatMessageCell *)messageCell;
 @end
 
@@ -33,8 +41,8 @@
 @property (nonatomic, strong, readonly) LCCKMessage *message;
 
 //FIXME:retain cycle
-@property (nonatomic, weak) UITableView *tableView;
-@property (nonatomic, weak) NSIndexPath *indexPath;
+@property (nonatomic, strong) UITableView *tableView;
+@property (nonatomic, strong) NSIndexPath *indexPath;
 
 /**
  *  显示用户头像

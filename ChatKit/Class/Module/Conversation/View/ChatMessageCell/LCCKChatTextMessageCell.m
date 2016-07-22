@@ -11,18 +11,21 @@ static CGFloat LCCK_MSG_SPACE_BTM = 16;
 static CGFloat LCCK_MSG_SPACE_LEFT = 16;
 static CGFloat LCCK_MSG_SPACE_RIGHT = 16;
 
-#import "LCCKChatTextMessageCell.h"
+#define SHOW_SIMPLE_TIPS(m) [[[UIAlertView alloc] initWithTitle:@"" message:(m) delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil]show];
 
+#import "LCCKChatTextMessageCell.h"
 #import "Masonry.h"
 #import "LCCKFaceManager.h"
+#import "LCCKWebViewController.h"
 
 @interface LCCKChatTextMessageCell ()
 
 /**
  *  用于显示文本消息的文字
  */
-@property (nonatomic, strong) UILabel *messageTextLabel;
+@property (nonatomic, strong) MLLinkLabel *messageTextLabel;
 @property (nonatomic, copy, readonly) NSDictionary *textStyle;
+@property (nonatomic, strong) NSArray *expressionData;
 
 @end
 
@@ -57,17 +60,31 @@ static CGFloat LCCK_MSG_SPACE_RIGHT = 16;
 
 #pragma mark - Getters
 
-- (UILabel *)messageTextLabel {
+- (MLLinkLabel *)messageTextLabel {
     if (!_messageTextLabel) {
-        _messageTextLabel = [[UILabel alloc] init];
+        _messageTextLabel = [[MLLinkLabel alloc] init];
         _messageTextLabel.textColor = [UIColor blackColor];
         _messageTextLabel.font = [UIFont systemFontOfSize:16.0f];
         _messageTextLabel.numberOfLines = 0;
         _messageTextLabel.lineBreakMode = NSLineBreakByWordWrapping;
+        _messageTextLabel.linkTextAttributes = @{NSForegroundColorAttributeName:[UIColor blueColor]};
+        _messageTextLabel.activeLinkTextAttributes = @{NSForegroundColorAttributeName:[UIColor blueColor],NSBackgroundColorAttributeName:kDefaultActiveLinkBackgroundColorForMLLinkLabel};
+        
+        [_messageTextLabel setDidClickLinkBlock:^(MLLink *link, NSString *linkText, MLLinkLabel *label) {
+            NSString *tips = [NSString stringWithFormat:@"Click\nlinkType:%ld\nlinkText:%@\nlinkValue:%@",link.linkType,linkText,link.linkValue];
+            if ([self.delegate respondsToSelector:@selector(messageCell:didTapLinkText:linkType:)]) {
+                [self.delegate messageCell:self didTapLinkText:linkText linkType:link.linkType];
+            }
+        }];
+        
     }
     return _messageTextLabel;
 }
 
+- (void)tap
+{
+    SHOW_SIMPLE_TIPS(@"tapped");
+}
 - (void)doubleTapMessageContentViewGestureRecognizerHandle:(UITapGestureRecognizer *)tapGestureRecognizer {
     if (tapGestureRecognizer.state == UIGestureRecognizerStateEnded) {
         if ([self.delegate respondsToSelector:@selector(textMessageCellDoubleTapped:)]) {

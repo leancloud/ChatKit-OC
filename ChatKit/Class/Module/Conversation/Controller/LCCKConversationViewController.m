@@ -26,6 +26,9 @@
 #import "NSMutableArray+LCCKMessageExtention.h"
 #import "Masonry.h"
 #import "LCCKConversationNavigationTitleView.h"
+#import "LCCKWebViewController.h"
+#import "LCCKSafariActivity.h"
+#import "LCCKAlertController.h"
 
 @interface LCCKConversationViewController () <LCCKChatBarDelegate, LCCKAVAudioPlayerDelegate, LCCKChatMessageCellDelegate, LCCKConversationViewModelDelegate>
 
@@ -42,6 +45,7 @@
 @property (nonatomic, copy) LCCKConversationHandler conversationHandler;
 @property (nonatomic, copy) LCCKViewControllerBooleanResultBlock loadHistoryMessagesHandler;
 @property (nonatomic, copy, readwrite) NSString *conversationId;
+@property (nonatomic, strong) LCCKWebViewController *webViewController;
 @end
 
 @implementation LCCKConversationViewController
@@ -545,6 +549,40 @@
 
 - (void)fileMessageDidDownload:(LCCKChatMessageCell *)messageCell {
     [self reloadAfterReceiveMessage:messageCell.message];
+}
+
+- (void)messageCell:(LCCKChatMessageCell *)messageCell didTapLinkText:(NSString *)linkText linkType:(MLLinkType)linkType {
+    switch (linkType) {
+        case MLLinkTypeURL: {
+            LCCKWebViewController *webViewController = [[LCCKWebViewController alloc] init];
+            webViewController.URL = [NSURL URLWithString:linkText];
+            LCCKSafariActivity *activity = [[LCCKSafariActivity alloc] init];
+            webViewController.applicationActivities = @[activity];
+            webViewController.excludedActivityTypes = @[UIActivityTypeMail, UIActivityTypeMessage, UIActivityTypePostToWeibo];
+            [self.navigationController pushViewController:webViewController animated:YES];
+        }
+            break;
+        case MLLinkTypePhoneNumber: {
+            NSString *title = [NSString stringWithFormat:@"%@?", LCCKLocalizedStrings(@"call")];
+            LCCKAlertController *alert = [LCCKAlertController alertControllerWithTitle:title
+                                                                               message:@""
+                                                                        preferredStyle:LCCKAlertControllerStyleAlert];
+            NSString *cancelActionTitle = LCCKLocalizedStrings(@"cancel");
+            LCCKAlertAction* cancelAction = [LCCKAlertAction actionWithTitle:cancelActionTitle style:LCCKAlertActionStyleDefault
+                                                                     handler:^(LCCKAlertAction * action) {}];
+            [alert addAction:cancelAction];
+            NSString *resendActionTitle = LCCKLocalizedStrings(@"call");
+            LCCKAlertAction* resendAction = [LCCKAlertAction actionWithTitle:resendActionTitle style:LCCKAlertActionStyleDefault
+                                                                     handler:^(LCCKAlertAction * action) {
+                                                                         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat: @"tel:%@", linkText]]];
+                                                                     }];
+            [alert addAction:resendAction];
+            [alert showWithSender:nil controller:self animated:YES completion:NULL];
+        }
+            break;
+        default:
+            break;
+    }
 }
 
 #pragma mark - LCCKConversationViewModelDelegate

@@ -121,14 +121,6 @@
  */
 - (void)addMessagesFirstTime:(NSArray<LCCKMessage *> *)messages {
     [self.dataArray addObjectsFromArray:[self messagesWithLocalMessages:messages fromTimestamp:0]];
-    //  添加失败消息
-//    LCCKMessage *lastMessage = messages.lastObject;
-//    NSString *startDate = [lastMessage getTimestampString];
-//    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(SELF >= %@) AND (SELF MATCHES %@)", startDate, self.timestampStringRegex];
-//    NSArray<LCCKMessage *> *failedLCCKMessages = [self failedMessagesWithPredicate:predicate];
-//    if (failedLCCKMessages.count > 0) {
-//        [self.dataArray addObjectsFromArray:[self messagesWithSystemMessages:failedLCCKMessages]];
-//    }
 }
 
 - (NSArray<LCCKMessage *> *)failedMessagesWithPredicate:(NSPredicate *)predicate {
@@ -399,7 +391,7 @@ fromTimestamp
     if (self.parentConversationViewController.loadingMoreMessage) {
         return;
     }
-    if (self.dataArray.count == 0) {
+    if (self.dataArray.count == 0 || !timestamp) {
         timestamp = [[NSDate distantFuture] timeIntervalSince1970] * 1000;
     }
     self.parentConversationViewController.loadingMoreMessage = YES;
