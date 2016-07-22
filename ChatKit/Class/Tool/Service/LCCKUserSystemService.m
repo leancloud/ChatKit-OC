@@ -129,6 +129,17 @@ NSString *const LCCKUserSystemServiceErrorDomain = @"LCCKUserSystemServiceErrorD
     }];
 }
 
+- (NSArray<id<LCCKUserDelegate>> *)getCachedProfilesIfExists:(NSArray<NSString *> *)userIds shouldSameCount:(BOOL)shouldSameCount error:(NSError * __autoreleasing *)theError {
+   NSArray *cachedProfiles = [self getCachedProfilesIfExists:userIds error:theError];
+    if (!shouldSameCount) {
+        return cachedProfiles;
+    }
+    if (cachedProfiles.count == userIds.count) {
+        return cachedProfiles;
+    }
+    return nil;
+}
+
 - (NSArray<id<LCCKUserDelegate>> *)getCachedProfilesIfExists:(NSArray<NSString *> *)userIds error:(NSError * __autoreleasing *)theError {
     if (!userIds || userIds.count == 0) {
         NSInteger code = 0;

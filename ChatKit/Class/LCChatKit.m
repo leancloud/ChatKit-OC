@@ -167,6 +167,9 @@ static NSMutableDictionary *_sharedInstances = nil;
 - (NSArray<id<LCCKUserDelegate>> *)getCachedProfilesIfExists:(NSArray<NSString *> *)userIds error:(NSError * __autoreleasing *)error {
    return [self.userSystemService getCachedProfilesIfExists:userIds error:error];
 }
+- (NSArray<id<LCCKUserDelegate>> *)getCachedProfilesIfExists:(NSArray<NSString *> *)userIds shouldSameCount:(BOOL)shouldSameCount error:(NSError * __autoreleasing *)error {
+    return [self.userSystemService getCachedProfilesIfExists:userIds shouldSameCount:shouldSameCount error:error];
+}
 
 - (void)getProfileInBackgroundForUserId:(NSString *)userId callback:(LCCKUserResultCallBack)callback {
     [self.userSystemService getProfileInBackgroundForUserId:userId callback:callback];

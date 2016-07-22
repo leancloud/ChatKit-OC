@@ -42,7 +42,6 @@
 #pragma mark - Public Methods
 
 - (void)setup {
-
     [self.messageContentView addSubview:self.messageImageView];
     [self.messageContentView addSubview:self.messageProgressView];
     [self.messageImageView mas_makeConstraints:^(MASConstraintMaker *make) {

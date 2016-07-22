@@ -57,8 +57,7 @@
     }
                                                              );
     self.firstViewController = firstViewController;
-    //FIXME:
-    NSArray *users = [[LCChatKit sharedInstance] getCachedProfilesIfExists:self.allPersonIds error:nil];
+    NSArray *users = [[LCChatKit sharedInstance] getCachedProfilesIfExists:self.allPersonIds shouldSameCount:YES error:nil];
     NSString *currentClientID = [[LCChatKit sharedInstance] clientId];
     LCCKContactListViewController *secondViewController = [[LCCKContactListViewController alloc] initWithContacts:users userIds:self.allPersonIds excludedUserIds:@[currentClientID] mode:LCCKContactListModeNormal];
     [secondViewController setSelectedContactCallback:^(UIViewController *viewController, NSString *peerId) {

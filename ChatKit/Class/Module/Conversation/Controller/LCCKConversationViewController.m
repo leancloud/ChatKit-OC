@@ -291,7 +291,7 @@
         NSError *error = [NSError errorWithDomain:@"kAVErrorDomain"
                                              code:code
                                          userInfo:errorInfo];
-        
+    
         !_loadHistoryMessagesHandler ?: _loadHistoryMessagesHandler(self, succeeded, error);
         return;
     }
@@ -343,14 +343,14 @@
 - (void)presentSelectMemberViewController {
     [[[UIApplication sharedApplication] keyWindow] endEditing:YES];
     NSString *cuttentClientId = [LCCKSessionService sharedInstance].clientId;
-    NSArray<id<LCCKUserDelegate>> *users = [[LCCKUserSystemService sharedInstance] getCachedProfilesIfExists:self.conversation.members error:nil];
-        LCCKContactListViewController *contactListViewController = [[LCCKContactListViewController alloc] initWithContacts:users userIds:self.conversation.members excludedUserIds:@[cuttentClientId] mode:LCCKContactListModeMultipleSelection];
+    NSArray<id<LCCKUserDelegate>> *users = [[LCCKUserSystemService sharedInstance] getCachedProfilesIfExists:self.conversation.members shouldSameCount:YES error:nil];
+    LCCKContactListViewController *contactListViewController = [[LCCKContactListViewController alloc] initWithContacts:users userIds:self.conversation.members excludedUserIds:@[cuttentClientId] mode:LCCKContactListModeMultipleSelection];
         [contactListViewController setSelectedContactCallback:^(UIViewController *viewController, NSString *peerId) {
             [viewController dismissViewControllerAnimated:YES completion:^{
                 [LCCKConversationService sharedInstance].contactListViewControllerActivce = NO;
             }];
             if (peerId.length > 0) {
-               NSArray *peerNames = [[LCChatKit sharedInstance] getProfilesForUserIds:@[peerId] error:nil];
+               NSArray *peerNames = [[LCChatKit sharedInstance] getCachedProfilesIfExists:@[peerId] error:nil];
                 NSString *peerName;
                 @try {
                     id<LCCKUserDelegate> user = peerNames[0];
@@ -616,16 +616,6 @@
 }
 
 #pragma mark - LCCKAVAudioPlayerDelegate
-
-//- (void)audioPlayerStateDidChanged:(LCCKVoiceMessageState)audioPlayerState identifier:(NSString *)identifier {
-//    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:index inSection:0];
-//    LCCKChatVoiceMessageCell *voiceMessageCell = [self.tableView cellForRowAtIndexPath:indexPath];
-//    dispatch_async(dispatch_get_main_queue(), ^{
-//        if ([voiceMessageCell respondsToSelector:@selector(setVoiceMessageState:)]) {
-//            [voiceMessageCell setVoiceMessageState:audioPlayerState];
-//        }
-//    });
-//}
 
 - (void)loadMoreMessagesScrollTotop {
     [self.chatViewModel loadOldMessages];

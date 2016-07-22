@@ -85,6 +85,11 @@ typedef void(^LCCKFetchProfilesBlock)(NSArray<NSString *> *userIds, LCCKFetchPro
 
 - (void)getCachedProfileIfExists:(NSString *)userId name:(NSString **)name avatarURL:(NSURL **)avatarURL error:(NSError * __autoreleasing *)error;
 - (NSArray<id<LCCKUserDelegate>> *)getCachedProfilesIfExists:(NSArray<NSString *> *)userIds error:(NSError * __autoreleasing *)error;
+
+/*!
+ * 如果从缓存查询到的userids数量不相符，则返回nil
+ */
+- (NSArray<id<LCCKUserDelegate>> *)getCachedProfilesIfExists:(NSArray<NSString *> *)userIds shouldSameCount:(BOOL)shouldSameCount error:(NSError * __autoreleasing *)theError;
 - (void)getProfileInBackgroundForUserId:(NSString *)userId callback:(LCCKUserResultCallBack)callback;
 - (void)getProfilesInBackgroundForUserIds:(NSArray<NSString *> *)userIds callback:(LCCKUserResultsCallBack)callback;
 - (NSArray<id<LCCKUserDelegate>> *)getProfilesForUserIds:(NSArray<NSString *> *)userIds error:(NSError * __autoreleasing *)error;
@@ -411,6 +416,9 @@ typedef void(^LCCKMarkBadgeWithTotalUnreadCountBlock)(NSInteger totalUnreadCount
 
 @property (nonatomic, copy, readonly) LCCKMarkBadgeWithTotalUnreadCountBlock markBadgeWithTotalUnreadCountBlock;
 
+/*!
+ * 如果不是TabBar样式，请实现该Blcok。如果不实现，默认会把 App 当作是 TabBar 样式，修改 navigationController 的 tabBarItem 的 badgeValue 数字显示，数字超出99显示省略号。
+ */
 - (void)setMarkBadgeWithTotalUnreadCountBlock:(LCCKMarkBadgeWithTotalUnreadCountBlock)markBadgeWithTotalUnreadCountBlock;
 
 @end
