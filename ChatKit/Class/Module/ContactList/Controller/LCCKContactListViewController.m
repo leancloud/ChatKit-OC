@@ -163,6 +163,9 @@ static NSString *const LCCKContactListViewControllerIdentifier = @"LCCKContactLi
         self.navigationItem.rightBarButtonItem = doneButtonItem;
         //        [self.tableView setEditing:YES animated:NO];
     }
+    /**
+     *   这里不考虑查询人数与返回人数不一致的情况，比如查询100人，服务器只返回一人，那么也只显示一人，其余99人不予显示
+     */
     if (!self.contacts || self.contacts.count == 0) {
        LCCKHUDActionBlock theHUDActionBlock = [LCCKUIService sharedInstance].HUDActionBlock;
         if (theHUDActionBlock) {
@@ -577,11 +580,6 @@ static NSString *const LCCKContactListViewControllerIdentifier = @"LCCKContactLi
 
 - (BOOL)searchBarShouldBeginEditing:(UISearchBar *)searchBar {
     [self.searchController setActive:YES animated:YES];
-    return YES;
-}
-
-- (BOOL)searchBarShouldEndEditing:(UISearchBar *)searchBar {
-    [self.searchController setActive:NO animated:YES];
     return YES;
 }
 
