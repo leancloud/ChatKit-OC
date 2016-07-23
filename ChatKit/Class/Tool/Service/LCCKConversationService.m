@@ -128,7 +128,7 @@ NSString *const LCCKConversationServiceErrorDomain = @"LCCKConversationServiceEr
     NSString *currentClientId = [LCChatKit sharedInstance].clientId;
     [mutableArray addObject:currentClientId];
     userIds = [mutableArray copy];
-    NSArray *array = [[LCCKUserSystemService sharedInstance] getCachedProfilesIfExists:userIds error:&error];
+    NSArray<id<LCCKUserDelegate>> *array = [[LCCKUserSystemService sharedInstance] getCachedProfilesIfExists:userIds error:&error];
     if (error || (array.count == 0)) {
         NSString *groupName = [userIds componentsJoinedByString:@","];
         return groupName;
@@ -136,7 +136,7 @@ NSString *const LCCKConversationServiceErrorDomain = @"LCCKConversationServiceEr
     
     NSMutableArray *names = [NSMutableArray array];
     [array enumerateObjectsUsingBlock:^(id<LCCKUserDelegate>  _Nonnull user, NSUInteger idx, BOOL * _Nonnull stop) {
-        [names addObject:user.name];
+        [names addObject:user.name ?: user.clientId];
     }];
     return [names componentsJoinedByString:@","];
 }

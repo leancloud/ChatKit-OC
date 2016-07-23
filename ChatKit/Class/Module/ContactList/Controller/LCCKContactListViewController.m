@@ -231,7 +231,7 @@ static NSString *const LCCKContactListViewControllerIdentifier = @"LCCKContactLi
     [super viewWillDisappear:animated];
     if (self.mode == LCCKContactListModeMultipleSelection) {
         //  Return an array of selectedContacts
-        [self selectedContactsCallback](self, self.selectedContacts);
+        [self selectedContactsCallback](self, [self.selectedContacts copy]);
         return;
     }
 }

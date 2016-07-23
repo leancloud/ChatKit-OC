@@ -61,6 +61,10 @@ static NSMutableDictionary *_sharedInstances = nil;
     [[LCChatKit sharedInstance] removeAllCachedProfiles];
     [[LCChatKit sharedInstance] closeWithCallback:^(BOOL succeeded, NSError *error) {
         if (succeeded) {
+            // 在系统偏好保存信息
+            NSUserDefaults *defaultsSet = [NSUserDefaults standardUserDefaults];
+            [defaultsSet setObject:nil forKey:LCCK_KEY_USERID];
+            [defaultsSet synchronize];
             [LCCKUtil showNotificationWithTitle:@"退出成功" subtitle:nil type:LCCKMessageNotificationTypeSuccess];
             !success ?: success();
         } else {
