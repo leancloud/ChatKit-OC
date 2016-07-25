@@ -24,6 +24,11 @@
  *  @return 返回BOOL值，判定是否拥有这个功能
  */
 @property (nonatomic, assign) BOOL shouldLoadMoreMessagesScrollToTop;
+
+/*!
+ * 发送消息时，会置YES
+ * 输入框高度变更，比如输入文字换行、切换到 More、Face 页面、键盘弹出、键盘收缩
+ */
 @property (nonatomic, assign) BOOL allowScrollToBottom;
 //somewhere in the header
 @property (nonatomic, assign) CGFloat tableViewLastContentOffset;

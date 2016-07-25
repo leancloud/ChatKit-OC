@@ -10,8 +10,6 @@
 #import "AVIMTypedMessage+LCCKExtention.h"
 #import "LCCKMessage.h"
 
-static id const LCCKLock;
-
 @implementation NSMutableArray (LCCKMessageExtention)
 
 + (NSMutableArray *)lcck_messagesWithAVIMMessages:(NSArray *)avimTypedMessage {
@@ -20,17 +18,14 @@ static id const LCCKLock;
     dispatch_group_t group = dispatch_group_create();
     //dispatch_group_notify(group, queue, ^{//..});
     NSLock *arrayLock = [[NSLock alloc] init];
-    for (AVIMTypedMessage *msg in avimTypedMessage) {
-        dispatch_group_async(group, queue, ^{
-            LCCKMessage *lcckMsg = [LCCKMessage messageWithAVIMTypedMessage:msg];
-            if (lcckMsg) {
-                [arrayLock lock]; // NSMutableArray isn't thread-safe
-                [messages addObject:lcckMsg];
-                [arrayLock unlock];
-
+    dispatch_group_async(group, queue, ^{
+    for (AVIMTypedMessage *typedMessage in avimTypedMessage) {
+            LCCKMessage *lcckMessage = [LCCKMessage messageWithAVIMTypedMessage:typedMessage];
+            if (lcckMessage) {
+                [messages addObject:lcckMessage];
             }
-        });
     }
+    });
     dispatch_group_wait(group, DISPATCH_TIME_FOREVER);//doSomethingWith:
     return messages;
 }

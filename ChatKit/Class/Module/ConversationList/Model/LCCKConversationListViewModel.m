@@ -265,8 +265,7 @@
  */
 - (NSMutableArray *)dataArray {
     if (_dataArray == nil) {
-        NSMutableArray *dataArray = [[NSMutableArray alloc] init];
-        _dataArray = dataArray;
+        _dataArray = @[].mutableCopy;
     }
     return _dataArray;
 }

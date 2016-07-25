@@ -44,6 +44,9 @@
  */
 @property (nonatomic, copy) NSString *userId;
 
+/*!
+ * 精确到毫秒，比如：1469413969460.018
+ */
 @property (nonatomic, assign, readonly) NSTimeInterval timestamp;
 
 @property (nonatomic, assign, readonly) BOOL sended;

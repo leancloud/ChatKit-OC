@@ -305,7 +305,6 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
 }
 
 - (void)beginConvert {
-    NSLog(@"开始转换");
     [LCCKProgressHUD changeSubTitle:@"正在转换..."];
 }
 
@@ -376,7 +375,6 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
         }
         self.textView.text = @"";
         self.cachedText = @"";
-//        [self chatBarFrameDidChangeShouldScrollToBottom:YES];
         self.showType = LCCKFunctionViewShowFace;
     } else {
         [self appendString:faceName beginInputing:NO];
@@ -401,7 +399,6 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
     }
     self.textView.text = [self.textView.text stringByAppendingString:string];
     [self textViewDidChange:self.textView];
-//    [self chatBarFrameDidChangeShouldScrollToBottom:YES];
     if (beginInputing) {
         [self beginInputing];
     }
@@ -433,7 +430,6 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
     self.keyboardFrame = CGRectZero;
     [self textViewDidChange:self.textView shouldCacheText:NO];
     [self chatBarFrameDidChangeShouldScrollToBottom:NO];
-
 }
 
 - (void)keyboardWillShow:(NSNotification *)notification {
@@ -670,7 +666,6 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
     }
     self.textView.text = @"";
     self.cachedText = @"";
-//    [self chatBarFrameDidChangeShouldScrollToBottom:YES];
     self.showType = LCCKFunctionViewShowKeyboard;
 }
 
