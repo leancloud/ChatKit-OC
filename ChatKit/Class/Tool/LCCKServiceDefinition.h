@@ -178,6 +178,8 @@ typedef void(^LCCKPreviewImageMessageBlock)(NSUInteger index, NSArray *allVisibl
 #define LCCKPreviewImageMessageUserInfoKeyFromController    @"LCCKPreviewImageMessageUserInfoKeyFromController"
 /// 传递触发的UIView对象
 #define LCCKPreviewImageMessageUserInfoKeyFromView          @"LCCKPreviewImageMessageUserInfoKeyFromView"
+/// 传递触发的UIView对象
+#define LCCKPreviewImageMessageUserInfoKeyFromPlaceholderView          @"LCCKPreviewImageMessageUserInfoKeyFromPlaceholderView"
 
 /*!
  *  当ChatKit需要预览图片消息时，会调用这个block.

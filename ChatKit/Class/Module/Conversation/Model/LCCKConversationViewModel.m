@@ -49,6 +49,7 @@
  * 懒加载，只在下拉刷新和第一次进入时，做消息流插入，所以在conversationViewController的生命周期里，只load一次就可以。
  */
 @property (nonatomic, copy) NSArray *allFailedMessageIds;
+@property (nonatomic, strong) NSArray *allFailedMessages;
 
 @end
 
@@ -97,8 +98,9 @@
 //FIXME:because of Memory Leak ,this method will be invoked for many times
 - (void)receiveMessage:(NSNotification *)notification {
     AVIMTypedMessage *message = notification.object;
-    AVIMConversation *currentConversation = [LCCKConversationService sharedInstance].currentConversation;
-    if ([message.conversationId isEqualToString:currentConversation.conversationId]) {
+    NSString *currentConversationId = [LCCKConversationService sharedInstance].currentConversationId;
+    if ([message.conversationId isEqualToString:currentConversationId]) {
+        AVIMConversation *currentConversation = self.parentConversationViewController.conversation;
         if (currentConversation.muted == NO) {
             [[LCCKSoundManager defaultManager] playReceiveSoundIfNeed];
         }
@@ -128,6 +130,19 @@
  */
 - (void)addMessagesFirstTime:(NSArray<LCCKMessage *> *)messages {
     [self.dataArray addObjectsFromArray:[self messagesWithLocalMessages:messages freshTimestamp:0]];
+}
+
+/**
+ *  lazy load allFailedMessages
+ *
+ *  @return NSArray
+ */
+- (NSArray *)allFailedMessages {
+    if (_allFailedMessages == nil) {
+        NSArray *allFailedMessages = [[LCCKConversationService sharedInstance] failedMessagesByConversationId:[LCCKConversationService sharedInstance].currentConversationId];
+        _allFailedMessages = allFailedMessages;
+    }
+    return _allFailedMessages;
 }
 
 /**
@@ -198,12 +213,11 @@
  ＊ @param messages 服务端返回到消息，如果一次拉去的是10条，那么这个数组将是10条，或少于10条。
  */
 - (NSArray *)messagesWithLocalMessages:(NSArray<LCCKMessage *> *)messages freshTimestamp:(int64_t)timestamp {
-    NSLog(@"🔴类名与方法名：%@（在第%@行），描述：%@", @(__PRETTY_FUNCTION__), @(__LINE__), @(timestamp));
     NSMutableArray<LCCKMessage *> *messagesWithLocalMessages = [NSMutableArray arrayWithCapacity:messages.count];
     BOOL shouldLoadMoreMessagesScrollToTop = self.parentConversationViewController.shouldLoadMoreMessagesScrollToTop;
     //情况一：只有失败消息的情况，直接返回数据库所有失败消息
     if (!shouldLoadMoreMessagesScrollToTop && messages.count == 0) {
-        NSArray *failedMessagesByConversationId = [[LCCKConversationService sharedInstance] failedMessagesByConversationId:[LCCKConversationService sharedInstance].currentConversation.conversationId];
+        NSArray *failedMessagesByConversationId = self.allFailedMessages;
         messagesWithLocalMessages = [NSMutableArray arrayWithArray:failedMessagesByConversationId];
         return [self messagesWithSystemMessages:messagesWithLocalMessages];
     }
@@ -312,7 +326,6 @@ fromTimestamp     |             |                |
     [self.avimTypedMessage addObject:avimTypedMessage];
     [self preloadMessageToTableView:message];
     NSTimeInterval date = [[NSDate date] timeIntervalSince1970] * 1000;
-    NSLog(@"🔴类名与方法名：%@（在第%@行），描述：%@", @(__PRETTY_FUNCTION__), @(__LINE__), @(date));
     NSString *messageUUID =  [NSString stringWithFormat:@"%@", @(date)];
     [[LCCKConversationService sharedInstance] sendMessage:avimTypedMessage
                                              conversation:[LCCKConversationService sharedInstance].currentConversation
@@ -460,7 +473,6 @@ fromTimestamp     |             |                |
 - (void)loadOldMessages {
     AVIMTypedMessage *msg = [self.avimTypedMessage lcck_messageAtIndex:0];
     int64_t timestamp = msg.sendTimestamp;
-    NSLog(@"🔴类名与方法名：%@（在第%@行），描述：%@", @(__PRETTY_FUNCTION__), @(__LINE__), @(timestamp));
     [self queryAndCacheMessagesWithTimestamp:timestamp block:^(NSArray *avimTypedMessages, NSError *error) {
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
             if ([self.parentConversationViewController filterAVIMError:error]) {

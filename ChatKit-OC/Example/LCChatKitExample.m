@@ -168,8 +168,8 @@ static NSMutableDictionary *_sharedInstances = nil;
                 [users addObject:user_];
             }
         }];
-        //模拟延时3秒
-        sleep(3);
+        // 模拟网络延时，3秒
+        // sleep(3);
         !callback ?: callback([users copy], nil);
     }];
     
@@ -181,9 +181,10 @@ static NSMutableDictionary *_sharedInstances = nil;
         //TODO:
     }];
     
-    [[LCChatKit sharedInstance] setPreviewImageMessageBlock:^(NSUInteger index, NSArray *allVisibleImages, NSArray *allVisibleThumbs, NSDictionary *userInfo) {
-        [self examplePreviewImageMessageWithIndex:index allVisibleImages:allVisibleImages allVisibleThumbs:allVisibleThumbs];
-    }];
+    //    替换默认预览图片的样式
+    //    [[LCChatKit sharedInstance] setPreviewImageMessageBlock:^(NSUInteger index, NSArray *allVisibleImages, NSArray *allVisibleThumbs, NSDictionary *userInfo) {
+    //        [self examplePreviewImageMessageWithInitialIndex:index allVisibleImages:allVisibleImages allVisibleThumbs:allVisibleThumbs];
+    //    }];
     
     [[LCChatKit sharedInstance] setLongPressMessageBlock:^NSArray<UIMenuItem *> *(LCCKMessage *message, NSDictionary *userInfo) {
         LCCKMenuItem *copyItem = [[LCCKMenuItem alloc] initWithTitle:LCCKLocalizedStrings(@"copy")
@@ -488,7 +489,7 @@ typedef void (^UITableViewRowActionHandler)(UITableViewRowAction *action, NSInde
     }];
 }
 
-- (void)examplePreviewImageMessageWithIndex:(NSUInteger)index allVisibleImages:(NSArray *)allVisibleImages allVisibleThumbs:(NSArray *)allVisibleThumbs {
+- (void)examplePreviewImageMessageWithInitialIndex:(NSUInteger)index allVisibleImages:(NSArray *)allVisibleImages allVisibleThumbs:(NSArray *)allVisibleThumbs {
     // Browser
     NSMutableArray *photos = [[NSMutableArray alloc] initWithCapacity:[allVisibleImages count]];
     NSMutableArray *thumbs = [[NSMutableArray alloc] initWithCapacity:[allVisibleThumbs count]];
