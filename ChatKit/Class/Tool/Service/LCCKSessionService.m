@@ -168,7 +168,7 @@ NSString *const LCCKSessionServiceErrorDemain = @"LCCKSessionServiceErrorDemain"
         }
         [[NSNotificationCenter defaultCenter] postNotificationName:LCCKNotificationUnreadsUpdated object:nil];
     }
-    if (![LCCKConversationService sharedInstance].currentConversationId) {
+    if (![LCCKConversationService sharedInstance].chatting) {
         if (!conversation.muted) {
             [[LCCKSoundManager defaultManager] playLoudReceiveSoundIfNeed];
             [[LCCKSoundManager defaultManager] vibrateIfNeed];

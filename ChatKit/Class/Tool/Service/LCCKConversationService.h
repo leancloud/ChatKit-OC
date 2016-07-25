@@ -27,7 +27,7 @@ FOUNDATION_EXTERN NSString *const LCCKConversationServiceErrorDomain;
 @interface LCCKConversationService : LCCKSingleton <LCCKConversationService>
 
 /**
- *  当前正在聊天的 conversationId，当前不在聊天界面则为nil
+ *  当前正在聊天的 conversationId，当前不在聊天界面则为nil。如果想判断当前是否在对话页面，请判断该值是否为nil。
  */
 @property (nonatomic, strong) NSString *currentConversationId;
 
@@ -36,6 +36,11 @@ FOUNDATION_EXTERN NSString *const LCCKConversationServiceErrorDomain;
  */
 @property (nonatomic, strong) NSString *remoteNotificationConversationId;
 
+@property (nonatomic, assign, readonly, getter=isChatting) BOOL chatting;
+
+/*!
+ * 只要进过聊天页面，这个值总不为nil。当前不在聊天界面则为nil，这是因为考虑到可能会在对话页面，Present其它页面，比如联系人列表，需要用到currentConversation信息，所以如果想判断当前是否在对话页面，请判断currentConversationId是否为nil。
+ */
 @property (nonatomic, strong) AVIMConversation *currentConversation;
 
 @property (nonatomic, assign, getter=isContactListViewControllerActivce) BOOL contactListViewControllerActivce;

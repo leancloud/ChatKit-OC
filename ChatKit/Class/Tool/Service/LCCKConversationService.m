@@ -191,6 +191,10 @@ NSString *const LCCKConversationServiceErrorDomain = @"LCCKConversationServiceEr
     return _currentConversation;
 }
 
+- (BOOL)isChatting {
+    return (self.currentConversationId.length > 0);
+}
+
 #pragma mark - conversations local data
 
 - (NSData *)dataFromConversation:(AVIMConversation *)conversation {
@@ -504,7 +508,6 @@ NSString *const LCCKConversationServiceErrorDomain = @"LCCKConversationServiceEr
     AVIMArrayResultBlock callback = ^(NSArray *messages, NSError *error) {
         if (!messages) {
             NSString *errorReason = [NSString stringWithFormat:@"类名与方法名：%@（在第%@行），描述：%@", @(__PRETTY_FUNCTION__), @(__LINE__), @"SDK处理异常，请联系SDK维护者修复luohanchenyilong@163.com"];
-            NSLog(@"🔴类名与方法名：%@（在第%@行），描述：%@", @(__PRETTY_FUNCTION__), @(__LINE__), errorReason);
         }
         //        NSAssert(messages, errorReason);
         //以下过滤为了避免非法的消息，引起崩溃

@@ -29,8 +29,9 @@
 #import "LCCKWebViewController.h"
 #import "LCCKSafariActivity.h"
 #import "LCCKAlertController.h"
+#import "LCCKPhotoBrowser.h"
 
-@interface LCCKConversationViewController () <LCCKChatBarDelegate, LCCKAVAudioPlayerDelegate, LCCKChatMessageCellDelegate, LCCKConversationViewModelDelegate>
+@interface LCCKConversationViewController () <LCCKChatBarDelegate, LCCKAVAudioPlayerDelegate, LCCKChatMessageCellDelegate, LCCKConversationViewModelDelegate, LCCKPhotoBrowserDelegate>
 
 @property (nonatomic, strong, readwrite) AVIMConversation *conversation;
 //@property (copy, nonatomic) NSString *messageSender /**< 正在聊天的用户昵称 */;
@@ -46,6 +47,9 @@
 @property (nonatomic, copy) LCCKViewControllerBooleanResultBlock loadHistoryMessagesHandler;
 @property (nonatomic, copy, readwrite) NSString *conversationId;
 @property (nonatomic, strong) LCCKWebViewController *webViewController;
+@property (nonatomic, strong) NSMutableArray *photos;
+@property (nonatomic, strong) NSMutableArray *thumbs;
+
 @end
 
 @implementation LCCKConversationViewController
@@ -186,6 +190,7 @@
     if (self.conversationId) {
         [[LCCKConversationService sharedInstance] updateDraft:self.chatBar.cachedText conversationId:self.conversationId];
     }
+    [self clearCurrentConversationInfo];
     [[LCCKAVAudioPlayer sharePlayer] stopAudioPlayer];
     [LCCKAVAudioPlayer sharePlayer].identifier = nil;
     [LCCKAVAudioPlayer sharePlayer].URLString = nil;
@@ -223,8 +228,8 @@
 }
 
 - (void)clearCurrentConversationInfo {
-        [LCCKConversationService sharedInstance].currentConversationId = nil;
-        [LCCKConversationService sharedInstance].currentConversation = nil;
+    [LCCKConversationService sharedInstance].currentConversationId = nil;
+//    [LCCKConversationService sharedInstance].currentConversation = nil;
 }
 
 - (void)markCurrentConversationInfo {
@@ -485,17 +490,24 @@
             break;
         case LCCKMessageTypeImage: {
             LCCKPreviewImageMessageBlock previewImageMessageBlock = [LCCKUIService sharedInstance].previewImageMessageBlock;
+            UIImageView *placeholderView = [(LCCKChatImageMessageCell *)messageCell messageImageView];
             NSDictionary *userInfo = @{
                                        /// 传递触发的UIViewController对象
                                        LCCKPreviewImageMessageUserInfoKeyFromController : self,
                                        /// 传递触发的UIView对象
                                        LCCKPreviewImageMessageUserInfoKeyFromView : self.tableView,
+                                       LCCKPreviewImageMessageUserInfoKeyFromPlaceholderView : placeholderView
                                        };
             NSArray *allVisibleImages = nil;
             NSArray *allVisibleThumbs = nil;
             NSNumber *selectedMessageIndex = nil;
             [self.chatViewModel getAllVisibleImagesForSelectedMessage:messageCell.message allVisibleImages:&allVisibleImages allVisibleThumbs:&allVisibleThumbs selectedMessageIndex:&selectedMessageIndex];
-            !previewImageMessageBlock ?: previewImageMessageBlock(selectedMessageIndex.unsignedIntegerValue, allVisibleImages, allVisibleThumbs, userInfo);
+            
+            if (previewImageMessageBlock) {
+            previewImageMessageBlock(selectedMessageIndex.unsignedIntegerValue, allVisibleImages, allVisibleThumbs, userInfo);
+            } else {
+                [self previewImageMessageWithInitialIndex:selectedMessageIndex.unsignedIntegerValue allVisibleImages:allVisibleImages allVisibleThumbs:allVisibleThumbs placeholderImageView:placeholderView fromViewController:self];
+            }
         }
             break;
         case LCCKMessageTypeLocation: {
@@ -529,6 +541,40 @@
     }
 }
 
+- (void)previewImageMessageWithInitialIndex:(NSUInteger)initialIndex
+                                  allVisibleImages:(NSArray *)allVisibleImages
+                                  allVisibleThumbs:(NSArray *)allVisibleThumbs
+                              placeholderImageView:(UIImageView *)placeholderImageView
+                                fromViewController:(LCCKConversationViewController *)fromViewController{
+    // Browser
+    NSMutableArray *photos = [[NSMutableArray alloc] initWithCapacity:[allVisibleImages count]];
+    NSMutableArray *thumbs = [[NSMutableArray alloc] initWithCapacity:[allVisibleThumbs count]];
+    LCCKPhoto *photo;
+    for (NSUInteger index = 0; index < allVisibleImages.count; index++) {
+        id image_ = allVisibleImages[index];
+        
+        if ([image_ isKindOfClass:[UIImage class]]) {
+            photo = [LCCKPhoto photoWithImage:image_];
+        } else {
+            photo = [LCCKPhoto photoWithURL:image_];
+        }
+        if (index == initialIndex) {
+            photo.placeholderImageView = placeholderImageView;
+        }
+        [photos addObject:photo];
+    }
+    // Options
+    self.photos = photos;
+    self.thumbs = thumbs;
+    // Create browser
+    LCCKPhotoBrowser *browser = [[LCCKPhotoBrowser alloc] initWithPhotos:photos];
+    browser.delegate = self;
+    [browser setInitialPageIndex:initialIndex];
+    browser.usePopAnimation = YES;
+    browser.animationDuration = 0.15;
+    // Show
+    [fromViewController presentViewController:browser animated:YES completion:nil];
+}
 - (void)avatarImageViewLongPressed:(LCCKChatMessageCell *)messageCell {
     NSString *userName = messageCell.message.user.name ?: messageCell.message.userId;
     NSString *appendString = [NSString stringWithFormat:@" @%@ ", userName];
