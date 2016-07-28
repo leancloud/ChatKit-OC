@@ -92,6 +92,10 @@
     LCCKImageManager *manager = [LCCKImageManager defaultManager];
     UIImage *image = [manager getImageWithName:imageName
                                      inBundle:bundle];
+    if (!image) {
+        //`-getImageWithName` not work for image in Access Asset Catalog
+        image = [UIImage imageNamed:imageName];
+    }
     return image;
 }
 
