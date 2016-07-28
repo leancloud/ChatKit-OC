@@ -11,8 +11,6 @@
 FOUNDATION_EXTERN NSString *const LCCKURLRegex;
 FOUNDATION_EXTERN NSString *const LCCKPhoneRegex;
 
-@class LCCKURL;
-
 @interface NSString (LCCKExtension)
 
 - (BOOL)lcck_containsString:(NSString *)string;
@@ -38,11 +36,8 @@ FOUNDATION_EXTERN NSString *const LCCKPhoneRegex;
 
 - (BOOL)lcck_isType:(NSTextCheckingType)type;
 
-//- (NSArray<NSString *> *)lcck_allCheckingType:(NSTextCheckingType)type error:(NSError **)error;
-
 - (NSArray<NSString *> *)lcck_allCheckingTypeWithPattern:(NSString *)pattern error:(NSError **)error;
 
-- (NSArray *)lcck_allRangesWithPattern:(NSString *)pattern error:(NSError **)error;
-- (NSArray<LCCKURL *> *)lcck_allURLModels;
+- (NSArray<NSValue *> *)lcck_allURLsWithPattern:(NSString *)pattern error:(NSError **)error;
 
 @end

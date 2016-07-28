@@ -7,7 +7,6 @@
 //
 
 #import "NSString+LCCKExtension.h"
-#import "LCCKURL.h"
 
 NSString *const LCCKURLRegex = @"(?i)\\b((?:[a-z][\\w-]+:(?:/{1,3}|[a-z0-9%])|www\\d{0,3}[.]|[a-z0-9.\\-]+[.][a-z]{2,4}/)(?:[^\\s()<>]+|\\(([^\\s()<>]+|(\\([^\\s()<>]+\\)))*\\))+(?:\\(([^\\s()<>]+|(\\([^\\s()<>]+\\)))*\\)|[^\\s`!()\\[\\]{};:'\".,<>?«»“”‘’]))";
 //匹配10到12位连续数字，或者带连字符/空格的固话号，空格和连字符可以省略。
@@ -98,22 +97,7 @@ NSString *const LCCKPhoneRegex =  @"\\d{3,4}[- ]?\\d{7,8}";
     return [allRanges copy];
 }
 
-
-- (NSArray<LCCKURL *> *)lcck_allURLModels {
-    NSString *URLRegex =  LCCKURLRegex;
-    NSError *error = nil;
-    NSArray *arrayOfAllMatches = [self lcck_allMatchsWithPattern:URLRegex error:&error];
-    NSMutableArray *arrayOfCheckingType = [[NSMutableArray alloc] init];
-    for (NSTextCheckingResult *match in arrayOfAllMatches) {
-        NSString* substringForMatch = [self substringWithRange:match.range];
-        LCCKURL *url = [LCCKURL urlWithURLString:substringForMatch range:match.range];
-        [arrayOfCheckingType addObject:url];
-    }
-    // return non-mutable version of the array
-    return [NSArray arrayWithArray:arrayOfCheckingType];
-}
-
-- (NSArray<LCCKURL *> *)lcck_allURLsWithPattern:(NSString *)pattern error:(NSError **)error {
+- (NSArray<NSValue *> *)lcck_allURLsWithPattern:(NSString *)pattern error:(NSError **)error {
     NSArray *arrayOfAllMatches = [self lcck_allMatchsWithPattern:pattern error:error];
     NSMutableArray *arrayOfCheckingType = [[NSMutableArray alloc] init];
     NSMutableArray *allRanges = [NSMutableArray arrayWithCapacity:1];
@@ -133,23 +117,5 @@ NSString *const LCCKPhoneRegex =  @"\\d{3,4}[- ]?\\d{7,8}";
     // return non-mutable version of the array
     return [NSArray arrayWithArray:arrayOfCheckingType];
 }
-
-// memory killer:
-//- (NSArray<NSTextCheckingResult *> *)lcck_allMatchsForCheckingType:(NSTextCheckingType)type error:(NSError **)error {
-//    NSDataDetector *linkDetector = [NSDataDetector dataDetectorWithTypes:type error:&error];
-//    NSArray *matches = [linkDetector matchesInString:self options:0 range:NSMakeRange(0, [self length])];
-//    return matches;
-//}
-//
-//- (NSArray<NSString *> *)lcck_allCheckingType:(NSTextCheckingType)type error:(NSError **)error {
-//    NSArray *matches = [self lcck_allCheckingType:type error:error];
-//    NSMutableArray *arrayOfCheckingType = [[NSMutableArray alloc] init];
-//    for (NSTextCheckingResult *match in matches) {
-//        NSString* substringForMatch = [self substringWithRange:match.range];
-//        [arrayOfCheckingType addObject:substringForMatch];
-//    }
-//    // return non-mutable version of the array
-//    return [arrayOfCheckingType copy];
-//}
 
 @end
