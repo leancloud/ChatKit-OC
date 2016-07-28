@@ -116,7 +116,7 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
 - (void)setCachedText:(NSString *)cachedText {
     _cachedText = [cachedText copy];
     if ([_cachedText isEqualToString:@""]) {
-        [self updateChatBarConstraintsIfNeeded];
+        [self updateChatBarConstraintsIfNeededShouldCacheText:NO];
         self.allowTextViewContentOffset = YES;
         return;
     }
@@ -176,6 +176,10 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
     return YES;
 }
 
+- (void)textViewDidChange:(UITextView *)textView {
+    [self textViewDidChange:textView shouldCacheText:YES];
+}
+
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range deleteBatchOfTextWithPrefix:(NSString *)prefix
           suffix:(NSString *)suffix {
     NSString *substringOfText = [textView.text substringWithRange:range];
@@ -214,6 +218,9 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
     [self showVoiceView:NO];
     return YES;
 }
+
+#pragma mark -
+#pragma mark - Private Methods
 
 - (void)updateChatBarConstraintsIfNeeded {
     BOOL shouldCacheText = NO;
