@@ -12,6 +12,6 @@
 
 @interface LCCKMessageVoiceFactory : NSObject
 
-+ (UIImageView *)messageVoiceAnimationImageViewWithBubbleMessageType:(LCCKMessageOwner)owner;
++ (UIImageView *)messageVoiceAnimationImageViewWithBubbleMessageType:(LCCKMessageOwnerType)owner;
 
 @end

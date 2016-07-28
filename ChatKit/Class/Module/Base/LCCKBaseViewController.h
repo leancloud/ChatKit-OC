@@ -18,6 +18,7 @@ typedef void(^LCCKViewWillAppearBlock)(LCCKBaseViewController *viewController, B
 typedef void(^LCCKViewDidAppearBlock)(LCCKBaseViewController *viewController, BOOL aAnimated);
 typedef void(^LCCKViewWillDisappearBlock)(LCCKBaseViewController *viewController, BOOL aAnimated);
 typedef void(^LCCKViewDidDisappearBlock)(LCCKBaseViewController *viewController, BOOL aAnimated);
+typedef void(^LCCKViewDidDismissBlock)(LCCKBaseViewController *viewController);
 typedef void(^LCCKViewControllerWillDeallocBlock) (LCCKBaseViewController *viewController);
 typedef void(^LCCKViewDidReceiveMemoryWarningBlock)(LCCKBaseViewController *viewController);
 
@@ -26,6 +27,7 @@ typedef void(^LCCKViewDidReceiveMemoryWarningBlock)(LCCKBaseViewController *view
 @property (nonatomic, copy, readonly) LCCKViewDidAppearBlock viewDidAppearBlock;
 @property (nonatomic, copy, readonly) LCCKViewWillDisappearBlock viewWillDisappearBlock;
 @property (nonatomic, copy, readonly) LCCKViewDidDisappearBlock viewDidDisappearBlock;
+@property (nonatomic, copy, readonly) LCCKViewDidDismissBlock viewDidDismissBlock;
 @property (nonatomic, copy, readonly) LCCKViewControllerWillDeallocBlock viewControllerWillDeallocBlock;
 @property (nonatomic, copy, readonly) LCCKViewDidReceiveMemoryWarningBlock didReceiveMemoryWarningBlock;
 
@@ -37,6 +39,7 @@ typedef void(^LCCKViewDidReceiveMemoryWarningBlock)(LCCKBaseViewController *view
 - (void)setViewDidAppearBlock:(LCCKViewDidAppearBlock)viewDidAppearBlock;
 - (void)setViewWillDisappearBlock:(LCCKViewWillDisappearBlock)viewWillDisappearBlock;
 - (void)setViewDidDisappearBlock:(LCCKViewDidDisappearBlock)viewDidDisappearBlock;
+- (void)setViewDidDismissBlock:(LCCKViewDidDismissBlock)viewDidDismissBlock;
 - (void)setViewControllerWillDeallocBlock:(LCCKViewControllerWillDeallocBlock)viewControllerWillDeallocBlock;
 - (void)setViewDidReceiveMemoryWarningBlock:(LCCKViewDidReceiveMemoryWarningBlock)didReceiveMemoryWarningBlock;
 

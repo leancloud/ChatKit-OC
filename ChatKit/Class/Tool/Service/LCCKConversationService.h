@@ -43,8 +43,6 @@ FOUNDATION_EXTERN NSString *const LCCKConversationServiceErrorDomain;
  */
 @property (nonatomic, strong) AVIMConversation *currentConversation;
 
-@property (nonatomic, assign, getter=isContactListViewControllerActivce) BOOL contactListViewControllerActivce;
-
 /*!
  *  根据 conversationId 获取对话
  *  @param conversationId   对话的 id
@@ -60,10 +58,19 @@ FOUNDATION_EXTERN NSString *const LCCKConversationServiceErrorDomain;
  */
 - (void)fecthConversationWithPeerId:(NSString *)peerId callback:(LCCKConversationResultBlock)callback;
 
-- (void)sendMessage:(AVIMTypedMessage*)message conversation:(AVIMConversation *)conversation
+- (void)sendMessage:(AVIMTypedMessage*)message
+       conversation:(AVIMConversation *)conversation
       progressBlock:(AVProgressBlock)progressBlock
            callback:(LCCKBooleanResultBlock)block;
+
+- (void)sendMessage:(AVIMTypedMessage*)message
+       conversation:(AVIMConversation *)conversation
+      progressBlock:(AVProgressBlock)progressBlock
+            options:(AVIMMessageSendOption)options
+           callback:(LCCKBooleanResultBlock)block;
+
 - (void)sendWelcomeMessageToPeerId:(NSString *)peerId text:(NSString *)text block:(LCCKBooleanResultBlock)block;
+
 - (void)queryTypedMessagesWithConversation:(AVIMConversation *)conversation timestamp:(int64_t)timestamp limit:(NSInteger)limit block:(LCCKArrayResultBlock)block;
 
 /**

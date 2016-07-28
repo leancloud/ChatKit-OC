@@ -42,6 +42,8 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
 @property (strong, nonatomic) UITextView *textView;
 @property (assign, nonatomic) CGFloat oldTextViewHeight;
 @property (nonatomic, assign, getter=shouldAllowTextViewContentOffset) BOOL allowTextViewContentOffset;
+@property (nonatomic, assign, getter=isClosed) BOOL close;
+
 @end
 
 @implementation LCCKChatBar
@@ -107,13 +109,14 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
 }
+
 #pragma mark -
 #pragma mark - Setter Method
 
 - (void)setCachedText:(NSString *)cachedText {
     _cachedText = [cachedText copy];
     if ([_cachedText isEqualToString:@""]) {
-        [self textViewDidChange:self.textView shouldCacheText:NO];
+        [self updateChatBarConstraintsIfNeeded];
         self.allowTextViewContentOffset = YES;
         return;
     }
@@ -212,25 +215,35 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
     return YES;
 }
 
-- (void)textViewDidChange:(UITextView *)textView {
-    [self textViewDidChange:textView shouldCacheText:YES];
+- (void)updateChatBarConstraintsIfNeeded {
+    BOOL shouldCacheText = NO;
+    LCCKFunctionViewShowType functionViewShowType = self.showType;
+    switch (functionViewShowType) {
+        case LCCKFunctionViewShowNothing:
+        case LCCKFunctionViewShowFace:
+        case LCCKFunctionViewShowMore:
+        case LCCKFunctionViewShowKeyboard:
+            shouldCacheText = YES;
+            break;
+        case LCCKFunctionViewShowVoice:
+            shouldCacheText = NO;
+            break;;
+    }
+    [self updateChatBarConstraintsIfNeededShouldCacheText:shouldCacheText];
+}
+
+- (void)updateChatBarConstraintsIfNeededShouldCacheText:(BOOL)shouldCacheText {
+    [self textViewDidChange:self.textView shouldCacheText:shouldCacheText];
 }
 
 - (void)updateChatBarKeyBoardConstraints {
-    if (self.keyboardFrame.size.height == 0) {
-        [self mas_updateConstraints:^(MASConstraintMaker *make) {
-            make.bottom.mas_equalTo(self.superview);
-        }];
-        [self layoutIfNeeded];
-    } else {
-        [self mas_updateConstraints:^(MASConstraintMaker *make) {
-            make.bottom.mas_equalTo(self.superview).offset(-self.keyboardFrame.size.height);
-        }];
-        [self layoutIfNeeded];
-    }
+    [self mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.bottom.mas_equalTo(-self.keyboardFrame.size.height);
+    }];
 }
 
 /*!
+ * updateChatBarConstraintsIfNeeded: WhenTextViewHeightDidChanged
  * 只要文本修改了就会调用，特殊情况，也会调用：刚刚进入对话追加草稿、键盘类型切换、添加表情信息
  */
 - (void)textViewDidChange:(UITextView *)textView
@@ -383,24 +396,38 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
 
 #pragma mark - Public Methods
 
+- (void)close {
+    //关闭
+    self.close = YES;
+    [self endInputing];
+}
+
+- (void)open {
+    self.close = NO;
+    [self beginInputing];
+}
+
 - (void)endInputing {
     if (self.voiceButton.selected) {
         return;
     }
     self.faceButton.selected = self.moreButton.selected = self.voiceButton.selected = NO;
-
     self.showType = LCCKFunctionViewShowNothing;
 }
 
 - (void)appendString:(NSString *)string beginInputing:(BOOL)beginInputing {
+    [self appendString:string beginInputing:beginInputing animated:NO];
+}
+
+- (void)appendString:(NSString *)string beginInputing:(BOOL)beginInputing animated:(BOOL)animated {
     self.allowTextViewContentOffset = YES;
     if ([self.textView.text hasSuffix:@"@"] && [string hasPrefix:@" "]) {
         self.textView.text = [self.textView.text substringToIndex:[self.textView.text length] - 1];
     }
     self.textView.text = [self.textView.text stringByAppendingString:string];
-    [self textViewDidChange:self.textView];
+    [self updateChatBarConstraintsIfNeeded];
     if (beginInputing) {
-        [self beginInputing];
+        [self beginInputingWithAnimated:animated];
     }
 }
 
@@ -408,7 +435,11 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
     [self appendString:string beginInputing:YES];
 }
 
-- (void)beginInputing {
+- (void)beginInputingWithAnimated:(BOOL)animated {
+    if (animated) {
+        [self.textView becomeFirstResponder];
+        return;
+    }
     [UIView beginAnimations:nil context:nil];
     [UIView setAnimationDuration:0.0];
     [UIView setAnimationDelay:0.0];
@@ -417,29 +448,31 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
     [UIView commitAnimations];
 }
 
-#pragma mark - Private Methods
-
-- (BOOL)isContactListViewControllerActivce {
-    return [LCCKConversationService sharedInstance].isContactListViewControllerActivce;;
+- (void)beginInputing {
+    [self beginInputingWithAnimated:NO];
 }
 
+#pragma mark - Private Methods
+
 - (void)keyboardWillHide:(NSNotification *)notification {
-    if (self.isContactListViewControllerActivce) {
+    if (self.isClosed) {
         return;
     }
     self.keyboardFrame = CGRectZero;
-    [self textViewDidChange:self.textView shouldCacheText:NO];
+    if (_showType == LCCKFunctionViewShowKeyboard) {
+        _showType = LCCKFunctionViewShowNothing;
+    }
+    [self updateChatBarConstraintsIfNeeded];
     [self chatBarFrameDidChangeShouldScrollToBottom:NO];
 }
 
 - (void)keyboardWillShow:(NSNotification *)notification {
-    if (self.isContactListViewControllerActivce) {
+    if (self.isClosed) {
         return;
     }
-    self.showType = LCCKFunctionViewShowKeyboard;
     self.allowTextViewContentOffset = YES;
     self.keyboardFrame = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
-    [self textViewDidChange:self.textView shouldCacheText:NO];
+    self.showType = LCCKFunctionViewShowKeyboard;
     [self chatBarFrameDidChangeShouldScrollToBottom:YES];
 }
 
@@ -457,6 +490,7 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
 }
 
 - (void)setup {
+    self.close = NO;
     self.allowTextViewContentOffset = YES;
     self.MP3 = [[Mp3Recorder alloc] initWithDelegate:self];
     [self addSubview:self.inputBarBackgroundView];
@@ -534,7 +568,6 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
     switch (showType) {
         case LCCKFunctionViewShowNothing: {
             self.textView.text = self.cachedText;
-            [self textViewDidChange:self.textView];
             [self.textView resignFirstResponder];
         }
             break;
@@ -542,20 +575,18 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
             self.cachedText = self.textView.text;
             self.textView.text = nil;
             [self.textView resignFirstResponder];
-            [self textViewDidChange:self.textView shouldCacheText:NO];
         }
             break;
         case LCCKFunctionViewShowMore:
         case LCCKFunctionViewShowFace:
             self.textView.text = self.cachedText;
             [self.textView resignFirstResponder];
-            [self textViewDidChange:self.textView];
             break;
         case LCCKFunctionViewShowKeyboard:
             self.textView.text = self.cachedText;
-            [self textViewDidChange:self.textView];
             break;
     }
+    [self updateChatBarConstraintsIfNeeded];
     [self chatBarFrameDidChangeShouldScrollToBottom:YES];
 }
 
@@ -579,7 +610,7 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
     
     if (!button.selected) {
         showType = LCCKFunctionViewShowKeyboard;
-        [self.textView becomeFirstResponder];
+        [self beginInputingWithAnimated:YES];
     }
     
     self.showType = showType;

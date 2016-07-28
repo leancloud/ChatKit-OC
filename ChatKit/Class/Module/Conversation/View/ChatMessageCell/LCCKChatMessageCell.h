@@ -84,7 +84,7 @@
 /**
  *  消息的所有者,只读类型,会根据自己的reuseIdentifier进行判断
  */
-@property (nonatomic, assign, readonly) LCCKMessageOwner messageOwner;
+@property (nonatomic, assign, readonly) LCCKMessageOwnerType messageOwner;
 
 /**
  *  消息群组类型,只读类型,根据reuseIdentifier判断

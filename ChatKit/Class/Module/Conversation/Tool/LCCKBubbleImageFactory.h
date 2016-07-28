@@ -12,6 +12,6 @@
 
 @interface LCCKBubbleImageFactory : NSObject
 
-+ (UIImage *)bubbleImageViewForType:(LCCKMessageOwner)owner messageType:(LCCKMessageType)messageType isHighlighted:(BOOL)isHighlighted;
++ (UIImage *)bubbleImageViewForType:(LCCKMessageOwnerType)owner messageType:(LCCKMessageType)messageType isHighlighted:(BOOL)isHighlighted;
 
 @end

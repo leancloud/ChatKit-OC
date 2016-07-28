@@ -11,14 +11,14 @@
 
 @implementation LCCKMessageVoiceFactory
 
-+ (UIImageView *)messageVoiceAnimationImageViewWithBubbleMessageType:(LCCKMessageOwner)owner {
++ (UIImageView *)messageVoiceAnimationImageViewWithBubbleMessageType:(LCCKMessageOwnerType)owner {
     UIImageView *messageVoiceAniamtionImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 20, 20)];
     NSString *imageSepatorName;
     switch (owner) {
-        case LCCKMessageOwnerSelf:
+        case LCCKMessageOwnerTypeSelf:
             imageSepatorName = @"Sender";
             break;
-        case LCCKMessageOwnerOther:
+        case LCCKMessageOwnerTypeOther:
             imageSepatorName = @"Receiver";
             break;
         default:

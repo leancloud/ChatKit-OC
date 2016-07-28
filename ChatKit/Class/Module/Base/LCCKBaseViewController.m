@@ -18,6 +18,7 @@
 @property (nonatomic, copy, readwrite) LCCKViewDidAppearBlock viewDidAppearBlock;
 @property (nonatomic, copy, readwrite) LCCKViewWillDisappearBlock viewWillDisappearBlock;
 @property (nonatomic, copy, readwrite) LCCKViewDidDisappearBlock viewDidDisappearBlock;
+@property (nonatomic, copy, readwrite) LCCKViewDidDismissBlock viewDidDismissBlock;
 @property (nonatomic, copy, readwrite) LCCKViewControllerWillDeallocBlock viewControllerWillDeallocBlock;
 @property (nonatomic, copy, readwrite) LCCKViewDidReceiveMemoryWarningBlock didReceiveMemoryWarningBlock;
 @property (nonatomic, copy) LCCKBarButtonItemActionBlock barButtonItemAction;
@@ -49,6 +50,11 @@
     _viewDidDisappearBlock = viewDidDisappearBlock;
 }
 
+- (void)setViewDidDismissBlock:(LCCKViewDidDismissBlock)viewDidDismissBlock {
+    _viewDidDismissBlock = viewDidDismissBlock;
+}
+
+
 - (void)setViewControllerWillDeallocBlock:(LCCKViewControllerWillDeallocBlock)viewControllerWillDeallocBlock {
     _viewControllerWillDeallocBlock = viewControllerWillDeallocBlock;
 }
@@ -56,6 +62,7 @@
 - (void)setViewDidReceiveMemoryWarningBlock:(LCCKViewDidReceiveMemoryWarningBlock)didReceiveMemoryWarningBlock {
     _didReceiveMemoryWarningBlock = didReceiveMemoryWarningBlock;
 }
+
 - (void)clickedBarButtonItemAction {
     if (self.barButtonItemAction) {
         self.barButtonItemAction();

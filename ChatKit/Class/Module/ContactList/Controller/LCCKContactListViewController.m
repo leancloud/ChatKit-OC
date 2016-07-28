@@ -127,6 +127,7 @@ static NSString *const LCCKContactListViewControllerIdentifier = @"LCCKContactLi
     }
     return _searchBar;
 }
+
 #pragma mark -
 #pragma mark - UIViewController Life
 
@@ -191,6 +192,7 @@ static NSString *const LCCKContactListViewControllerIdentifier = @"LCCKContactLi
             }
         }];
     }
+    !self.viewDidLoadBlock ?: self.viewDidLoadBlock(self);
 }
 
 #pragma clang diagnostic push
@@ -220,11 +222,13 @@ static NSString *const LCCKContactListViewControllerIdentifier = @"LCCKContactLi
     }
     [self.tableView deselectRowAtIndexPath:self.tableView.indexPathForSelectedRow animated:YES];
     [self setDictionaryTableRowCheckedState:[NSMutableDictionary dictionary]];
+    !self.viewWillAppearBlock ?: self.viewWillAppearBlock(self, animated);
 }
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     [self reloadData];
+    !self.viewDidAppearBlock ?: self.viewDidAppearBlock(self, animated);
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -234,11 +238,22 @@ static NSString *const LCCKContactListViewControllerIdentifier = @"LCCKContactLi
         [self selectedContactsCallback](self, [self.selectedContacts copy]);
         return;
     }
+    !self.viewWillDisappearBlock ?: self.viewWillDisappearBlock(self, animated);
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
     _originSections = nil;
+    !self.viewDidDisappearBlock ?: self.viewDidDisappearBlock(self, animated);
+}
+
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    !self.didReceiveMemoryWarningBlock ?: self.didReceiveMemoryWarningBlock(self);
+}
+
+- (void)dealloc {
+    !self.viewControllerWillDeallocBlock ?: self.viewControllerWillDeallocBlock(self);
 }
 
 #pragma mark - tableview
@@ -546,10 +561,12 @@ static NSString *const LCCKContactListViewControllerIdentifier = @"LCCKContactLi
 - (void)cancelBarButtonItemPressed:(id)sender {
     self.selectedContacts = nil;
     [self dismissViewControllerAnimated:YES completion:NULL];
+    !self.viewDidDismissBlock ?: self.viewDidDismissBlock(self);
 }
 
 - (void)doneBarButtonItemPressed:(id)sender {
     [self dismissViewControllerAnimated:YES completion:NULL];
+    !self.viewDidDismissBlock ?: self.viewDidDismissBlock(self);
 }
 
 - (void)refresh {
@@ -585,6 +602,19 @@ static NSString *const LCCKContactListViewControllerIdentifier = @"LCCKContactLi
 
 - (void)searchDisplayController:(UISearchDisplayController *)controller didHideSearchResultsTableView:(UITableView *)tableView {
     [self reloadAllTableViewData:tableView];
+}
+
+- (void)searchDisplayControllerDidBeginSearch:(UISearchDisplayController *)controller {
+    UIButton *cancelButton;
+    UIView *topView = self.searchBar.subviews[0];
+    for (UIView *subView in topView.subviews) {
+        if ([subView isKindOfClass:NSClassFromString(@"UINavigationButton")]) {
+            cancelButton = (UIButton*)subView;
+        }
+    }
+    if (cancelButton) {
+        [cancelButton setTitle:LCCKLocalizedStrings(@"done") forState:UIControlStateNormal];
+    }
 }
 
 #pragma mark - UISearchDisplayDelegate

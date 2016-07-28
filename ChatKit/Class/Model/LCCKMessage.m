@@ -46,28 +46,31 @@
 
 @property (nonatomic, assign) NSTimeInterval timestamp;
 
-@property (nonatomic, assign)  BOOL sended;
-
 @property (nonatomic, assign)  LCCKMessageType messageMediaType;
 
 @property (nonatomic, assign)  LCCKMessageReadState messageReadState;
 
-@property (nonatomic, assign)  BOOL isRead;
+@property (nonatomic, assign, getter=hasRead) BOOL read;
 
 @end
 
 @implementation LCCKMessage
+@synthesize sender = _sender;
+@synthesize senderId = _senderId;
+@synthesize sendStatus = _sendStatus;
+@synthesize conversationId = _conversationId;
+@synthesize ownerType = _ownerType;
 
 - (instancetype)initWithText:(NSString *)text
-                      userId:(NSString *)userId
-                        user:(id<LCCKUserDelegate>)user
+                      senderId:(NSString *)senderId
+                        sender:(id<LCCKUserDelegate>)sender
                    timestamp:(NSTimeInterval)timestamp
              serverMessageId:(NSString *)serverMessageId {
     self = [super init];
     if (self) {
         _text = text;
-        _user = user;
-        _userId = userId;
+        _sender = sender;
+        _senderId = senderId;
         _timestamp = timestamp;
         _serverMessageId = serverMessageId;
         _messageMediaType = LCCKMessageTypeText;
@@ -82,6 +85,11 @@
     if (_localMessageId) {
         return _localMessageId;
     }
+}
+
+- (void)setlocalMessageId:(NSString *)localMessageId {
+    _localMessageId = localMessageId;
+    _timestamp = [localMessageId doubleValue];
 }
 
 + (instancetype)systemMessageWithTimestamp:(NSTimeInterval)time {
@@ -102,7 +110,7 @@
     if (self) {
         _systemText = text;
         _messageMediaType = LCCKMessageTypeSystem;
-        _bubbleMessageType = LCCKMessageOwnerSystem;
+        _ownerType = LCCKMessageOwnerTypeSystem;
     }
     return self;
 }
@@ -112,8 +120,8 @@
                     photoPath:(NSString *)photoPath
                  thumbnailURL:(NSURL *)thumbnailURL
                originPhotoURL:(NSURL *)originPhotoURL
-                       userId:(NSString *)userId
-                         user:(id<LCCKUserDelegate>)user
+                       senderId:(NSString *)senderId
+                         sender:(id<LCCKUserDelegate>)sender
                     timestamp:(NSTimeInterval)timestamp
               serverMessageId:(NSString *)serverMessageId {
     self = [super init];
@@ -125,8 +133,8 @@
         _originPhotoURL = originPhotoURL;
         _timestamp = timestamp;
         _serverMessageId = serverMessageId;
-        _user = user;
-        _userId = userId;
+        _sender = sender;
+        _senderId = senderId;
         _messageMediaType = LCCKMessageTypeImage;
     }
     return self;
@@ -135,8 +143,8 @@
 - (instancetype)initWithVideoConverPhoto:(UIImage *)videoConverPhoto
                                videoPath:(NSString *)videoPath
                                 videoURL:(NSURL *)videoURL
-                                  userId:(NSString *)userId
-                                    user:(id<LCCKUserDelegate>)user
+                                  senderId:(NSString *)senderId
+                                    sender:(id<LCCKUserDelegate>)sender
                                timestamp:(NSTimeInterval)timestamp
                          serverMessageId:(NSString *)serverMessageId {
     self = [super init];
@@ -144,8 +152,8 @@
         _videoConverPhoto = videoConverPhoto;
         _videoPath = videoPath;
         _videoURL = videoURL;
-        _user = user;
-        _userId = userId;
+        _sender = sender;
+        _senderId = senderId;
         _timestamp = timestamp;
         _serverMessageId = serverMessageId;
         _messageMediaType = LCCKMessageTypeVideo;
@@ -156,62 +164,57 @@
 - (instancetype)initWithVoicePath:(NSString *)voicePath
                          voiceURL:(NSURL *)voiceURL
                     voiceDuration:(NSString *)voiceDuration
-                           userId:(NSString *)userId
-                             user:(id<LCCKUserDelegate>)user
+                           senderId:(NSString *)senderId
+                             sender:(id<LCCKUserDelegate>)sender
                         timestamp:(NSTimeInterval)timestamp
                   serverMessageId:(NSString *)serverMessageId {
     
-    return [self initWithVoicePath:voicePath voiceURL:voiceURL voiceDuration:voiceDuration userId:userId user:user timestamp:timestamp isRead:YES serverMessageId:serverMessageId];
+    return [self initWithVoicePath:voicePath voiceURL:voiceURL voiceDuration:voiceDuration senderId:senderId sender:sender timestamp:timestamp hasRead:YES serverMessageId:serverMessageId];
 }
 
 - (instancetype)initWithVoicePath:(NSString *)voicePath
                          voiceURL:(NSURL *)voiceURL
                     voiceDuration:(NSString *)voiceDuration
-                           userId:(NSString *)userId
-                             user:(id<LCCKUserDelegate>)user
+                           senderId:(NSString *)senderId
+                             sender:(id<LCCKUserDelegate>)sender
                         timestamp:(NSTimeInterval)timestamp
-                           isRead:(BOOL)isRead
+                           hasRead:(BOOL)hasRead
                 serverMessageId:(NSString *)serverMessageId {
     self = [super init];
     if (self) {
         _voicePath = voicePath;
         _voiceURL = voiceURL;
         _voiceDuration = voiceDuration;
-        _user = user;
-        _userId = userId;
+        _sender = sender;
+        _senderId = senderId;
         _timestamp = timestamp;
         _serverMessageId = serverMessageId;
-        _isRead = isRead;
+        _read = hasRead;
         _messageMediaType = LCCKMessageTypeVoice;
     }
     return self;
 }
 
-- (void)setlocalMessageId:(NSString *)localMessageId {
-    _localMessageId = localMessageId;
-    _timestamp = [localMessageId doubleValue];
-}
-
 - (instancetype)initWithEmotionPath:(NSString *)emotionPath
-                               user:(id<LCCKUserDelegate>)user
-                             userId:(NSString *)userId
+                               sender:(id<LCCKUserDelegate>)sender
+                             senderId:(NSString *)senderId
                           timestamp:(NSTimeInterval)timestamp
                     serverMessageId:(NSString *)serverMessageId {
-    return [self initWithEmotionPath:emotionPath emotionName:nil userId:userId user:user timestamp:timestamp serverMessageId:serverMessageId];
+    return [self initWithEmotionPath:emotionPath emotionName:nil senderId:senderId sender:sender timestamp:timestamp serverMessageId:serverMessageId];
 }
 
 - (instancetype)initWithEmotionPath:(NSString *)emotionPath
                         emotionName:(NSString *)emotionName
-                             userId:(NSString *)userId
-                               user:(id<LCCKUserDelegate>)user
+                             senderId:(NSString *)senderId
+                               sender:(id<LCCKUserDelegate>)sender
                           timestamp:(NSTimeInterval)timestamp
                     serverMessageId:(NSString *)serverMessageId {
     self = [super init];
     if (self) {
         _emotionPath = emotionPath;
         _emotionName = emotionName;
-        _user = user;
-        _userId = userId;
+        _sender = sender;
+        _senderId = senderId;
         _timestamp = timestamp;
         _serverMessageId = serverMessageId;
         _messageMediaType = LCCKMessageTypeEmotion;
@@ -222,8 +225,8 @@
 - (instancetype)initWithLocalPositionPhoto:(UIImage *)localPositionPhoto
                               geolocations:(NSString *)geolocations
                                   location:(CLLocation *)location
-                                    userId:(NSString *)userId
-                                      user:(id<LCCKUserDelegate>)user
+                                    senderId:(NSString *)senderId
+                                      sender:(id<LCCKUserDelegate>)sender
                                  timestamp:(NSTimeInterval)timestamp
                            serverMessageId:(NSString *)serverMessageId {
     self = [super init];
@@ -231,8 +234,8 @@
         _localPositionPhoto = localPositionPhoto;
         _geolocations = geolocations;
         _location = location;
-        _user = user;
-        _userId = userId;
+        _sender = sender;
+        _senderId = senderId;
         _timestamp = timestamp;
         _serverMessageId = serverMessageId;
         _messageMediaType = LCCKMessageTypeLocation;
@@ -271,8 +274,8 @@
 
 + (LCCKMessage *)messageWithAVIMTypedMessage:(AVIMTypedMessage *)message {
     NSError *error = nil;
-    NSString *userId = message.clientId;
-    id<LCCKUserDelegate> user = [[LCCKUserSystemService sharedInstance] getProfileForUserId:message.clientId error:&error];
+    NSString *senderId = message.clientId;
+    id<LCCKUserDelegate> sender = [[LCCKUserSystemService sharedInstance] getProfileForUserId:message.clientId error:&error];
     LCCKMessage *lcckMessage;
     NSTimeInterval time = message.sendTimestamp;
     NSString *serverMessageId = message.messageId;
@@ -281,7 +284,7 @@
     switch (mediaType) {
         case kAVIMMessageMediaTypeText: {
             AVIMTextMessage *textMsg = (AVIMTextMessage *)message;
-            lcckMessage = [[LCCKMessage alloc] initWithText:textMsg.text userId:userId user:user timestamp:time serverMessageId:serverMessageId];
+            lcckMessage = [[LCCKMessage alloc] initWithText:textMsg.text senderId:senderId sender:sender timestamp:time serverMessageId:serverMessageId];
             break;
         }
         case kAVIMMessageMediaTypeAudio: {
@@ -295,7 +298,7 @@
             } else {
                 voicePath = audioMsg.file.url;
             }
-            lcckMessage = [[LCCKMessage alloc] initWithVoicePath:voicePath voiceURL:nil voiceDuration:duration userId:userId user:user timestamp:time serverMessageId:serverMessageId];
+            lcckMessage = [[LCCKMessage alloc] initWithVoicePath:voicePath voiceURL:nil voiceDuration:duration senderId:senderId sender:sender timestamp:time serverMessageId:serverMessageId];
             break;
         }
             
@@ -305,7 +308,7 @@
                 NSString *imageName = @"MessageBubble_Location";
                 UIImage *image = [UIImage lcck_imageNamed:imageName bundleName:@"MessageBubble" bundleForClass:[self class]];
                 image;})
-                                                             geolocations:locationMsg.text location:[[CLLocation alloc] initWithLatitude:locationMsg.latitude longitude:locationMsg.longitude] userId:userId user:user timestamp:time serverMessageId:serverMessageId];
+                                                             geolocations:locationMsg.text location:[[CLLocation alloc] initWithLatitude:locationMsg.latitude longitude:locationMsg.longitude] senderId:senderId sender:sender timestamp:time serverMessageId:serverMessageId];
             break;
         }
         case kAVIMMessageMediaTypeImage: {
@@ -316,7 +319,7 @@
             if ([fileManager fileExistsAtPath:pathForFile]){
                 imagePath = imageMsg.file.localPath;
             }
-            lcckMessage = [[LCCKMessage alloc] initWithPhoto:nil thumbnailPhoto:nil photoPath:imagePath thumbnailURL:nil originPhotoURL:[NSURL URLWithString:imageMsg.file.url] userId:userId user:user timestamp:time serverMessageId:serverMessageId];
+            lcckMessage = [[LCCKMessage alloc] initWithPhoto:nil thumbnailPhoto:nil photoPath:imagePath thumbnailURL:nil originPhotoURL:[NSURL URLWithString:imageMsg.file.url] senderId:senderId sender:sender timestamp:time serverMessageId:serverMessageId];
             break;
         }
             
@@ -332,11 +335,12 @@
             break;
         }
         default: {
-            lcckMessage = [[LCCKMessage alloc] initWithText:LCCKLocalizedStrings(@"unknownMessage") userId:userId user:user timestamp:time serverMessageId:serverMessageId];
+            lcckMessage = [[LCCKMessage alloc] initWithText:LCCKLocalizedStrings(@"unknownMessage") senderId:senderId sender:sender timestamp:time serverMessageId:serverMessageId];
             LCCKLog("unkonwMessage");
             break;
         }
     }
+    //必然同步返回
     [[LCCKConversationService sharedInstance] fecthConversationWithConversationId:message.conversationId callback:^(AVIMConversation *conversation, NSError *error) {
         if (conversation) {
             lcckMessage.messageGroupType = conversation.lcck_type;
@@ -347,15 +351,15 @@
     }];
     
     if ([[LCCKSessionService sharedInstance].clientId isEqualToString:message.clientId]) {
-        lcckMessage.bubbleMessageType = LCCKMessageOwnerSelf;
+        lcckMessage.ownerType = LCCKMessageOwnerTypeSelf;
     } else {
-        lcckMessage.bubbleMessageType = LCCKMessageOwnerOther;
+        lcckMessage.ownerType = LCCKMessageOwnerTypeOther;
     }
     
     NSInteger msgStatuses[4] = { AVIMMessageStatusSending, AVIMMessageStatusSent, AVIMMessageStatusDelivered, AVIMMessageStatusFailed };
     NSInteger lcckMessageStatuses[4] = { LCCKMessageSendStateSending, LCCKMessageSendStateSuccess, LCCKMessageSendStateReceived, LCCKMessageSendStateFailed };
     
-    if (lcckMessage.bubbleMessageType == LCCKMessageOwnerSelf) {
+    if (lcckMessage.ownerType == LCCKMessageOwnerTypeSelf) {
         LCCKMessageSendState status = LCCKMessageSendStateReceived;
         int i;
         for (i = 0; i < 4; i++) {
@@ -364,9 +368,9 @@
                 break;
             }
         }
-        lcckMessage.status = status;
+        lcckMessage.sendStatus = status;
     } else {
-        lcckMessage.status = LCCKMessageSendStateReceived;
+        lcckMessage.sendStatus = LCCKMessageSendStateReceived;
     }
     return lcckMessage;
 }
@@ -398,8 +402,8 @@
         _geolocations = [aDecoder decodeObjectForKey:@"geolocations"];
         _location = [aDecoder decodeObjectForKey:@"location"];
         
-        _user = [aDecoder decodeObjectForKey:@"user"];
-        _userId = [aDecoder decodeObjectForKey:@"userId"];
+        _sender = [aDecoder decodeObjectForKey:@"sender"];
+        _senderId = [aDecoder decodeObjectForKey:@"senderId"];
         
         _timestamp = [aDecoder decodeInt64ForKey:@"timestamp"];
         _serverMessageId = [aDecoder decodeObjectForKey:@"serverMessageId"];
@@ -409,9 +413,9 @@
         _messageMediaType = [aDecoder decodeIntForKey:@"messageMediaType"];
         _messageGroupType = [aDecoder decodeIntForKey:@"messageGroupType"];
         _messageReadState = [aDecoder decodeIntForKey:@"messageReadState"];
-        _bubbleMessageType = [aDecoder decodeIntForKey:@"bubbleMessageType"];
-        
-        _status = [aDecoder decodeIntForKey:@"status"];
+        _ownerType = [aDecoder decodeIntForKey:@"ownerType"];
+        _read = [aDecoder decodeBoolForKey:@"read"];
+        _sendStatus = [aDecoder decodeIntForKey:@"sendStatus"];
         _photoPath = [aDecoder decodeObjectForKey:@"photoPath"];
         _thumbnailPhoto = [aDecoder decodeObjectForKey:@"thumbnailPhoto"];
     }
@@ -439,8 +443,8 @@
     [aCoder encodeObject:self.localPositionPhoto forKey:@"localPositionPhoto"];
     [aCoder encodeObject:self.geolocations forKey:@"geolocations"];
     [aCoder encodeObject:self.location forKey:@"location"];
-    [aCoder encodeObject:self.user forKey:@"user"];
-    [aCoder encodeObject:self.userId forKey:@"userId"];
+    [aCoder encodeObject:self.sender forKey:@"sender"];
+    [aCoder encodeObject:self.senderId forKey:@"senderId"];
     
     [aCoder encodeInt64:self.timestamp forKey:@"timestamp"];
     [aCoder encodeObject:self.serverMessageId forKey:@"serverMessageId"];
@@ -450,8 +454,9 @@
     [aCoder encodeInt:self.messageMediaType forKey:@"messageMediaType"];
     [aCoder encodeInt:self.messageGroupType forKey:@"messageGroupType"];
     [aCoder encodeInt:self.messageReadState forKey:@"messageReadState"];
-    [aCoder encodeInt:self.bubbleMessageType forKey:@"bubbleMessageType"];
-    [aCoder encodeInt:self.status forKey:@"status"];
+    [aCoder encodeInt:self.ownerType forKey:@"ownerType"];
+    [aCoder encodeBool:self.read forKey:@"read"];
+    [aCoder encodeInt:self.sendStatus forKey:@"sendStatus"];
     [aCoder encodeObject:self.photoPath forKey:@"photoPath"];
     [aCoder encodeObject:self.thumbnailPhoto forKey:@"thumbnailPhoto"];
     
@@ -464,8 +469,8 @@
     switch (self.messageMediaType) {
         case LCCKMessageTypeText: {
             message = [[[self class] allocWithZone:zone] initWithText:[self.text copy]
-                                                               userId:[self.userId copy]
-                                                                 user:[self.user copyWithZone:nil]
+                                                               senderId:[self.senderId copy]
+                                                                 sender:[self.sender copyWithZone:nil]
                                                             timestamp:self.timestamp
                                                       serverMessageId:[self.serverMessageId copy]];
             
@@ -477,8 +482,8 @@
                                                               photoPath:[self.photoPath copy]
                                                            thumbnailURL:[self.thumbnailURL copy]
                                                          originPhotoURL:[self.originPhotoURL copy]
-                                                                 userId:[self.userId copy]
-                                                                   user:[self.user copyWithZone:nil]
+                                                                 senderId:[self.senderId copy]
+                                                                   sender:[self.sender copyWithZone:nil]
                                                               timestamp:self.timestamp
                                                         serverMessageId:[self.serverMessageId copy]];
 
@@ -488,8 +493,8 @@
             message = [[[self class] allocWithZone:zone] initWithVideoConverPhoto:[self.videoConverPhoto copy]
                                                                         videoPath:[self.videoPath copy]
                                                                          videoURL:[self.videoURL copy]
-                                                                           userId:[self.userId copy]
-                                                                             user:[self.user copyWithZone:nil]
+                                                                           senderId:[self.senderId copy]
+                                                                             sender:[self.sender copyWithZone:nil]
                                                                         timestamp:self.timestamp
                                                                   serverMessageId:[self.serverMessageId copy]];
 
@@ -499,8 +504,8 @@
             message =  [[[self class] allocWithZone:zone] initWithVoicePath:[self.voicePath copy]
                                                                    voiceURL:[self.voiceURL copy]
                                                               voiceDuration:[self.voiceDuration copy]
-                                                                     userId:[self.userId copy]
-                                                                       user:[self.user copyWithZone:nil]
+                                                                     senderId:[self.senderId copy]
+                                                                       sender:[self.sender copyWithZone:nil]
                                                                   timestamp:self.timestamp
                                                             serverMessageId:[self.serverMessageId copy]];
 
@@ -509,8 +514,8 @@
         case LCCKMessageTypeEmotion: {
             message =  [[[self class] allocWithZone:zone] initWithEmotionPath:[self.emotionPath copy]
                                                                   emotionName:[self.emotionName copy]
-                                                                       userId:[self.userId copy]
-                                                                         user:[self.user copyWithZone:nil]
+                                                                       senderId:[self.senderId copy]
+                                                                         sender:[self.sender copyWithZone:nil]
                                                                     timestamp:self.timestamp
                                                               serverMessageId:[self.serverMessageId copy]];
 
@@ -520,8 +525,8 @@
             message =  [[[self class] allocWithZone:zone] initWithLocalPositionPhoto:[self.localPositionPhoto copy]
                                                                         geolocations:[self.geolocations copy]
                                                                             location:[self.location copy]
-                                                                              userId:[self.userId copy]
-                                                                                user:[self.user copyWithZone:nil]
+                                                                              senderId:[self.senderId copy]
+                                                                                sender:[self.sender copyWithZone:nil]
                                                                            timestamp:self.timestamp
                                                                      serverMessageId:[self.serverMessageId copy]];
 
@@ -544,7 +549,8 @@
     message.messageMediaType = self.messageMediaType;
     message.messageGroupType = self.messageGroupType;
     message.messageReadState = self.messageReadState;
-    message.status = self.status;
+    message.sendStatus = self.sendStatus;
+    message.read = self.read;
     return message;
 }
 

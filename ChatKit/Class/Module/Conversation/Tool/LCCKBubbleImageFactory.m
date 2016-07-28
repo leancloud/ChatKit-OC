@@ -12,7 +12,7 @@
 
 @implementation LCCKBubbleImageFactory
 
-+ (UIImage *)bubbleImageViewForType:(LCCKMessageOwner)owner
++ (UIImage *)bubbleImageViewForType:(LCCKMessageOwnerType)owner
                         messageType:(LCCKMessageType)messageType
                       isHighlighted:(BOOL)isHighlighted {
     NSString *messageTypeString = @"message_";
@@ -25,16 +25,16 @@
             break;
     }
     switch (owner) {
-        case LCCKMessageOwnerSelf:
+        case LCCKMessageOwnerTypeSelf:
             // 发送 ==> @"MessageBubble_Sender"
             messageTypeString = [messageTypeString stringByAppendingString:@"sender_"];
             break;
-        case LCCKMessageOwnerOther:
+        case LCCKMessageOwnerTypeOther:
             // 接收
             messageTypeString = [messageTypeString stringByAppendingString:@"receiver_"];
             break;
-            case LCCKMessageOwnerSystem:
-            case LCCKMessageOwnerUnknown:
+            case LCCKMessageOwnerTypeSystem:
+            case LCCKMessageOwnerTypeUnknown:
             //TODO:
             break;
     }

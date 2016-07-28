@@ -10,6 +10,7 @@
 "draft" = "草稿";
 "resend" = "重新发送";
 "cancel" = "取消";
+"done" = "确定";
 "ok" = "确定";
 "transpond" = "转发";
 "favorites" = "收藏";
@@ -45,7 +46,7 @@
 "call" = "拨打";
 "netDisconnected" = "当前网络不可用，请检查你的网络设置";
 "unknownMessage" = "该版本暂不支持该信息展示，请尝试升级版本查看";
-
+"unknownMessageType" = "未知消息类型";
 "message.bar.error.title" = "错误";
 "message.bar.error.message" = "错误";
 "message.bar.success.title" = "成功";

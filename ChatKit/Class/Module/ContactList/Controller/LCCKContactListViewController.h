@@ -30,7 +30,7 @@ typedef void (^LCCKSelectedContactsCallback)(UIViewController *viewController, N
  */
 typedef BOOL (^LCCKDeleteContactCallback)(UIViewController *viewController, NSString *peerId);
 
-@interface LCCKContactListViewController : UITableViewController
+@interface LCCKContactListViewController : LCCKBaseTableViewController
 
 /*!
  * 不参与展示的名单，可以是黑名单或者当前用户。该数组是client id的集合。

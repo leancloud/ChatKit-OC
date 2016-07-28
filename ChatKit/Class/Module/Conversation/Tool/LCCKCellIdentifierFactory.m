@@ -13,20 +13,20 @@
 
 + (NSString *)cellIdentifierForMessageConfiguration:(LCCKMessage *)message {
     LCCKMessageType messageType = message.messageMediaType;
-    LCCKMessageOwner messageOwner = message.bubbleMessageType;
+    LCCKMessageOwnerType messageOwner = message.ownerType;
     LCCKConversationType messageChat = message.messageGroupType;
     NSString *identifierKey = @"LCCKChatMessageCell";
     NSString *ownerKey;
     NSString *typeKey;
     NSString *groupKey;
     switch (messageOwner) {
-        case LCCKMessageOwnerSystem:
+        case LCCKMessageOwnerTypeSystem:
             ownerKey = @"OwnerSystem";
             break;
-        case LCCKMessageOwnerOther:
+        case LCCKMessageOwnerTypeOther:
             ownerKey = @"OwnerOther";
             break;
-        case LCCKMessageOwnerSelf:
+        case LCCKMessageOwnerTypeSelf:
             ownerKey = @"OwnerSelf";
             break;
         default:

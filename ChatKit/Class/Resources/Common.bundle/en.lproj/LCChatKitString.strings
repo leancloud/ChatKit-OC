@@ -10,6 +10,7 @@
 "transpond" = "transpond";
 "resend" = "resend";
 "cancel" = "cancel";
+"done" = "done";
 "ok" = "ok";
 "favorites" = "favorites";
 "more" = "more";
@@ -42,6 +43,7 @@
 "netDisconnected" = "Network unavailable, Check network";
 "call" = "call";
 "unknownMessage" = "unknown message type, please update your APP";
+"unknownMessageType" = "unknown message type";
 "message.bar.error.title" = "Error Title";
 "message.bar.error.message" = "This is an error message!";
 "message.bar.success.title" = "Success Title";

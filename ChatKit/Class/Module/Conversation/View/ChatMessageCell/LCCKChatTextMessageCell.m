@@ -10,8 +10,10 @@ static CGFloat LCCK_MSG_SPACE_TOP = 16;
 static CGFloat LCCK_MSG_SPACE_BTM = 16;
 static CGFloat LCCK_MSG_SPACE_LEFT = 16;
 static CGFloat LCCK_MSG_SPACE_RIGHT = 16;
+static CGFloat LCCK_MSG_TEXT_FONT_SIZE = 14;
 
 #define SHOW_SIMPLE_TIPS(m) [[[UIAlertView alloc] initWithTitle:@"" message:(m) delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil]show];
+#define LCCK_TEXT_MSG_CELL_TEXT_COLOR [UIColor blackColor]
 
 #import "LCCKChatTextMessageCell.h"
 #import "Masonry.h"
@@ -63,8 +65,8 @@ static CGFloat LCCK_MSG_SPACE_RIGHT = 16;
 - (MLLinkLabel *)messageTextLabel {
     if (!_messageTextLabel) {
         _messageTextLabel = [[MLLinkLabel alloc] init];
-        _messageTextLabel.textColor = [UIColor blackColor];
-        _messageTextLabel.font = [UIFont systemFontOfSize:16.0f];
+        _messageTextLabel.textColor = LCCK_TEXT_MSG_CELL_TEXT_COLOR;
+        _messageTextLabel.font = [UIFont systemFontOfSize:LCCK_MSG_TEXT_FONT_SIZE];
         _messageTextLabel.numberOfLines = 0;
         _messageTextLabel.lineBreakMode = NSLineBreakByWordWrapping;
         _messageTextLabel.linkTextAttributes = @{NSForegroundColorAttributeName:[UIColor blueColor]};
@@ -95,7 +97,7 @@ static CGFloat LCCK_MSG_SPACE_RIGHT = 16;
 
 - (NSDictionary *)textStyle {
     if (!_textStyle) {
-        UIFont *font = [UIFont systemFontOfSize:14.0f];
+        UIFont *font = [UIFont systemFontOfSize:LCCK_MSG_TEXT_FONT_SIZE];
         NSMutableParagraphStyle *style = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
         style.alignment = NSTextAlignmentLeft;
         style.paragraphSpacing = 0.25 * font.lineHeight;

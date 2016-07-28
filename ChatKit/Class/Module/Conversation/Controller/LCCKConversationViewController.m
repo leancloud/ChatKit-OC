@@ -322,8 +322,8 @@
 - (void)chatBar:(LCCKChatBar *)chatBar sendMessage:(NSString *)message {
     if ([message length] > 0 ) {
         LCCKMessage *lcckMessage = [[LCCKMessage alloc] initWithText:message
-                                                              userId:self.userId
-                                                              user:self.user
+                                                              senderId:self.userId
+                                                              sender:self.user
                                                            timestamp:[[self class] currentTimestamp]
                                                      serverMessageId:nil];
         lcckMessage.messageGroupType = self.conversation.lcck_type;
@@ -346,54 +346,55 @@
 }
 
 - (void)presentSelectMemberViewController {
-    [[[UIApplication sharedApplication] keyWindow] endEditing:YES];
     NSString *cuttentClientId = [LCCKSessionService sharedInstance].clientId;
     NSArray<id<LCCKUserDelegate>> *users = [[LCCKUserSystemService sharedInstance] getCachedProfilesIfExists:self.conversation.members shouldSameCount:YES error:nil];
     LCCKContactListViewController *contactListViewController = [[LCCKContactListViewController alloc] initWithContacts:users userIds:self.conversation.members excludedUserIds:@[cuttentClientId] mode:LCCKContactListModeMultipleSelection];
-        [contactListViewController setSelectedContactCallback:^(UIViewController *viewController, NSString *peerId) {
-            [viewController dismissViewControllerAnimated:YES completion:^{
-                [LCCKConversationService sharedInstance].contactListViewControllerActivce = NO;
-            }];
-            if (peerId.length > 0) {
-               NSArray *peerNames = [[LCChatKit sharedInstance] getCachedProfilesIfExists:@[peerId] error:nil];
-                NSString *peerName;
-                @try {
-                    id<LCCKUserDelegate> user = peerNames[0];
-                    peerName = user.name ?: user.clientId;
-                } @catch (NSException *exception) {
-                    peerName = peerId;
-                }
-                peerName = [NSString stringWithFormat:@" @%@ ", peerName];
-                [self.chatBar appendString:peerName];
-            }
+    [contactListViewController setViewDidDismissBlock:^(LCCKBaseViewController *viewController) {
+        [self.chatBar open];
+    }];
+    [contactListViewController setSelectedContactCallback:^(UIViewController *viewController, NSString *peerId) {
+        [viewController dismissViewControllerAnimated:YES completion:^{
+            [self.chatBar open];
         }];
-        [contactListViewController setSelectedContactsCallback:^(UIViewController *viewController, NSArray<NSString *> *peerIds) {
-             [LCCKConversationService sharedInstance].contactListViewControllerActivce = NO;
-            if (peerIds.count > 0) {
-                NSArray<id<LCCKUserDelegate>> *peers = [[LCCKUserSystemService sharedInstance] getCachedProfilesIfExists:peerIds error:nil];
-                NSMutableArray *peerNames = [NSMutableArray arrayWithCapacity:peers.count];
-                [peers enumerateObjectsUsingBlock:^(id<LCCKUserDelegate>  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-                    if (obj.name) {
-                        [peerNames addObject:obj.name];
-                    } else {
-                        [peerNames addObject:obj.clientId];
-                    }
-                }];
-                NSArray *realPeerNames;
-                if (peerNames.count > 0) {
-                    realPeerNames = peerNames;
+        if (peerId.length > 0) {
+            NSArray *peerNames = [[LCChatKit sharedInstance] getCachedProfilesIfExists:@[peerId] error:nil];
+            NSString *peerName;
+            @try {
+                id<LCCKUserDelegate> user = peerNames[0];
+                peerName = user.name ?: user.clientId;
+            } @catch (NSException *exception) {
+                peerName = peerId;
+            }
+            peerName = [NSString stringWithFormat:@" @%@ ", peerName];
+            [self.chatBar appendString:peerName];
+        }
+    }];
+    [contactListViewController setSelectedContactsCallback:^(UIViewController *viewController, NSArray<NSString *> *peerIds) {
+        if (peerIds.count > 0) {
+            NSArray<id<LCCKUserDelegate>> *peers = [[LCCKUserSystemService sharedInstance] getCachedProfilesIfExists:peerIds error:nil];
+            NSMutableArray *peerNames = [NSMutableArray arrayWithCapacity:peers.count];
+            [peers enumerateObjectsUsingBlock:^(id<LCCKUserDelegate>  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                if (obj.name) {
+                    [peerNames addObject:obj.name];
                 } else {
-                    realPeerNames = peerIds;
+                    [peerNames addObject:obj.clientId];
                 }
-                NSString *peerName = [[realPeerNames valueForKey:@"description"] componentsJoinedByString:@" @"];
-                peerName = [NSString stringWithFormat:@" @%@ ", peerName];
-                [self.chatBar appendString:peerName];
+            }];
+            NSArray *realPeerNames;
+            if (peerNames.count > 0) {
+                realPeerNames = peerNames;
+            } else {
+                realPeerNames = peerIds;
             }
-        }];
-        UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:contactListViewController];
-        [self presentViewController:navigationController animated:YES completion:^{
-             [LCCKConversationService sharedInstance].contactListViewControllerActivce = YES;
-        }];
+            NSString *peerName = [[realPeerNames valueForKey:@"description"] componentsJoinedByString:@" @"];
+            peerName = [NSString stringWithFormat:@" @%@ ", peerName];
+            [self.chatBar appendString:peerName];
+        }
+    }];
+    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:contactListViewController];
+    [self presentViewController:navigationController animated:YES completion:^{
+        [self.chatBar close];
+    }];
 }
 
 - (void)sendImages:(NSArray<UIImage *> *)pictures {
@@ -415,8 +416,8 @@
                                                         photoPath:path
                                                      thumbnailURL:nil
                                                    originPhotoURL:nil
-                                                           userId:self.userId
-                                                           user:self.user
+                                                           senderId:self.userId
+                                                           sender:self.user
                                                         timestamp:[[self class] currentTimestamp]
                                 serverMessageId:nil
                                 ];
@@ -431,8 +432,8 @@
     LCCKMessage *message = [[LCCKMessage alloc] initWithVoicePath:voicePath
                                                          voiceURL:nil
                                                     voiceDuration:[NSString stringWithFormat:@"%@", @(seconds)]
-                                                           userId:self.userId
-                                                           user:self.user
+                                                           senderId:self.userId
+                                                           sender:self.user
                                                         timestamp:[[self class] currentTimestamp]
                                                   serverMessageId:nil];
     message.messageGroupType =  self.conversation.lcck_type;
@@ -447,8 +448,8 @@
                                                               geolocations:locationText
                                                                   location:[[CLLocation alloc] initWithLatitude:locationCoordinate.latitude
                                                                                                       longitude:locationCoordinate.longitude]
-                                                                    userId:self.userId
-                                                                    user:self.user
+                                                                    senderId:self.userId
+                                                                    sender:self.user
                                                                  timestamp:[[self class] currentTimestamp]
                                                            serverMessageId:nil];
     [self.chatViewModel sendMessage:message];
@@ -468,7 +469,7 @@
 
 - (void)messageCellTappedHead:(LCCKChatMessageCell *)messageCell {
     LCCKOpenProfileBlock openProfileBlock = [LCCKUIService sharedInstance].openProfileBlock;
-    !openProfileBlock ?: openProfileBlock(messageCell.message.userId, messageCell.message.user, self);
+    !openProfileBlock ?: openProfileBlock(messageCell.message.senderId, messageCell.message.sender, self);
 }
 
 - (void)messageCellTappedBlank:(LCCKChatMessageCell *)messageCell {
@@ -575,10 +576,11 @@
     // Show
     [fromViewController presentViewController:browser animated:YES completion:nil];
 }
+
 - (void)avatarImageViewLongPressed:(LCCKChatMessageCell *)messageCell {
-    NSString *userName = messageCell.message.user.name ?: messageCell.message.userId;
+    NSString *userName = messageCell.message.sender.name ?: messageCell.message.senderId;
     NSString *appendString = [NSString stringWithFormat:@" @%@ ", userName];
-    [self.chatBar appendString:appendString];
+    [self.chatBar appendString:appendString beginInputing:YES animated:YES];
 }
 
 - (void)textMessageCellDoubleTapped:(LCCKChatMessageCell *)messageCell {

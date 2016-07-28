@@ -48,12 +48,23 @@ typedef NS_ENUM(NSUInteger, LCCKFunctionViewShowType){
  */
 @property (copy, nonatomic) NSString *cachedText;
 @property (nonatomic, assign) LCCKFunctionViewShowType showType;
+
+/*!
+ * 在 `-presentViewController:animated:completion:` 的completion回调中调用该方法，屏蔽来自其它 ViewController 的键盘通知事件。
+ */
+- (void)close;
+
+/*!
+ * 对应于 `-close` 方法。
+ */
+- (void)open;
+
 /*!
  * 追加后，输入框默认开启编辑模式
  */
 - (void)appendString:(NSString *)string;
-
 - (void)appendString:(NSString *)string beginInputing:(BOOL)beginInputing;
+- (void)appendString:(NSString *)string beginInputing:(BOOL)beginInputing animated:(BOOL)animated;
 
 /**
  *  结束输入状态

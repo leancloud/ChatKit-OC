@@ -32,7 +32,7 @@ static void * const LCCKChatVoiceMessageCellVoiceMessageStateContext = (void*)&L
 - (void)updateConstraints {
     [super updateConstraints];
 
-    if (self.messageOwner == LCCKMessageOwnerSelf) {
+    if (self.messageOwner == LCCKMessageOwnerTypeSelf) {
         [self.messageVoiceStatusImageView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.right.equalTo(self.messageContentView.mas_right).with.offset(-12);
             make.centerY.equalTo(self.messageContentView.mas_centerY);
@@ -46,7 +46,7 @@ static void * const LCCKChatVoiceMessageCellVoiceMessageStateContext = (void*)&L
             make.width.equalTo(@10);
             make.height.equalTo(@10);
         }];
-    } else if (self.messageOwner == LCCKMessageOwnerOther) {
+    } else if (self.messageOwner == LCCKMessageOwnerTypeOther) {
         [self.messageVoiceStatusImageView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.equalTo(self.messageContentView.mas_left).with.offset(12);
             make.centerY.equalTo(self.messageContentView.mas_centerY);

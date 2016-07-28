@@ -13,11 +13,11 @@
 /**
  *  消息拥有者类型
  */
-typedef NS_ENUM(NSUInteger, LCCKMessageOwner){
-    LCCKMessageOwnerUnknown = 0 /**< 未知的消息拥有者 */,
-    LCCKMessageOwnerSystem /**< 系统消息 */,
-    LCCKMessageOwnerSelf /**< 自己发送的消息 */,
-    LCCKMessageOwnerOther /**< 接收到的他人消息 */,
+typedef NS_ENUM(NSUInteger, LCCKMessageOwnerType){
+    LCCKMessageOwnerTypeUnknown = 0 /**< 未知的消息拥有者 */,
+    LCCKMessageOwnerTypeSystem /**< 系统消息 */,
+    LCCKMessageOwnerTypeSelf /**< 自己发送的消息 */,
+    LCCKMessageOwnerTypeOther /**< 接收到的他人消息 */,
 };
 
 /**
