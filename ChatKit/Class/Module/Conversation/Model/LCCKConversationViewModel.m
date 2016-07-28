@@ -207,7 +207,6 @@
     return failedLCCKMessages;
 }
 
-//FIXME:连续发1到20，如果第11个数是失败消息，那么11无法显示。
 /*!
  * freshTimestamp 下拉刷新的时间戳, 为0表示从当前时间开始查询。
  ＊ @param messages 服务端返回到消息，如果一次拉去的是10条，那么这个数组将是10条，或少于10条。
@@ -234,40 +233,47 @@
     
     /*!
      *
+     messages追加失败消息时，涉及到的概念对应关系：
      
-    index         | 参数         |     参数       |     屏幕位置
-     -------------|-------------|----------------|-------------
-     0            |             ｜               |      顶部
-     1            |   fromDate  |   lastMessage  |      上
+     index        |  参数        |     参数       |     屏幕位置
+    --------------|-------------|----------------|-------------
+     0            |             |                |      顶部
+     1            |   fromDate  |  formerMessage |      上
      2            |     --      |  failedMessage |      中
      3            |    toDate   |     message    |      下
      ...          |             |                |
-fromTimestamp     |             |                |
+     n(last)      |   fromDate  |   lastMessage  |     队尾，最后一条消息
+    -             |     --      |  failedMessage |
+fromTimestamp     |    toDate   |                |  上次上拉刷新顶端，第一条消息
      
      */
-    
+    __block int64_t fromDate;
+    __block int64_t toDate;
+    //messages追加失败消息，第一步：
+    //对应于上图中index里的0到3
     [messages enumerateObjectsUsingBlock:^(LCCKMessage * _Nonnull message, NSUInteger idx, BOOL * _Nonnull stop) {
-        int64_t fromDate;
-        int64_t toDate;
         if (idx == 0) {
             [messagesWithLocalMessages addObject:message];
             return;
         }
-        LCCKMessage *lastMessage = [messages objectAtIndex:idx - 1];
-        fromDate = [lastMessage timestamp];
+        LCCKMessage *formerMessage = [messages objectAtIndex:idx - 1];
+        fromDate = [formerMessage timestamp];
         toDate = [message timestamp];
         [self appendFailedMessagesToMessagesWithLocalMessages:messagesWithLocalMessages fromDate:fromDate toDate:toDate];
         [messagesWithLocalMessages addObject:message];
-        BOOL isLastObject = [message isEqual:[messages lastObject]];
-        if (isLastObject) {
-            fromDate = message.timestamp;
-            toDate = timestamp;
-            if (timestamp == 0) {
-                toDate = [[NSDate distantFuture] timeIntervalSince1970] * 1000;
-            }
-            [self appendFailedMessagesToMessagesWithLocalMessages:messagesWithLocalMessages fromDate:fromDate toDate:toDate];
-        }
     }];
+    //messages追加失败消息，第二步：
+    //对应于上图中index里的n(last)到fromTimestamp
+    //总是追加最后一条消息到上次下拉刷新之间的失败消息，如果历史记录里只有一条消息，也依然。
+    LCCKMessage *lastMessage = [messages lastObject];
+    if (lastMessage) {
+        fromDate = lastMessage.timestamp;
+        toDate = timestamp;
+        if (timestamp == 0) {
+            toDate = [[NSDate distantFuture] timeIntervalSince1970] * 1000;
+        }
+        [self appendFailedMessagesToMessagesWithLocalMessages:messagesWithLocalMessages fromDate:fromDate toDate:toDate];
+    }
     return [self messagesWithSystemMessages:messagesWithLocalMessages];
 }
 
@@ -300,12 +306,12 @@ fromTimestamp     |             |                |
             [self.delegate messageSendStateChanged:LCCKMessageSendStateSending withProgress:percentDone/100.f forIndex:[self.dataArray indexOfObject:message]];
         }
               success:^(NSString *messageUUID) {
-                  message.status = LCCKMessageSendStateSuccess;
+                  message.sendStatus = LCCKMessageSendStateSuccess;
                   [[LCCKSoundManager defaultManager] playSendSoundIfNeed];
                   [self.delegate messageSendStateChanged:LCCKMessageSendStateSuccess withProgress:1.0f forIndex:[self.dataArray indexOfObject:message]];
               } failed:^(NSString *messageUUID, NSError *error) {
                   __strong __typeof(wself)self = wself;
-                  message.status = LCCKMessageSendStateFailed;
+                  message.sendStatus = LCCKMessageSendStateFailed;
                   [self.delegate messageSendStateChanged:LCCKMessageSendStateFailed withProgress:0.0f forIndex:[self.dataArray indexOfObject:message]];
                   [[LCCKConversationService sharedInstance] insertFailedLCCKMessage:message];
               }];
@@ -318,10 +324,10 @@ fromTimestamp     |             |                |
     [self.delegate messageSendStateChanged:LCCKMessageSendStateSending withProgress:0.0f forIndex:[self.dataArray indexOfObject:message]];
     message.conversationId = [LCCKConversationService sharedInstance].currentConversationId ?: [LCCKConversationService sharedInstance].currentConversation.conversationId;
     NSAssert(message.conversationId, @"currentConversationId is nil");
-    message.status = LCCKMessageSendStateSending;
+    message.sendStatus = LCCKMessageSendStateSending;
     id<LCCKUserDelegate> sender = [[LCCKUserSystemService sharedInstance] fetchCurrentUser];
-    message.user = sender;
-    message.bubbleMessageType = LCCKMessageOwnerSelf;
+    message.sender = sender;
+    message.ownerType = LCCKMessageOwnerTypeSelf;
     AVIMTypedMessage *avimTypedMessage = [AVIMTypedMessage lcck_messageWithLCCKMessage:message];
     [self.avimTypedMessage addObject:avimTypedMessage];
     [self preloadMessageToTableView:message];
@@ -382,7 +388,7 @@ fromTimestamp     |             |                |
 }
 
 - (void)preloadMessageToTableView:(LCCKMessage *)message {
-    message.status = LCCKMessageSendStateSending;
+    message.sendStatus = LCCKMessageSendStateSending;
     NSUInteger oldLastMessageCount = self.dataArray.count;
     [self appendMessageToTrailing:message];
     NSUInteger newLastMessageCout = self.dataArray.count;
