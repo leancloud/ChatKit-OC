@@ -69,7 +69,7 @@ typedef void(^LCCKFetchProfilesCallBack)(NSArray<id<LCCKUserDelegate>> *users, N
  */
 typedef void(^LCCKFetchProfilesBlock)(NSArray<NSString *> *userIds, LCCKFetchProfilesCallBack callback);
 
-@property (nonatomic, copy, readonly) LCCKFetchProfilesBlock fetchProfilesBlock;
+@property (nonatomic, copy) LCCKFetchProfilesBlock fetchProfilesBlock;
 
 /*!
  *  @brief Add the ablitity to fetch profiles.
@@ -125,7 +125,7 @@ typedef void(^LCCKGenerateSignatureCallBack)(AVIMSignature *signature, NSError *
  */
 typedef void(^LCCKGenerateSignatureBlock)(NSString *clientId, NSString *conversationId, NSString *action, NSArray *clientIds, LCCKGenerateSignatureCallBack callback);
 
-@property (nonatomic, copy, readonly) LCCKGenerateSignatureBlock generateSignatureBlock;
+@property (nonatomic, copy) LCCKGenerateSignatureBlock generateSignatureBlock;
 
 /*!
  * @brief Add the ablitity to pin signature to these actions: open, start(create conversation), kick, invite.
@@ -155,7 +155,7 @@ typedef void(^LCCKGenerateSignatureBlock)(NSString *clientId, NSString *conversa
  */
 typedef void(^LCCKOpenProfileBlock)(NSString *userId, id<LCCKUserDelegate> user, UIViewController *parentController);
 
-@property (nonatomic, copy, readonly) LCCKOpenProfileBlock openProfileBlock;
+@property (nonatomic, copy) LCCKOpenProfileBlock openProfileBlock;
 
 /*!
  *  打开某个profile的回调block
@@ -172,7 +172,7 @@ typedef void(^LCCKOpenProfileBlock)(NSString *userId, id<LCCKUserDelegate> user,
  */
 typedef void(^LCCKPreviewImageMessageBlock)(NSUInteger index, NSArray *allVisibleImages, NSArray *allVisibleThumbs, NSDictionary *userInfo);
 
-@property (nonatomic, copy, readonly) LCCKPreviewImageMessageBlock previewImageMessageBlock;
+@property (nonatomic, copy) LCCKPreviewImageMessageBlock previewImageMessageBlock;
 
 /// 传递触发的UIViewController对象
 #define LCCKPreviewImageMessageUserInfoKeyFromController    @"LCCKPreviewImageMessageUserInfoKeyFromController"
@@ -195,7 +195,7 @@ typedef void(^LCCKPreviewImageMessageBlock)(NSUInteger index, NSArray *allVisibl
  */
 typedef void(^LCCKPreviewLocationMessageBlock)(CLLocation *location, NSString *geolocations, NSDictionary *userInfo);
 
-@property (nonatomic, copy, readonly) LCCKPreviewLocationMessageBlock previewLocationMessageBlock;
+@property (nonatomic, copy) LCCKPreviewLocationMessageBlock previewLocationMessageBlock;
 
 /// 传递触发的UIViewController对象
 #define LCCKPreviewLocationMessageUserInfoKeyFromController    @"LCCKPreviewLocationMessageUserInfoKeyFromController"
@@ -215,7 +215,7 @@ typedef void(^LCCKPreviewLocationMessageBlock)(CLLocation *location, NSString *g
  */
 typedef NSArray<LCCKMenuItem *> *(^LCCKLongPressMessageBlock)(LCCKMessage *message, NSDictionary *userInfo);
 
-@property (nonatomic, copy, readonly) LCCKLongPressMessageBlock longPressMessageBlock;
+@property (nonatomic, copy) LCCKLongPressMessageBlock longPressMessageBlock;
 
 /// 传递触发的UIViewController对象
 #define LCCKLongPressMessageUserInfoKeyFromController    @"LCCKLongPressMessageUserInfoKeyFromController"
@@ -238,7 +238,7 @@ typedef NSArray<LCCKMenuItem *> *(^LCCKLongPressMessageBlock)(LCCKMessage *messa
  */
 typedef void(^LCCKShowNotificationBlock)(UIViewController *viewController, NSString *title, NSString *subtitle, LCCKMessageNotificationType type);
 
-@property (nonatomic, copy, readonly) LCCKShowNotificationBlock showNotificationBlock;
+@property (nonatomic, copy) LCCKShowNotificationBlock showNotificationBlock;
 
 /**
  *  当ChatKit需要显示通知时，会调用这个block。
@@ -260,7 +260,7 @@ typedef void(^LCCKShowNotificationBlock)(UIViewController *viewController, NSStr
 
 typedef void(^LCCKHUDActionBlock)(UIViewController *viewController, UIView *view, NSString *title, LCCKMessageHUDActionType type);
 
-@property (nonatomic, copy, readonly) LCCKHUDActionBlock HUDActionBlock;
+@property (nonatomic, copy) LCCKHUDActionBlock HUDActionBlock;
 
 /**
  *  当ChatKit需要显示通知时，会调用这个block。
@@ -274,7 +274,7 @@ typedef void(^LCCKHUDActionBlock)(UIViewController *viewController, UIView *view
 
 typedef CGFloat (^LCCKAvatarImageViewCornerRadiusBlock)(CGSize avatarImageViewSize);
 
-@property (nonatomic, assign, readonly) LCCKAvatarImageViewCornerRadiusBlock avatarImageViewCornerRadiusBlock;
+@property (nonatomic, assign) LCCKAvatarImageViewCornerRadiusBlock avatarImageViewCornerRadiusBlock;
 
 /*!
  *  设置对话列表和聊天界面头像ImageView的圆角弧度
@@ -373,7 +373,7 @@ typedef void(^LCCKDidSelectConversationsListCellBlock)(NSIndexPath *indexPath, A
 /*!
  *  选中某个对话后的回调
  */
-@property (nonatomic, copy, readonly) LCCKDidSelectConversationsListCellBlock didSelectConversationsListCellBlock;
+@property (nonatomic, copy) LCCKDidSelectConversationsListCellBlock didSelectConversationsListCellBlock;
 
 /*!
  *  设置选中某个对话后的回调
@@ -389,7 +389,7 @@ typedef void(^LCCKDidDeleteConversationsListCellBlock)(NSIndexPath *indexPath, A
 /*!
  *  删除某个对话后的回调
  */
-@property (nonatomic, copy, readonly) LCCKDidDeleteConversationsListCellBlock didDeleteConversationsListCellBlock;
+@property (nonatomic, copy) LCCKDidDeleteConversationsListCellBlock didDeleteConversationsListCellBlock;
 
 /*!
  *  设置删除某个对话后的回调
@@ -407,7 +407,7 @@ typedef NSArray *(^LCCKConversationEditActionsBlock)(NSIndexPath *indexPath, NSA
 /*!
  *  可以通过这个block设置对话列表中每个对话的左滑菜单，这个是同步调用的，需要尽快返回，否则会卡住UI
  */
-@property (nonatomic, copy, readonly) LCCKConversationEditActionsBlock conversationEditActionBlock;
+@property (nonatomic, copy) LCCKConversationEditActionsBlock conversationEditActionBlock;
 
 /*!
  *  设置对话列表中每个对话的左滑菜单，这个是同步调用的，需要尽快返回，否则会卡住UI
@@ -416,7 +416,7 @@ typedef NSArray *(^LCCKConversationEditActionsBlock)(NSIndexPath *indexPath, NSA
 
 typedef void(^LCCKMarkBadgeWithTotalUnreadCountBlock)(NSInteger totalUnreadCount, UIViewController *controller);
 
-@property (nonatomic, copy, readonly) LCCKMarkBadgeWithTotalUnreadCountBlock markBadgeWithTotalUnreadCountBlock;
+@property (nonatomic, copy) LCCKMarkBadgeWithTotalUnreadCountBlock markBadgeWithTotalUnreadCountBlock;
 
 /*!
  * 如果不是TabBar样式，请实现该Blcok。如果不实现，默认会把 App 当作是 TabBar 样式，修改 navigationController 的 tabBarItem 的 badgeValue 数字显示，数字超出99显示省略号。

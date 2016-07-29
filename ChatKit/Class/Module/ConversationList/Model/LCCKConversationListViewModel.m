@@ -16,9 +16,14 @@
 #import "AVIMConversation+LCCKAddition.h"
 #import "LCCKLastMessageTypeManager.h"
 #import "NSDate+LCCKDateTools.h"
-#import "MJRefresh.h"
 #import "LCCKConversationListService.h"
 #import "UIImage+LCCKExtension.h"
+
+#if __has_include(<MJRefresh/MJRefresh.h>)
+    #import <MJRefresh/MJRefresh.h>
+#else
+    #import "MJRefresh.h"
+#endif
 
 #if __has_include(<SDWebImage/UIImageView+WebCache.h>)
     #import <SDWebImage/UIImageView+WebCache.h>

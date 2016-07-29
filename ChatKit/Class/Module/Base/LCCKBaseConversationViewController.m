@@ -7,12 +7,15 @@
 //
 //#define LCCKDebugging 1
 #import "LCCKBaseConversationViewController.h"
-
 #import "LCCKCellRegisterController.h"
 #import "LCCKChatBar.h"
-#import "MJRefresh.h"
 #import "LCCKConversationRefreshHeader.h"
 #import "Masonry.h"
+#if __has_include(<MJRefresh/MJRefresh.h>)
+    #import <MJRefresh/MJRefresh.h>
+#else
+    #import "MJRefresh.h"
+#endif
 
 static void * const LCCKBaseConversationViewControllerRefreshContext = (void*)&LCCKBaseConversationViewControllerRefreshContext;
 static CGFloat const LCCKScrollViewInsetTop = 20.f;

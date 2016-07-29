@@ -9,10 +9,15 @@
 #import "LCCKConversationListViewController.h"
 #import "LCCKConstants.h"
 #import "LCCKSessionService.h"
-#import "MJRefresh.h"
 #import "LCCKConversationService.h"
 #import "LCCKConversationListViewModel.h"
 #import "LCChatKit.h"
+
+#if __has_include(<MJRefresh/MJRefresh.h>)
+    #import <MJRefresh/MJRefresh.h>
+#else
+    #import "MJRefresh.h"
+#endif
 
 @interface LCCKConversationListViewController ()
 

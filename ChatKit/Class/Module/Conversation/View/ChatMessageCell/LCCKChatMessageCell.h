@@ -13,13 +13,11 @@
 #import "LCCKContentView.h"
 #import "LCCKChatUntiles.h"
 #import "LCCKMessage.h"
-#if __has_include(<MLLinkLabel/MLLinkLabel>)
-#import <MLLinkLabel/MLLinkLabel>
-//    #import <MLLabel/NSString+MLExpression.h>
 
+#if __has_include(<MLLinkLabel/MLLinkLabel.h>)
+    #import <MLLinkLabel/MLLinkLabel.h>
 #else
-#import "MLLinkLabel.h"
-//    #import "MLExpression.h"
+    #import "MLLinkLabel.h"
 #endif
 
 @class LCCKChatMessageCell;
