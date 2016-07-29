@@ -9,11 +9,17 @@
 #import "LCCKLoginViewController.h"
 #import "MLPAutoCompleteTextField.h"
 #import <QuartzCore/QuartzCore.h>
-#import <SDWebImage/UIImageView+WebCache.h>
-#if __has_include(<ChatKit/LCChatKit.h>)
-#import <ChatKit/LCChatKit.h>
+
+#if __has_include(<SDWebImage/UIImageView+WebCache.h>)
+    #import <SDWebImage/UIImageView+WebCache.h>
 #else
-#import "LCChatKit.h"
+    #import "UIImageView+WebCache.h"
+#endif
+
+#if __has_include(<ChatKit/LCChatKit.h>)
+    #import <ChatKit/LCChatKit.h>
+#else
+    #import "LCChatKit.h"
 #endif
 
 @interface LCCKLoginViewController ()

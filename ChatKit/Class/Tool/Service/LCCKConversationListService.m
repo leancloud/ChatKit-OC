@@ -48,7 +48,9 @@
         for (AVIMConversation *conversation in conversations) {
             NSArray *lastestMessages = [conversation queryMessagesFromCacheWithLimit:1];
             if (lastestMessages.count > 0) {
-                conversation.lcck_lastMessage = lastestMessages[0];
+                if ([[lastestMessages[0] class] isSubclassOfClass:[AVIMTypedMessage class]]) {
+                    conversation.lcck_lastMessage = lastestMessages[0];
+                }
             }
             if (conversation.lcck_type == LCCKConversationTypeSingle) {
                 [userIds addObject:conversation.lcck_peerId];

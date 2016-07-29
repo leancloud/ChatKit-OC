@@ -519,11 +519,19 @@ NSString *const LCCKConversationServiceErrorDomain = @"LCCKConversationServiceEr
             NSString *errorReason = [NSString stringWithFormat:@"类名与方法名：%@（在第%@行），描述：%@", @(__PRETTY_FUNCTION__), @(__LINE__), @"SDK处理异常，请联系SDK维护者修复luohanchenyilong@163.com"];
             NSAssert(messages, errorReason);
         }
-        //以下过滤为了避免非法的消息，引起崩溃
+        
+        //以下过滤为了避免非法的消息，引起崩溃，确保展示的只有 AVIMTypedMessage 类型
         NSMutableArray *typedMessages = [NSMutableArray array];
         for (AVIMTypedMessage *message in messages) {
             if ([message isKindOfClass:[AVIMTypedMessage class]]) {
                 [typedMessages addObject:message];
+            } else if ([[message class] isSubclassOfClass:[AVIMMessage class]]) {
+                AVIMTextMessage *typedMessage = [AVIMTextMessage messageWithText:LCCKLocalizedStrings(@"unknownMessage") attributes:nil];
+                [typedMessage setValue:message.conversationId forKey:@"conversationId"];
+                [typedMessage setValue:message.messageId forKey:@"messageId"];
+                [typedMessage setValue:@(message.sendTimestamp) forKey:@"sendTimestamp"];
+                [typedMessage setValue:message.clientId forKey:@"clientId"];
+                [typedMessages addObject:typedMessage];
             }
         }
         !block ?: block(typedMessages, error);

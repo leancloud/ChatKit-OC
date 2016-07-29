@@ -340,7 +340,10 @@
             break;
         }
     }
-    //必然同步返回
+    
+    if (!message.conversationId) {
+        lcckMessage.messageGroupType = [LCCKConversationService sharedInstance].currentConversation.lcck_type;
+    } else {
     [[LCCKConversationService sharedInstance] fecthConversationWithConversationId:message.conversationId callback:^(AVIMConversation *conversation, NSError *error) {
         if (conversation) {
             lcckMessage.messageGroupType = conversation.lcck_type;
@@ -349,6 +352,7 @@
             lcckMessage.messageGroupType = [LCCKConversationService sharedInstance].currentConversation.lcck_type;
         }
     }];
+    }
     
     if ([[LCCKSessionService sharedInstance].clientId isEqualToString:message.clientId]) {
         lcckMessage.ownerType = LCCKMessageOwnerTypeSelf;
