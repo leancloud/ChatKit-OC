@@ -10,6 +10,8 @@
 #import "Masonry.h"
 #import "LCCKMessageVoiceFactory.h"
 #import "LCCKAVAudioPlayer.h"
+#import "LCCKDeallocBlockExecutor.h"
+
 static void * const LCCKChatVoiceMessageCellVoiceMessageStateContext = (void*)&LCCKChatVoiceMessageCellVoiceMessageStateContext;
 
 @interface LCCKChatVoiceMessageCell ()
@@ -80,11 +82,10 @@ static void * const LCCKChatVoiceMessageCellVoiceMessageStateContext = (void*)&L
     [super setup];
     self.voiceMessageState = LCCKVoiceMessageStateNormal;
     [[LCCKAVAudioPlayer sharePlayer]  addObserver:self forKeyPath:@"audioPlayerState" options:NSKeyValueObservingOptionNew context:LCCKChatVoiceMessageCellVoiceMessageStateContext];
-}
-
-- (void)dealloc {
-    // KVO反注册
-    [[LCCKAVAudioPlayer sharePlayer] removeObserver:self forKeyPath:@"audioPlayerState"];
+    __unsafe_unretained typeof(self) weakSelf = self;
+    [self lcck_executeAtDealloc:^{
+        [[LCCKAVAudioPlayer sharePlayer] removeObserver:weakSelf forKeyPath:@"audioPlayerState"];
+    }];
 }
 
 // KVO监听执行

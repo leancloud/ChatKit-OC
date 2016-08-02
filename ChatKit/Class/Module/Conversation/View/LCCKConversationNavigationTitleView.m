@@ -10,6 +10,7 @@
 #import "NSString+LCCKExtension.h"
 #import "UIImageView+LCCKExtension.h"
 #import "LCChatKit.h"
+#import "LCCKDeallocBlockExecutor.h"
 
 static CGFloat const kLCCKTitleFontSize = 17.f;
 static void * const LCCKConversationNavigationTitleViewShowRemindMuteImageViewContext = (void*)&LCCKConversationNavigationTitleViewShowRemindMuteImageViewContext;
@@ -63,14 +64,14 @@ static void * const LCCKConversationNavigationTitleViewShowRemindMuteImageViewCo
     }
 }
 
-- (void)dealloc {
-    [self removeObserver:self forKeyPath:@"showRemindMuteImageView"];
-}
-
 - (instancetype)sharedInit {
     [self addSubview:self.containerView];
     self.showRemindMuteImageView = NO;
     [self addObserver:self forKeyPath:@"showRemindMuteImageView" options:NSKeyValueObservingOptionNew context:LCCKConversationNavigationTitleViewShowRemindMuteImageViewContext];
+    __unsafe_unretained typeof(self) weakSelf = self;
+    [self lcck_executeAtDealloc:^{
+        [weakSelf removeObserver:weakSelf forKeyPath:@"showRemindMuteImageView"];
+    }];
     [self.containerView layoutIfNeeded];//fix member count view won't display when conversationNameView is too long
     return self;
 }

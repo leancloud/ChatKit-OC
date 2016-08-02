@@ -8,6 +8,8 @@
 
 #import "LCCKMessageSendStateView.h"
 #import "UIImage+LCCKExtension.h"
+#import "LCCKDeallocBlockExecutor.h"
+
 static void * const LCCKSendImageViewShouldShowIndicatorViewContext = (void*)&LCCKSendImageViewShouldShowIndicatorViewContext;
 
 @interface LCCKMessageSendStateView ()
@@ -26,7 +28,12 @@ static void * const LCCKSendImageViewShouldShowIndicatorViewContext = (void*)&LC
         [self addSubview:self.indicatorView = indicatorView];
         // KVO注册监听
         [self addObserver:self forKeyPath:@"showIndicatorView" options:NSKeyValueObservingOptionNew context:LCCKSendImageViewShouldShowIndicatorViewContext];
+        __unsafe_unretained typeof(self) weakSelf = self;
+        [self lcck_executeAtDealloc:^{
+            [weakSelf removeObserver:weakSelf forKeyPath:@"showIndicatorView"];
+        }];
         [self addTarget:self action:@selector(failImageViewTap:) forControlEvents:UIControlEventTouchUpInside];
+        
     }
     return self;
 }
@@ -125,11 +132,6 @@ static void * const LCCKSendImageViewShouldShowIndicatorViewContext = (void*)&LC
             }
         }
     }
-}
-
-- (void)dealloc {
-    // KVO反注册
-    [self removeObserver:self forKeyPath:@"showIndicatorView"];
 }
 
 - (void)failImageViewTap:(id)sender {

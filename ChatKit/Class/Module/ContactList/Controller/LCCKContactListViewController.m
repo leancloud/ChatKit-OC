@@ -331,7 +331,7 @@ static NSString *const LCCKContactListViewControllerIdentifier = @"LCCKContactLi
         NSString *sectionKey = contactsGroupedInSections[(NSUInteger)indexPath.section];
         NSArray *contactsInSection = [self currentSectionsForTableView:tableView][sectionKey];
         if (indexPath.row < contactsInSection.count) {
-            id contact = contactsInSection[(NSUInteger)indexPath.row];;
+            id contact = contactsInSection[(NSUInteger)indexPath.row];
             return contact;
         }
     }

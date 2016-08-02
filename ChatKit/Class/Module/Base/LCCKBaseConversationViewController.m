@@ -10,6 +10,8 @@
 #import "LCCKCellRegisterController.h"
 #import "LCCKChatBar.h"
 #import "LCCKConversationRefreshHeader.h"
+#import "LCCKDeallocBlockExecutor.h"
+
 #import "Masonry.h"
 #if __has_include(<MJRefresh/MJRefresh.h>)
     #import <MJRefresh/MJRefresh.h>
@@ -46,7 +48,10 @@ static CGFloat const LCCKScrollViewInsetTop = 20.f;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     // KVO注册监听
     [self addObserver:self forKeyPath:@"loadingMoreMessage" options:NSKeyValueObservingOptionNew context:LCCKBaseConversationViewControllerRefreshContext];
-    
+    __unsafe_unretained typeof(self) weakSelf = self;
+    [self lcck_executeAtDealloc:^{
+        [weakSelf removeObserver:weakSelf forKeyPath:@"loadingMoreMessage"];
+    }];
     [LCCKCellRegisterController registerLCCKChatMessageCellClassForTableView:self.tableView];
 //    [self setTableViewInsetsWithBottomValue:kLCCKChatBarMinHeight];
     self.tableView.mj_header = [LCCKConversationRefreshHeader headerWithRefreshingBlock:^{
@@ -96,11 +101,6 @@ static CGFloat const LCCKScrollViewInsetTop = 20.f;
             }
         }
     }
-}
-
-- (void)dealloc {
-    // KVO反注册
-    [self removeObserver:self forKeyPath:@"loadingMoreMessage"];
 }
 
 - (void)loadMoreMessagesScrollTotop {

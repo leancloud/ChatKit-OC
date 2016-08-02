@@ -10,10 +10,10 @@
 
 static CGFloat const kChatBarBottomOffset = 8.f;
 static CGFloat const kChatBarTextViewBottomOffset = 6;
-static CGFloat const kLCCKChatBarTextViewFrameMinHeight = 37.f;;//kLCCKChatBarMinHeight - 2*kChatBarTextViewBottomOffset;
-static CGFloat const kLCCKChatBarTextViewFrameMaxHeight = 102.f;//kLCCKChatBarMaxHeight - 2*kChatBarTextViewBottomOffset;
-static CGFloat const kLCCKChatBarMaxHeight = kLCCKChatBarTextViewFrameMaxHeight + 2*kChatBarTextViewBottomOffset;//114.0f;
-static CGFloat const kLCCKChatBarMinHeight = kLCCKChatBarTextViewFrameMinHeight + 2*kChatBarTextViewBottomOffset;//49.0f;
+static CGFloat const kLCCKChatBarTextViewFrameMinHeight = 37.f; //kLCCKChatBarMinHeight - 2*kChatBarTextViewBottomOffset;
+static CGFloat const kLCCKChatBarTextViewFrameMaxHeight = 102.f; //kLCCKChatBarMaxHeight - 2*kChatBarTextViewBottomOffset;
+static CGFloat const kLCCKChatBarMaxHeight = kLCCKChatBarTextViewFrameMaxHeight + 2*kChatBarTextViewBottomOffset; //114.0f;
+static CGFloat const kLCCKChatBarMinHeight = kLCCKChatBarTextViewFrameMinHeight + 2*kChatBarTextViewBottomOffset; //49.0f;
 
 FOUNDATION_EXTERN NSString *const kLCCKBatchDeleteTextPrefix;
 FOUNDATION_EXTERN NSString *const kLCCKBatchDeleteTextSuffix;
@@ -134,7 +134,5 @@ typedef NS_ENUM(NSUInteger, LCCKFunctionViewShowType){
 - (void)didInputAtSign:(LCCKChatBar *)chatBar;
 
 - (NSArray *)regulationForBatchDeleteText;
-
-- (BOOL)isContactListViewControllerActivceForChatBar:(LCCKChatBar *)chatBar;
 
 @end

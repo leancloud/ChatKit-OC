@@ -7,7 +7,6 @@
 //
 
 #import "LCCKChatBar.h"
-
 #import "LCCKLocationController.h"
 #import "LCCKChatMoreView.h"
 #import "LCCKChatFaceView.h"
@@ -151,7 +150,6 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
                                             kLCCKBatchDeleteTextSuffix : @" ",
                                             },
                                         ];
-        
         NSArray *additionRegulation;
         if ([self.delegate respondsToSelector:@selector(regulationForBatchDeleteText)]) {
             additionRegulation = [self.delegate regulationForBatchDeleteText];
@@ -234,7 +232,7 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
             break;
         case LCCKFunctionViewShowVoice:
             shouldCacheText = NO;
-            break;;
+            break;
     }
     [self updateChatBarConstraintsIfNeededShouldCacheText:shouldCacheText];
 }

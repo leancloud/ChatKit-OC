@@ -112,9 +112,10 @@ static void * const LCCKUIImageViewExtensionContext = (void*)&LCCKUIImageViewExt
     
     if (!self.lcck_hadAddObserver) {
         [self addObserver:self forKeyPath:@"image" options:NSKeyValueObservingOptionNew context:LCCKUIImageViewExtensionContext];
+        __unsafe_unretained typeof(self) weakSelf = self;
         [self lcck_executeAtDealloc:^{
-            if (self.lcck_hadAddObserver) {
-                [self removeObserver:self forKeyPath:@"image"];
+            if (weakSelf.lcck_hadAddObserver) {
+                [weakSelf removeObserver:weakSelf forKeyPath:@"image"];
             }
         }];
         self.lcck_hadAddObserver = YES;
@@ -129,9 +130,10 @@ static void * const LCCKUIImageViewExtensionContext = (void*)&LCCKUIImageViewExt
     
     if (!self.lcck_hadAddObserver) {
         [self addObserver:self forKeyPath:@"image" options:NSKeyValueObservingOptionNew context:LCCKUIImageViewExtensionContext];
+        __unsafe_unretained typeof(self) weakSelf = self;
         [self lcck_executeAtDealloc:^{
-            if (self.lcck_hadAddObserver) {
-                [self removeObserver:self forKeyPath:@"image"];
+            if (weakSelf.lcck_hadAddObserver) {
+                [weakSelf removeObserver:weakSelf forKeyPath:@"image"];
             }
         }];
         self.lcck_hadAddObserver = YES;

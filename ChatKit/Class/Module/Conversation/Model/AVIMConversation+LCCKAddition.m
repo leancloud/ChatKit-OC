@@ -33,7 +33,7 @@
     if (unreadCount > 99) {
         badgeText = @"···";
     } else {
-        badgeText = [NSString stringWithFormat:@"%@", @(unreadCount)];;
+        badgeText = [NSString stringWithFormat:@"%@", @(unreadCount)];
     }
     return badgeText;
 }
