@@ -283,7 +283,6 @@
 }
 
 - (void)handleLoadHistoryMessagesHandlerForIsJoined:(BOOL)isJoined {
-
     if (!isJoined) {
         BOOL succeeded = NO;
         //错误码参考：https://leancloud.cn/docs/realtime_v2.html#服务器端错误码说明
@@ -436,7 +435,7 @@
                                                            sender:self.user
                                                         timestamp:[[self class] currentTimestamp]
                                                   serverMessageId:nil];
-    message.messageGroupType =  self.conversation.lcck_type;
+    message.messageGroupType = self.conversation.lcck_type;
     [self.chatViewModel sendMessage:message];
 }
 
@@ -460,7 +459,6 @@
         [self.tableView layoutIfNeeded];
         self.allowScrollToBottom = shouldScrollToBottom;
         [self scrollToBottomAnimated:NO];
-        
     } completion:nil];
 }
 

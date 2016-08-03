@@ -352,6 +352,16 @@ ChatKit 是完全开源并且免费给开发者使用，使用聊天所产生的
 **接入 ChatKit 有什么好处？**<br/>
 它可以减轻应用或者新功能研发初期的调研成本，直接引入使用即可。ChatKit 从底层到 UI 提供了一整套的聊天解决方案。
 
+**如何兼容 iOS7 ？**<br/>
+因为ChatKit中使用了 iOS8 的一个控件：UITableViewRowAction ，所以想要兼容 iOS7 就需要在你的 App 中添加一个 Lib：
+
+ ```Objective-C
+pod "CYLTableViewRowAction", "1.0.0"
+ ```
+
+Demo 中也是通过这个方式来兼容iOS7的。
+
+如果不使用 Pod，你可以直接下载 [CYLTableViewRowAction](https://github.com/ChenYilong/CYLTableViewRowAction) 将里面的文件夹拖拽到项目中就可以了，不兼容 iOS7 的问题就解决了。
 
 
 在使用中有任何问题都可以到[我们的官方论坛](https://forum.leancloud.cn/c/jing-xuan-faq)提问题，会有专业工程师回复，平均响应时间在24小时内。

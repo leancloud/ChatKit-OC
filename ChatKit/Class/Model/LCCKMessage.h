@@ -55,6 +55,7 @@
 - (instancetype)initWithSystemText:(NSString *)text;
 + (instancetype)systemMessageWithTimestamp:(NSTimeInterval)timestamp;
 - (NSString *)getTimestampString;
+
 /**
  *  初始化图片类型的消息
  *
