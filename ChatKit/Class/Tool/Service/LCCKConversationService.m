@@ -327,9 +327,10 @@ NSString *const LCCKConversationServiceErrorDomain = @"LCCKConversationServiceEr
     return removeAllCachedRecentConversationsSuccess;
 }
 
-///----------------------------------------------------------------------
-///---------------------FailedMessageStore-------------------------------
-///----------------------------------------------------------------------
+#pragma mark - FailedMessageStore
+///=============================================================================
+/// @name FailedMessageStore
+///=============================================================================
 
 /**
  *  openClient 时调用

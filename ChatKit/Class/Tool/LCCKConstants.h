@@ -72,9 +72,10 @@ static NSString *const LCCKNotificationConnectivityUpdated = @"LCCKNotificationC
 static NSString *const LCCK_KEY_USERNAME = @"LCCK_KEY_USERNAME";
 static NSString *const LCCK_KEY_USERID = @"LCCK_KEY_USERID";
 
-///-----------------------------------------------------------------------------------
-///---------------------用以产生Demo中的联系人数据的宏定义-------------------------------
-///-----------------------------------------------------------------------------------
+#pragma mark - 用以产生Demo中的联系人数据的宏定义
+///=============================================================================
+/// @name 用以产生Demo中的联系人数据的宏定义
+///=============================================================================
 
 #define LCCKProfileKeyPeerId        @"peerId"
 #define LCCKProfileKeyName          @"username"
@@ -215,9 +216,10 @@ typedef enum : NSUInteger {
     LCCKScrollDirectionCrazy,
 } LCCKScrollDirection;
 
-///-------------------------------------------------------------------------
-///---------------------Succeed Message Store-------------------------------
-///-------------------------------------------------------------------------
+#pragma mark - Succeed Message Store
+///=============================================================================
+/// @name Succeed Message Store
+///=============================================================================
 
 #define LCCKConversationTableName           @"conversations"
 #define LCCKConversationTableKeyId          @"id"
@@ -292,9 +294,10 @@ typedef enum : NSUInteger {
     @"SET " LCCKConversationTableKeyData @" = ? "                \
     LCCKConversationTableWhereClause                             \
 
-///------------------------------------------------------------------------
-///---------------------Failed Message Store-------------------------------
-///------------------------------------------------------------------------
+#pragma mark - Failed Message Store
+///=============================================================================
+/// @name Failed Message Store
+///=============================================================================
 
 #define LCCKFaildMessageTable   @"failed_messages"
 #define LCCKKeyId               @"id"

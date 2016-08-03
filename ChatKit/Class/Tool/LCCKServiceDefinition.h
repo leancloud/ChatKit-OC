@@ -19,9 +19,10 @@
 @class LCCKMessage;
 @import CoreLocation;
 
-///---------------------------------------------------------------------
-///---------------------LCCKSessionService------------------------------
-///---------------------------------------------------------------------
+#pragma mark - LCCKSessionService
+///=============================================================================
+/// @name LCCKSessionService
+///=============================================================================
 
 @protocol LCCKSessionService <NSObject>
 
@@ -47,12 +48,10 @@ typedef void (^LCCKSessionNotOpenedHandler)(UIViewController *viewController, LC
 
 @end
 
-///--------------------------------------------------------------------
-///----------------------LCCKUserSystemService-------------------------
-///--------------------------------------------------------------------
-
-#pragma mark -
 #pragma mark - LCCKUserSystemService
+///=============================================================================
+/// @name LCCKUserSystemService
+///=============================================================================
 
 @protocol LCCKUserSystemService <NSObject>
 
@@ -96,12 +95,10 @@ typedef void(^LCCKFetchProfilesBlock)(NSArray<NSString *> *userIds, LCCKFetchPro
 
 @end
 
-///--------------------------------------------------------------------
-///----------------------LCCKSignatureService--------------------------
-///--------------------------------------------------------------------
-
-#pragma mark -
 #pragma mark - LCCKSignatureService
+///=============================================================================
+/// @name LCCKSignatureService
+///=============================================================================
 
 @protocol LCCKSignatureService <NSObject>
 
@@ -135,18 +132,14 @@ typedef void(^LCCKGenerateSignatureBlock)(NSString *clientId, NSString *conversa
 
 @end
 
-///--------------------------------------------------------------------
-///----------------------------LCCKUIService---------------------------
-///--------------------------------------------------------------------
-
-#pragma mark -
 #pragma mark - LCCKUIService
+///=============================================================================
+/// @name LCCKUIService
+///=============================================================================
 
 #import "LCCKServiceDefinition.h"
 
 @protocol LCCKUIService <NSObject>
-
-#pragma mark - - Open Profile
 
 /*!
  *  打开某个profile的回调block
@@ -284,12 +277,10 @@ typedef CGFloat (^LCCKAvatarImageViewCornerRadiusBlock)(CGSize avatarImageViewSi
 
 @end
 
-///---------------------------------------------------------------------
-///------------------LCCKSettingService---------------------------------
-///---------------------------------------------------------------------
-
-#pragma mark -
 #pragma mark - LCCKSettingService
+///=============================================================================
+/// @name LCCKSettingService
+///=============================================================================
 
 @protocol LCCKSettingService <NSObject>
 
@@ -316,12 +307,10 @@ typedef CGFloat (^LCCKAvatarImageViewCornerRadiusBlock)(CGSize avatarImageViewSi
 
 @end
 
-///---------------------------------------------------------------------
-///---------------------LCCKConversationService-------------------------
-///---------------------------------------------------------------------
-
-#pragma mark -
 #pragma mark - LCCKConversationService
+///=============================================================================
+/// @name LCCKConversationService
+///=============================================================================
 
 typedef void (^LCCKConversationResultBlock)(AVIMConversation *conversation, NSError *error);
 
@@ -355,12 +344,10 @@ typedef void (^LCCKConversationResultBlock)(AVIMConversation *conversation, NSEr
 
 @end
 
-///---------------------------------------------------------------------
-///---------------------LCCKConversationsListService--------------------
-///---------------------------------------------------------------------
-
-#pragma mark -
 #pragma mark - LCCKConversationsListService
+///=============================================================================
+/// @name LCCKConversationsListService
+///=============================================================================
 
 @protocol LCCKConversationsListService <NSObject>
 

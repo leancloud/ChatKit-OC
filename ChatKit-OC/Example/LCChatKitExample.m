@@ -361,7 +361,7 @@ typedef void (^UITableViewRowActionHandler)(UITableViewRowAction *action, NSInde
             type = LCCKMessageNotificationTypeError;
             subtitle = error.localizedDescription;
         }
-        [LCCKUtil showNotificationWithTitle:title subtitle:subtitle type:type];
+//        [LCCKUtil showNotificationWithTitle:title subtitle:subtitle type:type];
     }];
     [self pushToViewController:conversationViewController];
 }
@@ -405,7 +405,7 @@ typedef void (^UITableViewRowActionHandler)(UITableViewRowAction *action, NSInde
             title = @"聊天记录加载失败";
             type = LCCKMessageNotificationTypeError;
         }
-        [LCCKUtil showNotificationWithTitle:title subtitle:nil type:type];
+//        [LCCKUtil showNotificationWithTitle:title subtitle:nil type:type];
     }];
     
     [conversationViewController setViewWillDisappearBlock:^(LCCKBaseViewController *viewController, BOOL aAnimated) {

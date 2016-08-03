@@ -29,9 +29,10 @@ typedef void (^LCCKConversationHandler) (AVIMConversation *conversation, LCCKCon
 
 @property (nonatomic, strong, readonly) AVIMConversation *conversation;
 
-///---------------------------------------------------------------------------------------------
-///---- Initialize a unique single chat type object of LCCKConversationViewController ----------
-///---------------------------------------------------------------------------------------------
+#pragma mark - Initialize a unique single chat type object of LCCKConversationViewController
+///=============================================================================
+/// @name Initialize a unique single chat type object of LCCKConversationViewController
+///=============================================================================
 
 /*!
  * @param PeerId id of the peer, a unique single conversation should be initialized with this property.
@@ -43,9 +44,10 @@ typedef void (^LCCKConversationHandler) (AVIMConversation *conversation, LCCKCon
  */
 - (instancetype)initWithPeerId:(NSString *)peerId;
 
-///----------------------------------------------------------------------------------------------
-///---- Initialize a single or group chat type object of LCCKConversationViewController ---------
-///----------------------------------------------------------------------------------------------
+#pragma mark - Initialize a single or group chat type object of LCCKConversationViewController
+///=============================================================================
+/// @name Initialize a single or group chat type object of LCCKConversationViewController
+///=============================================================================
 
 /*!
  * @param conversationId Id of the conversation, group conversation should be initialized with this property.

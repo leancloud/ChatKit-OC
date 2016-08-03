@@ -122,9 +122,10 @@ static NSMutableDictionary *_sharedInstances = nil;
     return [LCCKConversationListService sharedInstance];
 }
 
-///---------------------------------------------------------------------
-///---------------------LCCKSessionService------------------------------
-///---------------------------------------------------------------------
+#pragma mark - LCCKSessionService
+///=============================================================================
+/// @name LCCKSessionService
+///=============================================================================
 
 - (NSString *)clientId {
     return self.sessionService.clientId;
@@ -145,12 +146,10 @@ static NSMutableDictionary *_sharedInstances = nil;
     [self.sessionService setSessionNotOpenedHandler:sessionNotOpenedHandler];
 }
 
-///--------------------------------------------------------------------
-///----------------------LCCKUserSystemService-------------------------
-///--------------------------------------------------------------------
-
-#pragma mark -
 #pragma mark - LCCKUserSystemService
+///=============================================================================
+/// @name LCCKUserSystemService
+///=============================================================================
 
 - (void)setFetchProfilesBlock:(LCCKFetchProfilesBlock)fetchProfilesBlock {
     [self.userSystemService setFetchProfilesBlock:fetchProfilesBlock];
@@ -183,12 +182,10 @@ static NSMutableDictionary *_sharedInstances = nil;
     return [self.userSystemService getProfilesForUserIds:userIds error:error];
 }
 
-///--------------------------------------------------------------------
-///----------------------LCCKSignatureService--------------------------
-///--------------------------------------------------------------------
-
-#pragma mark -
 #pragma mark - LCCKSignatureService
+///=============================================================================
+/// @name LCCKSignatureService
+///=============================================================================
 
 - (void)setGenerateSignatureBlock:(LCCKGenerateSignatureBlock)generateSignatureBlock {
     [self.signatureService setGenerateSignatureBlock:generateSignatureBlock];
@@ -198,14 +195,10 @@ static NSMutableDictionary *_sharedInstances = nil;
     return [self.signatureService generateSignatureBlock];
 }
 
-///--------------------------------------------------------------------
-///----------------------------LCCKUIService---------------------------
-///--------------------------------------------------------------------
-
-#pragma mark -
 #pragma mark - LCCKUIService
-
-#pragma mark - - Open Profile
+///=============================================================================
+/// @name LCCKUIService
+///=============================================================================
 
 - (void)setOpenProfileBlock:(LCCKOpenProfileBlock)openProfileBlock {
     [self.UIService setOpenProfileBlock:openProfileBlock];
@@ -242,12 +235,10 @@ static NSMutableDictionary *_sharedInstances = nil;
     return self.UIService.longPressMessageBlock;
 }
 
-///---------------------------------------------------------------------
-///------------------LCCKSettingService---------------------------------
-///---------------------------------------------------------------------
-
-#pragma mark -
 #pragma mark - LCCKSettingService
+///=============================================================================
+/// @name LCCKSettingService
+///=============================================================================
 
 + (void)setAllLogsEnabled:(BOOL)enabled {
     [LCCKSettingService setAllLogsEnabled:YES];
@@ -273,12 +264,10 @@ static NSMutableDictionary *_sharedInstances = nil;
     [LCCKSettingService sharedInstance].useDevPushCerticate = useDevPushCerticate;
 }
 
-///---------------------------------------------------------------------
-///---------------------LCCKConversationService-------------------------
-///---------------------------------------------------------------------
-
-#pragma mark -
 #pragma mark - LCCKConversationService
+///=============================================================================
+/// @name LCCKConversationService
+///=============================================================================
 
 - (void)createConversationWithMembers:(NSArray *)members type:(LCCKConversationType)type unique:(BOOL)unique callback:(AVIMConversationResultBlock)callback {
     [self.conversationService createConversationWithMembers:members type:type unique:unique callback:callback];
@@ -312,9 +301,10 @@ static NSMutableDictionary *_sharedInstances = nil;
     return [self.conversationService removeAllCachedRecentConversations];
 }
 
-///---------------------------------------------------------------------
-///---------------------LCCKConversationsListService--------------------
-///---------------------------------------------------------------------
+#pragma mark - LCCKConversationsListService
+///=============================================================================
+/// @name LCCKConversationsListService
+///=============================================================================
 
 - (void)setDidSelectConversationsListCellBlock:(LCCKDidSelectConversationsListCellBlock)didSelectConversationsListCellBlock {
     [self.conversationListService setDidSelectConversationsListCellBlock:didSelectConversationsListCellBlock];
