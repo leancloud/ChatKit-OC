@@ -36,7 +36,7 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
 @property (assign, nonatomic, readonly) CGFloat bottomHeight;
 @property (strong, nonatomic, readonly) UIViewController *rootViewController;
 
-@property (assign, nonatomic) CGRect keyboardFrame;
+@property (assign, nonatomic) CGSize keyboardSize;
 
 @property (strong, nonatomic) UITextView *textView;
 @property (assign, nonatomic) CGFloat oldTextViewHeight;
@@ -243,7 +243,7 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
 
 - (void)updateChatBarKeyBoardConstraints {
     [self mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.bottom.mas_equalTo(-self.keyboardFrame.size.height);
+        make.bottom.mas_equalTo(-self.keyboardSize.height);
     }];
 }
 
@@ -464,7 +464,7 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
     if (self.isClosed) {
         return;
     }
-    self.keyboardFrame = CGRectZero;
+    self.keyboardSize = CGSizeZero;
     if (_showType == LCCKFunctionViewShowKeyboard) {
         _showType = LCCKFunctionViewShowNothing;
     }
@@ -476,8 +476,17 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
     if (self.isClosed) {
         return;
     }
+    CGFloat oldHeight = self.keyboardSize.height;
+    self.keyboardSize = [[notification.userInfo objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue].size;
+    //FIXME:兼容搜狗输入法：一次键盘事件会通知两次，且键盘高度不一。
+    if (self.keyboardSize.height != oldHeight) {
+        _showType = LCCKFunctionViewShowNothing;
+    }
+    if (self.keyboardSize.height == 0) {
+        _showType = LCCKFunctionViewShowNothing;
+        return;
+    }
     self.allowTextViewContentOffset = YES;
-    self.keyboardFrame = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
     self.showType = LCCKFunctionViewShowKeyboard;
     [self chatBarFrameDidChangeShouldScrollToBottom:YES];
 }
@@ -838,9 +847,9 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
 
 - (CGFloat)bottomHeight{
     if (self.faceView.superview || self.moreView.superview) {
-        return MAX(self.keyboardFrame.size.height, MAX(self.faceView.frame.size.height, self.moreView.frame.size.height));
+        return MAX(self.keyboardSize.height, MAX(self.faceView.frame.size.height, self.moreView.frame.size.height));
     } else {
-        return MAX(self.keyboardFrame.size.height, CGFLOAT_MIN);
+        return MAX(self.keyboardSize.height, CGFLOAT_MIN);
     }
 }
 

@@ -178,7 +178,6 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    [self.chatBar open];
     !self.viewWillAppearBlock ?: self.viewWillAppearBlock(self, animated);
 }
 
