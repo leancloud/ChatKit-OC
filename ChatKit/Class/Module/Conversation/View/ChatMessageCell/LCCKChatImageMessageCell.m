@@ -57,14 +57,12 @@
     if (tapGestureRecognizer.state == UIGestureRecognizerStateEnded) {
         if ([self.delegate respondsToSelector:@selector(messageCellTappedMessage:)]) {
             [self.delegate messageCellTappedMessage:self];
-            [[[UIApplication sharedApplication] keyWindow] endEditing:YES];
         }
     }
 }
 
 - (void)configureCellWithData:(LCCKMessage *)message {
     [super configureCellWithData:message];
-//    self.messageImageView.image = [self imageInBundleForImageName:@"Placeholder_Accept_Defeat"];
     UIImage *thumbnailPhoto = message.thumbnailPhoto;
     do {
         if (self.messageImageView.image && (self.messageImageView.image == thumbnailPhoto)) {

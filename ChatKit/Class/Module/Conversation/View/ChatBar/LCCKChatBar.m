@@ -404,12 +404,10 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
 - (void)close {
     //关闭
     self.close = YES;
-    [self endInputing];
 }
 
 - (void)open {
     self.close = NO;
-    [self beginInputing];
 }
 
 - (void)endInputing {
@@ -421,7 +419,7 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
 }
 
 - (void)appendString:(NSString *)string beginInputing:(BOOL)beginInputing {
-    [self appendString:string beginInputing:beginInputing animated:NO];
+    [self appendString:string beginInputing:beginInputing animated:YES];
 }
 
 - (void)appendString:(NSString *)string beginInputing:(BOOL)beginInputing animated:(BOOL)animated {
@@ -429,10 +427,13 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
     if ([self.textView.text hasSuffix:@"@"] && [string hasPrefix:@" "]) {
         self.textView.text = [self.textView.text substringToIndex:[self.textView.text length] - 1];
     }
-    self.textView.text = [self.textView.text stringByAppendingString:string];
-    [self updateChatBarConstraintsIfNeeded];
+    NSString *appendedString = [self.textView.text stringByAppendingString:string];
+    self.cachedText = appendedString;
+    self.textView.text = appendedString;
     if (beginInputing) {
         [self beginInputingWithAnimated:animated];
+    } else {
+        [self updateChatBarConstraintsIfNeeded];
     }
 }
 

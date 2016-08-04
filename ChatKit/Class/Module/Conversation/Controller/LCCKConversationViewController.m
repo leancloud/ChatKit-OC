@@ -173,20 +173,38 @@
         self.user = user;
     }];
     [self conversation];
-    if (self.conversation.lcck_draft.length > 0) {
-        [self.chatBar appendString:self.conversation.lcck_draft];
-    }
     !self.viewDidLoadBlock ?: self.viewDidLoadBlock(self);
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    [self.chatBar open];
+    !self.viewWillAppearBlock ?: self.viewWillAppearBlock(self, animated);
 }
 
 - (void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
+    [self.chatBar open];
+    [self loadDraft];
     [self markCurrentConversationInfo];
     !self.viewDidAppearBlock ?: self.viewDidAppearBlock(self, animated);
 }
 
+- (void)loadDraft {
+    //在对象生命周期内，不添加 flag 属性的情况下，防止多次调进这个方法
+    if (objc_getAssociatedObject(self, _cmd)) {
+        return;
+    } else {
+        objc_setAssociatedObject(self, _cmd, @"isLoadingDraft", OBJC_ASSOCIATION_RETAIN);
+    }
+    if (self.conversation.lcck_draft.length > 0) {
+        [self.chatBar appendString:self.conversation.lcck_draft];
+    }
+}
+
 - (void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
+    [self.chatBar close];
     if (self.conversationId) {
         [[LCCKConversationService sharedInstance] updateDraft:self.chatBar.cachedText conversationId:self.conversationId];
     }
@@ -208,11 +226,6 @@
 - (void)dealloc {
     [[LCCKAVAudioPlayer sharePlayer] setDelegate:nil];
     !self.viewControllerWillDeallocBlock ?: self.viewControllerWillDeallocBlock(self);
-}
-
-- (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-    !self.viewWillAppearBlock ?: self.viewWillAppearBlock(self, animated);
 }
 
 - (void)didReceiveMemoryWarning {
@@ -350,6 +363,7 @@
     LCCKContactListViewController *contactListViewController = [[LCCKContactListViewController alloc] initWithContacts:users userIds:self.conversation.members excludedUserIds:@[cuttentClientId] mode:LCCKContactListModeMultipleSelection];
     [contactListViewController setViewDidDismissBlock:^(LCCKBaseViewController *viewController) {
         [self.chatBar open];
+        [self.chatBar beginInputing];
     }];
     [contactListViewController setSelectedContactCallback:^(UIViewController *viewController, NSString *peerId) {
         [viewController dismissViewControllerAnimated:YES completion:^{
@@ -478,6 +492,7 @@
     if (!messageCell) {
         return;
     }
+    [self.chatBar close];
     NSIndexPath *indexPath = [self.tableView indexPathForCell:messageCell];
     LCCKMessage *message = [self.chatViewModel.dataArray lcck_messageAtIndex:indexPath.row];
     switch (messageCell.messageType) {
@@ -538,6 +553,7 @@
         }
             break;
     }
+    [self.chatBar open];
 }
 
 - (void)previewImageMessageWithInitialIndex:(NSUInteger)initialIndex

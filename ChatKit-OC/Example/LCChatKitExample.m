@@ -174,7 +174,9 @@ static NSMutableDictionary *_sharedInstances = nil;
     }];
     
     [[LCChatKit sharedInstance] setDidSelectConversationsListCellBlock:^(NSIndexPath *indexPath, AVIMConversation *conversation, LCCKConversationListViewController *controller) {
-        [[self class] exampleOpenConversationViewControllerWithConversaionId:conversation.conversationId fromNavigationController:nil];
+        [[self class] lcck_showMessage:@"打开对话..." toView:controller.view];
+        [[self class] exampleOpenConversationViewControllerWithConversaionId:conversation.conversationId fromNavigationController:controller.navigationController];
+        [self lcck_hideProgress];
     }];
     
     [[LCChatKit sharedInstance] setDidDeleteConversationsListCellBlock:^(NSIndexPath *indexPath, AVIMConversation *conversation, LCCKConversationListViewController *controller) {
@@ -392,6 +394,9 @@ typedef void (^UITableViewRowActionHandler)(UITableViewRowAction *action, NSInde
     }];
     
     [conversationViewController setViewDidLoadBlock:^(LCCKBaseViewController *viewController) {
+        if (aNavigationController) {
+            [[self class] lcck_hideHUDForView:aNavigationController.viewControllers[0].view];
+        }
         [self lcck_showMessage:@"加载历史记录..." toView:viewController.view];
     }];
     [conversationViewController setLoadHistoryMessagesHandler:^(__kindof UIViewController *viewController, BOOL succeeded, NSError *error) {
