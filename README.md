@@ -1,7 +1,7 @@
 # ChatKit 使用指南 · iOS
 
 <p align="center">
-![enter image description here](https://img.shields.io/badge/pod-v0.3.3-brightgreen.svg)  ![enter image description here](https://img.shields.io/badge/platform-iOS%207.0%2B-ff69b5618733984.svg) 
+![enter image description here](https://img.shields.io/badge/pod-v0.3.8-brightgreen.svg)  ![enter image description here](https://img.shields.io/badge/platform-iOS%207.0%2B-ff69b5618733984.svg) 
 <a href="https://github.com/leancloud/ChatKit-OC/blob/master/LICENSE"><img src="https://img.shields.io/badge/license-MIT-green.svg?style=flat"></a>
 </a>
 
@@ -47,8 +47,9 @@ git clone --depth=1 https://github.com/leancloud/ChatKit-OC
 -------------|-------------|-------------
 ![enter image description here](http://i65.tinypic.com/wmjuvs.jpg) | ![enter image description here](http://i63.tinypic.com/2eoa4j6.jpg) | ![enter image description here](http://i63.tinypic.com/1z1z5ur.jpg)
 
-
-
+健壮的输入框 | 多类型消息
+-------------|-------------
+![enter image description here](http://image18-c.poco.cn/mypoco/myphoto/20160805/13/17338872420160805133757084.gif?408x758_110) |![enter image description here](http://image18-c.poco.cn/mypoco/myphoto/20160729/19/17338872420160729191532029.gif?412x714_110)
 ## 项目结构
 
 ```

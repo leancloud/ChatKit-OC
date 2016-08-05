@@ -84,8 +84,8 @@
 }
 
 #pragma mark - Private Methods
-- (void)updateConstraints {
-    [super updateConstraints];
+- (void)setupConstraints {
+//    [super updateConstraints];
     [self.swipeView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.and.width.mas_equalTo(self);
         make.bottom.mas_equalTo(self).offset(-40);
@@ -119,9 +119,7 @@
     self.faceViewType = LCCKShowEmojiFace;
     [self setupFaceView];
     self.userInteractionEnabled = YES;
-    
-    [self updateConstraintsIfNeeded];
-    [self layoutIfNeeded];
+    [self setupConstraints];
 }
 
 - (void)setupFaceView {

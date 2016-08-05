@@ -90,9 +90,6 @@
         make.left.and.right.mas_equalTo(self);
         make.bottom.mas_equalTo(self).offset(-10);
     }];
-    
-    [self updateConstraintsIfNeeded];
-    [self layoutIfNeeded];
 }
 
 - (void)setupItems {

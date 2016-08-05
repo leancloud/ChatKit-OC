@@ -39,7 +39,6 @@ static CGFloat const LCCKScrollViewInsetTop = 20.f;
         make.left.and.right.and.bottom.equalTo(self.view);
         make.height.mas_greaterThanOrEqualTo(@(kLCCKChatBarMinHeight));
     }];
-    
 }
 
 - (void)initilzer {

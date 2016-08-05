@@ -6,9 +6,9 @@
 //  Copyright © 2016年 ElonChan. All rights reserved.
 //
 
-#import "LCCKChatBar.h"
-#import "LCCKConversationViewModel.h"
 #import "LCCKBaseTableViewController.h"
+
+@class LCCKChatBar, LCCKConversationViewModel;
 
 @interface LCCKBaseConversationViewController : LCCKBaseTableViewController
 
