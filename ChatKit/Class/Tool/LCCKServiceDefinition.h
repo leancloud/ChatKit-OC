@@ -141,12 +141,19 @@ typedef void(^LCCKGenerateSignatureBlock)(NSString *clientId, NSString *conversa
 
 @protocol LCCKUIService <NSObject>
 
+/// 传递触发的UIViewController对象
+#define LCCKPreviewImageMessageUserInfoKeyFromController    @"LCCKPreviewImageMessageUserInfoKeyFromController"
+/// 传递触发的UIView对象
+#define LCCKPreviewImageMessageUserInfoKeyFromView          @"LCCKPreviewImageMessageUserInfoKeyFromView"
+/// 传递触发的UIView对象
+#define LCCKPreviewImageMessageUserInfoKeyFromPlaceholderView          @"LCCKPreviewImageMessageUserInfoKeyFromPlaceholderView"
+
 /*!
  *  打开某个profile的回调block
  *  @param userId 被点击的user 的 userId (clientId) ，与 user 属性中 clientId 的区别在于，本属性永远不为空，但 user可能为空。
  *  @param parentController 用于打开的顶层控制器
  */
-typedef void(^LCCKOpenProfileBlock)(NSString *userId, id<LCCKUserDelegate> user, UIViewController *parentController);
+typedef void(^LCCKOpenProfileBlock)(NSString *userId, id<LCCKUserDelegate> user, __kindof UIViewController *parentController);
 
 @property (nonatomic, copy) LCCKOpenProfileBlock openProfileBlock;
 

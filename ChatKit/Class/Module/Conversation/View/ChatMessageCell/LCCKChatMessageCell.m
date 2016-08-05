@@ -394,7 +394,7 @@ static CGFloat const LCCK_MSG_CELL_NICKNAME_FONT_SIZE = 12;
             LCCKLongPressMessageBlock longPressMessageBlock = [LCChatKit sharedInstance].longPressMessageBlock;
             NSArray *menuItems = [NSArray array];
             NSDictionary *userInfo = @{
-                                       LCCKLongPressMessageUserInfoKeyFromController : self,
+                                       LCCKLongPressMessageUserInfoKeyFromController : self.delegate,
                                        LCCKLongPressMessageUserInfoKeyFromView : self.tableView,
                                        };
             if (longPressMessageBlock) {

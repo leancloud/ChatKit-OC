@@ -48,7 +48,7 @@ FOUNDATION_EXPORT const unsigned char LCChatKitVersionString[];
     #import <ChatKit/LCCKBaseNavigationController.h>
     #import <ChatKit/LCCKBaseConversationViewController.h>
     #import <ChatKit/LCCKContact.h>
-
+    #import <ChatKit/AVIMTypedMessage+LCCKExtention.h>
 #else
     #import "LCCKConstants.h"
     #import "LCCKSessionService.h"
@@ -76,6 +76,7 @@ FOUNDATION_EXPORT const unsigned char LCChatKitVersionString[];
     #import "LCCKBaseNavigationController.h"
     #import "LCCKBaseConversationViewController.h"
     #import "LCCKContact.h"
+#import "AVIMTypedMessage+LCCKExtention.h"
 #endif
 
 

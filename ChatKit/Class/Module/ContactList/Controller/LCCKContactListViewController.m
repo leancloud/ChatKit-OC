@@ -147,22 +147,12 @@ static NSString *const LCCKContactListViewControllerIdentifier = @"LCCKContactLi
     [self.navigationItem setTitle:@"联系人"];
     if (self.mode == LCCKContactListModeNormal) {
         self.navigationItem.title = self.title ?: @"联系人";
-        //TODO:
-        //        self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"搜索"
-        //                                                                                  style:UIBarButtonItemStylePlain
-        //                                                                                target:self
-        //                                                                                action:@selector(searchBarButtonItemPressed:)];
-        //        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"登出"
-        //                                                                                  style:UIBarButtonItemStylePlain
-        //                                                                                 target:self
-        //                                                                                 action:@selector(signOut)];
     } else {
         self.navigationItem.title = self.title ?: @"选择联系人";
         UIBarButtonItem *doneButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone
                                                                                         target:self
                                                                                         action:@selector(doneBarButtonItemPressed:)];
         self.navigationItem.rightBarButtonItem = doneButtonItem;
-        //        [self.tableView setEditing:YES animated:NO];
     }
     /**
      *   这里不考虑查询人数与返回人数不一致的情况，比如查询100人，服务器只返回一人，那么也只显示一人，其余99人不予显示

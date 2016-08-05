@@ -509,17 +509,20 @@ fromTimestamp     |    toDate   |                |  上次上拉刷新顶端，�
             [indexPaths addObject:indexPath];
         }];
         dispatch_async(dispatch_get_main_queue(),^{
-            [UIView setAnimationsEnabled:NO];
-            [self.parentConversationViewController.tableView beginUpdates];
-            self.dataArray = [messages mutableCopy];
-            [self.parentConversationViewController.tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationNone];
-            [self.parentConversationViewController.tableView reloadData];
-            [self.parentConversationViewController.tableView endUpdates];
-            CGSize afterContentSize = self.parentConversationViewController.tableView.contentSize;
-            CGPoint afterContentOffset = self.parentConversationViewController.tableView.contentOffset;
-            CGPoint newContentOffset = CGPointMake(afterContentOffset.x, afterContentOffset.y + afterContentSize.height - beforeContentSize.height);
-            [self.parentConversationViewController.tableView setContentOffset:newContentOffset animated:NO] ;
-            [UIView setAnimationsEnabled:YES];
+            BOOL animationEnabled = [UIView areAnimationsEnabled];
+            if (animationEnabled) {
+                [UIView setAnimationsEnabled:NO];
+                [self.parentConversationViewController.tableView beginUpdates];
+                self.dataArray = [messages mutableCopy];
+                [self.parentConversationViewController.tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationNone];
+                [self.parentConversationViewController.tableView reloadData];
+                [self.parentConversationViewController.tableView endUpdates];
+                CGSize afterContentSize = self.parentConversationViewController.tableView.contentSize;
+                CGPoint afterContentOffset = self.parentConversationViewController.tableView.contentOffset;
+                CGPoint newContentOffset = CGPointMake(afterContentOffset.x, afterContentOffset.y + afterContentSize.height - beforeContentSize.height);
+                [self.parentConversationViewController.tableView setContentOffset:newContentOffset animated:NO] ;
+                [UIView setAnimationsEnabled:YES];
+            }
             !completion ?: completion();
         });
     });
