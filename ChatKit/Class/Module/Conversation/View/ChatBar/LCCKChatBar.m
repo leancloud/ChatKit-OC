@@ -244,6 +244,10 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
     [self mas_updateConstraints:^(MASConstraintMaker *make) {
         make.bottom.mas_equalTo(-self.keyboardSize.height);
     }];
+    [UIView animateWithDuration:LCCKAnimateDuration animations:^{
+        [self layoutIfNeeded];
+    } completion:nil];
+    
 }
 
 /*!
@@ -268,7 +272,6 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
             CGFloat height = newTextViewHeight;
             make.height.mas_equalTo(height);
         }];
-//        [self.textView layoutIfNeeded];
         [self chatBarFrameDidChangeShouldScrollToBottom:YES];
     }
     [self updateChatBarKeyBoardConstraints];
@@ -429,6 +432,7 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
     NSString *appendedString = [self.textView.text stringByAppendingString:string];
     self.cachedText = appendedString;
     self.textView.text = appendedString;
+    //FIXME:语音条状态下，丢失cacheText
     if (beginInputing && self.keyboardSize.height == 0) {
         [self beginInputingWithAnimated:animated];
     } else {
@@ -640,8 +644,7 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
             make.top.mas_equalTo(self.superview.mas_bottom);
         }];
         [self.faceView layoutIfNeeded];
-        
-        
+
         [self.faceView mas_updateConstraints:^(MASConstraintMaker *make) {
             make.top.mas_equalTo(self.superview.mas_bottom).offset(-kFunctionViewHeight);
         }];
