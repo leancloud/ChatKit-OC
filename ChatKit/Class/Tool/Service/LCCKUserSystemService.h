@@ -11,11 +11,11 @@
 #import "LCCKUserDelegate.h"
 
 /**
- *  You must implement `-setFetchProfilesBlock:` to allow LeanCloudChatKit to get user information by user id.
+ *  You must implement `-setFetchProfilesBlock:` to allow LeanCloudChatKit to get user information by user clientId.
  *   The following example shows how to use AVUser as the user system:
 
  ```
-    [[LCChatKit sharedInstance] setFetchProfilesBlock:^(NSArray<NSString *> *userIds, LCCKFetchProfilesCallBack callback) {
+    [[LCChatKit sharedInstance] setFetchProfilesBlock:^(NSArray<NSString *> *userIds, LCCKFetchProfilesCompletionHandler completionHandler) {
         NSMutableArray<id<LCCKUserDelegate>> *userList = [NSMutableArray array];
         for (NSString *userId in userIds) {
             //MyUser is a subclass of AVUser, conforming to the LCCKUserDelegate protocol.

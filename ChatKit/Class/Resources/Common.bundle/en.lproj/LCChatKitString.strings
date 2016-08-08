@@ -41,6 +41,8 @@
 "Community" = "Community";
 "ConfirmDeletion" = "Confirm deletion";
 "netDisconnected" = "Network unavailable, Check network";
+"connectSucceeded" = "connect succeeded";
+"connectFailed" = "connect failed";
 "call" = "call";
 "unknownMessage" = "unknown message type, please update your APP";
 "unknownMessageType" = "unknown message type";

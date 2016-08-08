@@ -19,7 +19,7 @@
  2. Invoke `-[LCChatKit sharedInstance]` to get a singleton instance.
  3. Invoke `-[[LCChatKit sharedInstance] openWithClientId:callback:]` to log in LeanCloud IM service and begin chatting.
  4. Invoke `-[[LCChatKit sharedInstance] closeWithCallback:]` to log out LeanCloud IM service and end chatting.
- 5. Implement `-[[LCChatKit sharedInstance] setFetchProfilesBlock:]`, so LeanCloudChatKit can get user information by user id. `LCCKUserSystemService.h` file gives an example showing how to use AVUser as the user system.
+ 5. Implement `-[[LCChatKit sharedInstance] setFetchProfilesBlock:]`, so ChatKit can get user information by user id. `LCCKUserSystemService.h` file gives an example showing how to use AVUser as the user system.
  6. Implement `-[[LCChatKit sharedInstance] setGenerateSignatureBlock:]`. If implemeted, this method will be invoked automatically for pinning signature to these actions: open, start(create conversation), kick, invite.
  
  */

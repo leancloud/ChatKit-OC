@@ -22,6 +22,6 @@
 #import "LCCKConversationViewModel.h"
 
 #import "LCCKAVAudioPlayer.h"
-
+#import "LCCKServiceDefinition.h"
 
 #endif /* LCCKChat_h */

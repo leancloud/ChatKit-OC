@@ -31,6 +31,8 @@ NSString *const LCCKConversationServiceErrorDomain = @"LCCKConversationServiceEr
 
 @implementation LCCKConversationService
 @synthesize currentConversation = _currentConversation;
+@synthesize fetchConversationHandler = _fetchConversationHandler;
+@synthesize loadLatestMessagesHandler = _loadLatestMessagesHandler;
 
 /**
  *  根据 conversationId 获取对话
@@ -471,14 +473,14 @@ NSString *const LCCKConversationServiceErrorDomain = @"LCCKConversationServiceEr
        conversation:(AVIMConversation *)conversation
       progressBlock:(AVProgressBlock)progressBlock
            callback:(LCCKBooleanResultBlock)block {
-    [self sendMessage:message conversation:conversation progressBlock:progressBlock options:AVIMMessageSendOptionNone callback:block];
+    [self sendMessage:message conversation:conversation options:AVIMMessageSendOptionNone progressBlock:progressBlock callback:block];
 }
 
 - (void)sendMessage:(AVIMTypedMessage*)message
        conversation:(AVIMConversation *)conversation
-      progressBlock:(AVProgressBlock)progressBlock
             options:(AVIMMessageSendOption)options
-           callback:(LCCKBooleanResultBlock)block {
+      progressBlock:(AVProgressBlock)progressBlock
+           callback:(LCCKBooleanResultBlock)block  {
     id<LCCKUserDelegate> currentUser = [[LCCKUserSystemService sharedInstance] fetchCurrentUser];
     NSMutableDictionary *attributes = [NSMutableDictionary dictionary];
     // 云代码中获取到用户名，来设置推送消息, 老王:今晚约吗？
@@ -511,6 +513,14 @@ NSString *const LCCKConversationServiceErrorDomain = @"LCCKConversationServiceEr
 
 #pragma mark - query msgs
 
+- (void)setFetchConversationHandler:(LCCKFetchConversationHandler)fetchConversationHandler {
+    _fetchConversationHandler = fetchConversationHandler;
+}
+
+- (void)setLoadLatestMessagesHandler:(LCCKLoadLatestMessagesHandler)loadLatestMessagesHandler {
+    _loadLatestMessagesHandler = loadLatestMessagesHandler;
+}
+
 - (void)queryTypedMessagesWithConversation:(AVIMConversation *)conversation
                                  timestamp:(int64_t)timestamp
                                      limit:(NSInteger)limit
@@ -518,7 +528,8 @@ NSString *const LCCKConversationServiceErrorDomain = @"LCCKConversationServiceEr
     AVIMArrayResultBlock callback = ^(NSArray *messages, NSError *error) {
         if (!messages) {
             NSString *errorReason = [NSString stringWithFormat:@"类名与方法名：%@（在第%@行），描述：%@", @(__PRETTY_FUNCTION__), @(__LINE__), @"SDK处理异常，请联系SDK维护者修复luohanchenyilong@163.com"];
-            NSAssert(messages, errorReason);
+            NSLog(@"🔴类名与方法名：%@（在第%@行），描述：%@", @(__PRETTY_FUNCTION__), @(__LINE__), errorReason);
+            // NSAssert(messages, errorReason);
         }
         
         //以下过滤为了避免非法的消息，引起崩溃，确保展示的只有 AVIMTypedMessage 类型

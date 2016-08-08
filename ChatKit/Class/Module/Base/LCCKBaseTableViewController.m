@@ -115,17 +115,10 @@
     return _clientStatusView;
 }
 
-- (void)updateStatusView {
-}
+- (void)updateStatusView {}
 
 - (void)statusViewClicked:(id)sender {
-    LCCKSessionNotOpenedHandler sessionNotOpenedHandler = [LCCKSessionService sharedInstance].sessionNotOpenedHandler;
-    LCCKBooleanResultBlock callback = ^(BOOL succeeded, NSError *error) {
-        if (!succeeded) {
-            [self.navigationController popViewControllerAnimated:YES];
-        }
-    };
-    !sessionNotOpenedHandler ?: sessionNotOpenedHandler(self, callback);
+    [[LCCKSessionService sharedInstance] reconnectForViewController:self callback:nil];
 }
 
 @end

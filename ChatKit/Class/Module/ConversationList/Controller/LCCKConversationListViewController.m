@@ -36,8 +36,7 @@
     BOOL clientStatusOpened = [LCCKSessionService sharedInstance].client.status == AVIMClientStatusOpened;
     //NSAssert([LCCKSessionService sharedInstance].client.status == AVIMClientStatusOpened, @"client not opened");
     if (!clientStatusOpened) {
-        LCCKSessionNotOpenedHandler sessionNotOpenedHandler = [LCCKSessionService sharedInstance].sessionNotOpenedHandler;
-        !sessionNotOpenedHandler ?: sessionNotOpenedHandler(self, nil);
+        [[LCCKSessionService sharedInstance] reconnectForViewController:self callback:nil];
     }
     self.navigationItem.title = @"消息";
     self.tableView.delegate = self.conversationListViewModel;

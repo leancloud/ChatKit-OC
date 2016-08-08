@@ -11,8 +11,6 @@
 #import "LCCKChat.h"
 #import "LCCKBaseConversationViewController.h"
 
-typedef void (^LCCKConversationHandler) (AVIMConversation *conversation, LCCKConversationViewController *conversationController);
-
 @interface LCCKConversationViewController : LCCKBaseConversationViewController <LCCKChatMessageCellDelegate>
 
 /*!
@@ -67,13 +65,13 @@ typedef void (^LCCKConversationHandler) (AVIMConversation *conversation, LCCKCon
  * 设置获取 AVIMConversation 对象结束后的 Handler。 这里可以做异常处理，比如获取失败等操作。
  * 获取失败时，LCCKConversationHandler 返回值中的AVIMConversation 为 nil，成功时为正确的 conversation 值。
  */
-- (void)setConversationHandler:(LCCKConversationHandler)conversationHandler;
+- (void)setFetchConversationHandler:(LCCKFetchConversationHandler)fetchConversationHandler;
 
 /*!
  * 设置获取历史纪录结束时的 Handler。 这里可以做异常处理，比如获取失败等操作。
  * 获取失败时，LCCKViewControllerBooleanResultBlock 返回值中的 error 不为 nil，包含错误原因，成功时 succeeded 值为 YES。
  */
-- (void)setLoadHistoryMessagesHandler:(LCCKViewControllerBooleanResultBlock)loadHistoryMessagesHandler;
+- (void)setLoadLatestMessagesHandler:(LCCKLoadLatestMessagesHandler)loadLatestMessagesHandler;
 
 @end
 

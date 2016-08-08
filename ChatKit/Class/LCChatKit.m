@@ -24,7 +24,7 @@ static NSMutableDictionary *_sharedInstances = nil;
 @end
 
 @implementation LCChatKit
-@synthesize sessionNotOpenedHandler = _sessionNotOpenedHandler;
+@synthesize forceReconnectSessionBlock = _forceReconnectSessionBlock;
 @synthesize clientId = _clientId;
 @synthesize client = _client;
 @synthesize fetchProfilesBlock = _fetchProfilesBlock;
@@ -142,8 +142,8 @@ static NSMutableDictionary *_sharedInstances = nil;
 - (void)closeWithCallback:(LCCKBooleanResultBlock)callback {
     [self.sessionService closeWithCallback:callback];
 }
-- (void)setSessionNotOpenedHandler:(LCCKSessionNotOpenedHandler)sessionNotOpenedHandler {
-    [self.sessionService setSessionNotOpenedHandler:sessionNotOpenedHandler];
+- (void)setForceReconnectSessionBlock:(LCCKForceReconnectSessionBlock)forceReconnectSessionBlock {
+    [self.sessionService setForceReconnectSessionBlock:forceReconnectSessionBlock];
 }
 
 #pragma mark - LCCKUserSystemService
@@ -268,6 +268,15 @@ static NSMutableDictionary *_sharedInstances = nil;
 ///=============================================================================
 /// @name LCCKConversationService
 ///=============================================================================
+
+- (void)setFetchConversationHandler:(LCCKFetchConversationHandler)fetchConversationHandler {
+    [self.conversationService setFetchConversationHandler:fetchConversationHandler];
+
+}
+
+- (void)setLoadLatestMessagesHandler:(LCCKLoadLatestMessagesHandler)loadLatestMessagesHandler {
+    [self.conversationService setLoadLatestMessagesHandler:loadLatestMessagesHandler];
+}
 
 - (void)createConversationWithMembers:(NSArray *)members type:(LCCKConversationType)type unique:(BOOL)unique callback:(AVIMConversationResultBlock)callback {
     [self.conversationService createConversationWithMembers:members type:type unique:unique callback:callback];

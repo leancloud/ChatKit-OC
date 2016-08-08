@@ -30,6 +30,7 @@
 #import "LCCKSafariActivity.h"
 #import "LCCKAlertController.h"
 #import "LCCKPhotoBrowser.h"
+#import <MLeaksFinder/MLeaksFinder.h>
 
 @interface LCCKConversationViewController () <LCCKChatBarDelegate, LCCKAVAudioPlayerDelegate, LCCKChatMessageCellDelegate, LCCKConversationViewModelDelegate, LCCKPhotoBrowserDelegate>
 
@@ -43,8 +44,8 @@
 /**< 正在聊天的用户头像 */
 //@property (nonatomic, copy) NSURL *avatarURL;
 @property (nonatomic, strong) LCCKConversationViewModel *chatViewModel;
-@property (nonatomic, copy) LCCKConversationHandler conversationHandler;
-@property (nonatomic, copy) LCCKViewControllerBooleanResultBlock loadHistoryMessagesHandler;
+@property (nonatomic, copy) LCCKFetchConversationHandler fetchConversationHandler;
+@property (nonatomic, copy) LCCKLoadLatestMessagesHandler loadLatestMessagesHandler;
 @property (nonatomic, copy, readwrite) NSString *conversationId;
 @property (nonatomic, strong) LCCKWebViewController *webViewController;
 @property (nonatomic, strong) NSMutableArray *photos;
@@ -54,12 +55,12 @@
 
 @implementation LCCKConversationViewController
 
-- (void)setConversationHandler:(LCCKConversationHandler)conversationHandler {
-    _conversationHandler = conversationHandler;
+- (void)setFetchConversationHandler:(LCCKFetchConversationHandler)fetchConversationHandler {
+    _fetchConversationHandler = fetchConversationHandler;
 }
 
-- (void)setLoadHistoryMessagesHandler:(LCCKViewControllerBooleanResultBlock)loadHistoryMessagesHandler {
-    _loadHistoryMessagesHandler = loadHistoryMessagesHandler;
+- (void)setLoadLatestMessagesHandler:(LCCKLoadLatestMessagesHandler)loadLatestMessagesHandler {
+    _loadLatestMessagesHandler = loadLatestMessagesHandler;
 }
 
 #pragma mark -
@@ -133,14 +134,20 @@
     //    NSAssert(clientStatusOpened, @"client not opened");
     if (!clientStatusOpened) {
         [self refreshConversation:nil isJoined:NO];
-        LCCKSessionNotOpenedHandler sessionNotOpenedHandler = [LCCKSessionService sharedInstance].sessionNotOpenedHandler;
-        LCCKBooleanResultBlock callback = ^(BOOL succeeded, NSError *error) {
-            if (!succeeded) {
-                //[self.navigationController popViewControllerAnimated:YES];
+        [[LCCKSessionService sharedInstance] reconnectForViewController:self callback:^(BOOL succeeded, NSError *error) {
+            if (succeeded) {
+                [self conversation];
             }
-        };
-        !sessionNotOpenedHandler ?: sessionNotOpenedHandler(self, callback);
+        }];
     }
+}
+
+- (BOOL)willDealloc {
+    if (![super willDealloc]) {
+        return NO;
+    }
+    MLCheck(self.chatViewModel);
+    return YES;
 }
 
 /**
@@ -201,8 +208,9 @@
     }
 }
 
-- (void)viewWillDisappear:(BOOL)animated{
+- (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
+    [[[UIApplication sharedApplication] keyWindow] endEditing:YES];
     [self.chatBar close];
     if (self.conversationId) {
         [[LCCKConversationService sharedInstance] updateDraft:self.chatBar.cachedText conversationId:self.conversationId];
@@ -223,6 +231,7 @@
 }
 
 - (void)dealloc {
+    NSLog(@"🔴类名与方法名：%@（在第%@行），描述：%@", @(__PRETTY_FUNCTION__), @(__LINE__), @"");
     [[LCCKAVAudioPlayer sharePlayer] setDelegate:nil];
     !self.viewControllerWillDeallocBlock ?: self.viewControllerWillDeallocBlock(self);
 }
@@ -241,7 +250,6 @@
 
 - (void)clearCurrentConversationInfo {
     [LCCKConversationService sharedInstance].currentConversationId = nil;
-//    [LCCKConversationService sharedInstance].currentConversation = nil;
 }
 
 - (void)markCurrentConversationInfo {
@@ -271,6 +279,42 @@
     self.navigationItem.titleView = navigationItemTitle;
 }
 
+- (void)fetchConversationHandler:(AVIMConversation *)conversation {
+    LCCKFetchConversationHandler fetchConversationHandler;
+    do {
+        if (_fetchConversationHandler) {
+            fetchConversationHandler = _fetchConversationHandler;
+            break;
+        }
+        LCCKFetchConversationHandler generalFetchConversationHandler = [LCCKConversationService sharedInstance].fetchConversationHandler;
+        if (generalFetchConversationHandler) {
+            fetchConversationHandler = generalFetchConversationHandler;
+            break;
+        }
+    } while (NO);
+    if (fetchConversationHandler) {
+        fetchConversationHandler(conversation, self);
+    }
+}
+
+- (void)loadLatestMessagesHandler:(BOOL)succeeded error:(NSError *)error {
+    LCCKLoadLatestMessagesHandler loadLatestMessagesHandler;
+    do {
+        if (_loadLatestMessagesHandler) {
+            loadLatestMessagesHandler = _loadLatestMessagesHandler;
+            break;
+        }
+        LCCKLoadLatestMessagesHandler generalLoadLatestMessagesHandler = [LCCKConversationService sharedInstance].loadLatestMessagesHandler;
+        if (generalLoadLatestMessagesHandler) {
+            loadLatestMessagesHandler = generalLoadLatestMessagesHandler;
+            break;
+        }
+    } while (NO);
+    if (loadLatestMessagesHandler) {
+        loadLatestMessagesHandler(self, succeeded, error);
+    }
+}
+
 /*!
  * conversation 不一定有值，可能为 nil
  */
@@ -285,10 +329,10 @@
         self.conversationId = conversation.conversationId;
         [self setupNavigationItemTitleWithConversation:conversation];
         [[LCChatKit sharedInstance] getProfilesInBackgroundForUserIds:conversation.members callback:^(NSArray<id<LCCKUserDelegate>> *users, NSError *error) {
-            !_conversationHandler ?: _conversationHandler(conversation, self);
+            [self fetchConversationHandler:conversation];
         }];
     } else {
-        !_conversationHandler ?: _conversationHandler(conversation, self);
+        [self fetchConversationHandler:conversation];
     }
     [self markCurrentConversationInfo];
     [self handleLoadHistoryMessagesHandlerForIsJoined:isJoined];
@@ -307,15 +351,13 @@
         NSError *error = [NSError errorWithDomain:@"kAVErrorDomain"
                                              code:code
                                          userInfo:errorInfo];
-    
-        !_loadHistoryMessagesHandler ?: _loadHistoryMessagesHandler(self, succeeded, error);
+        [self loadLatestMessagesHandler:succeeded error:error];
         return;
     }
     [self.chatViewModel loadMessagesFirstTimeWithHandler:^(BOOL succeeded, NSError *error) {
         dispatch_async(dispatch_get_main_queue(),^{
-            !_loadHistoryMessagesHandler ?: _loadHistoryMessagesHandler(self, succeeded, error);
+            [self loadLatestMessagesHandler:succeeded error:error];
         });
-        
     }];
 }
 

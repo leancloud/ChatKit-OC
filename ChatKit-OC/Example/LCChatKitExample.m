@@ -132,7 +132,7 @@ static NSMutableDictionary *_sharedInstances = nil;
     [[LCChatKit sharedInstance] setUseDevPushCerticate:YES];
 #endif
     [LCChatKit setAppId:LCCKAPPID appKey:LCCKAPPKEY];
-    [[LCChatKit sharedInstance] setFetchProfilesBlock:^(NSArray<NSString *> *userIds, LCCKFetchProfilesCallBack callback) {
+    [[LCChatKit sharedInstance] setFetchProfilesBlock:^(NSArray<NSString *> *userIds, LCCKFetchProfilesCompletionHandler completionHandler) {
         
         if (userIds.count == 0) {
             NSInteger code = 0;
@@ -144,7 +144,7 @@ static NSMutableDictionary *_sharedInstances = nil;
             NSError *error = [NSError errorWithDomain:@"LCChatKit"
                                                  code:code
                                              userInfo:errorInfo];
-            !callback ?: callback(nil, error);
+            !completionHandler ?: completionHandler(nil, error);
             return;
         }
         
@@ -170,7 +170,7 @@ static NSMutableDictionary *_sharedInstances = nil;
         }];
         // 模拟网络延时，3秒
         // sleep(3);
-        !callback ?: callback([users copy], nil);
+        !completionHandler ?: completionHandler([users copy], nil);
     }];
     
     [[LCChatKit sharedInstance] setDidSelectConversationsListCellBlock:^(NSIndexPath *indexPath, AVIMConversation *conversation, LCCKConversationListViewController *controller) {
@@ -179,6 +179,42 @@ static NSMutableDictionary *_sharedInstances = nil;
     
     [[LCChatKit sharedInstance] setDidDeleteConversationsListCellBlock:^(NSIndexPath *indexPath, AVIMConversation *conversation, LCCKConversationListViewController *controller) {
         //TODO:
+    }];
+    
+    [[LCChatKit sharedInstance] setFetchConversationHandler:^(AVIMConversation *conversation, LCCKConversationViewController *aConversationController) {
+        if (conversation.members.count > 2) {
+            [aConversationController configureBarButtonItemStyle:LCCKBarButtonItemStyleGroupProfile action:^{
+                NSString *title = @"打开群聊详情";
+                NSString *subTitle = [NSString stringWithFormat:@"群聊id：%@", conversation.conversationId];
+                [LCCKUtil showNotificationWithTitle:title subtitle:subTitle type:LCCKMessageNotificationTypeMessage];
+            }];
+        } else {
+            [aConversationController configureBarButtonItemStyle:LCCKBarButtonItemStyleSingleProfile action:^{
+                NSString *title = @"打开用户详情";
+                NSArray *members = conversation.members;
+                NSPredicate *predicate = [NSPredicate predicateWithFormat:@"NOT (SELF IN %@)", @[ [LCChatKit sharedInstance].clientId ]];
+                NSString *peerId = [members filteredArrayUsingPredicate:predicate][0];
+                NSString *subTitle = [NSString stringWithFormat:@"用户id：%@", peerId];
+                [LCCKUtil showNotificationWithTitle:title subtitle:subTitle type:LCCKMessageNotificationTypeMessage];
+            }];
+        }
+    }];
+
+    [[LCChatKit sharedInstance] setLoadLatestMessagesHandler:^(LCCKConversationViewController *conversationController, BOOL succeeded, NSError *error) {
+        [[self class] lcck_hideHUDForView:conversationController.view];
+        NSString *title;
+        LCCKMessageNotificationType type;
+        if (succeeded) {
+            title = @"聊天记录加载成功";
+            type = LCCKMessageNotificationTypeSuccess;
+        } else {
+            title = @"聊天记录加载失败";
+            type = LCCKMessageNotificationTypeError;
+        }
+#ifndef __OPTIMIZE__
+        [LCCKUtil showNotificationWithTitle:title subtitle:nil type:type];
+#else
+#endif
     }];
     
     //    替换默认预览图片的样式
@@ -198,8 +234,6 @@ static NSMutableDictionary *_sharedInstances = nil;
                                                                     block:^{
                                                                         [self transpondMessage:message toConversationViewController:conversationViewController];
                                                                     }];
-
-        
         NSArray *menuItems = [NSArray array];
         if (message.messageMediaType ==  LCCKMessageTypeText) {
             menuItems = @[ copyItem, transpondItem ];
@@ -257,102 +291,13 @@ static NSMutableDictionary *_sharedInstances = nil;
         [self examplePreViewLocationMessageWithLocation:location geolocations:geolocations];
     }];
     
-    [[LCChatKit sharedInstance] setSessionNotOpenedHandler:^(UIViewController *viewController, LCCKBooleanResultBlock callback) {
+    [[LCChatKit sharedInstance] setForceReconnectSessionBlock:^(__kindof UIViewController *viewController, LCCKReconnectSessionCompletionHandler completionHandler) {
         [[self class] lcck_showMessage:@"正在重新连接聊天服务..." toView:viewController.view];
         [[LCChatKit sharedInstance] openWithClientId:[LCChatKit sharedInstance].clientId callback:^(BOOL succeeded, NSError *error) {
             [[self class] lcck_hideHUDForView:viewController.view];
-            if (succeeded) {
-                [[self class] lcck_showSuccess:@"连接成功"];
-                callback(succeeded, nil);
-            } else {
-                [[self class] lcck_showError:@"连接失败"];
-                callback(succeeded, error);
-            }
+            !completionHandler ?: completionHandler(succeeded, error);
         }];
     }];
-}
-
-void dispatch_async_limit(dispatch_queue_t queue, NSUInteger limitSemaphoreCount, dispatch_block_t block) {
-    //控制并发数的信号量
-    static dispatch_semaphore_t limitSemaphore;
-    //专门控制并发等待的线程
-    static dispatch_queue_t receiverQueue;
-    //使用 dispatch_once而非 lazy 模式，防止可能的多线程抢占问题
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        limitSemaphore = dispatch_semaphore_create(limitSemaphoreCount);
-        receiverQueue = dispatch_queue_create("receiver", DISPATCH_QUEUE_SERIAL);
-    });
-    dispatch_async(receiverQueue, ^{
-        //可用信号量后才能继续，否则等待
-        dispatch_semaphore_wait(limitSemaphore, DISPATCH_TIME_FOREVER);
-        dispatch_async(queue, ^{
-            !block ? : block();
-            //在该工作线程执行完成后释放信号量
-            dispatch_semaphore_signal(limitSemaphore);
-        });
-    });
-}
-
-- (void)transpondMessage:(LCCKMessage *)message toConversationViewController:(LCCKConversationViewController *)conversationViewController {
-    AVIMConversation *conversation = conversationViewController.conversation;
-    NSArray *allPersonIds;
-    if (conversation.lcck_type == LCCKConversationTypeSingle) {
-        //FIXME: add more to allPersonIds
-        allPersonIds = [[LCCKContactManager defaultManager] fetchContactPeerIds];
-    } else {
-        allPersonIds = conversation.members;
-    }
-    dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
-    NSArray *users = [[LCChatKit sharedInstance] getCachedProfilesIfExists:allPersonIds shouldSameCount:YES error:nil];
-    NSString *currentClientID = [[LCChatKit sharedInstance] clientId];
-    LCCKContactListViewController *contactListViewController = [[LCCKContactListViewController alloc] initWithContacts:users userIds:allPersonIds excludedUserIds:@[currentClientID] mode:LCCKContactListModeMultipleSelection];
-    contactListViewController.title = LCCKLocalizedStrings(@"transpond");
-    [contactListViewController setSelectedContactsCallback:^(UIViewController *viewController, NSArray<NSString *> *peerIds) {
-        if (!peerIds || peerIds.count == 0) {
-            return;
-        }
-        dispatch_source_t _processingQueueSource;
-        _processingQueueSource = dispatch_source_create(DISPATCH_SOURCE_TYPE_DATA_ADD, 0, 0,
-                                                        dispatch_get_global_queue(0, 0));
-        __block NSUInteger totalComplete = 0;
-        dispatch_source_set_event_handler(_processingQueueSource, ^{
-            NSUInteger value = dispatch_source_get_data(_processingQueueSource);
-            totalComplete += value;
-//            NSLog(@"发了%@,总共%@",@(totalComplete),  @(peerIds.count));
-//            NSLog(@"进度：%@", @((CGFloat)totalComplete/(peerIds.count)));
-            if (totalComplete/(allPersonIds.count) == 1 || totalComplete >= 30) {
-                dispatch_async(dispatch_get_main_queue(),^{
-                    [[self class] lcck_hideHUD];
-                    [[self class] lcck_showSuccess:@"转发完成"];
-                });
-            }
-        });
-        dispatch_resume(_processingQueueSource);
-        NSString *title = [NSString stringWithFormat:@"%@...",LCCKLocalizedStrings(@"transpond")];
-        [[self class] lcck_showText:title];
-        for (NSString *peerId in peerIds) {
-            dispatch_async_limit(queue, 10, ^{
-                [[LCCKConversationService sharedInstance] fecthConversationWithPeerId:peerId callback:^(AVIMConversation *conversation, NSError *error) {
-                    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
-                        if (!error) {
-                            AVIMTypedMessage *avimTypedMessage = [AVIMTypedMessage lcck_messageWithLCCKMessage:message];
-                            [conversation sendMessage:avimTypedMessage callback:^(BOOL succeeded, NSError *error) {
-                                dispatch_source_merge_data(_processingQueueSource, 1);
-                            }];
-                        } else {
-                            dispatch_source_merge_data(_processingQueueSource, 1);
-                        }
-                        
-                    });
-                }
-                 ];
-            });
-        }
-    }];
-    UINavigationController *navigationViewController = [[UINavigationController alloc] initWithRootViewController:contactListViewController];
-    [conversationViewController presentViewController:navigationViewController animated:YES completion:nil];
-
 }
 
 - (NSArray *)exampleConversationEditActionAtIndexPath:(NSIndexPath *)indexPath
@@ -426,79 +371,18 @@ typedef void (^UITableViewRowActionHandler)(UITableViewRowAction *action, NSInde
     LCCKConversationViewController *conversationViewController = [[LCCKConversationViewController alloc] initWithPeerId:peerId];
     [conversationViewController setViewDidLoadBlock:^(LCCKBaseViewController *viewController) {
         [self lcck_showMessage:@"加载历史记录..." toView:viewController.view];
-        [viewController configureBarButtonItemStyle:LCCKBarButtonItemStyleSingleProfile action:^{
-            NSString *title = @"打开用户详情";
-            NSString *subTitle = [NSString stringWithFormat:@"用户id：%@", peerId];
-            [LCCKUtil showNotificationWithTitle:title subtitle:subTitle type:LCCKMessageNotificationTypeMessage];
-        }];
     }];
-    [conversationViewController setConversationHandler:^(AVIMConversation *conversation, LCCKConversationViewController *aConversationController) {
-        if (!conversation) {
-            [self lcck_hideHUDForView:aConversationController.view];
-            [aConversationController.navigationController popViewControllerAnimated:YES];
-            return;
-        }
-    }];
-    [conversationViewController setLoadHistoryMessagesHandler:^(__kindof UIViewController *viewController, BOOL succeeded, NSError *error) {
+    [conversationViewController setViewWillDisappearBlock:^(LCCKBaseViewController *viewController, BOOL aAnimated) {
         [self lcck_hideHUDForView:viewController.view];
-        NSString *title;
-        NSString *subtitle;
-        LCCKMessageNotificationType type;
-        if (succeeded) {
-            title = @"聊天记录加载成功";
-            type = LCCKMessageNotificationTypeSuccess;
-        } else {
-            title = @"聊天记录加载失败";
-            type = LCCKMessageNotificationTypeError;
-            subtitle = error.localizedDescription;
-        }
-//        [LCCKUtil showNotificationWithTitle:title subtitle:subtitle type:type];
     }];
     [self pushToViewController:conversationViewController];
 }
 
 + (void)exampleOpenConversationViewControllerWithConversaionId:(NSString *)conversationId fromNavigationController:(UINavigationController *)aNavigationController {
     LCCKConversationViewController *conversationViewController = [[LCCKConversationViewController alloc] initWithConversationId:conversationId];
-    [conversationViewController setConversationHandler:^(AVIMConversation *conversation, LCCKConversationViewController *aConversationController) {
-        if (!conversation) {
-            [aConversationController.navigationController popViewControllerAnimated:YES];
-            return;
-        }
-        if (conversation.members.count > 2) {
-            [aConversationController configureBarButtonItemStyle:LCCKBarButtonItemStyleGroupProfile action:^{
-                NSString *title = @"打开群聊详情";
-                NSString *subTitle = [NSString stringWithFormat:@"群聊id：%@", conversationId];
-                [LCCKUtil showNotificationWithTitle:title subtitle:subTitle type:LCCKMessageNotificationTypeMessage];
-            }];
-        } else {
-            [aConversationController configureBarButtonItemStyle:LCCKBarButtonItemStyleSingleProfile action:^{
-                NSString *title = @"打开用户详情";
-                NSArray *members = conversation.members;
-                NSPredicate *predicate = [NSPredicate predicateWithFormat:@"NOT (SELF IN %@)", @[ conversation.clientId ]];
-                NSString *peerId = [members filteredArrayUsingPredicate:predicate][0];
-                NSString *subTitle = [NSString stringWithFormat:@"用户id：%@", peerId];
-                [LCCKUtil showNotificationWithTitle:title subtitle:subTitle type:LCCKMessageNotificationTypeMessage];
-            }];
-        }
-    }];
-    
     [conversationViewController setViewDidLoadBlock:^(LCCKBaseViewController *viewController) {
         [self lcck_showMessage:@"加载历史记录..." toView:viewController.view];
     }];
-    [conversationViewController setLoadHistoryMessagesHandler:^(__kindof UIViewController *viewController, BOOL succeeded, NSError *error) {
-        [self lcck_hideHUDForView:viewController.view];
-        NSString *title;
-        LCCKMessageNotificationType type;
-        if (succeeded) {
-            title = @"聊天记录加载成功";
-            type = LCCKMessageNotificationTypeSuccess;
-        } else {
-            title = @"聊天记录加载失败";
-            type = LCCKMessageNotificationTypeError;
-        }
-//        [LCCKUtil showNotificationWithTitle:title subtitle:nil type:type];
-    }];
-    
     [conversationViewController setViewWillDisappearBlock:^(LCCKBaseViewController *viewController, BOOL aAnimated) {
         [self lcck_hideHUDForView:viewController.view];
     }];
@@ -578,6 +462,85 @@ typedef void (^UITableViewRowActionHandler)(UITableViewRowAction *action, NSInde
         [LCCKUtil hideProgress];
         //        NSLog(@"%@", error);
     }];
+}
+
+void dispatch_async_limit(dispatch_queue_t queue, NSUInteger limitSemaphoreCount, dispatch_block_t block) {
+    static dispatch_semaphore_t limitSemaphore;
+    static dispatch_queue_t receiverQueue;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        limitSemaphore = dispatch_semaphore_create(limitSemaphoreCount);
+        receiverQueue = dispatch_queue_create("receiver", DISPATCH_QUEUE_SERIAL);
+    });
+    dispatch_async(receiverQueue, ^{
+        dispatch_semaphore_wait(limitSemaphore, DISPATCH_TIME_FOREVER);
+        dispatch_async(queue, ^{
+            !block ? : block();
+            dispatch_semaphore_signal(limitSemaphore);
+        });
+    });
+}
+
+- (void)transpondMessage:(LCCKMessage *)message toConversationViewController:(LCCKConversationViewController *)conversationViewController {
+    AVIMConversation *conversation = conversationViewController.conversation;
+    NSArray *allPersonIds;
+    if (conversation.lcck_type == LCCKConversationTypeSingle) {
+        //FIXME: add more to allPersonIds
+        allPersonIds = [[LCCKContactManager defaultManager] fetchContactPeerIds];
+    } else {
+        allPersonIds = conversation.members;
+    }
+    dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+    NSArray *users = [[LCChatKit sharedInstance] getCachedProfilesIfExists:allPersonIds shouldSameCount:YES error:nil];
+    NSString *currentClientID = [[LCChatKit sharedInstance] clientId];
+    LCCKContactListViewController *contactListViewController = [[LCCKContactListViewController alloc] initWithContacts:users userIds:allPersonIds excludedUserIds:@[currentClientID] mode:LCCKContactListModeMultipleSelection];
+    contactListViewController.title = LCCKLocalizedStrings(@"transpond");
+    [contactListViewController setSelectedContactsCallback:^(UIViewController *viewController, NSArray<NSString *> *peerIds) {
+        if (!peerIds || peerIds.count == 0) {
+            return;
+        }
+        dispatch_source_t _processingQueueSource;
+        _processingQueueSource = dispatch_source_create(DISPATCH_SOURCE_TYPE_DATA_ADD, 0, 0,
+                                                        dispatch_get_global_queue(0, 0));
+        __block NSUInteger totalComplete = 0;
+        dispatch_source_set_event_handler(_processingQueueSource, ^{
+            NSUInteger value = dispatch_source_get_data(_processingQueueSource);
+            totalComplete += value;
+            // NSLog(@"发了%@,总共%@",@(totalComplete),  @(peerIds.count));
+            // NSLog(@"进度：%@", @((CGFloat)totalComplete/(peerIds.count)));
+            // 服务端限制，一分钟只能查询30条Conversation信息，故这里最多转发30条。
+            if (totalComplete/(allPersonIds.count) == 1 || totalComplete >= 30) {
+                dispatch_async(dispatch_get_main_queue(),^{
+                    [[self class] lcck_hideHUD];
+                    [[self class] lcck_showSuccess:@"转发完成"];
+                });
+            }
+        });
+        dispatch_resume(_processingQueueSource);
+        NSString *title = [NSString stringWithFormat:@"%@...",LCCKLocalizedStrings(@"transpond")];
+        [[self class] lcck_showText:title];
+        for (NSString *peerId in peerIds) {
+            dispatch_async_limit(queue, 10, ^{
+                [[LCCKConversationService sharedInstance] fecthConversationWithPeerId:peerId callback:^(AVIMConversation *conversation, NSError *error) {
+                    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
+                        if (!error) {
+                            AVIMTypedMessage *avimTypedMessage = [AVIMTypedMessage lcck_messageWithLCCKMessage:message];
+                            [conversation sendMessage:avimTypedMessage callback:^(BOOL succeeded, NSError *error) {
+                                dispatch_source_merge_data(_processingQueueSource, 1);
+                            }];
+                        } else {
+                            dispatch_source_merge_data(_processingQueueSource, 1);
+                        }
+                        
+                    });
+                }
+                 ];
+            });
+        }
+    }];
+    UINavigationController *navigationViewController = [[UINavigationController alloc] initWithRootViewController:contactListViewController];
+    [conversationViewController presentViewController:navigationViewController animated:YES completion:nil];
+    
 }
 
 - (void)examplePreviewImageMessageWithInitialIndex:(NSUInteger)index allVisibleImages:(NSArray *)allVisibleImages allVisibleThumbs:(NSArray *)allVisibleThumbs {

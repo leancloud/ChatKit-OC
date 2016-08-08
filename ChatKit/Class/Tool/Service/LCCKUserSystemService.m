@@ -1,6 +1,6 @@
 //
 //  LCCKUserSystemService.m
-//  LeanCloudChatKit-iOS
+//  ChatKit-iOS
 //
 //  Created by ElonChan on 16/2/22.
 //  Copyright © 2016年 LeanCloud. All rights reserved.
@@ -26,18 +26,17 @@ NSString *const LCCKUserSystemServiceErrorDomain = @"LCCKUserSystemServiceErrorD
     __block NSArray<id<LCCKUserDelegate>> *blockUsers = [NSArray array];
     if (!_fetchProfilesBlock) {
         // This enforces implementing `-setFetchProfilesBlock:`.
-        NSString *reason = [NSString stringWithFormat:@"You must implement `-setFetchProfilesBlock:` to allow LeanCloudChatKit to get user information by user id."];
+        NSString *reason = [NSString stringWithFormat:@"You must implement `-setFetchProfilesBlock:` to allow ChatKit to get user information by user clientId."];
         @throw [NSException exceptionWithName:NSGenericException
                                        reason:reason
                                      userInfo:nil];
         return nil;
     }
-    LCCKFetchProfilesCallBack callback = ^(NSArray<id<LCCKUserDelegate>> *users, NSError *error) {
+    LCCKFetchProfilesCompletionHandler completionHandler = ^(NSArray<id<LCCKUserDelegate>> *users, NSError *error) {
         blockUsers = users;
         [self cacheUsers:users];
     };
-    _fetchProfilesBlock(userIds, callback);
-    
+    _fetchProfilesBlock(userIds, completionHandler);
     return blockUsers;
 }
 
@@ -57,7 +56,7 @@ NSString *const LCCKUserSystemServiceErrorDomain = @"LCCKUserSystemServiceErrorD
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
         if (!_fetchProfilesBlock) {
             // This enforces implementing `-setFetchProfilesBlock:`.
-            NSString *reason = [NSString stringWithFormat:@"You must implement `-setFetchProfilesBlock:` to allow LeanCloudChatKit to get user information by user id."];
+            NSString *reason = [NSString stringWithFormat:@"You must implement `-setFetchProfilesBlock:` to allow ChatKit to get user information by user clientId."];
             @throw [NSException exceptionWithName:NSGenericException
                                            reason:reason
                                          userInfo:nil];
@@ -238,7 +237,6 @@ NSString *const LCCKUserSystemServiceErrorDomain = @"LCCKUserSystemServiceErrorD
     }];
 }
 
-
 - (id<LCCKUserDelegate>)getCachedProfileIfExists:(NSString *)userId error:(NSError * __autoreleasing *)theError {
     id<LCCKUserDelegate> user;
     if (userId) {
@@ -281,6 +279,7 @@ NSString *const LCCKUserSystemServiceErrorDomain = @"LCCKUserSystemServiceErrorD
     }
 }
 
+//TODO:改为异步操作，启用本地缓存。只在关键操作时更新本地缓存，比如：签名机制对应的几个操作：加人、踢人等。
 - (void)cacheUsers:(NSArray<id<LCCKUserDelegate>> *)users {
     if (users.count > 0) {
         for (id<LCCKUserDelegate> user in users) {
@@ -306,7 +305,5 @@ NSString *const LCCKUserSystemServiceErrorDomain = @"LCCKUserSystemServiceErrorD
     }
     return _cachedUsers;
 }
-
-
 
 @end

@@ -23,7 +23,7 @@ NSString *const LCCKSessionServiceErrorDemain = @"LCCKSessionServiceErrorDemain"
 @implementation LCCKSessionService
 @synthesize clientId = _clientId;
 @synthesize client = _client;
-@synthesize sessionNotOpenedHandler = _sessionNotOpenedHandler;
+@synthesize forceReconnectSessionBlock = _forceReconnectSessionBlock;
 
 - (void)openWithClientId:(NSString *)clientId callback:(LCCKBooleanResultBlock)callback {
     _clientId = clientId;
@@ -37,8 +37,8 @@ NSString *const LCCKSessionServiceErrorDemain = @"LCCKSessionServiceErrorDemain"
     //    [[CDFailedMessageStore store] setupStoreWithDatabasePath:dbPath];
     _client = [[AVIMClient alloc] initWithClientId:clientId];
     _client.delegate = self;
-    /* 实现了generateSignatureBlock，将对 im的 open ，start(create conv),kick,invite 操作签名，更安全
-     可以从你的服务器获得签名，这里从云代码获取，需要部署云代码
+    /* 实现了generateSignatureBlock，将对 im 的 open , start(create conv), kick, invite 操作签名，更安全.
+     可以从你的服务器获得签名，也可以部署云代码获取 https://leancloud.cn/docs/leanengine_overview.html .
      */
     if ([[LCChatKit sharedInstance] generateSignatureBlock]) {
         _client.signatureDataSource = self;
@@ -47,11 +47,6 @@ NSString *const LCCKSessionServiceErrorDemain = @"LCCKSessionServiceErrorDemain"
         [self updateConnectStatus];
         !callback ?: callback(succeeded, error);
     }];
-    // 当用户表示喜欢 Giants，则为其订阅该频道。
-    AVInstallation *currentInstallation = [AVInstallation currentInstallation];
-    
-    [currentInstallation addUniqueObject:clientId forKey:@"channels"];
-    [currentInstallation saveInBackground];
 }
 
 - (void)closeWithCallback:(LCCKBooleanResultBlock)callback {
@@ -70,8 +65,23 @@ NSString *const LCCKSessionServiceErrorDemain = @"LCCKSessionServiceErrorDemain"
     }];
 }
 
-- (void)setSessionNotOpenedHandler:(LCCKSessionNotOpenedHandler)sessionNotOpenedHandler {
-    _sessionNotOpenedHandler = sessionNotOpenedHandler;
+- (void)setForceReconnectSessionBlock:(LCCKForceReconnectSessionBlock)forceReconnectSessionBlock {
+    _forceReconnectSessionBlock = forceReconnectSessionBlock;
+}
+
+- (void)reconnectForViewController:(UIViewController *)viewController callback:(LCCKBooleanResultBlock)aCallback {
+    LCCKForceReconnectSessionBlock forceReconnectSessionBlock = _forceReconnectSessionBlock;
+    LCCKBooleanResultBlock callback = ^(BOOL succeeded, NSError *error) {
+        LCCKHUDActionBlock HUDActionBlock = [LCCKUIService sharedInstance].HUDActionBlock;
+        if (succeeded) {
+            !HUDActionBlock ?: HUDActionBlock(nil, nil, LCCKLocalizedStrings(@"connectSucceeded"), LCCKMessageHUDActionTypeSuccess);
+        } else {
+            !HUDActionBlock ?: HUDActionBlock(nil, nil, LCCKLocalizedStrings(@"connectFailed"), LCCKMessageHUDActionTypeError);
+            LCCKLog(@"%@", error.description);
+        }
+        !aCallback ?: aCallback(succeeded, error);
+    };
+    !forceReconnectSessionBlock ?: forceReconnectSessionBlock(viewController, callback);
 }
 
 #pragma mark - AVIMClientDelegate
@@ -104,24 +114,18 @@ NSString *const LCCKSessionServiceErrorDemain = @"LCCKSessionServiceErrorDemain"
                        actionOnClientIds:(NSArray *)clientIds {
     __block AVIMSignature *signature_;
     LCCKGenerateSignatureBlock generateSignatureBlock = [[LCChatKit sharedInstance] generateSignatureBlock];
-    generateSignatureBlock(clientId, conversationId, action, clientIds, ^(AVIMSignature *signature, NSError *error) {
+    LCCKGenerateSignatureCompletionHandler completionHandler = ^(AVIMSignature *signature, NSError *error) {
         if (!error) {
             signature_ = signature;
         } else {
             NSLog(@"%@",error);
         }
-    });
+    };
+    generateSignatureBlock(clientId, conversationId, action, clientIds, completionHandler);
     return signature_;
 }
 
 #pragma mark - AVIMMessageDelegate
-
-// content : "this is message"
-- (void)conversation:(AVIMConversation *)conversation didReceiveCommonMessage:(AVIMMessage *)message {
-    // 不做处理，此应用没有用到
-    // 可以看做跟 AVIMTypedMessage 两个频道。构造消息和收消息的接口都不一样，互不干扰。
-    // 其实一般不用，有特殊的需求时可以考虑优先用 自定义 AVIMTypedMessage 来实现。见 AVIMCustomMessage 类
-}
 
 // content : "{\"_lctype\":-1,\"_lctext\":\"sdfdf\"}"  sdk 会解析好
 - (void)conversation:(AVIMConversation *)conversation didReceiveTypedMessage:(AVIMTypedMessage *)message {

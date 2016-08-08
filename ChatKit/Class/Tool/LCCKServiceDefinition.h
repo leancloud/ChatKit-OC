@@ -26,11 +26,13 @@
 
 @protocol LCCKSessionService <NSObject>
 
-typedef void (^LCCKSessionNotOpenedHandler)(UIViewController *viewController, LCCKBooleanResultBlock callback);
+typedef void (^LCCKReconnectSessionCompletionHandler)(BOOL succeeded, NSError *error);
+
+typedef void (^LCCKForceReconnectSessionBlock)(__kindof UIViewController *viewController, LCCKReconnectSessionCompletionHandler completionHandler);
 
 @property (nonatomic, copy, readonly) NSString *clientId;
 @property (nonatomic, strong, readonly) AVIMClient *client;
-@property (nonatomic, copy, readonly) LCCKSessionNotOpenedHandler sessionNotOpenedHandler;
+@property (nonatomic, copy, readonly) LCCKForceReconnectSessionBlock forceReconnectSessionBlock;
 
 /*!
  * @param clientId The peer id in your peer system, LeanCloudChatKit will get the current user's information by both this id and the method `-[LCCKChatService getProfilesForUserIds:callback:]`.
@@ -44,7 +46,7 @@ typedef void (^LCCKSessionNotOpenedHandler)(UIViewController *viewController, LC
  */
 - (void)closeWithCallback:(LCCKBooleanResultBlock)callback;
 
-- (void)setSessionNotOpenedHandler:(LCCKSessionNotOpenedHandler)sessionNotOpenedHandler;
+- (void)setForceReconnectSessionBlock:(LCCKForceReconnectSessionBlock)forceReconnectSessionBlock;
 
 @end
 
@@ -57,16 +59,16 @@ typedef void (^LCCKSessionNotOpenedHandler)(UIViewController *viewController, LC
 
 /*!
  *  @brief When fetching profiles completes, this callback will be invoked to notice LeanCloudChatKit
- *  @attention If you fetch users fails, you should reture nil, meanwhile, give the error reason. 
+ *  @attention If you fetch users fails, you should reture nil, meanwhile, give the error reason.
  */
-typedef void(^LCCKFetchProfilesCallBack)(NSArray<id<LCCKUserDelegate>> *users, NSError *error);
+typedef void(^LCCKFetchProfilesCompletionHandler)(NSArray<id<LCCKUserDelegate>> *users, NSError *error);
 
 /*!
  *  @brief When LeanCloudChatKit wants to fetch profiles, this block will be invoked.
  *  @param userIds User ids
- *  @param callback When fetching profiles completes, this callback will be invoked on main thread to notice LeanCloudChatKit.
+ *  @param completionHandler The block to execute with the users' information for the userIds. Always execute this block at some point during your implementation of this method on main thread. Specify users' information how you want ChatKit to show.
  */
-typedef void(^LCCKFetchProfilesBlock)(NSArray<NSString *> *userIds, LCCKFetchProfilesCallBack callback);
+typedef void(^LCCKFetchProfilesBlock)(NSArray<NSString *> *userIds, LCCKFetchProfilesCompletionHandler completionHandler);
 
 @property (nonatomic, copy) LCCKFetchProfilesBlock fetchProfilesBlock;
 
@@ -106,7 +108,7 @@ typedef void(^LCCKFetchProfilesBlock)(NSArray<NSString *> *userIds, LCCKFetchPro
  *  When fetching signature information completes, this callback will be invoked to notice LeanCloudChatKit.
  *  @attention If you fetch AVIMSignature fails, you should reture nil, meanwhile, give the error reason.
  */
-typedef void(^LCCKGenerateSignatureCallBack)(AVIMSignature *signature, NSError *error);
+typedef void(^LCCKGenerateSignatureCompletionHandler)(AVIMSignature *signature, NSError *error);
 
 /*!
  *  @brief If implemeted, this block will be invoked automatically for pinning signature to these actions: open, start(create conversation), kick, invite.
@@ -118,9 +120,9 @@ typedef void(^LCCKGenerateSignatureCallBack)(AVIMSignature *signature, NSError *
                     "add": invite myself or others to the conversation
                     "remove": kick someone out the conversation
  *  @param clientIds － Target id list for the action
- *  @param callback - When fetching signature information complites, this callback will be invoked on main thread to notice LeanCloudChatKit.
+ *  @param completionHandler The block to execute with the signature information for session. Always execute this block at some point during your implementation of this method on main thread. Specify signature information how you want ChatKit pin to these actions: open, start(create conversation), kick, invite.
  */
-typedef void(^LCCKGenerateSignatureBlock)(NSString *clientId, NSString *conversationId, NSString *action, NSArray *clientIds, LCCKGenerateSignatureCallBack callback);
+typedef void(^LCCKGenerateSignatureBlock)(NSString *clientId, NSString *conversationId, NSString *action, NSArray *clientIds, LCCKGenerateSignatureCompletionHandler completionHandler);
 
 @property (nonatomic, copy) LCCKGenerateSignatureBlock generateSignatureBlock;
 
@@ -208,6 +210,7 @@ typedef void(^LCCKPreviewLocationMessageBlock)(CLLocation *location, NSString *g
  */
 - (void)setPreviewLocationMessageBlock:(LCCKPreviewLocationMessageBlock)previewLocationMessageBlock;
 
+//TODO:可自定义长按能响应的消息类型
 /*!
  *  ChatKit会在长按消息时，调用这个block
  *  @param message 被长按的消息
@@ -236,7 +239,7 @@ typedef NSArray<LCCKMenuItem *> *(^LCCKLongPressMessageBlock)(LCCKMessage *messa
  *  @param subtitle 子标题
  *  @param type 类型
  */
-typedef void(^LCCKShowNotificationBlock)(UIViewController *viewController, NSString *title, NSString *subtitle, LCCKMessageNotificationType type);
+typedef void(^LCCKShowNotificationBlock)(__kindof UIViewController *viewController, NSString *title, NSString *subtitle, LCCKMessageNotificationType type);
 
 @property (nonatomic, copy) LCCKShowNotificationBlock showNotificationBlock;
 
@@ -258,7 +261,7 @@ typedef void(^LCCKShowNotificationBlock)(UIViewController *viewController, NSStr
  *  @param type 类型
  */
 
-typedef void(^LCCKHUDActionBlock)(UIViewController *viewController, UIView *view, NSString *title, LCCKMessageHUDActionType type);
+typedef void(^LCCKHUDActionBlock)(__kindof UIViewController *viewController, UIView *view, NSString *title, LCCKMessageHUDActionType type);
 
 @property (nonatomic, copy) LCCKHUDActionBlock HUDActionBlock;
 
@@ -320,8 +323,27 @@ typedef CGFloat (^LCCKAvatarImageViewCornerRadiusBlock)(CGSize avatarImageViewSi
 ///=============================================================================
 
 typedef void (^LCCKConversationResultBlock)(AVIMConversation *conversation, NSError *error);
+typedef void (^LCCKFetchConversationHandler) (AVIMConversation *conversation, LCCKConversationViewController *conversationController);
 
 @protocol LCCKConversationService <NSObject>
+
+@property (nonatomic, copy) LCCKFetchConversationHandler fetchConversationHandler;
+
+/*!
+ * 设置获取 AVIMConversation 对象结束后的 Handler。 这里可以做异常处理，比如获取失败等操作。
+ * 获取失败时，LCCKConversationHandler 返回值中的AVIMConversation 为 nil，成功时为正确的 conversation 值。
+ */
+- (void)setFetchConversationHandler:(LCCKFetchConversationHandler)fetchConversationHandler;
+
+typedef void (^LCCKLoadLatestMessagesHandler)(LCCKConversationViewController *conversationController, BOOL succeeded, NSError *error);
+
+@property (nonatomic, copy) LCCKLoadLatestMessagesHandler loadLatestMessagesHandler;
+
+/*!
+ * 设置获取历史纪录结束时的 Handler。 这里可以做异常处理，比如获取失败等操作。
+ * 获取失败时，LCCKViewControllerBooleanResultBlock 返回值中的 error 不为 nil，包含错误原因，成功时 succeeded 值为 YES。
+ */
+- (void)setLoadLatestMessagesHandler:(LCCKLoadLatestMessagesHandler)loadLatestMessagesHandler;
 
 - (void)createConversationWithMembers:(NSArray *)members type:(LCCKConversationType)type unique:(BOOL)unique callback:(AVIMConversationResultBlock)callback;
 
@@ -408,7 +430,7 @@ typedef NSArray *(^LCCKConversationEditActionsBlock)(NSIndexPath *indexPath, NSA
  */
 - (void)setConversationEditActionBlock:(LCCKConversationEditActionsBlock)conversationEditActionBlock;
 
-typedef void(^LCCKMarkBadgeWithTotalUnreadCountBlock)(NSInteger totalUnreadCount, UIViewController *controller);
+typedef void(^LCCKMarkBadgeWithTotalUnreadCountBlock)(NSInteger totalUnreadCount, __kindof UIViewController *controller);
 
 @property (nonatomic, copy) LCCKMarkBadgeWithTotalUnreadCountBlock markBadgeWithTotalUnreadCountBlock;
 

@@ -29,4 +29,6 @@ FOUNDATION_EXTERN NSString *const LCCKSessionServiceErrorDemain;
  */
 @property (nonatomic, assign, readonly) BOOL connect;
 
+- (void)reconnectForViewController:(UIViewController *)reconnectForViewController callback:(LCCKBooleanResultBlock)aCallback;
+
 @end
