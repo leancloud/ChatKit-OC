@@ -41,7 +41,7 @@
 
 @interface LCCKConversationViewModel ()
 
-@property (nonatomic, strong) LCCKConversationViewController *parentConversationViewController;
+@property (nonatomic, weak) LCCKConversationViewController *parentConversationViewController;
 @property (nonatomic, strong) NSMutableArray<LCCKMessage *> *dataArray;
 @property (nonatomic, strong) NSMutableArray<AVIMTypedMessage *> *avimTypedMessage;
 
@@ -59,7 +59,7 @@
     if (self = [super init]) {
         _dataArray = [NSMutableArray array];
         _avimTypedMessage = [NSMutableArray array];
-        _parentConversationViewController = parentConversationViewController;
+        self.parentConversationViewController = parentConversationViewController;
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveMessage:) name:LCCKNotificationMessageReceived object:nil];
     }
     return self;
@@ -98,8 +98,8 @@
 //FIXME:because of Memory Leak ,this method will be invoked for many times
 - (void)receiveMessage:(NSNotification *)notification {
     AVIMTypedMessage *message = notification.object;
-    NSString *currentConversationId = [LCCKConversationService sharedInstance].currentConversationId;
-    if ([message.conversationId isEqualToString:currentConversationId]) {
+    BOOL isCurrentConversationMessage = [message.conversationId isEqualToString:self.parentConversationViewController.conversation.conversationId];
+    if (isCurrentConversationMessage) {
         AVIMConversation *currentConversation = self.parentConversationViewController.conversation;
         if (currentConversation.muted == NO) {
             [[LCCKSoundManager defaultManager] playReceiveSoundIfNeed];
@@ -300,16 +300,19 @@ fromTimestamp     |    toDate   |                |  上次上拉刷新顶端，�
 
 - (void)sendMessage:(LCCKMessage *)message {
     self.parentConversationViewController.allowScrollToBottom = YES;
+    NSTimeInterval date = [[NSDate date] timeIntervalSince1970] * 1000;
+    NSString *messageUUID =  [NSString stringWithFormat:@"%@", @(date)];
+    message.localMessageId = messageUUID;
     __weak __typeof(&*self) wself = self;
     [self sendMessage:message
         progressBlock:^(NSInteger percentDone) {
             [self.delegate messageSendStateChanged:LCCKMessageSendStateSending withProgress:percentDone/100.f forIndex:[self.dataArray indexOfObject:message]];
         }
-              success:^(NSString *messageUUID) {
+              success:^(BOOL succeeded, NSError *error) {
                   message.sendStatus = LCCKMessageSendStateSuccess;
                   [[LCCKSoundManager defaultManager] playSendSoundIfNeed];
                   [self.delegate messageSendStateChanged:LCCKMessageSendStateSuccess withProgress:1.0f forIndex:[self.dataArray indexOfObject:message]];
-              } failed:^(NSString *messageUUID, NSError *error) {
+              } failed:^(BOOL succeeded, NSError *error) {
                   __strong __typeof(wself)self = wself;
                   message.sendStatus = LCCKMessageSendStateFailed;
                   [self.delegate messageSendStateChanged:LCCKMessageSendStateFailed withProgress:0.0f forIndex:[self.dataArray indexOfObject:message]];
@@ -319,8 +322,8 @@ fromTimestamp     |    toDate   |                |  上次上拉刷新顶端，�
 
 - (void)sendMessage:(LCCKMessage *)message
       progressBlock:(AVProgressBlock)progressBlock
-            success:(LCCKSendMessageSuccessBlock)success
-             failed:(LCCKSendMessageSuccessFailedBlock)failed {
+            success:(LCCKBooleanResultBlock)success
+             failed:(LCCKBooleanResultBlock)failed {
     [self.delegate messageSendStateChanged:LCCKMessageSendStateSending withProgress:0.0f forIndex:[self.dataArray indexOfObject:message]];
     message.conversationId = [LCCKConversationService sharedInstance].currentConversationId ?: [LCCKConversationService sharedInstance].currentConversation.conversationId;
     NSAssert(message.conversationId, @"currentConversationId is nil");
@@ -331,17 +334,14 @@ fromTimestamp     |    toDate   |                |  上次上拉刷新顶端，�
     AVIMTypedMessage *avimTypedMessage = [AVIMTypedMessage lcck_messageWithLCCKMessage:message];
     [self.avimTypedMessage addObject:avimTypedMessage];
     [self preloadMessageToTableView:message];
-    NSTimeInterval date = [[NSDate date] timeIntervalSince1970] * 1000;
-    NSString *messageUUID =  [NSString stringWithFormat:@"%@", @(date)];
     [[LCCKConversationService sharedInstance] sendMessage:avimTypedMessage
                                              conversation:[LCCKConversationService sharedInstance].currentConversation
                                             progressBlock:progressBlock
                                                  callback:^(BOOL succeeded, NSError *error) {
-                                                     message.localMessageId = messageUUID;
                                                      if (error) {
-                                                         !failed ?: failed(messageUUID, error);
+                                                         !failed ?: failed(YES, error);
                                                      } else {
-                                                         !success ?: success(messageUUID);
+                                                         !success ?: success(NO, nil);
                                                      }
                                                      // cache file type messages even failed
                                                      [LCCKConversationService cacheFileTypeMessages:@[avimTypedMessage] callback:nil];
