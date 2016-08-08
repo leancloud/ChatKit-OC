@@ -741,7 +741,6 @@ NSLocalizedStringFromTableInBundle((key), nil, [NSBundle bundleWithPath:[[NSBund
 }
 
 - (void)viewWillAppear:(BOOL)animated {
-    // Super
     [super viewWillAppear:animated];
     
     // Update
@@ -786,17 +785,17 @@ NSLocalizedStringFromTableInBundle((key), nil, [NSBundle bundleWithPath:[[NSBund
         return YES;
     }
 
-    if(_isdraggingPhoto) {
-        if(_statusBarOriginallyHidden) {
-            return YES;
-        }
-        else {
-            return NO;
-        }
-    }
-    else {
-        return [self areControlsHidden];
-    }
+//    if(_isdraggingPhoto) {
+//        if(_statusBarOriginallyHidden) {
+//            return YES;
+//        }
+//        else {
+//            return NO;
+//        }
+//    }
+//    else {
+//        return [self areControlsHidden];
+//    }
 }
 
 - (UIStatusBarAnimation)preferredStatusBarUpdateAnimation {
