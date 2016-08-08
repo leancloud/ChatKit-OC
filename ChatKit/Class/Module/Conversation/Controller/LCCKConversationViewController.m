@@ -30,7 +30,11 @@
 #import "LCCKSafariActivity.h"
 #import "LCCKAlertController.h"
 #import "LCCKPhotoBrowser.h"
+
+#ifdef CYLDebugging
 #import <MLeaksFinder/MLeaksFinder.h>
+#endif
+
 
 @interface LCCKConversationViewController () <LCCKChatBarDelegate, LCCKAVAudioPlayerDelegate, LCCKChatMessageCellDelegate, LCCKConversationViewModelDelegate, LCCKPhotoBrowserDelegate>
 
@@ -142,6 +146,7 @@
     }
 }
 
+#ifdef CYLDebugging
 - (BOOL)willDealloc {
     if (![super willDealloc]) {
         return NO;
@@ -149,6 +154,8 @@
     MLCheck(self.chatViewModel);
     return YES;
 }
+#endif
+
 
 /**
  *  lazy load chatViewModel
