@@ -58,7 +58,7 @@ typedef void (^LCCKForceReconnectSessionBlock)(__kindof UIViewController *viewCo
 @protocol LCCKUserSystemService <NSObject>
 
 /*!
- *  @brief When fetching profiles completes, this callback will be invoked to notice LeanCloudChatKit
+ *  @brief The block to execute with the users' information for the userIds. Always execute this block at some point when fetching profiles completes on main thread. Specify users' information how you want ChatKit to show.
  *  @attention If you fetch users fails, you should reture nil, meanwhile, give the error reason.
  */
 typedef void(^LCCKFetchProfilesCompletionHandler)(NSArray<id<LCCKUserDelegate>> *users, NSError *error);
@@ -105,7 +105,7 @@ typedef void(^LCCKFetchProfilesBlock)(NSArray<NSString *> *userIds, LCCKFetchPro
 @protocol LCCKSignatureService <NSObject>
 
 /*!
- *  When fetching signature information completes, this callback will be invoked to notice LeanCloudChatKit.
+ *  @brief The block to execute with the signature information for session. Always execute this block at some point when fetching signature information completes on main thread. Specify signature information how you want ChatKit pin to these actions: open, start(create conversation), kick, invite.
  *  @attention If you fetch AVIMSignature fails, you should reture nil, meanwhile, give the error reason.
  */
 typedef void(^LCCKGenerateSignatureCompletionHandler)(AVIMSignature *signature, NSError *error);

@@ -292,7 +292,7 @@ static NSMutableDictionary *_sharedInstances = nil;
     }];
     
     [[LCChatKit sharedInstance] setForceReconnectSessionBlock:^(__kindof UIViewController *viewController, LCCKReconnectSessionCompletionHandler completionHandler) {
-        [[self class] lcck_showMessage:@"正在重新连接聊天服务..." toView:viewController.view];
+        [[self class] lcck_showMessage:@"正在重连聊天服务..." toView:viewController.view];
         [[LCChatKit sharedInstance] openWithClientId:[LCChatKit sharedInstance].clientId callback:^(BOOL succeeded, NSError *error) {
             [[self class] lcck_hideHUDForView:viewController.view];
             !completionHandler ?: completionHandler(succeeded, error);
@@ -349,9 +349,7 @@ typedef void (^UITableViewRowActionHandler)(UITableViewRowAction *action, NSInde
     UITableViewRowAction *actionItemMore = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleDefault
                                                                               title:title
                                                                             handler:handler];
-    
     actionItemMore.backgroundColor = [UIColor colorWithRed:0.78f green:0.78f blue:0.8f alpha:1.0];
-    
     UITableViewRowAction *actionItemDelete = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleDefault
                                                                                 title:LCCKLocalizedStrings(@"Delete")
                                                                               handler:^(UITableViewRowAction *action, NSIndexPath *indexPath) {
@@ -540,7 +538,6 @@ void dispatch_async_limit(dispatch_queue_t queue, NSUInteger limitSemaphoreCount
     }];
     UINavigationController *navigationViewController = [[UINavigationController alloc] initWithRootViewController:contactListViewController];
     [conversationViewController presentViewController:navigationViewController animated:YES completion:nil];
-    
 }
 
 - (void)examplePreviewImageMessageWithInitialIndex:(NSUInteger)index allVisibleImages:(NSArray *)allVisibleImages allVisibleThumbs:(NSArray *)allVisibleThumbs {

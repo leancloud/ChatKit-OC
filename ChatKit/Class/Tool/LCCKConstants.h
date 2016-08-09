@@ -53,6 +53,10 @@ static NSString *const LCCKNotificationUnreadsUpdated = @"LCCKNotificationUnread
  *  消息到来了，通知聊天页面和最近对话页面刷新
  */
 static NSString *const LCCKNotificationMessageReceived = @"LCCKNotificationMessageReceived";
+/**
+ *  消息到来了，通知聊天页面和最近对话页面刷新
+ */
+static NSString *const LCCKNotificationCustomMessageReceived = @"LCCKNotificationCustomMessageReceived";
 
 /**
  *  消息到达对方了，通知聊天页面更改消息状态

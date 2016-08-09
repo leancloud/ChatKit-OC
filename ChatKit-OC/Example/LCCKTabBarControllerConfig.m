@@ -21,6 +21,7 @@
 @property (nonatomic, readwrite, strong) CYLTabBarController *tabBarController;
 @property (nonatomic, strong) LCCKConversationListViewController *firstViewController;
 @property (nonatomic, strong) LCCKContactListViewController *secondViewController;
+
 @end
 
 @implementation LCCKTabBarControllerConfig
@@ -82,12 +83,12 @@
 
 - (NSArray *)tabBarItemsAttributesForController {
     NSDictionary *dict1 = @{
-                            //                            CYLTabBarItemTitle : @"消息",
+                         // CYLTabBarItemTitle : @"消息",
                             CYLTabBarItemImage : @"tabbar_chat_normal",
                             CYLTabBarItemSelectedImage : @"tabbar_chat_active",
                             };
     NSDictionary *dict2 = @{
-                            //                            CYLTabBarItemTitle : @"联系人",
+                         // CYLTabBarItemTitle : @"联系人",
                             CYLTabBarItemImage : @"tabbar_contacts_normal",
                             CYLTabBarItemSelectedImage : @"tabbar_contacts_active",
                             };

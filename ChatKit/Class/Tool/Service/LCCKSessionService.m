@@ -129,25 +129,24 @@ NSString *const LCCKSessionServiceErrorDemain = @"LCCKSessionServiceErrorDemain"
 
 // content : "{\"_lctype\":-1,\"_lctext\":\"sdfdf\"}"  sdk 会解析好
 - (void)conversation:(AVIMConversation *)conversation didReceiveTypedMessage:(AVIMTypedMessage *)message {
-    if (message.messageId) {
-        if (conversation.creator == nil && [[LCCKConversationService sharedInstance] isRecentConversationExistWithConversationId:conversation.conversationId] == NO) {
-            [conversation fetchWithCallback:^(BOOL succeeded, NSError *error) {
-                if (error) {
-                    LCCKLog(@"%@", error);
-                } else {
-                    [self receiveMessage:message conversation:conversation];
-                }
-            }];
-        } else {
-            [self receiveMessage:message conversation:conversation];
-        }
-    } else {
+    if (!message.messageId) {
         LCCKLog(@"Receive Message , but MessageId is nil");
+        return;
+    }
+    if (conversation.creator == nil && [[LCCKConversationService sharedInstance] isRecentConversationExistWithConversationId:conversation.conversationId] == NO) {
+        [conversation fetchWithCallback:^(BOOL succeeded, NSError *error) {
+            if (error) {
+                LCCKLog(@"%@", error);
+            } else {
+                [self receiveMessage:message conversation:conversation];
+            }
+        }];
+    } else {
+        [self receiveMessage:message conversation:conversation];
     }
 }
 
 - (void)conversation:(AVIMConversation *)conversation messageDelivered:(AVIMMessage *)message {
-    LCCKLog();
     if (message != nil) {
         [[NSNotificationCenter defaultCenter] postNotificationName:LCCKNotificationMessageDelivered object:message];
     }
@@ -155,8 +154,8 @@ NSString *const LCCKSessionServiceErrorDemain = @"LCCKSessionServiceErrorDemain"
 
 //TODO:推荐使用这种方式接收离线消息
 - (void)conversation:(AVIMConversation *)conversation didReceiveUnread:(NSInteger)unread {
-    // 需要开启 AVIMUserOptionUseUnread 选项，见 init
-    NSLog(@"conversatoin:%@ didReceiveUnread:%@", conversation, @(unread));
+    // 需要开启 AVIMUserOptionUseUnread 选项
+    LCCKLog(@"conversatoin:%@ didReceiveUnread:%@", conversation, @(unread));
     [conversation markAsReadInBackground];
 }
 
@@ -179,6 +178,9 @@ NSString *const LCCKSessionServiceErrorDemain = @"LCCKSessionServiceErrorDemain"
         }
     }
     [[NSNotificationCenter defaultCenter] postNotificationName:LCCKNotificationMessageReceived object:message];
+    if (message.mediaType > 0) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:LCCKNotificationCustomMessageReceived object:message];
+    }
 }
 
 #pragma mark - mention
