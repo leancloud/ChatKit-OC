@@ -14,8 +14,8 @@
 #import "LCCKChatUntiles.h"
 #import "LCCKMessage.h"
 
-#if __has_include(<MLLinkLabel/MLLinkLabel.h>)
-    #import <MLLinkLabel/MLLinkLabel.h>
+#if __has_include(<MLLabel/MLLinkLabel.h>)
+    #import <MLLabel/MLLinkLabel.h>
 #else
     #import "MLLinkLabel.h"
 #endif
