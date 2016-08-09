@@ -37,7 +37,7 @@
 @property (nonatomic, strong, readonly) CLLocation *location;
 
 @property (nonatomic, assign, readonly) LCCKMessageType messageMediaType;
-@property (nonatomic, assign) LCCKConversationType messageGroupType;
+//@property (nonatomic, assign) LCCKConversationType messageGroupType;
 @property (nonatomic, assign, readonly) LCCKMessageReadState messageReadState;
 @property (nonatomic, copy, readonly) NSString *serverMessageId;
 

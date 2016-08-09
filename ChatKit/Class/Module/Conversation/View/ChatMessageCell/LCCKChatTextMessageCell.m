@@ -12,7 +12,6 @@ static CGFloat LCCK_MSG_SPACE_LEFT = 16;
 static CGFloat LCCK_MSG_SPACE_RIGHT = 16;
 static CGFloat LCCK_MSG_TEXT_FONT_SIZE = 14;
 
-#define SHOW_SIMPLE_TIPS(m) [[[UIAlertView alloc] initWithTitle:@"" message:(m) delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil]show];
 #define LCCK_TEXT_MSG_CELL_TEXT_COLOR [UIColor blackColor]
 
 #import "LCCKChatTextMessageCell.h"
@@ -83,10 +82,6 @@ static CGFloat LCCK_MSG_TEXT_FONT_SIZE = 14;
     return _messageTextLabel;
 }
 
-- (void)tap
-{
-    SHOW_SIMPLE_TIPS(@"tapped");
-}
 - (void)doubleTapMessageContentViewGestureRecognizerHandle:(UITapGestureRecognizer *)tapGestureRecognizer {
     if (tapGestureRecognizer.state == UIGestureRecognizerStateEnded) {
         if ([self.delegate respondsToSelector:@selector(textMessageCellDoubleTapped:)]) {
@@ -107,11 +102,5 @@ static CGFloat LCCK_MSG_TEXT_FONT_SIZE = 14;
     }
     return _textStyle;
 }
-
-//-(void)prepareForReuse {
-//    [super prepareForReuse];
-//    self.nicknameLabel = @"";
-//    self.avatarButton = nil;
-//}
 
 @end

@@ -11,28 +11,14 @@
 
 @implementation LCCKCellIdentifierFactory
 
-+ (NSString *)cellIdentifierForMessageConfiguration:(LCCKMessage *)message {
++ (NSString *)cellIdentifierForMessageConfiguration:(LCCKMessage *)message conversationType:(LCCKConversationType)conversationType {
     LCCKMessageType messageType = message.messageMediaType;
     LCCKMessageOwnerType messageOwner = message.ownerType;
-    LCCKConversationType messageChat = message.messageGroupType;
     NSString *identifierKey = @"LCCKChatMessageCell";
     NSString *ownerKey;
     NSString *typeKey;
     NSString *groupKey;
-    switch (messageOwner) {
-        case LCCKMessageOwnerTypeSystem:
-            ownerKey = @"OwnerSystem";
-            break;
-        case LCCKMessageOwnerTypeOther:
-            ownerKey = @"OwnerOther";
-            break;
-        case LCCKMessageOwnerTypeSelf:
-            ownerKey = @"OwnerSelf";
-            break;
-        default:
-            NSAssert(NO, @"Message Owner Unknow");
-            break;
-    }
+
     
     switch (messageType) {
         case LCCKMessageTypeVoice:
@@ -59,7 +45,7 @@
 //            NSAssert(NO, @"Message Type Unknow");
             break;
     }
-    switch (messageChat) {
+    switch (conversationType) {
         case LCCKConversationTypeGroup:
             groupKey = @"GroupCell";
             break;
@@ -70,6 +56,23 @@
             groupKey = @"";
             break;
     }
+    
+    switch (messageOwner) {
+        case LCCKMessageOwnerTypeSystem:
+            ownerKey = @"OwnerSystem";
+            break;
+        case LCCKMessageOwnerTypeOther:
+            ownerKey = @"OwnerOther";
+            break;
+        case LCCKMessageOwnerTypeSelf:
+            ownerKey = @"OwnerSelf";
+            groupKey = @"SingleCell";
+            break;
+        default:
+            NSAssert(NO, @"Message Owner Unknow");
+            break;
+    }
+    
     NSString *cellIdentifier = [NSString stringWithFormat:@"%@_%@_%@_%@",identifierKey,ownerKey,typeKey,groupKey];
     return cellIdentifier;
 }

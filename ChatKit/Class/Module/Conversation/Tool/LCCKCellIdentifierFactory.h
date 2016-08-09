@@ -15,6 +15,6 @@
 /**
  *  用来获取cellIdentifier
  */
-+ (NSString *)cellIdentifierForMessageConfiguration:(LCCKMessage *)message;
++ (NSString *)cellIdentifierForMessageConfiguration:(LCCKMessage *)message conversationType:(LCCKConversationType)conversationType;
 
 @end

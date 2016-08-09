@@ -77,7 +77,7 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     LCCKMessage *message = self.dataArray[indexPath.row];
-    NSString *identifier = [LCCKCellIdentifierFactory cellIdentifierForMessageConfiguration:message];
+    NSString *identifier = [LCCKCellIdentifierFactory cellIdentifierForMessageConfiguration:message conversationType:self.parentConversationViewController.conversation.lcck_type];
     LCCKChatMessageCell *messageCell = [tableView dequeueReusableCellWithIdentifier:identifier forIndexPath:indexPath];
     messageCell.tableView = self.parentConversationViewController.tableView;
     messageCell.indexPath = indexPath;
@@ -88,7 +88,7 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     LCCKMessage *message = self.dataArray[indexPath.row];
-    NSString *identifier = [LCCKCellIdentifierFactory cellIdentifierForMessageConfiguration:message];
+    NSString *identifier = [LCCKCellIdentifierFactory cellIdentifierForMessageConfiguration:message conversationType:self.parentConversationViewController.conversation.lcck_type];
     return [tableView fd_heightForCellWithIdentifier:identifier cacheByIndexPath:indexPath configuration:^(LCCKChatMessageCell *cell) {
         [cell configureCellWithData:message];
     }];

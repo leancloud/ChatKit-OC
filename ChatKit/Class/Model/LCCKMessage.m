@@ -341,19 +341,6 @@
         }
     }
     
-    if (!message.conversationId) {
-        lcckMessage.messageGroupType = [LCCKConversationService sharedInstance].currentConversation.lcck_type;
-    } else {
-    [[LCCKConversationService sharedInstance] fecthConversationWithConversationId:message.conversationId callback:^(AVIMConversation *conversation, NSError *error) {
-        if (conversation) {
-            lcckMessage.messageGroupType = conversation.lcck_type;
-        } else {
-            // 消息默认与当前对话的单群聊类型一致
-            lcckMessage.messageGroupType = [LCCKConversationService sharedInstance].currentConversation.lcck_type;
-        }
-    }];
-    }
-    
     if ([[LCCKSessionService sharedInstance].clientId isEqualToString:message.clientId]) {
         lcckMessage.ownerType = LCCKMessageOwnerTypeSelf;
     } else {
@@ -415,7 +402,7 @@
         
         _conversationId = [aDecoder decodeObjectForKey:@"conversationId"];
         _messageMediaType = [aDecoder decodeIntForKey:@"messageMediaType"];
-        _messageGroupType = [aDecoder decodeIntForKey:@"messageGroupType"];
+//        _messageGroupType = [aDecoder decodeIntForKey:@"messageGroupType"];
         _messageReadState = [aDecoder decodeIntForKey:@"messageReadState"];
         _ownerType = [aDecoder decodeIntForKey:@"ownerType"];
         _read = [aDecoder decodeBoolForKey:@"read"];
@@ -456,7 +443,7 @@
     
     [aCoder encodeObject:self.conversationId forKey:@"conversationId"];
     [aCoder encodeInt:self.messageMediaType forKey:@"messageMediaType"];
-    [aCoder encodeInt:self.messageGroupType forKey:@"messageGroupType"];
+//    [aCoder encodeInt:self.messageGroupType forKey:@"messageGroupType"];
     [aCoder encodeInt:self.messageReadState forKey:@"messageReadState"];
     [aCoder encodeInt:self.ownerType forKey:@"ownerType"];
     [aCoder encodeBool:self.read forKey:@"read"];
@@ -533,7 +520,6 @@
                                                                                 sender:[self.sender copyWithZone:nil]
                                                                            timestamp:self.timestamp
                                                                      serverMessageId:[self.serverMessageId copy]];
-
         }
             break;
         case LCCKMessageTypeSystem: {
@@ -551,7 +537,7 @@
     message.localMessageId = [self.localMessageId copy];
     message.conversationId = [self.conversationId copy];
     message.messageMediaType = self.messageMediaType;
-    message.messageGroupType = self.messageGroupType;
+//    message.messageGroupType = self.messageGroupType;
     message.messageReadState = self.messageReadState;
     message.sendStatus = self.sendStatus;
     message.read = self.read;
