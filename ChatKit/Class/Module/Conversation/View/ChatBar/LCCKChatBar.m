@@ -247,7 +247,6 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
     [UIView animateWithDuration:LCCKAnimateDuration animations:^{
         [self layoutIfNeeded];
     } completion:nil];
-    
 }
 
 /*!
@@ -274,7 +273,6 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
         }];
         [self chatBarFrameDidChangeShouldScrollToBottom:YES];
     }
-    [self updateChatBarKeyBoardConstraints];
     if (textView.scrollEnabled && self.allowTextViewContentOffset) {
         if (newTextViewHeight == kLCCKChatBarTextViewFrameMaxHeight) {
             [textView setContentOffset:CGPointMake(0, textView.contentSize.height - newTextViewHeight) animated:YES];
@@ -421,20 +419,22 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
 }
 
 - (void)appendString:(NSString *)string beginInputing:(BOOL)beginInputing {
-    [self appendString:string beginInputing:beginInputing animated:YES];
-}
-
-- (void)appendString:(NSString *)string beginInputing:(BOOL)beginInputing animated:(BOOL)animated {
     self.allowTextViewContentOffset = YES;
-    if ([self.textView.text hasSuffix:@"@"] && [string hasPrefix:@" "]) {
-        self.textView.text = [self.textView.text substringToIndex:[self.textView.text length] - 1];
+    if (self.textView.text.length > 0 && [string hasPrefix:@"@"] && ![self.textView.text hasSuffix:@" "]) {
+        self.textView.text = [self.textView.text stringByAppendingString:@" "];
     }
-    NSString *appendedString = [self.textView.text stringByAppendingString:string];
+    NSString *textViewText;
+    //特殊情况：处于语音按钮显示时，self.textView.text无信息，但self.cachedText有信息
+    if (self.textView.text.length == 0 && self.cachedText.length > 0) {
+        textViewText = self.cachedText;
+    } else {
+        textViewText = self.textView.text;
+    }
+    NSString *appendedString = [textViewText stringByAppendingString:string];
     self.cachedText = appendedString;
     self.textView.text = appendedString;
-    //FIXME:语音条状态下，丢失cacheText
     if (beginInputing && self.keyboardSize.height == 0) {
-        [self beginInputingWithAnimated:animated];
+        [self beginInputing];
     } else {
         [self updateChatBarConstraintsIfNeeded];
     }
@@ -444,21 +444,8 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
     [self appendString:string beginInputing:YES];
 }
 
-- (void)beginInputingWithAnimated:(BOOL)animated {
-    if (animated) {
-        [self.textView becomeFirstResponder];
-        return;
-    }
-    [UIView beginAnimations:nil context:nil];
-    [UIView setAnimationDuration:0.0];
-    [UIView setAnimationDelay:0.0];
-    [UIView setAnimationCurve:UIViewAnimationCurveLinear];
-    [self.textView becomeFirstResponder];
-    [UIView commitAnimations];
-}
-
 - (void)beginInputing {
-    [self beginInputingWithAnimated:NO];
+    [self.textView becomeFirstResponder];
 }
 
 #pragma mark - Private Methods
@@ -473,6 +460,7 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
     if (_showType == LCCKFunctionViewShowKeyboard) {
         _showType = LCCKFunctionViewShowNothing;
     }
+    [self updateChatBarKeyBoardConstraints];
     [self updateChatBarConstraintsIfNeeded];
 }
 
@@ -484,7 +472,7 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
     }
     CGFloat oldHeight = self.keyboardSize.height;
     self.keyboardSize = [[notification.userInfo objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue].size;
-    //FIXME:兼容搜狗输入法：一次键盘事件会通知两次，且键盘高度不一。
+    //兼容搜狗输入法：一次键盘事件会通知两次，且键盘高度不一。
     if (self.keyboardSize.height != oldHeight) {
         _showType = LCCKFunctionViewShowNothing;
     }
@@ -493,6 +481,7 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
         return;
     }
     self.allowTextViewContentOffset = YES;
+    [self updateChatBarKeyBoardConstraints];
     self.showType = LCCKFunctionViewShowKeyboard;
 }
 
@@ -610,7 +599,6 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
 
 - (void)buttonAction:(UIButton *)button {
     LCCKFunctionViewShowType showType = button.tag;
-    
     //更改对应按钮的状态
     if (button == self.faceButton) {
         [self.faceButton setSelected:!self.faceButton.selected];
@@ -625,12 +613,10 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
         [self.moreButton setSelected:NO];
         [self.voiceButton setSelected:!self.voiceButton.selected];
     }
-    
     if (!button.selected) {
         showType = LCCKFunctionViewShowKeyboard;
-        [self beginInputingWithAnimated:YES];
+        [self beginInputing];
     }
-    
     self.showType = showType;
 }
 

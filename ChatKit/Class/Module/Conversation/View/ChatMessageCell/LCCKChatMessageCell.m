@@ -208,7 +208,6 @@ static CGFloat const LCCK_MSG_CELL_NICKNAME_FONT_SIZE = 12;
     
     self.messageContentView.layer.mask.contents = (__bridge id _Nullable)(self.messageContentBackgroundImageView.image.CGImage);
     [self.contentView insertSubview:self.messageContentBackgroundImageView belowSubview:self.messageContentView];
-    
     [self updateConstraintsIfNeeded];
     
     //For Link handle
@@ -219,12 +218,10 @@ static CGFloat const LCCK_MSG_CELL_NICKNAME_FONT_SIZE = 12;
     UITapGestureRecognizer *avatarImageViewTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(avatarImageViewHandleTap:)];
     self.avatarImageView.userInteractionEnabled = YES;
     [self.avatarImageView addGestureRecognizer:avatarImageViewTap];
-    //    }
 
     UILongPressGestureRecognizer *recognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleLongPress:)];
     [recognizer setMinimumPressDuration:0.4f];
     [self addGestureRecognizer:recognizer];
-    
 }
 
 #pragma mark - Public Methods
@@ -252,15 +249,18 @@ static CGFloat const LCCK_MSG_CELL_NICKNAME_FONT_SIZE = 12;
         if (CGRectContainsPoint(self.messageContentView.frame, tapPoint)) {
             [self.delegate messageCellTappedMessage:self];
         }  else if (!CGRectContainsPoint(self.avatarImageView.frame, tapPoint)) {
+            //FIXME:Never invoked
             [self.delegate messageCellTappedBlank:self];
         }
     }
 }
+
 - (void)avatarImageViewHandleTap:(UITapGestureRecognizer *)tap {
     if (tap.state == UIGestureRecognizerStateEnded) {
         [self.delegate messageCellTappedHead:self];
     }
 }
+
 #pragma mark - Setters
 
 - (void)setMessageSendState:(LCCKMessageSendState)messageSendState {

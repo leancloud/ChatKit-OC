@@ -198,7 +198,10 @@
 - (void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
     [self.chatBar open];
-    [self loadDraft];
+    if (self.conversation.lcck_draft.length > 0) {
+        [self loadDraft];
+        [self.chatBar beginInputing];
+    }
     [self markCurrentConversationInfo];
     !self.viewDidAppearBlock ?: self.viewDidAppearBlock(self, animated);
 }
@@ -210,9 +213,7 @@
     } else {
         objc_setAssociatedObject(self, _cmd, @"isLoadingDraft", OBJC_ASSOCIATION_RETAIN);
     }
-    if (self.conversation.lcck_draft.length > 0) {
         [self.chatBar appendString:self.conversation.lcck_draft];
-    }
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -386,7 +387,6 @@
                                                               sender:self.user
                                                            timestamp:[[self class] currentTimestamp]
                                                      serverMessageId:nil];
-        lcckMessage.messageGroupType = self.conversation.lcck_type;
         [self.chatViewModel sendMessage:lcckMessage];
     }
 }
@@ -426,7 +426,7 @@
             } @catch (NSException *exception) {
                 peerName = peerId;
             }
-            peerName = [NSString stringWithFormat:@" @%@ ", peerName];
+            peerName = [NSString stringWithFormat:@"@%@ ", peerName];
             [self.chatBar appendString:peerName];
         }
     }];
@@ -448,7 +448,7 @@
                 realPeerNames = peerIds;
             }
             NSString *peerName = [[realPeerNames valueForKey:@"description"] componentsJoinedByString:@" @"];
-            peerName = [NSString stringWithFormat:@" @%@ ", peerName];
+            peerName = [NSString stringWithFormat:@"@%@ ", peerName];
             [self.chatBar appendString:peerName];
         }
     }];
@@ -482,7 +482,6 @@
                                                         timestamp:[[self class] currentTimestamp]
                                 serverMessageId:nil
                                 ];
-        message.messageGroupType = self.conversation.lcck_type;
         [self.chatViewModel sendMessage:message];
     } else {
         [self alert:@"write image to file error"];
@@ -497,7 +496,6 @@
                                                            sender:self.user
                                                         timestamp:[[self class] currentTimestamp]
                                                   serverMessageId:nil];
-    message.messageGroupType = self.conversation.lcck_type;
     [self.chatViewModel sendMessage:message];
 }
 
@@ -640,9 +638,12 @@
 }
 
 - (void)avatarImageViewLongPressed:(LCCKChatMessageCell *)messageCell {
+    if (messageCell.message.senderId == [LCChatKit sharedInstance].clientId || self.conversation.lcck_type == LCCKConversationTypeSingle) {
+        return;
+    }
     NSString *userName = messageCell.message.sender.name ?: messageCell.message.senderId;
-    NSString *appendString = [NSString stringWithFormat:@" @%@ ", userName];
-    [self.chatBar appendString:appendString beginInputing:YES animated:YES];
+    NSString *appendString = [NSString stringWithFormat:@"@%@ ", userName];
+    [self.chatBar appendString:appendString];
 }
 
 - (void)textMessageCellDoubleTapped:(LCCKChatMessageCell *)messageCell {

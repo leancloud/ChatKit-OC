@@ -64,7 +64,6 @@ typedef NS_ENUM(NSUInteger, LCCKFunctionViewShowType){
  */
 - (void)appendString:(NSString *)string;
 - (void)appendString:(NSString *)string beginInputing:(BOOL)beginInputing;
-- (void)appendString:(NSString *)string beginInputing:(BOOL)beginInputing animated:(BOOL)animated;
 
 /**
  *  结束输入状态
