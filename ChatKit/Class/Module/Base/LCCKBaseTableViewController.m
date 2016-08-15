@@ -68,6 +68,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor whiteColor];
+    //view在导航栏下方
+    self.edgesForExtendedLayout = UIRectEdgeNone;
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateStatusView) name:LCCKNotificationConnectivityUpdated object:nil];
     if (self.viewControllerStyle == LCCKViewControllerStylePresenting) {
         self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"取消" style:UIBarButtonItemStylePlain target:self action:@selector(dismissViewController:)];
