@@ -3,7 +3,7 @@
 //  LeanCloudChatKit-iOS
 //
 //  Created by ElonChan on 16/2/22.
-//  Copyright © 2016年 LeanCloud. All rights reserved.
+//  v0.5.0 Copyright © 2016年 LeanCloud. All rights reserved.
 //
 
 #import "LCChatKit.h"
@@ -272,6 +272,10 @@ static NSMutableDictionary *_sharedInstances = nil;
 - (void)setFetchConversationHandler:(LCCKFetchConversationHandler)fetchConversationHandler {
     [self.conversationService setFetchConversationHandler:fetchConversationHandler];
 
+}
+
+- (void)setConversationInvalidedHandler:(LCCKConversationInvalidedHandler)conversationInvalidedHandler {
+    [self.conversationService setConversationInvalidedHandler:conversationInvalidedHandler];
 }
 
 - (void)setLoadLatestMessagesHandler:(LCCKLoadLatestMessagesHandler)loadLatestMessagesHandler {

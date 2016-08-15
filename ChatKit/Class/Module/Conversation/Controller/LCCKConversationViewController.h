@@ -3,13 +3,15 @@
 //  LCCKChatBarExample
 //
 //  Created by ElonChan ( https://github.com/leancloud/ChatKit-OC ) on 15/11/20.
-//  Copyright © 2015年 https://LeanCloud.cn . All rights reserved.
+//  v0.5.0 Copyright © 2015年 https://LeanCloud.cn . All rights reserved.
 //
 @import UIKit;
 @class AVIMConversation;
 
 #import "LCCKChat.h"
 #import "LCCKBaseConversationViewController.h"
+
+FOUNDATION_EXTERN NSString *const LCCKConversationViewControllerErrorDomain;
 
 @interface LCCKConversationViewController : LCCKBaseConversationViewController <LCCKChatMessageCellDelegate>
 
@@ -51,15 +53,72 @@
  * @param conversationId Id of the conversation, group conversation should be initialized with this property.
  * @attention ConversationId can not be nil, if yes, LeanCloudKit will throw an exception to notice you.
  *            If LCCKConversationViewController is initialized with this method, the property named `peerId` will be nil.
- *            conversationId 与 peerId 并不等同。您一般不能自己构造一个conversationId，而是从 conversation 等特定接口中才能读取到 conversationId。如果需要使用 personId 来打开对话，应该使用 `-initWithPeerId:` 这个接口。
+ *            conversationId 与 peerId 并不等同。您一般不能自己构造一个 conversationId，而是从 conversation 等特定接口中才能读取到 conversationId。如果需要使用 personId 来打开对话，应该使用 `-initWithPeerId:` 这个接口。
  * @return Initialized single or group chat type odject of LCCKConversationViewController
  */
 - (instancetype)initWithConversationId:(NSString *)conversationId;
 
 /*!
- *  是否禁用文字的双击放大功能，默认为NO
+ * 如果不在对话中，是否自动加入对话，默认为 NO.
+ */
+@property (nonatomic, assign, getter=isEnableAutoJoin) BOOL enableAutoJoin;
+
+#pragma mark - send Message
+///=============================================================================
+/// @name send Message
+///=============================================================================
+
+/*!
+ *  文本发送
+ */
+- (void)sendTextMessage:(NSString *)text;
+/*
+ * 图片发送 包含图片上传交互
+ * 默认图片压缩比0.6，如想自定义压缩比，请使用 `-sendImageMessageData` 方法
+ *
+ * @param image, 要发送的图片
+ */
+- (void)sendImageMessage:(UIImage *)image;
+- (void)sendImageMessageData:(NSData *)imageData;
+
+/*!
+ * 语音发送
+ */
+- (void)sendVoiceMessageWithPath:(NSString *)voicePath time:(NSTimeInterval)recordingSeconds;
+
+/*!
+ * 地理位置发送
+ */
+- (void)sendLocationMessageWithLocationCoordinate:(CLLocationCoordinate2D)locationCoordinate locatioTitle:(NSString *)locationTitle;
+- (void)sendLocalFeedbackTextMessge:(NSString *)localFeedbackTextMessge;
+/*!
+ * 自定义消息位置发送
+ */
+- (void)sendCustomMessage:(AVIMTypedMessage *)customMessage;
+
+/*!
+ * 自定义消息位置发送
+ */
+- (void)sendCustomMessage:(AVIMTypedMessage *)customMessage
+            progressBlock:(AVProgressBlock)progressBlock
+                  success:(LCCKBooleanResultBlock)success
+                   failed:(LCCKBooleanResultBlock)failed;
+
+//TODO:
+/*!
+ * 发送用户的当前输入状态
+ */
+//- (void)sendInputStatus:(LCCKConversationInputStatus)status;
+
+/*!
+ *  是否禁用文字的双击放大功能，默认为 NO
  */
 @property (nonatomic, assign) BOOL disableTextShowInFullScreen;
+
+#pragma mark - Handler
+///=============================================================================
+/// @name Handler
+///=============================================================================
 
 /*!
  * 设置获取 AVIMConversation 对象结束后的 Handler。 这里可以做异常处理，比如获取失败等操作。

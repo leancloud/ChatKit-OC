@@ -3,7 +3,7 @@
 //  LCCKChatBarExample
 //
 //  Created by ElonChan ( https://github.com/leancloud/ChatKit-OC ) on 15/11/23.
-//  Copyright © 2015年 https://LeanCloud.cn . All rights reserved.
+//  v0.5.0 Copyright © 2015年 https://LeanCloud.cn . All rights reserved.
 //
 
 @import UIKit;
@@ -15,6 +15,6 @@
 /**
  *  用来获取cellIdentifier
  */
-+ (NSString *)cellIdentifierForMessageConfiguration:(LCCKMessage *)message conversationType:(LCCKConversationType)conversationType;
 
++ (NSString *)cellIdentifierForMessageConfiguration:(id)message conversationType:(LCCKConversationType)conversationType;
 @end

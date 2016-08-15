@@ -3,7 +3,7 @@
 //  LCCKChatBarExample
 //
 //  Created by ElonChan ( https://github.com/leancloud/ChatKit-OC ) on 15/11/23.
-//  Copyright © 2015年 https://LeanCloud.cn . All rights reserved.
+//  v0.5.0 Copyright © 2015年 https://LeanCloud.cn . All rights reserved.
 //
 
 @import UIKit;
@@ -11,6 +11,6 @@
 
 @interface LCCKCellRegisterController : NSObject
 
-+ (void)registerLCCKChatMessageCellClassForTableView:(UITableView *)tableView;
++ (void)registerChatMessageCellClassForTableView:(UITableView *)tableView;
 
 @end

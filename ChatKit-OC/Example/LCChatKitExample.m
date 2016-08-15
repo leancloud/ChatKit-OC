@@ -3,7 +3,7 @@
 //  LeanCloudChatKit-iOS
 //
 //  Created by ElonChan on 16/2/24.
-//  Copyright © 2016年 LeanCloud. All rights reserved.
+//  v0.5.0 Copyright © 2016年 LeanCloud. All rights reserved.
 //
 #import "LCChatKitExample.h"
 #import "LCCKUtil.h"
@@ -18,6 +18,9 @@
     #import "LCChatKit.h"
 #endif
 #import "LCCKLoginViewController.h"
+#import "LCCKVCardMessageCell.h"
+#import "LCCKExampleConstants.h"
+#import "LCCKContactManager.h"
 
 //==================================================================================================================================
 //If you want to see the storage of this demo, log in public account of leancloud.cn, search for the app named `LeanCloudChatKit-iOS`.
@@ -138,10 +141,10 @@ static NSMutableDictionary *_sharedInstances = nil;
             NSInteger code = 0;
             NSString *errorReasonText = @"User ids is nil";
             NSDictionary *errorInfo = @{
-                                        @"code":@(code),
+                                        @"code" : @(code),
                                         NSLocalizedDescriptionKey : errorReasonText,
                                         };
-            NSError *error = [NSError errorWithDomain:@"LCChatKit"
+            NSError *error = [NSError errorWithDomain:@"LCChatKitExample"
                                                  code:code
                                              userInfo:errorInfo];
             !completionHandler ?: completionHandler(nil, error);
@@ -182,6 +185,10 @@ static NSMutableDictionary *_sharedInstances = nil;
     }];
     
     [[LCChatKit sharedInstance] setFetchConversationHandler:^(AVIMConversation *conversation, LCCKConversationViewController *aConversationController) {
+        if (!conversation || (conversation.members.count == 0)) {
+            return;
+        }
+        [[self class] lcck_showText:@"加载历史记录..." toView:aConversationController.view];
         if (conversation.members.count > 2) {
             [aConversationController configureBarButtonItemStyle:LCCKBarButtonItemStyleGroupProfile action:^{
                 NSString *title = @"打开群聊详情";
@@ -199,7 +206,17 @@ static NSMutableDictionary *_sharedInstances = nil;
             }];
         }
     }];
-
+    
+    [[LCChatKit sharedInstance] setConversationInvalidedHandler:^(NSString *conversationId, LCCKConversationViewController *conversationController, id<LCCKUserDelegate> administrator, NSError *error) {
+        if (error.code == 4401) {
+            [conversationController.navigationController popToRootViewControllerAnimated:YES];
+            NSString *title = @"您已经不在当前对话";
+            NSString *subTitle = [NSString stringWithFormat:@"已被管理员%@移出", administrator.name ?: administrator.clientId];
+            [LCCKUtil showNotificationWithTitle:title subtitle:subTitle type:LCCKMessageNotificationTypeError];
+            LCCKLog(@"%@", error.description);
+        }
+    }];
+    
     [[LCChatKit sharedInstance] setLoadLatestMessagesHandler:^(LCCKConversationViewController *conversationController, BOOL succeeded, NSError *error) {
         [[self class] lcck_hideHUDForView:conversationController.view];
         NSString *title;
@@ -235,7 +252,7 @@ static NSMutableDictionary *_sharedInstances = nil;
                                                                         [self transpondMessage:message toConversationViewController:conversationViewController];
                                                                     }];
         NSArray *menuItems = [NSArray array];
-        if (message.messageMediaType ==  LCCKMessageTypeText) {
+        if (message.mediaType ==  kAVIMMessageMediaTypeText) {
             menuItems = @[ copyItem, transpondItem ];
         }
         return menuItems;
@@ -244,7 +261,7 @@ static NSMutableDictionary *_sharedInstances = nil;
     [[LCChatKit sharedInstance] setHUDActionBlock:^(UIViewController *viewController, UIView *view, NSString *title, LCCKMessageHUDActionType type) {
         switch (type) {
             case LCCKMessageHUDActionTypeShow:
-                [[self class] lcck_showMessage:title toView:view];
+                [[self class] lcck_showText:title toView:view];
                 break;
                 
             case LCCKMessageHUDActionTypeHide:
@@ -262,6 +279,10 @@ static NSMutableDictionary *_sharedInstances = nil;
     }];
     
     [[LCChatKit sharedInstance] setOpenProfileBlock:^(NSString *userId, id<LCCKUserDelegate> user, __kindof UIViewController *parentController) {
+        if (!userId) {
+            [LCCKUtil showNotificationWithTitle:@"用户不存在" subtitle:nil type:LCCKMessageNotificationTypeError];
+            return;
+        }
         [self exampleOpenProfileForUser:user userId:userId parentController:parentController];
     }];
     
@@ -292,12 +313,19 @@ static NSMutableDictionary *_sharedInstances = nil;
     }];
     
     [[LCChatKit sharedInstance] setForceReconnectSessionBlock:^(__kindof UIViewController *viewController, LCCKReconnectSessionCompletionHandler completionHandler) {
-        [[self class] lcck_showMessage:@"正在重连聊天服务..." toView:viewController.view];
+        [[self class] lcck_showText:@"正在重连聊天服务..." toView:viewController.view];
         [[LCChatKit sharedInstance] openWithClientId:[LCChatKit sharedInstance].clientId callback:^(BOOL succeeded, NSError *error) {
             [[self class] lcck_hideHUDForView:viewController.view];
             !completionHandler ?: completionHandler(succeeded, error);
         }];
     }];
+   
+//    [[LCCKUIService sharedInstance] setCustomMessageCellForRowBlock:^__kindof UITableViewCell *(id message, NSString *identifier, UITableView *tableView, NSIndexPath *indexPath) {
+//        if ([(AVIMTypedMessage *)message mediaType] == 2) {
+//            LCCKVCardMessageCell *messageCell = [tableView dequeueReusableCellWithIdentifier:identifier forIndexPath:indexPath];
+//            return messageCell;
+//        }
+//    }];
 }
 
 - (NSArray *)exampleConversationEditActionAtIndexPath:(NSIndexPath *)indexPath
@@ -322,7 +350,6 @@ typedef void (^UITableViewRowActionHandler)(UITableViewRowAction *action, NSInde
         *handler = ^(UITableViewRowAction *action, NSIndexPath *indexPath) {
             [controller.tableView setEditing:NO animated:YES];
             [[LCChatKit sharedInstance] updateUnreadCountToZeroWithConversationId:conversationId];
-            [controller refresh];
         };
     } else {
         if (*title == nil) {
@@ -331,7 +358,6 @@ typedef void (^UITableViewRowActionHandler)(UITableViewRowAction *action, NSInde
         *handler = ^(UITableViewRowAction *action, NSIndexPath *indexPath) {
             [controller.tableView setEditing:NO animated:YES];
             [[LCChatKit sharedInstance] increaseUnreadCountWithConversationId:conversationId];
-            [controller refresh];
         };
     }
 }
@@ -354,7 +380,6 @@ typedef void (^UITableViewRowActionHandler)(UITableViewRowAction *action, NSInde
                                                                                 title:LCCKLocalizedStrings(@"Delete")
                                                                               handler:^(UITableViewRowAction *action, NSIndexPath *indexPath) {
                                                                                   [[LCChatKit sharedInstance] deleteRecentConversationWithConversationId:conversation.conversationId];
-                                                                                  [controller refresh];
                                                                               }];
     return @[ actionItemDelete, actionItemMore ];
 }
@@ -367,9 +392,9 @@ typedef void (^UITableViewRowActionHandler)(UITableViewRowAction *action, NSInde
  */
 + (void)exampleOpenConversationViewControllerWithPeerId:(NSString *)peerId fromNavigationController:(UINavigationController *)navigationController {
     LCCKConversationViewController *conversationViewController = [[LCCKConversationViewController alloc] initWithPeerId:peerId];
-    [conversationViewController setViewDidLoadBlock:^(LCCKBaseViewController *viewController) {
-        [self lcck_showMessage:@"加载历史记录..." toView:viewController.view];
-    }];
+//    [conversationViewController setViewDidLoadBlock:^(LCCKBaseViewController *viewController) {
+//        [self lcck_showText:@"加载历史记录..." toView:viewController.view];
+//    }];
     [conversationViewController setViewWillDisappearBlock:^(LCCKBaseViewController *viewController, BOOL aAnimated) {
         [self lcck_hideHUDForView:viewController.view];
     }];
@@ -378,9 +403,10 @@ typedef void (^UITableViewRowActionHandler)(UITableViewRowAction *action, NSInde
 
 + (void)exampleOpenConversationViewControllerWithConversaionId:(NSString *)conversationId fromNavigationController:(UINavigationController *)aNavigationController {
     LCCKConversationViewController *conversationViewController = [[LCCKConversationViewController alloc] initWithConversationId:conversationId];
-    [conversationViewController setViewDidLoadBlock:^(LCCKBaseViewController *viewController) {
-        [self lcck_showMessage:@"加载历史记录..." toView:viewController.view];
-    }];
+    conversationViewController.enableAutoJoin = YES;
+//    [conversationViewController setViewDidLoadBlock:^(LCCKBaseViewController *viewController) {
+//        [self lcck_showText:@"加载历史记录..." toView:viewController.view];
+//    }];
     [conversationViewController setViewWillDisappearBlock:^(LCCKBaseViewController *viewController, BOOL aAnimated) {
         [self lcck_hideHUDForView:viewController.view];
     }];
@@ -398,7 +424,7 @@ typedef void (^UITableViewRowActionHandler)(UITableViewRowAction *action, NSInde
         if (!peerIds || peerIds.count == 0) {
             return;
         }
-        [self lcck_showText:@"创建群聊..." view:fromViewController.view];
+        [self lcck_showText:@"创建群聊..." toView:fromViewController.view];
         [[LCChatKit sharedInstance] createConversationWithMembers:peerIds type:LCCKConversationTypeGroup unique:YES callback:^(AVIMConversation *conversation, NSError *error) {
             [self lcck_hideHUDForView:fromViewController.view];
             if (conversation) {
@@ -604,12 +630,11 @@ void dispatch_async_limit(dispatch_queue_t queue, NSUInteger limitSemaphoreCount
         title = [NSString stringWithFormat:@"打开自己的主页 \nClientId是 : %@", userId];
         subtitle = [NSString stringWithFormat:@"我自己的name是 : %@", user.name];
     } else if ([parentController isKindOfClass:[LCCKConversationViewController class]] ) {
-        LCCKConversationViewController *conversationViewController = parentController;
-        if (conversationViewController.conversation.lcck_type == LCCKConversationTypeGroup) {
-            LCCKConversationViewController *conversationViewController = [[LCCKConversationViewController alloc] initWithPeerId:user.clientId];
-            [[self class] pushToViewController:conversationViewController];
+//        if (conversationViewController.conversation.lcck_type == LCCKConversationTypeGroup) {
+            LCCKConversationViewController *conversationViewController_ = [[LCCKConversationViewController alloc] initWithPeerId:user.clientId ?: userId];
+            [[self class] pushToViewController:conversationViewController_];
             return;
-        }
+//        }
     }
     [LCCKUtil showNotificationWithTitle:title subtitle:subtitle type:LCCKMessageNotificationTypeMessage];
 }

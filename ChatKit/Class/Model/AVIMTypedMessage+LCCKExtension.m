@@ -1,52 +1,71 @@
 //
-//  AVIMTypedMessage+LCCKExtention.m
+//  AVIMTypedMessage+LCCKExtension.m
 //  ChatKit
 //
 //  Created by 陈宜龙 on 16/5/26.
-//  Copyright © 2016年 ElonChan. All rights reserved.
+//  v0.5.0 Copyright © 2016年 ElonChan. All rights reserved.
 //
 
-#import "AVIMTypedMessage+LCCKExtention.h"
+#import "AVIMTypedMessage+LCCKExtension.h"
 #import "LCCKMessage.h"
+#import "LCCKConstants.h"
 
-@implementation AVIMTypedMessage (LCCKExtention)
+@implementation AVIMTypedMessage (LCCKExtension)
+
+- (BOOL)lcck_isSupportThisCustomMessage {
+    NSNumber *typeDictKey = @([(AVIMTypedMessage *)self mediaType]);
+    Class class = [_typeDict objectForKey:typeDictKey];
+    return class;
+}
 
 + (AVIMTypedMessage *)lcck_messageWithLCCKMessage:(LCCKMessage *)message {
     AVIMTypedMessage *avimTypedMessage;
-    switch (message.messageMediaType) {
-        case LCCKMessageTypeText: {
+    switch (message.mediaType) {
+        case kAVIMMessageMediaTypeText: {
             avimTypedMessage = [AVIMTextMessage messageWithText:message.text attributes:nil];
             break;
         }
-        case LCCKMessageTypeVideo:
-        case LCCKMessageTypeImage: {
+        case kAVIMMessageMediaTypeVideo:
+        case kAVIMMessageMediaTypeImage: {
             avimTypedMessage = [AVIMImageMessage messageWithText:nil attachedFilePath:message.photoPath attributes:nil];
             break;
         }
-        case LCCKMessageTypeVoice: {
+        case kAVIMMessageMediaTypeAudio: {
             avimTypedMessage = [AVIMAudioMessage messageWithText:nil attachedFilePath:message.voicePath attributes:nil];
             break;
         }
             
-        case LCCKMessageTypeEmotion:
+//        case LCCKMessageTypeEmotion:
             //#import "AVIMEmotionMessage.h"
             //            avimTypedMessage = [AVIMEmotionMessage messageWithEmotionPath:message.emotionName];
-            break;
+//            break;
             
-        case LCCKMessageTypeLocation: {
+        case kAVIMMessageMediaTypeLocation: {
             avimTypedMessage = [AVIMLocationMessage messageWithText:message.geolocations
                                                            latitude:message.location.coordinate.latitude
                                                           longitude:message.location.coordinate.longitude
                                                          attributes:nil];
             break;
-        case LCCKMessageTypeSystem:
-        case LCCKMessageTypeUnknow:
+//        case kAVIMMessageMediaTypeSystem:
+        case kAVIMMessageMediaTypeNone:
             //TODO:
             break;
         }
     }
-    avimTypedMessage.sendTimestamp = [[NSDate date] timeIntervalSince1970] * 1000;
+    avimTypedMessage.sendTimestamp = LCCK_CURRENT_TIMESTAMP;
     return avimTypedMessage;
+}
+
+- (void)lcck_setObject:(id)object forKey:(NSString *)key {
+    NSMutableDictionary *attributes = [NSMutableDictionary dictionary];
+    [attributes setObject:object forKey:key];
+    if (self.attributes == nil) {
+        self.attributes = attributes;
+    } else {
+        [attributes addEntriesFromDictionary:self.attributes];
+        self.attributes = attributes;
+    }
+    self.attributes = attributes;
 }
 
 @end

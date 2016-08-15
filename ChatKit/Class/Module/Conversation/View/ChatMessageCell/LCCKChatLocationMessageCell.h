@@ -3,11 +3,11 @@
 //  LCCKChatExample
 //
 //  Created by ElonChan ( https://github.com/leancloud/ChatKit-OC ) on 15/11/17.
-//  Copyright © 2015年 https://LeanCloud.cn . All rights reserved.
+//  v0.5.0 Copyright © 2015年 https://LeanCloud.cn . All rights reserved.
 //
 
 #import "LCCKChatMessageCell.h"
 
-@interface LCCKChatLocationMessageCell : LCCKChatMessageCell
+@interface LCCKChatLocationMessageCell : LCCKChatMessageCell<LCCKChatMessageCellSubclassing>
 
 @end

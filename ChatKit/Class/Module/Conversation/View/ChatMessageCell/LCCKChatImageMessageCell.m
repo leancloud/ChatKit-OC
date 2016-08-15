@@ -3,7 +3,7 @@
 //  LCCKChatExample
 //
 //  Created by ElonChan ( https://github.com/leancloud/ChatKit-OC ) on 15/11/16.
-//  Copyright © 2015年 https://LeanCloud.cn . All rights reserved.
+//  v0.5.0 Copyright © 2015年 https://LeanCloud.cn . All rights reserved.
 //
 
 #import "LCCKChatImageMessageCell.h"
@@ -51,6 +51,7 @@
     UITapGestureRecognizer *recognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(singleTapMessageImageViewGestureRecognizerHandler:)];
     [self.messageContentView addGestureRecognizer:recognizer];
     [super setup];
+    [self addGeneralView];
 }
 
 - (void)singleTapMessageImageViewGestureRecognizerHandler:(UITapGestureRecognizer *)tapGestureRecognizer {
@@ -165,6 +166,17 @@
         [_messageProgressView addSubview:self.messageProgressLabel = progressLabel];
     }
     return _messageProgressView;
+}
+
+#pragma mark -
+#pragma mark - LCCKChatMessageCellSubclassing Method
+
++ (void)load {
+    [self registerSubclass];
+}
+
++ (AVIMMessageMediaType)classMediaType {
+    return kAVIMMessageMediaTypeImage;
 }
 
 @end

@@ -3,7 +3,7 @@
 //  LeanCloudChatKit-iOS
 //
 //  Created by 陈宜龙 on 16/3/21.
-//  Copyright © 2016年 ElonChan. All rights reserved.
+//  v0.5.0 Copyright © 2016年 ElonChan. All rights reserved.
 //
 
 #import "LCCKBubbleImageFactory.h"
@@ -13,11 +13,12 @@
 @implementation LCCKBubbleImageFactory
 
 + (UIImage *)bubbleImageViewForType:(LCCKMessageOwnerType)owner
-                        messageType:(LCCKMessageType)messageType
+                        messageType:(AVIMMessageMediaType)messageMediaType
                       isHighlighted:(BOOL)isHighlighted {
+    BOOL isCustomMessage = NO;
     NSString *messageTypeString = @"message_";
-    switch (messageType) {
-        case LCCKMessageTypeImage:
+    switch (messageMediaType) {
+        case kAVIMMessageMediaTypeImage:
             messageTypeString = [messageTypeString stringByAppendingString:@"image_"];
             break;
             
@@ -34,11 +35,14 @@
             messageTypeString = [messageTypeString stringByAppendingString:@"receiver_"];
             break;
             case LCCKMessageOwnerTypeSystem:
+            break;
             case LCCKMessageOwnerTypeUnknown:
-            //TODO:
+            isCustomMessage = YES;
             break;
     }
-   
+    if (isCustomMessage) {
+        return nil;
+    }
     messageTypeString = [messageTypeString stringByAppendingString:@"background_"];
     if (isHighlighted) {
         messageTypeString = [messageTypeString stringByAppendingString:@"highlight"];

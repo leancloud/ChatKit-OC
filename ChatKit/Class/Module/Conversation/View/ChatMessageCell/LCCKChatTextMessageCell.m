@@ -3,7 +3,7 @@
 //  LCCKChatExample
 //
 //  Created by ElonChan ( https://github.com/leancloud/ChatKit-OC ) on 15/11/13.
-//  Copyright © 2015年 https://LeanCloud.cn . All rights reserved.
+//  v0.5.0 Copyright © 2015年 https://LeanCloud.cn . All rights reserved.
 //
 
 static CGFloat LCCK_MSG_SPACE_TOP = 16;
@@ -15,7 +15,6 @@ static CGFloat LCCK_MSG_TEXT_FONT_SIZE = 14;
 #define LCCK_TEXT_MSG_CELL_TEXT_COLOR [UIColor blackColor]
 
 #import "LCCKChatTextMessageCell.h"
-#import "Masonry.h"
 #import "LCCKFaceManager.h"
 #import "LCCKWebViewController.h"
 
@@ -50,6 +49,8 @@ static CGFloat LCCK_MSG_TEXT_FONT_SIZE = 14;
     tapGestureRecognizer.numberOfTapsRequired = 2;
     [self.messageContentView addGestureRecognizer:tapGestureRecognizer];
     [super setup];
+    [self addGeneralView];
+
 }
 
 - (void)configureCellWithData:(LCCKMessage *)message {
@@ -70,14 +71,12 @@ static CGFloat LCCK_MSG_TEXT_FONT_SIZE = 14;
         _messageTextLabel.lineBreakMode = NSLineBreakByWordWrapping;
         _messageTextLabel.linkTextAttributes = @{NSForegroundColorAttributeName:[UIColor blueColor]};
         _messageTextLabel.activeLinkTextAttributes = @{NSForegroundColorAttributeName:[UIColor blueColor],NSBackgroundColorAttributeName:kDefaultActiveLinkBackgroundColorForMLLinkLabel};
-        
+        __weak __typeof(self) weakSelf = self;
         [_messageTextLabel setDidClickLinkBlock:^(MLLink *link, NSString *linkText, MLLinkLabel *label) {
-            NSString *tips = [NSString stringWithFormat:@"Click\nlinkType:%ld\nlinkText:%@\nlinkValue:%@",link.linkType,linkText,link.linkValue];
-            if ([self.delegate respondsToSelector:@selector(messageCell:didTapLinkText:linkType:)]) {
-                [self.delegate messageCell:self didTapLinkText:linkText linkType:link.linkType];
+            if ([weakSelf.delegate respondsToSelector:@selector(messageCell:didTapLinkText:linkType:)]) {
+                [weakSelf.delegate messageCell:weakSelf didTapLinkText:linkText linkType:link.linkType];
             }
         }];
-        
     }
     return _messageTextLabel;
 }
@@ -101,6 +100,17 @@ static CGFloat LCCK_MSG_TEXT_FONT_SIZE = 14;
                  NSParagraphStyleAttributeName: style};
     }
     return _textStyle;
+}
+
+#pragma mark -
+#pragma mark - LCCKChatMessageCellSubclassing Method
+
++ (void)load {
+    [self registerSubclass];
+}
+
++ (AVIMMessageMediaType)classMediaType {
+    return kAVIMMessageMediaTypeText;
 }
 
 @end

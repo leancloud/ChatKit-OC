@@ -3,7 +3,7 @@
 //  LeanCloudChatKit-iOS
 //
 //  Created by 陈宜龙 on 16/3/21.
-//  Copyright © 2016年 ElonChan. All rights reserved.
+//  v0.5.0 Copyright © 2016年 ElonChan. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
@@ -29,18 +29,24 @@
 @property (nonatomic, strong, readonly) NSURL *voiceURL;
 @property (nonatomic, copy, readonly) NSString *voiceDuration;
 
-@property (nonatomic, copy, readonly) NSString *emotionName;
-@property (nonatomic, copy, readonly) NSString *emotionPath;
+//@property (nonatomic, copy, readonly) NSString *emotionName;
+//@property (nonatomic, copy, readonly) NSString *emotionPath;
 
 @property (nonatomic, strong, readonly) UIImage *localPositionPhoto;
 @property (nonatomic, copy, readonly) NSString *geolocations;
 @property (nonatomic, strong, readonly) CLLocation *location;
 
-@property (nonatomic, assign, readonly) LCCKMessageType messageMediaType;
+@property (nonatomic, assign, readonly) AVIMMessageMediaType mediaType;
 //@property (nonatomic, assign) LCCKConversationType messageGroupType;
 @property (nonatomic, assign, readonly) LCCKMessageReadState messageReadState;
 @property (nonatomic, copy, readonly) NSString *serverMessageId;
+@property (nonatomic, assign) NSTimeInterval timestamp;
 
+/*!
+ * 有localMessageId且没有serviceMessageId的属于localMessage，其中
+ * systemMessage不属于localMessage，localFeedbackText属于。
+ */
+@property (nonatomic, assign, getter=isLocalMessage) BOOL localMessage;
 /*!
  * just for failed message store, its value is always not same to serverMessageId. value is same to timestamp.
  */
@@ -54,7 +60,8 @@
 
 - (instancetype)initWithSystemText:(NSString *)text;
 + (instancetype)systemMessageWithTimestamp:(NSTimeInterval)timestamp;
-- (NSString *)getTimestampString;
+- (instancetype)initWithLocalFeedbackText:(NSString *)localFeedbackText;
++ (instancetype)localFeedbackText:(NSString *)localFeedbackText;
 
 /**
  *  初始化图片类型的消息
@@ -145,8 +152,6 @@
                                  timestamp:(NSTimeInterval)timestamp
                            serverMessageId:(NSString *)serverMessageId;
 
-// 是否显示时间轴Label
-- (BOOL)shouldDisplayTimestampForMessages:(NSArray *)messages;
 + (LCCKMessage *)messageWithAVIMTypedMessage:(AVIMTypedMessage *)message;
 
 @end

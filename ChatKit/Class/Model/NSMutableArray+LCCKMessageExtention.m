@@ -3,11 +3,11 @@
 //  ChatKit
 //
 //  Created by 陈宜龙 on 16/5/26.
-//  Copyright © 2016年 ElonChan. All rights reserved.
+//  v0.5.0 Copyright © 2016年 ElonChan. All rights reserved.
 //
 
 #import "NSMutableArray+LCCKMessageExtention.h"
-#import "AVIMTypedMessage+LCCKExtention.h"
+#import "AVIMTypedMessage+LCCKExtension.h"
 #import "LCCKMessage.h"
 
 @implementation NSMutableArray (LCCKMessageExtention)
@@ -20,9 +20,9 @@
     NSLock *arrayLock = [[NSLock alloc] init];
     dispatch_group_async(group, queue, ^{
     for (AVIMTypedMessage *typedMessage in avimTypedMessage) {
-            LCCKMessage *lcckMessage = [LCCKMessage messageWithAVIMTypedMessage:typedMessage];
-            if (lcckMessage) {
-                [messages addObject:lcckMessage];
+            id message = [LCCKMessage messageWithAVIMTypedMessage:typedMessage];
+            if (message) {
+                [messages addObject:message];
             }
     }
     });

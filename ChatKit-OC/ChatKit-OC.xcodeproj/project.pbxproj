@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		2D3A40ABD266D4907DE5943D /* libPods-ChatKit-OC.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BA5CD9C65171B4B671044819 /* libPods-ChatKit-OC.a */; };
+		9A08CA591D60D9D700612578 /* LCCKVCardView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A08CA581D60D9D700612578 /* LCCKVCardView.m */; };
+		9A08CA5B1D60D9EF00612578 /* LCCKVCardView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9A08CA5A1D60D9EF00612578 /* LCCKVCardView.xib */; };
 		9A4730611CECAEC500AEB86F /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A47302A1CECAEC500AEB86F /* AppDelegate.m */; };
 		9A4730621CECAEC500AEB86F /* LCCKUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A47302E1CECAEC500AEB86F /* LCCKUser.m */; };
 		9A4730671CECAEC500AEB86F /* LCCKLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A47303E1CECAEC500AEB86F /* LCCKLoginViewController.m */; };
@@ -23,7 +25,12 @@
 		9A4730731CECAEC500AEB86F /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A4730591CECAEC500AEB86F /* main.m */; };
 		9A4730751CECAEC500AEB86F /* NSObject+LCCKHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A47305E1CECAEC500AEB86F /* NSObject+LCCKHUD.m */; };
 		9A4730761CECAEC500AEB86F /* LCCKTabBarControllerConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A4730601CECAEC500AEB86F /* LCCKTabBarControllerConfig.m */; };
+		9A7E2DE51D5DCB94003A7312 /* LCCKInputViewPluginVCard.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A7E2DE41D5DCB94003A7312 /* LCCKInputViewPluginVCard.m */; };
+		9A7E2DE91D5F1040003A7312 /* LCCKContactManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A7E2DE81D5F1040003A7312 /* LCCKContactManager.m */; };
 		9A9E84511D13A66B008590B4 /* LCChatKitExample.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A9E84501D13A66B008590B4 /* LCChatKitExample.m */; };
+		9AA1DA841D62125F0066FB72 /* calling_card_bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9AA1DA831D62125F0066FB72 /* calling_card_bg@2x.png */; };
+		9AADF0571D5B205E00CE0731 /* LCCKVCardMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AADF0561D5B205E00CE0731 /* LCCKVCardMessageCell.m */; };
+		9AADF05A1D5B23F400CE0731 /* LCCKVCardMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AADF0591D5B23F400CE0731 /* LCCKVCardMessage.m */; };
 		9AD665CC1D2277830040A4E3 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A0B721B1CED662D004FDACC /* SystemConfiguration.framework */; };
 		9AD665CD1D22778B0040A4E3 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A0B721D1CED6637004FDACC /* MobileCoreServices.framework */; };
 		9AD665CE1D2277920040A4E3 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A0B721F1CED6644004FDACC /* CoreTelephony.framework */; };
@@ -45,6 +52,9 @@
 
 /* Begin PBXFileReference section */
 		5D845C2C6C7600912725AE71 /* Pods-ChatKit-OC.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChatKit-OC.release.xcconfig"; path = "Pods/Target Support Files/Pods-ChatKit-OC/Pods-ChatKit-OC.release.xcconfig"; sourceTree = "<group>"; };
+		9A08CA571D60D9D700612578 /* LCCKVCardView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKVCardView.h; sourceTree = "<group>"; };
+		9A08CA581D60D9D700612578 /* LCCKVCardView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCKVCardView.m; sourceTree = "<group>"; };
+		9A08CA5A1D60D9EF00612578 /* LCCKVCardView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LCCKVCardView.xib; sourceTree = "<group>"; };
 		9A0B721B1CED662D004FDACC /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		9A0B721D1CED6637004FDACC /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		9A0B721F1CED6644004FDACC /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
@@ -78,8 +88,18 @@
 		9A47305F1CECAEC500AEB86F /* LCCKTabBarControllerConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKTabBarControllerConfig.h; sourceTree = "<group>"; };
 		9A4730601CECAEC500AEB86F /* LCCKTabBarControllerConfig.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCKTabBarControllerConfig.m; sourceTree = "<group>"; };
 		9A754D4B1CECAC3E000967F1 /* ChatKit-OC.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "ChatKit-OC.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		9A7E2DE31D5DCB94003A7312 /* LCCKInputViewPluginVCard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKInputViewPluginVCard.h; sourceTree = "<group>"; };
+		9A7E2DE41D5DCB94003A7312 /* LCCKInputViewPluginVCard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCKInputViewPluginVCard.m; sourceTree = "<group>"; };
+		9A7E2DE61D5F0B59003A7312 /* LCCKExampleConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKExampleConstants.h; sourceTree = "<group>"; };
+		9A7E2DE71D5F1040003A7312 /* LCCKContactManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKContactManager.h; sourceTree = "<group>"; };
+		9A7E2DE81D5F1040003A7312 /* LCCKContactManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCKContactManager.m; sourceTree = "<group>"; };
 		9A9E844F1D13A66B008590B4 /* LCChatKitExample.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCChatKitExample.h; sourceTree = "<group>"; };
 		9A9E84501D13A66B008590B4 /* LCChatKitExample.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCChatKitExample.m; sourceTree = "<group>"; };
+		9AA1DA831D62125F0066FB72 /* calling_card_bg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "calling_card_bg@2x.png"; sourceTree = "<group>"; };
+		9AADF0551D5B205E00CE0731 /* LCCKVCardMessageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKVCardMessageCell.h; sourceTree = "<group>"; };
+		9AADF0561D5B205E00CE0731 /* LCCKVCardMessageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCKVCardMessageCell.m; sourceTree = "<group>"; };
+		9AADF0581D5B23F400CE0731 /* LCCKVCardMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKVCardMessage.h; sourceTree = "<group>"; };
+		9AADF0591D5B23F400CE0731 /* LCCKVCardMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCKVCardMessage.m; sourceTree = "<group>"; };
 		9AAFE6571D48C863004A0309 /* zh-Hans-CN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans-CN"; path = "zh-Hans-CN.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
 		BA5CD9C65171B4B671044819 /* libPods-ChatKit-OC.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ChatKit-OC.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		FE81801167FF7BEA287BEF15 /* Pods-ChatKit-OC.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChatKit-OC.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ChatKit-OC/Pods-ChatKit-OC.debug.xcconfig"; sourceTree = "<group>"; };
@@ -149,6 +169,7 @@
 		9A47302F1CECAEC500AEB86F /* Module */ = {
 			isa = PBXGroup;
 			children = (
+				9AADF03F1D5B1F9600CE0731 /* CustomMessage */,
 				9A47303B1CECAEC500AEB86F /* Login */,
 				9A4730481CECAEC500AEB86F /* Main */,
 				9A4730541CECAEC500AEB86F /* Other */,
@@ -240,7 +261,10 @@
 		9A47305A1CECAEC500AEB86F /* Tool */ = {
 			isa = PBXGroup;
 			children = (
+				9A7E2DE71D5F1040003A7312 /* LCCKContactManager.h */,
+				9A7E2DE81D5F1040003A7312 /* LCCKContactManager.m */,
 				9A47305B1CECAEC500AEB86F /* MBProgressHUD */,
+				9A7E2DE61D5F0B59003A7312 /* LCCKExampleConstants.h */,
 			);
 			path = Tool;
 			sourceTree = "<group>";
@@ -279,6 +303,47 @@
 				9A754D4B1CECAC3E000967F1 /* ChatKit-OC.app */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		9AA1DA821D62125F0066FB72 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				9AA1DA831D62125F0066FB72 /* calling_card_bg@2x.png */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		9AADF03F1D5B1F9600CE0731 /* CustomMessage */ = {
+			isa = PBXGroup;
+			children = (
+				9AADF0431D5B1F9600CE0731 /* View */,
+				9AADF0411D5B1F9600CE0731 /* Model */,
+				9AA1DA821D62125F0066FB72 /* Resources */,
+			);
+			path = CustomMessage;
+			sourceTree = "<group>";
+		};
+		9AADF0411D5B1F9600CE0731 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				9AADF0581D5B23F400CE0731 /* LCCKVCardMessage.h */,
+				9AADF0591D5B23F400CE0731 /* LCCKVCardMessage.m */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		9AADF0431D5B1F9600CE0731 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				9AADF0551D5B205E00CE0731 /* LCCKVCardMessageCell.h */,
+				9AADF0561D5B205E00CE0731 /* LCCKVCardMessageCell.m */,
+				9A08CA571D60D9D700612578 /* LCCKVCardView.h */,
+				9A08CA581D60D9D700612578 /* LCCKVCardView.m */,
+				9A08CA5A1D60D9EF00612578 /* LCCKVCardView.xib */,
+				9A7E2DE31D5DCB94003A7312 /* LCCKInputViewPluginVCard.h */,
+				9A7E2DE41D5DCB94003A7312 /* LCCKInputViewPluginVCard.m */,
+			);
+			path = View;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -343,6 +408,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9AA1DA841D62125F0066FB72 /* calling_card_bg@2x.png in Resources */,
+				9A08CA5B1D60D9EF00612578 /* LCCKVCardView.xib in Resources */,
 				9A4730711CECAEC500AEB86F /* LaunchScreen.storyboard in Resources */,
 				9A4730701CECAEC500AEB86F /* Assets.xcassets in Resources */,
 				9A4730681CECAEC500AEB86F /* LCCKLoginViewController.xib in Resources */,
@@ -404,19 +471,24 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9A08CA591D60D9D700612578 /* LCCKVCardView.m in Sources */,
 				9A9E84511D13A66B008590B4 /* LCChatKitExample.m in Sources */,
+				9AADF0571D5B205E00CE0731 /* LCCKVCardMessageCell.m in Sources */,
 				9A47306F1CECAEC500AEB86F /* LCCKPlusButtonSubclass.m in Sources */,
 				9A4730671CECAEC500AEB86F /* LCCKLoginViewController.m in Sources */,
 				9A4730611CECAEC500AEB86F /* AppDelegate.m in Sources */,
 				9A47306A1CECAEC500AEB86F /* DEMODataSource.m in Sources */,
+				9AADF05A1D5B23F400CE0731 /* LCCKVCardMessage.m in Sources */,
 				9A47306C1CECAEC500AEB86F /* LCCKMapViewController.m in Sources */,
 				9A4730621CECAEC500AEB86F /* LCCKUser.m in Sources */,
 				9A47306E1CECAEC500AEB86F /* LCCKUtil.m in Sources */,
 				9A4730761CECAEC500AEB86F /* LCCKTabBarControllerConfig.m in Sources */,
 				9A4730691CECAEC500AEB86F /* DEMOCustomAutoCompleteObject.m in Sources */,
 				9A4730731CECAEC500AEB86F /* main.m in Sources */,
+				9A7E2DE51D5DCB94003A7312 /* LCCKInputViewPluginVCard.m in Sources */,
 				9A4730751CECAEC500AEB86F /* NSObject+LCCKHUD.m in Sources */,
 				9A47306B1CECAEC500AEB86F /* LCCKLoginDataSource.m in Sources */,
+				9A7E2DE91D5F1040003A7312 /* LCCKContactManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

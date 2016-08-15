@@ -3,7 +3,7 @@
 //  LCCKChatExample
 //
 //  Created by ElonChan ( https://github.com/leancloud/ChatKit-OC ) on 15/11/17.
-//  Copyright © 2015年 https://LeanCloud.cn . All rights reserved.
+//  v0.5.0 Copyright © 2015年 https://LeanCloud.cn . All rights reserved.
 //
 
 #import "LCCKChatSystemMessageCell.h"
@@ -26,7 +26,7 @@
 - (void)updateConstraints {
     [super updateConstraints];
     [self.systemmessageContentView mas_makeConstraints:^(MASConstraintMaker *make) {
-        CGFloat offset = 3;//8
+        CGFloat offset = 8;
         make.top.equalTo(self.contentView.mas_top).with.offset(offset);
         make.bottom.equalTo(self.contentView.mas_bottom).with.offset(-offset);
         CGFloat width = [UIApplication sharedApplication].keyWindow.frame.size.width;
@@ -40,10 +40,10 @@
 #pragma mark - Public Methods
 
 - (void)setup {
-    self.backgroundColor = [UIColor clearColor];
     self.selectionStyle = UITableViewCellSelectionStyleNone;
     [self.contentView addSubview:self.systemmessageContentView];
     [self updateConstraintsIfNeeded];
+    [super setup];
 }
 
 - (void)configureCellWithData:(LCCKMessage *)message {
@@ -70,7 +70,7 @@
             CGFloat offsetLeftRight = 8;//8
             make.edges.equalTo(_systemmessageContentView).with.insets(UIEdgeInsetsMake(offsetTopBottom, offsetLeftRight, offsetTopBottom, offsetLeftRight));
         }];
-        systemMessageLabel.attributedText = [[NSAttributedString alloc] initWithString:@"2015-11-16" attributes:self.systemMessageStyle];
+        systemMessageLabel.attributedText = [[NSAttributedString alloc] initWithString:@"2016-8-14" attributes:self.systemMessageStyle];
     }
     return _systemmessageContentView;
 }
@@ -90,6 +90,17 @@
                  };
     }
     return _systemMessageStyle;
+}
+
+#pragma mark -
+#pragma mark - LCCKChatMessageCellSubclassing Method
+
++ (void)load {
+    [self registerSubclass];
+}
+
++ (AVIMMessageMediaType)classMediaType {
+    return kAVIMMessageMediaTypeSystem;
 }
 
 @end

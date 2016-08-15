@@ -3,7 +3,7 @@
 //  LCCKChatBarExample
 //
 //  Created by ElonChan ( https://github.com/leancloud/ChatKit-OC ) on 15/11/20.
-//  Copyright © 2015年 https://LeanCloud.cn . All rights reserved.
+//  v0.5.0 Copyright © 2015年 https://LeanCloud.cn . All rights reserved.
 //
 
 //CYLDebugging定义为1表示【debugging】 ，注释、不定义或者0 表示【debugging】
@@ -35,6 +35,7 @@
 #import <MLeaksFinder/MLeaksFinder.h>
 #endif
 
+NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationViewControllerErrorDomain";
 
 @interface LCCKConversationViewController () <LCCKChatBarDelegate, LCCKAVAudioPlayerDelegate, LCCKChatMessageCellDelegate, LCCKConversationViewModelDelegate, LCCKPhotoBrowserDelegate>
 
@@ -101,7 +102,8 @@
         /* If object is clean, ignore save request. */
         if (_peerId) {
             [[LCCKConversationService sharedInstance] fecthConversationWithPeerId:self.peerId callback:^(AVIMConversation *conversation, NSError *error) {
-                [self refreshConversation:conversation isJoined:YES];
+                //SDK没有好友观念，任何两个ID均可会话，请APP层自行处理好友关系。
+                [self refreshConversation:conversation isJoined:YES error:error];
             }];
             break;
         }
@@ -109,7 +111,8 @@
         if (_conversationId) {
             [[LCCKConversationService sharedInstance] fecthConversationWithConversationId:self.conversationId callback:^(AVIMConversation *conversation, NSError *error) {
                 if (error) {
-                    [self refreshConversation:conversation isJoined:NO];
+                    //如果用户已经已经被踢出群，此时依然能拿到 Conversation 对象，不会报 4401 错误，需要单独判断。即使后期服务端在这种情况下返回error，这里依然能正确处理。
+                    [self refreshConversation:conversation isJoined:NO error:error];
                     return;
                 }
                 NSString *currentClientId = [LCCKSessionService sharedInstance].clientId;
@@ -118,9 +121,23 @@
                     [self refreshConversation:conversation isJoined:YES];
                     return;
                 }
-                [conversation joinWithCallback:^(BOOL succeeded, NSError *error) {
-                    [self refreshConversation:conversation isJoined:succeeded];
-                }];
+                if (self.isEnableAutoJoin) {
+                    [conversation joinWithCallback:^(BOOL succeeded, NSError *error) {
+                        [self refreshConversation:conversation isJoined:succeeded error:error];
+                    }];
+                } else {
+                    NSInteger code = 4401;
+                    //错误码参考：https://leancloud.cn/docs/realtime_v2.html#%E4%BA%91%E7%AB%AF%E9%94%99%E8%AF%AF%E7%A0%81%E8%AF%B4%E6%98%8E
+                    NSString *errorReasonText = @"INVALID_MESSAGING_TARGET 您已被被管理员移除该群";
+                    NSDictionary *errorInfo = @{
+                                                @"code":@(code),
+                                                NSLocalizedDescriptionKey : errorReasonText,
+                                                };
+                    NSError *error_ = [NSError errorWithDomain:NSStringFromClass([self class])
+                                                          code:code
+                                                      userInfo:errorInfo];
+                    [self refreshConversation:nil isJoined:NO error:error_];
+                }
             }];
             break;
         }
@@ -177,7 +194,7 @@
     self.tableView.dataSource = self.chatViewModel;
     self.chatBar.delegate = self;
     [LCCKAVAudioPlayer sharePlayer].delegate = self;
-    self.tableView.backgroundColor = [UIColor colorWithRed:234.0f/255.0f green:234/255.0f blue:234/255.f alpha:1.0f];
+    self.tableView.backgroundColor = LCCK_CONVERSATIONVIEWCONTROLLER_BACKGROUNDCOLOR;
     self.view.backgroundColor = self.tableView.backgroundColor;
     [self.view addSubview:self.chatBar];
     [self.view addSubview:self.clientStatusView];
@@ -200,9 +217,8 @@
     [self.chatBar open];
     if (self.conversation.lcck_draft.length > 0) {
         [self loadDraft];
-        [self.chatBar beginInputing];
     }
-    [self markCurrentConversationInfo];
+    [self saveCurrentConversationInfoIfExists];
     !self.viewDidAppearBlock ?: self.viewDidAppearBlock(self, animated);
 }
 
@@ -213,15 +229,17 @@
     } else {
         objc_setAssociatedObject(self, _cmd, @"isLoadingDraft", OBJC_ASSOCIATION_RETAIN);
     }
-        [self.chatBar appendString:self.conversation.lcck_draft];
+    [self.chatBar appendString:self.conversation.lcck_draft];
+    [self.chatBar beginInputing];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
     [[[UIApplication sharedApplication] keyWindow] endEditing:YES];
     [self.chatBar close];
-    if (self.conversationId) {
-        [[LCCKConversationService sharedInstance] updateDraft:self.chatBar.cachedText conversationId:self.conversationId];
+    NSString *conversationId = [self getConversationIdIfExists:nil];
+    if (conversationId) {
+        [[LCCKConversationService sharedInstance] updateDraft:self.chatBar.cachedText conversationId:conversationId];
     }
     [self clearCurrentConversationInfo];
     [[LCCKAVAudioPlayer sharePlayer] stopAudioPlayer];
@@ -239,7 +257,7 @@
 }
 
 - (void)dealloc {
-    NSLog(@"🔴类名与方法名：%@（在第%@行），描述：%@", @(__PRETTY_FUNCTION__), @(__LINE__), @"");
+    _chatViewModel.delegate = nil;
     [[LCCKAVAudioPlayer sharePlayer] setDelegate:nil];
     !self.viewControllerWillDeallocBlock ?: self.viewControllerWillDeallocBlock(self);
 }
@@ -247,6 +265,95 @@
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     !self.didReceiveMemoryWarningBlock ?: self.didReceiveMemoryWarningBlock(self);
+}
+
+#pragma mark -
+#pragma mark - public Methods
+
+- (void)sendTextMessage:(NSString *)text {
+    if ([text length] > 0 ) {
+        LCCKMessage *lcckMessage = [[LCCKMessage alloc] initWithText:text
+                                                            senderId:self.userId
+                                                              sender:self.user
+                                                           timestamp:LCCK_CURRENT_TIMESTAMP
+                                                     serverMessageId:nil];
+        [self.chatViewModel sendMessage:lcckMessage];
+    }
+}
+
+- (void)sendImages:(NSArray<UIImage *> *)pictures {
+    for (UIImage *image in pictures) {
+        [self sendImageMessage:image];
+    }
+}
+
+- (void)sendImageMessage:(UIImage *)image {
+    NSData *imageData = UIImageJPEGRepresentation(image, 0.6);
+    [self sendImageMessageData:imageData];
+}
+
+- (void)sendImageMessageData:(NSData *)imageData {
+    NSString *path = [[LCCKSettingService sharedInstance] tmpPath];
+    NSError *error;
+    [imageData writeToFile:path options:NSDataWritingAtomic error:&error];
+    UIImage *representationImage = [[UIImage alloc] initWithData:imageData];
+    UIImage *thumbnailPhoto = [representationImage lcck_imageByScalingAspectFill];
+    if (error == nil) {
+        LCCKMessage *message = [[LCCKMessage alloc] initWithPhoto:representationImage
+                                                   thumbnailPhoto:thumbnailPhoto
+                                                        photoPath:path
+                                                     thumbnailURL:nil
+                                                   originPhotoURL:nil
+                                                         senderId:self.userId
+                                                           sender:self.user
+                                                        timestamp:LCCK_CURRENT_TIMESTAMP
+                                                  serverMessageId:nil
+                                ];
+        [self.chatViewModel sendMessage:message];
+    } else {
+        [self alert:@"write image to file error"];
+    }
+}
+
+- (void)sendVoiceMessageWithPath:(NSString *)voicePath time:(NSTimeInterval)recordingSeconds {
+    LCCKMessage *message = [[LCCKMessage alloc] initWithVoicePath:voicePath
+                                                         voiceURL:nil
+                                                    voiceDuration:[NSString stringWithFormat:@"%@", @(recordingSeconds)]
+                                                         senderId:self.userId
+                                                           sender:self.user
+                                                        timestamp:LCCK_CURRENT_TIMESTAMP
+                                                  serverMessageId:nil];
+    [self.chatViewModel sendMessage:message];
+}
+
+- (void)sendLocationMessageWithLocationCoordinate:(CLLocationCoordinate2D)locationCoordinate locatioTitle:(NSString *)locationTitle {
+    LCCKMessage *message = [[LCCKMessage alloc] initWithLocalPositionPhoto:({
+        NSString *imageName = @"message_sender_location";
+        UIImage *image = [UIImage lcck_imageNamed:imageName bundleName:@"MessageBubble" bundleForClass:[self class]];
+        image;})
+                                                              geolocations:locationTitle
+                                                                  location:[[CLLocation alloc] initWithLatitude:locationCoordinate.latitude
+                                                                                                      longitude:locationCoordinate.longitude]
+                                                                  senderId:self.userId
+                                                                    sender:self.user
+                                                                 timestamp:LCCK_CURRENT_TIMESTAMP
+                                                           serverMessageId:nil];
+    [self.chatViewModel sendMessage:message];
+}
+
+- (void)sendLocalFeedbackTextMessge:(NSString *)localFeedbackTextMessge {
+    [self.chatViewModel sendLocalFeedbackTextMessge:localFeedbackTextMessge];
+}
+
+- (void)sendCustomMessage:(AVIMTypedMessage *)customMessage {
+    [self.chatViewModel sendCustomMessage:customMessage];
+}
+
+- (void)sendCustomMessage:(AVIMTypedMessage *)customMessage
+            progressBlock:(AVProgressBlock)progressBlock
+                  success:(LCCKBooleanResultBlock)success
+                   failed:(LCCKBooleanResultBlock)failed {
+    [self.chatViewModel sendCustomMessage:customMessage progressBlock:progressBlock success:success failed:failed];
 }
 
 #pragma mark - UI init
@@ -260,13 +367,12 @@
     [LCCKConversationService sharedInstance].currentConversationId = nil;
 }
 
-- (void)markCurrentConversationInfo {
-    if (self.conversationId) {
-        [LCCKConversationService sharedInstance].currentConversationId = self.conversationId;
-    } else if (self.conversation.conversationId) {
-        [LCCKConversationService sharedInstance].currentConversationId = self.conversation.conversationId;
+- (void)saveCurrentConversationInfoIfExists {
+    NSString *conversationId = [self getConversationIdIfExists:nil];
+    if (conversationId) {
+        [LCCKConversationService sharedInstance].currentConversationId = conversationId;
     }
-    
+
     if (self.conversation) {
         [LCCKConversationService sharedInstance].currentConversation = self.conversation;
     }
@@ -323,76 +429,121 @@
     }
 }
 
+- (void)refreshConversation:(AVIMConversation *)conversation isJoined:(BOOL)isJoined {
+    [self refreshConversation:conversation isJoined:isJoined error:nil];
+}
+
+- (NSString *)getConversationIdIfExists:(AVIMConversation *)conversation {
+    NSString *conversationId;
+    do {
+        if (self.conversationId) {
+            conversationId = self.conversationId;
+            break;
+        }
+        if (self.conversation) {
+            conversationId = self.conversation.conversationId;
+            break;
+        }
+        if (conversation) {
+            conversationId = conversation.conversationId;
+            break;
+        }
+    } while (NO);
+    return conversationId;
+}
+
 /*!
  * conversation 不一定有值，可能为 nil
  */
-- (void)refreshConversation:(AVIMConversation *)conversation isJoined:(BOOL)isJoined {
-    if (_conversation == conversation) {
-        return;
+- (void)refreshConversation:(AVIMConversation *)aConversation isJoined:(BOOL)isJoined error:(NSError *)error {
+    if (error) {
+        LCCKConversationInvalidedHandler conversationInvalidedHandler = [[LCCKConversationService sharedInstance] conversationInvalidedHandler];
+        NSString *conversationId = [self getConversationIdIfExists:aConversation];
+        //错误码参考：https://leancloud.cn/docs/realtime_v2.html#%E4%BA%91%E7%AB%AF%E9%94%99%E8%AF%AF%E7%A0%81%E8%AF%B4%E6%98%8E
+        if (error.code == 4401 && conversationId.length > 0) {
+            //如果被管理员踢出群之后，再进入该会话，本地可能有缓存，要清除掉，防止下次再次进入。
+            [[LCCKConversationService sharedInstance] deleteRecentConversationWithConversationId:conversationId];
+        }
+        conversationInvalidedHandler(conversationId, self, nil, error);
+    }
+    AVIMConversation *conversation;
+    if (isJoined && !error) {
+        conversation = aConversation;
     }
     _conversation = conversation;
-    [LCCKConversationService sharedInstance].currentConversation = conversation;
+    [self callbackCurrentConversationEvenNotExists:conversation callback:^(BOOL succeeded, NSError *error) {
+        if (succeeded) {
+            [self handleLoadHistoryMessagesHandlerIfIsJoined:isJoined];
+        }
+    }];
+    [self saveCurrentConversationInfoIfExists];
+}
+
+- (void)callbackCurrentConversationEvenNotExists:(AVIMConversation *)conversation callback:(LCCKBooleanResultBlock)callback {
     if (conversation.members > 0) {
         NSAssert(_conversation.imClient, @"类名与方法名：%@（在第%@行），描述：%@", @(__PRETTY_FUNCTION__), @(__LINE__), @"imClient is nil");
         self.conversationId = conversation.conversationId;
         [self setupNavigationItemTitleWithConversation:conversation];
         [[LCChatKit sharedInstance] getProfilesInBackgroundForUserIds:conversation.members callback:^(NSArray<id<LCCKUserDelegate>> *users, NSError *error) {
             [self fetchConversationHandler:conversation];
+            !callback ?: callback(YES, nil);
         }];
     } else {
         [self fetchConversationHandler:conversation];
+        NSInteger code = 0;
+        NSString *errorReasonText = @"error reason";
+        NSDictionary *errorInfo = @{
+                                    @"code":@(code),
+                                    NSLocalizedDescriptionKey : errorReasonText,
+                                    };
+        NSError *error = [NSError errorWithDomain:@"NSStringFromClass([self class])"
+                                             code:code
+                                         userInfo:errorInfo];
+        
+        !callback ?: callback(NO, error);
     }
-    [self markCurrentConversationInfo];
-    [self handleLoadHistoryMessagesHandlerForIsJoined:isJoined];
 }
 
-- (void)handleLoadHistoryMessagesHandlerForIsJoined:(BOOL)isJoined {
+//TODO:Conversation为nil,不callback
+- (void)handleLoadHistoryMessagesHandlerIfIsJoined:(BOOL)isJoined {
     if (!isJoined) {
         BOOL succeeded = NO;
         //错误码参考：https://leancloud.cn/docs/realtime_v2.html#服务器端错误码说明
         NSInteger code = 4312;
         NSString *errorReasonText = @"拉取对话消息记录被拒绝，当前用户不再对话中";
         NSDictionary *errorInfo = @{
-                                    @"code":@(code),
+                                    @"code" : @(code),
                                     NSLocalizedDescriptionKey : errorReasonText,
                                     };
-        NSError *error = [NSError errorWithDomain:@"kAVErrorDomain"
+        NSError *error = [NSError errorWithDomain:LCCKConversationViewControllerErrorDomain
                                              code:code
                                          userInfo:errorInfo];
         [self loadLatestMessagesHandler:succeeded error:error];
         return;
     }
-    [self.chatViewModel loadMessagesFirstTimeWithHandler:^(BOOL succeeded, NSError *error) {
+    __weak __typeof(self) weakSelf = self;
+    [self.chatViewModel loadMessagesFirstTimeWithCallback:^(BOOL succeeded, NSError *error) {
         dispatch_async(dispatch_get_main_queue(),^{
-            [self loadLatestMessagesHandler:succeeded error:error];
+            [weakSelf loadLatestMessagesHandler:succeeded error:error];
         });
     }];
-}
-
-+ (NSTimeInterval)currentTimestamp {
-    NSTimeInterval seconds = [[NSDate date] timeIntervalSince1970];
-    return seconds * 1000;
 }
 
 - (NSString *)userId {
     return [LCChatKit sharedInstance].clientId;
 }
+//({ NSTimeInterval currentTimestamp = [[NSDate date] timeIntervalSince1970] * 1000;
+//    currentTimestamp;
+//})
 
 #pragma mark - LCCKChatBarDelegate
 
 - (void)chatBar:(LCCKChatBar *)chatBar sendMessage:(NSString *)message {
-    if ([message length] > 0 ) {
-        LCCKMessage *lcckMessage = [[LCCKMessage alloc] initWithText:message
-                                                              senderId:self.userId
-                                                              sender:self.user
-                                                           timestamp:[[self class] currentTimestamp]
-                                                     serverMessageId:nil];
-        [self.chatViewModel sendMessage:lcckMessage];
-    }
+    [self sendTextMessage:message];
 }
 
 - (void)chatBar:(LCCKChatBar *)chatBar sendVoice:(NSString *)voiceFileName seconds:(NSTimeInterval)seconds{
-    [self sendVoiceWithPath:voiceFileName seconds:seconds];
+    [self sendVoiceMessageWithPath:voiceFileName time:seconds];
 }
 
 - (void)chatBar:(LCCKChatBar *)chatBar sendPictures:(NSArray<UIImage *> *)pictures{
@@ -458,63 +609,12 @@
     }];
 }
 
-- (void)sendImages:(NSArray<UIImage *> *)pictures {
-    for (UIImage *image in pictures) {
-        [self sendImage:image];
-    }
+- (void)chatBar:(LCCKChatBar *)chatBar sendLocation:(CLLocationCoordinate2D)locationCoordinate locationText:(NSString *)locationText {
+    [self sendLocationMessageWithLocationCoordinate:locationCoordinate locatioTitle:locationText];
 }
 
-- (void)sendImage:(UIImage *)image {
-    NSData *imageData = UIImageJPEGRepresentation(image, 0.6);
-    NSString *path = [[LCCKSettingService sharedInstance] tmpPath];
-    NSError *error;
-    [imageData writeToFile:path options:NSDataWritingAtomic error:&error];
-    UIImage *representationImage = [[UIImage alloc] initWithData:imageData];
-    UIImage *thumbnailPhoto = [representationImage lcck_imageByScalingAspectFill];
-    if (error == nil) {
-        LCCKMessage *message = [[LCCKMessage alloc] initWithPhoto:representationImage
-                                                   thumbnailPhoto:thumbnailPhoto
-                                                        photoPath:path
-                                                     thumbnailURL:nil
-                                                   originPhotoURL:nil
-                                                           senderId:self.userId
-                                                           sender:self.user
-                                                        timestamp:[[self class] currentTimestamp]
-                                serverMessageId:nil
-                                ];
-        [self.chatViewModel sendMessage:message];
-    } else {
-        [self alert:@"write image to file error"];
-    }
-}
-
-- (void)sendVoiceWithPath:(NSString *)voicePath seconds:(NSTimeInterval)seconds {
-    LCCKMessage *message = [[LCCKMessage alloc] initWithVoicePath:voicePath
-                                                         voiceURL:nil
-                                                    voiceDuration:[NSString stringWithFormat:@"%@", @(seconds)]
-                                                           senderId:self.userId
-                                                           sender:self.user
-                                                        timestamp:[[self class] currentTimestamp]
-                                                  serverMessageId:nil];
-    [self.chatViewModel sendMessage:message];
-}
-
-- (void)chatBar:(LCCKChatBar *)chatBar sendLocation:(CLLocationCoordinate2D)locationCoordinate locationText:(NSString *)locationText{
-    LCCKMessage *message = [[LCCKMessage alloc] initWithLocalPositionPhoto:({
-        NSString *imageName = @"message_sender_location";
-        UIImage *image = [UIImage lcck_imageNamed:imageName bundleName:@"MessageBubble" bundleForClass:[self class]];
-        image;})
-                                                              geolocations:locationText
-                                                                  location:[[CLLocation alloc] initWithLatitude:locationCoordinate.latitude
-                                                                                                      longitude:locationCoordinate.longitude]
-                                                                    senderId:self.userId
-                                                                    sender:self.user
-                                                                 timestamp:[[self class] currentTimestamp]
-                                                           serverMessageId:nil];
-    [self.chatViewModel sendMessage:message];
-}
-
-- (void)chatBarFrameDidChange:(LCCKChatBar *)chatBar shouldScrollToBottom:(BOOL)shouldScrollToBottom; {
+//FIXME:如果有自定义消息，scrollToBottomAnimated 方法会出现异常，无法滚动到最低端
+- (void)chatBarFrameDidChange:(LCCKChatBar *)chatBar shouldScrollToBottom:(BOOL)shouldScrollToBottom {
     [UIView animateWithDuration:LCCKAnimateDuration animations:^{
         [self.tableView layoutIfNeeded];
         self.allowScrollToBottom = shouldScrollToBottom;
@@ -541,14 +641,14 @@
     [self.chatBar close];
     NSIndexPath *indexPath = [self.tableView indexPathForCell:messageCell];
     LCCKMessage *message = [self.chatViewModel.dataArray lcck_messageAtIndex:indexPath.row];
-    switch (messageCell.messageType) {
-        case LCCKMessageTypeVoice: {
-//            [(LCCKChatVoiceMessageCell *)messageCell setVoiceMessageState:[[LCCKAVAudioPlayer sharePlayer] audioPlayerState]];
+    switch (messageCell.mediaType) {
+        case kAVIMMessageMediaTypeAudio: {
             NSString *voiceFileName = message.voicePath;//必须带后缀，.mp3；
             [[LCCKAVAudioPlayer sharePlayer] playAudioWithURLString:voiceFileName identifier:message.messageId];
         }
             break;
-        case LCCKMessageTypeImage: {
+        case kAVIMMessageMediaTypeImage: {
+            ///FIXME:4S等低端机型在图片超过1M时，有几率会Crash，尤其是全景图。
             LCCKPreviewImageMessageBlock previewImageMessageBlock = [LCCKUIService sharedInstance].previewImageMessageBlock;
             UIImageView *placeholderView = [(LCCKChatImageMessageCell *)messageCell messageImageView];
             NSDictionary *userInfo = @{
@@ -570,7 +670,7 @@
             }
         }
             break;
-        case LCCKMessageTypeLocation: {
+        case kAVIMMessageMediaTypeLocation: {
             NSDictionary *userInfo = @{
                                        /// 传递触发的UIViewController对象
                                        LCCKPreviewLocationMessageUserInfoKeyFromController : self,
@@ -582,6 +682,7 @@
         }
             break;
         default: {
+//TODO:自定义消息的点击事件
             NSString *formatString = @"\n\n\
             ------ BEGIN NSException Log ---------------\n \
             class name: %@                              \n \
@@ -713,7 +814,7 @@
     if (![self.tableView.visibleCells containsObject:messageCell]) {
         return;
     }
-    if (messageCell.messageType == LCCKMessageTypeImage) {
+    if (messageCell.mediaType == kAVIMMessageMediaTypeImage) {
         [(LCCKChatImageMessageCell *)messageCell setUploadProgress:progress];
     }
     dispatch_async(dispatch_get_main_queue(), ^{

@@ -20,8 +20,6 @@
 		9A1E395D1CEDA4E6007B40F4 /* MessageBubble.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 9A1E39531CEDA4E6007B40F4 /* MessageBubble.bundle */; };
 		9A1E395E1CEDA4E6007B40F4 /* Placeholder.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 9A1E39541CEDA4E6007B40F4 /* Placeholder.bundle */; };
 		9A1E395F1CEDA4E6007B40F4 /* VoiceMessageSource.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 9A1E39551CEDA4E6007B40F4 /* VoiceMessageSource.bundle */; };
-		9A2F1A6D1CF6ECA300BE52F2 /* AVIMTypedMessage+LCCKExtention.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A2F1A6B1CF6ECA300BE52F2 /* AVIMTypedMessage+LCCKExtention.h */; };
-		9A2F1A6E1CF6ECA300BE52F2 /* AVIMTypedMessage+LCCKExtention.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A2F1A6C1CF6ECA300BE52F2 /* AVIMTypedMessage+LCCKExtention.m */; };
 		9A2F1A7F1CF6EF9C00BE52F2 /* NSMutableArray+LCCKMessageExtention.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A2F1A7D1CF6EF9C00BE52F2 /* NSMutableArray+LCCKMessageExtention.h */; };
 		9A2F1A801CF6EF9C00BE52F2 /* NSMutableArray+LCCKMessageExtention.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A2F1A7E1CF6EF9C00BE52F2 /* NSMutableArray+LCCKMessageExtention.m */; };
 		9A546F981D3971BA00A27C0F /* NSBundle+LCCKExtension.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A546F8A1D3971B900A27C0F /* NSBundle+LCCKExtension.h */; };
@@ -115,7 +113,6 @@
 		9A6061851CEC947A00D14D73 /* LCCKConversationListViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A6060ED1CEC947900D14D73 /* LCCKConversationListViewModel.m */; };
 		9A6061861CEC947A00D14D73 /* LCCKConversationListCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A6060EF1CEC947900D14D73 /* LCCKConversationListCell.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9A6061871CEC947A00D14D73 /* LCCKConversationListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A6060F01CEC947900D14D73 /* LCCKConversationListCell.m */; };
-		9A6061901CEC947A00D14D73 /* ChatKitHeaders.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A6060FE1CEC947900D14D73 /* ChatKitHeaders.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9A6061911CEC947A00D14D73 /* LCChatKit_Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A6060FF1CEC947900D14D73 /* LCChatKit_Internal.h */; };
 		9A6061921CEC947A00D14D73 /* LCCKConstants.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A6061001CEC947900D14D73 /* LCCKConstants.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9A6061931CEC947A00D14D73 /* LCCKServiceDefinition.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A6061011CEC947900D14D73 /* LCCKServiceDefinition.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -163,6 +160,8 @@
 		9A6061C11CEC949E00D14D73 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9A6061C01CEC949E00D14D73 /* Info.plist */; };
 		9A73B5AA1D33298A000A9B55 /* LCCKContact.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A73B5A81D33298A000A9B55 /* LCCKContact.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9A73B5AB1D33298A000A9B55 /* LCCKContact.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A73B5A91D33298A000A9B55 /* LCCKContact.m */; };
+		9A7E2DD11D5BF7BE003A7312 /* AVIMTypedMessage+LCCKExtension.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A7E2DCF1D5BF7BE003A7312 /* AVIMTypedMessage+LCCKExtension.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		9A7E2DD21D5BF7BF003A7312 /* AVIMTypedMessage+LCCKExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A7E2DD01D5BF7BE003A7312 /* AVIMTypedMessage+LCCKExtension.m */; };
 		9A8528141CF3297C00795B01 /* LCCKMenuItem.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A8528121CF3297A00795B01 /* LCCKMenuItem.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9A8528151CF3297C00795B01 /* LCCKMenuItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A8528131CF3297B00795B01 /* LCCKMenuItem.m */; };
 		9A91A3101D3BF25D00ED8300 /* LCChatKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A91A30E1D3BF25D00ED8300 /* LCChatKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -210,8 +209,6 @@
 		9A1E39531CEDA4E6007B40F4 /* MessageBubble.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = MessageBubble.bundle; sourceTree = "<group>"; };
 		9A1E39541CEDA4E6007B40F4 /* Placeholder.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Placeholder.bundle; sourceTree = "<group>"; };
 		9A1E39551CEDA4E6007B40F4 /* VoiceMessageSource.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = VoiceMessageSource.bundle; sourceTree = "<group>"; };
-		9A2F1A6B1CF6ECA300BE52F2 /* AVIMTypedMessage+LCCKExtention.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "AVIMTypedMessage+LCCKExtention.h"; sourceTree = "<group>"; };
-		9A2F1A6C1CF6ECA300BE52F2 /* AVIMTypedMessage+LCCKExtention.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "AVIMTypedMessage+LCCKExtention.m"; sourceTree = "<group>"; };
 		9A2F1A7D1CF6EF9C00BE52F2 /* NSMutableArray+LCCKMessageExtention.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSMutableArray+LCCKMessageExtention.h"; sourceTree = "<group>"; };
 		9A2F1A7E1CF6EF9C00BE52F2 /* NSMutableArray+LCCKMessageExtention.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSMutableArray+LCCKMessageExtention.m"; sourceTree = "<group>"; };
 		9A546F8A1D3971B900A27C0F /* NSBundle+LCCKExtension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSBundle+LCCKExtension.h"; sourceTree = "<group>"; };
@@ -306,7 +303,6 @@
 		9A6060ED1CEC947900D14D73 /* LCCKConversationListViewModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCKConversationListViewModel.m; sourceTree = "<group>"; };
 		9A6060EF1CEC947900D14D73 /* LCCKConversationListCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKConversationListCell.h; sourceTree = "<group>"; };
 		9A6060F01CEC947900D14D73 /* LCCKConversationListCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCKConversationListCell.m; sourceTree = "<group>"; };
-		9A6060FE1CEC947900D14D73 /* ChatKitHeaders.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatKitHeaders.h; sourceTree = "<group>"; };
 		9A6060FF1CEC947900D14D73 /* LCChatKit_Internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCChatKit_Internal.h; sourceTree = "<group>"; };
 		9A6061001CEC947900D14D73 /* LCCKConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKConstants.h; sourceTree = "<group>"; };
 		9A6061011CEC947900D14D73 /* LCCKServiceDefinition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKServiceDefinition.h; sourceTree = "<group>"; };
@@ -354,6 +350,8 @@
 		9A6061C01CEC949E00D14D73 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9A73B5A81D33298A000A9B55 /* LCCKContact.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKContact.h; sourceTree = "<group>"; };
 		9A73B5A91D33298A000A9B55 /* LCCKContact.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCKContact.m; sourceTree = "<group>"; };
+		9A7E2DCF1D5BF7BE003A7312 /* AVIMTypedMessage+LCCKExtension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "AVIMTypedMessage+LCCKExtension.h"; sourceTree = "<group>"; };
+		9A7E2DD01D5BF7BE003A7312 /* AVIMTypedMessage+LCCKExtension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "AVIMTypedMessage+LCCKExtension.m"; sourceTree = "<group>"; };
 		9A8528121CF3297A00795B01 /* LCCKMenuItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKMenuItem.h; sourceTree = "<group>"; };
 		9A8528131CF3297B00795B01 /* LCCKMenuItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCKMenuItem.m; sourceTree = "<group>"; };
 		9A91A30E1D3BF25D00ED8300 /* LCChatKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LCChatKit.h; path = Class/LCChatKit.h; sourceTree = "<group>"; };
@@ -500,8 +498,8 @@
 				9A6060911CEC947900D14D73 /* AVIMEmotionMessage.m */,
 				9A6060921CEC947900D14D73 /* LCCKMessage.h */,
 				9A6060931CEC947900D14D73 /* LCCKMessage.m */,
-				9A2F1A6B1CF6ECA300BE52F2 /* AVIMTypedMessage+LCCKExtention.h */,
-				9A2F1A6C1CF6ECA300BE52F2 /* AVIMTypedMessage+LCCKExtention.m */,
+				9A7E2DCF1D5BF7BE003A7312 /* AVIMTypedMessage+LCCKExtension.h */,
+				9A7E2DD01D5BF7BE003A7312 /* AVIMTypedMessage+LCCKExtension.m */,
 				9A2F1A7D1CF6EF9C00BE52F2 /* NSMutableArray+LCCKMessageExtention.h */,
 				9A2F1A7E1CF6EF9C00BE52F2 /* NSMutableArray+LCCKMessageExtention.m */,
 				9A6060941CEC947900D14D73 /* LCCKUserDelegate.h */,
@@ -695,7 +693,6 @@
 			children = (
 				9AABA6271D06B544003B0CB4 /* NSObject+LCCKIsFirstLaunch.h */,
 				9AABA6281D06B544003B0CB4 /* NSObject+LCCKIsFirstLaunch.m */,
-				9A6060FE1CEC947900D14D73 /* ChatKitHeaders.h */,
 				9A6060FF1CEC947900D14D73 /* LCChatKit_Internal.h */,
 				9A6061001CEC947900D14D73 /* LCCKConstants.h */,
 				9A6061011CEC947900D14D73 /* LCCKServiceDefinition.h */,
@@ -887,6 +884,7 @@
 				9AABA6291D06B549003B0CB4 /* NSObject+LCCKIsFirstLaunch.h in Headers */,
 				9A60617E1CEC947A00D14D73 /* LCCKContentView.h in Headers */,
 				9A6061441CEC947A00D14D73 /* LCCKLocationController.h in Headers */,
+				9A7E2DD11D5BF7BE003A7312 /* AVIMTypedMessage+LCCKExtension.h in Headers */,
 				9A60613A1CEC947A00D14D73 /* LCCKBaseConversationViewController.h in Headers */,
 				9A6061391CEC947A00D14D73 /* LCCKUserDelegate.h in Headers */,
 				9A60619C1CEC947A00D14D73 /* LCCKSettingService.h in Headers */,
@@ -899,7 +897,6 @@
 				9A6061911CEC947A00D14D73 /* LCChatKit_Internal.h in Headers */,
 				9A6061861CEC947A00D14D73 /* LCCKConversationListCell.h in Headers */,
 				9A546F9E1D3971BA00A27C0F /* UIColor+LCCKExtension.h in Headers */,
-				9A2F1A6D1CF6ECA300BE52F2 /* AVIMTypedMessage+LCCKExtention.h in Headers */,
 				9A6061821CEC947A00D14D73 /* LCCKConversationListViewController.h in Headers */,
 				9A6061B41CEC947A00D14D73 /* Mp3Recorder.h in Headers */,
 				9A6061621CEC947A00D14D73 /* LCCKMessageVoiceFactory.h in Headers */,
@@ -968,7 +965,6 @@
 				9A60613C1CEC947A00D14D73 /* LCCKBaseNavigationController.h in Headers */,
 				9A6061B81CEC947A00D14D73 /* LCCKConversationRefreshHeader.h in Headers */,
 				9A6061931CEC947A00D14D73 /* LCCKServiceDefinition.h in Headers */,
-				9A6061901CEC947A00D14D73 /* ChatKitHeaders.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1098,7 +1094,6 @@
 				9A60619B1CEC947A00D14D73 /* LCCKSessionService.m in Sources */,
 				9A6061811CEC947A00D14D73 /* LCCKMessageSendStateView.m in Sources */,
 				9A6061851CEC947A00D14D73 /* LCCKConversationListViewModel.m in Sources */,
-				9A2F1A6E1CF6ECA300BE52F2 /* AVIMTypedMessage+LCCKExtention.m in Sources */,
 				9A6061671CEC947A00D14D73 /* LCCKChatBar.m in Sources */,
 				9AE9B3041CF82CD20048E5F5 /* NSMutableDictionary+LCCKWeakReference.m in Sources */,
 				9A546FA31D3971BA00A27C0F /* UIImageView+LCCKExtension.m in Sources */,
@@ -1135,6 +1130,7 @@
 				9A9D75551D2F91F200090BA3 /* LCCKContactListViewController.m in Sources */,
 				9A546FA51D3971BA00A27C0F /* UIView+LCCKExtension.m in Sources */,
 				9AE9B3021CF82CD20048E5F5 /* NSBundle+LCCKCaleArray.m in Sources */,
+				9A7E2DD21D5BF7BF003A7312 /* AVIMTypedMessage+LCCKExtension.m in Sources */,
 				9A60614B1CEC947A00D14D73 /* LCCKConversationViewModel.m in Sources */,
 				9A6061771CEC947A00D14D73 /* LCCKChatMessageCell.m in Sources */,
 				9A6061471CEC947A00D14D73 /* LCCKTextFullScreenViewController.m in Sources */,

@@ -3,7 +3,7 @@
 //  LCCKChatExample
 //
 //  Created by ElonChan ( https://github.com/leancloud/ChatKit-OC ) on 15/11/18.
-//  Copyright © 2015年 https://LeanCloud.cn . All rights reserved.
+//  v0.5.0 Copyright © 2015年 https://LeanCloud.cn . All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
@@ -18,7 +18,7 @@
 @protocol LCCKConversationViewModelDelegate <NSObject>
 
 @optional
-- (void)reloadAfterReceiveMessage:(LCCKMessage *)message;
+- (void)reloadAfterReceiveMessage:(id)message;
 - (void)messageSendStateChanged:(LCCKMessageSendState)sendState  withProgress:(CGFloat)progress forIndex:(NSUInteger)index;
 - (void)messageReadStateChanged:(LCCKMessageReadState)readState withProgress:(CGFloat)progress forIndex:(NSUInteger)index;
 @end
@@ -47,9 +47,15 @@ typedef void (^LCCKSendMessageSuccessFailedBlock)(NSString *messageUUID, NSError
 /**
  *  发送一条消息,消息已经通过addMessage添加到LCCKConversationViewModel数组中了,此方法主要为了LCCKChatServer发送消息过程
  */
-- (void)sendMessage:(LCCKMessage *)message;
+- (void)sendMessage:(id)message;
+- (void)sendCustomMessage:(AVIMTypedMessage *)customMessage;
+- (void)sendCustomMessage:(AVIMTypedMessage *)aMessage
+            progressBlock:(AVProgressBlock)progressBlock
+                  success:(LCCKBooleanResultBlock)success
+                   failed:(LCCKBooleanResultBlock)failed;
+- (void)sendLocalFeedbackTextMessge:(NSString *)localFeedbackTextMessge;
+- (void)loadMessagesFirstTimeWithCallback:(LCCKBooleanResultBlock)callback;
 
-- (void)loadMessagesFirstTimeWithHandler:(LCCKBooleanResultBlock)handler;
 - (void)loadOldMessages;
 - (void)getAllVisibleImagesForSelectedMessage:(LCCKMessage *)message
                              allVisibleImages:(NSArray **)allVisibleImages

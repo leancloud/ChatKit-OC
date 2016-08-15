@@ -4,15 +4,16 @@
 //  LCCKChatMessageCell 是所有LCCKChatCell的父类
 //  提供了delegate,messageOwner,messageType属性
 //  Created by ElonChan ( https://github.com/leancloud/ChatKit-OC ) on 15/11/13.
-//  Copyright © 2015年 https://LeanCloud.cn . All rights reserved.
+//  v0.5.0 Copyright © 2015年 https://LeanCloud.cn . All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
-
 #import "LCCKMessageSendStateView.h"
 #import "LCCKContentView.h"
-#import "LCCKChatUntiles.h"
+#import "LCCKConstants.h"
 #import "LCCKMessage.h"
+#import "Masonry.h"
+#import <AVOSCloudIM/AVOSCloudIM.h>
 
 #if __has_include(<MLLabel/MLLinkLabel.h>)
     #import <MLLabel/MLLinkLabel.h>
@@ -21,6 +22,15 @@
 #endif
 
 @class LCCKChatMessageCell;
+
+@protocol LCCKChatMessageCellSubclassing <NSObject>
+@required
+/*!
+ 子类实现此方法用于返回该类对应的消息类型
+ @return 消息类型
+ */
++ (AVIMMessageMediaType)classMediaType;
+@end
 
 @protocol LCCKChatMessageCellDelegate <NSObject>
 
@@ -32,10 +42,14 @@
 - (void)avatarImageViewLongPressed:(LCCKChatMessageCell *)messageCell;
 - (void)messageCell:(LCCKChatMessageCell *)messageCell didTapLinkText:(NSString *)linkText linkType:(MLLinkType)linkType;
 - (void)fileMessageDidDownload:(LCCKChatMessageCell *)messageCell;
+
 @end
 
 @interface LCCKChatMessageCell : UITableViewCell
 
++ (void)registerCustomMessageCell;
++ (void)registerSubclass;
+- (void)addGeneralView;
 @property (nonatomic, strong, readonly) LCCKMessage *message;
 
 //FIXME:retain cycle
@@ -77,7 +91,7 @@
 /**
  *  消息的类型,只读类型,会根据自己的具体实例类型进行判断
  */
-@property (nonatomic, assign, readonly) LCCKMessageType messageType;
+@property (nonatomic, assign, readonly) AVIMMessageMediaType mediaType;
 
 /**
  *  消息的所有者,只读类型,会根据自己的reuseIdentifier进行判断
@@ -102,6 +116,6 @@
 #pragma mark - Public Methods
 
 - (void)setup;
-- (void)configureCellWithData:(LCCKMessage *)message;
+- (void)configureCellWithData:(id)message;
 
 @end
