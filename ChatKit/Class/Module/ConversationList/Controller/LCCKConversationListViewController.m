@@ -41,10 +41,11 @@
     self.navigationItem.title = @"消息";
     self.tableView.delegate = self.conversationListViewModel;
     self.tableView.dataSource = self.conversationListViewModel;
+    __weak __typeof(self) weakSelf = self;
     self.tableView.mj_header = ({
         MJRefreshNormalHeader *header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
             // 进入刷新状态后会自动调用这个 block
-            [self.conversationListViewModel refresh];
+            [weakSelf.conversationListViewModel refresh];
             // 设置颜色
         }];
         header.stateLabel.textColor = [UIColor grayColor];
