@@ -73,10 +73,11 @@ NSString *const LCCKSessionServiceErrorDemain = @"LCCKSessionServiceErrorDemain"
     LCCKForceReconnectSessionBlock forceReconnectSessionBlock = _forceReconnectSessionBlock;
     LCCKBooleanResultBlock callback = ^(BOOL succeeded, NSError *error) {
         LCCKHUDActionBlock HUDActionBlock = [LCCKUIService sharedInstance].HUDActionBlock;
+        !HUDActionBlock ?: HUDActionBlock(viewController, viewController.view, nil, LCCKMessageHUDActionTypeHide);
         if (succeeded) {
-            !HUDActionBlock ?: HUDActionBlock(nil, nil, LCCKLocalizedStrings(@"connectSucceeded"), LCCKMessageHUDActionTypeSuccess);
+            !HUDActionBlock ?: HUDActionBlock(viewController, viewController.view, LCCKLocalizedStrings(@"connectSucceeded"), LCCKMessageHUDActionTypeSuccess);
         } else {
-            !HUDActionBlock ?: HUDActionBlock(nil, nil, LCCKLocalizedStrings(@"connectFailed"), LCCKMessageHUDActionTypeError);
+            !HUDActionBlock ?: HUDActionBlock(viewController, viewController.view, LCCKLocalizedStrings(@"connectFailed"), LCCKMessageHUDActionTypeError);
             LCCKLog(@"%@", error.description);
         }
         !aCallback ?: aCallback(succeeded, error);
@@ -157,6 +158,13 @@ NSString *const LCCKSessionServiceErrorDemain = @"LCCKSessionServiceErrorDemain"
     // 需要开启 AVIMUserOptionUseUnread 选项
     LCCKLog(@"conversatoin:%@ didReceiveUnread:%@", conversation, @(unread));
     [conversation markAsReadInBackground];
+}
+
+- (void)conversation:(AVIMConversation *)conversation kickedByClientId:(NSString *)clientId {
+    [[NSNotificationCenter defaultCenter] postNotificationName:LCCKNotificationConversationInvalided object:clientId];
+    if ([[LCCKConversationService sharedInstance].currentConversationId isEqualToString:conversation.conversationId]) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:LCCKNotificationCurrentConversationInvalided object:clientId];
+    }
 }
 
 #pragma mark - receive message handle

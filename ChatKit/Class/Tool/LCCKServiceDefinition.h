@@ -35,7 +35,7 @@ typedef void (^LCCKForceReconnectSessionBlock)(__kindof UIViewController *viewCo
 @property (nonatomic, copy, readonly) LCCKForceReconnectSessionBlock forceReconnectSessionBlock;
 
 /*!
- * @param clientId The peer id in your peer system, LeanCloudChatKit will get the current user's information by both this id and the method `-[LCCKChatService getProfilesForUserIds:callback:]`.
+ * @param clientId You can use the user id in your user system as clientId, ChatKit will get the current user's information by both this id and the method `-[LCCKChatService getProfilesForUserIds:callback:]`.
  * @param callback Callback
  */
 - (void)openWithClientId:(NSString *)clientId callback:(LCCKBooleanResultBlock)callback;
@@ -46,6 +46,9 @@ typedef void (^LCCKForceReconnectSessionBlock)(__kindof UIViewController *viewCo
  */
 - (void)closeWithCallback:(LCCKBooleanResultBlock)callback;
 
+/*!
+ * set how you want to force reconnect session. It is usually usefully for losing session because of single sign-on, or weak network.
+ */
 - (void)setForceReconnectSessionBlock:(LCCKForceReconnectSessionBlock)forceReconnectSessionBlock;
 
 @end
@@ -324,6 +327,7 @@ typedef CGFloat (^LCCKAvatarImageViewCornerRadiusBlock)(CGSize avatarImageViewSi
 
 typedef void (^LCCKConversationResultBlock)(AVIMConversation *conversation, NSError *error);
 typedef void (^LCCKFetchConversationHandler) (AVIMConversation *conversation, LCCKConversationViewController *conversationController);
+typedef void (^LCCKConversationInvalidedHandler) (NSString *conversationId, LCCKConversationViewController *conversationController, id<LCCKUserDelegate> administrator, NSError *error);
 
 @protocol LCCKConversationService <NSObject>
 
@@ -334,6 +338,13 @@ typedef void (^LCCKFetchConversationHandler) (AVIMConversation *conversation, LC
  * 获取失败时，LCCKConversationHandler 返回值中的AVIMConversation 为 nil，成功时为正确的 conversation 值。
  */
 - (void)setFetchConversationHandler:(LCCKFetchConversationHandler)fetchConversationHandler;
+
+@property (nonatomic, copy) LCCKConversationInvalidedHandler conversationInvalidedHandler;
+
+/*!
+ *  会话失效的处理 block，如当群被解散或当前用户不再属于该会话时，对应会话会失效应当被删除并且关闭聊天窗口
+ */
+- (void)setConversationInvalidedHandler:(LCCKConversationInvalidedHandler)conversationInvalidedHandler;
 
 typedef void (^LCCKLoadLatestMessagesHandler)(LCCKConversationViewController *conversationController, BOOL succeeded, NSError *error);
 
