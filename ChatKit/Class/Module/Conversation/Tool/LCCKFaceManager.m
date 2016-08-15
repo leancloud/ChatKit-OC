@@ -8,6 +8,8 @@
 
 #import "LCCKFaceManager.h"
 #import "UIImage+LCCKExtension.h"
+#import "LCCKConstants.h"
+#import <ChatKit/LCChatKit.h>
 
 @interface LCCKFaceManager ()
 
@@ -158,7 +160,8 @@
 
 + (NSMutableAttributedString *)emotionStrWithString:(NSString *)text {
     if (!text.length) {
-        return [[NSMutableAttributedString alloc] initWithString:@"【此版本暂不支持该格式，请升级至最新版查看】"];
+        NSString *degradeContent = LCCKLocalizedStrings(@"unknownMessage");
+        return [[NSMutableAttributedString alloc] initWithString:degradeContent];
     }
     //1、创建一个可变的属性字符串
     NSMutableAttributedString *attributeString = [[NSMutableAttributedString alloc] initWithString:text];

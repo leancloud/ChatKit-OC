@@ -14,7 +14,7 @@
 - (void)resendMessage:(id)sender;
 @end
 
-#import "LCCKChatUntiles.h"
+#import "LCCKConstants.h"
 
 @interface LCCKMessageSendStateView : UIButton
 

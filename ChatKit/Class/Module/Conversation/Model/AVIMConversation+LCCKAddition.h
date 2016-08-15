@@ -8,7 +8,7 @@
 #import <AVOSCloudIM/AVIMConversation.h>
 #import "LCCKConversationService.h"
 #import "LCCKConstants.h"
-#import "LCCKChatUntiles.h"
+#import "LCCKConstants.h"
 
 @interface AVIMConversation (LCCKAddition)
 

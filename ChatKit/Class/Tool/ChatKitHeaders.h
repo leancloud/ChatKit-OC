@@ -22,7 +22,6 @@ FOUNDATION_EXPORT const unsigned char LCChatKitVersionString[];
 #endif
 
 #if __has_include(<ChatKit/LCChatKit.h>)
-    #import <ChatKit/LCCKConstants.h>
     #import <ChatKit/LCCKSessionService.h>
     #import <ChatKit/LCCKUserSystemService.h>
     #import <ChatKit/LCCKSignatureService.h>
@@ -42,15 +41,16 @@ FOUNDATION_EXPORT const unsigned char LCChatKitVersionString[];
     #import <ChatKit/NSString+LCCKExtension.h>
     #import <ChatKit/NSObject+LCCKIsFirstLaunch.h>
     #import <ChatKit/LCCKContactListViewController.h>
-    #import <ChatKit/LCCKContactManager.h>
     #import <ChatKit/LCCKBaseViewController.h>
     #import <ChatKit/LCCKBaseTableViewController.h>
     #import <ChatKit/LCCKBaseNavigationController.h>
     #import <ChatKit/LCCKBaseConversationViewController.h>
     #import <ChatKit/LCCKContact.h>
-    #import <ChatKit/AVIMTypedMessage+LCCKExtention.h>
+    #import <ChatKit/AVIMTypedMessage+LCCKExtension.h>
+    #import <ChatKit/LCCKInputViewPlugin.h>
+
 #else
-    #import "LCCKConstants.h"
+
     #import "LCCKSessionService.h"
     #import "LCCKUserSystemService.h"
     #import "LCCKSignatureService.h"
@@ -70,13 +70,14 @@ FOUNDATION_EXPORT const unsigned char LCChatKitVersionString[];
     #import "NSString+LCCKExtension.h"
     #import "NSObject+LCCKIsFirstLaunch.h"
     #import "LCCKContactListViewController.h"
-    #import "LCCKContactManager.h"
     #import "LCCKBaseViewController.h"
     #import "LCCKBaseTableViewController.h"
     #import "LCCKBaseNavigationController.h"
     #import "LCCKBaseConversationViewController.h"
     #import "LCCKContact.h"
-#import "AVIMTypedMessage+LCCKExtention.h"
+    #import "AVIMTypedMessage+LCCKExtension.h"
+    #import "LCCKInputViewPlugin.h"
+
 #endif
 
 

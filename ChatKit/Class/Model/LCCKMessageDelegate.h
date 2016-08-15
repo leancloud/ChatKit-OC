@@ -6,7 +6,6 @@
 //
 //
 #import "LCCKConstants.h"
-#import "LCCKChatUntiles.h"
 
 @protocol LCCKUserDelegate;
 @class LCCKMessageBody;

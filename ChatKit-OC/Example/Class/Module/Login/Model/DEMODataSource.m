@@ -16,6 +16,7 @@
 
 #import "DEMODataSource.h"
 #import "DEMOCustomAutoCompleteObject.h"
+#import "LCCKExampleConstants.h"
 
 @interface DEMODataSource ()
 

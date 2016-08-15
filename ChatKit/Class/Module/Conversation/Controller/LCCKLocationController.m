@@ -217,14 +217,14 @@ static CGFloat const LCCKLocationPOIListCellHeight = 40.f;
 
 
 - (void)cancel {
-    if (self.delegate && [self.delegate respondsToSelector:@selector(cancelLocation)]) {
+    if ([self.delegate respondsToSelector:@selector(cancelLocation)]) {
         [self.delegate cancelLocation];
     }
 }
 
 - (void)sendLocation {
     if (self.placemarks.count > self.selectedIndexPath.row) {
-        if (self.delegate && [self.delegate respondsToSelector:@selector(sendLocation:)]) {
+        if ([self.delegate respondsToSelector:@selector(sendLocation:)]) {
             [self.delegate sendLocation:self.placemarks[self.selectedIndexPath.row]];
         }
     }

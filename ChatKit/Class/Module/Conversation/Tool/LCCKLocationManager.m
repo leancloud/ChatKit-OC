@@ -57,7 +57,7 @@
     //取出经纬度
     CLLocationCoordinate2D coordinate = manager.location.coordinate;
     // 3.打印经纬度
-    NSLog(@"didUpdateLocations------%f %f", coordinate.latitude, coordinate.longitude);
+//    NSLog(@"didUpdateLocations------%f %f", coordinate.latitude, coordinate.longitude);
     if (self.locationCompleteBlock) {
         self.locationCompleteBlock(coordinate);
     }

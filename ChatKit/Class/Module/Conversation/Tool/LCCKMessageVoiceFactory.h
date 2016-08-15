@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "LCCKChatUntiles.h"
+#import "LCCKConstants.h"
 @import UIKit;
 
 @interface LCCKMessageVoiceFactory : NSObject

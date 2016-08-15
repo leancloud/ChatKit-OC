@@ -8,7 +8,6 @@
 
 #import "LCCKContactListViewController.h"
 #import "LCCKContactCell.h"
-#import "LCCKContactManager.h"
 #import "LCCKAlertController.h"
 #import "LCCKUIService.h"
 
@@ -441,8 +440,8 @@ static NSString *const LCCKContactListViewControllerIdentifier = @"LCCKContactLi
 
 - (NSArray *)excludedUserNames {
     if (!_excludedUserNames) {
-        NSArray<id<LCCKUserDelegate>> *excludedUsers = [[LCChatKit sharedInstance] getCachedProfilesIfExists:self.excludedUserIds error:nil];
-//        if (excludedUsers.count > 0) {
+        NSError *error = nil;
+        NSArray<id<LCCKUserDelegate>> *excludedUsers = [[LCChatKit sharedInstance] getCachedProfilesIfExists:nil error:&error];
             NSMutableArray *excludedUserNames = [NSMutableArray arrayWithCapacity:excludedUsers.count];
             [excludedUsers enumerateObjectsUsingBlock:^(id<LCCKUserDelegate>  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
                 @try {
@@ -459,22 +458,6 @@ static NSString *const LCCKContactListViewControllerIdentifier = @"LCCKContactLi
             } else {
                 _excludedUserNames = [_excludedUserIds copy];
             }
-//        } else {
-//            NSString *formatString = @"\n\n\
-//            ------ BEGIN NSException Log ---------------\n \
-//            class name: %@                              \n \
-//            ------line: %@                              \n \
-//            ----reason: %@                              \n \
-//            ------ END -------------------------------- \n\n";
-//            NSString *reason = [NSString stringWithFormat:formatString,
-//                                @(__PRETTY_FUNCTION__),
-//                                @(__LINE__),
-//                                @"Before init LCCKContactListViewController, You should make sure all the user profiles are prepared."];
-//            //手动创建一个异常导致的崩溃事件 http://is.gd/EfVfN0
-//            @throw [NSException exceptionWithName:NSGenericException
-//                                           reason:reason
-//                                         userInfo:nil];
-//        }
     }
     return _excludedUserNames;
 }

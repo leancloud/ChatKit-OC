@@ -21,6 +21,7 @@
 #else
     #import "LCChatKit.h"
 #endif
+#import "LCCKExampleConstants.h"
 
 @interface LCCKLoginViewController ()
 

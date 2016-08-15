@@ -12,7 +12,7 @@
 #import "LCCKUserDelegate.h"
 #import "LCCKUserSystemService.h"
 #import "LCCKConversationListViewController.h"
-#import "LCCKChatUntiles.h"
+#import "LCCKConstants.h"
 #import "AVIMConversation+LCCKAddition.h"
 #import "LCCKLastMessageTypeManager.h"
 #import "NSDate+LCCKDateTools.h"
@@ -36,6 +36,7 @@
 @interface LCCKConversationListViewModel ()
 
 @property (nonatomic, strong) LCCKConversationListViewController *conversationListViewController;
+@property (nonatomic, assign, getter=isFreshing) BOOL freshing;
 
 @end
 
@@ -52,6 +53,7 @@
     // 当在其它 Tab 的时候，收到消息, badge 增加，所以需要一直监听
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refresh) name:LCCKNotificationMessageReceived object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refresh) name:LCCKNotificationUnreadsUpdated object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refresh) name:LCCKNotificationConversationListDataSourceUpdated object:nil];
     _conversationListViewController = conversationListViewController;
     return self;
 }
@@ -95,7 +97,6 @@
     } else {
         [cell.avatarImageView setImage:[self imageInBundleForImageName:@"Placeholder_Group"]];
     }
-    
     cell.nameLabel.text = conversation.lcck_displayName;
     if (conversation.lcck_lastMessage) {
         cell.messageTextLabel.attributedText = [LCCKLastMessageTypeManager attributedStringWithMessage:conversation.lcck_lastMessage conversation:conversation userName:displayName];
@@ -182,7 +183,7 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     AVIMConversation *conversation = [self.dataArray objectAtIndex:indexPath.row];
     [conversation markAsReadInBackground];
-//    [self refresh];
+//    [self refreshIfNeeded];
     ![LCCKConversationListService sharedInstance].didSelectConversationsListCellBlock ?: [LCCKConversationListService sharedInstance].didSelectConversationsListCellBlock(indexPath, conversation, self.conversationListViewController);
 }
 
@@ -197,10 +198,18 @@
 
 #pragma mark - refresh
 
+- (void)setFreshing:(BOOL)freshing {
+    _freshing = freshing;
+    if (freshing == NO) {
+        [self.conversationListViewController.tableView.mj_header endRefreshing];
+    }
+}
+
 - (void)refresh {
+    self.freshing = YES;
     [[LCCKConversationListService sharedInstance] findRecentConversationsWithBlock:^(NSArray *conversations, NSInteger totalUnreadCount, NSError *error) {
         dispatch_block_t finishBlock = ^{
-            [self.conversationListViewController.tableView.mj_header endRefreshing];
+            self.freshing = NO;
             if ([self.conversationListViewController filterAVIMError:error]) {
                 self.dataArray = [NSMutableArray arrayWithArray:conversations];
                 [self.conversationListViewController.tableView reloadData];
@@ -228,7 +237,7 @@
                 if ([self.conversationListViewController filterAVIMError:error]) {
                     finishBlock();
                 } else {
-                    [self.conversationListViewController.tableView.mj_header endRefreshing];
+                    self.freshing = NO;
                 }
             });
         } else {
@@ -254,7 +263,7 @@
         }];
         
         if (!found) {
-            NSLog(@"not found remoteNofitciaonID");
+            LCCKLog(@"not found remoteNofitciaonID");
         }
         [LCCKConversationService sharedInstance].remoteNotificationConversationId = nil;
     }

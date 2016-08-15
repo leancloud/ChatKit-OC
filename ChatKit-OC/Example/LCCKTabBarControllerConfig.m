@@ -9,6 +9,7 @@
 #import "LCCKTabBarControllerConfig.h"
 #import <AVOSCloud/AVOSCloud.h>
 #import "LCChatKitExample.h"
+#import "LCCKContactManager.h"
 
 #if __has_include(<ChatKit/LCChatKit.h>)
     #import <ChatKit/LCChatKit.h>

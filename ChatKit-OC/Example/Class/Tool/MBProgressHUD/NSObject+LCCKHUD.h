@@ -31,7 +31,7 @@
 /**  只显示文字,几秒后消失 */
 + (void)lcck_showText:(NSString *)text;
 /**  只显示文字,几秒后消失(放到指定view中) */
-+ (void)lcck_showText:(NSString *)text view:(UIView *)view;
++ (void)lcck_showText:(NSString *)text toView:(UIView *)view;
 
 /**  只显示图片,几秒后消失 */
 + (void)lcck_showIcon:(NSString *)icon;

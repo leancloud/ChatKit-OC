@@ -14,7 +14,7 @@
 
 #import <Foundation/Foundation.h>
 
-#import "LCCKChatUntiles.h"
+#import "LCCKConstants.h"
 
 @protocol LCCKAVAudioPlayerDelegate <NSObject>
 

@@ -21,7 +21,7 @@
     NSInteger code = 0;
     NSString *errorReasonText = text;
     NSDictionary *errorInfo = @{
-                                @"code":@(code),
+                                @"code" : @(code),
                                 NSLocalizedDescriptionKey : errorReasonText,
                                 };
     NSError *error = [NSError errorWithDomain:@"LeanCloudChatKitExample"

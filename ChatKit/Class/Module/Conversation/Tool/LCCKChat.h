@@ -17,6 +17,8 @@
 #import "LCCKChatSystemMessageCell.h"
 #import "LCCKChatLocationMessageCell.h"
 
+#import "LCCKConstants.h"
+
 #import "LCCKChatUntiles.h"
 
 #import "LCCKConversationViewModel.h"

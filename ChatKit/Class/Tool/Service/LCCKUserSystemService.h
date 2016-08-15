@@ -25,14 +25,14 @@
             if (error == nil) {
                 [userList addObject:object];
             } else {
-                if (callback) {
-                    callback(nil, error);
+                if (completionHandler) {
+                    completionHandler(nil, error);
                     return;
                 }
             }
         }
-        if (callback) {
-            callback(userList, nil);
+        if (completionHandler) {
+            completionHandler(userList, nil);
         }
     }
      ];
