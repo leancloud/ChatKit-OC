@@ -40,6 +40,7 @@ typedef NS_ENUM(NSUInteger, LCCKFunctionViewShowType){
 @interface LCCKChatBar : UIView
 
 @property (weak, nonatomic) id<LCCKChatBarDelegate> delegate;
+@property (nonatomic, readonly) UIViewController *controllerRef;
 
 /*!
  *

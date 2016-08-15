@@ -7,8 +7,8 @@
 //
 
 #import "LCCKChatMoreView.h"
-
-#import "LCCKChatMoreItem.h"
+#import "LCCKConstants.h"
+#import "LCCKInputViewPlugin.h"
 #import "Masonry.h"
 
 #define kLCCKTopLineBackgroundColor [UIColor colorWithRed:184/255.0f green:184/255.0f blue:184/255.0f alpha:1.0f]
@@ -16,13 +16,14 @@
 @interface LCCKChatMoreView ()<UIScrollViewDelegate>
 
 @property (copy, nonatomic) NSArray *titles;
-@property (copy, nonatomic) NSArray *imageNames;
+@property (copy, nonatomic) NSArray *images;
 
-@property (strong, nonatomic) UIScrollView *scrollView;
-@property (strong, nonatomic) UIPageControl *pageControl;
-@property (strong, nonatomic) NSMutableArray *itemViews;
+@property (weak, nonatomic) UIScrollView *scrollView;
+@property (weak, nonatomic) UIPageControl *pageControl;
+@property (strong, nonatomic) NSMutableArray<LCCKInputViewPlugin *> *itemViews;
 
 @property (assign, nonatomic) CGSize itemSize;
+@property (nonatomic, copy) NSArray<Class> *sortedInputViewPluginArray;
 
 @end
 
@@ -50,21 +51,95 @@
     CGFloat itemWidth = (widthLimit - self.edgeInsets.left - self.edgeInsets.right) / self.numberPerLine;
     CGFloat itemHeight = kFunctionViewHeight / 2;
     self.itemSize = CGSizeMake(itemWidth, itemHeight);
-    
-    self.titles = [self.dataSource titlesOfMoreView:self];
-    self.imageNames = [self.dataSource imageNamesOfMoreView:self];
-    
-    [self.itemViews makeObjectsPerformSelector:@selector(removeFromSuperview) withObject:nil];
-    [self.itemViews removeAllObjects];
-    [self setupItems];
+    if (self && [self respondsToSelector:@selector(titlesOfMoreView:)]&&[self respondsToSelector:@selector(imagesOfMoreView:)]) {
+        self.titles = [self titlesOfMoreView:self];
+        self.images = [self imagesOfMoreView:self];
+        [self setupItems];
+    }
 }
 
 #pragma mark - Private Methods
-
-- (void)itemClickAction:(LCCKChatMoreItem *)item {
-    if (self.delegate && [self.delegate respondsToSelector:@selector(moreView:selectIndex:)]) {
-        [self.delegate moreView:self selectIndex:item.tag];
+#pragma mark - LCCKChatMoreViewDelegate & LCCKChatMoreViewDataSource
+- (NSArray<Class> *)sortedInputViewPluginArray {
+    if (_sortedInputViewPluginArray) {
+        return _sortedInputViewPluginArray;
     }
+    NSArray *inputViewPluginDictArray = [LCCKInputViewPluginArray copy];
+    
+    NSArray<NSDictionary *> *notSortedDefaultInputViewPlugin = [inputViewPluginDictArray filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"(LCCKInputViewPluginTypeKey < 0)"]];
+    NSArray<NSDictionary *> *notSortedCustomInputViewPlugin = [inputViewPluginDictArray filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"(LCCKInputViewPluginTypeKey > 0)"]];
+    
+    NSMutableArray<NSNumber *> *notSortedDefaultInputViewPluginMutableTypes = [NSMutableArray arrayWithCapacity:notSortedDefaultInputViewPlugin.count];
+    NSMutableArray<NSNumber *> *notSortedCustomInputViewPluginMutableTypes = [NSMutableArray arrayWithCapacity:notSortedCustomInputViewPlugin.count];
+    
+    [notSortedDefaultInputViewPlugin enumerateObjectsUsingBlock:^(NSDictionary * _Nonnull inputViewPluginDict, NSUInteger idx, BOOL * _Nonnull stop) {
+        [notSortedDefaultInputViewPluginMutableTypes addObject:inputViewPluginDict[LCCKInputViewPluginTypeKey]];
+    }];
+    [notSortedCustomInputViewPlugin enumerateObjectsUsingBlock:^(NSDictionary * _Nonnull inputViewPluginDict, NSUInteger idx, BOOL * _Nonnull stop) {
+        [notSortedCustomInputViewPluginMutableTypes addObject:inputViewPluginDict[LCCKInputViewPluginTypeKey]];
+    }];
+    
+    NSArray<NSNumber *> *notSortedDefaultInputViewPluginTypes = [notSortedDefaultInputViewPluginMutableTypes copy];
+    NSArray<NSNumber *> *notSortedCustomInputViewPluginTypes = [notSortedCustomInputViewPluginMutableTypes copy];
+    
+    //排序
+    NSSortDescriptor *highestToLowest = [NSSortDescriptor sortDescriptorWithKey:@"self" ascending:NO];
+    NSSortDescriptor *LowestToHighest = [NSSortDescriptor sortDescriptorWithKey:@"self" ascending:YES];
+    NSArray<NSNumber *> *sortedDefaultInputViewPluginTypes = [notSortedDefaultInputViewPluginTypes sortedArrayUsingDescriptors:@[highestToLowest]];
+    NSArray<NSNumber *> *sortedCustomInputViewPluginTypes = [notSortedCustomInputViewPluginTypes sortedArrayUsingDescriptors:@[LowestToHighest]];
+    
+    NSMutableArray *sortedInputViewPluginArray = [NSMutableArray arrayWithCapacity:[[LCCKInputViewPluginDict allKeys] count]];
+    [sortedDefaultInputViewPluginTypes enumerateObjectsUsingBlock:^(NSNumber * _Nonnull typeKey, NSUInteger idx, BOOL * _Nonnull stop) {
+        [sortedInputViewPluginArray addObject:[LCCKInputViewPluginDict objectForKey:typeKey]];
+    }];
+    
+    [sortedCustomInputViewPluginTypes enumerateObjectsUsingBlock:^(NSNumber * _Nonnull typeKey, NSUInteger idx, BOOL * _Nonnull stop) {
+        [sortedInputViewPluginArray addObject:[LCCKInputViewPluginDict objectForKey:typeKey]];
+    }];
+    _sortedInputViewPluginArray = [sortedInputViewPluginArray copy];
+    return _sortedInputViewPluginArray;
+}
+
+- (void)moreView:(LCCKChatMoreView *)moreView selectIndex:(LCCKInputViewPluginType)itemType {
+    NSNumber *typeKey = [NSNumber numberWithInt:itemType];
+    id<LCCKInputViewPluginDelegate> inputViewPlugin = [[LCCKInputViewPluginDict objectForKey:typeKey] new];
+    inputViewPlugin.inputViewRef = self.inputViewRef;
+    [inputViewPlugin pluginDidClicked];
+}
+
+- (NSArray *)titlesOfMoreView:(LCCKChatMoreView *)moreView {
+    NSMutableArray *titles = [NSMutableArray arrayWithCapacity:[[LCCKInputViewPluginDict allKeys] count]];
+    [self.sortedInputViewPluginArray enumerateObjectsUsingBlock:^(Class _Nonnull aClass, NSUInteger idx, BOOL * _Nonnull stop) {
+        id<LCCKInputViewPluginDelegate> inputViewPlugin = [aClass new];
+        NSString *title = [inputViewPlugin pluginTitle];
+        [titles addObject:title];
+    }];
+    return [titles copy];
+}
+
+- (NSArray<UIImage *> *)imagesOfMoreView:(LCCKChatMoreView *)moreView {
+    NSMutableArray *images = [NSMutableArray arrayWithCapacity:[[LCCKInputViewPluginDict allKeys] count]];
+    [self.sortedInputViewPluginArray enumerateObjectsUsingBlock:^(Class _Nonnull aClass, NSUInteger idx, BOOL * _Nonnull stop) {
+        id<LCCKInputViewPluginDelegate> inputViewPlugin = [aClass new];
+        UIImage *image = [inputViewPlugin pluginIconImage];
+        [images addObject:image];
+    }];
+    return [images copy];
+}
+
+- (LCCKInputViewPluginType)inputViewPluginTypeForItemTag:(NSInteger)tag {
+    NSArray *allPlugins = [LCCKInputViewPluginDict allKeys];
+    NSArray *allDefalutPlugins = [allPlugins filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"SELF < 0"]];
+    NSInteger allDefalutPluginsCount = [allDefalutPlugins count];
+    if (tag >= allDefalutPluginsCount) {
+        return (tag - allDefalutPluginsCount)+1;
+    } else {
+        return -tag-1;
+    }
+}
+
+- (void)itemClickAction:(LCCKInputViewPlugin *)item {
+    [self moreView:self selectIndex:[self inputViewPluginTypeForItemTag:item.tag]];
 }
 
 - (void)setup {
@@ -80,8 +155,8 @@
     self.itemViews = [NSMutableArray array];
     self.numberPerLine = 4;
     
-    [self addSubview:self.scrollView];
-    [self addSubview:self.pageControl];
+    [self scrollView];
+    [self pageControl];
     
     [self.scrollView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.edges.equalTo(self).with.insets(_edgeInsets);
@@ -90,6 +165,7 @@
         make.left.and.right.mas_equalTo(self);
         make.bottom.mas_equalTo(self).offset(-10);
     }];
+    [self reloadData];
 }
 
 - (void)setupItems {
@@ -111,9 +187,10 @@
         CGFloat scrollViewHeight = kFunctionViewHeight - self.edgeInsets.top - self.edgeInsets.bottom;
         CGFloat startX = column * self.itemSize.width + page * scrollViewWidth;
         CGFloat startY = line * self.itemSize.height;
-        
-        LCCKChatMoreItem *item = [[LCCKChatMoreItem alloc] initWithFrame:CGRectMake(startX, startY, self.itemSize.width, self.itemSize.height)];
-        [item fillViewWithTitle:obj imageName:self.imageNames[idx]];
+        LCCKInputViewPluginType type = [self inputViewPluginTypeForItemTag:idx];
+        NSNumber *typeKey = [NSNumber numberWithInt:type];
+        LCCKInputViewPlugin *item = [[[LCCKInputViewPluginDict objectForKey:typeKey] alloc] initWithFrame:CGRectMake(startX, startY, self.itemSize.width, self.itemSize.height)];
+        [item fillWithPluginTitle:obj pluginIconImage:self.images[idx]];
         item.tag = idx;
         [item addTarget:self action:@selector(itemClickAction:) forControlEvents:UIControlEventTouchUpInside];
         [self.scrollView addSubview:item];
@@ -129,39 +206,41 @@
 
 #pragma mark - Setters
 
-- (void)setDataSource:(id<LCCKChatMoreViewDataSource>)dataSource {
-    _dataSource = dataSource;
-    [self reloadData];
-}
-
-- (void)setEdgeInsets:(UIEdgeInsets)edgeInsets{
-    _edgeInsets = edgeInsets;
-    [self reloadData];
-}
-
-- (void)setNumberPerLine:(NSUInteger)numberPerLine {
-    _numberPerLine = numberPerLine;
-    [self reloadData];
-}
+//- (void)setDataSource:(id<LCCKChatMoreViewDataSource>)dataSource {
+//    _dataSource = dataSource;
+//    [self reloadData];
+//}
+//
+//- (void)setEdgeInsets:(UIEdgeInsets)edgeInsets{
+//    _edgeInsets = edgeInsets;
+//    [self reloadData];
+//}
+//
+//- (void)setNumberPerLine:(NSUInteger)numberPerLine {
+//    _numberPerLine = numberPerLine;
+//    [self reloadData];
+//}
 
 #pragma mark - Getters
 
 - (UIScrollView *)scrollView {
     if (!_scrollView) {
-        _scrollView = [[UIScrollView alloc] init];
-        _scrollView.showsHorizontalScrollIndicator = NO;
-        _scrollView.pagingEnabled = YES;
-        _scrollView.delegate = self;
+        UIScrollView *scrollView = [[UIScrollView alloc] init];
+        scrollView.showsHorizontalScrollIndicator = NO;
+        scrollView.pagingEnabled = YES;
+        scrollView.delegate = self;
+        [self addSubview:(_scrollView = scrollView)];
     }
     return _scrollView;
 }
 
 - (UIPageControl *)pageControl{
     if (!_pageControl) {
-        _pageControl = [[UIPageControl alloc] init];//WithFrame:CGRectMake(0, self.frame.size.height - 30, self.frame.size.width, 20)];
-        _pageControl.pageIndicatorTintColor = [UIColor lightGrayColor];
-        _pageControl.currentPageIndicatorTintColor = [UIColor darkGrayColor];
-        _pageControl.hidesForSinglePage = YES;
+        UIPageControl *pageControl = [[UIPageControl alloc] init];//WithFrame:CGRectMake(0, self.frame.size.height - 30, self.frame.size.width, 20)];
+        pageControl.pageIndicatorTintColor = [UIColor lightGrayColor];
+        pageControl.currentPageIndicatorTintColor = [UIColor darkGrayColor];
+        pageControl.hidesForSinglePage = YES;
+        [self addSubview:(_pageControl = pageControl)];
     }
     return _pageControl;
 }

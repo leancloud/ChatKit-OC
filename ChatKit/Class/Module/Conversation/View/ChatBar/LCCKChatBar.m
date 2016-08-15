@@ -7,7 +7,6 @@
 //
 
 #import "LCCKChatBar.h"
-#import "LCCKLocationController.h"
 #import "LCCKChatMoreView.h"
 #import "LCCKChatFaceView.h"
 #import "LCCKProgressHUD.h"
@@ -21,7 +20,7 @@
 NSString *const kLCCKBatchDeleteTextPrefix = @"kLCCKBatchDeleteTextPrefix";
 NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
 
-@interface LCCKChatBar () <UITextViewDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate, Mp3RecorderDelegate,LCCKChatMoreViewDelegate, LCCKChatMoreViewDataSource, LCCKChatFaceViewDelegate, LCCKLocationControllerDelegate>
+@interface LCCKChatBar () <UITextViewDelegate, UINavigationControllerDelegate, Mp3RecorderDelegate, LCCKChatFaceViewDelegate>
 
 @property (strong, nonatomic) Mp3Recorder *MP3;
 @property (nonatomic, strong) UIView *inputBarBackgroundView; /**< 输入栏目背景视图 */
@@ -30,8 +29,8 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
 
 @property (strong, nonatomic) UIButton *faceButton; /**< 表情按钮 */
 @property (strong, nonatomic) UIButton *moreButton; /**< 更多按钮 */
-@property (strong, nonatomic) LCCKChatFaceView *faceView; /**< 当前活跃的底部view,用来指向faceView */
-@property (strong, nonatomic) LCCKChatMoreView *moreView; /**< 当前活跃的底部view,用来指向moreView */
+@property (weak, nonatomic) LCCKChatFaceView *faceView; /**< 当前活跃的底部view,用来指向faceView */
+@property (weak, nonatomic) LCCKChatMoreView *moreView; /**< 当前活跃的底部view,用来指向moreView */
 
 @property (assign, nonatomic, readonly) CGFloat bottomHeight;
 @property (strong, nonatomic, readonly) UIViewController *rootViewController;
@@ -42,7 +41,6 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
 @property (assign, nonatomic) CGFloat oldTextViewHeight;
 @property (nonatomic, assign, getter=shouldAllowTextViewContentOffset) BOOL allowTextViewContentOffset;
 @property (nonatomic, assign, getter=isClosed) BOOL close;
-
 @end
 
 @implementation LCCKChatBar
@@ -95,6 +93,8 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
 }
 
 - (void)dealloc {
+    self.delegate = nil;
+    _faceView.delegate = nil;
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
 }
@@ -113,6 +113,14 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
         _cachedText = @"";
         return;
     }
+}
+
+- (UIViewController *)controllerRef {
+    return self.delegate;
+}
+
+- (void)setDelegate:(id<LCCKChatBarDelegate>)delegate {
+    _delegate = delegate;
 }
 
 #pragma mark - UITextViewDelegate
@@ -249,6 +257,11 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
     } completion:nil];
 }
 
+#pragma mark - 核心方法
+///=============================================================================
+/// @name 核心方法
+///=============================================================================
+
 /*!
  * updateChatBarConstraintsIfNeeded: WhenTextViewHeightDidChanged
  * 只要文本修改了就会调用，特殊情况，也会调用：刚刚进入对话追加草稿、键盘类型切换、添加表情信息
@@ -266,6 +279,7 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
     CGFloat newTextViewHeight = MAX(kLCCKChatBarTextViewFrameMinHeight, MIN(kLCCKChatBarTextViewFrameMaxHeight, textSize.height));
     BOOL textViewHeightChanged = (self.oldTextViewHeight != newTextViewHeight);
     if (textViewHeightChanged) {
+       //FIXME:如果有草稿，且超出了最低高度，会产生约束警告。
         self.oldTextViewHeight = newTextViewHeight;
         [self.textView mas_updateConstraints:^(MASConstraintMaker *make) {
             CGFloat height = newTextViewHeight;
@@ -279,31 +293,6 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
         } else {
             [textView setContentOffset:CGPointZero animated:YES];
         }
-    }
-}
-
-#pragma mark - UIImagePickerControllerDelegate
-
-- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
-    UIImage *image = info[UIImagePickerControllerOriginalImage];
-    [self sendImageMessage:image];
-    [self.rootViewController dismissViewControllerAnimated:YES completion:nil];
-}
-
-- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker{
-    [self.rootViewController dismissViewControllerAnimated:YES completion:nil];
-}
-
-#pragma mark - LCCKLocationControllerDelegate
-
-- (void)cancelLocation {
-    [self.rootViewController dismissViewControllerAnimated:YES completion:nil];
-}
-
-- (void)sendLocation:(CLPlacemark *)placemark {
-    [self cancelLocation];
-    if (self.delegate && [self.delegate respondsToSelector:@selector(chatBar:sendLocation:locationText:)]) {
-        [self.delegate chatBar:self sendLocation:placemark.location.coordinate locationText:placemark.name];
     }
 }
 
@@ -326,57 +315,7 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
     [LCCKProgressHUD changeSubTitle:@"正在转换..."];
 }
 
-#pragma mark - LCCKChatMoreViewDelegate & LCCKChatMoreViewDataSource
 
-- (void)moreView:(LCCKChatMoreView *)moreView selectIndex:(LCCKChatMoreItemType)itemType {
-    switch (itemType) {
-        case LCCKChatMoreItemAlbum: {
-            //显示相册
-            UIImagePickerController *pickerC = [[UIImagePickerController alloc] init];
-            pickerC.delegate = self;
-            [self.rootViewController presentViewController:pickerC animated:YES completion:nil];
-        }
-            break;
-        case LCCKChatMoreItemCamera: {
-            //显示拍照
-            if (![UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
-                LCCKShowNotificationBlock showNotificationBlock = [LCCKUIService sharedInstance].showNotificationBlock;
-                id<UIApplicationDelegate> delegate = ((id<UIApplicationDelegate>)[[UIApplication sharedApplication] delegate]);
-                UIWindow *window = delegate.window;
-                !showNotificationBlock ?: showNotificationBlock(window.rootViewController, @"您的设备不支持拍照", nil, LCCKMessageNotificationTypeError);
-                break;
-            }
-            
-            UIImagePickerController *pickerC = [[UIImagePickerController alloc] init];
-            pickerC.sourceType = UIImagePickerControllerSourceTypeCamera;
-            pickerC.delegate = self;
-            [self.rootViewController presentViewController:pickerC animated:YES completion:nil];
-        }
-            break;
-        case LCCKChatMoreItemLocation: {
-            //显示地理位置
-            LCCKLocationController *locationC = [[LCCKLocationController alloc] init];
-            locationC.delegate = self;
-            UINavigationController *locationNav = [[UINavigationController alloc] initWithRootViewController:locationC];
-            [self.rootViewController presentViewController:locationNav animated:YES completion:nil];
-        }
-            break;
-        default:
-            break;
-    }
-}
-
-- (NSArray *)titlesOfMoreView:(LCCKChatMoreView *)moreView {
-    return @[ @"拍摄", @"照片", @"位置" ];
-}
-
-- (NSArray<NSString *> *)imageNamesOfMoreView:(LCCKChatMoreView *)moreView {
-    return @[
-             @"chat_bar_icons_camera",
-             @"chat_bar_icons_pic",
-             @"chat_bar_icons_location"
-             ];
-}
 
 #pragma mark - LCCKChatFaceViewDelegate
 
@@ -520,6 +459,7 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
     }];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
+    //TODO:able to customize
     self.backgroundColor = [UIColor colorWithRed:235/255.0f green:236/255.0f blue:238/255.0f alpha:1.0f];
     [self setupConstraints];
 }
@@ -622,7 +562,7 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
 
 - (void)showFaceView:(BOOL)show {
     if (show) {
-        [self addSubview:self.faceView];
+        [self faceView];
         [self.faceView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.width.and.left.mas_equalTo(self);
             make.height.mas_equalTo(kFunctionViewHeight);
@@ -630,7 +570,7 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
             make.top.mas_equalTo(self.superview.mas_bottom);
         }];
         [self.faceView layoutIfNeeded];
-
+        
         [self.faceView mas_updateConstraints:^(MASConstraintMaker *make) {
             make.top.mas_equalTo(self.superview.mas_bottom).offset(-kFunctionViewHeight);
         }];
@@ -652,7 +592,7 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
  */
 - (void)showMoreView:(BOOL)show {
     if (show) {
-        [self addSubview:self.moreView];
+        [self moreView];
         [self.moreView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.width.and.left.mas_equalTo(self);
             make.height.mas_equalTo(kFunctionViewHeight);
@@ -727,9 +667,9 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
 - (void)chatBarFrameDidChangeShouldScrollToBottom:(BOOL)shouldScrollToBottom {
     NSString *reason = [NSString stringWithFormat:@"🔴类名与方法名：%@（在第%@行），描述：%@", @(__PRETTY_FUNCTION__), @(__LINE__), @"Should update on main thread"];
     NSAssert([NSThread mainThread], reason);
-        if (self.delegate && [self.delegate respondsToSelector:@selector(chatBarFrameDidChange:shouldScrollToBottom:)]) {
-            [self.delegate chatBarFrameDidChange:self shouldScrollToBottom:shouldScrollToBottom];
-        }
+    if (self.delegate && [self.delegate respondsToSelector:@selector(chatBarFrameDidChange:shouldScrollToBottom:)]) {
+        [self.delegate chatBarFrameDidChange:self shouldScrollToBottom:shouldScrollToBottom];
+    }
 }
 
 - (UIImage *)imageInBundlePathForImageName:(NSString *)imageName {
@@ -741,19 +681,20 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
 
 - (LCCKChatFaceView *)faceView {
     if (!_faceView) {
-        _faceView = [[LCCKChatFaceView alloc] init];
-        _faceView.delegate = self;
-        _faceView.backgroundColor = self.backgroundColor;
+        LCCKChatFaceView *faceView = [[LCCKChatFaceView alloc] init];
+        faceView.delegate = self;
+        faceView.backgroundColor = self.backgroundColor;
+        [self addSubview:(_faceView = faceView)];
     }
     return _faceView;
 }
 
 - (LCCKChatMoreView *)moreView {
     if (!_moreView) {
-        _moreView = [[LCCKChatMoreView alloc] init];
-        _moreView.delegate = self;
-        _moreView.dataSource = self;
-        _moreView.backgroundColor = self.backgroundColor;
+        LCCKChatMoreView *moreView = [[LCCKChatMoreView alloc] init];
+        moreView.backgroundColor = self.backgroundColor;
+        moreView.inputViewRef = self;
+        [self addSubview:(_moreView = moreView)];
     }
     return _moreView;
 }
@@ -833,7 +774,7 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
     return _faceButton;
 }
 
-- (CGFloat)bottomHeight{
+- (CGFloat)bottomHeight {
     if (self.faceView.superview || self.moreView.superview) {
         return MAX(self.keyboardSize.height, MAX(self.faceView.frame.size.height, self.moreView.frame.size.height));
     } else {
