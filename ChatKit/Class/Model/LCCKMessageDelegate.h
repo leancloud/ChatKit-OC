@@ -2,7 +2,7 @@
 //  LCCKMessageDelegate.h
 //  Pods
 //
-//  Created by 陈宜龙 on 16/7/26.
+// v0.5.1 Created by 陈宜龙 on 16/7/26.
 //
 //
 #import "LCCKConstants.h"

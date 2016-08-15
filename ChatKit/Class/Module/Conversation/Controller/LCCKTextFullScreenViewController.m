@@ -2,8 +2,8 @@
 //  LCCKTextFullScreenViewController.m
 //  LeanCloudIMKit-iOS
 //
-//  Created by 陈宜龙 on 16/3/23.
-//  v0.5.0 Copyright © 2016年 ElonChan. All rights reserved.
+// v0.5.1 Created by 陈宜龙 on 16/3/23.
+//  Copyright © 2016年 ElonChan. All rights reserved.
 //
 
 #import "LCCKTextFullScreenViewController.h"

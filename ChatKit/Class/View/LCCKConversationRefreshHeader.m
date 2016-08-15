@@ -3,7 +3,7 @@
 //  MJRefreshExample
 //
 //  Created by MJ Lee on 15/6/13.
-//  v0.5.0 Copyright © 2015年 小码哥. All rights reserved.
+//  Copyright © 2015年 小码哥. All rights reserved.
 //
 
 #import "LCCKConversationRefreshHeader.h"

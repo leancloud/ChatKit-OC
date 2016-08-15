@@ -3,7 +3,7 @@
 //  LeanCloudChatKit-iOS
 //
 //  Created by ElonChan on 16/2/22.
-//  v0.5.0 Copyright © 2016年 LeanCloud. All rights reserved.
+//  Copyright © 2016年 LeanCloud. All rights reserved.
 //
 
 #define RGBCOLOR(r, g, b) [UIColor colorWithRed : (r) / 255.0 green : (g) / 255.0 blue : (b) / 255.0 alpha : 1]

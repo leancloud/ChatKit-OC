@@ -2,7 +2,7 @@
 //  LCCKInputViewPluginPickImage.h
 //  Pods
 //
-//  Created by 陈宜龙 on 16/8/11.
+// v0.5.1 Created by 陈宜龙 on 16/8/11.
 //
 //
 
