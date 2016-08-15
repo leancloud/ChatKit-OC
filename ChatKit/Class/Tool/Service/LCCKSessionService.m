@@ -3,7 +3,7 @@
 //  LeanCloudChatKit-iOS
 //
 //  Created by ElonChan on 16/3/1.
-//  Copyright © 2016年 LeanCloud. All rights reserved.
+//  v0.5.0 Copyright © 2016年 LeanCloud. All rights reserved.
 //
 
 #import "LCCKSessionService.h"

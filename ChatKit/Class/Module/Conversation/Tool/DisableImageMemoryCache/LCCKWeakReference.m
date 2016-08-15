@@ -3,7 +3,7 @@
 //  Kuber
 //
 //  Created by Kuber on 16/4/29.
-//  Copyright © 2016年 Huaxu Technology. All rights reserved.
+//  v0.5.0 Copyright © 2016年 Huaxu Technology. All rights reserved.
 //
 
 #import "LCCKWeakReference.h"

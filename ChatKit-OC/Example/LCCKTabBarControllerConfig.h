@@ -3,7 +3,7 @@
 //  CYLTabBarController
 //
 //  Created by ElonChan on 15/11/3.
-//  Copyright © 2015年 微博@iOS程序犭袁. All rights reserved.
+//  v0.5.0 Copyright © 2015年 微博@iOS程序犭袁. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>

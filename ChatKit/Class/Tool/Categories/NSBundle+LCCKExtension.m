@@ -3,7 +3,7 @@
 //  ChatKit
 //
 //  Created by 陈宜龙 on 16/5/19.
-//  Copyright © 2016年 ElonChan. All rights reserved.
+//  v0.5.0 Copyright © 2016年 ElonChan. All rights reserved.
 //
 
 #import "NSBundle+LCCKExtension.h"

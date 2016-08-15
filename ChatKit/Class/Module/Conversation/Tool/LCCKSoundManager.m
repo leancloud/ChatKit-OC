@@ -3,7 +3,7 @@
 //  LeanCloudChatKit-iOS
 //
 //  Created by 陈宜龙 on 16/3/11.
-//  Copyright © 2016年 ElonChan. All rights reserved.
+//  v0.5.0 Copyright © 2016年 ElonChan. All rights reserved.
 //  声音设置、播放管理类。设置带有持久化功能。会把设置写入 NSUserDefaults，并在启动时加载
 
 #import "LCCKSoundManager.h"

@@ -3,7 +3,7 @@
 //  Kuber
 //
 //  Created by Kuber on 16/3/30.
-//  Copyright © 2016年 Huaxu Technology. All rights reserved.
+//  v0.5.0 Copyright © 2016年 Huaxu Technology. All rights reserved.
 //
 
 #import "NSString+LCCKAddScale.h"

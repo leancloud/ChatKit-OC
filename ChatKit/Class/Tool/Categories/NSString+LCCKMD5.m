@@ -3,7 +3,7 @@
 //  LCCKChatExample
 //
 //  Created by ElonChan ( https://github.com/leancloud/ChatKit-OC ) on 15/11/19.
-//  Copyright © 2015年 https://LeanCloud.cn . All rights reserved.
+//  v0.5.0 Copyright © 2015年 https://LeanCloud.cn . All rights reserved.
 //
 
 #import "NSString+LCCKMD5.h"

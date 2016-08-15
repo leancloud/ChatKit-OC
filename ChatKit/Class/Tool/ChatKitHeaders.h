@@ -3,7 +3,7 @@
 //  LeanCloudIMKit-iOS
 //
 //  Created by 陈宜龙 on 16/3/11.
-//  Copyright © 2016年 ElonChan. All rights reserved.
+//  v0.5.0 Copyright © 2016年 ElonChan. All rights reserved.
 //
 
 FOUNDATION_EXPORT double LCChatKitVersionNumber;
