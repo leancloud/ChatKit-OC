@@ -3,7 +3,7 @@
 //  LCCKChatBarExample
 //
 //  Created by ElonChan ( https://github.com/leancloud/ChatKit-OC ) on 15/11/20.
-//  v0.5.0 Copyright © 2015年 https://LeanCloud.cn . All rights reserved.
+//  Copyright © 2015年 https://LeanCloud.cn . All rights reserved.
 //
 
 //CYLDebugging定义为1表示【debugging】 ，注释、不定义或者0 表示【debugging】
@@ -215,7 +215,7 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
 - (void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
     [self.chatBar open];
-    if (self.conversation.lcck_draft.length > 0) {
+    if (_conversation.lcck_draft.length > 0) {
         [self loadDraft];
     }
     [self saveCurrentConversationInfoIfExists];
@@ -229,7 +229,7 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
     } else {
         objc_setAssociatedObject(self, _cmd, @"isLoadingDraft", OBJC_ASSOCIATION_RETAIN);
     }
-    [self.chatBar appendString:self.conversation.lcck_draft];
+    [self.chatBar appendString:_conversation.lcck_draft];
     [self.chatBar beginInputing];
 }
 
@@ -373,7 +373,7 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
         [LCCKConversationService sharedInstance].currentConversationId = conversationId;
     }
 
-    if (self.conversation) {
+    if (_conversation) {
         [LCCKConversationService sharedInstance].currentConversation = self.conversation;
     }
 }
@@ -440,7 +440,7 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
             conversationId = self.conversationId;
             break;
         }
-        if (self.conversation) {
+        if (_conversation) {
             conversationId = self.conversation.conversationId;
             break;
         }
@@ -481,7 +481,10 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
 
 - (void)callbackCurrentConversationEvenNotExists:(AVIMConversation *)conversation callback:(LCCKBooleanResultBlock)callback {
     if (conversation.members > 0) {
-        NSAssert(_conversation.imClient, @"类名与方法名：%@（在第%@行），描述：%@", @(__PRETTY_FUNCTION__), @(__LINE__), @"imClient is nil");
+        if (!conversation.imClient) {
+            [conversation setValue:[LCCKSessionService sharedInstance].client forKey:@"imClient"];
+            LCCKLog(@"🔴类名与方法名：%@（在第%@行），描述：%@", @(__PRETTY_FUNCTION__), @(__LINE__), @"imClient is nil");
+        }
         self.conversationId = conversation.conversationId;
         [self setupNavigationItemTitleWithConversation:conversation];
         [[LCChatKit sharedInstance] getProfilesInBackgroundForUserIds:conversation.members callback:^(NSArray<id<LCCKUserDelegate>> *users, NSError *error) {
@@ -496,7 +499,7 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
                                     @"code":@(code),
                                     NSLocalizedDescriptionKey : errorReasonText,
                                     };
-        NSError *error = [NSError errorWithDomain:@"NSStringFromClass([self class])"
+        NSError *error = [NSError errorWithDomain:NSStringFromClass([self class])
                                              code:code
                                          userInfo:errorInfo];
         

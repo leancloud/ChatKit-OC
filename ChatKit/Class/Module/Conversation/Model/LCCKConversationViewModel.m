@@ -3,7 +3,7 @@
 //  LCCKChatExample
 //
 //  Created by ElonChan ( https://github.com/leancloud/ChatKit-OC ) on 15/11/18.
-//  v0.5.0 Copyright © 2015年 https://LeanCloud.cn . All rights reserved.
+//  Copyright © 2015年 https://LeanCloud.cn . All rights reserved.
 //
 #if __has_include(<ChatKit/LCChatKit.h>)
 #import <ChatKit/LCChatKit.h>
@@ -534,8 +534,14 @@ fromTimestamp     |    toDate   |                |  上次上拉刷新顶端，�
 
 - (void)loadMessagesFirstTimeWithCallback:(LCCKBooleanResultBlock)callback {
     AVIMConversation *conversation = [LCCKConversationService sharedInstance].currentConversation;
-    [self queryAndCacheMessagesWithTimestamp:0 block:^(NSArray *avimTypedMessages, NSError *error) {
+    BOOL socketOpened = [LCCKSessionService sharedInstance].connect;
+    //必须在socketOpened时禁用，否则，`queryAndCacheMessagesWithTimestamp` 会在socket not opened 状态时返回nil。
+    if (socketOpened) {
+        conversation.imClient.messageQueryCacheEnabled = NO;
+    }
+    [self queryAndCacheMessagesWithTimestamp:([[NSDate distantFuture] timeIntervalSince1970] * 1000) block:^(NSArray *avimTypedMessages, NSError *error) {
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
+            conversation.imClient.messageQueryCacheEnabled = YES;
             BOOL succeed = [self.parentConversationViewController filterAVIMError:error];
             if (succeed) {
                 NSMutableArray *lcckSucceedMessags = [NSMutableArray lcck_messagesWithAVIMMessages:avimTypedMessages];
@@ -563,8 +569,8 @@ fromTimestamp     |    toDate   |                |  上次上拉刷新顶端，�
     if (self.parentConversationViewController.loadingMoreMessage) {
         return;
     }
-    if (self.dataArray.count == 0 ) {
-        timestamp = 0;
+    if (self.dataArray.count == 0 || !timestamp) {
+        timestamp = [[NSDate distantFuture] timeIntervalSince1970] * 1000;
     }
     self.parentConversationViewController.loadingMoreMessage = YES;
     [[LCCKConversationService sharedInstance] queryTypedMessagesWithConversation:[LCCKConversationService sharedInstance].currentConversation
