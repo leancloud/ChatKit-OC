@@ -562,7 +562,7 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
 - (void)presentSelectMemberViewController {
     NSString *cuttentClientId = [LCCKSessionService sharedInstance].clientId;
     NSArray<id<LCCKUserDelegate>> *users = [[LCCKUserSystemService sharedInstance] getCachedProfilesIfExists:self.conversation.members shouldSameCount:YES error:nil];
-    LCCKContactListViewController *contactListViewController = [[LCCKContactListViewController alloc] initWithContacts:users userIds:self.conversation.members excludedUserIds:@[cuttentClientId] mode:LCCKContactListModeMultipleSelection];
+    LCCKContactListViewController *contactListViewController = [[LCCKContactListViewController alloc] initWithContacts:[NSSet setWithArray:users] userIds:[NSSet setWithArray:self.conversation.members] excludedUserIds:[NSSet setWithArray:@[cuttentClientId]] mode:LCCKContactListModeMultipleSelection];
     [contactListViewController setViewDidDismissBlock:^(LCCKBaseViewController *viewController) {
         [self.chatBar open];
         [self.chatBar beginInputing];

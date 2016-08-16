@@ -61,12 +61,13 @@
     self.firstViewController = firstViewController;
     NSArray *users = [[LCChatKit sharedInstance] getCachedProfilesIfExists:self.allPersonIds shouldSameCount:YES error:nil];
     NSString *currentClientID = [[LCChatKit sharedInstance] clientId];
-    LCCKContactListViewController *secondViewController = [[LCCKContactListViewController alloc] initWithContacts:users userIds:self.allPersonIds excludedUserIds:@[currentClientID] mode:LCCKContactListModeNormal];
+    LCCKContactListViewController *secondViewController = [[LCCKContactListViewController alloc] initWithContacts:[NSSet setWithArray:users] userIds:[NSSet setWithArray:self.allPersonIds] excludedUserIds:[NSSet setWithArray:@[currentClientID]] mode:LCCKContactListModeNormal];
     [secondViewController setSelectedContactCallback:^(UIViewController *viewController, NSString *peerId) {
         [LCChatKitExample exampleOpenConversationViewControllerWithPeerId:peerId fromNavigationController:self.tabBarController.navigationController];
     }];
     [secondViewController setDeleteContactCallback:^BOOL(UIViewController *viewController, NSString *peerId) {
-        return [[LCCKContactManager defaultManager] removeContactForPeerId:peerId];
+        [[LCCKContactManager defaultManager] removeContactForPeerId:peerId];
+        return YES;
     }];
     self.secondViewController = secondViewController;
     UINavigationController *secondNavigationController = [[LCCKBaseNavigationController alloc]
@@ -75,6 +76,10 @@
                                                                                               style:UIBarButtonItemStylePlain
                                                                                              target:self
                                                                                              action:@selector(signOut)];
+    secondViewController.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"添加好友"
+                                                                                              style:UIBarButtonItemStylePlain
+                                                                                             target:self
+                                                                                            action:@selector(addFriend)];
     NSArray *viewControllers = @[
                                  firstNavigationController,
                                  secondNavigationController,
@@ -198,6 +203,15 @@
 - (void)createGroupConversation:(id)sender {
     [LCChatKitExample exampleCreateGroupConversationFromViewController:self.firstViewController];
 }
+
+- (void)addFriend {
+    int a = arc4random_uniform(100000000);
+    NSString *additionUserId = [NSString stringWithFormat:@"%@", @(a)];
+    NSMutableSet *addedUserIds = [NSMutableSet setWithSet:self.secondViewController.userIds];
+    [addedUserIds addObject:additionUserId];
+    self.secondViewController.userIds = [addedUserIds copy];
+}
+
 - (void)signOut {
     [LCChatKitExample signOutFromViewController:self.secondViewController];
 }

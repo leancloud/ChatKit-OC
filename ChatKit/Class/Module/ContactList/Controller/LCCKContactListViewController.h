@@ -35,11 +35,13 @@ typedef BOOL (^LCCKDeleteContactCallback)(UIViewController *viewController, NSSt
 /*!
  * 不参与展示的名单，可以是黑名单或者当前用户。该数组是client id的集合。
  */
-@property (nonatomic, copy) NSArray *excludedUserIds;
+@property (nonatomic) NSSet *excludedUserIds;
 
 @property (nonatomic, assign, readonly) LCCKContactListMode mode;
 @property (nonatomic, copy) NSString *title;
-@property (nonatomic, copy, readonly) NSArray<LCCKContact *> *contacts;
+@property (nonatomic, copy) NSSet<LCCKContact *> *contacts;
+@property (nonatomic, copy) NSSet<NSString *> *userIds;
+
 - (void)setDeleteContactCallback:(LCCKDeleteContactCallback)deleteContactCallback;
 - (LCCKDeleteContactCallback)deleteContactCallback;
 
@@ -47,20 +49,30 @@ typedef BOOL (^LCCKDeleteContactCallback)(UIViewController *viewController, NSSt
 - (LCCKSelectedContactCallback)selectedContactCallback;
 - (void)setSelectedContactsCallback:(LCCKSelectedContactsCallback)selectedContactsCallback;
 - (LCCKSelectedContactsCallback)selectedContactsCallback;
-- (instancetype)initWithMode:(LCCKContactListMode)mode;
-- (instancetype)initWithExcludedUserIds:(NSArray *)excludedUserIds
-                           mode:(LCCKContactListMode)mode;
-- (instancetype)initWithContacts:(NSArray<LCCKContact *> *)contacts
-                 excludedUserIds:(NSArray *)excludedUserIds
+
+NS_ASSUME_NONNULL_BEGIN
+- (instancetype)initWithContacts:(NSSet<LCCKContact *> *)contacts
                             mode:(LCCKContactListMode)mode;
-- (instancetype)initWithContacts:(NSArray<LCCKContact *> *)contacts
-                         userIds:(NSArray<NSString *> *)userIds
-                 excludedUserIds:(NSArray *)excludedUserIds
+
+- (instancetype)initWithContacts:(NSSet<LCCKContact *> *)contacts
+                 excludedUserIds:(NSSet * __nullable)excludedUserIds
                             mode:(LCCKContactListMode)mode;
-//TODO:
- @property (nonatomic, copy) NSArray<NSString *> *userIds;
-// - (instancetype)initWithUserIds:(NSArray<NSString *> *)userIds
-//                excludedUserIds:(NSArray *)excludedUserIds
-//                           mode:(LCCKContactListMode)mode;
+
+- (instancetype)initWithUserIds:(NSSet<NSString *> *)userIds
+                           mode:(LCCKContactListMode)contactListMode;
+
+- (instancetype)initWithUserIds:(NSSet<NSString *> *)userIds
+                 excludedUserIds:(NSSet * __nullable)excludedUserIds
+                            mode:(LCCKContactListMode)contactListMode;
+/*!
+ * @param 你可以使用 contacts 和 userIds 两个参数来进行联系人列表初始化，区别是前者可以为空，后者不可以为空。如果同时传了两个参数，那么前者优先级大于后者。如果只传了后者，ChatKit 会自行进行网络请求获取到对应的 contacts。
+ * @param excludedUserIds 是黑名单，不希望出现在联系人列表里的用户id，最常见的是将自己的id放在这里。
+ * @param contactListMode 主要分为：单选、多选、点击即跳转。
+ */
+- (instancetype)initWithContacts:(NSSet<LCCKContact *> * __nullable)contacts
+                         userIds:(NSSet<NSString *> *)userIds
+                 excludedUserIds:(NSSet * __nullable)excludedUserIds
+                            mode:(LCCKContactListMode)contactListMode;
+NS_ASSUME_NONNULL_END
 
 @end
