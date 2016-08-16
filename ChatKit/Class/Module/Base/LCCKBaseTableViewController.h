@@ -2,7 +2,7 @@
 //  LCCKBaseTableViewController.h
 //  LeanCloudChatKit-iOS
 //
-// v0.5.1 Created by 陈宜龙 on 16/3/9.
+// v0.5.2 Created by 陈宜龙 on 16/3/9.
 //  Copyright © 2016年 ElonChan. All rights reserved.
 //
 
