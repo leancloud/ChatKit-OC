@@ -2,7 +2,7 @@
 //  LCCKConversationViewController.h
 //  LCCKChatBarExample
 //
-//  Created by ElonChan ( https://github.com/leancloud/ChatKit-OC ) on 15/11/20.
+//  v0.5.3 Created by ElonChan ( https://github.com/leancloud/ChatKit-OC ) on 15/11/20.
 //  Copyright © 2015年 https://LeanCloud.cn . All rights reserved.
 //
 @import UIKit;
@@ -91,6 +91,7 @@ FOUNDATION_EXTERN NSString *const LCCKConversationViewControllerErrorDomain;
  */
 - (void)sendLocationMessageWithLocationCoordinate:(CLLocationCoordinate2D)locationCoordinate locatioTitle:(NSString *)locationTitle;
 - (void)sendLocalFeedbackTextMessge:(NSString *)localFeedbackTextMessge;
+
 /*!
  * 自定义消息位置发送
  */

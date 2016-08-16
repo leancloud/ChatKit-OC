@@ -2,29 +2,24 @@
 //  LCCKVCardMessageCell.m
 //  ChatKit-OC
 //
-// v0.5.1 Created by 陈宜龙 on 16/8/10.
+//  v0.5.3 Created by 陈宜龙 on 16/8/10.
 //  Copyright © 2016年 ElonChan. All rights reserved.
 //
-
-#define LCCK_TEXT_MSG_CELL_TEXT_COLOR [UIColor blackColor]
-
-#import "LCCKChatTextMessageCell.h"
-#import "LCCKFaceManager.h"
-#import "LCCKWebViewController.h"
 
 #import "LCCKVCardMessageCell.h"
 #import "LCCKVCardMessage.h"
 
 #if __has_include(<SDWebImage/UIImageView+WebCache.h>)
-    #import <SDWebImage/UIImageView+WebCache.h>
+#import <SDWebImage/UIImageView+WebCache.h>
 #else
-    #import "UIImageView+WebCache.h"
+#import "UIImageView+WebCache.h"
 #endif
 #import "LCCKVCardView.h"
 
 @interface LCCKVCardMessageCell ()
 @property (nonatomic, weak) LCCKVCardView *vCardView;
 @end
+
 static CGFloat LCCK_MSG_SPACE_TOP = 16;
 static CGFloat LCCK_MSG_SPACE_BTM = 16;
 static CGFloat LCCK_MSG_SPACE_LEFT = 50;
@@ -32,6 +27,7 @@ static CGFloat LCCK_MSG_SPACE_RIGHT = 50;
 
 @implementation LCCKVCardMessageCell
 
+#pragma mark -
 #pragma mark - Override Methods
 
 - (void)setup {
@@ -50,13 +46,24 @@ static CGFloat LCCK_MSG_SPACE_RIGHT = 50;
     clientId = [message.attributes valueForKey:@"clientId"];
     [[LCChatKit sharedInstance] getCachedProfileIfExists:clientId name:&name avatarURL:&avatarURL error:nil];
     if (!name) {
-            name = clientId;
-        }
-        if (!name) {
-            name = @"未知用户";
-        }
+        name = clientId;
+    }
+    if (!name) {
+        name = @"未知用户";
+    }
     
     [self.vCardView configureWithAvatarURL:avatarURL title:name clientId:clientId];
+}
+
+#pragma mark -
+#pragma mark - LCCKChatMessageCellSubclassing Method
+
++ (void)load {
+    [self registerCustomMessageCell];
+}
+
++ (AVIMMessageMediaType)classMediaType {
+    return kAVIMMessageMediaTypeVCard;
 }
 
 #pragma mark -
@@ -82,17 +89,6 @@ static CGFloat LCCK_MSG_SPACE_RIGHT = 50;
     }];
     [self.contentView addSubview:(_vCardView = vCardView)];
     return _vCardView;
-}
-
-#pragma mark -
-#pragma mark - LCCKChatMessageCellSubclassing Method
-
-+ (void)load {
-    [self registerCustomMessageCell];
-}
-
-+ (AVIMMessageMediaType)classMediaType {
-    return kAVIMMessageMediaTypeVCard;
 }
 
 @end

@@ -2,7 +2,7 @@
 //  LCCKInputViewPlugin.h
 //  Pods
 //
-// v0.5.1 Created by 陈宜龙 on 16/7/19.
+//  v0.5.3 Created by 陈宜龙 on 16/7/19.
 //
 //
 
@@ -49,6 +49,9 @@
 
 @property (nonatomic, weak) id<LCCKInputViewPluginDelegate> delegate;
 
+/*!
+ * 发送自定消息的实现
+ */
 @property (nonatomic, copy) LCCKIdResultBlock sendCustomMessageHandler;
 
 /*!

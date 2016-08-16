@@ -2,7 +2,7 @@
 //  UITableViewCell+LCCKCellIdentifier.m
 //  LCCKChatBarExample
 //
-//  Created by ElonChan ( https://github.com/leancloud/ChatKit-OC ) on 15/11/23.
+//  v0.5.3 Created by ElonChan ( https://github.com/leancloud/ChatKit-OC ) on 15/11/23.
 //  Copyright © 2015年 https://LeanCloud.cn . All rights reserved.
 //
 
@@ -62,7 +62,7 @@
             NSAssert(NO, @"Message Owner Unknow");
             break;
     }
-    
+    NSAssert(typeKey.length > 0, @"🔴类名与方法名：%@（在第%@行），描述：%@,%@", @(__PRETTY_FUNCTION__), @(__LINE__), @(message.mediaType), NSStringFromClass([message class]));
     NSString *cellIdentifier = [NSString stringWithFormat:@"%@_%@_%@", typeKey, ownerKey, groupKey];
     return cellIdentifier;
 }
@@ -76,7 +76,7 @@
     }
     AVIMMessageIOType messageOwner = message.ioType;
     NSString *typeKey = NSStringFromClass([LCCKChatMessageCellMediaTypeDict objectForKey:@(message.mediaType)]);
-   
+    NSAssert(typeKey.length > 0, @"🔴类名与方法名：%@（在第%@行），描述：%@,%@", @(__PRETTY_FUNCTION__), @(__LINE__), @(message.mediaType), NSStringFromClass([message class]));
     NSString *ownerKey;
     switch (messageOwner) {
         case AVIMMessageIOTypeOut:

@@ -2,7 +2,7 @@
 //  NSObject+LCCKExtension.m
 //  Pods
 //
-// v0.5.1 Created by 陈宜龙 on 16/8/10.
+//  v0.5.3 Created by 陈宜龙 on 16/8/10.
 //
 //
 
@@ -32,7 +32,8 @@
 
 - (BOOL)lcck_isCustomLCCKMessage {
     BOOL isCustomMessage = NO;
-    if ((int)[(LCCKMessage *)self mediaType] > 0) {
+    int mediaType = (int)[(LCCKMessage *)self mediaType];
+    if ( mediaType >= 0) {
         isCustomMessage = YES;
     }
     return isCustomMessage;

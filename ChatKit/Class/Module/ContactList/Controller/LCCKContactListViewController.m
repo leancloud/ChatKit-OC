@@ -2,7 +2,7 @@
 //  LCCKContactListViewController.m
 //  LeanCloudChatKit-iOS
 //
-//  Created by ElonChan on 16/2/22.
+//  v0.5.3 Created by ElonChan on 16/2/22.
 //  Copyright © 2016年 LeanCloud. All rights reserved.
 //
 
@@ -46,6 +46,8 @@ static NSString *const LCCKContactListViewControllerIdentifier = @"LCCKContactLi
 @property (nonatomic, copy, readwrite) NSArray<LCCKContact *> *contacts;
 @property (nonatomic, strong) UISearchBar *searchBar;
 @property (nonatomic, copy) NSArray *excludedUserNames;
+
+@property (nonatomic, copy) NSArray *visiableUserIds;
 @end
 
 @implementation LCCKContactListViewController
@@ -107,6 +109,19 @@ static NSString *const LCCKContactListViewControllerIdentifier = @"LCCKContactLi
     return _dictionaryTableRowCheckedState;
 }
 
+- (NSArray *)visiableUserIds {
+    if (_visiableUserIds) {
+        return _visiableUserIds;
+    }
+    NSMutableArray *visiableUserIds = [NSMutableArray arrayWithCapacity:self.userIds];
+    [visiableUserIds addObjectsFromArray:self.userIds];
+    if (self.excludedUserIds.count > 0) {
+        [visiableUserIds removeObjectsInArray:self.excludedUserIds];
+    }
+    _visiableUserIds = [visiableUserIds copy];
+    return _visiableUserIds;
+}
+
 #pragma mark -
 #pragma mark - Setter Method
 
@@ -161,7 +176,10 @@ static NSString *const LCCKContactListViewControllerIdentifier = @"LCCKContactLi
         if (theHUDActionBlock) {
             theHUDActionBlock(self, nil, @"获取联系人信息...", LCCKMessageHUDActionTypeShow);
         }
-        [[LCChatKit sharedInstance] getProfilesInBackgroundForUserIds:self.userIds callback:^(NSArray<id<LCCKUserDelegate>> *users, NSError *error) {
+        if (self.excludedUserIds.count > 0) {
+            
+        }
+        [[LCChatKit sharedInstance] getProfilesInBackgroundForUserIds:self.visiableUserIds callback:^(NSArray<id<LCCKUserDelegate>> *users, NSError *error) {
             if (theHUDActionBlock) {
                 theHUDActionBlock(self, nil, nil, LCCKMessageHUDActionTypeHide);
             }
@@ -504,7 +522,7 @@ static NSString *const LCCKContactListViewControllerIdentifier = @"LCCKContactLi
 
 - (NSDictionary *)originSections {
     if (!_originSections) {
-        _originSections = [self sortedSectionForUserNames:[self contactsFromContactsOrUserIds:self.contacts userIds:self.userIds]];
+        _originSections = [self sortedSectionForUserNames:[self contactsFromContactsOrUserIds:self.contacts userIds:self.visiableUserIds]];
     }
     return _originSections;
 }
@@ -614,7 +632,7 @@ static NSString *const LCCKContactListViewControllerIdentifier = @"LCCKContactLi
     //      id CONTAINS[c] "1568689942"
     if (!self.contacts) {
         NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF CONTAINS %@", searchString];
-        self.searchUserIds = [self.userIds filteredArrayUsingPredicate:predicate];
+        self.searchUserIds = [self.visiableUserIds filteredArrayUsingPredicate:predicate];
         self.searchContacts = nil;
         return;
     }

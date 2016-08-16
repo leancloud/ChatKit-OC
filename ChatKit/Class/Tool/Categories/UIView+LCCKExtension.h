@@ -2,7 +2,7 @@
 //  UIView+LCCKExtension.h
 //  ChatKit
 //
-// v0.5.1 Created by 陈宜龙 on 16/6/2.
+//  v0.5.3 Created by 陈宜龙 on 16/6/2.
 //  Copyright © 2016年 ElonChan. All rights reserved.
 //
 

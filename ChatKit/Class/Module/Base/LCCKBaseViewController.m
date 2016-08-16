@@ -2,7 +2,7 @@
 //  LCCKBaseViewController.m
 //  LeanCloudChatKit-iOS
 //
-//  Created by ElonChan on 16/2/26.
+//  v0.5.3 Created by ElonChan on 16/2/26.
 //  Copyright © 2016年 LeanCloud. All rights reserved.
 //
 

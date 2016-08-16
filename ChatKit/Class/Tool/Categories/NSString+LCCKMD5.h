@@ -2,7 +2,7 @@
 //  NSString+MD5.h
 //  LCCKChatExample
 //
-//  Created by ElonChan ( https://github.com/leancloud/ChatKit-OC ) on 15/11/19.
+//  v0.5.3 Created by ElonChan ( https://github.com/leancloud/ChatKit-OC ) on 15/11/19.
 //  Copyright © 2015年 https://LeanCloud.cn . All rights reserved.
 //
 

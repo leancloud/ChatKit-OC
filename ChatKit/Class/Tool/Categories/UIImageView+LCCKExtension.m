@@ -2,7 +2,7 @@
 //  UIImageView+LCCKExtension.m
 //  LeanCloudChatKit-iOS
 //
-// v0.5.1 Created by 陈宜龙 on 16/5/16.
+//  v0.5.3 Created by 陈宜龙 on 16/5/16.
 //  Copyright © 2016年 ElonChan. All rights reserved.
 //
 

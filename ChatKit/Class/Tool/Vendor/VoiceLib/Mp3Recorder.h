@@ -2,7 +2,7 @@
 //  Mp3Recorder.h
 //  BloodSugar
 //
-//  Created by PeterPan on 14-3-24.
+//  v0.5.3 Created by PeterPan on 14-3-24.
 //  Copyright (c) 2014年 shake. All rights reserved.
 //
 

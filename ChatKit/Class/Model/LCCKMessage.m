@@ -2,7 +2,7 @@
 //  LCCKMessage.m
 //  LeanCloudChatKit-iOS
 //
-// v0.5.1 Created by 陈宜龙 on 16/3/21.
+//  v0.5.3 Created by 陈宜龙 on 16/3/21.
 //  Copyright © 2016年 ElonChan. All rights reserved.
 //
 
@@ -393,7 +393,7 @@
         _localMessageId = [aDecoder decodeObjectForKey:@"localMessageId"];
         
         _conversationId = [aDecoder decodeObjectForKey:@"conversationId"];
-        _mediaType = [aDecoder decodeIntForKey:@"messageMediaType"];
+        _mediaType = [aDecoder decodeIntForKey:@"mediaType"];
 //        _messageGroupType = [aDecoder decodeIntForKey:@"messageGroupType"];
         _messageReadState = [aDecoder decodeIntForKey:@"messageReadState"];
         _ownerType = [aDecoder decodeIntForKey:@"ownerType"];
