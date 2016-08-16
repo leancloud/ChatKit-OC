@@ -23,7 +23,7 @@
 #import "LCCKContactManager.h"
 
 //==================================================================================================================================
-//If you want to see the storage of this demo, log in public account of leancloud.cn, search for the app named `LeanCloudChatKit-iOS`.
+//If you want to see the storage of this demo, log in public account of leancloud.cn, search for the app named `ChatKit`.
 //======================================== username : leancloud@163.com , password : Public123 =====================================
 //==================================================================================================================================
 

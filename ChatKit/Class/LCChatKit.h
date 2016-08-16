@@ -2,7 +2,7 @@
 //  LCChatKit.h
 //  LeanCloudChatKit-iOS
 //
-//  Created by ElonChan on 16/2/22.
+//  v0.5.3 Created by ElonChan on 16/2/22.
 //  Copyright © 2016年 LeanCloud. All rights reserved.
 //  Core class of LeanCloudChatKit
 

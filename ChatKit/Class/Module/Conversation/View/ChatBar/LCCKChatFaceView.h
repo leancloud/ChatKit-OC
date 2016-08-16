@@ -2,7 +2,7 @@
 //  LCCKChatFaceView.h
 //  LCCKChatBarExample
 //
-//  Created by ElonChan ( https://github.com/leancloud/ChatKit-OC ) on 15/8/21.
+//  v0.5.3 Created by ElonChan ( https://github.com/leancloud/ChatKit-OC ) on 15/8/21.
 //  Copyright (c) 2015年 https://LeanCloud.cn . All rights reserved.
 //
 

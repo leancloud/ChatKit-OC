@@ -2,7 +2,7 @@
 //  LCCKConversationListService.h
 //  LeanCloudChatKit-iOS
 //
-// v0.5.2 Created by 陈宜龙 on 16/3/22.
+//  v0.5.3 Created by 陈宜龙 on 16/3/22.
 //  Copyright © 2016年 ElonChan. All rights reserved.
 //
 

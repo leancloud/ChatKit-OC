@@ -2,7 +2,7 @@
 //  NSString+LCCKExtension.h
 //  ChatKit
 //
-// v0.5.2 Created by 陈宜龙 on 16/7/12.
+//  v0.5.3 Created by 陈宜龙 on 16/7/12.
 //  Copyright © 2016年 ElonChan. All rights reserved.
 //
 

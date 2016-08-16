@@ -2,7 +2,7 @@
 //  LCCKChatLocationMessageCell.m
 //  LCCKChatExample
 //
-//  Created by ElonChan ( https://github.com/leancloud/ChatKit-OC ) on 15/11/17.
+//  v0.5.3 Created by ElonChan ( https://github.com/leancloud/ChatKit-OC ) on 15/11/17.
 //  Copyright © 2015年 https://LeanCloud.cn . All rights reserved.
 //
 

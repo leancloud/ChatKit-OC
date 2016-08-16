@@ -2,7 +2,7 @@
 //  LCChatKit.m
 //  LeanCloudChatKit-iOS
 //
-//  Created by ElonChan on 16/2/22.
+//  v0.5.3 Created by ElonChan on 16/2/22.
 //  Copyright © 2016年 LeanCloud. All rights reserved.
 //
 
@@ -142,6 +142,7 @@ static NSMutableDictionary *_sharedInstances = nil;
 - (void)closeWithCallback:(LCCKBooleanResultBlock)callback {
     [self.sessionService closeWithCallback:callback];
 }
+
 - (void)setForceReconnectSessionBlock:(LCCKForceReconnectSessionBlock)forceReconnectSessionBlock {
     [self.sessionService setForceReconnectSessionBlock:forceReconnectSessionBlock];
 }
