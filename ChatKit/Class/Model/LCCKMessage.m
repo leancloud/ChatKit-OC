@@ -84,6 +84,7 @@
     if (_localMessageId) {
         return _localMessageId;
     }
+    return nil;
 }
 
 - (BOOL)isLocalMessage {

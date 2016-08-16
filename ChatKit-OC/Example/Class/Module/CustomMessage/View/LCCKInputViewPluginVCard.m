@@ -101,7 +101,7 @@
     }
     NSArray *users = [[LCChatKit sharedInstance] getCachedProfilesIfExists:allPersonIds shouldSameCount:YES error:nil];
     NSString *currentClientID = [[LCChatKit sharedInstance] clientId];
-    LCCKContactListViewController *contactListViewController = [[LCCKContactListViewController alloc] initWithContacts:users userIds:allPersonIds excludedUserIds:@[currentClientID] mode:LCCKContactListModeSingleSelection];
+    LCCKContactListViewController *contactListViewController = [[LCCKContactListViewController alloc] initWithContacts:[NSSet setWithArray:users] userIds:[NSSet setWithArray:allPersonIds] excludedUserIds:[NSSet setWithArray:@[currentClientID]] mode:LCCKContactListModeSingleSelection];
     contactListViewController.title = @"发送名片";
     [contactListViewController setViewDidDismissBlock:^(LCCKBaseViewController *viewController) {
         [self.inputViewRef open];

@@ -13,7 +13,7 @@
 
 #import "LCCKConstants.h"
 
-@protocol LCCKInputViewPluginSubclassing <NSObject>
+@protocol LCCKInputViewPluginSubclassing <NSObject>
 @required
 
 /*!

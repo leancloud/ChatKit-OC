@@ -83,8 +83,6 @@
 		9A6061671CEC947A00D14D73 /* LCCKChatBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A6060CB1CEC947900D14D73 /* LCCKChatBar.m */; };
 		9A6061681CEC947A00D14D73 /* LCCKChatFaceView.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A6060CC1CEC947900D14D73 /* LCCKChatFaceView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9A6061691CEC947A00D14D73 /* LCCKChatFaceView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A6060CD1CEC947900D14D73 /* LCCKChatFaceView.m */; };
-		9A60616A1CEC947A00D14D73 /* LCCKChatMoreItem.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A6060CE1CEC947900D14D73 /* LCCKChatMoreItem.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		9A60616B1CEC947A00D14D73 /* LCCKChatMoreItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A6060CF1CEC947900D14D73 /* LCCKChatMoreItem.m */; };
 		9A60616C1CEC947A00D14D73 /* LCCKChatMoreView.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A6060D01CEC947900D14D73 /* LCCKChatMoreView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9A60616D1CEC947A00D14D73 /* LCCKChatMoreView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A6060D11CEC947900D14D73 /* LCCKChatMoreView.m */; };
 		9A60616E1CEC947A00D14D73 /* LCCKFacePageView.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A6060D21CEC947900D14D73 /* LCCKFacePageView.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -142,10 +140,6 @@
 		9A6061AC1CEC947A00D14D73 /* LCCKDeallocExecutor.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A60611E1CEC947A00D14D73 /* LCCKDeallocExecutor.m */; };
 		9A6061AD1CEC947A00D14D73 /* NSObject+LCCKDeallocBlockExecutor.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A60611F1CEC947A00D14D73 /* NSObject+LCCKDeallocBlockExecutor.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9A6061AE1CEC947A00D14D73 /* NSObject+LCCKDeallocBlockExecutor.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A6061201CEC947A00D14D73 /* NSObject+LCCKDeallocBlockExecutor.m */; };
-		9A6061AF1CEC947A00D14D73 /* UITableViewCell+LCCKExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A6061221CEC947A00D14D73 /* UITableViewCell+LCCKExtension.m */; };
-		9A6061B01CEC947A00D14D73 /* UITableViewRowAction+LCCKExtension.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A6061231CEC947A00D14D73 /* UITableViewRowAction+LCCKExtension.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		9A6061B11CEC947A00D14D73 /* UITableViewRowAction+LCCKExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A6061241CEC947A00D14D73 /* UITableViewRowAction+LCCKExtension.m */; };
-		9A6061B21CEC947A00D14D73 /* UITableViewRowAction.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A6061251CEC947A00D14D73 /* UITableViewRowAction.m */; };
 		9A6061B31CEC947A00D14D73 /* lame.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A6061271CEC947A00D14D73 /* lame.framework */; };
 		9A6061B41CEC947A00D14D73 /* Mp3Recorder.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A6061281CEC947A00D14D73 /* Mp3Recorder.h */; };
 		9A6061B51CEC947A00D14D73 /* Mp3Recorder.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A6061291CEC947A00D14D73 /* Mp3Recorder.m */; };
@@ -168,11 +162,43 @@
 		9A91A3111D3BF25D00ED8300 /* LCChatKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A91A30F1D3BF25D00ED8300 /* LCChatKit.m */; };
 		9A9D75541D2F91ED00090BA3 /* LCCKContactListViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A9D754B1D2F91EC00090BA3 /* LCCKContactListViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9A9D75551D2F91F200090BA3 /* LCCKContactListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A9D754C1D2F91EC00090BA3 /* LCCKContactListViewController.m */; };
-		9A9D75561D2F91F200090BA3 /* LCCKContactManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A9D754E1D2F91EC00090BA3 /* LCCKContactManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		9A9D75571D2F91F200090BA3 /* LCCKContactManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A9D754F1D2F91EC00090BA3 /* LCCKContactManager.m */; };
 		9A9D75581D2F91F200090BA3 /* LCCKContactCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A9D75511D2F91EC00090BA3 /* LCCKContactCell.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9A9D75591D2F91F200090BA3 /* LCCKContactCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A9D75521D2F91EC00090BA3 /* LCCKContactCell.m */; };
 		9A9D755A1D2F91F200090BA3 /* LCCKContactCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9A9D75531D2F91EC00090BA3 /* LCCKContactCell.xib */; };
+		9AA1DA861D62F57F0066FB72 /* ChatKitHeaders.h in Headers */ = {isa = PBXBuildFile; fileRef = 9AA1DA851D62F57F0066FB72 /* ChatKitHeaders.h */; };
+		9AA1DA881D62F5C70066FB72 /* LCCKMessageDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 9AA1DA871D62F5C70066FB72 /* LCCKMessageDelegate.h */; };
+		9AA1DA911D62F72B0066FB72 /* LCCKInputViewPlugin.h in Headers */ = {isa = PBXBuildFile; fileRef = 9AA1DA891D62F72B0066FB72 /* LCCKInputViewPlugin.h */; };
+		9AA1DA921D62F72B0066FB72 /* LCCKInputViewPlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AA1DA8A1D62F72B0066FB72 /* LCCKInputViewPlugin.m */; };
+		9AA1DA931D62F72B0066FB72 /* LCCKInputViewPluginLocation.h in Headers */ = {isa = PBXBuildFile; fileRef = 9AA1DA8B1D62F72B0066FB72 /* LCCKInputViewPluginLocation.h */; };
+		9AA1DA941D62F72B0066FB72 /* LCCKInputViewPluginLocation.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AA1DA8C1D62F72B0066FB72 /* LCCKInputViewPluginLocation.m */; };
+		9AA1DA951D62F72B0066FB72 /* LCCKInputViewPluginPickImage.h in Headers */ = {isa = PBXBuildFile; fileRef = 9AA1DA8D1D62F72B0066FB72 /* LCCKInputViewPluginPickImage.h */; };
+		9AA1DA961D62F72B0066FB72 /* LCCKInputViewPluginPickImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AA1DA8E1D62F72B0066FB72 /* LCCKInputViewPluginPickImage.m */; };
+		9AA1DA971D62F72B0066FB72 /* LCCKInputViewPluginTakePhoto.h in Headers */ = {isa = PBXBuildFile; fileRef = 9AA1DA8F1D62F72B0066FB72 /* LCCKInputViewPluginTakePhoto.h */; };
+		9AA1DA981D62F72B0066FB72 /* LCCKInputViewPluginTakePhoto.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AA1DA901D62F72B0066FB72 /* LCCKInputViewPluginTakePhoto.m */; };
+		9AA1DA9B1D62F7E50066FB72 /* NSObject+LCCKExtension.h in Headers */ = {isa = PBXBuildFile; fileRef = 9AA1DA991D62F7E50066FB72 /* NSObject+LCCKExtension.h */; };
+		9AA1DA9C1D62F7E50066FB72 /* NSObject+LCCKExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AA1DA9A1D62F7E50066FB72 /* NSObject+LCCKExtension.m */; };
+		9AA1DAB81D62F8230066FB72 /* LCCKCaptionView.h in Headers */ = {isa = PBXBuildFile; fileRef = 9AA1DA9E1D62F8230066FB72 /* LCCKCaptionView.h */; };
+		9AA1DAB91D62F8230066FB72 /* LCCKCaptionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AA1DA9F1D62F8230066FB72 /* LCCKCaptionView.m */; };
+		9AA1DABA1D62F8230066FB72 /* LCCKPBConstants.h in Headers */ = {isa = PBXBuildFile; fileRef = 9AA1DAA01D62F8230066FB72 /* LCCKPBConstants.h */; };
+		9AA1DABB1D62F8230066FB72 /* LCCKPhoto.h in Headers */ = {isa = PBXBuildFile; fileRef = 9AA1DAA11D62F8230066FB72 /* LCCKPhoto.h */; };
+		9AA1DABC1D62F8230066FB72 /* LCCKPhoto.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AA1DAA21D62F8230066FB72 /* LCCKPhoto.m */; };
+		9AA1DABD1D62F8230066FB72 /* LCCKPhotoBrowser.h in Headers */ = {isa = PBXBuildFile; fileRef = 9AA1DAA31D62F8230066FB72 /* LCCKPhotoBrowser.h */; };
+		9AA1DABE1D62F8230066FB72 /* LCCKPhotoBrowser.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AA1DAA41D62F8230066FB72 /* LCCKPhotoBrowser.m */; };
+		9AA1DABF1D62F8230066FB72 /* LCCKPhotoProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 9AA1DAA51D62F8230066FB72 /* LCCKPhotoProtocol.h */; };
+		9AA1DAC01D62F8230066FB72 /* LCCKTapDetectingImageView.h in Headers */ = {isa = PBXBuildFile; fileRef = 9AA1DAA61D62F8230066FB72 /* LCCKTapDetectingImageView.h */; };
+		9AA1DAC11D62F8230066FB72 /* LCCKTapDetectingImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AA1DAA71D62F8230066FB72 /* LCCKTapDetectingImageView.m */; };
+		9AA1DAC21D62F8230066FB72 /* LCCKTapDetectingView.h in Headers */ = {isa = PBXBuildFile; fileRef = 9AA1DAA81D62F8230066FB72 /* LCCKTapDetectingView.h */; };
+		9AA1DAC31D62F8230066FB72 /* LCCKTapDetectingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AA1DAA91D62F8230066FB72 /* LCCKTapDetectingView.m */; };
+		9AA1DAC41D62F8230066FB72 /* LCCKZoomingScrollView.h in Headers */ = {isa = PBXBuildFile; fileRef = 9AA1DAAA1D62F8230066FB72 /* LCCKZoomingScrollView.h */; };
+		9AA1DAC51D62F8230066FB72 /* LCCKZoomingScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AA1DAAB1D62F8230066FB72 /* LCCKZoomingScrollView.m */; };
+		9AA1DAC61D62F8230066FB72 /* LCCKSafariActivity.h in Headers */ = {isa = PBXBuildFile; fileRef = 9AA1DAAE1D62F8230066FB72 /* LCCKSafariActivity.h */; };
+		9AA1DAC71D62F8230066FB72 /* LCCKSafariActivity.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AA1DAAF1D62F8230066FB72 /* LCCKSafariActivity.m */; };
+		9AA1DAC81D62F8230066FB72 /* LCCKWebViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 9AA1DAB11D62F8230066FB72 /* LCCKWebViewController.h */; };
+		9AA1DAC91D62F8230066FB72 /* LCCKWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AA1DAB21D62F8230066FB72 /* LCCKWebViewController.m */; };
+		9AA1DACA1D62F8230066FB72 /* LCCKWebViewProgress.h in Headers */ = {isa = PBXBuildFile; fileRef = 9AA1DAB41D62F8230066FB72 /* LCCKWebViewProgress.h */; };
+		9AA1DACB1D62F8230066FB72 /* LCCKWebViewProgress.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AA1DAB51D62F8230066FB72 /* LCCKWebViewProgress.m */; };
+		9AA1DACC1D62F8230066FB72 /* LCCKWebViewProgressView.h in Headers */ = {isa = PBXBuildFile; fileRef = 9AA1DAB61D62F8230066FB72 /* LCCKWebViewProgressView.h */; };
+		9AA1DACD1D62F8230066FB72 /* LCCKWebViewProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AA1DAB71D62F8230066FB72 /* LCCKWebViewProgressView.m */; };
 		9AABA6291D06B549003B0CB4 /* NSObject+LCCKIsFirstLaunch.h in Headers */ = {isa = PBXBuildFile; fileRef = 9AABA6271D06B544003B0CB4 /* NSObject+LCCKIsFirstLaunch.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9AABA62A1D06B549003B0CB4 /* NSObject+LCCKIsFirstLaunch.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AABA6281D06B544003B0CB4 /* NSObject+LCCKIsFirstLaunch.m */; };
 		9AAF30971D3F6DB800DC0E17 /* LCCKConversationNavigationTitleView.h in Headers */ = {isa = PBXBuildFile; fileRef = 9AAF30951D3F6DB800DC0E17 /* LCCKConversationNavigationTitleView.h */; };
@@ -273,8 +299,6 @@
 		9A6060CB1CEC947900D14D73 /* LCCKChatBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCKChatBar.m; sourceTree = "<group>"; };
 		9A6060CC1CEC947900D14D73 /* LCCKChatFaceView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKChatFaceView.h; sourceTree = "<group>"; };
 		9A6060CD1CEC947900D14D73 /* LCCKChatFaceView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCKChatFaceView.m; sourceTree = "<group>"; };
-		9A6060CE1CEC947900D14D73 /* LCCKChatMoreItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKChatMoreItem.h; sourceTree = "<group>"; };
-		9A6060CF1CEC947900D14D73 /* LCCKChatMoreItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCKChatMoreItem.m; sourceTree = "<group>"; };
 		9A6060D01CEC947900D14D73 /* LCCKChatMoreView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKChatMoreView.h; sourceTree = "<group>"; };
 		9A6060D11CEC947900D14D73 /* LCCKChatMoreView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCKChatMoreView.m; sourceTree = "<group>"; };
 		9A6060D21CEC947900D14D73 /* LCCKFacePageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKFacePageView.h; sourceTree = "<group>"; };
@@ -332,10 +356,6 @@
 		9A60611E1CEC947A00D14D73 /* LCCKDeallocExecutor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCKDeallocExecutor.m; sourceTree = "<group>"; };
 		9A60611F1CEC947A00D14D73 /* NSObject+LCCKDeallocBlockExecutor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+LCCKDeallocBlockExecutor.h"; sourceTree = "<group>"; };
 		9A6061201CEC947A00D14D73 /* NSObject+LCCKDeallocBlockExecutor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+LCCKDeallocBlockExecutor.m"; sourceTree = "<group>"; };
-		9A6061221CEC947A00D14D73 /* UITableViewCell+LCCKExtension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITableViewCell+LCCKExtension.m"; sourceTree = "<group>"; };
-		9A6061231CEC947A00D14D73 /* UITableViewRowAction+LCCKExtension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITableViewRowAction+LCCKExtension.h"; sourceTree = "<group>"; };
-		9A6061241CEC947A00D14D73 /* UITableViewRowAction+LCCKExtension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITableViewRowAction+LCCKExtension.m"; sourceTree = "<group>"; };
-		9A6061251CEC947A00D14D73 /* UITableViewRowAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITableViewRowAction.m; sourceTree = "<group>"; };
 		9A6061271CEC947A00D14D73 /* lame.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = lame.framework; sourceTree = "<group>"; };
 		9A6061281CEC947A00D14D73 /* Mp3Recorder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Mp3Recorder.h; sourceTree = "<group>"; };
 		9A6061291CEC947A00D14D73 /* Mp3Recorder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Mp3Recorder.m; sourceTree = "<group>"; };
@@ -358,11 +378,43 @@
 		9A91A30F1D3BF25D00ED8300 /* LCChatKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LCChatKit.m; path = Class/LCChatKit.m; sourceTree = "<group>"; };
 		9A9D754B1D2F91EC00090BA3 /* LCCKContactListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKContactListViewController.h; sourceTree = "<group>"; };
 		9A9D754C1D2F91EC00090BA3 /* LCCKContactListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCKContactListViewController.m; sourceTree = "<group>"; };
-		9A9D754E1D2F91EC00090BA3 /* LCCKContactManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKContactManager.h; sourceTree = "<group>"; };
-		9A9D754F1D2F91EC00090BA3 /* LCCKContactManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCKContactManager.m; sourceTree = "<group>"; };
 		9A9D75511D2F91EC00090BA3 /* LCCKContactCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKContactCell.h; sourceTree = "<group>"; };
 		9A9D75521D2F91EC00090BA3 /* LCCKContactCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCKContactCell.m; sourceTree = "<group>"; };
 		9A9D75531D2F91EC00090BA3 /* LCCKContactCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LCCKContactCell.xib; sourceTree = "<group>"; };
+		9AA1DA851D62F57F0066FB72 /* ChatKitHeaders.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatKitHeaders.h; sourceTree = "<group>"; };
+		9AA1DA871D62F5C70066FB72 /* LCCKMessageDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKMessageDelegate.h; sourceTree = "<group>"; };
+		9AA1DA891D62F72B0066FB72 /* LCCKInputViewPlugin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKInputViewPlugin.h; sourceTree = "<group>"; };
+		9AA1DA8A1D62F72B0066FB72 /* LCCKInputViewPlugin.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCKInputViewPlugin.m; sourceTree = "<group>"; };
+		9AA1DA8B1D62F72B0066FB72 /* LCCKInputViewPluginLocation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKInputViewPluginLocation.h; sourceTree = "<group>"; };
+		9AA1DA8C1D62F72B0066FB72 /* LCCKInputViewPluginLocation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCKInputViewPluginLocation.m; sourceTree = "<group>"; };
+		9AA1DA8D1D62F72B0066FB72 /* LCCKInputViewPluginPickImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKInputViewPluginPickImage.h; sourceTree = "<group>"; };
+		9AA1DA8E1D62F72B0066FB72 /* LCCKInputViewPluginPickImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCKInputViewPluginPickImage.m; sourceTree = "<group>"; };
+		9AA1DA8F1D62F72B0066FB72 /* LCCKInputViewPluginTakePhoto.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKInputViewPluginTakePhoto.h; sourceTree = "<group>"; };
+		9AA1DA901D62F72B0066FB72 /* LCCKInputViewPluginTakePhoto.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCKInputViewPluginTakePhoto.m; sourceTree = "<group>"; };
+		9AA1DA991D62F7E50066FB72 /* NSObject+LCCKExtension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+LCCKExtension.h"; sourceTree = "<group>"; };
+		9AA1DA9A1D62F7E50066FB72 /* NSObject+LCCKExtension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+LCCKExtension.m"; sourceTree = "<group>"; };
+		9AA1DA9E1D62F8230066FB72 /* LCCKCaptionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKCaptionView.h; sourceTree = "<group>"; };
+		9AA1DA9F1D62F8230066FB72 /* LCCKCaptionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCKCaptionView.m; sourceTree = "<group>"; };
+		9AA1DAA01D62F8230066FB72 /* LCCKPBConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKPBConstants.h; sourceTree = "<group>"; };
+		9AA1DAA11D62F8230066FB72 /* LCCKPhoto.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKPhoto.h; sourceTree = "<group>"; };
+		9AA1DAA21D62F8230066FB72 /* LCCKPhoto.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCKPhoto.m; sourceTree = "<group>"; };
+		9AA1DAA31D62F8230066FB72 /* LCCKPhotoBrowser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKPhotoBrowser.h; sourceTree = "<group>"; };
+		9AA1DAA41D62F8230066FB72 /* LCCKPhotoBrowser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCKPhotoBrowser.m; sourceTree = "<group>"; };
+		9AA1DAA51D62F8230066FB72 /* LCCKPhotoProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKPhotoProtocol.h; sourceTree = "<group>"; };
+		9AA1DAA61D62F8230066FB72 /* LCCKTapDetectingImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKTapDetectingImageView.h; sourceTree = "<group>"; };
+		9AA1DAA71D62F8230066FB72 /* LCCKTapDetectingImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCKTapDetectingImageView.m; sourceTree = "<group>"; };
+		9AA1DAA81D62F8230066FB72 /* LCCKTapDetectingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKTapDetectingView.h; sourceTree = "<group>"; };
+		9AA1DAA91D62F8230066FB72 /* LCCKTapDetectingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCKTapDetectingView.m; sourceTree = "<group>"; };
+		9AA1DAAA1D62F8230066FB72 /* LCCKZoomingScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKZoomingScrollView.h; sourceTree = "<group>"; };
+		9AA1DAAB1D62F8230066FB72 /* LCCKZoomingScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCKZoomingScrollView.m; sourceTree = "<group>"; };
+		9AA1DAAE1D62F8230066FB72 /* LCCKSafariActivity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKSafariActivity.h; sourceTree = "<group>"; };
+		9AA1DAAF1D62F8230066FB72 /* LCCKSafariActivity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCKSafariActivity.m; sourceTree = "<group>"; };
+		9AA1DAB11D62F8230066FB72 /* LCCKWebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKWebViewController.h; sourceTree = "<group>"; };
+		9AA1DAB21D62F8230066FB72 /* LCCKWebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCKWebViewController.m; sourceTree = "<group>"; };
+		9AA1DAB41D62F8230066FB72 /* LCCKWebViewProgress.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKWebViewProgress.h; sourceTree = "<group>"; };
+		9AA1DAB51D62F8230066FB72 /* LCCKWebViewProgress.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCKWebViewProgress.m; sourceTree = "<group>"; };
+		9AA1DAB61D62F8230066FB72 /* LCCKWebViewProgressView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKWebViewProgressView.h; sourceTree = "<group>"; };
+		9AA1DAB71D62F8230066FB72 /* LCCKWebViewProgressView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCKWebViewProgressView.m; sourceTree = "<group>"; };
 		9AABA6271D06B544003B0CB4 /* NSObject+LCCKIsFirstLaunch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+LCCKIsFirstLaunch.h"; sourceTree = "<group>"; };
 		9AABA6281D06B544003B0CB4 /* NSObject+LCCKIsFirstLaunch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+LCCKIsFirstLaunch.m"; sourceTree = "<group>"; };
 		9AAF30951D3F6DB800DC0E17 /* LCCKConversationNavigationTitleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKConversationNavigationTitleView.h; sourceTree = "<group>"; };
@@ -496,6 +548,7 @@
 			children = (
 				9A6060901CEC947900D14D73 /* AVIMEmotionMessage.h */,
 				9A6060911CEC947900D14D73 /* AVIMEmotionMessage.m */,
+				9AA1DA871D62F5C70066FB72 /* LCCKMessageDelegate.h */,
 				9A6060921CEC947900D14D73 /* LCCKMessage.h */,
 				9A6060931CEC947900D14D73 /* LCCKMessage.m */,
 				9A7E2DCF1D5BF7BE003A7312 /* AVIMTypedMessage+LCCKExtension.h */,
@@ -503,6 +556,8 @@
 				9A2F1A7D1CF6EF9C00BE52F2 /* NSMutableArray+LCCKMessageExtention.h */,
 				9A2F1A7E1CF6EF9C00BE52F2 /* NSMutableArray+LCCKMessageExtention.m */,
 				9A6060941CEC947900D14D73 /* LCCKUserDelegate.h */,
+				9AA1DA991D62F7E50066FB72 /* NSObject+LCCKExtension.h */,
+				9AA1DA9A1D62F7E50066FB72 /* NSObject+LCCKExtension.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -616,8 +671,14 @@
 				9A6060CB1CEC947900D14D73 /* LCCKChatBar.m */,
 				9A6060CC1CEC947900D14D73 /* LCCKChatFaceView.h */,
 				9A6060CD1CEC947900D14D73 /* LCCKChatFaceView.m */,
-				9A6060CE1CEC947900D14D73 /* LCCKChatMoreItem.h */,
-				9A6060CF1CEC947900D14D73 /* LCCKChatMoreItem.m */,
+				9AA1DA891D62F72B0066FB72 /* LCCKInputViewPlugin.h */,
+				9AA1DA8A1D62F72B0066FB72 /* LCCKInputViewPlugin.m */,
+				9AA1DA8B1D62F72B0066FB72 /* LCCKInputViewPluginLocation.h */,
+				9AA1DA8C1D62F72B0066FB72 /* LCCKInputViewPluginLocation.m */,
+				9AA1DA8D1D62F72B0066FB72 /* LCCKInputViewPluginPickImage.h */,
+				9AA1DA8E1D62F72B0066FB72 /* LCCKInputViewPluginPickImage.m */,
+				9AA1DA8F1D62F72B0066FB72 /* LCCKInputViewPluginTakePhoto.h */,
+				9AA1DA901D62F72B0066FB72 /* LCCKInputViewPluginTakePhoto.m */,
 				9A6060D01CEC947900D14D73 /* LCCKChatMoreView.h */,
 				9A6060D11CEC947900D14D73 /* LCCKChatMoreView.m */,
 				9A6060D21CEC947900D14D73 /* LCCKFacePageView.h */,
@@ -691,6 +752,7 @@
 		9A6060FD1CEC947900D14D73 /* Tool */ = {
 			isa = PBXGroup;
 			children = (
+				9AA1DA851D62F57F0066FB72 /* ChatKitHeaders.h */,
 				9AABA6271D06B544003B0CB4 /* NSObject+LCCKIsFirstLaunch.h */,
 				9AABA6281D06B544003B0CB4 /* NSObject+LCCKIsFirstLaunch.m */,
 				9A6060FF1CEC947900D14D73 /* LCChatKit_Internal.h */,
@@ -729,10 +791,11 @@
 		9A6061131CEC947A00D14D73 /* Vendor */ = {
 			isa = PBXGroup;
 			children = (
+				9AA1DA9D1D62F8230066FB72 /* LCCKPhotoBrowser */,
+				9AA1DAAC1D62F8230066FB72 /* LCCKWebViewController */,
 				9AC5467F1D00241500F8A053 /* LCCKAlertController */,
 				9A6061141CEC947A00D14D73 /* DateTools */,
 				9A60611B1CEC947A00D14D73 /* LCCKDeallocBlockExecutor */,
-				9A6061211CEC947A00D14D73 /* LCCKTableViewRowAction */,
 				9A6061261CEC947A00D14D73 /* VoiceLib */,
 			);
 			path = Vendor;
@@ -760,17 +823,6 @@
 				9A6061201CEC947A00D14D73 /* NSObject+LCCKDeallocBlockExecutor.m */,
 			);
 			path = LCCKDeallocBlockExecutor;
-			sourceTree = "<group>";
-		};
-		9A6061211CEC947A00D14D73 /* LCCKTableViewRowAction */ = {
-			isa = PBXGroup;
-			children = (
-				9A6061221CEC947A00D14D73 /* UITableViewCell+LCCKExtension.m */,
-				9A6061231CEC947A00D14D73 /* UITableViewRowAction+LCCKExtension.h */,
-				9A6061241CEC947A00D14D73 /* UITableViewRowAction+LCCKExtension.m */,
-				9A6061251CEC947A00D14D73 /* UITableViewRowAction.m */,
-			);
-			path = LCCKTableViewRowAction;
 			sourceTree = "<group>";
 		};
 		9A6061261CEC947A00D14D73 /* VoiceLib */ = {
@@ -812,7 +864,6 @@
 			children = (
 				9A73B5971D33296E000A9B55 /* Model */,
 				9A9D754A1D2F91EC00090BA3 /* Controller */,
-				9A9D754D1D2F91EC00090BA3 /* Tool */,
 				9A9D75501D2F91EC00090BA3 /* View */,
 			);
 			path = ContactList;
@@ -827,15 +878,6 @@
 			path = Controller;
 			sourceTree = "<group>";
 		};
-		9A9D754D1D2F91EC00090BA3 /* Tool */ = {
-			isa = PBXGroup;
-			children = (
-				9A9D754E1D2F91EC00090BA3 /* LCCKContactManager.h */,
-				9A9D754F1D2F91EC00090BA3 /* LCCKContactManager.m */,
-			);
-			path = Tool;
-			sourceTree = "<group>";
-		};
 		9A9D75501D2F91EC00090BA3 /* View */ = {
 			isa = PBXGroup;
 			children = (
@@ -844,6 +886,66 @@
 				9A9D75531D2F91EC00090BA3 /* LCCKContactCell.xib */,
 			);
 			path = View;
+			sourceTree = "<group>";
+		};
+		9AA1DA9D1D62F8230066FB72 /* LCCKPhotoBrowser */ = {
+			isa = PBXGroup;
+			children = (
+				9AA1DA9E1D62F8230066FB72 /* LCCKCaptionView.h */,
+				9AA1DA9F1D62F8230066FB72 /* LCCKCaptionView.m */,
+				9AA1DAA01D62F8230066FB72 /* LCCKPBConstants.h */,
+				9AA1DAA11D62F8230066FB72 /* LCCKPhoto.h */,
+				9AA1DAA21D62F8230066FB72 /* LCCKPhoto.m */,
+				9AA1DAA31D62F8230066FB72 /* LCCKPhotoBrowser.h */,
+				9AA1DAA41D62F8230066FB72 /* LCCKPhotoBrowser.m */,
+				9AA1DAA51D62F8230066FB72 /* LCCKPhotoProtocol.h */,
+				9AA1DAA61D62F8230066FB72 /* LCCKTapDetectingImageView.h */,
+				9AA1DAA71D62F8230066FB72 /* LCCKTapDetectingImageView.m */,
+				9AA1DAA81D62F8230066FB72 /* LCCKTapDetectingView.h */,
+				9AA1DAA91D62F8230066FB72 /* LCCKTapDetectingView.m */,
+				9AA1DAAA1D62F8230066FB72 /* LCCKZoomingScrollView.h */,
+				9AA1DAAB1D62F8230066FB72 /* LCCKZoomingScrollView.m */,
+			);
+			path = LCCKPhotoBrowser;
+			sourceTree = "<group>";
+		};
+		9AA1DAAC1D62F8230066FB72 /* LCCKWebViewController */ = {
+			isa = PBXGroup;
+			children = (
+				9AA1DAAD1D62F8230066FB72 /* LCCKSafariActivity */,
+				9AA1DAB01D62F8230066FB72 /* LCCKWebViewController */,
+				9AA1DAB31D62F8230066FB72 /* LCCKWebViewProgress */,
+			);
+			path = LCCKWebViewController;
+			sourceTree = "<group>";
+		};
+		9AA1DAAD1D62F8230066FB72 /* LCCKSafariActivity */ = {
+			isa = PBXGroup;
+			children = (
+				9AA1DAAE1D62F8230066FB72 /* LCCKSafariActivity.h */,
+				9AA1DAAF1D62F8230066FB72 /* LCCKSafariActivity.m */,
+			);
+			path = LCCKSafariActivity;
+			sourceTree = "<group>";
+		};
+		9AA1DAB01D62F8230066FB72 /* LCCKWebViewController */ = {
+			isa = PBXGroup;
+			children = (
+				9AA1DAB11D62F8230066FB72 /* LCCKWebViewController.h */,
+				9AA1DAB21D62F8230066FB72 /* LCCKWebViewController.m */,
+			);
+			path = LCCKWebViewController;
+			sourceTree = "<group>";
+		};
+		9AA1DAB31D62F8230066FB72 /* LCCKWebViewProgress */ = {
+			isa = PBXGroup;
+			children = (
+				9AA1DAB41D62F8230066FB72 /* LCCKWebViewProgress.h */,
+				9AA1DAB51D62F8230066FB72 /* LCCKWebViewProgress.m */,
+				9AA1DAB61D62F8230066FB72 /* LCCKWebViewProgressView.h */,
+				9AA1DAB71D62F8230066FB72 /* LCCKWebViewProgressView.m */,
+			);
+			path = LCCKWebViewProgress;
 			sourceTree = "<group>";
 		};
 		9AC5467F1D00241500F8A053 /* LCCKAlertController */ = {
@@ -880,22 +982,29 @@
 			buildActionMask = 2147483647;
 			files = (
 				9A6061781CEC947A00D14D73 /* LCCKChatSystemMessageCell.h in Headers */,
+				9AA1DABB1D62F8230066FB72 /* LCCKPhoto.h in Headers */,
 				9A91A3101D3BF25D00ED8300 /* LCChatKit.h in Headers */,
 				9AABA6291D06B549003B0CB4 /* NSObject+LCCKIsFirstLaunch.h in Headers */,
 				9A60617E1CEC947A00D14D73 /* LCCKContentView.h in Headers */,
+				9AA1DAC21D62F8230066FB72 /* LCCKTapDetectingView.h in Headers */,
+				9AA1DA911D62F72B0066FB72 /* LCCKInputViewPlugin.h in Headers */,
 				9A6061441CEC947A00D14D73 /* LCCKLocationController.h in Headers */,
 				9A7E2DD11D5BF7BE003A7312 /* AVIMTypedMessage+LCCKExtension.h in Headers */,
 				9A60613A1CEC947A00D14D73 /* LCCKBaseConversationViewController.h in Headers */,
 				9A6061391CEC947A00D14D73 /* LCCKUserDelegate.h in Headers */,
 				9A60619C1CEC947A00D14D73 /* LCCKSettingService.h in Headers */,
 				9A6061A51CEC947A00D14D73 /* LCCKDateToolsConstants.h in Headers */,
-				9A6061B01CEC947A00D14D73 /* UITableViewRowAction+LCCKExtension.h in Headers */,
+				9AA1DAB81D62F8230066FB72 /* LCCKCaptionView.h in Headers */,
 				9AE9B3051CF82CD20048E5F5 /* NSString+LCCKAddScale.h in Headers */,
 				9A8528141CF3297C00795B01 /* LCCKMenuItem.h in Headers */,
 				9AE9B3011CF82CD20048E5F5 /* NSBundle+LCCKSCaleArray.h in Headers */,
+				9AA1DAC41D62F8230066FB72 /* LCCKZoomingScrollView.h in Headers */,
 				9A6061A61CEC947A00D14D73 /* LCCKError.h in Headers */,
 				9A6061911CEC947A00D14D73 /* LCChatKit_Internal.h in Headers */,
+				9AA1DA881D62F5C70066FB72 /* LCCKMessageDelegate.h in Headers */,
+				9AA1DABD1D62F8230066FB72 /* LCCKPhotoBrowser.h in Headers */,
 				9A6061861CEC947A00D14D73 /* LCCKConversationListCell.h in Headers */,
+				9AA1DABA1D62F8230066FB72 /* LCCKPBConstants.h in Headers */,
 				9A546F9E1D3971BA00A27C0F /* UIColor+LCCKExtension.h in Headers */,
 				9A6061821CEC947A00D14D73 /* LCCKConversationListViewController.h in Headers */,
 				9A6061B41CEC947A00D14D73 /* Mp3Recorder.h in Headers */,
@@ -903,22 +1012,26 @@
 				9A546F9A1D3971BA00A27C0F /* NSString+LCCKExtension.h in Headers */,
 				9AE9B2FF1CF82CD20048E5F5 /* LCCKImageManager.h in Headers */,
 				9A6061661CEC947A00D14D73 /* LCCKChatBar.h in Headers */,
+				9AA1DA971D62F72B0066FB72 /* LCCKInputViewPluginTakePhoto.h in Headers */,
 				9A546FA41D3971BA00A27C0F /* UIView+LCCKExtension.h in Headers */,
+				9AA1DA931D62F72B0066FB72 /* LCCKInputViewPluginLocation.h in Headers */,
 				9A6061BA1CEC947A00D14D73 /* LCCKStatusView.h in Headers */,
 				9AE9B3091CF82CD20048E5F5 /* LCCKWeakReference.h in Headers */,
+				9AA1DA861D62F57F0066FB72 /* ChatKitHeaders.h in Headers */,
 				9A6061541CEC947A00D14D73 /* LCCKBubbleImageFactory.h in Headers */,
 				9A60616E1CEC947A00D14D73 /* LCCKFacePageView.h in Headers */,
 				9A60619E1CEC947A00D14D73 /* LCCKSignatureService.h in Headers */,
 				9A6061481CEC947A00D14D73 /* AVIMConversation+LCCKAddition.h in Headers */,
 				9A60615C1CEC947A00D14D73 /* LCCKFaceManager.h in Headers */,
+				9AA1DAC01D62F8230066FB72 /* LCCKTapDetectingImageView.h in Headers */,
 				9A6061421CEC947A00D14D73 /* LCCKConversationViewController.h in Headers */,
 				9A6061AA1CEC947A00D14D73 /* LCCKDeallocBlockExecutor.h in Headers */,
 				9A60617C1CEC947A00D14D73 /* LCCKChatVoiceMessageCell.h in Headers */,
 				9A6061581CEC947A00D14D73 /* LCCKCellRegisterController.h in Headers */,
 				9A60614A1CEC947A00D14D73 /* LCCKConversationViewModel.h in Headers */,
-				9A60616A1CEC947A00D14D73 /* LCCKChatMoreItem.h in Headers */,
 				9A60613E1CEC947A00D14D73 /* LCCKBaseTableViewController.h in Headers */,
 				9AAF30971D3F6DB800DC0E17 /* LCCKConversationNavigationTitleView.h in Headers */,
+				9AA1DABF1D62F8230066FB72 /* LCCKPhotoProtocol.h in Headers */,
 				9A6061941CEC947A00D14D73 /* LCCKSingleton.h in Headers */,
 				9A6061561CEC947A00D14D73 /* LCCKCellIdentifierFactory.h in Headers */,
 				9A6061A01CEC947A00D14D73 /* LCCKUIService.h in Headers */,
@@ -934,7 +1047,6 @@
 				9A60615E1CEC947A00D14D73 /* LCCKLastMessageTypeManager.h in Headers */,
 				9A60615A1CEC947A00D14D73 /* LCCKChat.h in Headers */,
 				9A6061841CEC947A00D14D73 /* LCCKConversationListViewModel.h in Headers */,
-				9A9D75561D2F91F200090BA3 /* LCCKContactManager.h in Headers */,
 				9A6061461CEC947A00D14D73 /* LCCKTextFullScreenViewController.h in Headers */,
 				9A60616C1CEC947A00D14D73 /* LCCKChatMoreView.h in Headers */,
 				9A60617A1CEC947A00D14D73 /* LCCKChatTextMessageCell.h in Headers */,
@@ -942,14 +1054,18 @@
 				9A6061641CEC947A00D14D73 /* LCCKSoundManager.h in Headers */,
 				9A546F981D3971BA00A27C0F /* NSBundle+LCCKExtension.h in Headers */,
 				9A546FA01D3971BA00A27C0F /* UIImage+LCCKExtension.h in Headers */,
+				9AA1DACC1D62F8230066FB72 /* LCCKWebViewProgressView.h in Headers */,
 				9A73B5AA1D33298A000A9B55 /* LCCKContact.h in Headers */,
 				9A6061B61CEC947A00D14D73 /* LCCKBadgeView.h in Headers */,
+				9AA1DAC81D62F8230066FB72 /* LCCKWebViewController.h in Headers */,
 				9A6061801CEC947A00D14D73 /* LCCKMessageSendStateView.h in Headers */,
 				9A6061A21CEC947A00D14D73 /* LCCKUserSystemService.h in Headers */,
 				9A6061AB1CEC947A00D14D73 /* LCCKDeallocExecutor.h in Headers */,
 				9A546F9C1D3971BA00A27C0F /* NSString+LCCKMD5.h in Headers */,
 				9A6061A81CEC947A00D14D73 /* NSDate+LCCKDateTools.h in Headers */,
+				9AA1DAC61D62F8230066FB72 /* LCCKSafariActivity.h in Headers */,
 				9A6061401CEC947A00D14D73 /* LCCKBaseViewController.h in Headers */,
+				9AA1DA9B1D62F7E50066FB72 /* NSObject+LCCKExtension.h in Headers */,
 				9A6061521CEC947A00D14D73 /* LCCKAVAudioPlayer.h in Headers */,
 				9A6061701CEC947A00D14D73 /* LCCKProgressHUD.h in Headers */,
 				9A6061681CEC947A00D14D73 /* LCCKChatFaceView.h in Headers */,
@@ -959,12 +1075,14 @@
 				9A60615B1CEC947A00D14D73 /* LCCKChatUntiles.h in Headers */,
 				9AE9B3031CF82CD20048E5F5 /* NSMutableDictionary+LCCKWeakReference.h in Headers */,
 				9A9D75541D2F91ED00090BA3 /* LCCKContactListViewController.h in Headers */,
+				9AA1DACA1D62F8230066FB72 /* LCCKWebViewProgress.h in Headers */,
 				9A546FA21D3971BA00A27C0F /* UIImageView+LCCKExtension.h in Headers */,
 				9A2F1A7F1CF6EF9C00BE52F2 /* NSMutableArray+LCCKMessageExtention.h in Headers */,
 				9A6061371CEC947A00D14D73 /* LCCKMessage.h in Headers */,
 				9A60613C1CEC947A00D14D73 /* LCCKBaseNavigationController.h in Headers */,
 				9A6061B81CEC947A00D14D73 /* LCCKConversationRefreshHeader.h in Headers */,
 				9A6061931CEC947A00D14D73 /* LCCKServiceDefinition.h in Headers */,
+				9AA1DA951D62F72B0066FB72 /* LCCKInputViewPluginPickImage.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1090,19 +1208,26 @@
 				9A546F991D3971BA00A27C0F /* NSBundle+LCCKExtension.m in Sources */,
 				9A6061951CEC947A00D14D73 /* LCCKSingleton.m in Sources */,
 				9A6061991CEC947A00D14D73 /* LCCKConversationService.m in Sources */,
+				9AA1DAB91D62F8230066FB72 /* LCCKCaptionView.m in Sources */,
+				9AA1DABE1D62F8230066FB72 /* LCCKPhotoBrowser.m in Sources */,
 				9A6061BB1CEC947A00D14D73 /* LCCKStatusView.m in Sources */,
+				9AA1DA961D62F72B0066FB72 /* LCCKInputViewPluginPickImage.m in Sources */,
 				9A60619B1CEC947A00D14D73 /* LCCKSessionService.m in Sources */,
 				9A6061811CEC947A00D14D73 /* LCCKMessageSendStateView.m in Sources */,
 				9A6061851CEC947A00D14D73 /* LCCKConversationListViewModel.m in Sources */,
 				9A6061671CEC947A00D14D73 /* LCCKChatBar.m in Sources */,
 				9AE9B3041CF82CD20048E5F5 /* NSMutableDictionary+LCCKWeakReference.m in Sources */,
 				9A546FA31D3971BA00A27C0F /* UIImageView+LCCKExtension.m in Sources */,
+				9AA1DAC71D62F8230066FB72 /* LCCKSafariActivity.m in Sources */,
 				9A546F9F1D3971BA00A27C0F /* UIColor+LCCKExtension.m in Sources */,
 				9A60613D1CEC947A00D14D73 /* LCCKBaseNavigationController.m in Sources */,
+				9AA1DABC1D62F8230066FB72 /* LCCKPhoto.m in Sources */,
 				9A6061411CEC947A00D14D73 /* LCCKBaseViewController.m in Sources */,
 				9AABA62A1D06B549003B0CB4 /* NSObject+LCCKIsFirstLaunch.m in Sources */,
 				9A6061A11CEC947A00D14D73 /* LCCKUIService.m in Sources */,
 				9A6061381CEC947A00D14D73 /* LCCKMessage.m in Sources */,
+				9AA1DAC31D62F8230066FB72 /* LCCKTapDetectingView.m in Sources */,
+				9AA1DAC11D62F8230066FB72 /* LCCKTapDetectingImageView.m in Sources */,
 				9A6061B51CEC947A00D14D73 /* Mp3Recorder.m in Sources */,
 				9A6061871CEC947A00D14D73 /* LCCKConversationListCell.m in Sources */,
 				9A60619D1CEC947A00D14D73 /* LCCKSettingService.m in Sources */,
@@ -1113,23 +1238,24 @@
 				9A6061751CEC947A00D14D73 /* LCCKChatLocationMessageCell.m in Sources */,
 				9A73B5AB1D33298A000A9B55 /* LCCKContact.m in Sources */,
 				9A60616D1CEC947A00D14D73 /* LCCKChatMoreView.m in Sources */,
+				9AA1DACB1D62F8230066FB72 /* LCCKWebViewProgress.m in Sources */,
 				9A6061551CEC947A00D14D73 /* LCCKBubbleImageFactory.m in Sources */,
 				9AE9B3001CF82CD20048E5F5 /* LCCKImageManager.m in Sources */,
 				9A6061361CEC947A00D14D73 /* AVIMEmotionMessage.m in Sources */,
-				9A9D75571D2F91F200090BA3 /* LCCKContactManager.m in Sources */,
-				9A6061AF1CEC947A00D14D73 /* UITableViewCell+LCCKExtension.m in Sources */,
 				9AAF30981D3F6DB800DC0E17 /* LCCKConversationNavigationTitleView.m in Sources */,
 				9A6061691CEC947A00D14D73 /* LCCKChatFaceView.m in Sources */,
 				9A2F1A801CF6EF9C00BE52F2 /* NSMutableArray+LCCKMessageExtention.m in Sources */,
 				9A6061731CEC947A00D14D73 /* LCCKChatImageMessageCell.m in Sources */,
 				9A60619F1CEC947A00D14D73 /* LCCKSignatureService.m in Sources */,
 				9A60617D1CEC947A00D14D73 /* LCCKChatVoiceMessageCell.m in Sources */,
+				9AA1DA981D62F72B0066FB72 /* LCCKInputViewPluginTakePhoto.m in Sources */,
 				9A6061AC1CEC947A00D14D73 /* LCCKDeallocExecutor.m in Sources */,
 				9A546F9D1D3971BA00A27C0F /* NSString+LCCKMD5.m in Sources */,
 				9A6061651CEC947A00D14D73 /* LCCKSoundManager.m in Sources */,
 				9A9D75551D2F91F200090BA3 /* LCCKContactListViewController.m in Sources */,
 				9A546FA51D3971BA00A27C0F /* UIView+LCCKExtension.m in Sources */,
 				9AE9B3021CF82CD20048E5F5 /* NSBundle+LCCKCaleArray.m in Sources */,
+				9AA1DA9C1D62F7E50066FB72 /* NSObject+LCCKExtension.m in Sources */,
 				9A7E2DD21D5BF7BF003A7312 /* AVIMTypedMessage+LCCKExtension.m in Sources */,
 				9A60614B1CEC947A00D14D73 /* LCCKConversationViewModel.m in Sources */,
 				9A6061771CEC947A00D14D73 /* LCCKChatMessageCell.m in Sources */,
@@ -1138,10 +1264,8 @@
 				9A6061711CEC947A00D14D73 /* LCCKProgressHUD.m in Sources */,
 				9A6061431CEC947A00D14D73 /* LCCKConversationViewController.m in Sources */,
 				9A60617B1CEC947A00D14D73 /* LCCKChatTextMessageCell.m in Sources */,
-				9A6061B11CEC947A00D14D73 /* UITableViewRowAction+LCCKExtension.m in Sources */,
 				9A60613F1CEC947A00D14D73 /* LCCKBaseTableViewController.m in Sources */,
 				9A8528151CF3297C00795B01 /* LCCKMenuItem.m in Sources */,
-				9A6061B21CEC947A00D14D73 /* UITableViewRowAction.m in Sources */,
 				9A9D75591D2F91F200090BA3 /* LCCKContactCell.m in Sources */,
 				9A6061611CEC947A00D14D73 /* LCCKLocationManager.m in Sources */,
 				9AC546831D00241500F8A053 /* LCCKAlertController.m in Sources */,
@@ -1150,15 +1274,19 @@
 				9A60615D1CEC947A00D14D73 /* LCCKFaceManager.m in Sources */,
 				9A6061791CEC947A00D14D73 /* LCCKChatSystemMessageCell.m in Sources */,
 				9A6061B71CEC947A00D14D73 /* LCCKBadgeView.m in Sources */,
+				9AA1DAC51D62F8230066FB72 /* LCCKZoomingScrollView.m in Sources */,
 				9A91A3111D3BF25D00ED8300 /* LCChatKit.m in Sources */,
+				9AA1DACD1D62F8230066FB72 /* LCCKWebViewProgressView.m in Sources */,
 				9A546FA11D3971BA00A27C0F /* UIImage+LCCKExtension.m in Sources */,
 				9A6061571CEC947A00D14D73 /* LCCKCellIdentifierFactory.m in Sources */,
 				9AE9B3061CF82CD20048E5F5 /* NSString+LCCKAddScale.m in Sources */,
+				9AA1DA941D62F72B0066FB72 /* LCCKInputViewPluginLocation.m in Sources */,
 				9A60617F1CEC947A00D14D73 /* LCCKContentView.m in Sources */,
 				9A6061531CEC947A00D14D73 /* LCCKAVAudioPlayer.m in Sources */,
 				9A6061BD1CEC947A00D14D73 /* LCCKSwipeView.m in Sources */,
+				9AA1DA921D62F72B0066FB72 /* LCCKInputViewPlugin.m in Sources */,
 				9A60615F1CEC947A00D14D73 /* LCCKLastMessageTypeManager.m in Sources */,
-				9A60616B1CEC947A00D14D73 /* LCCKChatMoreItem.m in Sources */,
+				9AA1DAC91D62F8230066FB72 /* LCCKWebViewController.m in Sources */,
 				9A6061A91CEC947A00D14D73 /* NSDate+LCCKDateTools.m in Sources */,
 				9A6061A71CEC947A00D14D73 /* LCCKError.m in Sources */,
 				9AE9B30A1CF82CD20048E5F5 /* LCCKWeakReference.m in Sources */,
