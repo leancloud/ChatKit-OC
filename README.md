@@ -319,102 +319,6 @@ typedef NS_ENUM(NSInteger, LCCKBarButtonItemStyle) {
 }];
 ```
 
-### 自定义消息
-
-自定义消息分几种：
-
-最简单的一种是：
-
-暂态消息，且不需要显示自定义Cell的自定义消息。
-
-请自行监听 `LCCKNotificationCustomMessageReceived` 通知，自行处理响应事件。
-
-比如直播聊天室的弹幕消息、点赞出心这种暂态消息，不会存在聊天记录里，也不会有离线通知。
-
-发送消息接口：
-
-
- ```Objective-C
- //  LCCKConversationViewController.h
-/*!
- * 自定义消息位置发送
- */
-- (void)sendCustomMessage:(AVIMTypedMessage *)customMessage;
-
-/*!
- * 自定义消息位置发送
- */
-- (void)sendCustomMessage:(AVIMTypedMessage *)customMessage
-            progressBlock:(AVProgressBlock)progressBlock
-                  success:(LCCKBooleanResultBlock)success
-                   failed:(LCCKBooleanResultBlock)failed;
- ```
-
-
-#### 需要显示自定义Cell的消息：
-
-这里以Demo里的 VCard 名片消息为例：
-
-第一步：定义自定义消息。
-
- [《iOS 实时通信开发指南》](https://leancloud.cn/docs/realtime_guide-ios.html#消息) 里面详细介绍了自定义消息的步骤。
- 
- 这里再介绍下 Demo 里的 VCard 消息的自定义过程：
- 
-定义一个`LCCKVCardMessage` 自定义消息，继承 `AVIMTypedMessage` ，并遵循、实现 `AVIMTypedMessageSubclassing` 协议：
-
- ```Objective-C
-#pragma mark -
-#pragma mark - Override Methods
-
-#pragma mark -
-#pragma mark - AVIMTypedMessageSubclassing Method
-
-+ (void)load {
-    [self registerSubclass];
-}
-
-+ (AVIMMessageMediaType)classMediaType {
-    return kAVIMMessageMediaTypeVCard;
-}
-
- ```
-
-
-在初始化自定义消息时，需要注意，务必添加三个字段，ChatKit 内部会使用到。
-
-字段名 | 作用 | 备注
--------------|-------------|-------------
-degrade | 用来定义如何展示老版本未支持的自定义消息类型  | 添加到自定义消息的 attributes 字典属性下
-typeTitle | 最近对话列表中最近一条消息的title，比如：最近一条消息是图片，可设置该字段内容为：`@"图片"`，相应会展示：`[图片]`） | 同上
-summary | 用来显示在push提示中  | 同上，另外，这个字段是为了方便自定义推送内容，这需要借助云引擎实现。
-
-以上三个字段需要添加到自定义消息的 attributes 字典属性下，ChatKit 给出了一个方法来方便添加 `-lcck_setObject:forKey:` ，用法如下：
-
-
- ```Objective-C
-/*!
- * 有几个必须添加的字段：
- *  - degrade 用来定义如何展示老版本未支持的自定义消息类型
- *  - typeTitle 最近对话列表中最近一条消息的title，比如：最近一条消息是图片，可设置该字段内容为：`@"图片"`，相应会展示：`[图片]`。
- *  - summary 会显示在 push 提示中
- * @attention 务必添加这三个字段，ChatKit 内部会使用到。
- */
-- (instancetype)initWithClientId:(NSString *)clientId {
-    self = [super init];
-    if (!self) {
-        return nil;
-    }
-    [self lcck_setObject:@"名片" forKey:LCCKCustomMessageTypeTitleKey];
-    [self lcck_setObject:@"这是一条名片消息，当前版本过低无法显示，请尝试升级APP查看" forKey:LCCKCustomMessageDegradeKey];
-    [self lcck_setObject:@"有人向您发送了一条名片消息，请打开APP查看" forKey:LCCKCustomMessageSummaryKey];
-    [self lcck_setObject:clientId forKey:@"clientId"];
-    return self;
-}
- ```
-
-
-
 #### 自定义消息 Cell
 
 继承 `LCCKChatMessageCell` ，并遵循、实现 `LCCKChatMessageCellSubclassing` 协议，重载父类方法:
@@ -437,7 +341,15 @@ summary | 用来显示在push提示中  | 同上，另外，这个字段是为�
 
 重写父类的下列方法：
 
-推荐使用 AutoLayout 进行布局，如果你在布局中对 `self.contentView` 进行了合理的约束，ChatKit 将自定计算 Cell 高度。如果你没有对 `self.contentView`
+
+ ```Objective-C
+- (void)setup;
+- (void)configureCellWithData:(AVIMTypedMessage *)message;
+ ```
+
+布局在 `-setup`方法中进行，默认不添加头像，昵称等，如需添加需要调用`addSubview` 方法，如果添加了，就会参与约束，约束在父类的 `-setup` 方法中已经实现。
+
+  推荐使用 AutoLayout 进行布局，如果你在布局中对 `self.contentView` 进行了合理的约束，ChatKit 将自定计算 Cell 高度。如果你没有对 `self.contentView`
 进行约束，那么你需要额外提供 Cell 的 Size 数据：
 
  - Auto layout 布局请请重载 `-systemLayoutSizeFittingSize:`
@@ -492,7 +404,7 @@ Demo 中的用法如下：
 
 #### 自定义输入框插件
 用法与自定义消息和自定义cell类似：
-继承 LCCKInputViewPlugin ，遵循、实现 `LCCKInputViewPluginSubclassing` 协议，
+继承 `LCCKInputViewPlugin` ，遵循、实现 `LCCKInputViewPluginSubclassing` 协议，
 
  ```Objective-C
 #pragma mark -
@@ -567,8 +479,7 @@ UI自定义，需要实现 `LCCKInputViewPluginDelegate` 方法：
 }
  ```
  
- 这里注意在 `-sendCustomMessageHandler` 定义时记得在Block执行结束时，执行 `_sendCustomMessageHandler = nil;` ，避免循环引用。
-
+ 这里注意在 `-sendCustomMessageHandler` 定义时记得在 Block 执行结束时，执行 `_sendCustomMessageHandler = nil;` ，避免循环引用。
 
 ### 手动集成
 
