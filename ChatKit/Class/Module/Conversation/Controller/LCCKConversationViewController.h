@@ -91,6 +91,7 @@ FOUNDATION_EXTERN NSString *const LCCKConversationViewControllerErrorDomain;
  */
 - (void)sendLocationMessageWithLocationCoordinate:(CLLocationCoordinate2D)locationCoordinate locatioTitle:(NSString *)locationTitle;
 - (void)sendLocalFeedbackTextMessge:(NSString *)localFeedbackTextMessge;
+
 /*!
  * 自定义消息位置发送
  */

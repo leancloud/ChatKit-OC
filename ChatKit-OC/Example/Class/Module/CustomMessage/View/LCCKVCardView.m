@@ -20,6 +20,7 @@
 #endif
 
 @interface LCCKVCardView()
+
 @property (weak, nonatomic) IBOutlet UILabel *nameLabel;
 @property (weak, nonatomic) IBOutlet UIImageView *avatarView;
 @property (weak, nonatomic) IBOutlet UIView *contentView;

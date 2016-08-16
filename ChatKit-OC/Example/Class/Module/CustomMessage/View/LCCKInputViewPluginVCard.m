@@ -16,6 +16,9 @@
 @synthesize sendCustomMessageHandler = _sendCustomMessageHandler;
 
 #pragma mark -
+#pragma mark - Override Methods
+
+#pragma mark -
 #pragma mark - LCCKInputViewPluginSubclassing Method
 
 + (void)load {
@@ -50,9 +53,42 @@
     return nil;
 }
 
+/**
+ * 插件被选中运行
+ */
 - (void)pluginDidClicked {
     [super pluginDidClicked];
     [self presentSelectMemberViewController];
+}
+
+/**
+ * 发送自定消息的实现
+ */
+- (LCCKIdResultBlock)sendCustomMessageHandler {
+    if (_sendCustomMessageHandler) {
+        return _sendCustomMessageHandler;
+    }
+    LCCKIdResultBlock sendCustomMessageHandler = ^(id object, NSError *error) {
+        LCCKVCardMessage *vCardMessage = [LCCKVCardMessage vCardMessageWithClientId:object];
+        [self.conversationViewController sendCustomMessage:vCardMessage progressBlock:^(NSInteger percentDone) {
+        } success:^(BOOL succeeded, NSError *error) {
+            [self.conversationViewController sendLocalFeedbackTextMessge:@"名片发送成功"];
+        } failed:^(BOOL succeeded, NSError *error) {
+            [self.conversationViewController sendLocalFeedbackTextMessge:@"名片发送失败"];
+        }];
+        //important: avoid retain cycle!
+        _sendCustomMessageHandler = nil;
+    };
+    _sendCustomMessageHandler = sendCustomMessageHandler;
+    return sendCustomMessageHandler;
+}
+
+#pragma mark -
+#pragma mark - Private Methods
+
+- (UIImage *)imageInBundlePathForImageName:(NSString *)imageName {
+    UIImage *image = [UIImage lcck_imageNamed:imageName bundleName:@"ChatKeyboard" bundleForClass:[self class]];
+    return image;
 }
 
 - (void)presentSelectMemberViewController {
@@ -83,33 +119,6 @@
     [self.conversationViewController presentViewController:navigationController animated:YES completion:^{
         [self.inputViewRef close];
     }];
-}
-
-- (LCCKIdResultBlock)sendCustomMessageHandler {
-    if (_sendCustomMessageHandler) {
-        return _sendCustomMessageHandler;
-    }
-    LCCKIdResultBlock sendCustomMessageHandler = ^(id object, NSError *error) {
-        LCCKVCardMessage *vCardMessage = [LCCKVCardMessage vCardMessageWithClientId:object];
-        [self.conversationViewController sendCustomMessage:vCardMessage progressBlock:^(NSInteger percentDone) {
-        } success:^(BOOL succeeded, NSError *error) {
-            [self.conversationViewController sendLocalFeedbackTextMessge:@"名片发送成功"];
-        } failed:^(BOOL succeeded, NSError *error) {
-            [self.conversationViewController sendLocalFeedbackTextMessge:@"名片发送失败"];
-        }];
-        //important: avoid retain cycle!
-        _sendCustomMessageHandler = nil;
-    };
-    _sendCustomMessageHandler = sendCustomMessageHandler;
-    return sendCustomMessageHandler;
-}
-
-#pragma mark -
-#pragma mark - Private Methods
-
-- (UIImage *)imageInBundlePathForImageName:(NSString *)imageName {
-    UIImage *image = [UIImage lcck_imageNamed:imageName bundleName:@"ChatKeyboard" bundleForClass:[self class]];
-    return image;
 }
 
 @end

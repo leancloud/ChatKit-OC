@@ -34,19 +34,12 @@
             avimTypedMessage = [AVIMAudioMessage messageWithText:nil attachedFilePath:message.voicePath attributes:nil];
             break;
         }
-            
-//        case LCCKMessageTypeEmotion:
-            //#import "AVIMEmotionMessage.h"
-            //            avimTypedMessage = [AVIMEmotionMessage messageWithEmotionPath:message.emotionName];
-//            break;
-            
         case kAVIMMessageMediaTypeLocation: {
             avimTypedMessage = [AVIMLocationMessage messageWithText:message.geolocations
                                                            latitude:message.location.coordinate.latitude
                                                           longitude:message.location.coordinate.longitude
                                                          attributes:nil];
             break;
-//        case kAVIMMessageMediaTypeSystem:
         case kAVIMMessageMediaTypeNone:
             //TODO:
             break;

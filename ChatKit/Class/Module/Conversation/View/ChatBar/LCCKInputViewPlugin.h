@@ -49,6 +49,9 @@
 
 @property (nonatomic, weak) id<LCCKInputViewPluginDelegate> delegate;
 
+/*!
+ * 发送自定消息的实现
+ */
 @property (nonatomic, copy) LCCKIdResultBlock sendCustomMessageHandler;
 
 /*!
