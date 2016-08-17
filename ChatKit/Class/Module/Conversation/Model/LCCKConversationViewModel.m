@@ -2,7 +2,7 @@
 //  LCCKConversationViewModel.m
 //  LCCKChatExample
 //
-//  v0.5.3 Created by ElonChan ( https://github.com/leancloud/ChatKit-OC ) on 15/11/18.
+//  v0.5.4 Created by ElonChan ( https://github.com/leancloud/ChatKit-OC ) on 15/11/18.
 //  Copyright © 2015年 https://LeanCloud.cn . All rights reserved.
 //
 #if __has_include(<ChatKit/LCChatKit.h>)
@@ -98,28 +98,30 @@
 }
 
 #pragma mark - LCCKChatServerDelegate
-//FIXME:收到消息后，界面会卡顿。
+
 - (void)receiveMessage:(NSNotification *)notification {
-    AVIMTypedMessage *message = notification.object;
-    BOOL isCurrentConversationMessage = [message.conversationId isEqualToString:self.parentConversationViewController.conversation.conversationId];
+    NSDictionary *userInfo = notification.object;
+    NSArray<AVIMTypedMessage *> *messages = userInfo[LCCKDidReceiveMessagesUserInfoMessagesKey];
+    AVIMConversation *conversation = userInfo[LCCKDidReceiveMessagesUserInfoConversationKey];
+    BOOL isCurrentConversationMessage = [conversation.conversationId isEqualToString:self.parentConversationViewController.conversation.conversationId];
     if (isCurrentConversationMessage) {
         AVIMConversation *currentConversation = self.parentConversationViewController.conversation;
         if (currentConversation.muted == NO) {
             [[LCCKSoundManager defaultManager] playReceiveSoundIfNeed];
         }
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
-            id lcckMessage = [LCCKMessage messageWithAVIMTypedMessage:message];
+            NSArray *lcckMessages = [NSMutableArray lcck_messagesWithAVIMMessages:messages];
             dispatch_async(dispatch_get_main_queue(),^{
-                [self receivedOneMessage:lcckMessage];
+                [self receivedOneMessages:lcckMessages];
             });
         });
     }
 }
 
-- (void)receivedOneMessage:(id)message {
-    [self appendMessageToTrailing:message];
-    if ([self.delegate respondsToSelector:@selector(reloadAfterReceiveMessage:)]) {
-        [self.delegate reloadAfterReceiveMessage:message];
+- (void)receivedOneMessages:(NSArray *)messages {
+    [self appendMessagesToTrailing:messages];
+    if ([self.delegate respondsToSelector:@selector(reloadAfterReceiveMessage)]) {
+        [self.delegate reloadAfterReceiveMessage];
     }
 }
 
@@ -326,10 +328,6 @@ fromTimestamp     |    toDate   |                |  上次上拉刷新顶端，�
     return failedLCCKMessages;
 }
 
-- (void)appendMessageToTrailing:(id)message {
-    [self appendMessagesToTrailing:@[message]];
-}
-
 #pragma mark - Public Methods
 
 - (void)sendCustomMessage:(AVIMTypedMessage *)customMessage {
@@ -407,6 +405,7 @@ fromTimestamp     |    toDate   |                |  上次上拉刷新顶端，�
     } else {
         avimTypedMessage = aMessage ;
     }
+    [avimTypedMessage lcck_setObject:@(self.parentConversationViewController.conversation.lcck_type) forKey:LCCKCustomMessageConversationTypeKey];
     [self.avimTypedMessage addObject:avimTypedMessage];
     [self preloadMessageToTableView:aMessage callback:^{
         [[LCCKConversationService sharedInstance] sendMessage:avimTypedMessage
@@ -483,7 +482,7 @@ fromTimestamp     |    toDate   |                |  上次上拉刷新顶端，�
         message.sendStatus = LCCKMessageSendStateSending;
     }
     NSUInteger oldLastMessageCount = self.dataArray.count;
-    [self appendMessageToTrailing:aMessage];
+    [self appendMessagesToTrailing:@[aMessage]];
     NSUInteger newLastMessageCout = self.dataArray.count;
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:self.dataArray.count - 1 inSection:0];
     [self.delegate messageSendStateChanged:LCCKMessageSendStateSending withProgress:0.0f forIndex:indexPath.row];
@@ -508,7 +507,7 @@ fromTimestamp     |    toDate   |                |  上次上拉刷新顶端，�
     return self.dataArray.count;
 }
 
-- (void)loadMessagesFirstTimeWithCallback:(LCCKBooleanResultBlock)callback {
+- (void)loadMessagesFirstTimeWithCallback:(LCCKIdBoolResultBlock)callback {
     AVIMConversation *conversation = [LCCKConversationService sharedInstance].currentConversation;
     BOOL socketOpened = [LCCKSessionService sharedInstance].connect;
     [self queryAndCacheMessagesWithTimestamp:([[NSDate distantFuture] timeIntervalSince1970] * 1000) block:^(NSArray *avimTypedMessages, NSError *error) {
@@ -530,7 +529,7 @@ fromTimestamp     |    toDate   |                |  上次上拉刷新顶端，�
             } else {
                 self.parentConversationViewController.loadingMoreMessage = NO;
             }
-            !callback ?: callback(succeed, error);
+            !callback ?: callback(succeed, self.avimTypedMessage, error);
         });
     }];
 }

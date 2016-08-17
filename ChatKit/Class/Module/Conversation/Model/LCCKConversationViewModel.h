@@ -2,7 +2,7 @@
 //  LCCKConversationViewModel.h
 //  LCCKChatExample
 //
-//  v0.5.3 Created by ElonChan ( https://github.com/leancloud/ChatKit-OC ) on 15/11/18.
+//  v0.5.4 Created by ElonChan ( https://github.com/leancloud/ChatKit-OC ) on 15/11/18.
 //  Copyright © 2015年 https://LeanCloud.cn . All rights reserved.
 //
 
@@ -18,7 +18,7 @@
 @protocol LCCKConversationViewModelDelegate <NSObject>
 
 @optional
-- (void)reloadAfterReceiveMessage:(id)message;
+- (void)reloadAfterReceiveMessage;
 - (void)messageSendStateChanged:(LCCKMessageSendState)sendState  withProgress:(CGFloat)progress forIndex:(NSUInteger)index;
 - (void)messageReadStateChanged:(LCCKMessageReadState)readState withProgress:(CGFloat)progress forIndex:(NSUInteger)index;
 @end
@@ -54,8 +54,7 @@ typedef void (^LCCKSendMessageSuccessFailedBlock)(NSString *messageUUID, NSError
                   success:(LCCKBooleanResultBlock)success
                    failed:(LCCKBooleanResultBlock)failed;
 - (void)sendLocalFeedbackTextMessge:(NSString *)localFeedbackTextMessge;
-- (void)loadMessagesFirstTimeWithCallback:(LCCKBooleanResultBlock)callback;
-
+- (void)loadMessagesFirstTimeWithCallback:(LCCKIdBoolResultBlock)callback;
 - (void)loadOldMessages;
 - (void)getAllVisibleImagesForSelectedMessage:(LCCKMessage *)message
                              allVisibleImages:(NSArray **)allVisibleImages

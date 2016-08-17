@@ -58,6 +58,7 @@
         rightBarButtonItem;
     }
                                                              );
+    
     self.firstViewController = firstViewController;
     NSArray *users = [[LCChatKit sharedInstance] getCachedProfilesIfExists:self.allPersonIds shouldSameCount:YES error:nil];
     NSString *currentClientID = [[LCChatKit sharedInstance] clientId];
@@ -204,9 +205,14 @@
     [LCChatKitExample exampleCreateGroupConversationFromViewController:self.firstViewController];
 }
 
-- (void)addFriend {
+- (NSString *)arc4randomString {
     int a = arc4random_uniform(100000000);
-    NSString *additionUserId = [NSString stringWithFormat:@"%@", @(a)];
+    NSString *arc4randomString = [NSString stringWithFormat:@"%@", @(a)];
+    return arc4randomString;
+}
+
+- (void)addFriend {
+    NSString *additionUserId = self.arc4randomString;
     NSMutableSet *addedUserIds = [NSMutableSet setWithSet:self.secondViewController.userIds];
     [addedUserIds addObject:additionUserId];
     self.secondViewController.userIds = [addedUserIds copy];

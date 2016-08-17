@@ -50,9 +50,12 @@ static NSMutableDictionary *_sharedInstances = nil;
 
 + (void)invokeThisMethodInDidFinishLaunching {
     //    [AVOSCloud setServiceRegion:AVServiceRegionUS];
+    // 启用未读消息
+    [AVIMClient setUserOptions:@{
+                                 AVIMUserOptionUseUnread: @(YES)
+                                 }];
     [AVOSCloud registerForRemoteNotification];
     [AVIMClient setTimeoutIntervalInSeconds:20];
-    
 }
 
 + (void)invokeThisMethodInDidRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {

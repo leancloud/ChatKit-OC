@@ -2,7 +2,7 @@
 //  LCCKServiceDefinition.h
 //  LeanCloudChatKit-iOS
 //
-//  v0.5.3 Created by ElonChan on 16/2/22.
+//  v0.5.4 Created by ElonChan on 16/2/22.
 //  Copyright © 2016年 LeanCloud. All rights reserved.
 //  All the Typedefine for all kinds of services.
 
@@ -365,22 +365,27 @@ typedef void (^LCCKLoadLatestMessagesHandler)(LCCKConversationViewController *co
  *  @param conversation 相应对话
  */
 - (void)increaseUnreadCountWithConversationId:(NSString *)conversationId;
-
+- (void)increaseUnreadCountWithConversationId:(NSString *)conversationId shouldRefreshWhenFinished:(BOOL)shouldRefreshWhenFinished;
 /**
  *  最近对话列表左滑删除本地数据库的对话，将不显示在列表
  *  @param conversation
  */
 - (void)deleteRecentConversationWithConversationId:(NSString *)conversationId;
+- (void)deleteRecentConversationWithConversationId:(NSString *)conversationId shouldRefreshWhenFinished:(BOOL)shouldRefreshWhenFinished;
 
 /**
  *  清空未读数
  *  @param conversation 相应的对话
  */
 - (void)updateUnreadCountToZeroWithConversationId:(NSString *)conversationId;
+- (void)updateUnreadCountToZeroWithConversationId:(NSString *)conversationId shouldRefreshWhenFinished:(BOOL)shouldRefreshWhenFinished;
 /**
  *  删除全部缓存，比如当切换用户时，如果同一个人显示的名称和头像需要变更
  */
 - (BOOL)removeAllCachedRecentConversations;
+
+- (void)sendWelcomeMessageToPeerId:(NSString *)peerId text:(NSString *)text block:(LCCKBooleanResultBlock)block;
+- (void)sendWelcomeMessageToConversationId:(NSString *)conversationId text:(NSString *)text block:(LCCKBooleanResultBlock)block;
 
 @end
 
