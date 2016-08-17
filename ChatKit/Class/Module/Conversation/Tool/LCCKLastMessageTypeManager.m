@@ -58,7 +58,7 @@ static NSMutableDictionary *attributedStringCache = nil;
                     title = [NSString stringWithFormat:@"[%@]",title];
                 } @catch (NSException *exception) {} @finally {
                     if (!title) {
-                        title = LCCKLocalizedStrings(@"unknownMessage");
+                        title = LCCKLocalizedStrings(@"unknownMessageType");
                     }
                 }
             }

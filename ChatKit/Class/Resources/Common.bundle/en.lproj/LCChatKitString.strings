@@ -46,6 +46,9 @@
 "call" = "call";
 "unknownMessage" = "unknown message type, please update your APP";
 "unknownMessageType" = "unknown message type";
+"SingleWelcomeMessage" = "Hello!";
+"GroupWelcomeMessage" = "Hello!";
+"GroupWelcomeMessageWithNickName" = "Hello! I am ";
 "message.bar.error.title" = "Error Title";
 "message.bar.error.message" = "This is an error message!";
 "message.bar.success.title" = "Success Title";

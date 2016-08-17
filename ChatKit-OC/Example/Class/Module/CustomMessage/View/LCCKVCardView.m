@@ -27,6 +27,7 @@
 @property (nonatomic, copy) NSString *clientId;
 
 @end
+
 @implementation LCCKVCardView
 
 + (id)vCardView {

@@ -47,8 +47,11 @@
 "netDisconnected" = "当前网络不可用，请检查你的网络设置";
 "connectSucceeded" = "连接成功";
 "connectFailed" = "连接失败";
-"unknownMessage" = "当前版本过低无法显示，请尝试升级APP查看";
+"unknownMessage" = "当前版本暂不支持查看此消息，请尝试升级APP查看";
 "unknownMessageType" = "未知消息类型";
+"SingleWelcomeMessage" = "我们已经是好友啦，一起来聊天吧！";
+"GroupWelcomeMessage" = "大家好";
+"GroupWelcomeMessageWithNickName" = "大家好，我是";
 "message.bar.error.title" = "错误";
 "message.bar.error.message" = "错误";
 "message.bar.success.title" = "成功";

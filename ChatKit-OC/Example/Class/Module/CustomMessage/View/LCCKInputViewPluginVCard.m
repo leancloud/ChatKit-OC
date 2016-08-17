@@ -68,8 +68,11 @@
     if (_sendCustomMessageHandler) {
         return _sendCustomMessageHandler;
     }
+    if (!self.conversationViewController.isAvailable) {
+        return nil;
+    }
     LCCKIdResultBlock sendCustomMessageHandler = ^(id object, NSError *error) {
-        LCCKVCardMessage *vCardMessage = [LCCKVCardMessage vCardMessageWithClientId:object];
+        LCCKVCardMessage *vCardMessage = [LCCKVCardMessage vCardMessageWithClientId:object conversationType:self.conversationViewController.conversation.lcck_type];
         [self.conversationViewController sendCustomMessage:vCardMessage progressBlock:^(NSInteger percentDone) {
         } success:^(BOOL succeeded, NSError *error) {
             [self.conversationViewController sendLocalFeedbackTextMessge:@"名片发送成功"];
