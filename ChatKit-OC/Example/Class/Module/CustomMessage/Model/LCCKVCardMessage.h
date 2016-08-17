@@ -19,7 +19,7 @@ static AVIMMessageMediaType const kAVIMMessageMediaTypeVCard = 1;
 
 @interface LCCKVCardMessage : AVIMTypedMessage<AVIMTypedMessageSubclassing>
 
-- (instancetype)initWithClientId:(NSString *)clientId;
-+ (instancetype)vCardMessageWithClientId:(NSString *)clientId;
+- (instancetype)initWithClientId:(NSString *)clientId conversationType:(LCCKConversationType)conversationType;
++ (instancetype)vCardMessageWithClientId:(NSString *)clientId conversationType:(LCCKConversationType)conversationType;
 
 @end
