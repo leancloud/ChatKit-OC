@@ -2,7 +2,7 @@
 //  LCCKInputViewPluginVCard.m
 //  ChatKit-OC
 //
-//  v0.5.3 Created by 陈宜龙 on 16/8/12.
+//  v0.5.4 Created by 陈宜龙 on 16/8/12.
 //  Copyright © 2016年 ElonChan. All rights reserved.
 //
 

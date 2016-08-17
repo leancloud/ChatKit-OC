@@ -2,7 +2,7 @@
 //  LCCKLocationManager.m
 //  LCCKLocationManagerDemo
 //
-//  v0.5.3 Created by ElonChan ( https://github.com/leancloud/ChatKit-OC ) on 15/7/31.
+//  v0.5.4 Created by ElonChan ( https://github.com/leancloud/ChatKit-OC ) on 15/7/31.
 //  Copyright (c) 2015年 https://LeanCloud.cn . All rights reserved.
 //
 
