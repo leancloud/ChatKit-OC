@@ -22,10 +22,6 @@
 #pragma mark -
 #pragma mark - LCCKInputViewPluginSubclassing Method
 
-+ (void)load {
-    [self registerSubclass];
-}
-
 + (LCCKInputViewPluginType)classPluginType {
     return LCCKInputViewPluginTypePickImage;
 }

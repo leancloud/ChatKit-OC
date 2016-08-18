@@ -23,10 +23,6 @@
 #pragma mark -
 #pragma mark - LCCKInputViewPluginSubclassing Method
 
-+ (void)load {
-    [self registerSubclass];
-}
-
 + (LCCKInputViewPluginType)classPluginType {
     return LCCKInputViewPluginTypeTakePhoto;
 }
@@ -96,6 +92,7 @@
         return _pickerController;
     }
     _pickerController = [[UIImagePickerController alloc] init];
+    _pickerController.sourceType = UIImagePickerControllerSourceTypeCamera;
     _pickerController.delegate = self;
     return _pickerController;
 }

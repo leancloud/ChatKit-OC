@@ -279,7 +279,6 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
 #pragma mark - public Methods
 
 - (void)sendTextMessage:(NSString *)text {
-    [self makeSureSendMessageAfterFetchedConversation];
     if ([text length] > 0 ) {
         LCCKMessage *lcckMessage = [[LCCKMessage alloc] initWithText:text
                                                             senderId:self.userId
@@ -291,7 +290,6 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
 }
 
 - (void)sendImages:(NSArray<UIImage *> *)pictures {
-    [self makeSureSendMessageAfterFetchedConversation];
     for (UIImage *image in pictures) {
         [self sendImageMessage:image];
     }
@@ -303,7 +301,6 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
 }
 
 - (void)sendImageMessageData:(NSData *)imageData {
-    [self makeSureSendMessageAfterFetchedConversation];
     NSString *path = [[LCCKSettingService sharedInstance] tmpPath];
     NSError *error;
     [imageData writeToFile:path options:NSDataWritingAtomic error:&error];
@@ -327,7 +324,6 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
 }
 
 - (void)sendVoiceMessageWithPath:(NSString *)voicePath time:(NSTimeInterval)recordingSeconds {
-    [self makeSureSendMessageAfterFetchedConversation];
     LCCKMessage *message = [[LCCKMessage alloc] initWithVoicePath:voicePath
                                                          voiceURL:nil
                                                     voiceDuration:[NSString stringWithFormat:@"%@", @(recordingSeconds)]
@@ -339,7 +335,6 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
 }
 
 - (void)sendLocationMessageWithLocationCoordinate:(CLLocationCoordinate2D)locationCoordinate locatioTitle:(NSString *)locationTitle {
-    [self makeSureSendMessageAfterFetchedConversation];
     LCCKMessage *message = [[LCCKMessage alloc] initWithLocalPositionPhoto:({
         NSString *imageName = @"message_sender_location";
         UIImage *image = [UIImage lcck_imageNamed:imageName bundleName:@"MessageBubble" bundleForClass:[self class]];
@@ -384,9 +379,6 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
                             @(__LINE__),
                             @"Remember to check if `isAvailable` is ture, making sure sending message after conversation has been fetched"];
         NSAssert(NO, reason);
-//        @throw [NSException exceptionWithName:NSGenericException
-//                                       reason:reason
-//                                     userInfo:nil];
     }
 }
 
@@ -514,7 +506,7 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
 }
 
 - (void)callbackCurrentConversationEvenNotExists:(AVIMConversation *)conversation callback:(LCCKBooleanResultBlock)callback {
-    if (conversation.members > 0) {
+    if (conversation.createAt) {
         if (!conversation.imClient) {
             [conversation setValue:[LCCKSessionService sharedInstance].client forKey:@"imClient"];
             LCCKLog(@"🔴类名与方法名：%@（在第%@行），描述：%@", @(__PRETTY_FUNCTION__), @(__LINE__), @"imClient is nil");

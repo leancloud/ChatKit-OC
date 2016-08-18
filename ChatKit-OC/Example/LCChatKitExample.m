@@ -56,6 +56,10 @@ static NSMutableDictionary *_sharedInstances = nil;
                                  }];
     [AVOSCloud registerForRemoteNotification];
     [AVIMClient setTimeoutIntervalInSeconds:20];
+    //添加输入框底部插件，如需更换图标标题，可子类化，然后调用 `+registerSubclass`
+    [LCCKInputViewPluginTakePhoto registerSubclass];
+    [LCCKInputViewPluginPickImage registerSubclass];
+    [LCCKInputViewPluginLocation registerSubclass];
 }
 
 + (void)invokeThisMethodInDidRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
@@ -197,7 +201,7 @@ static NSMutableDictionary *_sharedInstances = nil;
     }];
     
     [[LCChatKit sharedInstance] setFetchConversationHandler:^(AVIMConversation *conversation, LCCKConversationViewController *aConversationController) {
-        if (!conversation || (conversation.members.count == 0)) {
+        if (!conversation.createAt) {
             return;
         }
         [[self class] lcck_showText:@"加载历史记录..." toView:aConversationController.view];
