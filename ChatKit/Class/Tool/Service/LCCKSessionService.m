@@ -122,23 +122,15 @@ NSString *const LCCKSessionServiceErrorDemain = @"LCCKSessionServiceErrorDemain"
 
 #pragma mark - AVIMMessageDelegate
 
-// content : "{\"_lctype\":-1,\"_lctext\":\"sdfdf\"}"  sdk 会解析好
 - (void)conversation:(AVIMConversation *)conversation didReceiveTypedMessage:(AVIMTypedMessage *)message {
     if (!message.messageId) {
         LCCKLog(@"🔴类名与方法名：%@（在第%@行），描述：%@", @(__PRETTY_FUNCTION__), @(__LINE__), @"Receive Message , but MessageId is nil");
         return;
     }
-    if (!conversation.createAt && ![[LCCKConversationService sharedInstance] isRecentConversationExistWithConversationId:conversation.conversationId]) {
-        [conversation fetchWithCallback:^(BOOL succeeded, NSError *error) {
-            if (succeeded) {
-                [self receiveMessage:message conversation:conversation];
-                return;
-            }
-            LCCKLog(@"🔴类名与方法名：%@（在第%@行），描述：%@", @(__PRETTY_FUNCTION__), @(__LINE__), error);
-        }];
-    } else {
+    void (^fetchedConversationCallback)() = ^() {
         [self receiveMessage:message conversation:conversation];
-    }
+    };
+    [self makeSureConversation:conversation isAvailableCallback:fetchedConversationCallback];
 }
 
 - (void)conversation:(AVIMConversation *)conversation messageDelivered:(AVIMMessage *)message {
@@ -150,14 +142,32 @@ NSString *const LCCKSessionServiceErrorDemain = @"LCCKSessionServiceErrorDemain"
 - (void)conversation:(AVIMConversation *)conversation didReceiveUnread:(NSInteger)unread {
     if (unread <= 0) return;
     LCCKLog(@"conversatoin:%@ didReceiveUnread:%@", conversation, @(unread));
-    __weak __typeof(conversation) weakConversation = conversation;
-    [conversation queryMessagesFromServerWithLimit:unread callback:^(NSArray *objects, NSError *error) {
-        if (!error && (objects.count > 0)) {
-            [self receiveMessages:objects conversation:weakConversation isUnreadMessage:YES];
-        }
-    }];
-    [self playLoudReceiveSoundIfNeededForConversation:conversation];
-    [conversation markAsReadInBackground];
+    
+    void (^fetchedConversationCallback)() = ^() {
+        __weak __typeof(conversation) weakConversation = conversation;
+        [conversation queryMessagesFromServerWithLimit:unread callback:^(NSArray *objects, NSError *error) {
+            if (!error && (objects.count > 0)) {
+                [self receiveMessages:objects conversation:weakConversation isUnreadMessage:YES];
+            }
+        }];
+        [self playLoudReceiveSoundIfNeededForConversation:conversation];
+        [conversation markAsReadInBackground];
+    };
+    [self makeSureConversation:conversation isAvailableCallback:fetchedConversationCallback];
+}
+
+- (void)makeSureConversation:(AVIMConversation *)conversation isAvailableCallback:(LCCKVoidBlock)callback {
+    if (!conversation.createAt && ![[LCCKConversationService sharedInstance] isRecentConversationExistWithConversationId:conversation.conversationId]) {
+        [conversation fetchWithCallback:^(BOOL succeeded, NSError *error) {
+            if (succeeded) {
+                !callback ?: callback();
+                return;
+            }
+            LCCKLog(@"🔴类名与方法名：%@（在第%@行），描述：%@", @(__PRETTY_FUNCTION__), @(__LINE__), error);
+        }];
+    } else {
+        !callback ?: callback();
+    }
 }
 
 - (void)conversation:(AVIMConversation *)conversation kickedByClientId:(NSString *)clientId {
