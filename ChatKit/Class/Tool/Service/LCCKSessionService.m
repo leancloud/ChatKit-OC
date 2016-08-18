@@ -17,6 +17,7 @@ NSString *const LCCKSessionServiceErrorDemain = @"LCCKSessionServiceErrorDemain"
 @interface LCCKSessionService() <AVIMClientDelegate, AVIMSignatureDataSource>
 
 @property (nonatomic, assign, readwrite) BOOL connect;
+@property (nonatomic, assign, getter=isPlayingSound) BOOL playingSound;
 
 @end
 
@@ -213,12 +214,26 @@ NSString *const LCCKSessionServiceErrorDemain = @"LCCKSessionServiceErrorDemain"
  * 如果是未读消息，会在 query 时播放一次，避免重复播放
  */
 - (void)playLoudReceiveSoundIfNeededForConversation:(AVIMConversation *)conversation {
-    if (![LCCKConversationService sharedInstance].chatting) {
-        if (!conversation.muted) {
-            [[LCCKSoundManager defaultManager] playLoudReceiveSoundIfNeed];
-            [[LCCKSoundManager defaultManager] vibrateIfNeed];
-        }
+    if ([LCCKConversationService sharedInstance].chatting) {
+        return;
     }
+    if (conversation.muted) {
+        return;
+    }
+    if (self.isPlayingSound) {
+        return;
+    }
+    self.playingSound = YES;
+    [[LCCKSoundManager defaultManager] playLoudReceiveSoundIfNeed];
+    [[LCCKSoundManager defaultManager] vibrateIfNeed];
+    //一定时间之内不播放声音，
+    NSUInteger delaySeconds = 1;
+    dispatch_time_t when = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delaySeconds * NSEC_PER_SEC));
+    dispatch_after(when, dispatch_get_main_queue(), ^{
+        self.playingSound = NO;
+    });
+    
+    
 }
 
 #pragma mark - mention
