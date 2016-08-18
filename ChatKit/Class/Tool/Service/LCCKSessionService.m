@@ -2,7 +2,7 @@
 //  LCCKSessionService.m
 //  LeanCloudChatKit-iOS
 //
-//  v0.5.4 Created by ElonChan on 16/3/1.
+//  v0.6.0 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/3/1.
 //  Copyright © 2016年 LeanCloud. All rights reserved.
 //
 
@@ -53,14 +53,7 @@ NSString *const LCCKSessionServiceErrorDemain = @"LCCKSessionServiceErrorDemain"
     [_client closeWithCallback:^(BOOL succeeded, NSError *error) {
         !callback ?: callback(succeeded, error);
         if (succeeded) {
-            [LCCKConversationListService destroyInstance];
-            [LCCKConversationService destroyInstance];
-            [LCCKSessionService destroyInstance];
-            [LCCKSessionService destroyInstance];
-            [LCCKSettingService destroyInstance];
-            [LCCKSignatureService destroyInstance];
-            [LCCKUIService destroyInstance];
-            [LCCKUserSystemService destroyInstance];
+            [LCCKSingleton destroyAllInstance];
         }
     }];
 }
