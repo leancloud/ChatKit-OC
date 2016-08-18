@@ -2,7 +2,7 @@
 //  LCChatKitExample.m
 //  LeanCloudChatKit-iOS
 //
-//  Created by ElonChan on 16/2/24.
+//  Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/2/24.
 //  Copyright © 2016年 LeanCloud. All rights reserved.
 //
 #import "LCChatKitExample.h"
@@ -137,9 +137,16 @@ static NSMutableDictionary *_sharedInstances = nil;
     //        [LCChatKit setAllLogsEnabled:YES];
     [[LCChatKit sharedInstance] setUseDevPushCerticate:YES];
 #endif
+    /**
+     * @attention 请区别 `[AVOSCloud setApplicationId:appId clientKey:appKey];` 与 `[LCChatKit setAppId:appId appKey:appKey];`。
+     两者功能并不相同，前者不能代替后者。即使你在 `-[AppDelegate application:didFinishLaunchingWithOptions:]` 方法里已经设置过前者，也不能因此不调用后者。
+     前者为 LeanCloud-SDK 初始化，后者为 ChatKit 初始化。后者需要你在**每次**登录操作时调用一次，前者只需要你在程序启动时调用。
+     如果你使用了 LeanCloud-SDK 的其他功能，你可能要根据需要，这两个方法都使用到。
+     */
     [LCChatKit setAppId:LCCKAPPID appKey:LCCKAPPKEY];
+    
+#warning 注意：setFetchProfilesBlock 方法必须实现，如果不实现，ChatKit将无法显示用户头像、用户昵称。以下方法循环模拟了通过 userIds 同步查询 user 信息的过程，这里需要替换为 App 的 API 同步查询
     [[LCChatKit sharedInstance] setFetchProfilesBlock:^(NSArray<NSString *> *userIds, LCCKFetchProfilesCompletionHandler completionHandler) {
-        
         if (userIds.count == 0) {
             NSInteger code = 0;
             NSString *errorReasonText = @"User ids is nil";
@@ -176,6 +183,8 @@ static NSMutableDictionary *_sharedInstances = nil;
         }];
         // 模拟网络延时，3秒
         // sleep(3);
+
+#warning 重要：completionHandler 这个 Bock 必须执行，需要在你获取到用户信息**结束**后，将信息传给该Block！
         !completionHandler ?: completionHandler([users copy], nil);
     }];
     
