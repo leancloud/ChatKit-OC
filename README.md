@@ -390,9 +390,9 @@ typedef NS_ENUM(NSInteger, LCCKBarButtonItemStyle) {
 字段名 | 作用 | 备注
 -------------|-------------|-------------
 degrade | 用来定义如何展示老版本未支持的自定义消息类型  | 添加到自定义消息的 attributes 字典属性下
-typeTitle | 最近对话列表中最近一条消息的title，比如：最近一条消息是图片，可设置该字段内容为：`@"图片"`，相应会展示：`[图片]`） | 同上
-summary | 用来显示在push提示中  | 同上，另外，这个字段是为了方便自定义推送内容，这需要借助云引擎实现。
-
+typeTitle | 最近对话列表中最近一条消息的title，</p>比如：最近一条消息是图片，可设置该字段内容为：`@"图片"`，相应会展示：`[图片]`） | 添加到自定义消息的 attributes 字典属性下
+summary | 用来显示在push提示中  | 添加到自定义消息的 attributes 字典属性下，</p>另外，这个字段是为了方便自定义推送内容，这需要借助云引擎实现。
+conversationType | 用来显示在push提示中 |  添加到自定义消息的 attributes 字典属性下,</p>对话类型，用来展示在推送提示中，以达到这样的效果： [群消息]Tom：hello gays!</p> 以枚举 LCCKConversationType 定义为准，0为单聊，1为群聊
 以上三个字段需要添加到自定义消息的 attributes 字典属性下，ChatKit 给出了一个方法来方便添加 `-lcck_setObject:forKey:` ，用法如下：
 
 
@@ -580,6 +580,43 @@ UI自定义，需要实现 `LCCKInputViewPluginDelegate` 方法：
  ```
  
  这里注意在 `-sendCustomMessageHandler` 定义时记得在 Block 执行结束时，执行 `_sendCustomMessageHandler = nil;` ，避免循环引用。
+
+
+#### 删除自定义插件、自定义消息、自定义Cell
+
+如果需要删除插件，比如 Demo 中自定义了一个名片插件，如果想删除掉，只需要删除 LCCKInputViewPluginVCard 类中的如下代码，当然删除整个类也是能达到该效果的：
+
+
+ ```Objective-C
++ (void)load {
+    [self registerCustomInputViewPlugin];
+}
+ ```
+
+另外因为一个插件往往搭配一个自定义cell和自定义消息，这个也需要一并删除：
+
+删除自定义消息：
+
+`LCCKVCardMessage` 类中的：
+
+ ```Objective-C
++ (void)load {
+    [self registerSubclass];
+}
+ ```
+
+删除自定义Cell：
+
+`LCCKVCardMessageCell` 类中的：
+
+ ```Objective-C
++ (void)load {
+    [self registerCustomMessageCell];
+}
+ ```
+
+同理删除掉对应的类，也可以达到删除效果。
+
 
 ### 手动集成
 
