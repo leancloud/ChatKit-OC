@@ -2,7 +2,7 @@
 //  LCCKInputViewPluginPickImage.m
 //  Pods
 //
-//  v0.5.3 Created by 陈宜龙 on 16/8/11.
+//  v0.5.4 Created by 陈宜龙 on 16/8/11.
 //
 //
 
@@ -11,6 +11,7 @@
 @interface LCCKInputViewPluginPickImage()<UIImagePickerControllerDelegate>
 
 @property (nonatomic, copy) LCCKIdResultBlock sendCustomMessageHandler;
+@property (nonatomic, copy) UIImagePickerController *pickerController;
 
 @end
 
@@ -56,9 +57,7 @@
 - (void)pluginDidClicked {
     [super pluginDidClicked];
     //显示相册
-    UIImagePickerController *pickerC = [[UIImagePickerController alloc] init];
-    pickerC.delegate = self;
-    [self.conversationViewController presentViewController:pickerC animated:YES completion:nil];
+    [self.conversationViewController presentViewController:self.pickerController animated:YES completion:nil];
 }
 
 - (LCCKIdResultBlock)sendCustomMessageHandler {
@@ -81,6 +80,14 @@
 
 #pragma mark -
 #pragma mark - Private Methods
+- (UIImagePickerController *)pickerController {
+    if (_pickerController) {
+        return _pickerController;
+    }
+    _pickerController = [[UIImagePickerController alloc] init];
+    _pickerController.delegate = self;
+    return _pickerController;
+}
 
 - (UIImage *)imageInBundlePathForImageName:(NSString *)imageName {
     UIImage *image = [UIImage lcck_imageNamed:imageName bundleName:@"ChatKeyboard" bundleForClass:[self class]];

@@ -2,7 +2,7 @@
 //  LCCKVCardMessage.h
 //  ChatKit-OC
 //
-//  v0.5.3 Created by 陈宜龙 on 16/8/10.
+//  v0.5.4 Created by 陈宜龙 on 16/8/10.
 //  Copyright © 2016年 ElonChan. All rights reserved.
 //
 
@@ -19,7 +19,7 @@ static AVIMMessageMediaType const kAVIMMessageMediaTypeVCard = 1;
 
 @interface LCCKVCardMessage : AVIMTypedMessage<AVIMTypedMessageSubclassing>
 
-- (instancetype)initWithClientId:(NSString *)clientId;
-+ (instancetype)vCardMessageWithClientId:(NSString *)clientId;
+- (instancetype)initWithClientId:(NSString *)clientId conversationType:(LCCKConversationType)conversationType;
++ (instancetype)vCardMessageWithClientId:(NSString *)clientId conversationType:(LCCKConversationType)conversationType;
 
 @end

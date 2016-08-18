@@ -2,7 +2,7 @@
 //  LCChatKit.m
 //  LeanCloudChatKit-iOS
 //
-//  v0.5.3 Created by ElonChan on 16/2/22.
+//  v0.5.4 Created by ElonChan on 16/2/22.
 //  Copyright © 2016年 LeanCloud. All rights reserved.
 //
 
@@ -272,7 +272,6 @@ static NSMutableDictionary *_sharedInstances = nil;
 
 - (void)setFetchConversationHandler:(LCCKFetchConversationHandler)fetchConversationHandler {
     [self.conversationService setFetchConversationHandler:fetchConversationHandler];
-
 }
 
 - (void)setConversationInvalidedHandler:(LCCKConversationInvalidedHandler)conversationInvalidedHandler {
@@ -313,6 +312,14 @@ static NSMutableDictionary *_sharedInstances = nil;
 
 - (BOOL)removeAllCachedRecentConversations {
     return [self.conversationService removeAllCachedRecentConversations];
+}
+
+- (void)sendWelcomeMessageToPeerId:(NSString *)peerId text:(NSString *)text block:(LCCKBooleanResultBlock)block {
+    [self.conversationService sendWelcomeMessageToPeerId:peerId text:text block:block];
+}
+
+- (void)sendWelcomeMessageToConversationId:(NSString *)conversationId text:(NSString *)text block:(LCCKBooleanResultBlock)block {
+    [self.conversationService sendWelcomeMessageToConversationId:conversationId text:text block:block];
 }
 
 #pragma mark - LCCKConversationsListService

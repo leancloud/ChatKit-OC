@@ -2,7 +2,7 @@
 //  LCCKInputViewPlugin.h
 //  Pods
 //
-//  v0.5.3 Created by 陈宜龙 on 16/7/19.
+//  v0.5.4 Created by 陈宜龙 on 16/7/19.
 //
 //
 
@@ -13,7 +13,7 @@
 
 #import "LCCKConstants.h"
 
-@protocol LCCKInputViewPluginSubclassing <NSObject>
+@protocol LCCKInputViewPluginSubclassing <NSObject>
 @required
 
 /*!

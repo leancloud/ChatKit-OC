@@ -2,7 +2,7 @@
 //  LCCKContact.h
 //  ChatKit
 //
-//  v0.5.3 Created by 陈宜龙 on 16/7/11.
+//  v0.5.4 Created by 陈宜龙 on 16/7/11.
 //  Copyright © 2016年 ElonChan. All rights reserved.
 //
 

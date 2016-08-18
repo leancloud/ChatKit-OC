@@ -2,7 +2,7 @@
 //  LCCKConstants.h
 //  LeanCloudChatKit-iOS
 //
-//  v0.5.3 Created by ElonChan on 16/2/19.
+//  v0.5.4 Created by ElonChan on 16/2/19.
 //  Copyright © 2016年 LeanCloud. All rights reserved.
 //  Common typdef and constants, and so on.
 
@@ -28,6 +28,8 @@ typedef void (^LCCKArrayResultBlock)(NSArray *objects, NSError *error);
 typedef void (^LCCKSetResultBlock)(NSSet *channels, NSError *error);
 typedef void (^LCCKDataResultBlock)(NSData *data, NSError *error);
 typedef void (^LCCKIdResultBlock)(id object, NSError *error);
+typedef void (^LCCKIdBoolResultBlock)(BOOL succeeded, id object, NSError *error);
+
 //Callback with Function object
 typedef void (^LCCKVoidBlock)(void);
 typedef void (^LCCKErrorBlock)(NSError *error);
@@ -71,6 +73,8 @@ static NSString *const LCCKNotificationMessageReceived = @"LCCKNotificationMessa
  *  消息到来了，通知聊天页面和最近对话页面刷新
  */
 static NSString *const LCCKNotificationCustomMessageReceived = @"LCCKNotificationCustomMessageReceived";
+
+static NSString *const LCCKNotificationCustomTransientMessageReceived = @"LCCKNotificationCustomTransientMessageReceived";
 
 /**
  *  消息到达对方了，通知聊天页面更改消息状态
@@ -176,6 +180,10 @@ static NSInteger const kLCCKOnePageSize = 10;
 static NSString *const LCCK_CONVERSATION_TYPE = @"type";
 static NSString *const LCCKInstallationKeyChannels = @"channels";
 
+static NSString *const LCCKDidReceiveMessagesUserInfoConversationKey = @"conversation";
+static NSString *const LCCKDidReceiveMessagesUserInfoMessagesKey = @"receivedMessages";
+static NSString *const LCCKDidReceiveCustomMessageUserInfoMessageKey = @"receivedCustomMessage";
+
 #define LCCK_CURRENT_TIMESTAMP ([[NSDate date] timeIntervalSince1970] * 1000)
 #define LCCK_FUTURE_TIMESTAMP ([[NSDate distantFuture] timeIntervalSince1970] * 1000)
 //整数或小数
@@ -200,6 +208,14 @@ static NSString *const LCCKCustomMessageTypeTitleKey = @"typeTitle";
  * 用来显示在push提示中。
  */
 static NSString *const LCCKCustomMessageSummaryKey = @"summary";
+
+/*!
+ * 对话类型，用来展示在推送提示中，以达到这样的效果： [群消息]Tom：hello gays!
+ * 以枚举 LCCKConversationType 定义为准，0为单聊，1为群聊
+ */
+static NSString *const LCCKCustomMessageConversationTypeKey = @"conversationType";
+
+static NSString *const LCCKConversationGroupAvatarURLKey = @"LCCKConversationGroupAvatarURLKey";
 
 #pragma mark - Custom Message Cell
 ///=============================================================================
@@ -363,8 +379,15 @@ typedef NS_ENUM(NSInteger, LCCKBubbleMessageMenuSelectedType) {
 #define LCCKConversationTableIncreaseUnreadCountSQL              \
     @"UPDATE " LCCKConversationTableName         @" "            \
     @"SET " LCCKConversationTableKeyUnreadCount  @" = "          \
+            LCCKConversationTableKeyUnreadCount  @" + ?"        \
+    LCCKConversationTableWhereClause
+
+#define LCCKConversationTableIncreaseOneUnreadCountSQL              \
+    @"UPDATE " LCCKConversationTableName         @" "            \
+    @"SET " LCCKConversationTableKeyUnreadCount  @" = "          \
             LCCKConversationTableKeyUnreadCount  @" + 1 "        \
     LCCKConversationTableWhereClause
+
 
 #define LCCKConversationTableUpdateUnreadCountSQL                \
     @"UPDATE " LCCKConversationTableName         @" "            \

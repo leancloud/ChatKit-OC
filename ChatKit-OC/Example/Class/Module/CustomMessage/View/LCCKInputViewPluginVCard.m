@@ -2,7 +2,7 @@
 //  LCCKInputViewPluginVCard.m
 //  ChatKit-OC
 //
-//  v0.5.3 Created by 陈宜龙 on 16/8/12.
+//  v0.5.4 Created by 陈宜龙 on 16/8/12.
 //  Copyright © 2016年 ElonChan. All rights reserved.
 //
 
@@ -68,8 +68,11 @@
     if (_sendCustomMessageHandler) {
         return _sendCustomMessageHandler;
     }
+    if (!self.conversationViewController.isAvailable) {
+        return nil;
+    }
     LCCKIdResultBlock sendCustomMessageHandler = ^(id object, NSError *error) {
-        LCCKVCardMessage *vCardMessage = [LCCKVCardMessage vCardMessageWithClientId:object];
+        LCCKVCardMessage *vCardMessage = [LCCKVCardMessage vCardMessageWithClientId:object conversationType:self.conversationViewController.conversation.lcck_type];
         [self.conversationViewController sendCustomMessage:vCardMessage progressBlock:^(NSInteger percentDone) {
         } success:^(BOOL succeeded, NSError *error) {
             [self.conversationViewController sendLocalFeedbackTextMessge:@"名片发送成功"];
@@ -101,7 +104,7 @@
     }
     NSArray *users = [[LCChatKit sharedInstance] getCachedProfilesIfExists:allPersonIds shouldSameCount:YES error:nil];
     NSString *currentClientID = [[LCChatKit sharedInstance] clientId];
-    LCCKContactListViewController *contactListViewController = [[LCCKContactListViewController alloc] initWithContacts:users userIds:allPersonIds excludedUserIds:@[currentClientID] mode:LCCKContactListModeSingleSelection];
+    LCCKContactListViewController *contactListViewController = [[LCCKContactListViewController alloc] initWithContacts:[NSSet setWithArray:users] userIds:[NSSet setWithArray:allPersonIds] excludedUserIds:[NSSet setWithArray:@[currentClientID]] mode:LCCKContactListModeSingleSelection];
     contactListViewController.title = @"发送名片";
     [contactListViewController setViewDidDismissBlock:^(LCCKBaseViewController *viewController) {
         [self.inputViewRef open];

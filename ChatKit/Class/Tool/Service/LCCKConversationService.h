@@ -2,7 +2,7 @@
 //  LCCKConversationService.h
 //  LeanCloudChatKit-iOS
 //
-//  v0.5.3 Created by ElonChan on 16/3/1.
+//  v0.5.4 Created by ElonChan on 16/3/1.
 //  Copyright © 2016年 LeanCloud. All rights reserved.
 //
 
@@ -69,8 +69,6 @@ FOUNDATION_EXTERN NSString *const LCCKConversationServiceErrorDomain;
       progressBlock:(AVProgressBlock)progressBlock
            callback:(LCCKBooleanResultBlock)block;
 
-- (void)sendWelcomeMessageToPeerId:(NSString *)peerId text:(NSString *)text block:(LCCKBooleanResultBlock)block;
-
 - (void)queryTypedMessagesWithConversation:(AVIMConversation *)conversation timestamp:(int64_t)timestamp limit:(NSInteger)limit block:(LCCKArrayResultBlock)block;
 
 /**
@@ -96,26 +94,30 @@ FOUNDATION_EXTERN NSString *const LCCKConversationServiceErrorDomain;
  *  @param conversation
  */
 - (void)insertRecentConversation:(AVIMConversation *)conversation;
+- (void)insertRecentConversation:(AVIMConversation *)conversation shouldRefreshWhenFinished:(BOOL)shouldRefreshWhenFinished;
 
+- (void)increaseUnreadCount:(NSUInteger)increaseUnreadCount withConversationId:(NSString *)conversationId shouldRefreshWhenFinished:(BOOL)shouldRefreshWhenFinished;
 /**
  *  更新 mentioned 值，当接收到消息发现 @了我的时候，设为 YES，进入聊天页面，设为 NO
  *  @param mentioned  要更新的值
  *  @param conversation 相应对话
  */
 - (void)updateMentioned:(BOOL)mentioned conversationId:(NSString *)conversationId;
-
+- (void)updateMentioned:(BOOL)mentioned conversationId:(NSString *)conversationId shouldRefreshWhenFinished:(BOOL)shouldRefreshWhenFinished;
 /**
  *  更新 draft 值
  *  @param draft  要更新的值
  *  @param conversation 相应对话
  */
 - (void)updateDraft:(NSString *)draft conversationId:(NSString *)conversationId;
+- (void)updateDraft:(NSString *)draft conversationId:(NSString *)conversationId shouldRefreshWhenFinished:(BOOL)shouldRefreshWhenFinished;
 
 /**
  *  更新每条最近对话记录里的 conversation 值，也即某对话的名字、成员可能变了，需要更新应用打开时，第一次加载最近对话列表时，会去向服务器要对话的最新数据，然后更新
  *  @param conversations 要更新的对话
  */
 - (void)updateRecentConversation:(NSArray *)conversations;
+- (void)updateRecentConversation:(NSArray *)conversations shouldRefreshWhenFinished:(BOOL)shouldRefreshWhenFinished;
 
 /**
  *  从数据库查找所有的对话，即所有的最近对话

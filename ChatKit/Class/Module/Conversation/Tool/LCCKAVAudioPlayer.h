@@ -2,7 +2,7 @@
 //  LCCKAVAudioPlayer.h
 //  LCCKChatExample
 //
-//  v0.5.3 Created by ElonChan ( https://github.com/leancloud/ChatKit-OC ) on 15/11/18.
+//  v0.5.4 Created by ElonChan ( https://github.com/leancloud/ChatKit-OC ) on 15/11/18.
 //  Copyright © 2015年 https://LeanCloud.cn . All rights reserved.
 //
 

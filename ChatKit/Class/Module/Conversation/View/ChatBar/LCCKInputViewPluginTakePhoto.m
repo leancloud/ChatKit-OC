@@ -2,7 +2,7 @@
 //  LCCKInputViewPluginTakePhoto.m
 //  Pods
 //
-//  v0.5.3 Created by 陈宜龙 on 16/8/11.
+//  v0.5.4 Created by 陈宜龙 on 16/8/11.
 //
 //
 
@@ -12,6 +12,7 @@
 
 @property (nonatomic) LCCKConversationViewController *conversationViewController;
 @property (nonatomic, copy) LCCKIdResultBlock sendCustomMessageHandler;
+@property (nonatomic, copy) UIImagePickerController *pickerController;
 
 @end
 
@@ -68,10 +69,7 @@
         !showNotificationBlock ?: showNotificationBlock(window.rootViewController, @"您的设备不支持拍照", @"请尝试在设置中开启拍照权限", LCCKMessageNotificationTypeError);
         return;
     }
-    UIImagePickerController *pickerC = [[UIImagePickerController alloc] init];
-    pickerC.sourceType = UIImagePickerControllerSourceTypeCamera;
-    pickerC.delegate = self;
-    [self.conversationViewController presentViewController:pickerC animated:YES completion:nil];
+    [self.conversationViewController presentViewController:self.pickerController animated:YES completion:nil];
 }
 
 - (LCCKIdResultBlock)sendCustomMessageHandler {
@@ -92,6 +90,15 @@
 
 #pragma mark -
 #pragma mark - Private Methods
+
+- (UIImagePickerController *)pickerController {
+    if (_pickerController) {
+        return _pickerController;
+    }
+    _pickerController = [[UIImagePickerController alloc] init];
+    _pickerController.delegate = self;
+    return _pickerController;
+}
 
 - (UIImage *)imageInBundlePathForImageName:(NSString *)imageName {
     UIImage *image = [UIImage lcck_imageNamed:imageName bundleName:@"ChatKeyboard" bundleForClass:[self class]];

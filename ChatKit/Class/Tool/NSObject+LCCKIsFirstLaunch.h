@@ -2,7 +2,7 @@
 //  NSObject+IsFirstLaunch.h
 //  ElonChan
 //
-//  v0.5.3 Created by chenyilong on 15/6/15.
+//  v0.5.4 Created by chenyilong on 15/6/15.
 //  Copyright © 2015年 ElonChan. All rights reserved.
 //
 

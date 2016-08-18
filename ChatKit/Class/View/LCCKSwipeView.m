@@ -3,7 +3,7 @@
 //
 //  Version 1.3.2
 //
-//  v0.5.3 Created by Nick Lockwood on 03/09/2010.
+//  v0.5.4 Created by Nick Lockwood on 03/09/2010.
 //  Copyright 2010 Charcoal Design
 //
 //  Distributed under the permissive zlib License

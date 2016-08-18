@@ -2,7 +2,7 @@
 //  LCCKMapViewController.m
 //  LeanCloudChatKit-iOS
 //
-//  v0.5.3 Created by 陈宜龙 on 16/3/30.
+//  v0.5.4 Created by 陈宜龙 on 16/3/30.
 //  Copyright © 2016年 ElonChan. All rights reserved.
 //
 
