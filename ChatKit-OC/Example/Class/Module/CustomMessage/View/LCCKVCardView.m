@@ -2,8 +2,8 @@
 //  LCCKVCardView.m
 //  ChatKit-OC
 //
-//  v0.5.4 Created by 陈宜龙 on 16/8/15.
-//  Copyright © 2016年 ElonChan. All rights reserved.
+//  v0.6.0 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/8/15.
+//  Copyright © 2016年 ElonChan (wechat:chenyilong1010). All rights reserved.
 //
 
 #import "LCCKVCardView.h"

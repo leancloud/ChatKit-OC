@@ -2,8 +2,8 @@
 //  LCCKBaseConversationViewController.m
 //  LeanCloudIMKit-iOS
 //
-//  v0.5.4 Created by 陈宜龙 on 16/3/21.
-//  Copyright © 2016年 ElonChan. All rights reserved.
+//  v0.6.0 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/3/21.
+//  Copyright © 2016年 ElonChan (微信向我报BUG:chenyilong1010). All rights reserved.
 //
 //#define LCCKDebugging 1
 #import "LCCKBaseConversationViewController.h"

@@ -2,7 +2,7 @@
 //  LCCKConversationNavigationTitleView.m
 //  Pods
 //
-//  v0.5.4 Created by 陈宜龙 on 16/7/19.
+//  v0.6.0 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/7/19.
 //
 //
 
