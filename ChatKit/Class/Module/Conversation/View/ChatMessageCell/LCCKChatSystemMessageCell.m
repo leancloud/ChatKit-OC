@@ -8,8 +8,6 @@
 
 #import "LCCKChatSystemMessageCell.h"
 
-#import "Masonry.h"
-
 @interface LCCKChatSystemMessageCell ()
 
 @property (nonatomic, weak) UILabel *systemMessageLabel;

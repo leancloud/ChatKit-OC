@@ -2,13 +2,17 @@
 //  LCCKInputViewPlugin.m
 //  Pods
 //
-//  v0.5.4 Created by 陈宜龙 on 16/7/19.
+//  v0.6.0 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/7/19.
 //
 //
 
 #import "LCCKInputViewPlugin.h"
 #import <ChatKit/LCChatKit.h>
+#if __has_include(<Masonry/Masonry.h>)
+#import <Masonry/Masonry.h>
+#else
 #import "Masonry.h"
+#endif
 
 NSMutableDictionary const *LCCKInputViewPluginDict = nil;
 NSMutableArray const *LCCKInputViewPluginArray = nil;
@@ -47,7 +51,7 @@ NSMutableArray const *LCCKInputViewPluginArray = nil;
 }
 
 + (Class)classForMediaType:(LCCKInputViewPluginType)type {
-    NSNumber *typeKey = [NSNumber numberWithInt:type];
+    NSNumber *typeKey = [NSNumber numberWithInteger:type];
     Class class = [LCCKInputViewPluginDict objectForKey:typeKey];
     if (!class) {
         class = self;
@@ -62,7 +66,7 @@ NSMutableArray const *LCCKInputViewPluginArray = nil;
     if (!LCCKInputViewPluginArray) {
         LCCKInputViewPluginArray = [[NSMutableArray alloc] init];
     }
-    NSNumber *typeKey = [NSNumber numberWithInt:type];
+    NSNumber *typeKey = [NSNumber numberWithInteger:type];
     Class c = [LCCKInputViewPluginDict objectForKey:typeKey];
     if (!c || [class isSubclassOfClass:c]) {
         [LCCKInputViewPluginDict setObject:class forKey:typeKey];
@@ -102,12 +106,11 @@ NSMutableArray const *LCCKInputViewPluginArray = nil;
 
 #pragma mark - Public Methods
 
-- (instancetype)fillWithPluginTitle:(NSString *)pluginTitle
+- (void)fillWithPluginTitle:(NSString *)pluginTitle
                     pluginIconImage:(UIImage *)pluginIconImage {
     self.titleLabel.text = pluginTitle;
     [self.button setBackgroundImage:pluginIconImage forState:UIControlStateNormal];
 }
-
 
 #pragma mark - Private Methods
 

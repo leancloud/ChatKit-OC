@@ -7,7 +7,6 @@
 //
 
 #import "LCCKChatVoiceMessageCell.h"
-#import "Masonry.h"
 #import "LCCKMessageVoiceFactory.h"
 #import "LCCKAVAudioPlayer.h"
 #import "LCCKDeallocBlockExecutor.h"

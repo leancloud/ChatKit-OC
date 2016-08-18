@@ -7,7 +7,6 @@
 //
 
 #import "LCCKChatImageMessageCell.h"
-#import "Masonry.h"
 #import "UIImage+LCCKExtension.h"
 
 #if __has_include(<SDWebImage/UIImageView+WebCache.h>)

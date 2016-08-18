@@ -12,7 +12,11 @@
 #import "LCCKContentView.h"
 #import "LCCKConstants.h"
 #import "LCCKMessage.h"
+#if __has_include(<Masonry/Masonry.h>)
+#import <Masonry/Masonry.h>
+#else
 #import "Masonry.h"
+#endif
 #import <AVOSCloudIM/AVOSCloudIM.h>
 
 #if __has_include(<MLLabel/MLLinkLabel.h>)

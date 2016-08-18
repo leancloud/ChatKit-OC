@@ -7,7 +7,11 @@
 //
 
 #import "LCCKLocationController.h"
+#if __has_include(<Masonry/Masonry.h>)
+#import <Masonry/Masonry.h>
+#else
 #import "Masonry.h"
+#endif
 #import "UIImage+LCCKExtension.h"
 
 static CGFloat const LCCKLocationPOIListCellHeight = 40.f;

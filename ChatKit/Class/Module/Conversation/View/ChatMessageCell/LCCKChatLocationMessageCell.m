@@ -7,7 +7,6 @@
 //
 
 #import "LCCKChatLocationMessageCell.h"
-#import "Masonry.h"
 #import "UIImage+LCCKExtension.h"
 
 @interface LCCKChatLocationMessageCell ()

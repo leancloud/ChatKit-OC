@@ -24,7 +24,11 @@
 #import "LCCKTextFullScreenViewController.h"
 #import <objc/runtime.h>
 #import "NSMutableArray+LCCKMessageExtention.h"
+#if __has_include(<Masonry/Masonry.h>)
+#import <Masonry/Masonry.h>
+#else
 #import "Masonry.h"
+#endif
 #import "LCCKConversationNavigationTitleView.h"
 #import "LCCKWebViewController.h"
 #import "LCCKSafariActivity.h"
