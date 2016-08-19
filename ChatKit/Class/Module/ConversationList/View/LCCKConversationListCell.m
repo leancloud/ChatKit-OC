@@ -8,7 +8,13 @@
 
 #import "LCCKConversationListCell.h"
 #import "LCCKBadgeView.h"
+
+#if __has_include(<ChatKit/LCChatKit.h>)
+#import <ChatKit/LCChatKit.h>
+#else
 #import "LCChatKit.h"
+#endif
+
 #import "UIImageView+LCCKExtension.h"
 
 static CGFloat LCCKImageSize = 45;

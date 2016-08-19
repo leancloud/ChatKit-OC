@@ -11,7 +11,6 @@
 #import "LCCKSessionService.h"
 #import "LCCKConversationService.h"
 #import "LCCKConversationListViewModel.h"
-#import "LCChatKit.h"
 
 #if __has_include(<MJRefresh/MJRefresh.h>)
     #import <MJRefresh/MJRefresh.h>

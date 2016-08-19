@@ -13,7 +13,7 @@
 #import "LCChatKit.h"
 #endif
 
-@interface LCChatKitExample : LCCKSingleton
+@interface LCChatKitExample : NSObject
 
 #pragma mark - SDK Life Control
 #pragma mark - quick start 使用下面的函数即可完成从程序启动到登录再到登出的完整流程

@@ -9,9 +9,12 @@
 #import "LCCKConversationNavigationTitleView.h"
 #import "NSString+LCCKExtension.h"
 #import "UIImageView+LCCKExtension.h"
-#import "LCChatKit.h"
 #import "LCCKDeallocBlockExecutor.h"
-
+#if __has_include(<ChatKit/LCChatKit.h>)
+#import <ChatKit/LCChatKit.h>
+#else
+#import "LCChatKit.h"
+#endif
 static CGFloat const kLCCKTitleFontSize = 17.f;
 static void * const LCCKConversationNavigationTitleViewShowRemindMuteImageViewContext = (void*)&LCCKConversationNavigationTitleViewShowRemindMuteImageViewContext;
 

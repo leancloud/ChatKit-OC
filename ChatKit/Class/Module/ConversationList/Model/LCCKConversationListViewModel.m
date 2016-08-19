@@ -30,6 +30,7 @@
 #else
     #import "UIImageView+WebCache.h"
 #endif
+#import "LCCKDeallocBlockExecutor.h"
 
 
 
@@ -54,12 +55,12 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refresh) name:LCCKNotificationMessageReceived object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refresh) name:LCCKNotificationUnreadsUpdated object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refresh) name:LCCKNotificationConversationListDataSourceUpdated object:nil];
+        __unsafe_unretained typeof(self) weakSelf = self;
+        [self lcck_executeAtDealloc:^{
+               [[NSNotificationCenter defaultCenter] removeObserver:weakSelf];
+            }];
     _conversationListViewController = conversationListViewController;
     return self;
-}
-
-- (void)dealloc {
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 #pragma mark - table view

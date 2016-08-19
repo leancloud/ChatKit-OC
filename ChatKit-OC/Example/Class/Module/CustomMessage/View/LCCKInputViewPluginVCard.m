@@ -69,6 +69,7 @@
         return _sendCustomMessageHandler;
     }
     if (!self.conversationViewController.isAvailable) {
+        [self.conversationViewController sendLocalFeedbackTextMessge:@"名片发送失败"];
         return nil;
     }
     LCCKIdResultBlock sendCustomMessageHandler = ^(id object, NSError *error) {

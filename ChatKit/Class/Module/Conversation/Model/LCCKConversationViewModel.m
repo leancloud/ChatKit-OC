@@ -39,6 +39,7 @@
 #import "NSMutableArray+LCCKMessageExtention.h"
 #import "LCCKAlertController.h"
 #import "NSObject+LCCKExtension.h"
+#import "LCCKDeallocBlockExecutor.h"
 
 @interface LCCKConversationViewModel ()
 
@@ -63,13 +64,13 @@
         self.parentConversationViewController = parentConversationViewController;
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveMessage:) name:LCCKNotificationMessageReceived object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(conversationInvalided:) name:LCCKNotificationCurrentConversationInvalided object:nil];
+            __unsafe_unretained typeof(self) weakSelf = self;
+            [self lcck_executeAtDealloc:^{
+            weakSelf.delegate = nil;
+                   [[NSNotificationCenter defaultCenter] removeObserver:weakSelf];
+                }];
     }
     return self;
-}
-
-- (void)dealloc {
-    self.delegate = nil;
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 #pragma mark - UITableViewDataSource & UITableViewDelegate

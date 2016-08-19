@@ -38,32 +38,25 @@ static NSMutableDictionary *attributedStringCache = nil;
             title = LCCKLocalizedStrings(@"Location");
             title = [NSString stringWithFormat:@"[%@]",title];
             break;
-            //TODO:
-//        case kAVIMMessageMediaTypeEmotion:
-//            title = NSLocalizedStringFromTable(@"Sight", @"LCChatKitString", @"表情");
-//            title = [NSString stringWithFormat:@"[%@]",title];
-
-//            break;
+            
         case kAVIMMessageMediaTypeVideo:
             title = LCCKLocalizedStrings(@"Video");
             title = [NSString stringWithFormat:@"[%@]",title];
             break;
-//TODO:
-            
+            //TODO:
         default:
-            
             if ([message lcck_isSupportThisCustomMessage]) {
                 @try {
                     title = [message.attributes valueForKey:LCCKCustomMessageTypeTitleKey];
-                    title = [NSString stringWithFormat:@"[%@]",title];
                 } @catch (NSException *exception) {} @finally {
                     if (!title) {
                         title = LCCKLocalizedStrings(@"unknownMessageType");
                     }
                 }
+            } else {
+                title = LCCKLocalizedStrings(@"unknownMessageType");
             }
-            //自定义消息
-            
+            title = [NSString stringWithFormat:@"[%@]",title];
             break;
     }
     return title;

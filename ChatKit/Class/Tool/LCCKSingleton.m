@@ -8,8 +8,7 @@
 
 #import "LCCKSingleton.h"
 
-// Dictionary that holds all instances of LCCKSingleton subclasses
-static NSMutableDictionary *_sharedInstances = nil;
+NSMutableDictionary const *_sharedInstances = nil;
 
 @implementation LCCKSingleton
 

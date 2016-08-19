@@ -8,8 +8,7 @@
 
 #import "NSObject+LCCKHUD.h"
 
-// 正常是2秒
-static CGFloat const kTime = 2.0f;
+static CGFloat const kTime = 20;
 static CGFloat const kSuccessMessageTime = 0.3f;
 static CGFloat const kFailureMessageTime = 0.3f;
 

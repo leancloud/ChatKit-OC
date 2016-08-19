@@ -31,10 +31,6 @@
 
 static NSString *const LCCKAPPID = @"dYRQ8YfHRiILshUnfFJu2eQM-gzGzoHsz";
 static NSString *const LCCKAPPKEY = @"ye24iIK6ys8IvaISMC4Bs5WK";
-//static NSString *const LCCKAPPID = @"eBLWvezQIK0XbGoyhUAn614d-gzGzoHsz";
-//static NSString *const LCCKAPPKEY = @"cjAQu6MAIVbxwihONRX3Ulx6";
-// Dictionary that holds all instances of Singleton include subclasses
-static NSMutableDictionary *_sharedInstances = nil;
 
 @interface LCChatKitExample () <MWPhotoBrowserDelegate>
 
@@ -109,15 +105,17 @@ static NSMutableDictionary *_sharedInstances = nil;
         // 应用在前台时收到推送，只能来自于普通的推送，而非离线消息推送
     }
     else {
-        //  当使用 https://github.com/leancloud/leanchat-cloudcode 云代码更改推送内容的时候
-        //        {
-        //            aps =     {
-        //                alert = "lcckkit : sdfsdf";
-        //                badge = 4;
-        //                sound = default;
-        //            };
-        //            convid = 55bae86300b0efdcbe3e742e;
-        //        }
+        /*!
+         *  当使用 https://github.com/leancloud/leanchat-cloudcode 云代码更改推送内容的时候
+         {
+            aps =     {
+                alert = "lcckkit : sdfsdf";
+                badge = 4;
+                sound = default;
+            };
+            convid = 55bae86300b0efdcbe3e742e;
+         }
+         */
         [[LCChatKit sharedInstance] didReceiveRemoteNotification:userInfo];
     }
 }
@@ -408,9 +406,6 @@ typedef void (^UITableViewRowActionHandler)(UITableViewRowAction *action, NSInde
  */
 + (void)exampleOpenConversationViewControllerWithPeerId:(NSString *)peerId fromNavigationController:(UINavigationController *)navigationController {
     LCCKConversationViewController *conversationViewController = [[LCCKConversationViewController alloc] initWithPeerId:peerId];
-//    [conversationViewController setViewDidLoadBlock:^(LCCKBaseViewController *viewController) {
-//        [self lcck_showText:@"加载历史记录..." toView:viewController.view];
-//    }];
     [conversationViewController setViewWillDisappearBlock:^(LCCKBaseViewController *viewController, BOOL aAnimated) {
         [self lcck_hideHUDForView:viewController.view];
     }];
@@ -420,9 +415,6 @@ typedef void (^UITableViewRowActionHandler)(UITableViewRowAction *action, NSInde
 + (void)exampleOpenConversationViewControllerWithConversaionId:(NSString *)conversationId fromNavigationController:(UINavigationController *)aNavigationController {
     LCCKConversationViewController *conversationViewController = [[LCCKConversationViewController alloc] initWithConversationId:conversationId];
     conversationViewController.enableAutoJoin = YES;
-//    [conversationViewController setViewDidLoadBlock:^(LCCKBaseViewController *viewController) {
-//        [self lcck_showText:@"加载历史记录..." toView:viewController.view];
-//    }];
     [conversationViewController setViewWillDisappearBlock:^(LCCKBaseViewController *viewController, BOOL aAnimated) {
         [self lcck_hideHUDForView:viewController.view];
     }];
@@ -494,13 +486,13 @@ typedef void (^UITableViewRowActionHandler)(UITableViewRowAction *action, NSInde
                 LCCKTabBarControllerConfig *tabBarControllerConfig = [[LCCKTabBarControllerConfig alloc] init];
                 [self cyl_tabBarController].rootWindow.rootViewController = tabBarControllerConfig.tabBarController;
             } failed:^(NSError *error) {
-                //                NSLog(@"%@",error);
+                LCCKLog(@"%@", error);
             }];
         }];
         [viewController presentViewController:loginViewController animated:YES completion:nil];
     } failed:^(NSError *error) {
         [LCCKUtil hideProgress];
-        //        NSLog(@"%@", error);
+        LCCKLog(@"%@", error);
     }];
 }
 
@@ -646,11 +638,9 @@ void dispatch_async_limit(dispatch_queue_t queue, NSUInteger limitSemaphoreCount
         title = [NSString stringWithFormat:@"打开自己的主页 \nClientId是 : %@", userId];
         subtitle = [NSString stringWithFormat:@"我自己的name是 : %@", user.name];
     } else if ([parentController isKindOfClass:[LCCKConversationViewController class]] ) {
-//        if (conversationViewController.conversation.lcck_type == LCCKConversationTypeGroup) {
             LCCKConversationViewController *conversationViewController_ = [[LCCKConversationViewController alloc] initWithPeerId:user.clientId ?: userId];
             [[self class] pushToViewController:conversationViewController_];
             return;
-//        }
     }
     [LCCKUtil showNotificationWithTitle:title subtitle:subtitle type:LCCKMessageNotificationTypeMessage];
 }
@@ -683,6 +673,21 @@ void dispatch_async_limit(dispatch_queue_t queue, NSUInteger limitSemaphoreCount
 
 - (void)photoBrowser:(MWPhotoBrowser *)photoBrowser photoAtIndex:(NSUInteger)index selectedChanged:(BOOL)selected {
     [_selections replaceObjectAtIndex:index withObject:[NSNumber numberWithBool:selected]];
+}
+
+#pragma mark -
+#pragma mark - Private Methods
+
+/**
+ * create a singleton instance of LCChatKitExample
+ */
++ (instancetype)sharedInstance {
+    static LCChatKitExample *_sharedLCChatKitExample = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        _sharedLCChatKitExample = [[self alloc] init];
+    });
+    return _sharedLCChatKitExample;
 }
 
 @end

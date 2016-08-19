@@ -6,7 +6,11 @@
 //  Copyright © 2016年 LeanCloud. All rights reserved.
 //
 
+#if __has_include(<ChatKit/LCChatKit.h>)
 #import <ChatKit/LCChatKit.h>
+#else
+#import "LCChatKit.h"
+#endif
 
 @import UIKit;
 @import Foundation;

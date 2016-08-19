@@ -7,8 +7,11 @@
 //
 
 #import "LCCKStatusView.h"
+#if __has_include(<ChatKit/LCChatKit.h>)
+#import <ChatKit/LCChatKit.h>
+#else
 #import "LCChatKit.h"
-#import "UIImage+LCCKExtension.h"
+#endif
 
 static CGFloat LCCKStatusImageViewHeight = 20;
 static CGFloat LCCKHorizontalSpacing = 15;
