@@ -2,12 +2,16 @@
 //  LCCKConversationService.m
 //  LeanCloudChatKit-iOS
 //
-//  v0.6.0 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/3/1.
+//  v0.6.1 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/3/1.
 //  Copyright © 2016年 LeanCloud. All rights reserved.
 //
 
 #import "LCCKConversationService.h"
+#if __has_include(<ChatKit/LCChatKit.h>)
+#import <ChatKit/LCChatKit.h>
+#else
 #import "LCChatKit.h"
+#endif
 #if __has_include(<FMDB/FMDB.h>)
 #import <FMDB/FMDB.h>
 #else
@@ -359,7 +363,11 @@ NSString *const LCCKConversationServiceErrorDomain = @"LCCKConversationServiceEr
     [self.databaseQueue inDatabase:^(FMDatabase *db) {
         FMResultSet  *resultSet = [db executeQuery:LCCKConversationTableSelectSQL withArgumentsInArray:@[]];
         while ([resultSet next]) {
-            [conversations addObject:[self createConversationFromResultSet:resultSet]];
+            AVIMConversation *conversation = [self createConversationFromResultSet:resultSet];
+            BOOL isAvailable = conversation.createAt;
+            if (isAvailable) {
+                [conversations addObject:conversation];
+            } 
         }
         [resultSet close];
     }];
