@@ -43,7 +43,7 @@
 }
 
 + (UIImage *)imageInBundleForImageName:(NSString *)imageName {
-    UIImage *image = [UIImage lcck_imageNamed:imageName bundleName:@"VoiceMessageSource" bundleForClass:[self class]];
+    UIImage *image = [UIImage lcck_imageNamed:imageName bundleName:@"MessageBubble" bundleForClass:[self class]];
     return  image;
 }
 

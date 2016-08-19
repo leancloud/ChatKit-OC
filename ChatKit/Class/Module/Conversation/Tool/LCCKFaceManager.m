@@ -61,7 +61,7 @@
 }
 
 + (NSString *)defaultEmojiFacePath {
-    NSBundle *bundle = [NSBundle lcck_bundleForbundleName:@"Emoji" class:[self class]];
+    NSBundle *bundle = [NSBundle lcck_bundleForName:@"Emoji" class:[self class]];
     NSString *defaultEmojiFacePath = [bundle pathForResource:@"face" ofType:@"plist"];
     return defaultEmojiFacePath;
 }

@@ -106,7 +106,7 @@ static void * const LCCKConversationNavigationTitleViewShowRemindMuteImageViewCo
     if (_remindMuteImageView == nil) {
         UIImageView *remindMuteImageView = [[UIImageView alloc] init];
         NSString *remindMuteImageName = @"Connectkeyboad_banner_mute";
-        UIImage *remindMuteImage = [UIImage lcck_imageNamed:remindMuteImageName bundleName:@"Common" bundleForClass:[LCChatKit class]];
+        UIImage *remindMuteImage = [UIImage lcck_imageNamed:remindMuteImageName bundleName:@"Other" bundleForClass:[LCChatKit class]];
         remindMuteImageView.contentMode = UIViewContentModeScaleAspectFill;
         remindMuteImageView.image = remindMuteImage;
         remindMuteImageView.hidden = YES;

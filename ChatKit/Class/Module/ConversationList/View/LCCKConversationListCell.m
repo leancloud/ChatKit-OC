@@ -131,7 +131,7 @@ CGFloat const LCCKConversationListCellDefaultHeight = 61; //LCCKImageSize + LCCK
         remindMuteImageView.frame = CGRectMake(CGRectGetMaxX(_messageTextLabel.frame) + LCCKHorizontalSpacing, CGRectGetMinY(_messageTextLabel.frame), LCCKRemindMuteSize, LCCKRemindMuteSize);
         NSString *remindMuteImageName = @"Connectkeyboad_banner_mute";
 //        remindMuteImageView.imageEdgeInsets = UIEdgeInsetsMake(2.5, 2.5, 2.5, 2.5);
-        UIImage *remindMuteImage = [UIImage lcck_imageNamed:remindMuteImageName bundleName:@"Common" bundleForClass:[LCChatKit class]];
+        UIImage *remindMuteImage = [UIImage lcck_imageNamed:remindMuteImageName bundleName:@"Other" bundleForClass:[LCChatKit class]];
         [remindMuteImageView setImage:remindMuteImage forState:UIControlStateNormal];
         remindMuteImageView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
         remindMuteImageView.hidden = YES;

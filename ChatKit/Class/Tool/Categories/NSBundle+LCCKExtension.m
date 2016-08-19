@@ -16,7 +16,18 @@
     return bundlePath;
 }
 
-+ (NSBundle *)lcck_bundleForbundleName:(NSString *)bundleName class:(Class)aClass {
++ (NSString *)lcck_customizedBundlePathForBundleName:(NSString *)bundleName {
+    NSString *customizedBundlePathComponent = [NSString stringWithFormat:@"CustomizedChatKit.%@.bundle", bundleName];
+    NSString *customizedBundlePath =[[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:customizedBundlePathComponent];
+    return customizedBundlePath;
+}
+
++ (NSBundle *)lcck_bundleForName:(NSString *)bundleName class:(Class)aClass {
+    NSString *customizedBundlePath = [NSBundle lcck_customizedBundlePathForBundleName:bundleName];
+    NSBundle *customizedBundle = [NSBundle bundleWithPath:customizedBundlePath];
+    if (customizedBundle) {
+        return customizedBundle;
+    }
     NSString *bundlePath = [NSBundle lcck_bundlePathForBundleName:bundleName class:aClass];
     NSBundle *bundle = [NSBundle bundleWithPath:bundlePath];
     return bundle;

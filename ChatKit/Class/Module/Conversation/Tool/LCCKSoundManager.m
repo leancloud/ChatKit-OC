@@ -43,8 +43,7 @@
 }
 
 - (NSURL *)soundURLWithName:(NSString *)soundName {
-    NSString *bundlePath = [NSBundle lcck_bundlePathForBundleName:@"VoiceMessageSource" class:[self class]];
-    NSBundle *bundle = [NSBundle bundleWithPath:bundlePath];
+    NSBundle *bundle = [NSBundle lcck_bundleForName:@"VoiceMessageSource" class:[self class]];
     NSURL *url = [bundle URLForResource:soundName withExtension:@"caf"];
     return url;
 }
@@ -98,7 +97,7 @@
 }
 
 - (void)setDefaultSettings {
-    NSBundle *bundle = [NSBundle lcck_bundleForbundleName:@"Common" class:[self class]];
+    NSBundle *bundle = [NSBundle lcck_bundleForName:@"Other" class:[self class]];
     NSString *defaultSettingsFile = [bundle pathForResource:@"LCChatKit-Settings" ofType:@"plist"];
     NSDictionary *defaultSettings = [[NSDictionary alloc] initWithContentsOfFile:defaultSettingsFile];
     NSDictionary *conversationSettings = defaultSettings[@"Conversation"];

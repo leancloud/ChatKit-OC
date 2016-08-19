@@ -48,8 +48,8 @@
     }
     NSString *selectionStatusButtonNormalImageName = @"CellGraySelected";
     NSString *selectionStatusButtonSelectedImageName = @"CellBlueSelected";
-    UIImage *selectionStatusButtonNormalImage = [UIImage lcck_imageNamed:selectionStatusButtonNormalImageName bundleName:@"Common" bundleForClass:[LCChatKit class]];
-    UIImage *selectionStatusButtonSelectedImage = [UIImage lcck_imageNamed:selectionStatusButtonSelectedImageName bundleName:@"Common" bundleForClass:[LCChatKit class]];
+    UIImage *selectionStatusButtonNormalImage = [UIImage lcck_imageNamed:selectionStatusButtonNormalImageName bundleName:@"Other" bundleForClass:[LCChatKit class]];
+    UIImage *selectionStatusButtonSelectedImage = [UIImage lcck_imageNamed:selectionStatusButtonSelectedImageName bundleName:@"Other" bundleForClass:[LCChatKit class]];
     [self.selectionStatusButton setImage:selectionStatusButtonNormalImage forState:UIControlStateNormal];
     [self.selectionStatusButton setImage:selectionStatusButtonSelectedImage forState:UIControlStateSelected];
 }

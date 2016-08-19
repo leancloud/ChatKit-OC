@@ -325,9 +325,11 @@ typedef NS_ENUM(NSInteger, LCCKBarButtonItemStyle) {
 
 最简单的一种是：
 
-暂态消息，且不需要显示自定义Cell的自定义消息。
+[暂态消息](https://leancloud.cn/docs/realtime_guide-ios.html#暂态消息) ，且不需要显示自定义 Cell 的自定义消息。
 
-请自行监听 `LCCKNotificationCustomMessageReceived` 通知，自行处理响应事件。
+请自行监听 `LCCKNotificationCustomTransientMessageReceived` 通知，自行处理响应事件。
+
+这里注意，非暂态自定义消息也会走这个通知，所以监听该通知时务必检查 Message 的类型，进行筛选。
 
 比如直播聊天室的弹幕消息、点赞出心这种暂态消息，不会存在聊天记录里，也不会有离线通知。
 
@@ -351,7 +353,7 @@ typedef NS_ENUM(NSInteger, LCCKBarButtonItemStyle) {
  ```
 
 
-#### 需要显示自定义Cell的消息：
+#### 需要显示自定义 Cell 的消息：
 
 这里以Demo里的 VCard 名片消息为例：
 
@@ -499,11 +501,11 @@ Demo 中的用法如下：
 
  ```
  
- 自定义Cell的点击事件，请在自定义cell中自行定义、响应，Demo中采用了添加 Tap 手势的方式。
+ 自定义 Cell 的点击事件，请在自定义 Cell 中自行定义、响应，Demo中采用了添加 Tap 手势的方式。
 
 
 #### 自定义输入框插件
-用法与自定义消息和自定义cell类似：
+用法与自定义消息和自定义 Cell 类似：
 继承 `LCCKInputViewPlugin` ，遵循、实现 `LCCKInputViewPluginSubclassing` 协议，
 
  ```Objective-C
@@ -582,7 +584,7 @@ UI自定义，需要实现 `LCCKInputViewPluginDelegate` 方法：
  这里注意在 `-sendCustomMessageHandler` 定义时记得在 Block 执行结束时，执行 `_sendCustomMessageHandler = nil;` ，避免循环引用。
 
 
-#### 删除自定义插件、自定义消息、自定义Cell
+#### 删除自定义插件、自定义消息、自定义 Cell 
 
 如果需要删除插件，比如 Demo 中自定义了一个名片插件，如果想删除掉，只需要删除 LCCKInputViewPluginVCard 类中的如下代码，当然删除整个类也是能达到该效果的：
 
@@ -593,7 +595,7 @@ UI自定义，需要实现 `LCCKInputViewPluginDelegate` 方法：
 }
  ```
 
-另外因为一个插件往往搭配一个自定义cell和自定义消息，这个也需要一并删除：
+另外因为一个插件往往搭配一个自定义 Cell 和自定义消息，这个也需要一并删除：
 
 删除自定义消息：
 
@@ -605,7 +607,7 @@ UI自定义，需要实现 `LCCKInputViewPluginDelegate` 方法：
 }
  ```
 
-删除自定义Cell：
+删除自定义 Cell ：
 
 `LCCKVCardMessageCell` 类中的：
 
@@ -616,6 +618,22 @@ UI自定义，需要实现 `LCCKInputViewPluginDelegate` 方法：
  ```
 
 同理删除掉对应的类，也可以达到删除效果。
+
+### 自定义图片、语音等资源
+
+ChatKit 提供了默认的 Bundle 文件，如果想自定义对应的 Bundle ，需要在相应的资源 Bunble 前加前缀 CustomizedChatKit，然后拖拽到自己的项目中，详细的对应关系如下：
+
+
+
+项目 | 默认名称 | 自定义名称 | 资源类型
+-------------|-------------|-------------|-------------
+聊天气泡 | MessageBubble.bundle        | CustomizedChatKitMessageBubble.bundle       |  图片
+聊天输入框键盘相关 | ChatKeyboard.bundle         | CustomizedChatKitChatKeyboard.bundle        | 图片
+表情 | Emoji.bundle                | CustomizedChatKitEmoji.bundle               | 图片、plist描述文件
+默认占位图片 | Placeholder.bundle          | CustomizedChatKitPlaceholder.bundle         | 图片
+声音相关 | VoiceMessageSource.bundle   | CustomizedChatKitVoiceMessageSource.bundle  | 声音
+NavigationBar 左右侧icon | BarButtonIcon.bundle        | CustomizedChatKitBarButtonIcon.bundle       | 图片
+其他 | Common.bundle               | CustomizedChatKitCommon.bundle              | 任意类型
 
 
 ### 手动集成

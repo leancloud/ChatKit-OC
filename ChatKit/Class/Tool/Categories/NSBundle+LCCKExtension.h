@@ -10,7 +10,6 @@
 
 @interface NSBundle (LCCKExtension)
 
-+ (NSString *)lcck_bundlePathForBundleName:(NSString *)bundleName class:(Class)aClass;
-+ (NSBundle *)lcck_bundleForbundleName:(NSString *)bundleName class:(Class)aClass;
++ (NSBundle *)lcck_bundleForName:(NSString *)bundleName class:(Class)aClass;
 
 @end
