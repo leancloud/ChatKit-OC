@@ -2,7 +2,7 @@
 //  NSBundle+LCCKSCaleArray.m
 //  Kuber
 //
-//  v0.6.0 Created by Kuber on 16/3/30.
+//  v0.6.1 Created by Kuber on 16/3/30.
 //  Copyright © 2016年 Huaxu Technology. All rights reserved.
 //
 
