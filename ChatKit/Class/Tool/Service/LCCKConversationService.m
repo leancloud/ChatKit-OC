@@ -1,4 +1,4 @@
-//
+ //
 //  LCCKConversationService.m
 //  LeanCloudChatKit-iOS
 //
@@ -23,6 +23,7 @@
 #import "LCCKConversationListViewController.h"
 #import "LCCKMessage.h"
 #import "LCCKConversationListService.h"
+#import "AVIMMessage+LCCKExtension.h"
 
 NSString *const LCCKConversationServiceErrorDomain = @"LCCKConversationServiceErrorDomain";
 
@@ -630,24 +631,17 @@ NSString *const LCCKConversationServiceErrorDomain = @"LCCKConversationServiceEr
         //以下过滤为了避免非法的消息，引起崩溃，确保展示的只有 AVIMTypedMessage 类型
         NSMutableArray *typedMessages = [NSMutableArray array];
         for (AVIMTypedMessage *message in messages) {
-            if ([message isKindOfClass:[AVIMTypedMessage class]]) {
-                [typedMessages addObject:message];
-            } else if ([[message class] isSubclassOfClass:[AVIMMessage class]]) {
-                AVIMTextMessage *typedMessage = [AVIMTextMessage messageWithText:LCCKLocalizedStrings(@"unknownMessage") attributes:nil];
-                [typedMessage setValue:message.conversationId forKey:@"conversationId"];
-                [typedMessage setValue:message.messageId forKey:@"messageId"];
-                [typedMessage setValue:@(message.sendTimestamp) forKey:@"sendTimestamp"];
-                [typedMessage setValue:message.clientId forKey:@"clientId"];
-                [typedMessages addObject:typedMessage];
-            }
+            [typedMessages addObject:[message lcck_getValidTypedMessage]];
         }
         !block ?: block(typedMessages, error);
     };
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
         if(timestamp == 0) {
+            // 该方法能确保在有网络时总是从服务端拉取最新的消息，首次拉取必须使用该方法
             // sdk 会设置好 timestamp
             [conversation queryMessagesWithLimit:limit callback:callback];
         } else {
+            //会先根据本地缓存判断是否有必要从服务端拉取，这个方法不能用于首次拉取
             [conversation queryMessagesBeforeId:nil timestamp:timestamp limit:limit callback:callback];
         }
     });
@@ -655,10 +649,12 @@ NSString *const LCCKConversationServiceErrorDomain = @"LCCKConversationServiceEr
 
 + (void)cacheFileTypeMessages:(NSArray<AVIMTypedMessage *> *)messages callback:(AVBooleanResultBlock)callback {
     NSMutableSet *userIds = [[NSMutableSet alloc] init];
-    dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
-    dispatch_group_t group = dispatch_group_create();
+    NSString *queueBaseLabel = [NSString stringWithFormat:@"com.chatkit.%@", NSStringFromClass([self class])];
+    const char *queueName = [[NSString stringWithFormat:@"%@.ForBarrier",queueBaseLabel] UTF8String];
+    dispatch_queue_t queue = dispatch_queue_create(queueName, DISPATCH_QUEUE_CONCURRENT);
+    
     for (AVIMTypedMessage *message in messages) {
-        dispatch_group_async(group, queue, ^{
+        dispatch_async(queue, ^(void) {
             if (message.mediaType == kAVIMMessageMediaTypeImage || message.mediaType == kAVIMMessageMediaTypeAudio) {
                 AVFile *file = message.file;
                 if (file && file.isDataAvailable == NO) {
@@ -683,8 +679,10 @@ NSString *const LCCKConversationServiceErrorDomain = @"LCCKConversationServiceEr
             }
         });
     }
-    dispatch_group_notify(group, queue, ^{
-        !callback ?: callback(YES, nil);
+    dispatch_barrier_async(queue, ^{
+        dispatch_async(dispatch_get_main_queue(),^{
+            !callback ?: callback(YES, nil);
+        });
     });
 }
 
