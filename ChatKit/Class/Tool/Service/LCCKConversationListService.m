@@ -34,6 +34,7 @@
 #import <AVOSCloudIM/AVOSCloudIM.h>
 #import "LCCKUserSystemService.h"
 #import "LCCKSessionService.h"
+#import "AVIMMessage+LCCKExtension.h"
 
 @implementation LCCKConversationListService
 @synthesize didSelectConversationsListCellBlock = _didSelectConversationsListCellBlock;
@@ -48,9 +49,8 @@
         for (AVIMConversation *conversation in conversations) {
             NSArray *lastestMessages = [conversation queryMessagesFromCacheWithLimit:1];
             if (lastestMessages.count > 0) {
-                if ([[lastestMessages[0] class] isSubclassOfClass:[AVIMTypedMessage class]]) {
-                    conversation.lcck_lastMessage = lastestMessages[0];
-                }
+                AVIMTypedMessage *avimTypedMessage = [lastestMessages[0] lcck_getValidTypedMessage];
+                conversation.lcck_lastMessage = avimTypedMessage;
             }
             if (conversation.lcck_type == LCCKConversationTypeSingle) {
                 [userIds addObject:conversation.lcck_peerId];

@@ -8,6 +8,8 @@
 
 #import "LCCKSessionService.h"
 #import "LCCKSoundManager.h"
+#import "AVIMMessage+LCCKExtension.h"
+
 #if __has_include(<ChatKit/LCChatKit.h>)
 #import <ChatKit/LCChatKit.h>
 #else
@@ -138,6 +140,14 @@ NSString *const LCCKSessionServiceErrorDemain = @"LCCKSessionServiceErrorDemain"
 }
 
 #pragma mark - AVIMMessageDelegate
+
+/*!
+ * 低版本如果不支持某自定义消息，该自定义消息会走该代理
+ */
+- (void)conversation:(AVIMConversation *)conversation didReceiveCommonMessage:(AVIMMessage *)message {
+    AVIMTypedMessage *typedMessage = [message lcck_getValidTypedMessage];
+    [self conversation:conversation didReceiveTypedMessage:typedMessage];
+}
 
 - (void)conversation:(AVIMConversation *)conversation didReceiveTypedMessage:(AVIMTypedMessage *)message {
     if (!message.messageId) {

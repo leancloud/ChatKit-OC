@@ -208,27 +208,22 @@
 
 - (UIWindow *)overlayWindow {
     if(!_overlayWindow) {
-        
         _overlayWindow = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
         _overlayWindow.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         _overlayWindow.userInteractionEnabled = NO;
         [_overlayWindow makeKeyAndVisible];
-        
     }
     return _overlayWindow;
 }
 
-
-
 #pragma mark - Class Methods
-
 
 + (LCCKProgressHUD *)sharedView {
     static dispatch_once_t once;
     static LCCKProgressHUD *sharedView;
     dispatch_once(&once, ^ {
         sharedView = [[LCCKProgressHUD alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-        sharedView.backgroundColor = [[UIColor blackColor]colorWithAlphaComponent:0.5];
+        sharedView.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.5];
     });
     return sharedView;
 }

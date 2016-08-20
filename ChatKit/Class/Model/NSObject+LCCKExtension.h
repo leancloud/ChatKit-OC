@@ -28,4 +28,6 @@ typedef void (^LCCKShouldDisplayTimestampCallBack)(BOOL shouldDisplayTimestamp, 
  */
 - (void)lcck_shouldDisplayTimestampForMessages:(NSArray *)messages callback:(LCCKShouldDisplayTimestampCallBack)callback;
 
+- (NSDictionary *)lcck_JSONValue;
+
 @end

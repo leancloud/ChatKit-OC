@@ -216,6 +216,8 @@ static NSString *const LCCKCustomMessageTypeTitleKey = @"typeTitle";
  */
 static NSString *const LCCKCustomMessageSummaryKey = @"summary";
 
+static NSString *const LCCKCustomMessageIsCustomKey = @"isCustom";
+
 /*!
  * 对话类型，用来展示在推送提示中，以达到这样的效果： [群消息]Tom：hello gays!
  * 以枚举 LCCKConversationType 定义为准，0为单聊，1为群聊

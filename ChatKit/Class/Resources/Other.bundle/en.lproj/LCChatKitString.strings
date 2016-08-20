@@ -6,6 +6,7 @@
 //
 "Delete" = "Delete";
 "draft" = "Draft";
+"mentioned" = "You are mentioned";
 "copy" = "copy";
 "transpond" = "transpond";
 "resend" = "resend";

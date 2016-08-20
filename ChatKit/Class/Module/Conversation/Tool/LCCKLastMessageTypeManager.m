@@ -20,10 +20,16 @@ static NSMutableDictionary *attributedStringCache = nil;
 + (NSString *)getMessageTitle:(AVIMTypedMessage *)message {
     NSString *title;
     switch (message.mediaType) {
-        case kAVIMMessageMediaTypeText:
-            title = message.text;
+        case kAVIMMessageMediaTypeText: {
+            //Custom message
+            BOOL isCustom = [[message.attributes valueForKey:LCCKCustomMessageIsCustomKey] boolValue];
+            if (!isCustom) {
+                title = message.text;
+                break;
+            }
+            title = [self titleForCustomMessage:message];
             break;
-            
+        }
         case kAVIMMessageMediaTypeAudio:
             title = LCCKLocalizedStrings(@"Voice");
             title = [NSString stringWithFormat:@"[%@]",title];
@@ -43,22 +49,28 @@ static NSMutableDictionary *attributedStringCache = nil;
             title = LCCKLocalizedStrings(@"Video");
             title = [NSString stringWithFormat:@"[%@]",title];
             break;
-            //TODO:
+            
         default:
-            if ([message lcck_isSupportThisCustomMessage]) {
-                @try {
-                    title = [message.attributes valueForKey:LCCKCustomMessageTypeTitleKey];
-                } @catch (NSException *exception) {} @finally {
-                    if (!title) {
-                        title = LCCKLocalizedStrings(@"unknownMessageType");
-                    }
-                }
-            } else {
-                title = LCCKLocalizedStrings(@"unknownMessageType");
-            }
-            title = [NSString stringWithFormat:@"[%@]",title];
+            title = [self titleForCustomMessage:message];
             break;
     }
+    return title;
+}
+
++ (NSString *)titleForCustomMessage:(AVIMTypedMessage *)customMessage {
+    NSString *typeTitleKey = [customMessage.attributes valueForKey:LCCKCustomMessageTypeTitleKey];
+    NSString *title = @"";
+    do {
+        if (typeTitleKey.length > 0) {
+            title = typeTitleKey;
+            title = [NSString stringWithFormat:@"[%@]",title];
+            break;
+        }
+        
+        title = LCCKLocalizedStrings(@"unknownMessageType");
+        title = [NSString stringWithFormat:@"[%@]",title];
+        break;
+    } while (NO);
     return title;
 }
 
@@ -71,7 +83,7 @@ static NSMutableDictionary *attributedStringCache = nil;
         title = [NSString stringWithFormat:@"[%@条] %@", @(conversation.lcck_unreadCount), title];
     }
     
-    NSString *mentionText = @"[有人@你] ";
+    NSString *mentionText = [NSString stringWithFormat:@"%@ ", LCCKLocalizedStrings(@"mentioned")];
     if (conversation.lcck_draft.length > 0) {
         title = conversation.lcck_draft;
         NSString *draftText = [NSString stringWithFormat:@"[%@]", LCCKLocalizedStrings(@"draft")];
