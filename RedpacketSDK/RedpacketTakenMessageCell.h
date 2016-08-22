@@ -6,13 +6,13 @@
 //  Copyright © 2016年 云帐户. All rights reserved.
 //
 
-#import <RongIMKit/RongIMKit.h>
+#import "LCCKChatMessageCell.h"
 #define REDPACKET_TAKEN_MESSAGE_TOP_BOTTOM_PADDING 20
 #define REDPACKET_MESSAGE_TOP_BOTTOM_PADDING 40
 
-@interface RedpacketTakenMessageTipCell : RCMessageBaseCell
-@property(strong, nonatomic) RCTipLabel *tipMessageLabel;
+@interface RedpacketTakenMessageCell : LCCKChatMessageCell<LCCKChatMessageCellSubclassing>
+@property(strong, nonatomic) UILabel *tipMessageLabel;
 @property(strong, nonatomic) UIImageView *iconView;
 
-+ (CGSize)sizeForModel:(RCMessageModel*)model;
+
 @end

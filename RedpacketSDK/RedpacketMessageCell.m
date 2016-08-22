@@ -17,7 +17,7 @@
 #define Redpacket_Label_Padding 2
 
 @implementation RedpacketMessageCell
-
+@synthesize message = _message;
 + (void)load {
     [self registerCustomMessageCell];
 }
@@ -107,6 +107,7 @@
 
 - (void)configureCellWithData:(AVIMTypedMessageRedPacket *)message{
     [super configureCellWithData:message];
+    _message = message;
     NSDictionary * redpacketDictionary = message.attributes;
     
     RedpacketMessageModel *redpacketMessageModel = [RedpacketMessageModel redpacketMessageModelWithDic:redpacketDictionary];
