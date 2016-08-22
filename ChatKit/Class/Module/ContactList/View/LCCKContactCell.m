@@ -44,7 +44,7 @@
     LCCKAvatarImageViewCornerRadiusBlock avatarImageViewCornerRadiusBlock = [LCChatKit sharedInstance].avatarImageViewCornerRadiusBlock;
     if (avatarImageViewCornerRadiusBlock) {
         CGFloat avatarImageViewCornerRadius = avatarImageViewCornerRadiusBlock(self.avatarImageView.frame.size);
-        [self.avatarImageView lcck_cornerRadiusAdvance:avatarImageViewCornerRadius rectCornerType:UIRectCornerAllCorners];
+        self.avatarImageView.lcck_cornerRadius = avatarImageViewCornerRadius;
     }
     NSString *selectionStatusButtonNormalImageName = @"CellGraySelected";
     NSString *selectionStatusButtonSelectedImageName = @"CellBlueSelected";

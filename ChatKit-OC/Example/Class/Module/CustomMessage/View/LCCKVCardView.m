@@ -45,7 +45,7 @@
     LCCKAvatarImageViewCornerRadiusBlock avatarImageViewCornerRadiusBlock = [LCChatKit sharedInstance].avatarImageViewCornerRadiusBlock;
     if (avatarImageViewCornerRadiusBlock) {
         CGFloat avatarImageViewCornerRadius = avatarImageViewCornerRadiusBlock(self.avatarView.frame.size);
-        [self.avatarView lcck_cornerRadiusAdvance:avatarImageViewCornerRadius rectCornerType:UIRectCornerAllCorners];
+        self.avatarView.lcck_cornerRadius = avatarImageViewCornerRadius;
     }
     UITapGestureRecognizer *tapGestureRecognizer =[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(vCardClicked)];
     [self addGestureRecognizer:tapGestureRecognizer];

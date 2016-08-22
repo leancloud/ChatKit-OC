@@ -20,10 +20,10 @@
 @property (nonatomic, weak) LCCKVCardView *vCardView;
 @end
 
-static CGFloat LCCK_MSG_SPACE_TOP = 16;
-static CGFloat LCCK_MSG_SPACE_BTM = 16;
-static CGFloat LCCK_MSG_SPACE_LEFT = 50;
-static CGFloat LCCK_MSG_SPACE_RIGHT = 50;
+static CGFloat LCCK_MSG_SPACE_TOP = 10;
+static CGFloat LCCK_MSG_SPACE_BTM = 10;
+static CGFloat LCCK_MSG_SPACE_LEFT = 20;
+static CGFloat LCCK_MSG_SPACE_RIGHT = 20;
 
 @implementation LCCKVCardMessageCell
 

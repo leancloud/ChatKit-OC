@@ -383,7 +383,7 @@ static CGFloat const LCCK_MSG_CELL_NICKNAME_FONT_SIZE = 12;
         if (avatarImageViewCornerRadiusBlock) {
             CGSize avatarImageViewSize = CGSizeMake(kAvatarImageViewWidth, kAvatarImageViewHeight);
             CGFloat avatarImageViewCornerRadius = avatarImageViewCornerRadiusBlock(avatarImageViewSize);
-            [_avatarImageView lcck_cornerRadiusAdvance:avatarImageViewCornerRadius rectCornerType:UIRectCornerAllCorners];
+            self.avatarImageView.lcck_cornerRadius = avatarImageViewCornerRadius;
         }
         [self bringSubviewToFront:_avatarImageView];
     }

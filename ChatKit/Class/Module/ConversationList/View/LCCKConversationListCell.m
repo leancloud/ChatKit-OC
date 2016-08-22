@@ -60,7 +60,6 @@ CGFloat const LCCKConversationListCellDefaultHeight = 61; //LCCKImageSize + LCCK
     LCCKNameLabelHeight = LCCKImageSize * LCCKNameLabelHeightProportion;
     LCCKMessageLabelHeight = LCCKImageSize - LCCKNameLabelHeight;
     [self addSubview:self.avatarImageView];
-    [self.avatarImageView addSubview:self.badgeView];
     [self addSubview:self.timestampLabel];
     [self.contentView addSubview:self.litteBadgeView];
     [self.contentView addSubview:self.nameLabel];
@@ -74,7 +73,7 @@ CGFloat const LCCKConversationListCellDefaultHeight = 61; //LCCKImageSize + LCCK
         LCCKAvatarImageViewCornerRadiusBlock avatarImageViewCornerRadiusBlock = [LCChatKit sharedInstance].avatarImageViewCornerRadiusBlock;
         if (avatarImageViewCornerRadiusBlock) {
             CGFloat avatarImageViewCornerRadius = avatarImageViewCornerRadiusBlock(avatarImageView.frame.size);
-            [avatarImageView lcck_cornerRadiusAdvance:avatarImageViewCornerRadius rectCornerType:UIRectCornerAllCorners];
+            avatarImageView.lcck_cornerRadius = avatarImageViewCornerRadius;
         }
         _avatarImageView = avatarImageView;
     }
@@ -84,7 +83,7 @@ CGFloat const LCCKConversationListCellDefaultHeight = 61; //LCCKImageSize + LCCK
 - (UIView *)litteBadgeView {
     if (_litteBadgeView == nil) {
         UIView *litteBadgeView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, LCCKLittleBadgeSize, LCCKLittleBadgeSize)];
-        litteBadgeView.layer.masksToBounds = YES;
+//        litteBadgeView.layer.masksToBounds = YES;
         litteBadgeView.layer.cornerRadius = LCCKLittleBadgeSize / 2;
         litteBadgeView.center = CGPointMake(CGRectGetMaxX(_avatarImageView.frame), CGRectGetMinY(_avatarImageView.frame));
         litteBadgeView.hidden = YES;

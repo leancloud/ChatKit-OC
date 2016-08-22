@@ -222,13 +222,23 @@ static NSString *const LCCKAPPKEY = @"ye24iIK6ys8IvaISMC4Bs5WK";
     }];
     
     [[LCChatKit sharedInstance] setConversationInvalidedHandler:^(NSString *conversationId, LCCKConversationViewController *conversationController, id<LCCKUserDelegate> administrator, NSError *error) {
+        NSString *title;
+        NSString *subTitle;
+        //错误码参考：https://leancloud.cn/docs/realtime_v2.html#%E4%BA%91%E7%AB%AF%E9%94%99%E8%AF%AF%E7%A0%81%E8%AF%B4%E6%98%8E
         if (error.code == 4401) {
+            /**
+             * 下列情景下会执行
+             - 当前用户被踢出群，也会执行
+             - 用户不在当前群众，且未开启 `enableAutoJoin` (自动进群)
+             */
             [conversationController.navigationController popToRootViewControllerAnimated:YES];
-            NSString *title = @"您已经不在当前对话";
-            NSString *subTitle = [NSString stringWithFormat:@"已被管理员%@移出", administrator.name ?: administrator.clientId];
-            [LCCKUtil showNotificationWithTitle:title subtitle:subTitle type:LCCKMessageNotificationTypeError];
+            title = @"进群失败！";
+            subTitle = [NSString stringWithFormat:@"请联系管理员%@", administrator.name ?: administrator.clientId];
             LCCKLog(@"%@", error.description);
+        } else if (error.code == 4304) {
+            title = @"群已满";
         }
+        [LCCKUtil showNotificationWithTitle:title subtitle:subTitle type:LCCKMessageNotificationTypeError];
     }];
     
     [[LCChatKit sharedInstance] setLoadLatestMessagesHandler:^(LCCKConversationViewController *conversationController, BOOL succeeded, NSError *error) {
