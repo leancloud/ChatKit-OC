@@ -12,7 +12,7 @@
 #import "LCChatKit.h"
 #endif
 
-@interface LCCKInputViewPluginTest : LCCKInputViewPlugin<LCCKInputViewPluginSubclassing>
+@interface RedPacketInputViewPluginTest : LCCKInputViewPlugin<LCCKInputViewPluginSubclassing>
 
 @property (nonatomic, weak) LCCKChatBar *inputViewRef;
 

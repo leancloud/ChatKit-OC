@@ -6,15 +6,16 @@
 //  Copyright © 2016年 ElonChan. All rights reserved.
 //
 
-#import "LCCKInputViewPluginTest.h"
+#import "RedPacketInputViewPluginTest.h"
 #import "RedpacketDemoViewController.h"
+#import "RedpacketViewControl.h"
 
-@interface LCCKInputViewPluginTest()
+@interface RedPacketInputViewPluginTest()
 
 @property (nonatomic, copy) LCCKIdResultBlock sendCustomMessageHandler;
-
+@property (nonatomic, strong) RedpacketViewControl *redpacketControl;
 @end
-@implementation LCCKInputViewPluginTest
+@implementation RedPacketInputViewPluginTest
 @synthesize inputViewRef = _inputViewRef;
 @synthesize sendCustomMessageHandler = _sendCustomMessageHandler;
 + (void)load {
@@ -50,29 +51,10 @@
 }
 
 - (void)pluginDidClicked {
-    [super pluginDidClicked];
-
+    
     if ([self.conversationViewController isKindOfClass:[RedpacketDemoViewController class]]) {
         [(RedpacketDemoViewController*)self.conversationViewController chatBarWillSendRedPacket];
     }
-}
-
-- (LCCKIdResultBlock)sendCustomMessageHandler {
-    if (_sendCustomMessageHandler) {
-        return _sendCustomMessageHandler;
-    }
-    LCCKIdResultBlock sendCustomMessageHandler = ^(id object, NSError *error) {
-        [self.conversationViewController dismissViewControllerAnimated:YES completion:nil];
-        if (object) {
-            UIImage *image = (UIImage *)object;
-            [self.conversationViewController sendImageMessage:image];
-        } else {
-            LCCKLog(@"%@", error.description);
-        }
-        _sendCustomMessageHandler = nil;
-    };
-    _sendCustomMessageHandler = sendCustomMessageHandler;
-    return sendCustomMessageHandler;
 }
 
 #pragma mark -

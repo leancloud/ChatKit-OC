@@ -35,7 +35,6 @@
 		9AD665CD1D22778B0040A4E3 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A0B721D1CED6637004FDACC /* MobileCoreServices.framework */; };
 		9AD665CE1D2277920040A4E3 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A0B721F1CED6644004FDACC /* CoreTelephony.framework */; };
 		9AD665CF1D22779A0040A4E3 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A0B72211CED664D004FDACC /* CoreLocation.framework */; };
-		E7586C301D62FC9E000C18B4 /* LCCKInputViewPluginTest.m in Sources */ = {isa = PBXBuildFile; fileRef = E7586C2F1D62FC9E000C18B4 /* LCCKInputViewPluginTest.m */; };
 		E7586C471D630420000C18B4 /* RedpacketCellResource.bundle in Resources */ = {isa = PBXBuildFile; fileRef = E7586C321D630420000C18B4 /* RedpacketCellResource.bundle */; };
 		E7586C481D630420000C18B4 /* RedpacketConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = E7586C341D630420000C18B4 /* RedpacketConfig.m */; };
 		E7586C491D630420000C18B4 /* RedpacketDemoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E7586C361D630420000C18B4 /* RedpacketDemoViewController.m */; };
@@ -45,6 +44,8 @@
 		E7586C4D1D630420000C18B4 /* RedPacketResource.bundle in Resources */ = {isa = PBXBuildFile; fileRef = E7586C441D630420000C18B4 /* RedPacketResource.bundle */; };
 		E7586C4F1D630681000C18B4 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E7586C4E1D630681000C18B4 /* CoreMotion.framework */; };
 		E7586C521D630E90000C18B4 /* AVIMTypedMessageRedPacket.m in Sources */ = {isa = PBXBuildFile; fileRef = E7586C511D630E90000C18B4 /* AVIMTypedMessageRedPacket.m */; };
+		E7586C551D669E14000C18B4 /* RedPacketInputViewPluginTest.m in Sources */ = {isa = PBXBuildFile; fileRef = E7586C541D669E14000C18B4 /* RedPacketInputViewPluginTest.m */; };
+		E7586C5A1D66A298000C18B4 /* RedpacketMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = E7586C571D66A298000C18B4 /* RedpacketMessageCell.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -113,8 +114,6 @@
 		9AADF0581D5B23F400CE0731 /* LCCKVCardMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKVCardMessage.h; sourceTree = "<group>"; };
 		9AADF0591D5B23F400CE0731 /* LCCKVCardMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCKVCardMessage.m; sourceTree = "<group>"; };
 		9AAFE6571D48C863004A0309 /* zh-Hans-CN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans-CN"; path = "zh-Hans-CN.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
-		E7586C2E1D62FC9E000C18B4 /* LCCKInputViewPluginTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKInputViewPluginTest.h; sourceTree = "<group>"; };
-		E7586C2F1D62FC9E000C18B4 /* LCCKInputViewPluginTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCKInputViewPluginTest.m; sourceTree = "<group>"; };
 		E7586C321D630420000C18B4 /* RedpacketCellResource.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = RedpacketCellResource.bundle; sourceTree = "<group>"; };
 		E7586C331D630420000C18B4 /* RedpacketConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RedpacketConfig.h; sourceTree = "<group>"; };
 		E7586C341D630420000C18B4 /* RedpacketConfig.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RedpacketConfig.m; sourceTree = "<group>"; };
@@ -135,6 +134,10 @@
 		E7586C4E1D630681000C18B4 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
 		E7586C501D630E90000C18B4 /* AVIMTypedMessageRedPacket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVIMTypedMessageRedPacket.h; sourceTree = "<group>"; };
 		E7586C511D630E90000C18B4 /* AVIMTypedMessageRedPacket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVIMTypedMessageRedPacket.m; sourceTree = "<group>"; };
+		E7586C531D669E14000C18B4 /* RedPacketInputViewPluginTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RedPacketInputViewPluginTest.h; sourceTree = "<group>"; };
+		E7586C541D669E14000C18B4 /* RedPacketInputViewPluginTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RedPacketInputViewPluginTest.m; sourceTree = "<group>"; };
+		E7586C561D66A298000C18B4 /* RedpacketMessageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RedpacketMessageCell.h; sourceTree = "<group>"; };
+		E7586C571D66A298000C18B4 /* RedpacketMessageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RedpacketMessageCell.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -185,8 +188,6 @@
 				9A47302A1CECAEC500AEB86F /* AppDelegate.m */,
 				9A9E844F1D13A66B008590B4 /* LCChatKitExample.h */,
 				9A9E84501D13A66B008590B4 /* LCChatKitExample.m */,
-				E7586C2E1D62FC9E000C18B4 /* LCCKInputViewPluginTest.h */,
-				E7586C2F1D62FC9E000C18B4 /* LCCKInputViewPluginTest.m */,
 				9A47305F1CECAEC500AEB86F /* LCCKTabBarControllerConfig.h */,
 				9A4730601CECAEC500AEB86F /* LCCKTabBarControllerConfig.m */,
 				9A47302B1CECAEC500AEB86F /* Class */,
@@ -396,6 +397,10 @@
 				E7586C511D630E90000C18B4 /* AVIMTypedMessageRedPacket.m */,
 				E7586C351D630420000C18B4 /* RedpacketDemoViewController.h */,
 				E7586C361D630420000C18B4 /* RedpacketDemoViewController.m */,
+				E7586C531D669E14000C18B4 /* RedPacketInputViewPluginTest.h */,
+				E7586C541D669E14000C18B4 /* RedPacketInputViewPluginTest.m */,
+				E7586C561D66A298000C18B4 /* RedpacketMessageCell.h */,
+				E7586C571D66A298000C18B4 /* RedpacketMessageCell.m */,
 			);
 			name = RedpacketSDK;
 			path = ../RedpacketSDK;
@@ -480,6 +485,7 @@
 				TargetAttributes = {
 					9A754D4A1CECAC3E000967F1 = {
 						CreatedOnToolsVersion = 7.3;
+						DevelopmentTeam = PUEB48NTQQ;
 					};
 				};
 			};
@@ -576,12 +582,12 @@
 				9A08CA591D60D9D700612578 /* LCCKVCardView.m in Sources */,
 				9A9E84511D13A66B008590B4 /* LCChatKitExample.m in Sources */,
 				9AADF0571D5B205E00CE0731 /* LCCKVCardMessageCell.m in Sources */,
+				E7586C551D669E14000C18B4 /* RedPacketInputViewPluginTest.m in Sources */,
 				9A47306F1CECAEC500AEB86F /* LCCKPlusButtonSubclass.m in Sources */,
 				9A4730671CECAEC500AEB86F /* LCCKLoginViewController.m in Sources */,
 				9A4730611CECAEC500AEB86F /* AppDelegate.m in Sources */,
 				9A47306A1CECAEC500AEB86F /* DEMODataSource.m in Sources */,
 				9AADF05A1D5B23F400CE0731 /* LCCKVCardMessage.m in Sources */,
-				E7586C301D62FC9E000C18B4 /* LCCKInputViewPluginTest.m in Sources */,
 				9A47306C1CECAEC500AEB86F /* LCCKMapViewController.m in Sources */,
 				9A4730621CECAEC500AEB86F /* LCCKUser.m in Sources */,
 				9A47306E1CECAEC500AEB86F /* LCCKUtil.m in Sources */,
@@ -591,6 +597,7 @@
 				9A7E2DE51D5DCB94003A7312 /* LCCKInputViewPluginVCard.m in Sources */,
 				9A4730751CECAEC500AEB86F /* NSObject+LCCKHUD.m in Sources */,
 				E7586C481D630420000C18B4 /* RedpacketConfig.m in Sources */,
+				E7586C5A1D66A298000C18B4 /* RedpacketMessageCell.m in Sources */,
 				9A47306B1CECAEC500AEB86F /* LCCKLoginDataSource.m in Sources */,
 				E7586C521D630E90000C18B4 /* AVIMTypedMessageRedPacket.m in Sources */,
 				9A7E2DE91D5F1040003A7312 /* LCCKContactManager.m in Sources */,
@@ -709,6 +716,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = "$(SRCROOT)/Example/Class/Module/Other/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
@@ -736,7 +744,7 @@
 					"\"$(SRCROOT)/../RedpacketStaticLib\"/**",
 				);
 				OTHER_LDFLAGS = "$(inherited)";
-				PRODUCT_BUNDLE_IDENTIFIER = com.chatkit.leancloud;
+				PRODUCT_BUNDLE_IDENTIFIER = com.redpacket.chatkit;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 			};
@@ -750,6 +758,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = "$(SRCROOT)/Example/Class/Module/Other/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
@@ -777,7 +786,7 @@
 					"\"$(SRCROOT)/../RedpacketStaticLib\"/**",
 				);
 				OTHER_LDFLAGS = "$(inherited)";
-				PRODUCT_BUNDLE_IDENTIFIER = com.chatkit.leancloud;
+				PRODUCT_BUNDLE_IDENTIFIER = com.redpacket.chatkit;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 			};

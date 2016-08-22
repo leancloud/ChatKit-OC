@@ -8,7 +8,9 @@
 
 #import <UIKit/UIKit.h>
 #import <AVOSCloudIM/AVIMTypedMessage.h>
+#import "AVIMTypedMessage+LCCKExtension.h"
+#import "LCCKConstants.h"
 
 @interface AVIMTypedMessageRedPacket : AVIMTypedMessage<AVIMTypedMessageSubclassing>
-
+- (instancetype)initWithClientId:(NSString *)clientId ConversationType:(LCCKConversationType)conversationType;
 @end
