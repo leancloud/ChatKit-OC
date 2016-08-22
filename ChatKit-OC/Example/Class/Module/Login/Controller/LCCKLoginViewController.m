@@ -11,15 +11,15 @@
 #import <QuartzCore/QuartzCore.h>
 
 #if __has_include(<SDWebImage/UIImageView+WebCache.h>)
-    #import <SDWebImage/UIImageView+WebCache.h>
+#import <SDWebImage/UIImageView+WebCache.h>
 #else
-    #import "UIImageView+WebCache.h"
+#import "UIImageView+WebCache.h"
 #endif
 
 #if __has_include(<ChatKit/LCChatKit.h>)
-    #import <ChatKit/LCChatKit.h>
+#import <ChatKit/LCChatKit.h>
 #else
-    #import "LCChatKit.h"
+#import "LCChatKit.h"
 #endif
 #import "LCCKExampleConstants.h"
 
@@ -52,7 +52,7 @@
     [self.autocompleteTextField becomeFirstResponder];
     [[NSNotificationCenter defaultCenter] postNotificationName:UITextFieldTextDidChangeNotification object:self.autocompleteTextField];
     self.autocompleteTextField.autoCompleteTableViewHidden = NO;
-    if (clientId) {
+    if (self.autoLogin && clientId) {
         !_clientIDHandler ?: _clientIDHandler(clientId);
     }
 }
@@ -63,7 +63,8 @@
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
     [textField resignFirstResponder];
-    !_clientIDHandler ?: _clientIDHandler(textField.text);
+    NSString *clientId = textField.text;
+    !_clientIDHandler ?: _clientIDHandler(clientId);
     return YES;
 }
 
@@ -92,7 +93,7 @@
   didSelectAutoCompleteString:(NSString *)selectedString
        withAutoCompleteObject:(id<MLPAutoCompletionObject>)selectedObject
             forRowAtIndexPath:(NSIndexPath *)indexPath {
-        !_clientIDHandler ?: _clientIDHandler(selectedString);
+    !_clientIDHandler ?: _clientIDHandler(selectedString);
 }
 
 - (void)autoCompleteTextField:(MLPAutoCompleteTextField *)textField willHideAutoCompleteTableView:(UITableView *)autoCompleteTableView {

@@ -2,7 +2,7 @@
 //  LCCKContactListViewController.m
 //  LeanCloudChatKit-iOS
 //
-//  v0.6.1 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/2/22.
+//  v0.6.2 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/2/22.
 //  Copyright © 2016年 LeanCloud. All rights reserved.
 //
 
@@ -545,10 +545,12 @@ static NSString *const LCCKContactListViewControllerIdentifier = @"LCCKContactLi
             LCCKAlertController *alert = [LCCKAlertController alertControllerWithTitle:title
                                                                                message:@""
                                                                         preferredStyle:LCCKAlertControllerStyleAlert];
-            NSString *cancelActionTitle = LCCKLocalizedStrings(@"cancel");            LCCKAlertAction* cancelAction = [LCCKAlertAction actionWithTitle:cancelActionTitle style:LCCKAlertActionStyleDefault
+            NSString *cancelActionTitle = LCCKLocalizedStrings(@"cancel");
+            LCCKAlertAction* cancelAction = [LCCKAlertAction actionWithTitle:cancelActionTitle style:LCCKAlertActionStyleDefault
                                                                      handler:^(LCCKAlertAction * action) {}];
             [alert addAction:cancelAction];
-            NSString *resendActionTitle = LCCKLocalizedStrings(@"ok");            LCCKAlertAction* resendAction = [LCCKAlertAction actionWithTitle:resendActionTitle style:LCCKAlertActionStyleDefault
+            NSString *resendActionTitle = LCCKLocalizedStrings(@"ok");
+            LCCKAlertAction* resendAction = [LCCKAlertAction actionWithTitle:resendActionTitle style:LCCKAlertActionStyleDefault
                                                                      handler:^(LCCKAlertAction * action) {
                                                                          if (self.deleteContactCallback) {
                                                                              BOOL delegateSuccess = self.deleteContactCallback(self, peerId);

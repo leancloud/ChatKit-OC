@@ -67,10 +67,7 @@ static NSString *const LCCKAPPKEY = @"ye24iIK6ys8IvaISMC4Bs5WK";
     [[LCChatKit sharedInstance] removeAllCachedProfiles];
     [[LCChatKit sharedInstance] closeWithCallback:^(BOOL succeeded, NSError *error) {
         if (succeeded) {
-            // 在系统偏好保存信息
-            NSUserDefaults *defaultsSet = [NSUserDefaults standardUserDefaults];
-            [defaultsSet setObject:nil forKey:LCCK_KEY_USERID];
-            [defaultsSet synchronize];
+            [self clearLocalClientInfo];
             [LCCKUtil showNotificationWithTitle:@"退出成功" subtitle:nil type:LCCKMessageNotificationTypeSuccess];
             !success ?: success();
         } else {
@@ -79,18 +76,27 @@ static NSString *const LCCKAPPKEY = @"ye24iIK6ys8IvaISMC4Bs5WK";
         }
     }];
 }
++ (void)saveLocalClientInfo:(NSString *)clientId {
+    // 在系统偏好保存信息
+    NSUserDefaults *defaultsSet = [NSUserDefaults standardUserDefaults];
+    [defaultsSet setObject:clientId forKey:LCCK_KEY_USERID];
+    [defaultsSet synchronize];
+    NSString *subtitle = [NSString stringWithFormat:@"User Id 是 : %@", clientId];
+    [LCCKUtil showNotificationWithTitle:@"登陆成功" subtitle:subtitle type:LCCKMessageNotificationTypeSuccess];
+}
+
++ (void)clearLocalClientInfo {
+    // 在系统偏好保存信息
+    NSUserDefaults *defaultsSet = [NSUserDefaults standardUserDefaults];
+    [defaultsSet setObject:nil forKey:LCCK_KEY_USERID];
+    [defaultsSet synchronize];
+}
 
 + (void)invokeThisMethodAfterLoginSuccessWithClientId:(NSString *)clientId success:(LCCKVoidBlock)success failed:(LCCKErrorBlock)failed  {
     [[self sharedInstance] exampleInit];
-    
     [[LCChatKit sharedInstance] openWithClientId:clientId callback:^(BOOL succeeded, NSError *error) {
         if (succeeded) {
-            // 在系统偏好保存信息
-            NSUserDefaults *defaultsSet = [NSUserDefaults standardUserDefaults];
-            [defaultsSet setObject:clientId forKey:LCCK_KEY_USERID];
-            [defaultsSet synchronize];
-            NSString *subtitle = [NSString stringWithFormat:@"User Id 是 : %@", clientId];
-            [LCCKUtil showNotificationWithTitle:@"登陆成功" subtitle:subtitle type:LCCKMessageNotificationTypeSuccess];
+            [self saveLocalClientInfo:clientId];
             !success ?: success();
         } else {
             [LCCKUtil showNotificationWithTitle:@"登陆失败" subtitle:nil type:LCCKMessageNotificationTypeError];
@@ -235,10 +241,12 @@ static NSString *const LCCKAPPKEY = @"ye24iIK6ys8IvaISMC4Bs5WK";
             title = @"进群失败！";
             subTitle = [NSString stringWithFormat:@"请联系管理员%@", administrator.name ?: administrator.clientId];
             LCCKLog(@"%@", error.description);
+            [LCCKUtil showNotificationWithTitle:title subtitle:subTitle type:LCCKMessageNotificationTypeError];
         } else if (error.code == 4304) {
             title = @"群已满";
+            [LCCKUtil showNotificationWithTitle:title subtitle:subTitle type:LCCKMessageNotificationTypeError];
+
         }
-        [LCCKUtil showNotificationWithTitle:title subtitle:subTitle type:LCCKMessageNotificationTypeError];
     }];
     
     [[LCChatKit sharedInstance] setLoadLatestMessagesHandler:^(LCCKConversationViewController *conversationController, BOOL succeeded, NSError *error) {
@@ -336,20 +344,63 @@ static NSString *const LCCKAPPKEY = @"ye24iIK6ys8IvaISMC4Bs5WK";
         [self examplePreViewLocationMessageWithLocation:location geolocations:geolocations];
     }];
     
-    [[LCChatKit sharedInstance] setForceReconnectSessionBlock:^(__kindof UIViewController *viewController, LCCKReconnectSessionCompletionHandler completionHandler) {
-        [[self class] lcck_showText:@"正在重连聊天服务..." toView:viewController.view];
-        [[LCChatKit sharedInstance] openWithClientId:[LCChatKit sharedInstance].clientId callback:^(BOOL succeeded, NSError *error) {
-            [[self class] lcck_hideHUDForView:viewController.view];
-            !completionHandler ?: completionHandler(succeeded, error);
+    [[LCChatKit sharedInstance] setForceReconnectSessionBlock:^(NSError *aError, BOOL granted, __kindof UIViewController *viewController, LCCKReconnectSessionCompletionHandler completionHandler) {
+        BOOL isSingleSignOnOffline = (aError.code == 4111);
+        // - 用户允许重连请求，发起重连或强制登录
+        if (granted == YES) {
+            BOOL force = NO;
+            NSString *title = @"正在重连聊天服务...";
+            if (isSingleSignOnOffline) {
+                force = YES;
+                title = @"正在强制登录...";
+            }
+            [[self class] lcck_showText:title toView:viewController.view];
+            [[LCChatKit sharedInstance] openWithClientId:[LCChatKit sharedInstance].clientId force:force callback:^(BOOL succeeded, NSError *error) {
+                [[self class] lcck_hideHUDForView:viewController.view];
+                !completionHandler ?: completionHandler(succeeded, error);
+            }];
+            return;
+        }
+        
+        // 用户拒绝了重连请求
+        // - 退回登录页面
+        [[self class] clearLocalClientInfo];
+        LCCKLoginViewController *loginViewController = [[LCCKLoginViewController alloc] init];
+        [loginViewController setClientIDHandler:^(NSString *clientID) {
+            [LCCKUtil showProgressText:@"open client ..." duration:10.0f];
+            [LCChatKitExample invokeThisMethodAfterLoginSuccessWithClientId:clientID success:^{
+                [LCCKUtil hideProgress];
+                LCCKTabBarControllerConfig *tabBarControllerConfig = [[LCCKTabBarControllerConfig alloc] init];
+                [UIApplication sharedApplication].keyWindow.rootViewController = tabBarControllerConfig.tabBarController;
+            } failed:^(NSError *error) {
+                [LCCKUtil hideProgress];
+                NSLog(@"%@",error);
+            }];
         }];
+        [[self class] tryPresentViewControllerViewController:loginViewController];
+        // - 显示返回信息
+        NSInteger code = 0;
+        NSString *errorReasonText = @"not granted";
+        NSDictionary *errorInfo = @{
+                                    @"code":@(code),
+                                    NSLocalizedDescriptionKey : errorReasonText,
+                                    };
+        NSError *error = [NSError errorWithDomain:NSStringFromClass([self class])
+                                             code:code
+                                         userInfo:errorInfo];
+        !completionHandler ?: completionHandler(NO, error);
+        
     }];
-   
-//    [[LCCKUIService sharedInstance] setCustomMessageCellForRowBlock:^__kindof UITableViewCell *(id message, NSString *identifier, UITableView *tableView, NSIndexPath *indexPath) {
-//        if ([(AVIMTypedMessage *)message mediaType] == 2) {
-//            LCCKVCardMessageCell *messageCell = [tableView dequeueReusableCellWithIdentifier:identifier forIndexPath:indexPath];
-//            return messageCell;
-//        }
-//    }];
+}
+
++ (void)tryPresentViewControllerViewController:(UIViewController *)viewController {
+    if (viewController) {
+        UIViewController *rootViewController = [[UIApplication sharedApplication].delegate window].rootViewController;
+        if ([rootViewController isKindOfClass:[UINavigationController class]]) {
+            rootViewController = [(UINavigationController*)rootViewController visibleViewController];
+        }
+        [rootViewController presentViewController:viewController animated:YES completion:nil];
+    }
 }
 
 - (NSArray *)exampleConversationEditActionAtIndexPath:(NSIndexPath *)indexPath

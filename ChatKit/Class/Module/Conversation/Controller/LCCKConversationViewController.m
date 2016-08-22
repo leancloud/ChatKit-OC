@@ -2,7 +2,7 @@
 //  LCCKConversationViewController.m
 //  LCCKChatBarExample
 //
-//  v0.6.1 Created by ElonChan (微信向我报BUG:chenyilong1010) ( https://github.com/leancloud/ChatKit-OC ) on 15/11/20.
+//  v0.6.2 Created by ElonChan (微信向我报BUG:chenyilong1010) ( https://github.com/leancloud/ChatKit-OC ) on 15/11/20.
 //  Copyright © 2015年 https://LeanCloud.cn . All rights reserved.
 //
 
@@ -258,7 +258,7 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
 
 - (void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
-    if (self.chatViewModel.avimTypedMessage.count > 0) {
+    if (_conversation && (self.chatViewModel.avimTypedMessage.count > 0)) {
         [[LCCKConversationService sharedInstance] updateConversationAsRead];
     }
     !self.viewDidDisappearBlock ?: self.viewDidDisappearBlock(self, animated);
