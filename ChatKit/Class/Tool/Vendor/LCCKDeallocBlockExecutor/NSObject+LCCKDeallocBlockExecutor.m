@@ -2,7 +2,7 @@
 //  NSObject+LCCKDeallocBlockExecutor.m
 //  LCCKDeallocBlockExecutor
 //
-//  v0.6.1 Created by 微博@iOS程序犭袁 (http://weibo.com/luohanchenyilong/) on 15/12/27.
+//  v0.6.2 Created by 微博@iOS程序犭袁 (http://weibo.com/luohanchenyilong/) on 15/12/27.
 //  Copyright © 2015年 https://github.com/ChenYilong . All rights reserved.
 //
 
