@@ -2,16 +2,19 @@
 //  LCCKConversationNavigationTitleView.m
 //  Pods
 //
-//  v0.5.4 Created by 陈宜龙 on 16/7/19.
+//  v0.6.1 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/7/19.
 //
 //
 
 #import "LCCKConversationNavigationTitleView.h"
 #import "NSString+LCCKExtension.h"
 #import "UIImageView+LCCKExtension.h"
-#import "LCChatKit.h"
 #import "LCCKDeallocBlockExecutor.h"
-
+#if __has_include(<ChatKit/LCChatKit.h>)
+#import <ChatKit/LCChatKit.h>
+#else
+#import "LCChatKit.h"
+#endif
 static CGFloat const kLCCKTitleFontSize = 17.f;
 static void * const LCCKConversationNavigationTitleViewShowRemindMuteImageViewContext = (void*)&LCCKConversationNavigationTitleViewShowRemindMuteImageViewContext;
 
@@ -103,7 +106,7 @@ static void * const LCCKConversationNavigationTitleViewShowRemindMuteImageViewCo
     if (_remindMuteImageView == nil) {
         UIImageView *remindMuteImageView = [[UIImageView alloc] init];
         NSString *remindMuteImageName = @"Connectkeyboad_banner_mute";
-        UIImage *remindMuteImage = [UIImage lcck_imageNamed:remindMuteImageName bundleName:@"Common" bundleForClass:[LCChatKit class]];
+        UIImage *remindMuteImage = [UIImage lcck_imageNamed:remindMuteImageName bundleName:@"Other" bundleForClass:[LCChatKit class]];
         remindMuteImageView.contentMode = UIViewContentModeScaleAspectFill;
         remindMuteImageView.image = remindMuteImage;
         remindMuteImageView.hidden = YES;

@@ -2,14 +2,18 @@
 //  LCCKChatMoreView.m
 //  LCCKChatBarExample
 //
-//  v0.5.4 Created by ElonChan ( https://github.com/leancloud/ChatKit-OC ) on 15/8/18.
+//  v0.6.1 Created by ElonChan (微信向我报BUG:chenyilong1010) ( https://github.com/leancloud/ChatKit-OC ) on 15/8/18.
 //  Copyright (c) 2015年 https://LeanCloud.cn . All rights reserved.
 //
 
 #import "LCCKChatMoreView.h"
 #import "LCCKConstants.h"
 #import "LCCKInputViewPlugin.h"
+#if __has_include(<Masonry/Masonry.h>)
+#import <Masonry/Masonry.h>
+#else
 #import "Masonry.h"
+#endif
 
 #define kLCCKTopLineBackgroundColor [UIColor colorWithRed:184/255.0f green:184/255.0f blue:184/255.0f alpha:1.0f]
 
@@ -100,8 +104,8 @@
     return _sortedInputViewPluginArray;
 }
 
-- (void)moreView:(LCCKChatMoreView *)moreView selectIndex:(LCCKInputViewPluginType)itemType {
-    NSNumber *typeKey = [NSNumber numberWithInt:itemType];
+- (void)moreView:(LCCKChatMoreView *)moreView selectIndex:(NSInteger)itemType {
+    NSNumber *typeKey = @(itemType);
     id<LCCKInputViewPluginDelegate> inputViewPlugin = [[LCCKInputViewPluginDict objectForKey:typeKey] new];
     inputViewPlugin.inputViewRef = self.inputViewRef;
     [inputViewPlugin pluginDidClicked];
@@ -127,8 +131,8 @@
     return [images copy];
 }
 
-- (LCCKInputViewPluginType)inputViewPluginTypeForItemTag:(NSInteger)tag {
-    NSArray *allPlugins = [LCCKInputViewPluginDict allKeys];
+- (NSInteger)inputViewPluginTypeForItemTag:(NSInteger)tag {
+    NSArray<NSNumber *> *allPlugins = [LCCKInputViewPluginDict allKeys];
     NSArray *allDefalutPlugins = [allPlugins filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"SELF < 0"]];
     NSInteger allDefalutPluginsCount = [allDefalutPlugins count];
     if (tag >= allDefalutPluginsCount) {
@@ -172,7 +176,7 @@
     __block NSUInteger line = 0;   //行数
     __block NSUInteger column = 0; //列数
     __block NSUInteger page = 0;
-    [self.titles enumerateObjectsUsingBlock:^(NSString *obj, NSUInteger idx, BOOL *stop) {
+    [self.titles enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         if (column > 3) {
             line ++ ;
             column = 0;
@@ -187,8 +191,8 @@
         CGFloat scrollViewHeight = kFunctionViewHeight - self.edgeInsets.top - self.edgeInsets.bottom;
         CGFloat startX = column * self.itemSize.width + page * scrollViewWidth;
         CGFloat startY = line * self.itemSize.height;
-        LCCKInputViewPluginType type = [self inputViewPluginTypeForItemTag:idx];
-        NSNumber *typeKey = [NSNumber numberWithInt:type];
+        NSInteger type = [self inputViewPluginTypeForItemTag:idx];
+        NSNumber *typeKey = @(type);
         LCCKInputViewPlugin *item = [[[LCCKInputViewPluginDict objectForKey:typeKey] alloc] initWithFrame:CGRectMake(startX, startY, self.itemSize.width, self.itemSize.height)];
         [item fillWithPluginTitle:obj pluginIconImage:self.images[idx]];
         item.tag = idx;

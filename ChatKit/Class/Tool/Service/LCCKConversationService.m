@@ -2,12 +2,16 @@
 //  LCCKConversationService.m
 //  LeanCloudChatKit-iOS
 //
-//  v0.5.4 Created by ElonChan on 16/3/1.
+//  v0.6.1 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/3/1.
 //  Copyright © 2016年 LeanCloud. All rights reserved.
 //
 
 #import "LCCKConversationService.h"
+#if __has_include(<ChatKit/LCChatKit.h>)
+#import <ChatKit/LCChatKit.h>
+#else
 #import "LCChatKit.h"
+#endif
 #if __has_include(<FMDB/FMDB.h>)
 #import <FMDB/FMDB.h>
 #else
@@ -196,15 +200,17 @@ NSString *const LCCKConversationServiceErrorDomain = @"LCCKConversationServiceEr
 
 - (void)setCurrentConversation:(AVIMConversation *)currentConversation {
     _currentConversation = currentConversation;
-    if (!_currentConversation.imClient) {
-        [_currentConversation setValue:[LCChatKit sharedInstance].client forKey:@"imClient"];
+    [self pinIMClientToConversationIfNeeded:currentConversation];
+}
+
+- (void)pinIMClientToConversationIfNeeded:(AVIMConversation *)conversation {
+    if (!conversation.imClient) {
+        [conversation setValue:[LCChatKit sharedInstance].client forKey:@"imClient"];
     }
 }
 
 - (AVIMConversation *)currentConversation {
-    if (!_currentConversation.imClient) {
-        [_currentConversation setValue:[LCChatKit sharedInstance].client forKey:@"imClient"];
-    }
+    [self pinIMClientToConversationIfNeeded:_currentConversation];
     return _currentConversation;
 }
 
@@ -348,6 +354,7 @@ NSString *const LCCKConversationServiceErrorDomain = @"LCCKConversationServiceEr
     conversation.lcck_unreadCount = unreadCount;
     conversation.lcck_mentioned = mentioned;
     conversation.lcck_draft = draft;
+    [self pinIMClientToConversationIfNeeded:conversation];
     return conversation;
 }
 
@@ -356,7 +363,11 @@ NSString *const LCCKConversationServiceErrorDomain = @"LCCKConversationServiceEr
     [self.databaseQueue inDatabase:^(FMDatabase *db) {
         FMResultSet  *resultSet = [db executeQuery:LCCKConversationTableSelectSQL withArgumentsInArray:@[]];
         while ([resultSet next]) {
-            [conversations addObject:[self createConversationFromResultSet:resultSet]];
+            AVIMConversation *conversation = [self createConversationFromResultSet:resultSet];
+            BOOL isAvailable = conversation.createAt;
+            if (isAvailable) {
+                [conversations addObject:conversation];
+            } 
         }
         [resultSet close];
     }];

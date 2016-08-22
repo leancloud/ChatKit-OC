@@ -2,8 +2,8 @@
 //  UIImage+LCCKExtension.m
 //  LeanCloudChatKit-iOS
 //
-//  v0.5.4 Created by 陈宜龙 on 16/5/7.
-//  Copyright © 2016年 ElonChan. All rights reserved.
+//  v0.6.1 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/5/7.
+//  Copyright © 2016年 LeanCloud. All rights reserved.
 //
 
 #import "UIImage+LCCKExtension.h"
@@ -87,8 +87,7 @@
 + (UIImage *)lcck_imageNamed:(NSString *)imageName bundleName:(NSString *)bundleName bundleForClass:(Class)aClass {
     if (imageName.length == 0) return nil;
     if ([imageName hasSuffix:@"/"]) return nil;
-    NSString *bundlePath = [NSBundle lcck_bundlePathForBundleName:bundleName class:aClass];
-    NSBundle *bundle = [NSBundle bundleWithPath:bundlePath];
+    NSBundle *bundle = [NSBundle lcck_bundleForName:bundleName class:aClass];
     LCCKImageManager *manager = [LCCKImageManager defaultManager];
     UIImage *image = [manager getImageWithName:imageName
                                      inBundle:bundle];

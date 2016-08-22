@@ -2,8 +2,8 @@
 //  LCCKConversationListViewModel.m
 //  LeanCloudChatKit-iOS
 //
-//  v0.5.4 Created by 陈宜龙 on 16/3/22.
-//  Copyright © 2016年 ElonChan. All rights reserved.
+//  v0.6.1 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/3/22.
+//  Copyright © 2016年 LeanCloud. All rights reserved.
 //
 
 #import "LCCKConversationListViewModel.h"
@@ -30,6 +30,7 @@
 #else
     #import "UIImageView+WebCache.h"
 #endif
+#import "LCCKDeallocBlockExecutor.h"
 
 
 
@@ -54,12 +55,12 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refresh) name:LCCKNotificationMessageReceived object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refresh) name:LCCKNotificationUnreadsUpdated object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refresh) name:LCCKNotificationConversationListDataSourceUpdated object:nil];
+        __unsafe_unretained typeof(self) weakSelf = self;
+        [self lcck_executeAtDealloc:^{
+               [[NSNotificationCenter defaultCenter] removeObserver:weakSelf];
+            }];
     _conversationListViewController = conversationListViewController;
     return self;
-}
-
-- (void)dealloc {
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 #pragma mark - table view

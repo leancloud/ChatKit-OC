@@ -2,8 +2,8 @@
 //  LCCKLastMessageTypeManager.m
 //  LeanCloudChatKit-iOS
 //
-//  v0.5.4 Created by 陈宜龙 on 16/3/22.
-//  Copyright © 2016年 ElonChan. All rights reserved.
+//  v0.6.1 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/3/22.
+//  Copyright © 2016年 LeanCloud. All rights reserved.
 //
 
 #import "LCCKLastMessageTypeManager.h"
@@ -38,32 +38,25 @@ static NSMutableDictionary *attributedStringCache = nil;
             title = LCCKLocalizedStrings(@"Location");
             title = [NSString stringWithFormat:@"[%@]",title];
             break;
-            //TODO:
-//        case kAVIMMessageMediaTypeEmotion:
-//            title = NSLocalizedStringFromTable(@"Sight", @"LCChatKitString", @"表情");
-//            title = [NSString stringWithFormat:@"[%@]",title];
-
-//            break;
+            
         case kAVIMMessageMediaTypeVideo:
             title = LCCKLocalizedStrings(@"Video");
             title = [NSString stringWithFormat:@"[%@]",title];
             break;
-//TODO:
-            
+            //TODO:
         default:
-            
             if ([message lcck_isSupportThisCustomMessage]) {
                 @try {
                     title = [message.attributes valueForKey:LCCKCustomMessageTypeTitleKey];
-                    title = [NSString stringWithFormat:@"[%@]",title];
                 } @catch (NSException *exception) {} @finally {
                     if (!title) {
                         title = LCCKLocalizedStrings(@"unknownMessageType");
                     }
                 }
+            } else {
+                title = LCCKLocalizedStrings(@"unknownMessageType");
             }
-            //自定义消息
-            
+            title = [NSString stringWithFormat:@"[%@]",title];
             break;
     }
     return title;

@@ -2,7 +2,7 @@
 //  MBProgressHUD+LCCKHUD.h
 //  UberHackathon
 //
-//  v0.5.4 Created by 陈宜龙 on 16/1/16.
+//  v0.6.1 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/1/16.
 //  Copyright © 2016年 微博@iOS程序犭袁. All rights reserved.
 //
 

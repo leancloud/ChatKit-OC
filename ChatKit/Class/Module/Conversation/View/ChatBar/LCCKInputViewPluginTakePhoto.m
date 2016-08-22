@@ -2,7 +2,7 @@
 //  LCCKInputViewPluginTakePhoto.m
 //  Pods
 //
-//  v0.5.4 Created by 陈宜龙 on 16/8/11.
+//  v0.6.1 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/8/11.
 //
 //
 
@@ -22,10 +22,6 @@
 
 #pragma mark -
 #pragma mark - LCCKInputViewPluginSubclassing Method
-
-+ (void)load {
-    [self registerSubclass];
-}
 
 + (LCCKInputViewPluginType)classPluginType {
     return LCCKInputViewPluginTypeTakePhoto;
@@ -96,6 +92,7 @@
         return _pickerController;
     }
     _pickerController = [[UIImagePickerController alloc] init];
+    _pickerController.sourceType = UIImagePickerControllerSourceTypeCamera;
     _pickerController.delegate = self;
     return _pickerController;
 }

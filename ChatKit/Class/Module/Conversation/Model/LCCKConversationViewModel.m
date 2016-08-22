@@ -2,7 +2,7 @@
 //  LCCKConversationViewModel.m
 //  LCCKChatExample
 //
-//  v0.5.4 Created by ElonChan ( https://github.com/leancloud/ChatKit-OC ) on 15/11/18.
+//  v0.6.1 Created by ElonChan (微信向我报BUG:chenyilong1010) ( https://github.com/leancloud/ChatKit-OC ) on 15/11/18.
 //  Copyright © 2015年 https://LeanCloud.cn . All rights reserved.
 //
 #if __has_include(<ChatKit/LCChatKit.h>)
@@ -39,6 +39,7 @@
 #import "NSMutableArray+LCCKMessageExtention.h"
 #import "LCCKAlertController.h"
 #import "NSObject+LCCKExtension.h"
+#import "LCCKDeallocBlockExecutor.h"
 
 @interface LCCKConversationViewModel ()
 
@@ -63,13 +64,13 @@
         self.parentConversationViewController = parentConversationViewController;
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveMessage:) name:LCCKNotificationMessageReceived object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(conversationInvalided:) name:LCCKNotificationCurrentConversationInvalided object:nil];
+            __unsafe_unretained typeof(self) weakSelf = self;
+            [self lcck_executeAtDealloc:^{
+            weakSelf.delegate = nil;
+                   [[NSNotificationCenter defaultCenter] removeObserver:weakSelf];
+                }];
     }
     return self;
-}
-
-- (void)dealloc {
-    self.delegate = nil;
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 #pragma mark - UITableViewDataSource & UITableViewDelegate

@@ -2,7 +2,7 @@
 //  LCCKContactListViewController.m
 //  LeanCloudChatKit-iOS
 //
-//  v0.5.4 Created by ElonChan on 16/2/22.
+//  v0.6.1 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/2/22.
 //  Copyright © 2016年 LeanCloud. All rights reserved.
 //
 
@@ -96,6 +96,12 @@ static NSString *const LCCKContactListViewControllerIdentifier = @"LCCKContactLi
     _excludedUserIds = excludedUserIds;
     _mode = mode;
     _userIds = userIds;
+    //TODO:
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(dataSourceUpdated:) name:LCCKNotificationContactListDataSourceUpdated object:nil];
+    __unsafe_unretained typeof(self) weakSelf = self;
+    [self lcck_executeAtDealloc:^{
+        [[NSNotificationCenter defaultCenter] removeObserver:weakSelf];
+    }];
     return self;
 }
 
@@ -458,38 +464,54 @@ static NSString *const LCCKContactListViewControllerIdentifier = @"LCCKContactLi
     [self forceReloadByContacts];
 }
 
+- (void)dataSourceUpdated:(NSNotification *)notification {
+    if (notification.object == nil) {
+        return;
+    }
+    //TODO:
+//    NSDictionary *userInfo = [notification object];
+//    NSSet *dataSource = userInfo[LCCKNotificationContactListDataSourceUpdatedUserInfoDataSourceKey];
+//    NSString *dataSourceType = userInfo[LCCKNotificationContactListDataSourceUpdatedUserInfoDataSourceTypeKey];
+//    if ([dataSourceType isEqualToString:LCCKNotificationContactListDataSourceContactObjType]) {
+//        self.contacts = dataSource;
+//    } else {
+//        
+//    }
+}
+
 - (void)forceReloadByContacts {
     self.needReloadDataSource = YES;
 }
 
 - (void)forceReloadByUserId {
-    if (_userIds.count > 0) {
-        /**
-         *   这里不考虑查询人数与返回人数不一致的情况，比如查询100人，服务器只返回一人，那么也只显示一人，其余99人不予显示
-         */
-        LCCKHUDActionBlock theHUDActionBlock = [LCCKUIService sharedInstance].HUDActionBlock;
-        if (theHUDActionBlock) {
-            theHUDActionBlock(self, nil, @"获取联系人信息...", LCCKMessageHUDActionTypeShow);
-        }
-        [[LCChatKit sharedInstance] getProfilesInBackgroundForUserIds:_userIds callback:^(NSArray<id<LCCKUserDelegate>> *users, NSError *error) {
-            if (theHUDActionBlock) {
-                theHUDActionBlock(self, nil, nil, LCCKMessageHUDActionTypeHide);
-            }
-            if (users.count > 0) {
-                if (theHUDActionBlock) {
-                    theHUDActionBlock(self, nil, @"获取成功", LCCKMessageHUDActionTypeSuccess);
-                }
-                self.contacts = [NSSet setWithArray:users];
-                dispatch_async(dispatch_get_main_queue(),^{
-                    [self.tableView reloadData];
-                });
-            } else {
-                if (theHUDActionBlock) {
-                    theHUDActionBlock(self, nil, @"获取失败", LCCKMessageHUDActionTypeError);
-                }
-            }
-        }];
+    if (!_userIds || _userIds.count == 0) {
+        return;
     }
+    /**
+     *   这里不考虑查询人数与返回人数不一致的情况，比如查询100人，服务器只返回一人，那么也只显示一人，其余99人不予显示
+     */
+    LCCKHUDActionBlock theHUDActionBlock = [LCCKUIService sharedInstance].HUDActionBlock;
+    if (theHUDActionBlock) {
+        theHUDActionBlock(self, nil, @"获取联系人信息...", LCCKMessageHUDActionTypeShow);
+    }
+    [[LCChatKit sharedInstance] getProfilesInBackgroundForUserIds:_userIds callback:^(NSArray<id<LCCKUserDelegate>> *users, NSError *error) {
+        if (theHUDActionBlock) {
+            theHUDActionBlock(self, nil, nil, LCCKMessageHUDActionTypeHide);
+        }
+        if (users.count > 0) {
+            if (theHUDActionBlock) {
+                theHUDActionBlock(self, nil, @"获取成功", LCCKMessageHUDActionTypeSuccess);
+            }
+            self.contacts = [NSSet setWithArray:users];
+        } else {
+            //在添加 UserIds（ClientIds） 的情况下，但获取用户信息失败的情况下，也刷新，至少展示 UserIds（ClientIds）。
+            self.needReloadDataSource = YES;
+            if (theHUDActionBlock) {
+                theHUDActionBlock(self, nil, @"获取失败", LCCKMessageHUDActionTypeError);
+            }
+        }
+        [self.tableView reloadData];
+    }];
 }
 
 - (void)deleteClientId:(NSString *)clientId {
@@ -506,6 +528,12 @@ static NSString *const LCCKContactListViewControllerIdentifier = @"LCCKContactLi
         self.contacts = [allMutableSet copy];
     }
 }
+
+//TOO:
+//- (void)deletePeerId:(NSString *)peerId callback:(LCCKDeleteContactCallback)deleteContactCallback {
+//    [self deleteClientId:peerId];
+//    !deleteContactCallback ?: deleteContactCallback(self, peerId);
+//}
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
     if (self.mode == LCCKContactListModeNormal) {

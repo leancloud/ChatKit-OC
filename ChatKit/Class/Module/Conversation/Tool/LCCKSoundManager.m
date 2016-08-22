@@ -2,8 +2,8 @@
 //  LCCKSoundManager.m
 //  LeanCloudChatKit-iOS
 //
-//  v0.5.4 Created by 陈宜龙 on 16/3/11.
-//  Copyright © 2016年 ElonChan. All rights reserved.
+//  v0.6.1 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/3/11.
+//  Copyright © 2016年 ElonChan (wechat:chenyilong1010). All rights reserved.
 //  声音设置、播放管理类。设置带有持久化功能。会把设置写入 NSUserDefaults，并在启动时加载
 
 #import "LCCKSoundManager.h"
@@ -43,8 +43,7 @@
 }
 
 - (NSURL *)soundURLWithName:(NSString *)soundName {
-    NSString *bundlePath = [NSBundle lcck_bundlePathForBundleName:@"VoiceMessageSource" class:[self class]];
-    NSBundle *bundle = [NSBundle bundleWithPath:bundlePath];
+    NSBundle *bundle = [NSBundle lcck_bundleForName:@"VoiceMessageSource" class:[self class]];
     NSURL *url = [bundle URLForResource:soundName withExtension:@"caf"];
     return url;
 }
@@ -98,7 +97,7 @@
 }
 
 - (void)setDefaultSettings {
-    NSBundle *bundle = [NSBundle lcck_bundleForbundleName:@"Common" class:[self class]];
+    NSBundle *bundle = [NSBundle lcck_bundleForName:@"Other" class:[self class]];
     NSString *defaultSettingsFile = [bundle pathForResource:@"LCChatKit-Settings" ofType:@"plist"];
     NSDictionary *defaultSettings = [[NSDictionary alloc] initWithContentsOfFile:defaultSettingsFile];
     NSDictionary *conversationSettings = defaultSettings[@"Conversation"];

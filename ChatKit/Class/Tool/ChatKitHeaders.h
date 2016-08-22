@@ -2,8 +2,8 @@
 //  ChatKitHeaders.h
 //  LeanCloudIMKit-iOS
 //
-//  v0.5.4 Created by 陈宜龙 on 16/3/11.
-//  Copyright © 2016年 ElonChan. All rights reserved.
+//  v0.6.1 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/3/11.
+//  Copyright © 2016年 LeanCloud. All rights reserved.
 //
 
 FOUNDATION_EXPORT double LCChatKitVersionNumber;
@@ -48,6 +48,9 @@ FOUNDATION_EXPORT const unsigned char LCChatKitVersionString[];
     #import <ChatKit/LCCKContact.h>
     #import <ChatKit/AVIMTypedMessage+LCCKExtension.h>
     #import <ChatKit/LCCKInputViewPlugin.h>
+    #import <ChatKit/LCCKInputViewPluginPickImage.h>
+    #import <ChatKit/LCCKInputViewPluginTakePhoto.h>
+    #import <ChatKit/LCCKInputViewPluginLocation.h>
 
 #else
 
@@ -77,6 +80,9 @@ FOUNDATION_EXPORT const unsigned char LCChatKitVersionString[];
     #import "LCCKContact.h"
     #import "AVIMTypedMessage+LCCKExtension.h"
     #import "LCCKInputViewPlugin.h"
+    #import "LCCKInputViewPluginPickImage.h"
+    #import "LCCKInputViewPluginTakePhoto.h"
+    #import "LCCKInputViewPluginLocation.h"
 
 #endif
 

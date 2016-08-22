@@ -2,7 +2,7 @@
 //  LCCKConversationListViewController.m
 //  LeanCloudChatKit-iOS
 //
-//  v0.5.4 Created by ElonChan on 16/2/22.
+//  v0.6.1 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/2/22.
 //  Copyright © 2016年 LeanCloud. All rights reserved.
 //
 
@@ -11,7 +11,6 @@
 #import "LCCKSessionService.h"
 #import "LCCKConversationService.h"
 #import "LCCKConversationListViewModel.h"
-#import "LCChatKit.h"
 
 #if __has_include(<MJRefresh/MJRefresh.h>)
     #import <MJRefresh/MJRefresh.h>

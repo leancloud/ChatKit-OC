@@ -2,7 +2,7 @@
 //  LCCKTabBarControllerConfig.h
 //  CYLTabBarController
 //
-//  Created by ElonChan on 15/11/3.
+//  Created by ElonChan (微信向我报BUG:chenyilong1010) on 15/11/3.
 //  Copyright © 2015年 微博@iOS程序犭袁. All rights reserved.
 //
 

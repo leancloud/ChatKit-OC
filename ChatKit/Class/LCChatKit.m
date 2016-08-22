@@ -2,14 +2,11 @@
 //  LCChatKit.m
 //  LeanCloudChatKit-iOS
 //
-//  v0.5.4 Created by ElonChan on 16/2/22.
+//  v0.6.1 Created by ElonChan (wechat:chenyilong1010) on 16/2/22.
 //  Copyright © 2016年 LeanCloud. All rights reserved.
 //
 
 #import "LCChatKit.h"
-
-// Dictionary that holds all instances of Singleton include subclasses
-static NSMutableDictionary *_sharedInstances = nil;
 
 @interface LCChatKit ()
 /*!
@@ -44,39 +41,26 @@ static NSMutableDictionary *_sharedInstances = nil;
 
 #pragma mark -
 
-+ (void)initialize {
-    if (_sharedInstances == nil) {
-        _sharedInstances = [NSMutableDictionary dictionary];
-    }
-}
-
-+ (id)allocWithZone:(NSZone *)zone {
-    // Not allow allocating memory in a different zone
-    return [self sharedInstance];
-}
-
+//+ (id)allocWithZone:(NSZone *)zone {
+//    // Not allow allocating memory in a different zone
+//    return [self sharedInstance];
+//}
+//
 + (id)copyWithZone:(NSZone *)zone {
     // Not allow copying to a different zone
     return [self sharedInstance];
 }
 
+/**
+ * create a singleton instance of LCChatKit
+ */
 + (instancetype)sharedInstance {
-    id sharedInstance = nil;
-    
-    @synchronized(self) {
-        NSString *instanceClass = NSStringFromClass(self);
-        
-        // Looking for existing instance
-        sharedInstance = [_sharedInstances objectForKey:instanceClass];
-        
-        // If there's no instance – create one and add it to the dictionary
-        if (sharedInstance == nil) {
-            sharedInstance = [[super allocWithZone:nil] init];
-            [_sharedInstances setObject:sharedInstance forKey:instanceClass];
-        }
-    }
-    
-    return sharedInstance;
+    static LCChatKit *_sharedLCChatKit = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        _sharedLCChatKit = [[self alloc] init];
+    });
+    return _sharedLCChatKit;
 }
 
 #pragma mark -

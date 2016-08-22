@@ -2,7 +2,7 @@
 //  LCCKChatMessageCell.m
 //  LCCKChatExample
 //
-//  v0.5.4 Created by ElonChan ( https://github.com/leancloud/ChatKit-OC ) on 15/11/13.
+//  v0.6.1 Created by ElonChan (微信向我报BUG:chenyilong1010) ( https://github.com/leancloud/ChatKit-OC ) on 15/11/13.
 //  Copyright © 2015年 https://LeanCloud.cn . All rights reserved.
 //
 
@@ -14,7 +14,6 @@
 #import "LCCKChatSystemMessageCell.h"
 #import "LCCKChatLocationMessageCell.h"
 
-#import "Masonry.h"
 #import <objc/runtime.h>
 #import "LCCKBubbleImageFactory.h"
 
@@ -24,7 +23,12 @@
 #import "UIImageView+WebCache.h"
 #endif
 
+#if __has_include(<ChatKit/LCChatKit.h>)
+#import <ChatKit/LCChatKit.h>
+#else
 #import "LCChatKit.h"
+#endif
+
 #import "UIImageView+LCCKExtension.h"
 #import "UIImage+LCCKExtension.h"
 #import "NSObject+LCCKExtension.h"
@@ -66,7 +70,7 @@ static CGFloat const LCCK_MSG_CELL_NICKNAME_FONT_SIZE = 12;
 }
 
 + (Class)classForMediaType:(AVIMMessageMediaType)mediaType {
-    NSNumber *key = [NSNumber numberWithInt:mediaType];
+    NSNumber *key = [NSNumber numberWithInteger:mediaType];
     Class class = [LCCKChatMessageCellMediaTypeDict objectForKey:key];
     if (!class) {
         class = self;
@@ -78,7 +82,7 @@ static CGFloat const LCCK_MSG_CELL_NICKNAME_FONT_SIZE = 12;
     if (!LCCKChatMessageCellMediaTypeDict) {
         LCCKChatMessageCellMediaTypeDict = [[NSMutableDictionary alloc] init];
     }
-    NSNumber *key = [NSNumber numberWithInt:mediaType];
+    NSNumber *key = [NSNumber numberWithInteger:mediaType];
     Class c = [LCCKChatMessageCellMediaTypeDict objectForKey:key];
     if (!c || [class isSubclassOfClass:c]) {
         [LCCKChatMessageCellMediaTypeDict setObject:class forKey:key];

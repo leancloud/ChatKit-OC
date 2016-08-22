@@ -2,11 +2,15 @@
 //  LCCKVCardMessageCell.h
 //  ChatKit-OC
 //
-//  v0.5.4 Created by 陈宜龙 on 16/8/10.
-//  Copyright © 2016年 ElonChan. All rights reserved.
+//  v0.6.1 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/8/10.
+//  Copyright © 2016年 LeanCloud. All rights reserved.
 //
 
+#if __has_include(<ChatKit/LCChatKit.h>)
 #import <ChatKit/LCChatKit.h>
+#else
+#import "LCChatKit.h"
+#endif
 
 @interface LCCKVCardMessageCell : LCCKChatMessageCell<LCCKChatMessageCellSubclassing>
 

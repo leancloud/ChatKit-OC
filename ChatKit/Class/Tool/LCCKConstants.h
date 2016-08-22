@@ -2,7 +2,7 @@
 //  LCCKConstants.h
 //  LeanCloudChatKit-iOS
 //
-//  v0.5.4 Created by ElonChan on 16/2/19.
+//  v0.6.1 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/2/19.
 //  Copyright © 2016年 LeanCloud. All rights reserved.
 //  Common typdef and constants, and so on.
 
@@ -97,6 +97,13 @@ static NSString *const LCCKNotificationConnectivityUpdated = @"LCCKNotificationC
 static NSString *const LCCKNotificationCurrentConversationInvalided = @"LCCKNotificationCurrentConversationInvalided";
 static NSString *const LCCKNotificationConversationInvalided = @"LCCKNotificationConversationInvalided";
 static NSString *const LCCKNotificationConversationListDataSourceUpdated = @"LCCKNotificationConversationListDataSourceUpdated";
+static NSString *const LCCKNotificationContactListDataSourceUpdated = @"LCCKNotificationContactListDataSourceUpdated";
+
+static NSString *const LCCKNotificationContactListDataSourceUpdatedUserInfoDataSourceKey = @"LCCKNotificationContactListDataSourceUpdatedUserInfoDataSourceKey";
+
+static NSString *const LCCKNotificationContactListDataSourceUserIdType = @"LCCKNotificationContactListDataSourceUserIdType";
+static NSString *const LCCKNotificationContactListDataSourceContactObjType = @"LCCKNotificationContactListDataSourceContactObjType";
+static NSString *const LCCKNotificationContactListDataSourceUpdatedUserInfoDataSourceTypeKey = @"LCCKNotificationContactListDataSourceUpdatedUserInfoDataSourceTypeKey";
 
 #pragma mark - Conversation Enum : Message Type and operation
 ///=============================================================================

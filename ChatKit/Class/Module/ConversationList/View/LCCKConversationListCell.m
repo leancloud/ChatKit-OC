@@ -2,13 +2,19 @@
 //  LCCKConversationListCell.m
 //  LeanCloudChatKit-iOS
 //
-//  v0.5.4 Created by 陈宜龙 on 16/3/22.
-//  Copyright © 2016年 ElonChan. All rights reserved.
+//  v0.6.1 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/3/22.
+//  Copyright © 2016年 LeanCloud. All rights reserved.
 //
 
 #import "LCCKConversationListCell.h"
 #import "LCCKBadgeView.h"
+
+#if __has_include(<ChatKit/LCChatKit.h>)
+#import <ChatKit/LCChatKit.h>
+#else
 #import "LCChatKit.h"
+#endif
+
 #import "UIImageView+LCCKExtension.h"
 
 static CGFloat LCCKImageSize = 45;
@@ -125,7 +131,7 @@ CGFloat const LCCKConversationListCellDefaultHeight = 61; //LCCKImageSize + LCCK
         remindMuteImageView.frame = CGRectMake(CGRectGetMaxX(_messageTextLabel.frame) + LCCKHorizontalSpacing, CGRectGetMinY(_messageTextLabel.frame), LCCKRemindMuteSize, LCCKRemindMuteSize);
         NSString *remindMuteImageName = @"Connectkeyboad_banner_mute";
 //        remindMuteImageView.imageEdgeInsets = UIEdgeInsetsMake(2.5, 2.5, 2.5, 2.5);
-        UIImage *remindMuteImage = [UIImage lcck_imageNamed:remindMuteImageName bundleName:@"Common" bundleForClass:[LCChatKit class]];
+        UIImage *remindMuteImage = [UIImage lcck_imageNamed:remindMuteImageName bundleName:@"Other" bundleForClass:[LCChatKit class]];
         [remindMuteImageView setImage:remindMuteImage forState:UIControlStateNormal];
         remindMuteImageView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
         remindMuteImageView.hidden = YES;

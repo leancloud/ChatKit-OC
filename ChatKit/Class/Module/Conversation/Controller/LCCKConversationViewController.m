@@ -2,7 +2,7 @@
 //  LCCKConversationViewController.m
 //  LCCKChatBarExample
 //
-//  v0.5.4 Created by ElonChan ( https://github.com/leancloud/ChatKit-OC ) on 15/11/20.
+//  v0.6.1 Created by ElonChan (微信向我报BUG:chenyilong1010) ( https://github.com/leancloud/ChatKit-OC ) on 15/11/20.
 //  Copyright © 2015年 https://LeanCloud.cn . All rights reserved.
 //
 
@@ -24,7 +24,11 @@
 #import "LCCKTextFullScreenViewController.h"
 #import <objc/runtime.h>
 #import "NSMutableArray+LCCKMessageExtention.h"
+#if __has_include(<Masonry/Masonry.h>)
+#import <Masonry/Masonry.h>
+#else
 #import "Masonry.h"
+#endif
 #import "LCCKConversationNavigationTitleView.h"
 #import "LCCKWebViewController.h"
 #import "LCCKSafariActivity.h"
@@ -275,19 +279,18 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
 #pragma mark - public Methods
 
 - (void)sendTextMessage:(NSString *)text {
-    [self makeSureSendMessageAfterFetchedConversation];
     if ([text length] > 0 ) {
         LCCKMessage *lcckMessage = [[LCCKMessage alloc] initWithText:text
                                                             senderId:self.userId
                                                               sender:self.user
                                                            timestamp:LCCK_CURRENT_TIMESTAMP
                                                      serverMessageId:nil];
+        [self makeSureSendValidMessage:lcckMessage afterFetchedConversationShouldWithAssert:NO];
         [self.chatViewModel sendMessage:lcckMessage];
     }
 }
 
 - (void)sendImages:(NSArray<UIImage *> *)pictures {
-    [self makeSureSendMessageAfterFetchedConversation];
     for (UIImage *image in pictures) {
         [self sendImageMessage:image];
     }
@@ -299,7 +302,6 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
 }
 
 - (void)sendImageMessageData:(NSData *)imageData {
-    [self makeSureSendMessageAfterFetchedConversation];
     NSString *path = [[LCCKSettingService sharedInstance] tmpPath];
     NSError *error;
     [imageData writeToFile:path options:NSDataWritingAtomic error:&error];
@@ -316,6 +318,7 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
                                                         timestamp:LCCK_CURRENT_TIMESTAMP
                                                   serverMessageId:nil
                                 ];
+        [self makeSureSendValidMessage:message afterFetchedConversationShouldWithAssert:NO];
         [self.chatViewModel sendMessage:message];
     } else {
         [self alert:@"write image to file error"];
@@ -323,7 +326,7 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
 }
 
 - (void)sendVoiceMessageWithPath:(NSString *)voicePath time:(NSTimeInterval)recordingSeconds {
-    [self makeSureSendMessageAfterFetchedConversation];
+
     LCCKMessage *message = [[LCCKMessage alloc] initWithVoicePath:voicePath
                                                          voiceURL:nil
                                                     voiceDuration:[NSString stringWithFormat:@"%@", @(recordingSeconds)]
@@ -331,11 +334,12 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
                                                            sender:self.user
                                                         timestamp:LCCK_CURRENT_TIMESTAMP
                                                   serverMessageId:nil];
+    [self makeSureSendValidMessage:message afterFetchedConversationShouldWithAssert:NO];
     [self.chatViewModel sendMessage:message];
 }
 
 - (void)sendLocationMessageWithLocationCoordinate:(CLLocationCoordinate2D)locationCoordinate locatioTitle:(NSString *)locationTitle {
-    [self makeSureSendMessageAfterFetchedConversation];
+
     LCCKMessage *message = [[LCCKMessage alloc] initWithLocalPositionPhoto:({
         NSString *imageName = @"message_sender_location";
         UIImage *image = [UIImage lcck_imageNamed:imageName bundleName:@"MessageBubble" bundleForClass:[self class]];
@@ -347,6 +351,7 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
                                                                     sender:self.user
                                                                  timestamp:LCCK_CURRENT_TIMESTAMP
                                                            serverMessageId:nil];
+    [self makeSureSendValidMessage:message afterFetchedConversationShouldWithAssert:NO];
     [self.chatViewModel sendMessage:message];
 }
 
@@ -355,7 +360,7 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
 }
 
 - (void)sendCustomMessage:(AVIMTypedMessage *)customMessage {
-    [self makeSureSendMessageAfterFetchedConversation];
+    [self makeSureSendValidMessageAfterFetchedConversation:customMessage];
     [self.chatViewModel sendCustomMessage:customMessage];
 }
 
@@ -363,26 +368,46 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
             progressBlock:(AVProgressBlock)progressBlock
                   success:(LCCKBooleanResultBlock)success
                    failed:(LCCKBooleanResultBlock)failed {
-    [self makeSureSendMessageAfterFetchedConversation];
+    [self makeSureSendValidMessageAfterFetchedConversation:customMessage];
     [self.chatViewModel sendCustomMessage:customMessage progressBlock:progressBlock success:success failed:failed];
 }
 
-- (void)makeSureSendMessageAfterFetchedConversation {
+- (void)makeSureSendValidMessageAfterFetchedConversation:(id)message {
+    [self makeSureSendValidMessage:message afterFetchedConversationShouldWithAssert:YES];
+}
+
+- (void)makeSureSendValidMessage:(id)message afterFetchedConversationShouldWithAssert:(BOOL)withAssert {
+    NSString *formatString = @"\n\n\
+    ------ BEGIN NSException Log ---------------\n \
+    class name: %@                              \n \
+    ------line: %@                              \n \
+    ----reason: %@                              \n \
+    ------ END -------------------------------- \n\n";
     if (!self.isAvailable) {
-        NSString *formatString = @"\n\n\
-        ------ BEGIN NSException Log ---------------\n \
-        class name: %@                              \n \
-        ------line: %@                              \n \
-        ----reason: %@                              \n \
-        ------ END -------------------------------- \n\n";
         NSString *reason = [NSString stringWithFormat:formatString,
                             @(__PRETTY_FUNCTION__),
                             @(__LINE__),
                             @"Remember to check if `isAvailable` is ture, making sure sending message after conversation has been fetched"];
+        if (!withAssert) {
+            LCCKLog(@"🔴类名与方法名：%@（在第%@行），描述：%@", @(__PRETTY_FUNCTION__), @(__LINE__), reason);
+            return;
+        }
         NSAssert(NO, reason);
-//        @throw [NSException exceptionWithName:NSGenericException
-//                                       reason:reason
-//                                     userInfo:nil];
+    }
+    if ([message isKindOfClass:[LCCKMessage class]]) {
+        return;
+    }
+    if ([message isKindOfClass:[AVIMTypedMessage class]]) {
+        return;
+    }
+    if ([[message class] isSubclassOfClass:[AVIMMessage class]]) {
+        NSString *reason = [NSString stringWithFormat:formatString,
+                            @(__PRETTY_FUNCTION__),
+                            @(__LINE__),
+                            @"ChatKit only support sending AVIMTypedMessage"];
+        @throw [NSException exceptionWithName:NSGenericException
+                                       reason:reason
+                                     userInfo:nil];
     }
 }
 
@@ -510,7 +535,7 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
 }
 
 - (void)callbackCurrentConversationEvenNotExists:(AVIMConversation *)conversation callback:(LCCKBooleanResultBlock)callback {
-    if (conversation.members > 0) {
+    if (conversation.createAt) {
         if (!conversation.imClient) {
             [conversation setValue:[LCCKSessionService sharedInstance].client forKey:@"imClient"];
             LCCKLog(@"🔴类名与方法名：%@（在第%@行），描述：%@", @(__PRETTY_FUNCTION__), @(__LINE__), @"imClient is nil");
@@ -538,7 +563,7 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
 }
 
 - (BOOL)isAvailable {
-    BOOL isAvailable = _conversation;
+    BOOL isAvailable = self.conversation;
     return isAvailable;
 }
 

@@ -3,7 +3,7 @@
 //
 //  Version 1.3.2
 //
-//  v0.5.4 Created by Nick Lockwood on 03/09/2010.
+//  v0.6.1 Created by Nick Lockwood on 03/09/2010.
 //  Copyright 2010 Charcoal Design
 //
 //  Distributed under the permissive zlib License
@@ -40,7 +40,11 @@
 #pragma GCC diagnostic ignored "-Wconversion"
 #pragma GCC diagnostic ignored "-Wselector"
 #pragma GCC diagnostic ignored "-Wgnu"
+#if __has_include(<Masonry/Masonry.h>)
+#import <Masonry/Masonry.h>
+#else
 #import "Masonry.h"
+#endif
 
 
 #import <Availability.h>
