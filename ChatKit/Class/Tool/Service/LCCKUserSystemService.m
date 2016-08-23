@@ -52,7 +52,6 @@ NSString *const LCCKUserSystemServiceErrorDomain = @"LCCKUserSystemServiceErrorD
         });
         return;
     }
-    NSMutableArray *usersMutableArray = [NSMutableArray arrayWithCapacity:userIds.count];
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
         if (!_fetchProfilesBlock) {
             // This enforces implementing `-setFetchProfilesBlock:`.
@@ -286,7 +285,7 @@ NSString *const LCCKUserSystemServiceErrorDomain = @"LCCKUserSystemServiceErrorD
         for (id<LCCKUserDelegate> user in users) {
             @try {
                 NSString *clientId = [NSString stringWithString:user.clientId];
-                self.cachedUsers[clientId] = user;
+                [self.cachedUsers setObject:user forKey:clientId];
             } @catch (NSException *exception) {}
         }
     }

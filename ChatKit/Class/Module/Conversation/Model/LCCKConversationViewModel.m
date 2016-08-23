@@ -102,24 +102,40 @@
 
 - (void)receiveMessage:(NSNotification *)notification {
     NSDictionary *userInfo = notification.object;
-    NSArray<AVIMTypedMessage *> *messages = userInfo[LCCKDidReceiveMessagesUserInfoMessagesKey];
+    __block NSArray<AVIMTypedMessage *> *messages = userInfo[LCCKDidReceiveMessagesUserInfoMessagesKey];
     AVIMConversation *conversation = userInfo[LCCKDidReceiveMessagesUserInfoConversationKey];
     BOOL isCurrentConversationMessage = [conversation.conversationId isEqualToString:self.parentConversationViewController.conversation.conversationId];
     if (isCurrentConversationMessage) {
-        AVIMConversation *currentConversation = self.parentConversationViewController.conversation;
-        if (currentConversation.muted == NO) {
-            [[LCCKSoundManager defaultManager] playReceiveSoundIfNeed];
-        }
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
-            NSArray *lcckMessages = [NSMutableArray lcck_messagesWithAVIMMessages:messages];
-            dispatch_async(dispatch_get_main_queue(),^{
-                [self receivedOneMessages:lcckMessages];
+        
+        void(^filterdMessageCallback)(NSArray *messages) = ^(NSArray *messages) {
+            AVIMConversation *currentConversation = self.parentConversationViewController.conversation;
+            if (currentConversation.muted == NO) {
+                [[LCCKSoundManager defaultManager] playReceiveSoundIfNeed];
+            }
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
+                NSArray *lcckMessages = [NSMutableArray lcck_messagesWithAVIMMessages:messages];
+                dispatch_async(dispatch_get_main_queue(),^{
+                    [self receivedNewMessages:lcckMessages];
+                });
             });
-        });
+        };
+        
+        LCCKFilterMessagesBlock filterMessagesBlock = [LCCKConversationService sharedInstance].filterMessagesBlock;
+        if (filterMessagesBlock) {
+            LCCKFilterMessagesCompletionHandler filterMessagesCompletionHandler = ^(NSArray *filterMessages, NSError *error) {
+                if (!error) {
+                    !filterdMessageCallback ?: filterdMessageCallback([filterMessages copy]);
+                }
+            };
+            filterMessagesBlock(conversation, messages, filterMessagesCompletionHandler);
+        } else {
+            !filterdMessageCallback ?: filterdMessageCallback(messages);
+        }
+        
     }
 }
 
-- (void)receivedOneMessages:(NSArray *)messages {
+- (void)receivedNewMessages:(NSArray *)messages {
     [self appendMessagesToTrailing:messages];
     if ([self.delegate respondsToSelector:@selector(reloadAfterReceiveMessage)]) {
         [self.delegate reloadAfterReceiveMessage];
@@ -165,6 +181,7 @@
         }
     }
 }
+
 /*!
  * 与`-addMessages`方法的区别在于，第一次加载历史消息时需要查找最后一条消息之余还有没有消息。
  * 时间戳必须传0，后续方法会根据是否为了0，来判断是否是第一次进对话页面。
