@@ -286,7 +286,7 @@ NSString *const LCCKUserSystemServiceErrorDomain = @"LCCKUserSystemServiceErrorD
         for (id<LCCKUserDelegate> user in users) {
             @try {
                 NSString *clientId = [NSString stringWithString:user.clientId];
-                self.cachedUsers[clientId] = user;
+                [self.cachedUsers setObject:user forKey:clientId];
             } @catch (NSException *exception) {}
         }
     }

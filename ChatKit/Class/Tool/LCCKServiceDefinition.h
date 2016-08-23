@@ -355,6 +355,18 @@ typedef void (^LCCKConversationInvalidedHandler) (NSString *conversationId, LCCK
  */
 - (void)setConversationInvalidedHandler:(LCCKConversationInvalidedHandler)conversationInvalidedHandler;
 
+typedef void (^LCCKFilterMessagesCompletionHandler)(NSArray *filterMessages, NSError *error);
+typedef void (^LCCKFilterMessagesBlock)(AVIMConversation *conversation, NSArray<AVIMTypedMessage *> *messages, LCCKFilterMessagesCompletionHandler completionHandler);
+
+/*!
+ * 用于筛选消息，比如：群定向消息、筛选黑名单消息、黑名单消息
+ * @attention 同步方法异步方法皆可
+ */
+- (void)setFilterMessagesBlock:(LCCKFilterMessagesBlock)filterMessagesBlock;
+
+@property (nonatomic, copy) LCCKFilterMessagesBlock filterMessagesBlock;
+
+//TODO:未实现
 typedef void (^LCCKLoadLatestMessagesHandler)(LCCKConversationViewController *conversationController, BOOL succeeded, NSError *error);
 
 @property (nonatomic, copy) LCCKLoadLatestMessagesHandler loadLatestMessagesHandler;

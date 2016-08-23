@@ -39,6 +39,7 @@ NSString *const LCCKConversationServiceErrorDomain = @"LCCKConversationServiceEr
 @synthesize fetchConversationHandler = _fetchConversationHandler;
 @synthesize conversationInvalidedHandler = _conversationInvalidedHandler;
 @synthesize loadLatestMessagesHandler = _loadLatestMessagesHandler;
+@synthesize filterMessagesBlock = _filterMessagesBlock;
 
 /**
  *  根据 conversationId 获取对话

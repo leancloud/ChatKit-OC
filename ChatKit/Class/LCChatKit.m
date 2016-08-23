@@ -274,6 +274,10 @@
     [self.conversationService setLoadLatestMessagesHandler:loadLatestMessagesHandler];
 }
 
+- (void)setFilterMessagesBlock:(LCCKFilterMessagesBlock)filterMessagesBlock {
+    [self.conversationService setFilterMessagesBlock:filterMessagesBlock];
+}
+
 - (void)createConversationWithMembers:(NSArray *)members type:(LCCKConversationType)type unique:(BOOL)unique callback:(AVIMConversationResultBlock)callback {
     [self.conversationService createConversationWithMembers:members type:type unique:unique callback:callback];
 }
