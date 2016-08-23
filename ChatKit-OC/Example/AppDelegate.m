@@ -30,6 +30,7 @@
     [self customizeNavigationBar];
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     LCCKLoginViewController *loginViewController = [[LCCKLoginViewController alloc] initWithNibName:@"LCCKLoginViewController" bundle:[NSBundle mainBundle]];
+    loginViewController.autoLogin = YES;
     [loginViewController setClientIDHandler:^(NSString *clientID) {
         [LCCKUtil showProgressText:@"open client ..." duration:10.0f];
         [LCChatKitExample invokeThisMethodAfterLoginSuccessWithClientId:clientID success:^{

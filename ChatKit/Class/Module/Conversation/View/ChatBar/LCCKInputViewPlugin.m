@@ -2,7 +2,7 @@
 //  LCCKInputViewPlugin.m
 //  Pods
 //
-//  v0.6.1 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/7/19.
+//  v0.6.2 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/7/19.
 //
 //
 

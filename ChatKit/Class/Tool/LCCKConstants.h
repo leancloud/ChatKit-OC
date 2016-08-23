@@ -2,7 +2,7 @@
 //  LCCKConstants.h
 //  LeanCloudChatKit-iOS
 //
-//  v0.6.1 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/2/19.
+//  v0.6.2 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/2/19.
 //  Copyright © 2016年 LeanCloud. All rights reserved.
 //  Common typdef and constants, and so on.
 
@@ -29,6 +29,7 @@ typedef void (^LCCKSetResultBlock)(NSSet *channels, NSError *error);
 typedef void (^LCCKDataResultBlock)(NSData *data, NSError *error);
 typedef void (^LCCKIdResultBlock)(id object, NSError *error);
 typedef void (^LCCKIdBoolResultBlock)(BOOL succeeded, id object, NSError *error);
+typedef void (^LCCKRequestAuthorizationBoolResultBlock)(BOOL granted, NSError *error);
 
 //Callback with Function object
 typedef void (^LCCKVoidBlock)(void);
@@ -45,7 +46,7 @@ typedef void (^LCCKProgressBlock)(NSInteger percentDone);
 
 #ifndef LCCKLocalizedStrings
 #define LCCKLocalizedStrings(key) \
-    NSLocalizedStringFromTableInBundle(key, @"LCChatKitString", [NSBundle bundleWithPath:[[[NSBundle bundleForClass:[LCChatKit class]] resourcePath] stringByAppendingPathComponent:@"Common.bundle"]], nil)
+    NSLocalizedStringFromTableInBundle(key, @"LCChatKitString", [NSBundle bundleWithPath:[[[NSBundle bundleForClass:[LCChatKit class]] resourcePath] stringByAppendingPathComponent:@"Other.bundle"]], nil)
 #endif
 
 
@@ -215,6 +216,9 @@ static NSString *const LCCKCustomMessageTypeTitleKey = @"typeTitle";
  * 用来显示在push提示中。
  */
 static NSString *const LCCKCustomMessageSummaryKey = @"summary";
+
+static NSString *const LCCKCustomMessageIsCustomKey = @"isCustom";
+static NSString *const LCCKCustomMessageOnlyVisiableForPartClientIds = @"OnlyVisiableForPartClientIds";
 
 /*!
  * 对话类型，用来展示在推送提示中，以达到这样的效果： [群消息]Tom：hello gays!

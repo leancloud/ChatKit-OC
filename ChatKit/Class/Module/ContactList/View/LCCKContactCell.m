@@ -2,7 +2,7 @@
 //  LCCKContactCell.m
 //  LeanCloudChatKit-iOS
 //
-//  v0.6.1 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/3/9.
+//  v0.6.2 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/3/9.
 //  Copyright © 2016年 LeanCloud. All rights reserved.
 //
 
@@ -44,7 +44,7 @@
     LCCKAvatarImageViewCornerRadiusBlock avatarImageViewCornerRadiusBlock = [LCChatKit sharedInstance].avatarImageViewCornerRadiusBlock;
     if (avatarImageViewCornerRadiusBlock) {
         CGFloat avatarImageViewCornerRadius = avatarImageViewCornerRadiusBlock(self.avatarImageView.frame.size);
-        [self.avatarImageView lcck_cornerRadiusAdvance:avatarImageViewCornerRadius rectCornerType:UIRectCornerAllCorners];
+        self.avatarImageView.lcck_cornerRadius = avatarImageViewCornerRadius;
     }
     NSString *selectionStatusButtonNormalImageName = @"CellGraySelected";
     NSString *selectionStatusButtonSelectedImageName = @"CellBlueSelected";

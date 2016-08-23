@@ -2,7 +2,7 @@
 //  LCCKVCardView.m
 //  ChatKit-OC
 //
-//  v0.6.1 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/8/15.
+//  v0.6.2 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/8/15.
 //  Copyright © 2016年 ElonChan (wechat:chenyilong1010). All rights reserved.
 //
 
@@ -45,7 +45,7 @@
     LCCKAvatarImageViewCornerRadiusBlock avatarImageViewCornerRadiusBlock = [LCChatKit sharedInstance].avatarImageViewCornerRadiusBlock;
     if (avatarImageViewCornerRadiusBlock) {
         CGFloat avatarImageViewCornerRadius = avatarImageViewCornerRadiusBlock(self.avatarView.frame.size);
-        [self.avatarView lcck_cornerRadiusAdvance:avatarImageViewCornerRadius rectCornerType:UIRectCornerAllCorners];
+        self.avatarView.lcck_cornerRadius = avatarImageViewCornerRadius;
     }
     UITapGestureRecognizer *tapGestureRecognizer =[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(vCardClicked)];
     [self addGestureRecognizer:tapGestureRecognizer];

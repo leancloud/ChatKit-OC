@@ -2,7 +2,7 @@
 //  LCCKConversationViewController.m
 //  LCCKChatBarExample
 //
-//  v0.6.1 Created by ElonChan (微信向我报BUG:chenyilong1010) ( https://github.com/leancloud/ChatKit-OC ) on 15/11/20.
+//  v0.6.2 Created by ElonChan (微信向我报BUG:chenyilong1010) ( https://github.com/leancloud/ChatKit-OC ) on 15/11/20.
 //  Copyright © 2015年 https://LeanCloud.cn . All rights reserved.
 //
 
@@ -144,7 +144,7 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
                     NSError *error_ = [NSError errorWithDomain:NSStringFromClass([self class])
                                                           code:code
                                                       userInfo:errorInfo];
-                    [self refreshConversation:nil isJoined:NO error:error_];
+                    [self refreshConversation:conversation isJoined:NO error:error_];
                 }
             }];
             break;
@@ -258,7 +258,7 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
 
 - (void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
-    if (self.chatViewModel.avimTypedMessage.count > 0) {
+    if (_conversation && (self.chatViewModel.avimTypedMessage.count > 0)) {
         [[LCCKConversationService sharedInstance] updateConversationAsRead];
     }
     !self.viewDidDisappearBlock ?: self.viewDidDisappearBlock(self, animated);
@@ -507,20 +507,40 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
     return conversationId;
 }
 
-/*!
- * conversation 不一定有值，可能为 nil
- */
-- (void)refreshConversation:(AVIMConversation *)aConversation isJoined:(BOOL)isJoined error:(NSError *)error {
-    if (error) {
+- (void)notJoinedHandler:(AVIMConversation *)conversation error:(NSError *)aError {
+    void(^notJoinedHandler)(id<LCCKUserDelegate> user, NSError *error) = ^(id<LCCKUserDelegate> user, NSError *error) {
         LCCKConversationInvalidedHandler conversationInvalidedHandler = [[LCCKConversationService sharedInstance] conversationInvalidedHandler];
-        NSString *conversationId = [self getConversationIdIfExists:aConversation];
+        NSString *conversationId = [self getConversationIdIfExists:conversation];
         //错误码参考：https://leancloud.cn/docs/realtime_v2.html#%E4%BA%91%E7%AB%AF%E9%94%99%E8%AF%AF%E7%A0%81%E8%AF%B4%E6%98%8E
         if (error.code == 4401 && conversationId.length > 0) {
             //如果被管理员踢出群之后，再进入该会话，本地可能有缓存，要清除掉，防止下次再次进入。
             [[LCCKConversationService sharedInstance] deleteRecentConversationWithConversationId:conversationId];
         }
-        conversationInvalidedHandler(conversationId, self, nil, error);
+        conversationInvalidedHandler(conversationId, self, user, error);
+    };
+    
+    if (conversation) {
+        [[LCCKUserSystemService sharedInstance] getProfilesInBackgroundForUserIds:@[ conversation.creator ] callback:^(NSArray<id<LCCKUserDelegate>> *users, NSError *error) {
+            id<LCCKUserDelegate> user;
+            @try {
+                user = users[0];
+            } @catch (NSException *exception) {}
+            !notJoinedHandler ?: notJoinedHandler(user, aError);
+        }];
+    } else {
+        !notJoinedHandler ?: notJoinedHandler(nil, aError);
     }
+}
+
+/*!
+ * conversation 不一定有值，可能为 nil
+ */
+- (void)refreshConversation:(AVIMConversation *)aConversation isJoined:(BOOL)isJoined error:(NSError *)error {
+    if (error) {
+        [self notJoinedHandler:aConversation error:error];
+        aConversation = nil;
+    }
+    
     AVIMConversation *conversation;
     if (isJoined && !error) {
         conversation = aConversation;

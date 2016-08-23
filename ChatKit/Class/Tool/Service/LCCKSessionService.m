@@ -2,24 +2,27 @@
 //  LCCKSessionService.m
 //  LeanCloudChatKit-iOS
 //
-//  v0.6.1 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/3/1.
+//  v0.6.2 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/3/1.
 //  Copyright © 2016年 LeanCloud. All rights reserved.
 //
 
 #import "LCCKSessionService.h"
 #import "LCCKSoundManager.h"
+#import "AVIMMessage+LCCKExtension.h"
+
 #if __has_include(<ChatKit/LCChatKit.h>)
 #import <ChatKit/LCChatKit.h>
 #else
 #import "LCChatKit.h"
 #endif
 
-NSString *const LCCKSessionServiceErrorDemain = @"LCCKSessionServiceErrorDemain";
+NSString *const LCCKSessionServiceErrorDomain = @"LCCKSessionServiceErrorDomain";
 
 @interface LCCKSessionService() <AVIMClientDelegate, AVIMSignatureDataSource>
 
 @property (nonatomic, assign, readwrite) BOOL connect;
 @property (nonatomic, assign, getter=isPlayingSound) BOOL playingSound;
+@property (nonatomic, assign, getter=isRequestingSingleSignOn) BOOL requestingSingleSignOn;
 
 @end
 
@@ -27,8 +30,27 @@ NSString *const LCCKSessionServiceErrorDemain = @"LCCKSessionServiceErrorDemain"
 @synthesize clientId = _clientId;
 @synthesize client = _client;
 @synthesize forceReconnectSessionBlock = _forceReconnectSessionBlock;
+@synthesize disableSingleSignOn = _disableSingleSignOn;
 
 - (void)openWithClientId:(NSString *)clientId callback:(LCCKBooleanResultBlock)callback {
+    [self openWithClientId:clientId force:NO callback:callback];
+}
+
+- (void)openWithClientId:(NSString *)clientId force:(BOOL)force callback:(AVIMBooleanResultBlock)callback {
+    if ([clientId lcck_isSpace]) {
+        NSInteger code = 0;
+        NSString *errorReasonText = @"clientId not valid";
+        NSDictionary *errorInfo = @{
+                                    @"code":@(code),
+                                    NSLocalizedDescriptionKey : errorReasonText,
+                                    };
+        NSError *error = [NSError errorWithDomain:NSStringFromClass([self class])
+                                             code:code
+                                         userInfo:errorInfo];
+        
+        !callback ?: callback(NO, error);
+        return;
+    }
     [self openSevice];
     _clientId = clientId;
     [[LCCKConversationService sharedInstance] setupDatabaseWithUserId:_clientId];
@@ -39,7 +61,11 @@ NSString *const LCCKSessionServiceErrorDemain = @"LCCKSessionServiceErrorDemain"
                                                    return [[LCChatKit sharedInstance] removeAllCachedRecentConversations];
                                               }];
     //    [[CDFailedMessageStore store] setupStoreWithDatabasePath:dbPath];
-    _client = [[AVIMClient alloc] initWithClientId:clientId];
+    NSString *tag;
+    if (!self.disableSingleSignOn) {
+        tag = clientId;
+    }
+    _client = [[AVIMClient alloc] initWithClientId:clientId tag:tag];
     _client.delegate = self;
     /* 实现了generateSignatureBlock，将对 im 的 open , start(create conv), kick, invite 操作签名，更安全.
      可以从你的服务器获得签名，也可以部署云代码获取 https://leancloud.cn/docs/leanengine_overview.html .
@@ -47,9 +73,16 @@ NSString *const LCCKSessionServiceErrorDemain = @"LCCKSessionServiceErrorDemain"
     if ([[LCChatKit sharedInstance] generateSignatureBlock]) {
         _client.signatureDataSource = self;
     }
-    [_client openWithCallback:^(BOOL succeeded, NSError *error) {
+    AVIMClientOpenOption *option = [AVIMClientOpenOption new];
+    option.force = force;
+    [_client openWithOption:option callback:^(BOOL succeeded, NSError *error) {
         [self updateConnectStatus];
         !callback ?: callback(succeeded, error);
+        if (error.code == 4111) {
+            [self handleSingleSignOnError:error callback:^(BOOL succeeded, NSError *error) {
+                !callback ?: callback(succeeded, error);
+            }];
+        }
     }];
 }
 
@@ -81,8 +114,12 @@ NSString *const LCCKSessionServiceErrorDemain = @"LCCKSessionServiceErrorDemain"
 }
 
 - (void)reconnectForViewController:(UIViewController *)viewController callback:(LCCKBooleanResultBlock)aCallback {
+    [self reconnectForViewController:viewController error:nil granted:YES callback:aCallback];
+}
+
+- (void)reconnectForViewController:(UIViewController *)viewController error:(NSError *)aError granted:(BOOL)granted callback:(LCCKBooleanResultBlock)aCallback {
     LCCKForceReconnectSessionBlock forceReconnectSessionBlock = _forceReconnectSessionBlock;
-    LCCKBooleanResultBlock callback = ^(BOOL succeeded, NSError *error) {
+    LCCKBooleanResultBlock completionHandler = ^(BOOL succeeded, NSError *error) {
         LCCKHUDActionBlock HUDActionBlock = [LCCKUIService sharedInstance].HUDActionBlock;
         !HUDActionBlock ?: HUDActionBlock(viewController, viewController.view, nil, LCCKMessageHUDActionTypeHide);
         if (succeeded) {
@@ -93,7 +130,7 @@ NSString *const LCCKSessionServiceErrorDemain = @"LCCKSessionServiceErrorDemain"
         }
         !aCallback ?: aCallback(succeeded, error);
     };
-    !forceReconnectSessionBlock ?: forceReconnectSessionBlock(viewController, callback);
+    !forceReconnectSessionBlock ?: forceReconnectSessionBlock(aError, granted, viewController, completionHandler);
 }
 
 #pragma mark - AVIMClientDelegate
@@ -108,6 +145,54 @@ NSString *const LCCKSessionServiceErrorDemain = @"LCCKSessionServiceErrorDemain"
 
 - (void)imClientResumed:(AVIMClient *)imClient {
     [self updateConnectStatus];
+}
+
+- (void)handleSingleSignOnError:(NSError *)aError callback:(LCCKBooleanResultBlock)aCallback {
+    if (aError.code == 4111) {
+        [self requestForceSingleSignOnAuthorizationWithCallback:^(BOOL granted, NSError *theError) {
+            [self reconnectForViewController:nil error:aError granted:granted callback:aCallback];
+        }];
+    }
+}
+
+- (void)client:(AVIMClient *)client didOfflineWithError:(NSError *)aError {
+    [self handleSingleSignOnError:aError callback:nil];
+}
+
+- (void)requestForceSingleSignOnAuthorizationWithCallback:(LCCKRequestAuthorizationBoolResultBlock)callback {
+    if (self.isRequestingSingleSignOn) {
+        return;
+    }
+    self.requestingSingleSignOn = YES;
+    NSString *title = LCCKLocalizedStrings(@"requestForceSingleSignOnAuthorization");
+    LCCKAlertController *alert = [LCCKAlertController alertControllerWithTitle:title
+                                                                       message:@""
+                                                                preferredStyle:LCCKAlertControllerStyleAlert];
+    NSString *cancelActionTitle = LCCKLocalizedStrings(@"cancel") ?: @"取消";
+    LCCKAlertAction* cancelAction = [LCCKAlertAction actionWithTitle:cancelActionTitle style:LCCKAlertActionStyleDefault
+                                                             handler:^(LCCKAlertAction * action) {
+                                                                 NSInteger code = 0;
+                                                                 NSString *errorReasonText = @"request force single sign on failed";
+                                                                 NSDictionary *errorInfo = @{
+                                                                                             @"code":@(code),
+                                                                                             NSLocalizedDescriptionKey : errorReasonText,
+                                                                                             };
+                                                                 NSError *error = [NSError errorWithDomain:LCCKSessionServiceErrorDomain
+                                                                                                      code:code
+                                                                                                  userInfo:errorInfo];
+                                                                 !callback ?: callback(NO, error);
+                                                                 self.requestingSingleSignOn = NO;
+                                                             }];
+    [alert addAction:cancelAction];
+    
+    NSString *forceOpenActionTitle = LCCKLocalizedStrings(@"ok") ?: @"确认";
+    LCCKAlertAction *forceOpenAction = [LCCKAlertAction actionWithTitle:forceOpenActionTitle style:LCCKAlertActionStyleDefault
+                                                                handler:^(LCCKAlertAction * action) {
+                                                                    !callback ?: callback(YES, nil);
+                                                                    self.requestingSingleSignOn = NO;
+                                                                }];
+    [alert addAction:forceOpenAction];
+    [alert showWithSender:nil controller:nil animated:YES completion:NULL];
 }
 
 #pragma mark - status
@@ -138,6 +223,14 @@ NSString *const LCCKSessionServiceErrorDemain = @"LCCKSessionServiceErrorDemain"
 }
 
 #pragma mark - AVIMMessageDelegate
+
+/*!
+ * 低版本如果不支持某自定义消息，该自定义消息会走该代理
+ */
+- (void)conversation:(AVIMConversation *)conversation didReceiveCommonMessage:(AVIMMessage *)message {
+    AVIMTypedMessage *typedMessage = [message lcck_getValidTypedMessage];
+    [self conversation:conversation didReceiveTypedMessage:typedMessage];
+}
 
 - (void)conversation:(AVIMConversation *)conversation didReceiveTypedMessage:(AVIMTypedMessage *)message {
     if (!message.messageId) {
@@ -224,7 +317,8 @@ NSString *const LCCKSessionServiceErrorDemain = @"LCCKSessionServiceErrorDemain"
         
         [[NSNotificationCenter defaultCenter] postNotificationName:LCCKNotificationMessageReceived object:userInfo];
     };
-    // - 检查是否有人@我
+    
+    // - 在最近对话列表页时，检查是否有人@我
     if (![[LCCKConversationService sharedInstance].currentConversationId isEqualToString:conversation.conversationId]) {
         // 没有在聊天的时候才增加未读数和设置mentioned
         [self isMentionedByMessages:messages callback:^(BOOL succeeded, NSError *error) {
@@ -235,9 +329,9 @@ NSString *const LCCKSessionServiceErrorDemain = @"LCCKSessionServiceErrorDemain"
                 // [[NSNotificationCenter defaultCenter] postNotificationName:LCCKNotificationUnreadsUpdated object:nil];
             }
         }];
+    } else {
+        !afterMentionedBlock ?: afterMentionedBlock();
     }
-    
-   
 }
 
 /*!
@@ -274,7 +368,7 @@ NSString *const LCCKSessionServiceErrorDemain = @"LCCKSessionServiceErrorDemain"
                                     @"code":@(code),
                                     NSLocalizedDescriptionKey : errorReasonText,
                                     };
-        NSError *error = [NSError errorWithDomain:LCCKSessionServiceErrorDemain
+        NSError *error = [NSError errorWithDomain:LCCKSessionServiceErrorDomain
                                              code:code
                                          userInfo:errorInfo];
         !callback ?: callback(NO, error);
@@ -317,7 +411,7 @@ NSString *const LCCKSessionServiceErrorDemain = @"LCCKSessionServiceErrorDemain"
                                             @"code":@(code),
                                             NSLocalizedDescriptionKey : errorReasonText,
                                             };
-                error = [NSError errorWithDomain:LCCKSessionServiceErrorDemain                                                         code:code
+                error = [NSError errorWithDomain:LCCKSessionServiceErrorDomain                                                         code:code
                                         userInfo:errorInfo];
             }
             dispatch_async(dispatch_get_main_queue(),^{

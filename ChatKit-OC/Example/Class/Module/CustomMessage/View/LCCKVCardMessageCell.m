@@ -2,7 +2,7 @@
 //  LCCKVCardMessageCell.m
 //  ChatKit-OC
 //
-//  v0.6.1 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/8/10.
+//  v0.6.2 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/8/10.
 //  Copyright © 2016年 LeanCloud. All rights reserved.
 //
 
@@ -20,10 +20,10 @@
 @property (nonatomic, weak) LCCKVCardView *vCardView;
 @end
 
-static CGFloat LCCK_MSG_SPACE_TOP = 16;
-static CGFloat LCCK_MSG_SPACE_BTM = 16;
-static CGFloat LCCK_MSG_SPACE_LEFT = 50;
-static CGFloat LCCK_MSG_SPACE_RIGHT = 50;
+static CGFloat LCCK_MSG_SPACE_TOP = 10;
+static CGFloat LCCK_MSG_SPACE_BTM = 10;
+static CGFloat LCCK_MSG_SPACE_LEFT = 20;
+static CGFloat LCCK_MSG_SPACE_RIGHT = 20;
 
 @implementation LCCKVCardMessageCell
 

@@ -2,7 +2,7 @@
 //  LCCKConversationViewModel.m
 //  LCCKChatExample
 //
-//  v0.6.1 Created by ElonChan (微信向我报BUG:chenyilong1010) ( https://github.com/leancloud/ChatKit-OC ) on 15/11/18.
+//  v0.6.2 Created by ElonChan (微信向我报BUG:chenyilong1010) ( https://github.com/leancloud/ChatKit-OC ) on 15/11/18.
 //  Copyright © 2015年 https://LeanCloud.cn . All rights reserved.
 //
 #if __has_include(<ChatKit/LCChatKit.h>)
@@ -511,7 +511,7 @@ fromTimestamp     |    toDate   |                |  上次上拉刷新顶端，�
 - (void)loadMessagesFirstTimeWithCallback:(LCCKIdBoolResultBlock)callback {
     AVIMConversation *conversation = [LCCKConversationService sharedInstance].currentConversation;
     BOOL socketOpened = [LCCKSessionService sharedInstance].connect;
-    [self queryAndCacheMessagesWithTimestamp:([[NSDate distantFuture] timeIntervalSince1970] * 1000) block:^(NSArray *avimTypedMessages, NSError *error) {
+    [self queryAndCacheMessagesWithTimestamp:0 block:^(NSArray *avimTypedMessages, NSError *error) {
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
             BOOL succeed = [self.parentConversationViewController filterAVIMError:error];
             if (succeed) {
@@ -539,8 +539,8 @@ fromTimestamp     |    toDate   |                |  上次上拉刷新顶端，�
     if (self.parentConversationViewController.loadingMoreMessage) {
         return;
     }
-    if (self.dataArray.count == 0 || !timestamp) {
-        timestamp = [[NSDate distantFuture] timeIntervalSince1970] * 1000;
+    if (self.dataArray.count == 0) {
+        timestamp = 0;
     }
     self.parentConversationViewController.loadingMoreMessage = YES;
     [[LCCKConversationService sharedInstance] queryTypedMessagesWithConversation:[LCCKConversationService sharedInstance].currentConversation

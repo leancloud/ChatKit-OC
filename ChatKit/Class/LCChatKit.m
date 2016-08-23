@@ -2,7 +2,7 @@
 //  LCChatKit.m
 //  LeanCloudChatKit-iOS
 //
-//  v0.6.1 Created by ElonChan (wechat:chenyilong1010) on 16/2/22.
+//  v0.6.2 Created by ElonChan (wechat:chenyilong1010) on 16/2/22.
 //  Copyright © 2016年 LeanCloud. All rights reserved.
 //
 
@@ -123,12 +123,20 @@
     [self.sessionService openWithClientId:clientId callback:callback];
 }
 
+- (void)openWithClientId:(NSString *)clientId force:(BOOL)force callback:(AVIMBooleanResultBlock)callback {
+    [self.sessionService openWithClientId:clientId force:force callback:callback];
+}
+
 - (void)closeWithCallback:(LCCKBooleanResultBlock)callback {
     [self.sessionService closeWithCallback:callback];
 }
 
 - (void)setForceReconnectSessionBlock:(LCCKForceReconnectSessionBlock)forceReconnectSessionBlock {
     [self.sessionService setForceReconnectSessionBlock:forceReconnectSessionBlock];
+}
+
+- (void)setDisableSingleSignOn:(BOOL)disableSingleSignOn {
+    self.sessionService.disableSingleSignOn = disableSingleSignOn;
 }
 
 #pragma mark - LCCKUserSystemService

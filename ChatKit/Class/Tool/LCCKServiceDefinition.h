@@ -2,7 +2,7 @@
 //  LCCKServiceDefinition.h
 //  LeanCloudChatKit-iOS
 //
-//  v0.6.1 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/2/22.
+//  v0.6.2 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/2/22.
 //  Copyright © 2016年 LeanCloud. All rights reserved.
 //  All the Typedefine for all kinds of services.
 
@@ -28,10 +28,15 @@
 
 typedef void (^LCCKReconnectSessionCompletionHandler)(BOOL succeeded, NSError *error);
 
-typedef void (^LCCKForceReconnectSessionBlock)(__kindof UIViewController *viewController, LCCKReconnectSessionCompletionHandler completionHandler);
+/*!
+ * @param granted granted fore single signOn
+ * 默认允许重连，error的code为4111时，需要额外请求权限，才可标记为YES。
+ */
+typedef void (^LCCKForceReconnectSessionBlock)(NSError *error, BOOL granted, __kindof UIViewController *viewController, LCCKReconnectSessionCompletionHandler completionHandler);
 
 @property (nonatomic, copy, readonly) NSString *clientId;
 @property (nonatomic, strong, readonly) AVIMClient *client;
+@property (nonatomic, assign) BOOL disableSingleSignOn;
 @property (nonatomic, copy, readonly) LCCKForceReconnectSessionBlock forceReconnectSessionBlock;
 
 /*!
@@ -40,6 +45,10 @@ typedef void (^LCCKForceReconnectSessionBlock)(__kindof UIViewController *viewCo
  */
 - (void)openWithClientId:(NSString *)clientId callback:(LCCKBooleanResultBlock)callback;
 
+/*!
+ * @param force Just for Single Sign On
+ */
+- (void)openWithClientId:(NSString *)clientId force:(BOOL)force callback:(AVIMBooleanResultBlock)callback;
 /*!
  * @brief Close the client
  * @param callback Callback
