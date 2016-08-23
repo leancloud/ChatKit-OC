@@ -54,7 +54,7 @@
 
 - (id)lcck_messageAtIndex:(NSUInteger)index {
     BOOL valid = (index < self.count);
-    if (index < self.count) {
+    if (valid) {
         return self[index];
     }
     NSLog(@" `self.avimTypedMessage` in `-loadOldMessages` has no object");

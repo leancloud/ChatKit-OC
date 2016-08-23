@@ -381,7 +381,6 @@ NSString *const LCCKSessionServiceErrorDomain = @"LCCKSessionServiceErrorDomain"
         const char *queueName = [[NSString stringWithFormat:@"%@.%@.ForBarrier",queueBaseLabel, [[NSUUID UUID] UUIDString]] UTF8String];
         dispatch_queue_t queue = dispatch_queue_create(queueName, DISPATCH_QUEUE_CONCURRENT);
         
-        NSUInteger messagesCount = messages.count;
         [messages enumerateObjectsUsingBlock:^(AVIMTextMessage * _Nonnull message, NSUInteger idx, BOOL * _Nonnull stop) {
             if (![message isKindOfClass:[AVIMTextMessage class]]) {
                 return;

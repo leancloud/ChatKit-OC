@@ -32,7 +32,7 @@
     [self lcck_setObject:@(conversationType) forKey:LCCKCustomMessageConversationTypeKey];
     [self lcck_setObject:clientId forKey:@"clientId"];
     //定向群消息，仅部分用户可见，需要实现 `-setFilterMessagesBlock:`, 详情见 LCChatKitExample 中的演示
-    //[self lcck_setObject:@[ @"Tom", @"Jerry" ] forKey:LCCKCustomMessageOnlyVisiableForPartClientIds];
+//    [self lcck_setObject:@[ @"Tom", @"Jerry"] forKey:LCCKCustomMessageOnlyVisiableForPartClientIds];
     return self;
 }
 

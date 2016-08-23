@@ -401,6 +401,10 @@ static NSString *const LCCKAPPKEY = @"ye24iIK6ys8IvaISMC4Bs5WK";
 //        //群聊
 //        NSMutableArray *filterMessages = [NSMutableArray arrayWithCapacity:messages.count];
 //        for (AVIMTypedMessage *typedMessage in messages) {
+//            if ([typedMessage.clientId isEqualToString:[LCChatKit sharedInstance].clientId]) {
+//                [filterMessages addObject:typedMessage];
+//                continue;
+//            }
 //            NSArray *visiableForPartClientIds = [typedMessage.attributes valueForKey:LCCKCustomMessageOnlyVisiableForPartClientIds];
 //            if (!visiableForPartClientIds) {
 //                [filterMessages addObject:typedMessage];
@@ -408,12 +412,15 @@ static NSString *const LCCKAPPKEY = @"ye24iIK6ys8IvaISMC4Bs5WK";
 //                BOOL visiableForCurrentClientId = [visiableForPartClientIds containsObject:[LCChatKit sharedInstance].clientId];
 //                if (visiableForCurrentClientId) {
 //                    [filterMessages addObject:typedMessage];
+//                } else {
+//                    typedMessage.text = @"这是群定向消息，仅部分群成员可见";
+//                    typedMessage.mediaType = kAVIMMessageMediaTypeText;
+//                    [filterMessages addObject:typedMessage];
 //                }
 //            }
 //        }
 //        completionHandler([filterMessages copy] ,nil);
 //    }];
-    
 }
 
 + (void)tryPresentViewControllerViewController:(UIViewController *)viewController {

@@ -52,7 +52,6 @@ NSString *const LCCKUserSystemServiceErrorDomain = @"LCCKUserSystemServiceErrorD
         });
         return;
     }
-    NSMutableArray *usersMutableArray = [NSMutableArray arrayWithCapacity:userIds.count];
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
         if (!_fetchProfilesBlock) {
             // This enforces implementing `-setFetchProfilesBlock:`.
