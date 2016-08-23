@@ -20,7 +20,6 @@ typedef void(^LCCKPrepareConversationsWhenLoadBlock)(NSArray<AVIMConversation *>
 @property (nonatomic, copy, readonly) LCCKPrepareConversationsWhenLoadBlock prepareConversationsWhenLoadBlock;
 - (void)setPrepareConversationsWhenLoadBlock:(LCCKPrepareConversationsWhenLoadBlock)prepareConversationsWhenLoadBlock;
 
-- (void)fetchConversationsWithConversationIds:(NSSet *)conversationIds callback:(LCCKArrayResultBlock)callback;
 - (void)findRecentConversationsWithBlock:(LCCKRecentConversationsCallback)block;
 
 /**

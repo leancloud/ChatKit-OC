@@ -13,7 +13,7 @@
 #import "LCCKUserSystemService.h"
 #import "LCCKConversationListViewController.h"
 #import "LCCKConstants.h"
-#import "AVIMConversation+LCCKAddition.h"
+#import "AVIMConversation+LCCKExtension.h"
 #import "LCCKLastMessageTypeManager.h"
 #import "NSDate+LCCKDateTools.h"
 #import "LCCKConversationListService.h"
@@ -96,8 +96,11 @@
     if (conversation.lcck_type == LCCKConversationTypeSingle) {
         [cell.avatarImageView sd_setImageWithURL:avatarURL placeholderImage:[self imageInBundleForImageName:@"Placeholder_Avatar" ]];
     } else {
-        [cell.avatarImageView setImage:[self imageInBundleForImageName:@"Placeholder_Group"]];
+        NSString *conversationGroupAvatarURLKey = [conversation.attributes valueForKey:LCCKConversationGroupAvatarURLKey];
+        NSURL *conversationGroupAvatarURL = [NSURL URLWithString:conversationGroupAvatarURLKey];
+        [cell.avatarImageView sd_setImageWithURL:conversationGroupAvatarURL placeholderImage:[self imageInBundleForImageName:@"Placeholder_Group" ]];
     }
+    
     cell.nameLabel.text = conversation.lcck_displayName;
     if (conversation.lcck_lastMessage) {
         cell.messageTextLabel.attributedText = [LCCKLastMessageTypeManager attributedStringWithMessage:conversation.lcck_lastMessage conversation:conversation userName:displayName];

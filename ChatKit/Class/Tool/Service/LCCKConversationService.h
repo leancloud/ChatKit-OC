@@ -49,6 +49,7 @@ FOUNDATION_EXTERN NSString *const LCCKConversationServiceErrorDomain;
  *  @param callback
  */
 - (void)fecthConversationWithConversationId:(NSString *)conversationId callback:(LCCKConversationResultBlock)callback;
+- (void)fetchConversationsWithConversationIds:(NSSet *)conversationIds callback:(LCCKArrayResultBlock)callback;
 
 /*!
  *  根据 peerId 获取对话,

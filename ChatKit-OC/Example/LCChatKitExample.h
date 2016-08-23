@@ -84,4 +84,6 @@
 
 + (void)signOutFromViewController:(UIViewController *)viewController;
 
++ (void)exampleChangeGroupAvatarURLsForConversationId:(NSString *)conversationId;
+
 @end

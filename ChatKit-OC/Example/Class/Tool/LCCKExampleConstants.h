@@ -55,6 +55,20 @@
     __LCCKContactsOfDevelopers,  \
 ]
 
+#define LCCKTestConversationGroupAvatarURLs                      \
+    @[                                                           \
+      @"http://www.avatarsdb.com/avatars/mickey.jpg",            \
+      @"http://www.avatarsdb.com/avatars/mickey_mouse.jpg",      \
+      @"http://www.avatarsdb.com/avatars/all_together.jpg",      \
+      @"http://www.avatarsdb.com/avatars/baby_disney.jpg",       \
+      @"http://www.avatarsdb.com/avatars/donald_duck01.jpg",     \
+      @"http://www.avatarsdb.com/avatars/Blue_Team_Disney.jpg",  \
+      @"http://www.avatarsdb.com/avatars/mickey_mouse_smile.jpg",\
+      @"http://www.avatarsdb.com/avatars/baby_pluto_dog.jpg",    \
+      @"http://www.avatarsdb.com/avatars/donald_duck_angry.jpg", \
+      @"http://www.avatarsdb.com/avatars/mickey_mouse_colors.jpg"\
+]
+
 #pragma mark - UI opera
 ///=============================================================================
 /// @name UI opera

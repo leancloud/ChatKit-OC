@@ -45,7 +45,7 @@ typedef void(^LCCKViewDidReceiveMemoryWarningBlock)(LCCKBaseViewController *view
 
 @end
 
-typedef void(^LCCKBarButtonItemActionBlock)(void);
+typedef void(^LCCKBarButtonItemActionBlock)(UIBarButtonItem *sender, UIEvent *event);
 
 typedef NS_ENUM(NSInteger, LCCKBarButtonItemStyle) {
     LCCKBarButtonItemStyleSetting = 0,

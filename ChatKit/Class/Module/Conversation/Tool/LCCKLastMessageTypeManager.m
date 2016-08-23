@@ -10,7 +10,7 @@
 #import <AVOSCloudIM/AVIMTypedMessage.h>
 #import <AVOSCloudIM/AVOSCloudIM.h>
 #import "LCCKUserSystemService.h"
-#import "AVIMConversation+LCCKAddition.h"
+#import "AVIMConversation+LCCKExtension.h"
 #import "NSObject+LCCKExtension.h"
 
 static NSMutableDictionary *attributedStringCache = nil;

@@ -1,5 +1,5 @@
 //
-//  AVIMConversation+LCCKAddition.h
+//  AVIMConversation+LCCKExtension.h
 //  LeanCloudChatKit-iOS
 //
 //  v0.6.2 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/3/11.
@@ -10,7 +10,7 @@
 #import "LCCKConstants.h"
 #import "LCCKConstants.h"
 
-@interface AVIMConversation (LCCKAddition)
+@interface AVIMConversation (LCCKExtension)
 
 /**
  *  最后一条消息。通过 SDK 的消息缓存找到的
@@ -59,5 +59,9 @@
  *  对话的标题。如 兴趣群(30)
  */
 - (NSString *)lcck_title;
+
+- (void)lcck_setObject:(id)object forKey:(NSString *)key callback:(LCCKBooleanResultBlock)callback;
+
+- (void)lcck_removeObjectForKey:(NSString *)key callback:(LCCKBooleanResultBlock)callback;
 
 @end

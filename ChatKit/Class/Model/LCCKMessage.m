@@ -15,7 +15,7 @@
 #else
 #import "AVIMTypedMessage.h"
 #endif
-#import "AVIMConversation+LCCKAddition.h"
+#import "AVIMConversation+LCCKExtension.h"
 #import "UIImage+LCCKExtension.h"
 //#define LCCKIsDebugging 1
 #import "NSObject+LCCKExtension.h"

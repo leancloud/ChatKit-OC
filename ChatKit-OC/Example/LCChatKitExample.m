@@ -210,13 +210,13 @@ static NSString *const LCCKAPPKEY = @"ye24iIK6ys8IvaISMC4Bs5WK";
         }
         [[self class] lcck_showText:@"加载历史记录..." toView:aConversationController.view];
         if (conversation.members.count > 2) {
-            [aConversationController configureBarButtonItemStyle:LCCKBarButtonItemStyleGroupProfile action:^{
+            [aConversationController configureBarButtonItemStyle:LCCKBarButtonItemStyleGroupProfile action:^(UIBarButtonItem *sender, UIEvent *event) {
                 NSString *title = @"打开群聊详情";
                 NSString *subTitle = [NSString stringWithFormat:@"群聊id：%@", conversation.conversationId];
                 [LCCKUtil showNotificationWithTitle:title subtitle:subTitle type:LCCKMessageNotificationTypeMessage];
             }];
         } else {
-            [aConversationController configureBarButtonItemStyle:LCCKBarButtonItemStyleSingleProfile action:^{
+            [aConversationController configureBarButtonItemStyle:LCCKBarButtonItemStyleSingleProfile action:^(UIBarButtonItem *sender, UIEvent *event) {
                 NSString *title = @"打开用户详情";
                 NSArray *members = conversation.members;
                 NSPredicate *predicate = [NSPredicate predicateWithFormat:@"NOT (SELF IN %@)", @[ [LCChatKit sharedInstance].clientId ]];
@@ -486,7 +486,17 @@ typedef void (^UITableViewRowActionHandler)(UITableViewRowAction *action, NSInde
                                                                               handler:^(UITableViewRowAction *action, NSIndexPath *indexPath) {
                                                                                   [[LCChatKit sharedInstance] deleteRecentConversationWithConversationId:conversation.conversationId];
                                                                               }];
-    return @[ actionItemDelete, actionItemMore ];
+    
+    UITableViewRowAction *actionItemChangeGroupAvatar = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleDefault
+                                                                                title:@"改群头像"
+                                                                              handler:^(UITableViewRowAction *action, NSIndexPath *indexPath) {
+                                                                                  [[self class] exampleChangeGroupAvatarURLsForConversationId:conversation.conversationId shouldInsert:NO];
+                                                                              }];
+    actionItemChangeGroupAvatar.backgroundColor = [UIColor colorWithRed:251/255.f green:186/255.f blue:11/255.f alpha:1.0];
+    if (conversation.lcck_type == LCCKConversationTypeSingle) {
+        return @[ actionItemDelete, actionItemMore ];
+    }
+    return @[ actionItemDelete, actionItemMore, actionItemChangeGroupAvatar];
 }
 
 #pragma -
@@ -665,6 +675,27 @@ void dispatch_async_limit(dispatch_queue_t queue, NSUInteger limitSemaphoreCount
     [conversationViewController presentViewController:navigationViewController animated:YES completion:nil];
 }
 
++ (void)exampleChangeGroupAvatarURLsForConversationId:(NSString *)conversationId {
+    [self exampleChangeGroupAvatarURLsForConversationId:conversationId shouldInsert:YES];
+}
+
++ (void)exampleChangeGroupAvatarURLsForConversationId:(NSString *)conversationId shouldInsert:(BOOL)shouldInsert {
+    [self lcck_showText:@"正在设置群头像"];
+    [[LCCKConversationService sharedInstance] fecthConversationWithConversationId:conversationId callback:^(AVIMConversation *conversation, NSError *error) {
+        [conversation lcck_setObject:LCCKTestConversationGroupAvatarURLs[arc4random_uniform((int)LCCKTestConversationGroupAvatarURLs.count - 1)] forKey:LCCKConversationGroupAvatarURLKey callback:^(BOOL succeeded, NSError *error) {
+            [self lcck_hideHUD];
+            if (succeeded) {
+                [self lcck_showSuccess:@"设置群头像成功"];
+                if (shouldInsert) {
+                    [[LCCKConversationService sharedInstance] insertRecentConversation:conversation];
+                }
+                [[NSNotificationCenter defaultCenter] postNotificationName:LCCKNotificationConversationListDataSourceUpdated object:self];
+            } else {
+                [self lcck_showError:@"设置群头像失败"];
+            }
+        }];
+    }];
+}
 - (void)examplePreviewImageMessageWithInitialIndex:(NSUInteger)index allVisibleImages:(NSArray *)allVisibleImages allVisibleThumbs:(NSArray *)allVisibleThumbs {
     // Browser
     NSMutableArray *photos = [[NSMutableArray alloc] initWithCapacity:[allVisibleImages count]];

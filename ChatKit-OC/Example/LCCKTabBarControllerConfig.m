@@ -10,11 +10,14 @@
 #import <AVOSCloud/AVOSCloud.h>
 #import "LCChatKitExample.h"
 #import "LCCKContactManager.h"
+#import "NSObject+LCCKHUD.h"
+#import "FTPopOverMenu.h"
+#import "LCCKExampleConstants.h"
 
 #if __has_include(<ChatKit/LCChatKit.h>)
-    #import <ChatKit/LCChatKit.h>
+#import <ChatKit/LCChatKit.h>
 #else
-    #import "LCChatKit.h"
+#import "LCChatKit.h"
 #endif
 
 @interface LCCKTabBarControllerConfig ()
@@ -51,14 +54,9 @@
     LCCKConversationListViewController *firstViewController = [[LCCKConversationListViewController alloc] init];
     UINavigationController *firstNavigationController = [[LCCKBaseNavigationController alloc]
                                                          initWithRootViewController:firstViewController];
-    firstViewController.navigationItem.rightBarButtonItem = ({
-        UIButton *createGroupConversationButton = [UIButton buttonWithType:UIButtonTypeContactAdd];
-        [createGroupConversationButton addTarget:self action:@selector(createGroupConversation:) forControlEvents:UIControlEventTouchUpInside];
-        UIBarButtonItem *rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:createGroupConversationButton];
-        rightBarButtonItem;
-    }
-                                                             );
-    
+    [firstViewController configureBarButtonItemStyle:LCCKBarButtonItemStyleAdd action:^(UIBarButtonItem *sender, UIEvent *event) {
+        [self showPopOverMenu:sender event:event];
+    }];
     self.firstViewController = firstViewController;
     NSArray *users = [[LCChatKit sharedInstance] getCachedProfilesIfExists:self.allPersonIds shouldSameCount:YES error:nil];
     NSString *currentClientID = [[LCChatKit sharedInstance] clientId];
@@ -78,8 +76,8 @@
                                                                                              target:self
                                                                                              action:@selector(signOut)];
     secondViewController.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"添加好友"
-                                                                                              style:UIBarButtonItemStylePlain
-                                                                                             target:self
+                                                                                             style:UIBarButtonItemStylePlain
+                                                                                            target:self
                                                                                             action:@selector(addFriend)];
     NSArray *viewControllers = @[
                                  firstNavigationController,
@@ -90,12 +88,12 @@
 
 - (NSArray *)tabBarItemsAttributesForController {
     NSDictionary *dict1 = @{
-                         // CYLTabBarItemTitle : @"消息",
+                            // CYLTabBarItemTitle : @"消息",
                             CYLTabBarItemImage : @"tabbar_chat_normal",
                             CYLTabBarItemSelectedImage : @"tabbar_chat_active",
                             };
     NSDictionary *dict2 = @{
-                         // CYLTabBarItemTitle : @"联系人",
+                            // CYLTabBarItemTitle : @"联系人",
                             CYLTabBarItemImage : @"tabbar_contacts_normal",
                             CYLTabBarItemSelectedImage : @"tabbar_contacts_active",
                             };
@@ -218,8 +216,25 @@
     self.secondViewController.userIds = [addedUserIds copy];
 }
 
+- (void)showPopOverMenu:(UIBarButtonItem *)sender event:(UIEvent *)event {
+    [FTPopOverMenu showFromEvent:event
+                        withMenu:@[ @"创建群聊", @"修改群头像" ]
+                       doneBlock:^(NSInteger selectedIndex) {
+                           if (selectedIndex == 0) {
+                               [self createGroupConversation:sender];
+                           } else if (selectedIndex == 1) {
+                               [self changeGroupAvatar];
+                           }
+                       } dismissBlock:^{
+                           
+                       }];
+}
 - (void)signOut {
     [LCChatKitExample signOutFromViewController:self.secondViewController];
+}
+
+- (void)changeGroupAvatar {
+    [LCChatKitExample exampleChangeGroupAvatarURLsForConversationId:@"570da6a9daeb3a63ca5b07b0"];
 }
 
 @end

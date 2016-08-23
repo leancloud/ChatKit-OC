@@ -29,7 +29,7 @@
 #import "LCCKCellIdentifierFactory.h"
 
 #import "LCCKMessage.h"
-#import "AVIMConversation+LCCKAddition.h"
+#import "AVIMConversation+LCCKExtension.h"
 #import <AVOSCloudIM/AVIMLocationMessage.h>
 #import "LCCKConversationViewController.h"
 #import "LCCKUserSystemService.h"

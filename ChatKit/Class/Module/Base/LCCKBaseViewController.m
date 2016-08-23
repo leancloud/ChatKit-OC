@@ -63,9 +63,9 @@
     _didReceiveMemoryWarningBlock = didReceiveMemoryWarningBlock;
 }
 
-- (void)clickedBarButtonItemAction {
+- (void)clickedBarButtonItemAction:(UIBarButtonItem *)sender event:(UIEvent *)event {
     if (self.barButtonItemAction) {
-        self.barButtonItemAction();
+        self.barButtonItemAction(sender, event);
     }
 }
 
@@ -99,7 +99,7 @@
             icon = @"barbuttonicon_Operate";
             break;
     }
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage lcck_imageNamed:icon bundleName:@"BarButtonIcon" bundleForClass:[self class]] style:UIBarButtonItemStylePlain target:self action:@selector(clickedBarButtonItemAction)];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage lcck_imageNamed:icon bundleName:@"BarButtonIcon" bundleForClass:[self class]] style:UIBarButtonItemStylePlain target:self action:@selector(clickedBarButtonItemAction:event:)];
     self.barButtonItemAction = action;
 }
 

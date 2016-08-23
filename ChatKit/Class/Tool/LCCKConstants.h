@@ -226,7 +226,7 @@ static NSString *const LCCKCustomMessageOnlyVisiableForPartClientIds = @"OnlyVis
  */
 static NSString *const LCCKCustomMessageConversationTypeKey = @"conversationType";
 
-static NSString *const LCCKConversationGroupAvatarURLKey = @"LCCKConversationGroupAvatarURLKey";
+static NSString *const LCCKConversationGroupAvatarURLKey = @"groupAvatarURL";
 
 #pragma mark - Custom Message Cell
 ///=============================================================================
