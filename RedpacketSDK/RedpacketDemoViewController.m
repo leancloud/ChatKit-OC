@@ -75,7 +75,12 @@
         [self.redpacketControl presentRedPacketMoreViewControllerWithGroupMembers:@[]];
     }
 }
-
+- (NSString*)clientId{
+    NSString * clientID = @"";
+    clientID = self.peerId?self.peerId:@"";
+    clientID = self.conversationId?self.conversationId:@"";
+    return clientID;
+}
 - (LCCKConversationViewModel *)chatViewModel {
     if (_chatViewModel == nil) {
         LCCKConversationViewModel *chatViewModel = [[LCCKConversationViewModel alloc] initWithParentViewController:self];
@@ -99,33 +104,26 @@
 // 发送融云红包消息
 - (void)sendRedpacketMessage:(RedpacketMessageModel *)redpacket
 {
-    AVIMTypedMessageRedPacket * message = [AVIMTypedMessageRedPacket messageWithText:@"这是一个红包消息" file:nil attributes:redpacket.redpacketMessageModelToDic];
+    AVIMTypedMessageRedPacket * message = [[AVIMTypedMessageRedPacket alloc]initWithClientId:self.clientId ConversationType:LCCKConversationTypeSingle];
     [self.chatViewModel sendCustomMessage:message];
 }
 
 // 红包被抢消息处理
 - (void)onRedpacketTakenMessage:(RedpacketMessageModel *)redpacket
 {
-//    RedpacketTakenMessage *message = [RedpacketTakenMessage messageWithRedpacket:redpacket];
-    // 抢自己的红包不发消息，只自己显示抢红包消息
+
     if ([redpacket.currentUser.userId isEqualToString:redpacket.redpacketSender.userId]) {//如果发送者是自己
         [self.chatViewModel sendLocalFeedbackTextMessge:@"您给自己发了一个红包"];
     }
     else {
         if (NO == self.redpacketControl.converstationInfo.isGroup) {//如果不是群红包
-//            [self sendMessage:message pushContent:nil];
+            NSString * receiveString = [NSString stringWithFormat:@"%@抢了你的红包",redpacket.currentUser.userNickname];
+            AVIMTypedMessageRedPacketTaken * message = [AVIMTypedMessageRedPacketTaken messageWithText:receiveString file:nil attributes:redpacket.redpacketMessageModelToDic ];
+            [self.chatViewModel sendCustomMessage:message];
             
         }else {
-//            RCMessage *m = [[RCIMClient sharedRCIMClient] insertMessage:self.conversationType
-//                                                               targetId:self.targetId
-//                                                           senderUserId:self.conversation.senderUserId
-//                                                             sendStatus:SentStatus_SENT
-//                                                                content:message];
-//            [self appendAndDisplayMessage:m];
-//            
-//            // 按照 android 的需求修改发送红包的功能
-//            RedpacketTakenOutgoingMessage *m2 = [RedpacketTakenOutgoingMessage messageWithRedpacket:redpacket];
-//            [self sendMessage:m2 pushContent:nil];
+            AVIMTypedMessageRedPacketTaken * message = [[AVIMTypedMessageRedPacketTaken alloc]initWithClientId:self.clientId ConversationType:LCCKConversationTypeSingle receiveMembers:@[redpacket.redpacketSender.userId]];
+            [self.chatViewModel sendCustomMessage:message];
         }
     }
 }
