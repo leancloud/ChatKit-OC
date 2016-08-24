@@ -13,6 +13,8 @@
 @property (nonatomic, weak) UILabel *systemMessageLabel;
 @property (nonatomic, strong) UIView *systemmessageContentView;
 @property (nonatomic, strong, readonly) NSDictionary *systemMessageStyle;
+@property (nonatomic, strong) UIColor *conversationViewTimeLineTextColor;
+@property (nonatomic, strong) UIColor *conversationViewTimeLineBackgroundColor;
 
 @end
 
@@ -54,14 +56,14 @@
 - (UIView *)systemmessageContentView {
     if (!_systemmessageContentView) {
         _systemmessageContentView = [[UIView alloc] init];
-        _systemmessageContentView.backgroundColor = [UIColor lightGrayColor];
+        _systemmessageContentView.backgroundColor = self.conversationViewTimeLineBackgroundColor ?: [UIColor lightGrayColor];
         _systemmessageContentView.alpha = .8f;
         _systemmessageContentView.layer.cornerRadius = 6.0f;
         _systemmessageContentView.translatesAutoresizingMaskIntoConstraints = NO;
 
         UILabel *systemMessageLabel = [[UILabel alloc] init];
         systemMessageLabel.numberOfLines = 0;
-        
+        systemMessageLabel.textColor = self.conversationViewTimeLineTextColor;
         [_systemmessageContentView addSubview:self.systemMessageLabel = systemMessageLabel];
         [systemMessageLabel mas_makeConstraints:^(MASConstraintMaker *make) {
             CGFloat offsetTopBottom = 0.5;//8
@@ -99,6 +101,22 @@
 
 + (AVIMMessageMediaType)classMediaType {
     return kAVIMMessageMediaTypeSystem;
+}
+
+- (UIColor *)conversationViewTimeLineTextColor {
+    if (_conversationViewTimeLineTextColor) {
+        return _conversationViewTimeLineTextColor;
+    }
+    _conversationViewTimeLineTextColor = [[LCCKSettingService sharedInstance] defaultThemeColorForKey:@"ConversationView-TimeLine-TextColor"];
+    return _conversationViewTimeLineTextColor;
+}
+
+- (UIColor *)conversationViewTimeLineBackgroundColor {
+    if (_conversationViewTimeLineBackgroundColor) {
+        return _conversationViewTimeLineBackgroundColor;
+    }
+    _conversationViewTimeLineBackgroundColor = [[LCCKSettingService sharedInstance] defaultThemeColorForKey:@"ConversationView-TimeLine-BackgroundColor"];
+    return _conversationViewTimeLineBackgroundColor;
 }
 
 @end

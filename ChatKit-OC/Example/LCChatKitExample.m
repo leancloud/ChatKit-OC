@@ -208,7 +208,7 @@ static NSString *const LCCKAPPKEY = @"ye24iIK6ys8IvaISMC4Bs5WK";
         if (!conversation.createAt) {
             return;
         }
-        [[self class] lcck_showText:@"加载历史记录..." toView:aConversationController.view];
+        [[self class] lcck_showMessage:@"加载历史记录..." toView:aConversationController.view];
         if (conversation.members.count > 2) {
             [aConversationController configureBarButtonItemStyle:LCCKBarButtonItemStyleGroupProfile action:^(UIBarButtonItem *sender, UIEvent *event) {
                 NSString *title = @"打开群聊详情";
@@ -293,7 +293,7 @@ static NSString *const LCCKAPPKEY = @"ye24iIK6ys8IvaISMC4Bs5WK";
     [[LCChatKit sharedInstance] setHUDActionBlock:^(UIViewController *viewController, UIView *view, NSString *title, LCCKMessageHUDActionType type) {
         switch (type) {
             case LCCKMessageHUDActionTypeShow:
-                [[self class] lcck_showText:title toView:view];
+                [[self class] lcck_showMessage:title toView:view];
                 break;
                 
             case LCCKMessageHUDActionTypeHide:
@@ -354,7 +354,7 @@ static NSString *const LCCKAPPKEY = @"ye24iIK6ys8IvaISMC4Bs5WK";
                 force = YES;
                 title = @"正在强制登录...";
             }
-            [[self class] lcck_showText:title toView:viewController.view];
+            [[self class] lcck_showMessage:title toView:viewController.view];
             [[LCChatKit sharedInstance] openWithClientId:[LCChatKit sharedInstance].clientId force:force callback:^(BOOL succeeded, NSError *error) {
                 [[self class] lcck_hideHUDForView:viewController.view];
                 !completionHandler ?: completionHandler(succeeded, error);
@@ -533,7 +533,7 @@ typedef void (^UITableViewRowActionHandler)(UITableViewRowAction *action, NSInde
         if (!peerIds || peerIds.count == 0) {
             return;
         }
-        [self lcck_showText:@"创建群聊..." toView:fromViewController.view];
+        [self lcck_showMessage:@"创建群聊..." toView:fromViewController.view];
         [[LCChatKit sharedInstance] createConversationWithMembers:peerIds type:LCCKConversationTypeGroup unique:YES callback:^(AVIMConversation *conversation, NSError *error) {
             [self lcck_hideHUDForView:fromViewController.view];
             if (conversation) {
@@ -615,7 +615,7 @@ void dispatch_async_limit(dispatch_queue_t queue, NSUInteger limitSemaphoreCount
 }
 
 - (void)transpondMessage:(LCCKMessage *)message toConversationViewController:(LCCKConversationViewController *)conversationViewController {
-    AVIMConversation *conversation = conversationViewController.conversation;
+    AVIMConversation *conversation = [conversationViewController getConversationIfExists];
     NSArray *allPersonIds;
     if (conversation.lcck_type == LCCKConversationTypeSingle) {
         //FIXME: add more to allPersonIds
@@ -651,7 +651,7 @@ void dispatch_async_limit(dispatch_queue_t queue, NSUInteger limitSemaphoreCount
         });
         dispatch_resume(_processingQueueSource);
         NSString *title = [NSString stringWithFormat:@"%@...",LCCKLocalizedStrings(@"transpond")];
-        [[self class] lcck_showText:title];
+        [[self class] lcck_showMessage:title];
         for (NSString *peerId in peerIds) {
             dispatch_async_limit(queue, 10, ^{
                 [[LCCKConversationService sharedInstance] fecthConversationWithPeerId:peerId callback:^(AVIMConversation *conversation, NSError *error) {
@@ -680,7 +680,7 @@ void dispatch_async_limit(dispatch_queue_t queue, NSUInteger limitSemaphoreCount
 }
 
 + (void)exampleChangeGroupAvatarURLsForConversationId:(NSString *)conversationId shouldInsert:(BOOL)shouldInsert {
-    [self lcck_showText:@"正在设置群头像"];
+    [self lcck_showMessage:@"正在设置群头像"];
     [[LCCKConversationService sharedInstance] fecthConversationWithConversationId:conversationId callback:^(AVIMConversation *conversation, NSError *error) {
         [conversation lcck_setObject:LCCKTestConversationGroupAvatarURLs[arc4random_uniform((int)LCCKTestConversationGroupAvatarURLs.count - 1)] forKey:LCCKConversationGroupAvatarURLKey callback:^(BOOL succeeded, NSError *error) {
             [self lcck_hideHUD];

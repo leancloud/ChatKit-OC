@@ -9,6 +9,9 @@
 #import "LCCKChatMoreView.h"
 #import "LCCKConstants.h"
 #import "LCCKInputViewPlugin.h"
+#import "LCCKSettingService.h"
+#import "NSString+LCCKExtension.h"
+
 #if __has_include(<Masonry/Masonry.h>)
 #import <Masonry/Masonry.h>
 #else
@@ -28,6 +31,7 @@
 
 @property (assign, nonatomic) CGSize itemSize;
 @property (nonatomic, copy) NSArray<Class> *sortedInputViewPluginArray;
+@property (nonatomic, strong) UIColor *messageInputViewMorePanelBackgroundColor;
 
 @end
 
@@ -169,6 +173,7 @@
         make.left.and.right.mas_equalTo(self);
         make.bottom.mas_equalTo(self).offset(-10);
     }];
+    self.backgroundColor = self.messageInputViewMorePanelBackgroundColor;
     [self reloadData];
 }
 
@@ -208,23 +213,6 @@
     }];
 }
 
-#pragma mark - Setters
-
-//- (void)setDataSource:(id<LCCKChatMoreViewDataSource>)dataSource {
-//    _dataSource = dataSource;
-//    [self reloadData];
-//}
-//
-//- (void)setEdgeInsets:(UIEdgeInsets)edgeInsets{
-//    _edgeInsets = edgeInsets;
-//    [self reloadData];
-//}
-//
-//- (void)setNumberPerLine:(NSUInteger)numberPerLine {
-//    _numberPerLine = numberPerLine;
-//    [self reloadData];
-//}
-
 #pragma mark - Getters
 
 - (UIScrollView *)scrollView {
@@ -247,6 +235,14 @@
         [self addSubview:(_pageControl = pageControl)];
     }
     return _pageControl;
+}
+
+- (UIColor *)messageInputViewMorePanelBackgroundColor {
+    if (_messageInputViewMorePanelBackgroundColor) {
+        return _messageInputViewMorePanelBackgroundColor;
+    }
+    _messageInputViewMorePanelBackgroundColor = [[LCCKSettingService sharedInstance] defaultThemeColorForKey:@"MessageInputView-MorePanel-BackgroundColor"];
+    return _messageInputViewMorePanelBackgroundColor;
 }
 
 @end

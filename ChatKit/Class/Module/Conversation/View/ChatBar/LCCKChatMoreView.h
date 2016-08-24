@@ -20,5 +20,4 @@ static CGFloat const kFunctionViewHeight = 210.0f;
 @property (assign, nonatomic) UIEdgeInsets edgeInsets;
 @property (weak, nonatomic) LCCKChatBar *inputViewRef;
 
-
 @end

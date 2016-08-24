@@ -27,8 +27,6 @@ FOUNDATION_EXTERN NSString *const LCCKConversationViewControllerErrorDomain;
  */
 @property (nonatomic, copy, readonly) NSString *peerId;
 
-@property (nonatomic, strong, readonly) AVIMConversation *conversation;
-
 #pragma mark - Initialize a unique single chat type object of LCCKConversationViewController
 ///=============================================================================
 /// @name Initialize a unique single chat type object of LCCKConversationViewController
@@ -65,6 +63,11 @@ FOUNDATION_EXTERN NSString *const LCCKConversationViewControllerErrorDomain;
 @property (nonatomic, assign, getter=isEnableAutoJoin) BOOL enableAutoJoin;
 
 @property (nonatomic, assign, getter=isAvailable, readonly) BOOL available;
+
+/*!
+ * If `isAvailable` is NO, it will return nil
+ */
+- (AVIMConversation *)getConversationIfExists;
 
 #pragma mark - send Message
 ///=============================================================================

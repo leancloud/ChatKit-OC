@@ -50,12 +50,11 @@ static CGFloat const LCCK_MSG_CELL_EDGES_TOP = LCCK_MSG_CELL_EDGES_OFFSET;
 static CGFloat const LCCK_MSG_CELL_NICKNAME_HEIGHT = 16;
 static CGFloat const LCCK_MSG_CELL_NICKNAME_FONT_SIZE = 12;
 
-#define LCCK_MSG_CELL_NICKNAME_COLOR [UIColor blackColor]
-
 @interface LCCKChatMessageCell ()<LCCKSendImageViewDelegate>
 
 @property (nonatomic, strong, readwrite) LCCKMessage *message;
 @property (nonatomic, assign, readwrite) AVIMMessageMediaType mediaType;
+@property (nonatomic, strong) UIColor *conversationViewSenderNameTextColor;
 
 @end
 
@@ -288,7 +287,7 @@ static CGFloat const LCCK_MSG_CELL_NICKNAME_FONT_SIZE = 12;
     }
     self.mediaType = [[self class] classMediaType];
     self.selectionStyle = UITableViewCellSelectionStyleNone;
-    self.backgroundColor = LCCK_CONVERSATIONVIEWCONTROLLER_BACKGROUNDCOLOR;
+    self.backgroundColor = [UIColor clearColor];;
 }
 
 #pragma mark - Public Methods
@@ -394,7 +393,7 @@ static CGFloat const LCCK_MSG_CELL_NICKNAME_FONT_SIZE = 12;
     if (!_nicknameLabel) {
         _nicknameLabel = [[UILabel alloc] init];
         _nicknameLabel.font = [UIFont systemFontOfSize:LCCK_MSG_CELL_NICKNAME_FONT_SIZE];
-        _nicknameLabel.textColor = LCCK_MSG_CELL_NICKNAME_COLOR;
+        _nicknameLabel.textColor = self.conversationViewSenderNameTextColor;
         _nicknameLabel.text = @"nickname";
         [_nicknameLabel sizeToFit];
     }
@@ -526,5 +525,12 @@ static CGFloat const LCCK_MSG_CELL_NICKNAME_FONT_SIZE = 12;
     }
 }
 
+- (UIColor *)conversationViewSenderNameTextColor {
+    if (_conversationViewSenderNameTextColor) {
+        return _conversationViewSenderNameTextColor;
+    }
+    _conversationViewSenderNameTextColor = [[LCCKSettingService sharedInstance] defaultThemeColorForKey:@"ConversationView-SenderName-TextColor"];
+    return _conversationViewSenderNameTextColor;
+}
 @end
 

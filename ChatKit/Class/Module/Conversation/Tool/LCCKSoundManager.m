@@ -9,8 +9,7 @@
 #import "LCCKSoundManager.h"
 #import <AudioToolbox/AudioToolbox.h>
 #import "NSBundle+LCCKExtension.h"
-
-#define STR_BY_SEL(sel) NSStringFromSelector(@selector(sel))
+#import "LCCKSettingService.h"
 
 @interface LCCKSoundManager ()
 
@@ -51,7 +50,7 @@
 - (void)createSoundWithURL:(NSURL *)URL soundId:(SystemSoundID *)soundId {
     OSStatus errorCode = AudioServicesCreateSystemSoundID((__bridge CFURLRef)(URL) , soundId);
     if (errorCode != 0) {
-        NSLog(@"create sound failed");
+        LCCKLog(@"create sound failed");
     }
 }
 
@@ -83,27 +82,25 @@
 
 - (void)setNeedPlaySoundWhenChatting:(BOOL)needPlaySoundWhenChatting {
     _needPlaySoundWhenChatting = needPlaySoundWhenChatting;
-    [[NSUserDefaults standardUserDefaults] setObject:@(self.needPlaySoundWhenChatting) forKey:STR_BY_SEL(needPlaySoundWhenChatting)];
+    [[NSUserDefaults standardUserDefaults] setObject:@(self.needPlaySoundWhenChatting) forKey:LCCK_STRING_BY_SEL(needPlaySoundWhenChatting)];
 }
 
 - (void)setNeedPlaySoundWhenNotChatting:(BOOL)needPlaySoundWhenNotChatting {
     _needPlaySoundWhenNotChatting = needPlaySoundWhenNotChatting;
-    [[NSUserDefaults standardUserDefaults] setObject:@(self.needPlaySoundWhenNotChatting) forKey:STR_BY_SEL(needPlaySoundWhenNotChatting)];
+    [[NSUserDefaults standardUserDefaults] setObject:@(self.needPlaySoundWhenNotChatting) forKey:LCCK_STRING_BY_SEL(needPlaySoundWhenNotChatting)];
 }
 
 - (void)setNeedVibrateWhenNotChatting:(BOOL)needVibrateWhenNotChatting {
     _needVibrateWhenNotChatting = needVibrateWhenNotChatting;
-    [[NSUserDefaults standardUserDefaults] setObject:@(self.needVibrateWhenNotChatting) forKey:STR_BY_SEL(needVibrateWhenNotChatting)];
+    [[NSUserDefaults standardUserDefaults] setObject:@(self.needVibrateWhenNotChatting) forKey:LCCK_STRING_BY_SEL(needVibrateWhenNotChatting)];
 }
 
 - (void)setDefaultSettings {
-    NSBundle *bundle = [NSBundle lcck_bundleForName:@"Other" class:[self class]];
-    NSString *defaultSettingsFile = [bundle pathForResource:@"LCChatKit-Settings" ofType:@"plist"];
-    NSDictionary *defaultSettings = [[NSDictionary alloc] initWithContentsOfFile:defaultSettingsFile];
+    NSDictionary *defaultSettings = [LCCKSettingService sharedInstance].defaultSettings;
     NSDictionary *conversationSettings = defaultSettings[@"Conversation"];
-    self.needPlaySoundWhenChatting =  [conversationSettings[STR_BY_SEL(needPlaySoundWhenChatting)] boolValue];
-    self.needPlaySoundWhenNotChatting  = [conversationSettings[STR_BY_SEL(needPlaySoundWhenNotChatting)] boolValue];
-    self.needVibrateWhenNotChatting = [conversationSettings[STR_BY_SEL(needVibrateWhenNotChatting)] boolValue];
+    self.needPlaySoundWhenChatting =  [conversationSettings[LCCK_STRING_BY_SEL(needPlaySoundWhenChatting)] boolValue];
+    self.needPlaySoundWhenNotChatting  = [conversationSettings[LCCK_STRING_BY_SEL(needPlaySoundWhenNotChatting)] boolValue];
+    self.needVibrateWhenNotChatting = [conversationSettings[LCCK_STRING_BY_SEL(needVibrateWhenNotChatting)] boolValue];
 }
 
 @end

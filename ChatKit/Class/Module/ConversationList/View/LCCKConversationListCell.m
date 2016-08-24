@@ -30,6 +30,13 @@ static CGFloat LCCKRemindMuteSize = 18;
 
 CGFloat const LCCKConversationListCellDefaultHeight = 61; //LCCKImageSize + LCCKVerticalSpacing * 2;
 
+@interface LCCKConversationListCell ()
+
+@property (nonatomic, strong) UIColor *conversationListUnreadBackgroundColor;
+@property (nonatomic, strong) UIColor *conversationListUnreadTextColor;
+
+@end
+
 @implementation LCCKConversationListCell
 
 + (instancetype)dequeueOrCreateCellByTableView :(UITableView *)tableView {
@@ -139,15 +146,32 @@ CGFloat const LCCKConversationListCellDefaultHeight = 61; //LCCKImageSize + LCCK
     return _remindMuteImageView;
 }
 
-
 - (LCCKBadgeView *)badgeView {
     if (_badgeView == nil) {
         LCCKBadgeView *badgeView = [[LCCKBadgeView alloc] initWithParentView:self.avatarImageView
                                                                alignment:LCCKBadgeViewAlignmentTopRight];
+        badgeView.badgeBackgroundColor = self.conversationListUnreadBackgroundColor;
+        badgeView.badgeTextColor = self.conversationListUnreadTextColor;
         [self.avatarImageView addSubview:(_badgeView = badgeView)];
         [self.avatarImageView bringSubviewToFront:_badgeView];
     }
     return _badgeView;
+}
+
+- (UIColor *)conversationListUnreadBackgroundColor {
+    if (_conversationListUnreadBackgroundColor) {
+        return _conversationListUnreadBackgroundColor;
+    }
+    _conversationListUnreadBackgroundColor = [[LCCKSettingService sharedInstance] defaultThemeColorForKey:@"ConversationList-UnreadBackground"];
+    return _conversationListUnreadBackgroundColor;
+}
+
+- (UIColor *)conversationListUnreadTextColor {
+    if (_conversationListUnreadTextColor) {
+        return _conversationListUnreadTextColor;
+    }
+    _conversationListUnreadTextColor = [[LCCKSettingService sharedInstance] defaultThemeColorForKey:@"ConversationList-UnreadText"];
+    return _conversationListUnreadTextColor;
 }
 
 - (void)prepareForReuse {
