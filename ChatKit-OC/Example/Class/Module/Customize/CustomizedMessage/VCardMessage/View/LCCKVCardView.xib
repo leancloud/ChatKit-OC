@@ -37,7 +37,7 @@
                             </subviews>
                         </stackView>
                     </subviews>
-                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     <constraints>
                         <constraint firstItem="8xW-Xa-XiZ" firstAttribute="top" secondItem="TPW-Xu-fMO" secondAttribute="top" id="34B-FE-yvw"/>
                         <constraint firstItem="8xW-Xa-XiZ" firstAttribute="leading" secondItem="TPW-Xu-fMO" secondAttribute="leading" id="8Ug-k6-jHC"/>

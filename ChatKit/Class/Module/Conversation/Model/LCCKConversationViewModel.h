@@ -61,5 +61,7 @@ typedef void (^LCCKSendMessageSuccessFailedBlock)(NSString *messageUUID, NSError
                              allVisibleThumbs:(NSArray **)allVisibleThumbs
                          selectedMessageIndex:(NSNumber **)selectedMessageIndex;
 - (void)resendMessageForMessageCell:(LCCKChatMessageCell *)messageCell;
+- (void)resetBackgroundImage;
+- (void)setDefaultBackgroundImage;
 
 @end

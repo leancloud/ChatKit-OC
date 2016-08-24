@@ -96,6 +96,13 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
     return self;
 }
 
+- (AVIMConversation *)getConversationIfExists {
+    if (_conversation) {
+        return _conversation;
+    }
+    return nil;
+}
+
 /**
  *  lazy load conversation
  *
@@ -202,8 +209,6 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
     self.tableView.dataSource = self.chatViewModel;
     self.chatBar.delegate = self;
     [LCCKAVAudioPlayer sharePlayer].delegate = self;
-    self.tableView.backgroundColor = LCCK_CONVERSATIONVIEWCONTROLLER_BACKGROUNDCOLOR;
-    self.view.backgroundColor = self.tableView.backgroundColor;
     [self.view addSubview:self.chatBar];
     [self.view addSubview:self.clientStatusView];
     [self updateStatusView];
@@ -211,6 +216,8 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
     [[LCCKUserSystemService sharedInstance] fetchCurrentUserInBackground:^(id<LCCKUserDelegate> user, NSError *error) {
         self.user = user;
     }];
+    [self.chatViewModel setDefaultBackgroundImage];
+    self.navigationItem.title = @"聊天";
     [self conversation];
     !self.viewDidLoadBlock ?: self.viewDidLoadBlock(self);
 }
@@ -462,7 +469,9 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
         }
     } while (NO);
     if (fetchConversationHandler) {
-        fetchConversationHandler(conversation, self);
+        dispatch_async(dispatch_get_main_queue(),^{
+            fetchConversationHandler(conversation, self);
+        });
     }
 }
 
@@ -480,7 +489,9 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
         }
     } while (NO);
     if (loadLatestMessagesHandler) {
-        loadLatestMessagesHandler(self, succeeded, error);
+        dispatch_async(dispatch_get_main_queue(),^{
+            loadLatestMessagesHandler(self, succeeded, error);
+        });
     }
 }
 
@@ -561,6 +572,7 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
             LCCKLog(@"🔴类名与方法名：%@（在第%@行），描述：%@", @(__PRETTY_FUNCTION__), @(__LINE__), @"imClient is nil");
         }
         self.conversationId = conversation.conversationId;
+        [self.chatViewModel resetBackgroundImage];
         [self setupNavigationItemTitleWithConversation:conversation];
         [[LCChatKit sharedInstance] getProfilesInBackgroundForUserIds:conversation.members callback:^(NSArray<id<LCCKUserDelegate>> *users, NSError *error) {
             [self fetchConversationHandler:conversation];

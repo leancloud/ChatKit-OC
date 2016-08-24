@@ -96,6 +96,15 @@ static NSString *const LCCKNotificationConnectivityUpdated = @"LCCKNotificationC
  * 会话失效，如当群被解散或当前用户不再属于该会话时，对应会话会失效应当被删除并且关闭聊天窗口
  */
 static NSString *const LCCKNotificationCurrentConversationInvalided = @"LCCKNotificationCurrentConversationInvalided";
+
+/**
+ * 对话聊天背景切换
+ */
+static NSString *const LCCKNotificationConversationViewControllerBackgroundImageDidChanged = @"LCCKNotificationConversationViewControllerBackgroundImageDidChanged";
+
+static NSString *const LCCKNotificationConversationViewControllerBackgroundImageDidChangedUserInfoConversationIdKey = @"LCCKNotificationConversationViewControllerBackgroundImageDidChangedUserInfoConversationIdKey";
+
+
 static NSString *const LCCKNotificationConversationInvalided = @"LCCKNotificationConversationInvalided";
 static NSString *const LCCKNotificationConversationListDataSourceUpdated = @"LCCKNotificationConversationListDataSourceUpdated";
 static NSString *const LCCKNotificationContactListDataSourceUpdated = @"LCCKNotificationContactListDataSourceUpdated";
@@ -128,21 +137,6 @@ typedef NS_ENUM(NSUInteger, LCCKMessageOwnerType){
     LCCKMessageOwnerTypeSelf /**< 自己发送的消息 */,
     LCCKMessageOwnerTypeOther /**< 接收到的他人消息 */,
 };
-
-//TODO: to delete
-/**
- *  消息类型
- */
-//typedef NS_ENUM(NSUInteger, LCCKMessageType){
-//    kAVIMMessageMediaTypeNone = 0, /**< 未知的消息类型 */
-//    kAVIMMessageMediaTypeText = -1, /**< 文本消息 */
-//    kAVIMMessageMediaTypeImage = -2, /**< 图片消息 */
-//    kAVIMMessageMediaTypeAudio = -3, /**< 语音消息 */
-//    kAVIMMessageMediaTypeVideo = -4, /**< 视频文件消息 */
-//    kAVIMMessageMediaTypeLocation = -5, /**< 地理位置消息 */
-//    LCCKMessageTypeFile = -6, /**< 文件消息 */
-//    kAVIMMessageMediaTypeSystem = -7 /**< 系统消息 */,
-//};
 
 static AVIMMessageMediaType const kAVIMMessageMediaTypeSystem = -7;
 
@@ -279,7 +273,9 @@ typedef NS_ENUM(NSUInteger, LCCKInputViewPluginType) {
 ///=============================================================================
 /// @name 自定义UI行为
 ///=============================================================================
-
+static NSString *const LCCKCustomConversationViewControllerBackgroundImageNamePrefix = @"CONVERSATION_BACKGROUND_";
+static NSString *const LCCKDefaultConversationViewControllerBackgroundImageName = @"CONVERSATION_BACKGROUND_ALL";
+    
 static CGFloat const LCCKAnimateDuration = .25f;
 
 #define LCCKMessageCellLimit ([UIApplication sharedApplication].keyWindow.frame.size.width/5*3)

@@ -40,7 +40,7 @@
         CGRect tableViewFrame = self.view.bounds;
         UITableView *tableView = [[UITableView alloc] initWithFrame:tableViewFrame style:self.tableViewStyle];
         tableView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-        tableView.backgroundColor = self.view.backgroundColor;
+        tableView.backgroundColor = [UIColor clearColor];
         tableView.contentInset = UIEdgeInsetsMake(0, 0, 0, 0);
         if (self.tableViewStyle == UITableViewStyleGrouped) {
             UIView *backgroundView = [[UIView alloc] initWithFrame:tableView.bounds];

@@ -8,10 +8,21 @@
 
 #import "LCCKSettingService.h"
 #import "AVOSCloudIM/AVIMVideoMessage.h"
+#import "NSBundle+LCCKExtension.h"
+#import "NSString+LCCKExtension.h"
+#import "UIImage+LCCKExtension.h"
+#import "LCCKConversationService.h"
 
 NSString *const LCCKSettingServiceErrorDomain = @"LCCKSettingServiceErrorDomain";
 
 static BOOL LCCKAllLogsEnabled;
+
+@interface LCCKSettingService ()
+
+@property (nonatomic, strong) NSDictionary *defaultSettings;
+@property (nonatomic, strong) NSDictionary *defaultTheme;
+
+@end
 
 @implementation LCCKSettingService
 @synthesize useDevPushCerticate = _useDevPushCerticate;
@@ -109,6 +120,52 @@ static BOOL LCCKAllLogsEnabled;
 - (void)setUseDevPushCerticate:(BOOL)useDevPushCerticate {
     _useDevPushCerticate = useDevPushCerticate;
     [AVPush setProductionMode:!_useDevPushCerticate];
+}
+
+- (NSDictionary *)defaultSettings {
+    if (_defaultSettings) {
+        return _defaultSettings;
+    }
+    NSBundle *bundle = [NSBundle lcck_bundleForName:@"Other" class:[self class]];
+    NSString *defaultSettingsFile = [bundle pathForResource:@"ChatKit-Settings" ofType:@"plist"];
+    NSDictionary *defaultSettings = [[NSDictionary alloc] initWithContentsOfFile:defaultSettingsFile];
+    _defaultSettings = defaultSettings;
+    return _defaultSettings;
+}
+
+- (NSDictionary *)defaultTheme {
+    if (_defaultTheme) {
+        return _defaultTheme;
+    }
+    NSBundle *bundle = [NSBundle lcck_bundleForName:@"Other" class:[self class]];
+    NSString *defaultThemeFile = [bundle pathForResource:@"ChatKit-Theme" ofType:@"plist"];
+    NSDictionary *defaultTheme = [[NSDictionary alloc] initWithContentsOfFile:defaultThemeFile];
+    _defaultTheme = defaultTheme;
+    return _defaultTheme;
+}
+
+- (UIColor *)defaultThemeColorForKey:(NSString *)key {
+    UIColor *defaultThemeColor = [self.defaultTheme[@"Colors"][key] lcck_hexStringToColor];
+    return defaultThemeColor;
+}
+
+- (void)setConversationViewControllerBackgroundImage:(UIImage *)image scaledToSize:(CGSize)scaledToSize {
+    image = [image lcck_scalingPatternImageToSize:scaledToSize];
+    NSData *imageData = (UIImagePNGRepresentation(image) ? UIImagePNGRepresentation(image) : UIImageJPEGRepresentation(image, 1));
+    NSString *imageName = [NSString stringWithFormat:@"%@.jpg", [[NSUUID UUID] UUIDString]];
+    NSString *imagePath = [imageName lcck_pathForConversationBackgroundImage];;
+    [[NSFileManager defaultManager] createFileAtPath:imagePath contents:imageData attributes:nil];
+    NSString *conversationId = [LCCKConversationService sharedInstance].currentConversation.conversationId;
+    if (conversationId.length > 0) {
+        NSString *customImageNameKey = [NSString stringWithFormat:@"%@%@_%@", LCCKCustomConversationViewControllerBackgroundImageNamePrefix, [LCCKSessionService sharedInstance].clientId, conversationId];
+        [[NSUserDefaults standardUserDefaults] setObject:imageName forKey:customImageNameKey];
+    } else {
+        [[NSUserDefaults standardUserDefaults] setObject:imageName forKey:LCCKDefaultConversationViewControllerBackgroundImageName];
+    }
+    NSDictionary *userInfo = @{
+                               LCCKNotificationConversationViewControllerBackgroundImageDidChangedUserInfoConversationIdKey : conversationId,
+                               };
+    [[NSNotificationCenter defaultCenter] postNotificationName:LCCKNotificationConversationViewControllerBackgroundImageDidChanged object:userInfo];
 }
 
 @end

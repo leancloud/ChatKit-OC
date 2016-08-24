@@ -73,7 +73,7 @@
         return nil;
     }
     LCCKIdResultBlock sendCustomMessageHandler = ^(id object, NSError *error) {
-        LCCKVCardMessage *vCardMessage = [LCCKVCardMessage vCardMessageWithClientId:object conversationType:self.conversationViewController.conversation.lcck_type];
+        LCCKVCardMessage *vCardMessage = [LCCKVCardMessage vCardMessageWithClientId:object conversationType:[self.conversationViewController getConversationIfExists].lcck_type];
         [self.conversationViewController sendCustomMessage:vCardMessage progressBlock:^(NSInteger percentDone) {
         } success:^(BOOL succeeded, NSError *error) {
             [self.conversationViewController sendLocalFeedbackTextMessge:@"名片发送成功"];
@@ -96,7 +96,7 @@
 }
 
 - (void)presentSelectMemberViewController {
-    AVIMConversation *conversation = self.conversationViewController.conversation;
+    AVIMConversation *conversation = [self.conversationViewController getConversationIfExists];
     NSArray *allPersonIds;
     if (conversation.lcck_type == LCCKConversationTypeSingle) {
         allPersonIds = [[LCCKContactManager defaultManager] fetchContactPeerIds];

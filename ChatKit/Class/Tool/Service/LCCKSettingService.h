@@ -15,7 +15,12 @@
  */
 FOUNDATION_EXTERN NSString *const LCCKSettingServiceErrorDomain;
 
+#define LCCK_STRING_BY_SEL(sel) NSStringFromSelector(@selector(sel))
+
 @interface LCCKSettingService : LCCKSingleton <LCCKSettingService>
+
+@property (nonatomic, strong, readonly) NSDictionary *defaultSettings;
+@property (nonatomic, strong, readonly) NSDictionary *defaultTheme;
 
 //TODO:
 /*!
@@ -54,5 +59,9 @@ FOUNDATION_EXTERN NSString *const LCCKSettingServiceErrorDomain;
 
 //save the local applicationIconBadgeNumber to the server
 - (void)syncBadge;
+
+- (UIColor *)defaultThemeColorForKey:(NSString *)key;
+
+- (void)setConversationViewControllerBackgroundImage:(UIImage *)image scaledToSize:(CGSize)scaledToSize;
 
 @end

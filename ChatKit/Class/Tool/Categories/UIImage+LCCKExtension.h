@@ -23,4 +23,6 @@
 + (UIImage *)lcck_imageNamed:(NSString *)imageName bundleName:(NSString *)bundleName bundleForClass:(Class)aClass;
 + (UIImage *)lcck_imageNamed:(NSString *)name;
 
+- (UIImage *)lcck_scalingPatternImageToSize:(CGSize)size;
+
 @end

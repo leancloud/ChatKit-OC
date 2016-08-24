@@ -40,4 +40,8 @@ FOUNDATION_EXTERN NSString *const LCCKPhoneRegex;
 
 - (NSArray<NSValue *> *)lcck_allURLsWithPattern:(NSString *)pattern error:(NSError **)error;
 
+- (UIColor *)lcck_hexStringToColor;
+
+- (NSString *)lcck_pathForConversationBackgroundImage;
+
 @end

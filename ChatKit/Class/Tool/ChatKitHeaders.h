@@ -52,6 +52,7 @@ FOUNDATION_EXPORT const unsigned char LCChatKitVersionString[];
     #import <ChatKit/LCCKInputViewPluginTakePhoto.h>
     #import <ChatKit/LCCKInputViewPluginLocation.h>
     #import <ChatKit/LCCKAlertController.h>
+    #import <ChatKit/NSFileManager+LCCKExtension.h>
 
 #else
 
@@ -85,6 +86,7 @@ FOUNDATION_EXPORT const unsigned char LCChatKitVersionString[];
     #import "LCCKInputViewPluginTakePhoto.h"
     #import "LCCKInputViewPluginLocation.h"
     #import "LCCKAlertController.h"
+    #import "NSFileManager+LCCKExtension.h"
 
 #endif
 
