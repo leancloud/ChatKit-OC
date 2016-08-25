@@ -2,7 +2,7 @@
 //  LCCKBaseViewController.m
 //  LeanCloudChatKit-iOS
 //
-//  v0.6.2 Created by ElonChan (wechat:chenyilong1010) on 16/2/26.
+//  v0.7.0 Created by ElonChan (wechat:chenyilong1010) on 16/2/26.
 //  Copyright © 2016年 LeanCloud. All rights reserved.
 //
 
@@ -101,12 +101,6 @@
     }
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage lcck_imageNamed:icon bundleName:@"BarButtonIcon" bundleForClass:[self class]] style:UIBarButtonItemStylePlain target:self action:@selector(clickedBarButtonItemAction:event:)];
     self.barButtonItemAction = action;
-}
-
-- (void)setupBackgroundImage:(UIImage *)backgroundImage {
-    UIImageView *backgroundImageView = [[UIImageView alloc] initWithFrame:self.view.bounds];
-    backgroundImageView.image = backgroundImage;
-    [self.view insertSubview:backgroundImageView atIndex:0];
 }
 
 #pragma mark - alert and async utils

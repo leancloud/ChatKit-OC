@@ -2,7 +2,7 @@
 //  LCCKSettingService.h
 //  LeanCloudChatKit-iOS
 //
-//  v0.6.2 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/2/23.
+//  v0.7.0 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/2/23.
 //  Copyright © 2016年 LeanCloud. All rights reserved.
 //  Service for common chat setting.
 
@@ -21,6 +21,7 @@ FOUNDATION_EXTERN NSString *const LCCKSettingServiceErrorDomain;
 
 @property (nonatomic, strong, readonly) NSDictionary *defaultSettings;
 @property (nonatomic, strong, readonly) NSDictionary *defaultTheme;
+@property (nonatomic, strong, readonly) NSDictionary *messageBubbleCustomizeSettings;
 
 //TODO:
 /*!
@@ -61,7 +62,31 @@ FOUNDATION_EXTERN NSString *const LCCKSettingServiceErrorDomain;
 - (void)syncBadge;
 
 - (UIColor *)defaultThemeColorForKey:(NSString *)key;
-
+- (UIFont *)defaultThemeTextMessageFont;
 - (void)setConversationViewControllerBackgroundImage:(UIImage *)image scaledToSize:(CGSize)scaledToSize;
+
+/**
+ * @param capOrEdge 分为：cap_insets和edge_insets
+ * @param position 主要分为：CommonLeft、CommonRight等
+ */
+- (UIEdgeInsets)messageBubbleCustomizeSettingsForPosition:(NSString *)position capOrEdge:(NSString *)capOrEdge;
+- (UIEdgeInsets)rightCapMessageBubbleCustomize;
+- (UIEdgeInsets)rightEdgeMessageBubbleCustomize;
+- (UIEdgeInsets)leftCapMessageBubbleCustomize;
+- (UIEdgeInsets)leftEdgeMessageBubbleCustomize;
+- (UIEdgeInsets)rightHollowCapMessageBubbleCustomize;
+- (UIEdgeInsets)rightHollowEdgeMessageBubbleCustomize;
+- (UIEdgeInsets)leftHollowCapMessageBubbleCustomize;
+- (UIEdgeInsets)leftHollowEdgeMessageBubbleCustomize;
+
+- (NSString *)imageNameForMessageBubbleCustomizeForPosition:(NSString *)position normalOrHighlight:(NSString *)normalOrHighlight;
+- (NSString *)leftNormalImageNameMessageBubbleCustomize;
+- (NSString *)leftHighlightImageNameMessageBubbleCustomize;
+- (NSString *)rightHighlightImageNameMessageBubbleCustomize;
+- (NSString *)rightNormalImageNameMessageBubbleCustomize;
+- (NSString *)hollowRightNormalImageNameMessageBubbleCustomize;
+- (NSString *)hollowRightHighlightImageNameMessageBubbleCustomize;
+- (NSString *)hollowLeftNormalImageNameMessageBubbleCustomize;
+- (NSString *)hollowLeftHighlightImageNameMessageBubbleCustomize;
 
 @end

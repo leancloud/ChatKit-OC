@@ -2,7 +2,7 @@
 //  LCCKConversationViewModel.m
 //  LCCKChatExample
 //
-//  v0.6.2 Created by ElonChan (微信向我报BUG:chenyilong1010) ( https://github.com/leancloud/ChatKit-OC ) on 15/11/18.
+//  v0.7.0 Created by ElonChan (微信向我报BUG:chenyilong1010) ( https://github.com/leancloud/ChatKit-OC ) on 15/11/18.
 //  Copyright © 2015年 https://LeanCloud.cn . All rights reserved.
 //
 #if __has_include(<ChatKit/LCChatKit.h>)
@@ -154,7 +154,7 @@
 }
 
 - (void)setDefaultBackgroundImage {
-    UIImage *image = [self imageInBundlePathForImageName:@"ConversationViewControllerBackgroundImage"];
+    UIImage *image = [self imageInBundlePathForImageName:@"conversationViewController_default_backgroundImage"];
     [self.parentConversationViewController.view setBackgroundColor:[UIColor colorWithPatternImage:image]];
 }
 

@@ -2,7 +2,7 @@
 //  LCCKVCardView.m
 //  ChatKit-OC
 //
-//  v0.6.2 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/8/15.
+//  v0.7.0 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/8/15.
 //  Copyright © 2016年 ElonChan (wechat:chenyilong1010). All rights reserved.
 //
 
@@ -39,6 +39,7 @@
 }
 
 - (void)setup {
+    self.backgroundColor = [UIColor clearColor];
     [self.nameLabel sizeToFit];
     LCCKAvatarImageViewCornerRadiusBlock avatarImageViewCornerRadiusBlock = [LCChatKit sharedInstance].avatarImageViewCornerRadiusBlock;
     if (avatarImageViewCornerRadiusBlock) {

@@ -218,12 +218,10 @@
 
 - (void)showPopOverMenu:(UIBarButtonItem *)sender event:(UIEvent *)event {
     [FTPopOverMenu showFromEvent:event
-                        withMenu:@[ @"创建群聊", @"修改群头像" ]
+                        withMenu:@[ @"创建群聊" ]
                        doneBlock:^(NSInteger selectedIndex) {
                            if (selectedIndex == 0) {
                                [self createGroupConversation:sender];
-                           } else if (selectedIndex == 1) {
-                               [self changeGroupAvatar];
                            }
                        } dismissBlock:^{
                            

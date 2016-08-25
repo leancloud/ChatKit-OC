@@ -2,7 +2,7 @@
 //  LCCKChatMessageCell.m
 //  LCCKChatExample
 //
-//  v0.6.2 Created by ElonChan (微信向我报BUG:chenyilong1010) ( https://github.com/leancloud/ChatKit-OC ) on 15/11/13.
+//  v0.7.0 Created by ElonChan (微信向我报BUG:chenyilong1010) ( https://github.com/leancloud/ChatKit-OC ) on 15/11/13.
 //  Copyright © 2015年 https://LeanCloud.cn . All rights reserved.
 //
 
@@ -42,7 +42,7 @@ static CGFloat const LCCKMessageSendStateViewWidthHeight = 30.f;
 static CGFloat const LCCKMessageSendStateViewLeftOrRightToMessageContentView = 2.f;
 static CGFloat const LCCKAvatarToMessageContent = 5.f;
 
-static CGFloat const LCCKAvatarBottomToMessageContentTop = 4.f;
+static CGFloat const LCCKAvatarBottomToMessageContentTop = -1.f;
 
 
 static CGFloat const LCCK_MSG_CELL_EDGES_OFFSET = 16;
@@ -119,6 +119,17 @@ static CGFloat const LCCK_MSG_CELL_NICKNAME_FONT_SIZE = 12;
 
 #pragma mark - Override Methods
 
+- (BOOL)showName {
+    BOOL isMessageOwner = self.messageOwner == LCCKMessageOwnerTypeOther;
+    BOOL isMessageChatTypeGroup = self.messageChatType == LCCKConversationTypeGroup;
+    if (isMessageOwner && isMessageChatTypeGroup) {
+        self.nicknameLabel.hidden = NO;
+        return YES;
+    }
+    self.nicknameLabel.hidden = YES;
+    return NO;
+}
+
 - (void)updateConstraints {
     [super updateConstraints];
     if (self.messageOwner == LCCKMessageOwnerTypeSystem || self.messageOwner == LCCKMessageOwnerTypeUnknown) {
@@ -144,7 +155,7 @@ static CGFloat const LCCK_MSG_CELL_NICKNAME_FONT_SIZE = 12;
         if (self.messageContentView.superview) {
             [self.messageContentView mas_makeConstraints:^(MASConstraintMaker *make) {
                 make.right.equalTo(self.avatarImageView.mas_left).with.offset(-LCCKAvatarToMessageContent);
-                make.top.equalTo(self.nicknameLabel.mas_bottom).with.offset(LCCKAvatarBottomToMessageContentTop);
+                make.top.equalTo(self.nicknameLabel.mas_bottom).with.offset(self.showName ? 0 : LCCKAvatarBottomToMessageContentTop);
                 CGFloat width = [UIApplication sharedApplication].keyWindow.frame.size.width;
                 CGFloat height = [UIApplication sharedApplication].keyWindow.frame.size.height;
                 CGFloat widthLimit = MIN(width, height)/5 * 3;
@@ -189,7 +200,7 @@ static CGFloat const LCCK_MSG_CELL_NICKNAME_FONT_SIZE = 12;
         if (self.messageContentView.superview) {
             [self.messageContentView mas_makeConstraints:^(MASConstraintMaker *make) {
                 make.left.equalTo(self.avatarImageView.mas_right).with.offset(LCCKAvatarToMessageContent);
-                make.top.equalTo(self.nicknameLabel.mas_bottom).with.offset(LCCKAvatarBottomToMessageContentTop);
+                make.top.equalTo(self.nicknameLabel.mas_bottom).with.offset(self.showName ? 0 : LCCKAvatarBottomToMessageContentTop);
                 CGFloat width = [UIApplication sharedApplication].keyWindow.frame.size.width;
                 CGFloat height = [UIApplication sharedApplication].keyWindow.frame.size.height;
                 CGFloat widthLimit = MIN(width, height)/5 * 3;
@@ -221,7 +232,7 @@ static CGFloat const LCCK_MSG_CELL_NICKNAME_FONT_SIZE = 12;
         }];
     }
     
-    if (self.messageChatType == LCCKConversationTypeSingle) {
+    if (!self.showName) {
         if (self.nicknameLabel.superview) {
             [self.nicknameLabel mas_updateConstraints:^(MASConstraintMaker *make) {
                 make.height.equalTo(@0);
@@ -313,11 +324,9 @@ static CGFloat const LCCK_MSG_CELL_NICKNAME_FONT_SIZE = 12;
         //            self.messageReadState = self.message.messageReadState;
         //        }
     }
-    BOOL isMessageOwner = self.messageOwner == LCCKMessageOwnerTypeOther;
-    BOOL isMessageChatTypeGroup = self.messageChatType == LCCKConversationTypeGroup;
-    if (isMessageOwner && isMessageChatTypeGroup) {
+//    if (self.showName) {
         self.nicknameLabel.text = nickName;
-    }
+//    }
     [self.avatarImageView sd_setImageWithURL:avatarURL
                             placeholderImage:({
         NSString *imageName = @"Placeholder_Avatar";

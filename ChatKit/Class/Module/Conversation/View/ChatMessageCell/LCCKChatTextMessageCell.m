@@ -2,17 +2,10 @@
 //  LCCKChatTextMessageCell.m
 //  LCCKChatExample
 //
-//  v0.6.2 Created by ElonChan (微信向我报BUG:chenyilong1010) ( https://github.com/leancloud/ChatKit-OC ) on 15/11/13.
+//  v0.7.0 Created by ElonChan (微信向我报BUG:chenyilong1010) ( https://github.com/leancloud/ChatKit-OC ) on 15/11/13.
 //  Copyright © 2015年 https://LeanCloud.cn . All rights reserved.
 //
 
-static CGFloat LCCK_MSG_SPACE_TOP = 16;
-static CGFloat LCCK_MSG_SPACE_BTM = 16;
-static CGFloat LCCK_MSG_SPACE_LEFT = 16;
-static CGFloat LCCK_MSG_SPACE_RIGHT = 16;
-static CGFloat LCCK_MSG_TEXT_FONT_SIZE = 14;
-
-#define LCCK_TEXT_MSG_CELL_TEXT_COLOR [UIColor blackColor]
 
 #import "LCCKChatTextMessageCell.h"
 #import "LCCKFaceManager.h"
@@ -44,8 +37,16 @@ static CGFloat LCCK_MSG_TEXT_FONT_SIZE = 14;
 
 - (void)updateConstraints {
     [super updateConstraints];
+    UIEdgeInsets edgeMessageBubbleCustomize;
+    if (self.messageOwner == LCCKMessageOwnerTypeSelf) {
+        UIEdgeInsets rightEdgeMessageBubbleCustomize = [LCCKSettingService sharedInstance].rightEdgeMessageBubbleCustomize;
+        edgeMessageBubbleCustomize = rightEdgeMessageBubbleCustomize;
+    } else {
+        UIEdgeInsets leftEdgeMessageBubbleCustomize = [LCCKSettingService sharedInstance].leftEdgeMessageBubbleCustomize;
+        edgeMessageBubbleCustomize = leftEdgeMessageBubbleCustomize;
+    }
     [self.messageTextLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.edges.equalTo(self.messageContentView).with.insets(UIEdgeInsetsMake(LCCK_MSG_SPACE_TOP, LCCK_MSG_SPACE_LEFT, LCCK_MSG_SPACE_BTM, LCCK_MSG_SPACE_RIGHT));
+        make.edges.equalTo(self.messageContentView).with.insets(edgeMessageBubbleCustomize);
     }];
 }
 
@@ -94,7 +95,7 @@ static CGFloat LCCK_MSG_TEXT_FONT_SIZE = 14;
 - (MLLinkLabel *)messageTextLabel {
     if (!_messageTextLabel) {
         _messageTextLabel = [[MLLinkLabel alloc] init];
-        _messageTextLabel.font = [UIFont systemFontOfSize:LCCK_MSG_TEXT_FONT_SIZE];
+        _messageTextLabel.font = [LCCKSettingService sharedInstance].defaultThemeTextMessageFont;
         _messageTextLabel.numberOfLines = 0;
         _messageTextLabel.lineBreakMode = NSLineBreakByWordWrapping;
         __weak __typeof(self) weakSelf = self;
@@ -117,7 +118,7 @@ static CGFloat LCCK_MSG_TEXT_FONT_SIZE = 14;
 
 - (NSDictionary *)textStyle {
     if (!_textStyle) {
-        UIFont *font = [UIFont systemFontOfSize:LCCK_MSG_TEXT_FONT_SIZE];
+        UIFont *font = [LCCKSettingService sharedInstance].defaultThemeTextMessageFont;
         NSMutableParagraphStyle *style = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
         style.alignment = NSTextAlignmentLeft;
         style.paragraphSpacing = 0.25 * font.lineHeight;
