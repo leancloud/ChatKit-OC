@@ -36,10 +36,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.usersArray = [NSMutableArray array];
-    // 注册消息显示 Cell
-//    [self registerClass:[RedpacketMessageCell class] forCellWithReuseIdentifier:YZHRedpacketMessageTypeIdentifier];
-//    [self registerClass:[RedpacketTakenMessageTipCell class] forCellWithReuseIdentifier:YZHRedpacketTakenMessageTypeIdentifier];
-//    [self registerClass:[RCTextMessageCell class] forCellWithReuseIdentifier:@"Message"];
     
     __weak typeof(self) weakSelf = self;
     [[LCCKUserSystemService sharedInstance] fetchCurrentUserInBackground:^(id<LCCKUserDelegate> user, NSError *error) {
