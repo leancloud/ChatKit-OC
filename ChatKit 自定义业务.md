@@ -23,7 +23,8 @@
         -  [预览地理位置](https://github.com/leancloud/ChatKit-OC/blob/master/ChatKit%20自定义业务.md#预览地理位置)
         -  [消息未读数](https://github.com/leancloud/ChatKit-OC/blob/master/ChatKit%20自定义业务.md#消息未读数)
         -  [设置单点登录与强制重连](https://github.com/leancloud/ChatKit-OC/blob/master/ChatKit%20自定义业务.md#设置单点登录与强制重连)
-        -  
+
+
 ## 设置单聊用户的头像和昵称
 
 当你的应用想要集成一个IM服务时，可能这时候，你的APP已经上架了，已经有自己的注册、登录等流程了。用 ChatKit 进行聊天很简单，只需要给 ChatKit 一个 id 就够了，就像 Demo 里做的那样。聊天是正常了，但是双方只能看到一个id，这样体验很不好。但是如果展示头像、昵称呢？于是就设计了这样一个接口，`-setFetchProfilesBlock:` 。

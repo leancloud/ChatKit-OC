@@ -152,6 +152,6 @@
                                  timestamp:(NSTimeInterval)timestamp
                            serverMessageId:(NSString *)serverMessageId;
 
-+ (LCCKMessage *)messageWithAVIMTypedMessage:(AVIMTypedMessage *)message;
++ (id)messageWithAVIMTypedMessage:(AVIMTypedMessage *)message;
 
 @end

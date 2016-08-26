@@ -4,16 +4,16 @@
 
   1. [支持自定义区域说明](https://github.com/leancloud/ChatKit-OC/blob/master/ChatKit%20自定义样式.md#支持自定义区域说明) 
   2. [自定义UI资源包](https://github.com/leancloud/ChatKit-OC/blob/master/ChatKit%20自定义样式.md#自定义主题图片语音等资源) 
-        - [默认UI资源包位置](https://github.com/leancloud/ChatKit-OC/blob/master/ChatKit%20自定义样式.md#默认UI资源包位置)
-        - [自定义 Bundle 命名规则](https://github.com/leancloud/ChatKit-OC/blob/master/ChatKit%20自定义样式.md#自定义-bundle-命名规则)  
+    - [默认UI资源包位置](https://github.com/leancloud/ChatKit-OC/blob/master/ChatKit%20自定义样式.md#默认UI资源包位置)
+    - [自定义 Bundle 命名规则](https://github.com/leancloud/ChatKit-OC/blob/master/ChatKit%20自定义样式.md#自定义-bundle-命名规则)  
   3. [UI属性配置](https://github.com/leancloud/ChatKit-OC/blob/master/ChatKit%20自定义样式.md#ui属性配置)
-        1.  [TableView](https://github.com/leancloud/ChatKit-OC/blob/master/ChatKit%20自定义样式.md#tableview) 
-        2.  [TableViewCell](https://github.com/leancloud/ChatKit-OC/blob/master/ChatKit%20自定义样式.md#tableviewcell) 
-        3.  [未读数](https://github.com/leancloud/ChatKit-OC/blob/master/ChatKit%20自定义样式.md#未读数) 
-        4.  [聊天背景](https://github.com/leancloud/ChatKit-OC/blob/master/ChatKit%20自定义样式.md#聊天背景) 
-        5.  [输入框](https://github.com/leancloud/ChatKit-OC/blob/master/ChatKit%20自定义样式.md#输入框) 
-        6.  [聊天消息](https://github.com/leancloud/ChatKit-OC/blob/master/ChatKit%20自定义样式.md#聊天消息) 
-        7.  [消息气泡](https://github.com/leancloud/ChatKit-OC/blob/master/ChatKit%20自定义样式.md#消息气泡) 
+    1.  [TableView](https://github.com/leancloud/ChatKit-OC/blob/master/ChatKit%20自定义样式.md#tableview) 
+    2.  [TableViewCell](https://github.com/leancloud/ChatKit-OC/blob/master/ChatKit%20自定义样式.md#tableviewcell) 
+    3.  [未读数](https://github.com/leancloud/ChatKit-OC/blob/master/ChatKit%20自定义样式.md#未读数) 
+    4.  [聊天背景](https://github.com/leancloud/ChatKit-OC/blob/master/ChatKit%20自定义样式.md#聊天背景) 
+    5.  [输入框](https://github.com/leancloud/ChatKit-OC/blob/master/ChatKit%20自定义样式.md#输入框) 
+    6.  [聊天消息](https://github.com/leancloud/ChatKit-OC/blob/master/ChatKit%20自定义样式.md#聊天消息) 
+    7.  [消息气泡](https://github.com/leancloud/ChatKit-OC/blob/master/ChatKit%20自定义样式.md#消息气泡) 
   4.  [控制状态栏、导航栏、Tabbar等](https://github.com/leancloud/ChatKit-OC/blob/master/ChatKit%20自定义样式.md#控制状态栏导航栏tabbar等)  
   5.  [会话列表页面的导航栏标题](https://github.com/leancloud/ChatKit-OC/blob/master/ChatKit%20自定义样式.md#会话列表页面的导航栏标题) 
   6.  [聊天界面标题自定义](https://github.com/leancloud/ChatKit-OC/blob/master/ChatKit%20自定义样式.md#聊天界面标题自定义) 
@@ -25,27 +25,27 @@
 页面	| 位置	| 定制点	| 定制方式
 -------------|-------------|-------------|-------------
 全局	| 顶部导航栏	| 背景色、文字颜色等样式	| 系统API
-全局	| 顶部导航栏	| 导航按钮	| 既可以使用 `-[LCCKBaseViewController configureBarButtonItemStyle:action:]`，又可以在各个Controller的 `setViewDidLoadBlock:` 中调用系统API
-全局	| TableView	| 分割线、背景色、Cell文字颜色、Cell背景色等 | 【plist】TableView-XXX </p>	ChatKit-Theme.plist中 **【plist】是指资源包 MessageBubble.bundle 中的 MessageBubble-Customize.plist 或者是 Other.bundle 中的 ChatKit-Theme.plist 文件，下同** 
-全局 | 核心流程（聊天、对话列表话及相关页面） | 支持国际化 | 自定义 Other.bundle 为 CustomizedChatKitOther.bundle，并修改或增加其中的本地化文件
+全局	| 顶部导航栏	| 导航按钮	| 既可以使用 `-[LCCKBaseViewController configureBarButtonItemStyle:action:]`，</p>又可以在各个Controller的 `setViewDidLoadBlock:` 中调用系统API
+全局	| TableView	| 分割线、背景色、Cell文字颜色、Cell背景色等 | 【plist】</p>TableView-XXX </p>	ChatKit-Theme.plist中 </p>**【plist】是指资源包 MessageBubble.bundle 中的 MessageBubble-Customize.plist </p>或者是 Other.bundle 中的 ChatKit-Theme.plist 文件，下同** 
+全局 | 核心流程</p>（聊天、对话列表话及相关页面） | 支持国际化 | 自定义 Other.bundle 为 CustomizedChatKitOther.bundle，并修改或增加其中的本地化文件
 全局	| 头像样式	| 头像圆角	|  `-[LCChatKit setAvatarImageViewCornerRadiusBlock:]`
 全局	| 事件处理 |	预览图片 |	`-[LCChatKit setPreviewImageMessageBlock:]`
 全局	| 事件处理 |	点击头像	| `-[LCChatKit setOpenProfileBlock:]`
 全局	| 事件处理 | 	提示信息 |	`-[LCChatKit setShowNotificationBlock:`
-会话列表 |	未读数	| 文字颜色，背景色|【plist】ConversationList-UnreadText、ConversationList-UnreadBackground
-聊天页面	| 聊天背景	| 替换资源包图片 |如果想修改默认的图片，需要替换 Other.bundle `conversationViewController_default_backgroundImage.png` ，如果要修改特定对话，需要调用下面的方法： `-[LCChatKit setCurrentConversationBackgroundImage:scaledToSize:`或</p>`-[LCChatKit setBackgroundImage:forConversationId:scaledToSize:]`
-聊天页面	| 输入区域	| 主题色	|【plist】 MessageInputView-Tint-Color
-聊天页面	| 输入区域 |	输入区域背景色|	【plist】 MessageInputView-BackgroundColor
-聊天页面	| 输入区域 |	输入框 |	【plist】 MessageInputView-TextField-TextColor、MessageInputView-TextField-BackgroundColor
-聊天页面	| 输入区域 |	录音按钮|	【plist】MessageInputView-Record-TextColor 、MessageInputView-RecordView-BackgroundColor
-聊天页面 |	输入区域 |	更多区域|【plist】MessageInputView-MorePanel-BackgroundColor、MessageInputView-MorePanel-TextColor
+会话列表 |	未读数	| 文字颜色，背景色|【plist】</p>ConversationList-UnreadText、ConversationList-UnreadBackground
+聊天页面	| 聊天背景	| 替换资源包图片 |如果想修改默认的图片，需要替换 Other.bundle</p> `conversationViewController_default_backgroundImage.png` ，</p>如果要修改特定对话，需要调用下面的方法： `-[LCChatKit setCurrentConversationBackgroundImage:scaledToSize:`或</p>`-[LCChatKit setBackgroundImage:forConversationId:scaledToSize:]`
+聊天页面	| 输入区域	| 主题色	|【plist】 </p>MessageInputView-Tint-Color
+聊天页面	| 输入区域 |	输入区域背景色|	【plist】</p> MessageInputView-BackgroundColor
+聊天页面	| 输入区域 |	输入框 |	【plist】</p> MessageInputView-TextField-TextColor、MessageInputView-TextField-BackgroundColor
+聊天页面	| 输入区域 |	录音按钮|	【plist】</p>MessageInputView-Record-TextColor 、MessageInputView-RecordView-BackgroundColor
+聊天页面 |	输入区域 |	更多区域|【plist】</p>MessageInputView-MorePanel-BackgroundColor、MessageInputView-MorePanel-TextColor
 聊天页面 |	输入区域	|更多区域Item |	参考 `LCCKInputViewPluginVCard` 类
 聊天页面 | 输入区域	| 自定义表情	| 替换 Emoji.bundle 中的图片资源和 plist 文件
 聊天页面 | 自定义消息 |	自定义消息 | 参考 `LCCKVCardMessage` 类、与 `LCCKInputViewPluginVCard` 类
-聊天页面 | 消息显示	| 左右文本颜色	|【plist】ConversationView-Message-Left-TextColor、ConversationView-Message-Right-TextColor、
-聊天页面 | 消息显示 |	链接颜色 | 【plist】ConversationView-Message-LinkColor、ConversationView-Message-LinkColor-Left、ConversationView-Message-LinkColor-Right
-聊天页面 | 消息显示	| 发送者昵称颜色	|【plist】 ConversationView-SenderName-TextColor
-聊天页面 | 消息显示 |	时间分割线文字颜色	|【plist】 ConversationView-TimeLine-TextColor
+聊天页面 | 消息显示	| 左右文本颜色	|【plist】</p>ConversationView-Message-Left-TextColor、ConversationView-Message-Right-TextColor、
+聊天页面 | 消息显示 |	链接颜色 | 【plist】</p>ConversationView-Message-LinkColor、</p>ConversationView-Message-LinkColor-Left、</p>ConversationView-Message-LinkColor-Right
+聊天页面 | 消息显示	| 发送者昵称颜色	|【plist】</p> ConversationView-SenderName-TextColor
+聊天页面 | 消息显示 |	时间分割线文字颜色	|【plist】</p> ConversationView-TimeLine-TextColor
 聊天页面 | 气泡样式	| 气泡背景图等 | MessageBubble.bundle 中的 MessageBubble-Customize.plist，详见下文消息气泡小节
 
 注意： **上表中的【plist】是指资源包 MessageBubble.bundle 中的 MessageBubble-Customize.plist 或者是 Other.bundle 中的 ChatKit-Theme.plist 文件**
@@ -143,7 +143,7 @@ ConversationList-UnreadBackground | 会话列表未读数背景色
 
 默认背景图 | 修改bundle文件，将修改全部的默认背景图 |代码动态修改可针对特定对话 
 -------------|-------------|-------------
-![enter image description here](http://image18-c.poco.cn/mypoco/myphoto/20160825/17/17338872420160825172051075.png?414x736_130) | ![enter image description here](http://image18-c.poco.cn/mypoco/myphoto/20160825/17/17338872420160825172131044.png?414x736_130) | ![enter image description here](http://image18-c.poco.cn/mypoco/myphoto/20160825/17/17338872420160825172228061.png?414x736_130)
+![enter image description here](http://image18-c.poco.cn/mypoco/myphoto/20160825/17/17338872420160825172051075.png?414x736_130) | ![enter image description here](http://image18-c.poco.cn/mypoco/myphoto/20160825/17/17338872420160825172131044.png?414x736_130) | ![enter image description here](http://image18-c.poco.cn/mypoco/myphoto/20160825/17/17338872420160825172228061.png)
 
 
 ### 输入框

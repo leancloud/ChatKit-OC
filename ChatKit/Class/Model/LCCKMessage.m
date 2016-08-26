@@ -266,7 +266,7 @@
     return self;
 }
 
-+ (LCCKMessage *)messageWithAVIMTypedMessage:(AVIMTypedMessage *)message {
++ (id)messageWithAVIMTypedMessage:(AVIMTypedMessage *)message {
     //FIXME:自定义消息
     if ([message lcck_isCustomMessage]) {
         if ([message lcck_isSupportThisCustomMessage]) {
