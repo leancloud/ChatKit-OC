@@ -32,7 +32,6 @@ static void * const LCCKChatVoiceMessageCellVoiceMessageStateContext = (void*)&L
 
 - (void)updateConstraints {
     [super updateConstraints];
-
     if (self.messageOwner == LCCKMessageOwnerTypeSelf) {
         [self.messageVoiceStatusImageView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.right.equalTo(self.messageContentView.mas_right).with.offset(-12);

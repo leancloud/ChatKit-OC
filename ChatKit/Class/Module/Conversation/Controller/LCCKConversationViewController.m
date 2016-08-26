@@ -205,6 +205,7 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.navigationController.interactivePopGestureRecognizer.delaysTouchesBegan = NO;
     self.tableView.delegate = self.chatViewModel;
     self.tableView.dataSource = self.chatViewModel;
     self.chatBar.delegate = self;
@@ -573,7 +574,9 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
         }
         self.conversationId = conversation.conversationId;
         [self.chatViewModel resetBackgroundImage];
-        [self setupNavigationItemTitleWithConversation:conversation];
+        if (!self.disableTitleAutoConfig) {
+            [self setupNavigationItemTitleWithConversation:conversation];
+        }
         [[LCChatKit sharedInstance] getProfilesInBackgroundForUserIds:conversation.members callback:^(NSArray<id<LCCKUserDelegate>> *users, NSError *error) {
             [self fetchConversationHandler:conversation];
             !callback ?: callback(YES, nil);

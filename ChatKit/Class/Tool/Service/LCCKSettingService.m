@@ -268,14 +268,17 @@ static BOOL LCCKAllLogsEnabled;
     return defaultThemeTextMessageFont;
 }
 
+- (void)setCurrentConversationBackgroundImage:(UIImage *)image scaledToSize:(CGSize)scaledToSize {
+    NSString *conversationId = [LCCKConversationService sharedInstance].currentConversation.conversationId;
+    [self setBackgroundImage:image forConversationId:conversationId scaledToSize:scaledToSize];
+}
 
-- (void)setConversationViewControllerBackgroundImage:(UIImage *)image scaledToSize:(CGSize)scaledToSize {
+- (void)setBackgroundImage:(UIImage *)image forConversationId:(NSString *)conversationId scaledToSize:(CGSize)scaledToSize {
     image = [image lcck_scalingPatternImageToSize:scaledToSize];
     NSData *imageData = (UIImagePNGRepresentation(image) ? UIImagePNGRepresentation(image) : UIImageJPEGRepresentation(image, 1));
     NSString *imageName = [NSString stringWithFormat:@"%@.jpg", [[NSUUID UUID] UUIDString]];
     NSString *imagePath = [imageName lcck_pathForConversationBackgroundImage];;
     [[NSFileManager defaultManager] createFileAtPath:imagePath contents:imageData attributes:nil];
-    NSString *conversationId = [LCCKConversationService sharedInstance].currentConversation.conversationId;
     if (conversationId.length > 0) {
         NSString *customImageNameKey = [NSString stringWithFormat:@"%@%@_%@", LCCKCustomConversationViewControllerBackgroundImageNamePrefix, [LCCKSessionService sharedInstance].clientId, conversationId];
         [[NSUserDefaults standardUserDefaults] setObject:imageName forKey:customImageNameKey];

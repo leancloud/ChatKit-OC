@@ -64,6 +64,10 @@ CGFloat const LCCKConversationListCellDefaultHeight = 61; //LCCKImageSize + LCCK
 }
 
 - (void)setup {
+    self.backgroundColor = [[LCCKSettingService sharedInstance] defaultThemeColorForKey:@"TableView-CellBackgroundColor"];
+    UIView *selectionColor = [[UIView alloc] init];
+    selectionColor.backgroundColor = [[LCCKSettingService sharedInstance] defaultThemeColorForKey:@"TableView-CellBackgroundColor_Highlighted"];
+    self.selectedBackgroundView = selectionColor;
     LCCKNameLabelHeight = LCCKImageSize * LCCKNameLabelHeightProportion;
     LCCKMessageLabelHeight = LCCKImageSize - LCCKNameLabelHeight;
     [self addSubview:self.avatarImageView];
@@ -104,7 +108,7 @@ CGFloat const LCCKConversationListCellDefaultHeight = 61; //LCCKImageSize + LCCK
         UILabel *timestampLabel = [[UILabel alloc] initWithFrame:CGRectMake(LCCKAutoResizingDefaultScreenWidth - LCCKHorizontalSpacing - LCCKTimestampeLabelWidth, CGRectGetMinY(_avatarImageView.frame), LCCKTimestampeLabelWidth, LCCKNameLabelHeight)];
         timestampLabel.font = [UIFont systemFontOfSize:13];
         timestampLabel.textAlignment = NSTextAlignmentRight;
-        timestampLabel.textColor = [UIColor grayColor];
+        timestampLabel.textColor = [[LCCKSettingService sharedInstance] defaultThemeColorForKey:@"TableView-CellMinor"];
         timestampLabel.autoresizingMask =  UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleBottomMargin;
         _timestampLabel = timestampLabel;
     }
@@ -115,6 +119,7 @@ CGFloat const LCCKConversationListCellDefaultHeight = 61; //LCCKImageSize + LCCK
     if (_nameLabel == nil) {
         UILabel *nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(_avatarImageView.frame) + LCCKHorizontalSpacing, CGRectGetMinY(_avatarImageView.frame), CGRectGetMinX(_timestampLabel.frame) - LCCKHorizontalSpacing * 3 - LCCKImageSize, LCCKNameLabelHeight)];
         nameLabel.font = [UIFont systemFontOfSize:17];
+        nameLabel.textColor = [[LCCKSettingService sharedInstance] defaultThemeColorForKey:@"TableView-CellTitle"];
         nameLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         _nameLabel = nameLabel;
     }
@@ -126,6 +131,7 @@ CGFloat const LCCKConversationListCellDefaultHeight = 61; //LCCKImageSize + LCCK
         UILabel *messageTextLabel = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMinX(_nameLabel.frame), CGRectGetMaxY(_nameLabel.frame), LCCKAutoResizingDefaultScreenWidth - 4 * LCCKHorizontalSpacing - LCCKImageSize - LCCKRemindMuteSize, LCCKMessageLabelHeight)];
         messageTextLabel.backgroundColor = [UIColor clearColor];
         messageTextLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+        messageTextLabel.textColor = [[LCCKSettingService sharedInstance] defaultThemeColorForKey:@"TableView-CellDetail"];
         _messageTextLabel = messageTextLabel;
     }
     return _messageTextLabel;

@@ -68,13 +68,4 @@ FOUNDATION_EXTERN NSString *const LCCKUserSystemServiceErrorDomain;
 
 - (void)cacheUsers:(NSArray<id<LCCKUserDelegate>> *)users;
 
-/**
- *  清除对指定 person 的 profile 缓存
- *
- *  @param person 用户对象
- */
-- (void)removeCachedProfileForPeerId:(NSString *)peerId;
-
-- (void)removeAllCachedProfiles;
-
 @end

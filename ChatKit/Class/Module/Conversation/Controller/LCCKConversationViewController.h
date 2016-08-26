@@ -140,6 +140,14 @@ FOUNDATION_EXTERN NSString *const LCCKConversationViewControllerErrorDomain;
  */
 @property (nonatomic, assign) BOOL disableTextShowInFullScreen;
 
+/*!
+ * 是否禁用标题自动配置
+ * 默认配置如下：
+ *          - 最右侧显示静音状态
+ *          - 单聊默认显示对方昵称，群聊显示 `conversation` 的 name 字段值
+ */
+@property (nonatomic, assign, getter=isDisableTitleAutoConfig) BOOL disableTitleAutoConfig;
+
 #pragma mark - Handler
 ///=============================================================================
 /// @name Handler

@@ -63,7 +63,6 @@ FOUNDATION_EXTERN NSString *const LCCKSettingServiceErrorDomain;
 
 - (UIColor *)defaultThemeColorForKey:(NSString *)key;
 - (UIFont *)defaultThemeTextMessageFont;
-- (void)setConversationViewControllerBackgroundImage:(UIImage *)image scaledToSize:(CGSize)scaledToSize;
 
 /**
  * @param capOrEdge 分为：cap_insets和edge_insets
