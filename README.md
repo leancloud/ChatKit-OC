@@ -32,7 +32,7 @@
 
 ## 简介
 
-[ChatKit](https://github.com/leancloud/ChatKit-OC) 是一个免费且开源的 UI 聊天组件，由 LeanCloud 官方推出，底层聊天服务基于 LeanCloud 的 IM 实时通信服务「LeanMessage」而开发。它可以帮助开发者快速集成 IM 服务，轻松实现聊天功能，提供完全自由的授权协议，支持二次开发。其最大特点是把聊天常用的一些功能配合 UI 一起提供给开发者。
+[ChatKit](https://github.com/leancloud/ChatKit-OC) 是一个免费且开源的 UI 聊天组件，自带云服务器，自带推送，支持消息漫游，消息永久存储。底层聊天服务基于 [LeanCloud（原名 `AVOS` ）](https://leancloud.cn/?source=T6M35E4H) 的 IM 实时通信服务「LeanMessage」而开发，采用 Protobuf 协议进行消息传输。ChatKit 可以帮助开发者快速集成 IM 服务，轻松实现聊天功能，提供完全自由的授权协议，支持二次开发。其最大特点是把聊天常用的一些功能配合 UI 一起提供给开发者。
 
 ## 获取项目 
 
@@ -127,7 +127,8 @@ git clone --depth=1 https://github.com/leancloud/ChatKit-OC
 
  使用 ChatKit 大体有几个步骤：
 
- 1. 在 `-[AppDelegate application:didFinishLaunchingWithOptions:]` 中调用 `-[LCChatKit setAppId:appKey:]` 来开启 LeanCloud 服务。
+ 1. 在 `-[AppDelegate application:didFinishLaunchingWithOptions:]` 中调用 `-[LCChatKit setAppId:appKey:]` 来开启 LeanCloud 服务。需要到
+ [LeanCloud（原名 `AVOS` ）](https://leancloud.cn/?source=T6M35E4H) 申请一个 AppId 和一个 AppKey，可以在控制台里创建应用，替换 Demo 中的 AppId 和 AppKey。
  2. 调用 `-[LCChatKit sharedInstance]` 来初始化一个单例对象。
  3. 调用 `-[[LCChatKit sharedInstance] openWithClientId:callback:]` 开启 LeanCloud 的 IM 服务 LeanMessage，开始聊天。
  4. 调用 `-[[LCChatKit sharedInstance] closeWithCallback:]` 关闭 LeanCloud 的 IM 服务，结束聊天。
