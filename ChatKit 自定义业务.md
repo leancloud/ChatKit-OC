@@ -1,6 +1,30 @@
 # ChatKit 自定义业务
 
-### 设置单聊用户的头像和昵称
+
+## 导航
+  1.  [设置单聊用户的头像和昵称](https://github.com/leancloud/ChatKit-OC/blob/master/ChatKit%20自定义业务.md#设置单聊用户的头像和昵称) 
+      - [ClientId 与 UserId](https://github.com/leancloud/ChatKit-OC/blob/master/ChatKit%20自定义业务.md#clientid-与-userid) 
+  2.  [Profile缓存](https://github.com/leancloud/ChatKit-OC/blob/master/ChatKit%20自定义业务.md#profile缓存) 
+  3.  [聊天页面头像点击事件](https://github.com/leancloud/ChatKit-OC/blob/master/ChatKit%20自定义业务.md#聊天页面头像点击事件) 
+  4.  [自定义会话列表左滑菜单](https://github.com/leancloud/ChatKit-OC/blob/master/ChatKit%20自定义业务.md#自定义会话列表左滑菜单) 
+  5.  [自定义长按菜单](https://github.com/leancloud/ChatKit-OC/blob/master/ChatKit%20自定义业务.md#自定义长按菜单) 
+  6.  [自定义消息](https://github.com/leancloud/ChatKit-OC/blob/master/ChatKit%20自定义业务.md#自定义消息) 
+      -  [不需要显示自定义 Cell 的消息](https://github.com/leancloud/ChatKit-OC/blob/master/ChatKit%20自定义业务.md#不需要显示自定义-cell-的消息) 
+      -  [需要显示自定义 Cell 的消息](https://github.com/leancloud/ChatKit-OC/blob/master/ChatKit%20自定义业务.md#需要显示自定义-cell-的消息) 
+  7. [自定义消息步骤](https://github.com/leancloud/ChatKit-OC/blob/master/ChatKit%20自定义业务.md#自定义消息步骤) 
+      1.  [自定义消息](https://github.com/leancloud/ChatKit-OC/blob/master/ChatKit%20自定义业务.md#自定义消息) 
+      2. [自定义消息 Cell](https://github.com/leancloud/ChatKit-OC/blob/master/ChatKit%20自定义业务.md#自定义消息-cell) 
+      3.  [自定义输入框插件](https://github.com/leancloud/ChatKit-OC/blob/master/ChatKit%20自定义业务.md#自定义输入框插件) 
+      4.  [删除自定义插件、自定义消息、自定义 Cell (可选) ](https://github.com/leancloud/ChatKit-OC/blob/master/ChatKit%20自定义业务.md#删除自定义插件自定义消息自定义-cell) 
+  8.  [国际化与本地化](https://github.com/leancloud/ChatKit-OC/blob/master/ChatKit%20自定义业务.md#国际化与本地化) 
+  9.  [其他事件及属性](https://github.com/leancloud/ChatKit-OC/blob/master/ChatKit%20自定义业务.md#其他事件及属性) 
+        -  [监听并筛选或处理消息](https://github.com/leancloud/ChatKit-OC/blob/master/ChatKit%20自定义业务.md#监听并筛选或处理消息) 
+        -  [预览大图](https://github.com/leancloud/ChatKit-OC/blob/master/ChatKit%20自定义业务.md#预览大图) 
+        -  [预览地理位置](https://github.com/leancloud/ChatKit-OC/blob/master/ChatKit%20自定义业务.md#预览地理位置)
+        -  [消息未读数](https://github.com/leancloud/ChatKit-OC/blob/master/ChatKit%20自定义业务.md#消息未读数)
+        -  [设置单点登录与强制重连](https://github.com/leancloud/ChatKit-OC/blob/master/ChatKit%20自定义业务.md#设置单点登录与强制重连)
+        -  
+## 设置单聊用户的头像和昵称
 
 当你的应用想要集成一个IM服务时，可能这时候，你的APP已经上架了，已经有自己的注册、登录等流程了。用 ChatKit 进行聊天很简单，只需要给 ChatKit 一个 id 就够了，就像 Demo 里做的那样。聊天是正常了，但是双方只能看到一个id，这样体验很不好。但是如果展示头像、昵称呢？于是就设计了这样一个接口，`-setFetchProfilesBlock:` 。
 
@@ -72,7 +96,7 @@
 
 比如上面的代码中 userIds 这个就是 ClientIds，但 LCCKProfileKeyPeerId 这个就是 App 已有用户系统的UserId。除了 LCCKUserDelegate 中的 userId，其余在 ChatKit 接口中定义的 UserId 、PeerId 均是 ClientId（如果确定是对方，不是自己，比如好友列表、进行对话的对象，就会使用 PeerId 代替UserId），建议将 App 已有的用户系统中的 UserId 直接设置为 ClientId，如果 UserId 与 ClientId 不相等，那么就需要在上面的 `-setFetchProfilesBlock:` 方法中添加 clientIds 转换为 userIds 的步骤，然后再拿 userIds 去调用 App 已有的 API 来进行查询。
 
-### Profile缓存
+## Profile缓存
 
 当 ChatKit 成功获取到用户的头像和昵称后，会将 Profile 缓存到内存中，关于 Profile 缓存（暂时未作本地缓存，相关讨论见 [issue](https://github.com/leancloud/ChatKit-OC/issues/28)），如果用户修改了自己的头像和昵称，开发者应该调用下面 ChatKit 的缓存清理接口，让 ChatKit 获取新的 Profile:
 
@@ -80,24 +104,8 @@
 - (void)removeCachedProfileForPeerId:(NSString *)peerId;
 - (void)removeAllCachedProfiles;
  ```
- 
- ### 头像样式
- 
- 
- 您可以通过如下接口设置头像显示样式：
 
-
- ```Objective-C
-    [[LCChatKit sharedInstance] setAvatarImageViewCornerRadiusBlock:^CGFloat(CGSize avatarImageViewSize) {
-        if (avatarImageViewSize.height > 0) {
-            return avatarImageViewSize.height/2;
-        }
-        return 5;
-    }];
- ```
-
-
-### 聊天页面头像点击事件
+## 聊天页面头像点击事件
 
 可以通过设置 `-[LCChatKit setOpenProfileBlock]` 来处理用户点击会话列表中头像的事件:
 
@@ -131,21 +139,23 @@
  ```
  
  
- ### 自定义会话列表左滑菜单
+## 自定义会话列表左滑菜单
 
 会话列表会话节点的 cell 默认支持的左滑菜单为删除，可以通过 `-[LCChatKit setConversationEditActionBlock:]` 来实现自定义功能，Demo中演示了如何添加一个标记未读的左滑菜单。详情见 Demo。
 
 
-### 自定义消息长按菜单
+## 自定义长按菜单
 
 聊天页面的气泡，默认支持长按复制， 你可以通过 `[LCChatKit setLongPressMessageBlock:]` 来自定义添加功能，Demo 中演示了如何添加长按转发消息的功能。详情见Demo。
 
 
-### 自定义消息
+## 自定义消息
 
 自定义消息分几种：
 
 最简单的一种是：
+
+### 需要显示自定义 Cell 的消息
 
 [暂态消息](https://leancloud.cn/docs/realtime_guide-ios.html#暂态消息) ，且不需要显示自定义 Cell 的自定义消息。
 
@@ -175,7 +185,7 @@
  ```
 
 
-#### 需要显示自定义 Cell 的消息：
+### 需要显示自定义 Cell 的消息
 
 这里以Demo里的 VCard 名片消息为例：
 
@@ -183,7 +193,10 @@
 
 ![enter image description here](http://image18-c.poco.cn/mypoco/myphoto/20160816/14/17338872420160816144930053.png?414x736_130)
 
-第一步：定义自定义消息。
+
+## 自定义消息步骤
+
+### 自定义消息
 
  [《iOS 实时通信开发指南》](https://leancloud.cn/docs/realtime_guide-ios.html#消息) 里面详细介绍了自定义消息的步骤。
  
@@ -243,7 +256,7 @@ conversationType | 用来显示在push提示中 |  添加到自定义消息的 a
 
 
 
-#### 自定义消息 Cell
+### 自定义消息 Cell
 
 继承 `LCCKChatMessageCell` ，并遵循、实现 `LCCKChatMessageCellSubclassing` 协议，重载父类方法:
 
@@ -326,7 +339,7 @@ Demo 中的用法如下：
  自定义 Cell 的点击事件，请在自定义 Cell 中自行定义、响应，Demo中采用了添加 Tap 手势的方式。
 
 
-#### 自定义输入框插件
+### 自定义输入框插件
 用法与自定义消息和自定义 Cell 类似：
 继承 `LCCKInputViewPlugin` ，遵循、实现 `LCCKInputViewPluginSubclassing` 协议，
 
@@ -406,7 +419,7 @@ UI自定义，需要实现 `LCCKInputViewPluginDelegate` 方法：
  这里注意在 `-sendCustomMessageHandler` 定义时记得在 Block 执行结束时，执行 `_sendCustomMessageHandler = nil;` ，避免循环引用。
 
 
-#### 删除自定义插件、自定义消息、自定义 Cell 
+### 删除自定义插件、自定义消息、自定义 Cell 
 
 如果需要删除插件，比如 Demo 中自定义了一个名片插件，如果想删除掉，只需要删除 LCCKInputViewPluginVCard 类中的如下代码，当然删除整个类也是能达到该效果的：
 
@@ -441,18 +454,15 @@ UI自定义，需要实现 `LCCKInputViewPluginDelegate` 方法：
 
 同理删除掉对应的类，也可以达到删除效果。
 
-### 国际化与本地化
+## 国际化与本地化
 
-iOS ChatKit 目前已在核心流程（聊天、对话列表话及相关页面）中支持国际化，开发者可以通过非常少的工作量来支持本地化，只需要自定义 Other.bundle 为 CustomizedChatKitOther.bundle，并修改或增加其中的本地化文件即可。
+ ChatKit 目前已在核心流程（聊天、对话列表话及相关页面）中支持国际化，开发者可以通过非常少的工作量来支持本地化，只需要自定义 Other.bundle 为 CustomizedChatKitOther.bundle，并修改或增加其中的本地化文件即可。
 
 这个文件在每次 ChatKit 版本发布时是增量更新的，新增的内容置于文件的末尾并有时间注释，保证开发者可以迅速定位新增键值对。
 
-### 其他事件及属性
+## 其他事件及属性
 
-
-
-
-#### 监听并筛选或处理消息
+### 监听并筛选或处理消息
 
 可以接口 `-[LCChatKit setFilterMessagesBlock:]` 实现拦截新消息，包括实时接收的消息，和拉取历史记录消息。
 
@@ -514,7 +524,7 @@ LCChatKitExample 类:
  ```
 
 
-#### 预览大图
+### 预览大图
 
 默认的显示的方式是类似微信的消息，如果想自定义，可以通过下面的方式：
 
@@ -537,7 +547,7 @@ LCChatKitExample 类:
     }];
  ```
 
-#### 消息未读数
+### 消息未读数
 
 chatKit 默认会为 TabBar 样式设置未读消息数，如果不是 TabBar 样式，请实现该 Blcok 来设置 Badge 红标：
 
@@ -549,9 +559,11 @@ chatKit 默认会为 TabBar 样式设置未读消息数，如果不是 TabBar �
     }];
  ```
 
-
-#### 设置单点登录与强制重连
+### 设置单点登录与强制重连
 
 单点登录被踢下线或者点击聊天界面顶端的重连红条，ChatKit会去执行 `ForceReconnectSessionBlock`，你需要设置好 `[LCChatKit setForceReconnectSessionBlock:]` 来让ChatKit执行重连逻辑。
 
 ChatKit会默认开启单点登录，如果需要关闭，需要设置 `[LCChatKit setDisableSingleSignOn:]`。
+
+
+

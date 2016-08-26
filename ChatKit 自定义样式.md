@@ -1,5 +1,25 @@
 # ChatKit 自定义样式
 
+## 导航
+
+  1. [支持自定义区域说明](https://github.com/leancloud/ChatKit-OC/blob/master/ChatKit%20自定义样式.md#支持自定义区域说明) 
+  2. [自定义UI资源包](https://github.com/leancloud/ChatKit-OC/blob/master/ChatKit%20自定义样式.md#自定义主题图片语音等资源) 
+        - [默认UI资源包位置](https://github.com/leancloud/ChatKit-OC/blob/master/ChatKit%20自定义样式.md#默认UI资源包位置)
+        - [自定义 Bundle 命名规则](https://github.com/leancloud/ChatKit-OC/blob/master/ChatKit%20自定义样式.md#自定义-bundle-命名规则)  
+  3. [UI属性配置](https://github.com/leancloud/ChatKit-OC/blob/master/ChatKit%20自定义样式.md#ui属性配置)
+        1.  [TableView](https://github.com/leancloud/ChatKit-OC/blob/master/ChatKit%20自定义样式.md#tableview) 
+        2.  [TableViewCell](https://github.com/leancloud/ChatKit-OC/blob/master/ChatKit%20自定义样式.md#tableviewcell) 
+        3.  [未读数](https://github.com/leancloud/ChatKit-OC/blob/master/ChatKit%20自定义样式.md#未读数) 
+        4.  [聊天背景](https://github.com/leancloud/ChatKit-OC/blob/master/ChatKit%20自定义样式.md#聊天背景) 
+        5.  [输入框](https://github.com/leancloud/ChatKit-OC/blob/master/ChatKit%20自定义样式.md#输入框) 
+        6.  [聊天消息](https://github.com/leancloud/ChatKit-OC/blob/master/ChatKit%20自定义样式.md#聊天消息) 
+        7.  [消息气泡](https://github.com/leancloud/ChatKit-OC/blob/master/ChatKit%20自定义样式.md#消息气泡) 
+  4.  [控制状态栏、导航栏、Tabbar等](https://github.com/leancloud/ChatKit-OC/blob/master/ChatKit%20自定义样式.md#控制状态栏导航栏tabbar等)  
+  5.  [会话列表页面的导航栏标题](https://github.com/leancloud/ChatKit-OC/blob/master/ChatKit%20自定义样式.md#会话列表页面的导航栏标题) 
+  6.  [聊天界面标题自定义](https://github.com/leancloud/ChatKit-OC/blob/master/ChatKit%20自定义样式.md#聊天界面标题自定义) 
+  7.   [HUD 和通知提醒演示自定义](https://github.com/leancloud/ChatKit-OC/blob/master/ChatKit%20自定义样式.md#hud-和通知提醒演示自定义) 
+
+
 ## 支持自定义区域说明
 
 页面	| 位置	| 定制点	| 定制方式
@@ -32,7 +52,11 @@
 
 注意：上表中列出的参考点，均可以在Demo工程中找到。
 
-## UI资源包
+
+## 自定义UI资源包
+
+
+### 默认UI资源包位置
 
 可以通过如下路径找到资源包，对其中的图片和配置文件等做修改可以直接影响到 UI 页面：
 
@@ -48,7 +72,6 @@
 
 注意：**但是我们强烈地建议您不要直接修改此bundle，因为会导致您升级 ChatKit 时难以维护被修改的资源文件。推荐使用自定义皮肤包的方式。**
 
-### 自定义主题、图片、语音等资源
 
 注意：为了方便升级 ChatKit，强烈建议使用自定义资源包，自定义资源文件时，只需要拷贝遵循命名规则的 Bundle 即可，无需在代码中进行设置。ChatKit 将资源分为了多个 Bundle 文件，自定义时只包含你需要修改的 Bundle 即可，不需要所有 Bundle 都包含。比如如果你只需要自定义聊天气泡，那么你需要如下步骤：
 
@@ -73,12 +96,12 @@ NavigationBar 左右侧icon |BarButtonIcon.bundle        |CustomizedChatKitBarBu
 其他 |Other.bundle               |CustomizedChatKitOther.bundle              | 任意类型
 
 
-### UI属性配置
+## UI属性配置
 
 您可以在资源包中找到 ChatKit-Theme.plist 文件，修改某些选项即可定制对应的 UI 
 
 
-#### TableView
+### TableView
 
 影响除聊天页面外的绝大多数 TableView ，以最近对话列表为例：
 
@@ -92,7 +115,7 @@ TableView-PullRefresh-TextColor| 下拉刷新控件文字颜色
 TableView-PullRefresh-BackgroundColor | 下拉刷新控件背景颜色
 
 
-#### TableViewCell
+### TableViewCell
 
 ![enter image description here](http://image18-c.poco.cn/mypoco/myphoto/20160826/10/17338872420160826101226079.png?669x273_130)
 
@@ -104,7 +127,7 @@ TableView-CellDetail | 内容文字颜色
 TableView-CellBackgroundColor | 背景色
 TableView-CellBackgroundColor_Highlighted | 高亮背景色
 
-#### 未读数
+### 未读数
 
 ![enter image description here](http://image18-c.poco.cn/mypoco/myphoto/20160826/10/17338872420160826101138050.png?650x190_130)
 
@@ -113,7 +136,7 @@ Key | 修改区域
 ConversationList-UnreadText | 会话列表未读数文字颜色
 ConversationList-UnreadBackground | 会话列表未读数背景色
 
-#### 聊天背景
+### 聊天背景
 
 如果想修改默认的图片，需要替换 Other.bundle `conversationViewController_default_backgroundImage.png` ，如果要修改特定对话，需要调用下面的方法：`-[LCChatKit setCurrentConversationBackgroundImage:scaledToSize:`或`-[LCChatKit setBackgroundImage:forConversationId:scaledToSize:]`
 
@@ -123,9 +146,10 @@ ConversationList-UnreadBackground | 会话列表未读数背景色
 ![enter image description here](http://image18-c.poco.cn/mypoco/myphoto/20160825/17/17338872420160825172051075.png?414x736_130) | ![enter image description here](http://image18-c.poco.cn/mypoco/myphoto/20160825/17/17338872420160825172131044.png?414x736_130) | ![enter image description here](http://image18-c.poco.cn/mypoco/myphoto/20160825/17/17338872420160825172228061.png?414x736_130)
 
 
-#### 输入框
+### 输入框
 
 ![enter image description here](http://image18-c.poco.cn/mypoco/myphoto/20160826/10/1733887242016082610103106.png?808x422_130)
+
 Key | 修改区域
 -------------|-------------
 MessageInputView-BackgroundColor | 输入区域背景色
@@ -136,7 +160,7 @@ MessageInputView-TextField-BackgroundColor | 输入框背景色
 MessageInputView-Record-TextColor | 录音按钮文字颜色
 MessageInputView-Tint-Color | 输入区域主题色，如果没有该项，默认会使用全局主题色
 
-#### 聊天消息
+### 聊天消息
 
 ![enter image description here](http://image18-c.poco.cn/mypoco/myphoto/20160826/10/17338872420160826100911064.png?601x542_130)
 
@@ -186,7 +210,7 @@ edge_insets: 气泡背景区域（红色）和内容区域（白色）间距：
 ![enter image description here](http://image18-c.poco.cn/mypoco/myphoto/20160826/10/1733887242016082610152507.png?528x454_130)
 
 
-### 控制状态栏、导航栏、Tabbar等
+## 控制状态栏、导航栏、Tabbar等
 
 ChatKit 提供的各个 Controller 都遵循 LCCKViewControllerEventProtocol 协议，你可以在 controller 的 `-setViewDidLoadBlock:`、`-setViewWillAppearBlock:`、`-setViewDidAppearBlock:`、`-setViewWillDisappearBlock:`、`-setViewDidDisappearBlock:`等 block 中，调用相关的系统API，以便控制状态栏、导航栏、Tabbar等。
 
@@ -205,7 +229,7 @@ ChatKit 提供的各个 Controller 都遵循 LCCKViewControllerEventProtocol 协
     }];
  ```
  
-### 会话列表页面的导航栏标题
+## 会话列表页面的导航栏标题
 
 在 LCCKConversationListViewController 的 `setViewDidLoadBlock:` 中修改导航栏标题。
 
@@ -216,7 +240,7 @@ ChatKit 提供的各个 Controller 都遵循 LCCKViewControllerEventProtocol 协
     }];
  ```
 
-### 聊天界面标题自定义
+## 聊天界面标题自定义
 
 需要禁用标题自动配置。
 
@@ -234,7 +258,7 @@ ChatKit 提供的各个 Controller 都遵循 LCCKViewControllerEventProtocol 协
  ```
  
  
- #### 头像圆角定义
+## 头像圆角定义
  
  可以通过下面的方式自定义圆角，支持设置为圆形头像：
  
@@ -249,7 +273,7 @@ ChatKit 提供的各个 Controller 都遵循 LCCKViewControllerEventProtocol 协
 
 
 
-#### HUD 和通知提醒演示自定义
+## HUD 和通知提醒演示自定义
 
 通知
 
@@ -285,3 +309,4 @@ HUD
         }
     }];
  ```
+
