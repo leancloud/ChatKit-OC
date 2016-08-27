@@ -382,13 +382,13 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 9A754D621CECAC3E000967F1 /* Build configuration list for PBXNativeTarget "ChatKit-OC" */;
 			buildPhases = (
-				1E370B72B10E872F9EF1EABD /* 📦 Check Pods Manifest.lock */,
+				1E370B72B10E872F9EF1EABD /* [CP] Check Pods Manifest.lock */,
 				9A754D471CECAC3E000967F1 /* Sources */,
 				9A754D481CECAC3E000967F1 /* Frameworks */,
 				9A754D491CECAC3E000967F1 /* Resources */,
 				9A1AD17B1CEDE640000FF26E /* Embed Frameworks */,
-				B3D3A07CFC7415F038843CA3 /* 📦 Embed Pods Frameworks */,
-				B2766B2FC2AFFF07E341B315 /* 📦 Copy Pods Resources */,
+				B3D3A07CFC7415F038843CA3 /* [CP] Embed Pods Frameworks */,
+				B2766B2FC2AFFF07E341B315 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -448,14 +448,14 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		1E370B72B10E872F9EF1EABD /* 📦 Check Pods Manifest.lock */ = {
+		1E370B72B10E872F9EF1EABD /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "📦 Check Pods Manifest.lock";
+			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -463,14 +463,14 @@
 			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
-		B2766B2FC2AFFF07E341B315 /* 📦 Copy Pods Resources */ = {
+		B2766B2FC2AFFF07E341B315 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "📦 Copy Pods Resources";
+			name = "[CP] Copy Pods Resources";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -478,14 +478,14 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ChatKit-OC/Pods-ChatKit-OC-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		B3D3A07CFC7415F038843CA3 /* 📦 Embed Pods Frameworks */ = {
+		B3D3A07CFC7415F038843CA3 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "📦 Embed Pods Frameworks";
+			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
