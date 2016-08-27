@@ -2,7 +2,7 @@
 //  LCCKConversationListCell.m
 //  LeanCloudChatKit-iOS
 //
-//  v0.6.2 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/3/22.
+//  v0.7.0 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/3/22.
 //  Copyright © 2016年 LeanCloud. All rights reserved.
 //
 
@@ -29,6 +29,13 @@ static CGFloat LCCKLittleBadgeSize = 10;
 static CGFloat LCCKRemindMuteSize = 18;
 
 CGFloat const LCCKConversationListCellDefaultHeight = 61; //LCCKImageSize + LCCKVerticalSpacing * 2;
+
+@interface LCCKConversationListCell ()
+
+@property (nonatomic, strong) UIColor *conversationListUnreadBackgroundColor;
+@property (nonatomic, strong) UIColor *conversationListUnreadTextColor;
+
+@end
 
 @implementation LCCKConversationListCell
 
@@ -57,6 +64,10 @@ CGFloat const LCCKConversationListCellDefaultHeight = 61; //LCCKImageSize + LCCK
 }
 
 - (void)setup {
+    self.backgroundColor = [[LCCKSettingService sharedInstance] defaultThemeColorForKey:@"TableView-CellBackgroundColor"];
+    UIView *selectionColor = [[UIView alloc] init];
+    selectionColor.backgroundColor = [[LCCKSettingService sharedInstance] defaultThemeColorForKey:@"TableView-CellBackgroundColor_Highlighted"];
+    self.selectedBackgroundView = selectionColor;
     LCCKNameLabelHeight = LCCKImageSize * LCCKNameLabelHeightProportion;
     LCCKMessageLabelHeight = LCCKImageSize - LCCKNameLabelHeight;
     [self addSubview:self.avatarImageView];
@@ -97,7 +108,7 @@ CGFloat const LCCKConversationListCellDefaultHeight = 61; //LCCKImageSize + LCCK
         UILabel *timestampLabel = [[UILabel alloc] initWithFrame:CGRectMake(LCCKAutoResizingDefaultScreenWidth - LCCKHorizontalSpacing - LCCKTimestampeLabelWidth, CGRectGetMinY(_avatarImageView.frame), LCCKTimestampeLabelWidth, LCCKNameLabelHeight)];
         timestampLabel.font = [UIFont systemFontOfSize:13];
         timestampLabel.textAlignment = NSTextAlignmentRight;
-        timestampLabel.textColor = [UIColor grayColor];
+        timestampLabel.textColor = [[LCCKSettingService sharedInstance] defaultThemeColorForKey:@"TableView-CellMinor"];
         timestampLabel.autoresizingMask =  UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleBottomMargin;
         _timestampLabel = timestampLabel;
     }
@@ -108,6 +119,7 @@ CGFloat const LCCKConversationListCellDefaultHeight = 61; //LCCKImageSize + LCCK
     if (_nameLabel == nil) {
         UILabel *nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(_avatarImageView.frame) + LCCKHorizontalSpacing, CGRectGetMinY(_avatarImageView.frame), CGRectGetMinX(_timestampLabel.frame) - LCCKHorizontalSpacing * 3 - LCCKImageSize, LCCKNameLabelHeight)];
         nameLabel.font = [UIFont systemFontOfSize:17];
+        nameLabel.textColor = [[LCCKSettingService sharedInstance] defaultThemeColorForKey:@"TableView-CellTitle"];
         nameLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         _nameLabel = nameLabel;
     }
@@ -119,6 +131,7 @@ CGFloat const LCCKConversationListCellDefaultHeight = 61; //LCCKImageSize + LCCK
         UILabel *messageTextLabel = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMinX(_nameLabel.frame), CGRectGetMaxY(_nameLabel.frame), LCCKAutoResizingDefaultScreenWidth - 4 * LCCKHorizontalSpacing - LCCKImageSize - LCCKRemindMuteSize, LCCKMessageLabelHeight)];
         messageTextLabel.backgroundColor = [UIColor clearColor];
         messageTextLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+        messageTextLabel.textColor = [[LCCKSettingService sharedInstance] defaultThemeColorForKey:@"TableView-CellDetail"];
         _messageTextLabel = messageTextLabel;
     }
     return _messageTextLabel;
@@ -139,15 +152,32 @@ CGFloat const LCCKConversationListCellDefaultHeight = 61; //LCCKImageSize + LCCK
     return _remindMuteImageView;
 }
 
-
 - (LCCKBadgeView *)badgeView {
     if (_badgeView == nil) {
         LCCKBadgeView *badgeView = [[LCCKBadgeView alloc] initWithParentView:self.avatarImageView
                                                                alignment:LCCKBadgeViewAlignmentTopRight];
+        badgeView.badgeBackgroundColor = self.conversationListUnreadBackgroundColor;
+        badgeView.badgeTextColor = self.conversationListUnreadTextColor;
         [self.avatarImageView addSubview:(_badgeView = badgeView)];
         [self.avatarImageView bringSubviewToFront:_badgeView];
     }
     return _badgeView;
+}
+
+- (UIColor *)conversationListUnreadBackgroundColor {
+    if (_conversationListUnreadBackgroundColor) {
+        return _conversationListUnreadBackgroundColor;
+    }
+    _conversationListUnreadBackgroundColor = [[LCCKSettingService sharedInstance] defaultThemeColorForKey:@"ConversationList-UnreadBackground"];
+    return _conversationListUnreadBackgroundColor;
+}
+
+- (UIColor *)conversationListUnreadTextColor {
+    if (_conversationListUnreadTextColor) {
+        return _conversationListUnreadTextColor;
+    }
+    _conversationListUnreadTextColor = [[LCCKSettingService sharedInstance] defaultThemeColorForKey:@"ConversationList-UnreadText"];
+    return _conversationListUnreadTextColor;
 }
 
 - (void)prepareForReuse {

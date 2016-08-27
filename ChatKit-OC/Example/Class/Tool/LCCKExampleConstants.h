@@ -2,7 +2,7 @@
 //  LCCKExampleConstants.h
 //  ChatKit-OC
 //
-//  v0.6.2 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/8/13.
+//  v0.7.0 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/8/13.
 //  Copyright © 2016年 LeanCloud. All rights reserved.
 //
 
@@ -53,6 +53,20 @@
 @[                               \
     LCCKTestPeerIds,             \
     __LCCKContactsOfDevelopers,  \
+]
+
+#define LCCKTestConversationGroupAvatarURLs                      \
+    @[                                                           \
+      @"http://www.avatarsdb.com/avatars/mickey.jpg",            \
+      @"http://www.avatarsdb.com/avatars/mickey_mouse.jpg",      \
+      @"http://www.avatarsdb.com/avatars/all_together.jpg",      \
+      @"http://www.avatarsdb.com/avatars/baby_disney.jpg",       \
+      @"http://www.avatarsdb.com/avatars/donald_duck01.jpg",     \
+      @"http://www.avatarsdb.com/avatars/Blue_Team_Disney.jpg",  \
+      @"http://www.avatarsdb.com/avatars/mickey_mouse_smile.jpg",\
+      @"http://www.avatarsdb.com/avatars/baby_pluto_dog.jpg",    \
+      @"http://www.avatarsdb.com/avatars/donald_duck_angry.jpg", \
+      @"http://www.avatarsdb.com/avatars/mickey_mouse_colors.jpg"\
 ]
 
 #pragma mark - UI opera

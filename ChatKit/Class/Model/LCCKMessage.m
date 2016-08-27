@@ -2,7 +2,7 @@
 //  LCCKMessage.m
 //  LeanCloudChatKit-iOS
 //
-//  v0.6.2 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/3/21.
+//  v0.7.0 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/3/21.
 //  Copyright © 2016年 LeanCloud. All rights reserved.
 //
 
@@ -15,7 +15,7 @@
 #else
 #import "AVIMTypedMessage.h"
 #endif
-#import "AVIMConversation+LCCKAddition.h"
+#import "AVIMConversation+LCCKExtension.h"
 #import "UIImage+LCCKExtension.h"
 //#define LCCKIsDebugging 1
 #import "NSObject+LCCKExtension.h"
@@ -266,7 +266,7 @@
     return self;
 }
 
-+ (LCCKMessage *)messageWithAVIMTypedMessage:(AVIMTypedMessage *)message {
++ (id)messageWithAVIMTypedMessage:(AVIMTypedMessage *)message {
     //FIXME:自定义消息
     if ([message lcck_isCustomMessage]) {
         if ([message lcck_isSupportThisCustomMessage]) {

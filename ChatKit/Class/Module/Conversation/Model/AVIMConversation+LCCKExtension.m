@@ -1,18 +1,18 @@
 //
-//  AVIMConversation+LCCKAddition.m
+//  AVIMConversation+LCCKExtension.m
 //  LeanCloudChatKit-iOS
 //
-//  v0.6.2 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/3/11.
+//  v0.7.0 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/3/11.
 //  Copyright © 2016年 LeanCloud. All rights reserved.
 //
 
-#import "AVIMConversation+LCCKAddition.h"
+#import "AVIMConversation+LCCKExtension.h"
 #import <objc/runtime.h>
 #import "LCCKUserSystemService.h"
 #import "LCCKSessionService.h"
 #import "LCCKUserDelegate.h"
 
-@implementation AVIMConversation (LCCKAddition)
+@implementation AVIMConversation (LCCKExtension)
 
 - (AVIMTypedMessage *)lcck_lastMessage {
     return objc_getAssociatedObject(self, @selector(lcck_lastMessage));
@@ -106,6 +106,20 @@
     } else {
         return [NSString stringWithFormat:@"%@(%ld)", self.lcck_displayName, (long)self.members.count];
     }
+}
+
+- (void)lcck_setObject:(id)object forKey:(NSString *)key callback:(LCCKBooleanResultBlock)callback {
+    AVIMConversationUpdateBuilder *updateBuilder = [self newUpdateBuilder] ;
+    updateBuilder.attributes = self.attributes;
+    [updateBuilder setObject:object forKey:key];
+    [self update:[updateBuilder dictionary] callback:callback];
+}
+
+- (void)lcck_removeObjectForKey:(NSString *)key callback:(LCCKBooleanResultBlock)callback {
+    AVIMConversationUpdateBuilder *updateBuilder = [self newUpdateBuilder] ;
+    updateBuilder.attributes = self.attributes;
+    [updateBuilder removeObjectForKey:key];
+    [self update:[updateBuilder dictionary] callback:callback];
 }
 
 @end

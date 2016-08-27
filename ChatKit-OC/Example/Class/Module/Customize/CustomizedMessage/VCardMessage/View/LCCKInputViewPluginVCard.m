@@ -2,7 +2,7 @@
 //  LCCKInputViewPluginVCard.m
 //  ChatKit-OC
 //
-//  v0.6.2 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/8/12.
+//  v0.7.0 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/8/12.
 //  Copyright © 2016年 LeanCloud. All rights reserved.
 //
 
@@ -73,7 +73,7 @@
         return nil;
     }
     LCCKIdResultBlock sendCustomMessageHandler = ^(id object, NSError *error) {
-        LCCKVCardMessage *vCardMessage = [LCCKVCardMessage vCardMessageWithClientId:object conversationType:self.conversationViewController.conversation.lcck_type];
+        LCCKVCardMessage *vCardMessage = [LCCKVCardMessage vCardMessageWithClientId:object conversationType:[self.conversationViewController getConversationIfExists].lcck_type];
         [self.conversationViewController sendCustomMessage:vCardMessage progressBlock:^(NSInteger percentDone) {
         } success:^(BOOL succeeded, NSError *error) {
             [self.conversationViewController sendLocalFeedbackTextMessge:@"名片发送成功"];
@@ -96,7 +96,7 @@
 }
 
 - (void)presentSelectMemberViewController {
-    AVIMConversation *conversation = self.conversationViewController.conversation;
+    AVIMConversation *conversation = [self.conversationViewController getConversationIfExists];
     NSArray *allPersonIds;
     if (conversation.lcck_type == LCCKConversationTypeSingle) {
         allPersonIds = [[LCCKContactManager defaultManager] fetchContactPeerIds];

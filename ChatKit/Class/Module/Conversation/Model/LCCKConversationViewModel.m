@@ -2,7 +2,7 @@
 //  LCCKConversationViewModel.m
 //  LCCKChatExample
 //
-//  v0.6.2 Created by ElonChan (微信向我报BUG:chenyilong1010) ( https://github.com/leancloud/ChatKit-OC ) on 15/11/18.
+//  v0.7.0 Created by ElonChan (微信向我报BUG:chenyilong1010) ( https://github.com/leancloud/ChatKit-OC ) on 15/11/18.
 //  Copyright © 2015年 https://LeanCloud.cn . All rights reserved.
 //
 #if __has_include(<ChatKit/LCChatKit.h>)
@@ -29,7 +29,7 @@
 #import "LCCKCellIdentifierFactory.h"
 
 #import "LCCKMessage.h"
-#import "AVIMConversation+LCCKAddition.h"
+#import "AVIMConversation+LCCKExtension.h"
 #import <AVOSCloudIM/AVIMLocationMessage.h>
 #import "LCCKConversationViewController.h"
 #import "LCCKUserSystemService.h"
@@ -64,6 +64,7 @@
         self.parentConversationViewController = parentConversationViewController;
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveMessage:) name:LCCKNotificationMessageReceived object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(conversationInvalided:) name:LCCKNotificationCurrentConversationInvalided object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(backgroundImageChanged:) name:LCCKNotificationConversationViewControllerBackgroundImageDidChanged object:nil];
             __unsafe_unretained typeof(self) weakSelf = self;
             [self lcck_executeAtDealloc:^{
             weakSelf.delegate = nil;
@@ -81,7 +82,7 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     id message = self.dataArray[indexPath.row];
-    NSString *identifier = [LCCKCellIdentifierFactory cellIdentifierForMessageConfiguration:message conversationType:self.parentConversationViewController.conversation.lcck_type];
+    NSString *identifier = [LCCKCellIdentifierFactory cellIdentifierForMessageConfiguration:message conversationType:[self.parentConversationViewController getConversationIfExists].lcck_type];
     LCCKChatMessageCell *messageCell = [tableView dequeueReusableCellWithIdentifier:identifier forIndexPath:indexPath];
     messageCell.tableView = self.parentConversationViewController.tableView;
     messageCell.indexPath = indexPath;
@@ -92,7 +93,7 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     id message = self.dataArray[indexPath.row];
-    NSString *identifier = [LCCKCellIdentifierFactory cellIdentifierForMessageConfiguration:message conversationType:self.parentConversationViewController.conversation.lcck_type];
+    NSString *identifier = [LCCKCellIdentifierFactory cellIdentifierForMessageConfiguration:message conversationType:[self.parentConversationViewController getConversationIfExists].lcck_type];
     return [tableView fd_heightForCellWithIdentifier:identifier cacheByIndexPath:indexPath configuration:^(LCCKChatMessageCell *cell) {
         [cell configureCellWithData:message];
     }];
@@ -102,36 +103,78 @@
 
 - (void)receiveMessage:(NSNotification *)notification {
     NSDictionary *userInfo = notification.object;
+    if (!userInfo) {
+        return;
+    }
     __block NSArray<AVIMTypedMessage *> *messages = userInfo[LCCKDidReceiveMessagesUserInfoMessagesKey];
     AVIMConversation *conversation = userInfo[LCCKDidReceiveMessagesUserInfoConversationKey];
-    BOOL isCurrentConversationMessage = [conversation.conversationId isEqualToString:self.parentConversationViewController.conversation.conversationId];
-    if (isCurrentConversationMessage) {
-        
-        void(^filterdMessageCallback)(NSArray *messages) = ^(NSArray *messages) {
-            AVIMConversation *currentConversation = self.parentConversationViewController.conversation;
-            if (currentConversation.muted == NO) {
-                [[LCCKSoundManager defaultManager] playReceiveSoundIfNeed];
-            }
-            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
-                NSArray *lcckMessages = [NSMutableArray lcck_messagesWithAVIMMessages:messages];
-                dispatch_async(dispatch_get_main_queue(),^{
-                    [self receivedNewMessages:lcckMessages];
-                });
-            });
-        };
-        
-        LCCKFilterMessagesBlock filterMessagesBlock = [LCCKConversationService sharedInstance].filterMessagesBlock;
-        if (filterMessagesBlock) {
-            LCCKFilterMessagesCompletionHandler filterMessagesCompletionHandler = ^(NSArray *filterMessages, NSError *error) {
-                if (!error) {
-                    !filterdMessageCallback ?: filterdMessageCallback([filterMessages copy]);
-                }
-            };
-            filterMessagesBlock(conversation, messages, filterMessagesCompletionHandler);
-        } else {
-            !filterdMessageCallback ?: filterdMessageCallback(messages);
+    BOOL isCurrentConversationMessage = [conversation.conversationId isEqualToString:self.parentConversationViewController.conversationId];
+    if (!isCurrentConversationMessage) {
+        return;
+    }
+    
+    void(^filterdMessageCallback)(NSArray *messages) = ^(NSArray *messages) {
+        AVIMConversation *currentConversation = [self.parentConversationViewController getConversationIfExists];
+        if (currentConversation.muted == NO) {
+            [[LCCKSoundManager defaultManager] playReceiveSoundIfNeed];
         }
-        
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
+            NSArray *lcckMessages = [NSMutableArray lcck_messagesWithAVIMMessages:messages];
+            dispatch_async(dispatch_get_main_queue(),^{
+                [self receivedNewMessages:lcckMessages];
+            });
+        });
+    };
+    
+    LCCKFilterMessagesBlock filterMessagesBlock = [LCCKConversationService sharedInstance].filterMessagesBlock;
+    if (filterMessagesBlock) {
+        LCCKFilterMessagesCompletionHandler filterMessagesCompletionHandler = ^(NSArray *filterMessages, NSError *error) {
+            if (!error) {
+                !filterdMessageCallback ?: filterdMessageCallback([filterMessages copy]);
+            }
+        };
+        filterMessagesBlock(conversation, messages, filterMessagesCompletionHandler);
+    } else {
+        !filterdMessageCallback ?: filterdMessageCallback(messages);
+    }
+}
+
+- (void)backgroundImageChanged:(NSNotification *)notification {
+    NSDictionary *userInfo = notification.object;
+    if (!userInfo) {
+        return;
+    }
+    NSString *userInfoConversationId = userInfo[LCCKNotificationConversationViewControllerBackgroundImageDidChangedUserInfoConversationIdKey];
+    NSString *conversationId = self.parentConversationViewController.conversationId;
+    BOOL isCurrentConversationMessage = [userInfoConversationId isEqualToString:conversationId];
+    if (!isCurrentConversationMessage) {
+        return;
+    }
+    [self resetBackgroundImage];
+}
+
+- (void)setDefaultBackgroundImage {
+    UIImage *image = [self imageInBundlePathForImageName:@"conversationViewController_default_backgroundImage"];
+    [self.parentConversationViewController.view setBackgroundColor:[UIColor colorWithPatternImage:image]];
+}
+
+- (void)resetBackgroundImage {
+    NSString *conversationId = self.parentConversationViewController.conversationId;
+    NSString *conversationViewControllerBackgroundImageKey = [NSString stringWithFormat:@"%@%@_%@", LCCKCustomConversationViewControllerBackgroundImageNamePrefix, [LCCKSessionService sharedInstance].clientId, conversationId];
+    NSString *conversationViewControllerBackgroundImage = [[NSUserDefaults standardUserDefaults] objectForKey:conversationViewControllerBackgroundImageKey];
+    if (conversationViewControllerBackgroundImage == nil) {
+        conversationViewControllerBackgroundImage = [[NSUserDefaults standardUserDefaults] objectForKey:LCCKDefaultConversationViewControllerBackgroundImageName];
+        if (conversationViewControllerBackgroundImage == nil) {
+            [self setDefaultBackgroundImage];
+        } else {
+            NSString *imagePath = [conversationViewControllerBackgroundImage lcck_pathForConversationBackgroundImage];
+            UIImage *image = [UIImage imageNamed:imagePath];
+            [self.parentConversationViewController.view setBackgroundColor:[UIColor colorWithPatternImage:image]];
+        }
+    } else {
+        NSString *imagePath = [conversationViewControllerBackgroundImage lcck_pathForConversationBackgroundImage];
+        UIImage *image = [UIImage imageNamed:imagePath];
+        [self.parentConversationViewController.view setBackgroundColor:[UIColor colorWithPatternImage:image]];
     }
 }
 
@@ -423,7 +466,7 @@ fromTimestamp     |    toDate   |                |  上次上拉刷新顶端，�
     } else {
         avimTypedMessage = aMessage ;
     }
-    [avimTypedMessage lcck_setObject:@(self.parentConversationViewController.conversation.lcck_type) forKey:LCCKCustomMessageConversationTypeKey];
+    [avimTypedMessage lcck_setObject:@([self.parentConversationViewController getConversationIfExists].lcck_type) forKey:LCCKCustomMessageConversationTypeKey];
     [self.avimTypedMessage addObject:avimTypedMessage];
     [self preloadMessageToTableView:aMessage callback:^{
         [[LCCKConversationService sharedInstance] sendMessage:avimTypedMessage
@@ -703,6 +746,11 @@ fromTimestamp     |    toDate   |                |  上次上拉刷新顶端，�
         allowScrollToBottom = NO;
     }
     self.parentConversationViewController.allowScrollToBottom = allowScrollToBottom;
+}
+
+- (UIImage *)imageInBundlePathForImageName:(NSString *)imageName {
+    UIImage *image = [UIImage lcck_imageNamed:imageName bundleName:@"Other" bundleForClass:[self class]];
+    return image;
 }
 
 @end

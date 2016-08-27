@@ -2,7 +2,7 @@
 //  LCCKChatBar.m
 //  LCCKChatBarExample
 //
-//  v0.6.2 Created by ElonChan (微信向我报BUG:chenyilong1010) ( https://github.com/leancloud/ChatKit-OC ) on 15/8/17.
+//  v0.7.0 Created by ElonChan (微信向我报BUG:chenyilong1010) ( https://github.com/leancloud/ChatKit-OC ) on 15/8/17.
 //  Copyright (c) 2015年 https://LeanCloud.cn . All rights reserved.
 //
 
@@ -45,6 +45,18 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
 @property (assign, nonatomic) CGFloat oldTextViewHeight;
 @property (nonatomic, assign, getter=shouldAllowTextViewContentOffset) BOOL allowTextViewContentOffset;
 @property (nonatomic, assign, getter=isClosed) BOOL close;
+
+#pragma mark - MessageInputView Customize UI
+///=============================================================================
+/// @name MessageInputView Customize UI
+///=============================================================================
+
+@property (nonatomic, strong) UIColor *messageInputViewBackgroundColor;
+@property (nonatomic, strong) UIColor *messageInputViewTextFieldTextColor;
+@property (nonatomic, strong) UIColor *messageInputViewTextFieldBackgroundColor;
+@property (nonatomic, strong) UIColor *messageInputViewRecordTextColor;
+//TODO:MessageInputView-Tint-Color
+
 @end
 
 @implementation LCCKChatBar
@@ -463,8 +475,7 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
     }];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
-    //TODO:able to customize
-    self.backgroundColor = [UIColor colorWithRed:235/255.0f green:236/255.0f blue:238/255.0f alpha:1.0f];
+    self.backgroundColor = self.messageInputViewBackgroundColor;
     [self setupConstraints];
 }
 
@@ -696,7 +707,6 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
 - (LCCKChatMoreView *)moreView {
     if (!_moreView) {
         LCCKChatMoreView *moreView = [[LCCKChatMoreView alloc] init];
-        moreView.backgroundColor = self.backgroundColor;
         moreView.inputViewRef = self;
         [self addSubview:(_moreView = moreView)];
     }
@@ -709,6 +719,8 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
         _textView.font = [UIFont systemFontOfSize:16.0f];
         _textView.delegate = self;
         _textView.layer.cornerRadius = 4.0f;
+        _textView.textColor = self.messageInputViewTextFieldTextColor;
+        _textView.backgroundColor = self.messageInputViewTextFieldBackgroundColor;
         _textView.layer.borderColor = [UIColor colorWithRed:204.0/255.0f green:204.0/255.0f blue:204.0/255.0f alpha:1.0f].CGColor;
         _textView.returnKeyType = UIReturnKeySend;
         _textView.layer.borderWidth = .5f;
@@ -722,6 +734,8 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
     if (!_voiceButton) {
         _voiceButton = [UIButton buttonWithType:UIButtonTypeCustom];
         _voiceButton.tag = LCCKFunctionViewShowVoice;
+        [_voiceButton setTitleColor:self.messageInputViewRecordTextColor forState:UIControlStateNormal];
+        [_voiceButton setTitleColor:self.messageInputViewRecordTextColor forState:UIControlStateHighlighted];
         [_voiceButton setBackgroundImage:[self imageInBundlePathForImageName:@"ToolViewInputVoice"] forState:UIControlStateNormal];
         [_voiceButton setBackgroundImage:[self imageInBundlePathForImageName:@"ToolViewKeyboard"] forState:UIControlStateSelected];
         [_voiceButton addTarget:self action:@selector(buttonAction:) forControlEvents:UIControlEventTouchUpInside];
@@ -788,6 +802,41 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
 
 - (UIViewController *)rootViewController {
     return [[UIApplication sharedApplication] keyWindow].rootViewController;
+}
+
+#pragma mark -
+#pragma mark - MessageInputView Customize UI Method
+
+- (UIColor *)messageInputViewBackgroundColor {
+    if (_messageInputViewBackgroundColor) {
+        return _messageInputViewBackgroundColor;
+    }
+    _messageInputViewBackgroundColor = [[LCCKSettingService sharedInstance] defaultThemeColorForKey:@"MessageInputView-BackgroundColor"];
+    return _messageInputViewBackgroundColor;
+}
+
+- (UIColor *)messageInputViewTextFieldTextColor {
+    if (_messageInputViewTextFieldTextColor) {
+        return _messageInputViewTextFieldTextColor;
+    }
+    _messageInputViewTextFieldTextColor = [[LCCKSettingService sharedInstance] defaultThemeColorForKey:@"MessageInputView-TextField-TextColor"];
+    return _messageInputViewTextFieldTextColor;
+}
+
+- (UIColor *)messageInputViewTextFieldBackgroundColor {
+    if (_messageInputViewTextFieldBackgroundColor) {
+        return _messageInputViewTextFieldBackgroundColor;
+    }
+    _messageInputViewTextFieldBackgroundColor = [[LCCKSettingService sharedInstance] defaultThemeColorForKey:@"MessageInputView-TextField-BackgroundColor"];
+    return _messageInputViewTextFieldBackgroundColor;
+}
+
+- (UIColor *)messageInputViewRecordTextColor {
+    if (_messageInputViewRecordTextColor) {
+        return _messageInputViewRecordTextColor;
+    }
+    _messageInputViewRecordTextColor = [[LCCKSettingService sharedInstance] defaultThemeColorForKey:@"MessageInputView-Record-TextColor"];
+    return _messageInputViewRecordTextColor;
 }
 
 @end

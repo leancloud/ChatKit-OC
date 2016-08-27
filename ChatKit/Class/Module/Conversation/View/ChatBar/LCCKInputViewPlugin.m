@@ -2,7 +2,7 @@
 //  LCCKInputViewPlugin.m
 //  Pods
 //
-//  v0.6.2 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/7/19.
+//  v0.7.0 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/7/19.
 //
 //
 
@@ -28,6 +28,7 @@ NSMutableArray const *LCCKInputViewPluginArray = nil;
 @property (nonatomic, readwrite) LCCKInputViewPluginType pluginType;
 @property (strong, nonatomic) UIButton *button;
 @property (strong, nonatomic) UILabel *titleLabel;
+@property (nonatomic, strong) UIColor *messageInputViewMorePanelTextColor;
 
 @end
 
@@ -113,7 +114,7 @@ NSMutableArray const *LCCKInputViewPluginArray = nil;
 #pragma mark - Public Methods
 
 - (void)fillWithPluginTitle:(NSString *)pluginTitle
-                    pluginIconImage:(UIImage *)pluginIconImage {
+            pluginIconImage:(UIImage *)pluginIconImage {
     self.titleLabel.text = pluginTitle;
     [self.button setBackgroundImage:pluginIconImage forState:UIControlStateNormal];
 }
@@ -153,7 +154,7 @@ NSMutableArray const *LCCKInputViewPluginArray = nil;
     if (!_titleLabel) {
         _titleLabel = [[UILabel alloc] init];
         _titleLabel.font = [UIFont systemFontOfSize:13.0f];
-        _titleLabel.textColor = [UIColor darkTextColor];
+        _titleLabel.textColor = self.messageInputViewMorePanelTextColor;
     }
     return _titleLabel;
 }
@@ -168,6 +169,14 @@ NSMutableArray const *LCCKInputViewPluginArray = nil;
     } else {
         return nil;
     }
+}
+
+- (UIColor *)messageInputViewMorePanelTextColor {
+    if (_messageInputViewMorePanelTextColor) {
+        return _messageInputViewMorePanelTextColor;
+    }
+    _messageInputViewMorePanelTextColor = [[LCCKSettingService sharedInstance] defaultThemeColorForKey:@"MessageInputView-MorePanel-TextColor"];
+    return _messageInputViewMorePanelTextColor;
 }
 
 @end

@@ -1,15 +1,38 @@
-# ChatKit 使用指南 · iOS
+# ChatKit 快速入门 · iOS
 
 <p align="center">
-![enter image description here](https://img.shields.io/badge/pod-v0.6.0-brightgreen.svg)  ![enter image description here](https://img.shields.io/badge/platform-iOS%207.0%2B-ff69b5618733984.svg) 
+![enter image description here](https://img.shields.io/badge/pod-v0.7.1-brightgreen.svg)  ![enter image description here](https://img.shields.io/badge/platform-iOS%207.0%2B-ff69b5618733984.svg) 
 <a href="https://github.com/leancloud/ChatKit-OC/blob/master/LICENSE"><img src="https://img.shields.io/badge/license-MIT-green.svg?style=flat"></a>
 </a>
 
 在使用中有任何问题都可以到[我们的官方论坛](https://forum.leancloud.cn/c/jing-xuan-faq)提问题，会有专业工程师回复，平均响应时间在24小时内。
 
+该篇为快速入门，更多自定义需求请前往这里：
+
+ 1.  [《ChatKit 自定义样式》]( https://github.com/leancloud/ChatKit-OC/blob/master/ChatKit%20自定义样式.md )
+ 2. [《ChatKit 自定义业务》]( https://github.com/leancloud/ChatKit-OC/blob/master/ChatKit%20自定义业务.md) 
+
+
+
+##  导航
+ 
+ 1. [简介](https://github.com/leancloud/ChatKit-OC#简介) 
+ 2. [获取项目](https://github.com/leancloud/ChatKit-OC#获取项目) 
+ 2. [集成效果](https://github.com/leancloud/ChatKit-OC#集成效果) 
+ 3. [项目结构](https://github.com/leancloud/ChatKit-OC#项目结构) 
+ 4. [使用方法](https://github.com/leancloud/ChatKit-OC#使用方法) 
+      1. [CocoaPods 导入](https://github.com/leancloud/ChatKit-OC#cocoapods-导入) 
+      2. [胶水函数快速集成](https://github.com/leancloud/ChatKit-OC#胶水函数快速集成) 
+      3. [最近联系人界面](https://github.com/leancloud/ChatKit-OC#最近联系人界面) 
+      4. [由最近联系人进入聊天界面](https://github.com/leancloud/ChatKit-OC#由最近联系人进入聊天界面) 
+      4. [聊天界面](https://github.com/leancloud/ChatKit-OC#聊天界面) 
+      5. [响应聊天界面的几类操作](https://github.com/leancloud/ChatKit-OC#响应聊天界面的几类操作) 
+      5. [手动集成](https://github.com/leancloud/ChatKit-OC#手动集成) 
+ 8. [常见问题](https://github.com/leancloud/ChatKit-OC#常见问题) 
+
 ## 简介
 
-[ChatKit](https://github.com/leancloud/ChatKit-OC) 是一个免费且开源的 UI 聊天组件，由 LeanCloud 官方推出，底层聊天服务基于 LeanCloud 的 IM 实时通信服务「LeanMessage」而开发。它可以帮助开发者快速集成 IM 服务，轻松实现聊天功能，提供完全自由的授权协议，支持二次开发。其最大特点是把聊天常用的一些功能配合 UI 一起提供给开发者。
+[ChatKit](https://github.com/leancloud/ChatKit-OC) 是一个免费且开源的 UI 聊天组件，自带云服务器，自带推送，支持消息漫游，消息永久存储。底层聊天服务基于 [LeanCloud（原名 `AVOS` ）](https://leancloud.cn/?source=T6M35E4H) 的 IM 实时通信服务「LeanMessage」而开发，采用 Protobuf 协议进行消息传输。ChatKit 可以帮助开发者快速集成 IM 服务，轻松实现聊天功能，提供完全自由的授权协议，支持二次开发。其最大特点是把聊天常用的一些功能配合 UI 一起提供给开发者。
 
 ## 获取项目 
 
@@ -104,7 +127,8 @@ git clone --depth=1 https://github.com/leancloud/ChatKit-OC
 
  使用 ChatKit 大体有几个步骤：
 
- 1. 在 `-[AppDelegate application:didFinishLaunchingWithOptions:]` 中调用 `-[LCChatKit setAppId:appKey:]` 来开启 LeanCloud 服务。
+ 1. 在 `-[AppDelegate application:didFinishLaunchingWithOptions:]` 中调用 `-[LCChatKit setAppId:appKey:]` 来开启 LeanCloud 服务。需要到
+ [LeanCloud（原名 `AVOS` ）](https://leancloud.cn/?source=T6M35E4H) 申请一个 AppId 和一个 AppKey，可以在控制台里创建应用，替换 Demo 中的 AppId 和 AppKey。
  2. 调用 `-[LCChatKit sharedInstance]` 来初始化一个单例对象。
  3. 调用 `-[[LCChatKit sharedInstance] openWithClientId:callback:]` 开启 LeanCloud 的 IM 服务 LeanMessage，开始聊天。
  4. 调用 `-[[LCChatKit sharedInstance] closeWithCallback:]` 关闭 LeanCloud 的 IM 服务，结束聊天。
@@ -270,7 +294,7 @@ LCCKConversationViewController *conversationViewController = [[LCCKConversationV
 
 这里注意，通过 `peerId` 初始化，内部实现时，如果没有一个 unique 对话刚好包含这两个成员，则会先创建一个 unique 对话，所以调用该方法时可能会导致 _Conversation 表中自动增加一条记录。同理，通过 `conversationId` 初始化群聊，内部实现时，如果不是对话成员会先把当前用户加入对话，并开启群聊。
 
-#### 响应聊天界面的几类操作
+### 响应聊天界面的几类操作
 
 由于有了 ChatKit 的帮助，聊天界面的初始化和展示非常简单，但是这里面交互上还有很多地方需要自定义扩展。
 
@@ -312,329 +336,12 @@ typedef NS_ENUM(NSInteger, LCCKBarButtonItemStyle) {
 示例代码如下：
 
 ```objective-c
-[conversationController configureBarButtonItemStyle:LCCKBarButtonItemStyleGroupProfile action:^{
+[conversationController configureBarButtonItemStyle:LCCKBarButtonItemStyleGroupProfile action:^(UIBarButtonItem *sender, UIEvent *event) {
     ConversationDetailViewController *detailVC = [[ConversationDetailViewController alloc] init];// 自己实现的对话详情页
     detailVC.conversation = conversation;
     [conversationController.navigationController pushViewController:detailVC animated:YES];
 }];
 ```
-
-### 自定义消息
-
-自定义消息分几种：
-
-最简单的一种是：
-
-[暂态消息](https://leancloud.cn/docs/realtime_guide-ios.html#暂态消息) ，且不需要显示自定义 Cell 的自定义消息。
-
-请自行监听 `LCCKNotificationCustomTransientMessageReceived` 通知，自行处理响应事件。
-
-这里注意，非暂态自定义消息也会走这个通知，所以监听该通知时务必检查 Message 的类型，进行筛选。
-
-比如直播聊天室的弹幕消息、点赞出心这种暂态消息，不会存在聊天记录里，也不会有离线通知。
-
-发送消息接口：
-
-
- ```Objective-C
- //  LCCKConversationViewController.h
-/*!
- * 自定义消息位置发送
- */
-- (void)sendCustomMessage:(AVIMTypedMessage *)customMessage;
-
-/*!
- * 自定义消息位置发送
- */
-- (void)sendCustomMessage:(AVIMTypedMessage *)customMessage
-            progressBlock:(AVProgressBlock)progressBlock
-                  success:(LCCKBooleanResultBlock)success
-                   failed:(LCCKBooleanResultBlock)failed;
- ```
-
-
-#### 需要显示自定义 Cell 的消息：
-
-这里以Demo里的 VCard 名片消息为例：
-
-效果如下，ChatKit 默认实现是不支持这种消息类型，需要自定义：
-
-![enter image description here](http://image18-c.poco.cn/mypoco/myphoto/20160816/14/17338872420160816144930053.png?414x736_130)
-
-第一步：定义自定义消息。
-
- [《iOS 实时通信开发指南》](https://leancloud.cn/docs/realtime_guide-ios.html#消息) 里面详细介绍了自定义消息的步骤。
- 
- 这里再介绍下 Demo 里的 VCard 消息的自定义过程：
- 
-定义一个`LCCKVCardMessage` 自定义消息，继承 `AVIMTypedMessage` ，并遵循、实现 `AVIMTypedMessageSubclassing` 协议：
-
- ```Objective-C
-#pragma mark -
-#pragma mark - Override Methods
-
-#pragma mark -
-#pragma mark - AVIMTypedMessageSubclassing Method
-
-+ (void)load {
-    [self registerSubclass];
-}
-
-+ (AVIMMessageMediaType)classMediaType {
-    return kAVIMMessageMediaTypeVCard;
-}
-
- ```
-
-
-在初始化自定义消息时，需要注意，务必添加三个字段，ChatKit 内部会使用到。
-
-字段名 | 作用 | 备注
--------------|-------------|-------------
-degrade | 用来定义如何展示老版本未支持的自定义消息类型  | 添加到自定义消息的 attributes 字典属性下
-typeTitle | 最近对话列表中最近一条消息的title，</p>比如：最近一条消息是图片，可设置该字段内容为：`@"图片"`，相应会展示：`[图片]`） | 添加到自定义消息的 attributes 字典属性下
-summary | 用来显示在push提示中  | 添加到自定义消息的 attributes 字典属性下，</p>另外，这个字段是为了方便自定义推送内容，这需要借助云引擎实现。
-conversationType | 用来显示在push提示中 |  添加到自定义消息的 attributes 字典属性下,</p>对话类型，用来展示在推送提示中，以达到这样的效果： [群消息]Tom：hello gays!</p> 以枚举 LCCKConversationType 定义为准，0为单聊，1为群聊
-以上三个字段需要添加到自定义消息的 attributes 字典属性下，ChatKit 给出了一个方法来方便添加 `-lcck_setObject:forKey:` ，用法如下：
-
-
- ```Objective-C
-/*!
- * 有几个必须添加的字段：
- *  - degrade 用来定义如何展示老版本未支持的自定义消息类型
- *  - typeTitle 最近对话列表中最近一条消息的title，比如：最近一条消息是图片，可设置该字段内容为：`@"图片"`，相应会展示：`[图片]`。
- *  - summary 会显示在 push 提示中
- * @attention 务必添加这三个字段，ChatKit 内部会使用到。
- */
-- (instancetype)initWithClientId:(NSString *)clientId {
-    self = [super init];
-    if (!self) {
-        return nil;
-    }
-    [self lcck_setObject:@"名片" forKey:LCCKCustomMessageTypeTitleKey];
-    [self lcck_setObject:@"这是一条名片消息，当前版本过低无法显示，请尝试升级APP查看" forKey:LCCKCustomMessageDegradeKey];
-    [self lcck_setObject:@"有人向您发送了一条名片消息，请打开APP查看" forKey:LCCKCustomMessageSummaryKey];
-    [self lcck_setObject:clientId forKey:@"clientId"];
-    return self;
-}
- ```
-
-
-
-#### 自定义消息 Cell
-
-继承 `LCCKChatMessageCell` ，并遵循、实现 `LCCKChatMessageCellSubclassing` 协议，重载父类方法:
-
-这里注意 `+classMediaType` 返回的类型与自定义消息里返回的类型一致：
-
-
- ```Objective-C
-#pragma mark -
-#pragma mark - LCCKChatMessageCellSubclassing Method
-
-+ (void)load {
-    [self registerCustomMessageCell];
-}
-
-+ (AVIMMessageMediaType)classMediaType {
-    return kAVIMMessageMediaTypeVCard;
-}
- ```
-
-重写父类的下列方法：
-
-
- ```Objective-C
-- (void)setup;
-- (void)configureCellWithData:(AVIMTypedMessage *)message;
- ```
-
-布局在 `-setup`方法中进行，默认不添加头像，昵称等，如需添加需要调用`addSubview` 方法，如果添加了，就会参与约束，约束在父类的 `-setup` 方法中已经实现。
-
-  推荐使用 AutoLayout 进行布局，如果你在布局中对 `self.contentView` 进行了合理的约束，ChatKit 将自定计算 Cell 高度。如果你没有对 `self.contentView`
-进行约束，那么你需要额外提供 Cell 的 Size 数据：
-
- - Auto layout 布局请请重载 `-systemLayoutSizeFittingSize:`
- - Frame layout 布局请重载 `-sizeThatFits:`
-
-比如：
-
- ```Objective-C
-- (CGSize)sizeThatFits:(CGSize)size {
-    return CGSizeMake(size.width, A+B+C+D+E+....);
-}
- ```
-
-
-具体用法请参考[文档](https://github.com/forkingdog/UITableView-FDTemplateLayoutCell)。
-
-Demo 中的用法如下：
-
- ```Objective-C
-#pragma mark -
-#pragma mark - Override Methods
-
-- (void)setup {
-    [self.vCardView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.edges.equalTo(self.contentView).with.insets(UIEdgeInsetsMake(LCCK_MSG_SPACE_TOP, LCCK_MSG_SPACE_LEFT, LCCK_MSG_SPACE_BTM, LCCK_MSG_SPACE_RIGHT));
-    }];
-    [self updateConstraintsIfNeeded];
-    [super setup];
-}
-
-- (void)configureCellWithData:(AVIMTypedMessage *)message {
-    [super configureCellWithData:message];
-    NSString *clientId;
-    NSString *name = nil;
-    NSURL *avatarURL = nil;
-    clientId = [message.attributes valueForKey:@"clientId"];
-    [[LCChatKit sharedInstance] getCachedProfileIfExists:clientId name:&name avatarURL:&avatarURL error:nil];
-    if (!name) {
-        name = clientId;
-    }
-    if (!name) {
-        name = @"未知用户";
-    }
-    
-    [self.vCardView configureWithAvatarURL:avatarURL title:name clientId:clientId];
-}
-
- ```
- 
- 自定义 Cell 的点击事件，请在自定义 Cell 中自行定义、响应，Demo中采用了添加 Tap 手势的方式。
-
-
-#### 自定义输入框插件
-用法与自定义消息和自定义 Cell 类似：
-继承 `LCCKInputViewPlugin` ，遵循、实现 `LCCKInputViewPluginSubclassing` 协议，
-
- ```Objective-C
-#pragma mark -
-#pragma mark - LCCKInputViewPluginSubclassing Method
-
-+ (void)load {
-    [self registerCustomInputViewPlugin];
-}
-
-+ (LCCKInputViewPluginType)classPluginType {
-    return LCCKInputViewPluginTypeVCard;
-}
-
- ```
-
-UI自定义，需要实现 `LCCKInputViewPluginDelegate` 方法：
-
-
- ```Objective-C
-#pragma mark -
-#pragma mark - LCCKInputViewPluginDelegate Method
-
-/**
- * 插件图标
- */
-- (UIImage *)pluginIconImage {
-    return [self imageInBundlePathForImageName:@"chat_bar_icons_location"];
-}
-
-/**
- * 插件名称
- */
-- (NSString *)pluginTitle {
-    return @"名片";
-}
-
-/**
- * 插件对应的 view，会被加载到 inputView 上
- */
-- (UIView *)pluginContentView {
-    return nil;
-}
-
-/**
- * 插件被选中运行
- */
-- (void)pluginDidClicked {
-    [super pluginDidClicked];
-    [self presentSelectMemberViewController];
-}
-
-/**
- * 发送自定消息的实现
- */
-- (LCCKIdResultBlock)sendCustomMessageHandler {
-    if (_sendCustomMessageHandler) {
-        return _sendCustomMessageHandler;
-    }
-    LCCKIdResultBlock sendCustomMessageHandler = ^(id object, NSError *error) {
-        LCCKVCardMessage *vCardMessage = [LCCKVCardMessage vCardMessageWithClientId:object];
-        [self.conversationViewController sendCustomMessage:vCardMessage progressBlock:^(NSInteger percentDone) {
-        } success:^(BOOL succeeded, NSError *error) {
-            [self.conversationViewController sendLocalFeedbackTextMessge:@"名片发送成功"];
-        } failed:^(BOOL succeeded, NSError *error) {
-            [self.conversationViewController sendLocalFeedbackTextMessge:@"名片发送失败"];
-        }];
-        //important: avoid retain cycle!
-        _sendCustomMessageHandler = nil;
-    };
-    _sendCustomMessageHandler = sendCustomMessageHandler;
-    return sendCustomMessageHandler;
-}
- ```
- 
- 这里注意在 `-sendCustomMessageHandler` 定义时记得在 Block 执行结束时，执行 `_sendCustomMessageHandler = nil;` ，避免循环引用。
-
-
-#### 删除自定义插件、自定义消息、自定义 Cell 
-
-如果需要删除插件，比如 Demo 中自定义了一个名片插件，如果想删除掉，只需要删除 LCCKInputViewPluginVCard 类中的如下代码，当然删除整个类也是能达到该效果的：
-
-
- ```Objective-C
-+ (void)load {
-    [self registerCustomInputViewPlugin];
-}
- ```
-
-另外因为一个插件往往搭配一个自定义 Cell 和自定义消息，这个也需要一并删除：
-
-删除自定义消息：
-
-`LCCKVCardMessage` 类中的：
-
- ```Objective-C
-+ (void)load {
-    [self registerSubclass];
-}
- ```
-
-删除自定义 Cell ：
-
-`LCCKVCardMessageCell` 类中的：
-
- ```Objective-C
-+ (void)load {
-    [self registerCustomMessageCell];
-}
- ```
-
-同理删除掉对应的类，也可以达到删除效果。
-
-### 自定义图片、语音等资源
-
-ChatKit 提供了默认的 Bundle 文件，如果想自定义对应的 Bundle ，需要在相应的资源 Bunble 前加前缀 CustomizedChatKit，然后拖拽到自己的项目中，详细的对应关系如下：
-
-
-
-项目 | 默认名称 | 自定义名称 | 资源类型
--------------|-------------|-------------|-------------
-聊天气泡 | MessageBubble.bundle        | CustomizedChatKitMessageBubble.bundle       |  图片
-聊天输入框键盘相关 | ChatKeyboard.bundle         | CustomizedChatKitChatKeyboard.bundle        | 图片
-表情 | Emoji.bundle                | CustomizedChatKitEmoji.bundle               | 图片、plist描述文件
-默认占位图片 | Placeholder.bundle          | CustomizedChatKitPlaceholder.bundle         | 图片
-声音相关 | VoiceMessageSource.bundle   | CustomizedChatKitVoiceMessageSource.bundle  | 声音
-NavigationBar 左右侧icon | BarButtonIcon.bundle        | CustomizedChatKitBarButtonIcon.bundle       | 图片
-其他 | Common.bundle               | CustomizedChatKitCommon.bundle              | 任意类型
-
 
 ### 手动集成
 
@@ -656,6 +363,7 @@ NavigationBar 左右侧icon | BarButtonIcon.bundle        | CustomizedChatKitBar
 - [FMDB](https://github.com/ccgus/fmdb) 2.6.2 
 - [UITableView+FDTemplateLayoutCell](https://github.com/forkingdog/UITableView-FDTemplateLayoutCell) 1.5.beta
 
+具体以  [这里](https://github.com/leancloud/ChatKit-OC/blob/master/ChatKit.podspec) 为准。
 
 ## 常见问题
 

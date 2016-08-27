@@ -2,7 +2,7 @@
 //  LCCKConversationListViewModel.m
 //  LeanCloudChatKit-iOS
 //
-//  v0.6.2 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/3/22.
+//  v0.7.0 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/3/22.
 //  Copyright © 2016年 LeanCloud. All rights reserved.
 //
 
@@ -13,7 +13,7 @@
 #import "LCCKUserSystemService.h"
 #import "LCCKConversationListViewController.h"
 #import "LCCKConstants.h"
-#import "AVIMConversation+LCCKAddition.h"
+#import "AVIMConversation+LCCKExtension.h"
 #import "LCCKLastMessageTypeManager.h"
 #import "NSDate+LCCKDateTools.h"
 #import "LCCKConversationListService.h"
@@ -82,6 +82,8 @@
         return customCell;
     }
     LCCKConversationListCell *cell = [LCCKConversationListCell dequeueOrCreateCellByTableView:tableView];
+    [tableView setSeparatorStyle:UITableViewCellSeparatorStyleSingleLine];
+    [tableView setSeparatorColor:[[LCCKSettingService sharedInstance] defaultThemeColorForKey:@"TableView-SeparatorColor"]];
     __block NSString *displayName = nil;
     __block NSURL *avatarURL = nil;
     NSString *peerId = nil;
@@ -96,8 +98,11 @@
     if (conversation.lcck_type == LCCKConversationTypeSingle) {
         [cell.avatarImageView sd_setImageWithURL:avatarURL placeholderImage:[self imageInBundleForImageName:@"Placeholder_Avatar" ]];
     } else {
-        [cell.avatarImageView setImage:[self imageInBundleForImageName:@"Placeholder_Group"]];
+        NSString *conversationGroupAvatarURLKey = [conversation.attributes valueForKey:LCCKConversationGroupAvatarURLKey];
+        NSURL *conversationGroupAvatarURL = [NSURL URLWithString:conversationGroupAvatarURLKey];
+        [cell.avatarImageView sd_setImageWithURL:conversationGroupAvatarURL placeholderImage:[self imageInBundleForImageName:@"Placeholder_Group" ]];
     }
+    
     cell.nameLabel.text = conversation.lcck_displayName;
     if (conversation.lcck_lastMessage) {
         cell.messageTextLabel.attributedText = [LCCKLastMessageTypeManager attributedStringWithMessage:conversation.lcck_lastMessage conversation:conversation userName:displayName];

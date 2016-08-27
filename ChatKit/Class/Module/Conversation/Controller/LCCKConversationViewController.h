@@ -2,7 +2,7 @@
 //  LCCKConversationViewController.h
 //  LCCKChatBarExample
 //
-//  v0.6.2 Created by ElonChan (微信向我报BUG:chenyilong1010) ( https://github.com/leancloud/ChatKit-OC ) on 15/11/20.
+//  v0.7.0 Created by ElonChan (微信向我报BUG:chenyilong1010) ( https://github.com/leancloud/ChatKit-OC ) on 15/11/20.
 //  Copyright © 2015年 https://LeanCloud.cn . All rights reserved.
 //
 @import UIKit;
@@ -26,8 +26,6 @@ FOUNDATION_EXTERN NSString *const LCCKConversationViewControllerErrorDomain;
  *  @details Initialization method is `-initWithPeerId:`.
  */
 @property (nonatomic, copy, readonly) NSString *peerId;
-
-@property (nonatomic, strong, readonly) AVIMConversation *conversation;
 
 #pragma mark - Initialize a unique single chat type object of LCCKConversationViewController
 ///=============================================================================
@@ -65,6 +63,11 @@ FOUNDATION_EXTERN NSString *const LCCKConversationViewControllerErrorDomain;
 @property (nonatomic, assign, getter=isEnableAutoJoin) BOOL enableAutoJoin;
 
 @property (nonatomic, assign, getter=isAvailable, readonly) BOOL available;
+
+/*!
+ * If `isAvailable` is NO, it will return nil
+ */
+- (AVIMConversation *)getConversationIfExists;
 
 #pragma mark - send Message
 ///=============================================================================
@@ -136,6 +139,14 @@ FOUNDATION_EXTERN NSString *const LCCKConversationViewControllerErrorDomain;
  *  是否禁用文字的双击放大功能，默认为 NO
  */
 @property (nonatomic, assign) BOOL disableTextShowInFullScreen;
+
+/*!
+ * 是否禁用标题自动配置
+ * 默认配置如下：
+ *          - 最右侧显示静音状态
+ *          - 单聊默认显示对方昵称，群聊显示 `conversation` 的 name 字段值
+ */
+@property (nonatomic, assign, getter=isDisableTitleAutoConfig) BOOL disableTitleAutoConfig;
 
 #pragma mark - Handler
 ///=============================================================================

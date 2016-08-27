@@ -2,17 +2,10 @@
 //  LCCKChatTextMessageCell.m
 //  LCCKChatExample
 //
-//  v0.6.2 Created by ElonChan (微信向我报BUG:chenyilong1010) ( https://github.com/leancloud/ChatKit-OC ) on 15/11/13.
+//  v0.7.0 Created by ElonChan (微信向我报BUG:chenyilong1010) ( https://github.com/leancloud/ChatKit-OC ) on 15/11/13.
 //  Copyright © 2015年 https://LeanCloud.cn . All rights reserved.
 //
 
-static CGFloat LCCK_MSG_SPACE_TOP = 16;
-static CGFloat LCCK_MSG_SPACE_BTM = 16;
-static CGFloat LCCK_MSG_SPACE_LEFT = 16;
-static CGFloat LCCK_MSG_SPACE_RIGHT = 16;
-static CGFloat LCCK_MSG_TEXT_FONT_SIZE = 14;
-
-#define LCCK_TEXT_MSG_CELL_TEXT_COLOR [UIColor blackColor]
 
 #import "LCCKChatTextMessageCell.h"
 #import "LCCKFaceManager.h"
@@ -26,6 +19,14 @@ static CGFloat LCCK_MSG_TEXT_FONT_SIZE = 14;
 @property (nonatomic, strong) MLLinkLabel *messageTextLabel;
 @property (nonatomic, copy, readonly) NSDictionary *textStyle;
 @property (nonatomic, strong) NSArray *expressionData;
+@property (nonatomic, strong) UIColor *conversationViewMessageLeftTextColor; /**< 左侧文本消息文字颜色 */
+@property (nonatomic, strong) UIColor *conversationViewMessageRightTextColor; /**< 右侧文本消息文字颜色 */
+@property (nonatomic, strong) UIColor *conversationViewMessageLinkColorLeft; /**< 左侧消息中链接文字颜色，如果没有该项，则使用统一的消息链接文字颜色 */
+@property (nonatomic, strong) UIColor *conversationViewMessageLinkColorRight; /**< 右侧消息中链接文字颜色，如果没有该项，则使用统一的消息链接文字颜色 */
+@property (nonatomic, strong) UIColor *conversationViewMessageLinkColor; /**< 右侧消息中链接文字颜色，如果没有该项，则使用统一的消息链接文字颜色 */
+
+//TODO:
+//ConversationView-Message-Middle-TextColor: 居中文本消息文字颜色
 
 @end
 
@@ -36,8 +37,16 @@ static CGFloat LCCK_MSG_TEXT_FONT_SIZE = 14;
 
 - (void)updateConstraints {
     [super updateConstraints];
+    UIEdgeInsets edgeMessageBubbleCustomize;
+    if (self.messageOwner == LCCKMessageOwnerTypeSelf) {
+        UIEdgeInsets rightEdgeMessageBubbleCustomize = [LCCKSettingService sharedInstance].rightEdgeMessageBubbleCustomize;
+        edgeMessageBubbleCustomize = rightEdgeMessageBubbleCustomize;
+    } else {
+        UIEdgeInsets leftEdgeMessageBubbleCustomize = [LCCKSettingService sharedInstance].leftEdgeMessageBubbleCustomize;
+        edgeMessageBubbleCustomize = leftEdgeMessageBubbleCustomize;
+    }
     [self.messageTextLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.edges.equalTo(self.messageContentView).with.insets(UIEdgeInsetsMake(LCCK_MSG_SPACE_TOP, LCCK_MSG_SPACE_LEFT, LCCK_MSG_SPACE_BTM, LCCK_MSG_SPACE_RIGHT));
+        make.edges.equalTo(self.messageContentView).with.insets(edgeMessageBubbleCustomize);
     }];
 }
 
@@ -45,12 +54,33 @@ static CGFloat LCCK_MSG_TEXT_FONT_SIZE = 14;
 
 - (void)setup {
     [self.messageContentView addSubview:self.messageTextLabel];
+    UIColor *linkColor = [UIColor blueColor];
+    if (self.messageOwner == LCCKMessageOwnerTypeSelf) {
+        self.messageTextLabel.textColor = self.conversationViewMessageRightTextColor;
+        if (self.conversationViewMessageLinkColorRight) {
+            linkColor = self.conversationViewMessageLinkColorRight;
+        } else if (self.conversationViewMessageLinkColor) {
+            linkColor = self.conversationViewMessageLinkColor;
+        }
+    } else {
+        self.messageTextLabel.textColor = self.conversationViewMessageLeftTextColor;
+        if (self.conversationViewMessageLinkColorLeft) {
+            linkColor = self.conversationViewMessageLinkColorLeft;
+        } else if (self.conversationViewMessageLinkColor) {
+            linkColor = self.conversationViewMessageLinkColor;
+        }
+    }
+    self.messageTextLabel.linkTextAttributes = @{ NSForegroundColorAttributeName : linkColor };
+    self.messageTextLabel.activeLinkTextAttributes = @{
+                                                       NSForegroundColorAttributeName : linkColor ,
+                                                       NSBackgroundColorAttributeName : kDefaultActiveLinkBackgroundColorForMLLinkLabel
+                                                       };
     UITapGestureRecognizer *tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(doubleTapMessageContentViewGestureRecognizerHandle:)];
     tapGestureRecognizer.numberOfTapsRequired = 2;
     [self.messageContentView addGestureRecognizer:tapGestureRecognizer];
     [super setup];
     [self addGeneralView];
-
+    
 }
 
 - (void)configureCellWithData:(LCCKMessage *)message {
@@ -65,12 +95,9 @@ static CGFloat LCCK_MSG_TEXT_FONT_SIZE = 14;
 - (MLLinkLabel *)messageTextLabel {
     if (!_messageTextLabel) {
         _messageTextLabel = [[MLLinkLabel alloc] init];
-        _messageTextLabel.textColor = LCCK_TEXT_MSG_CELL_TEXT_COLOR;
-        _messageTextLabel.font = [UIFont systemFontOfSize:LCCK_MSG_TEXT_FONT_SIZE];
+        _messageTextLabel.font = [LCCKSettingService sharedInstance].defaultThemeTextMessageFont;
         _messageTextLabel.numberOfLines = 0;
         _messageTextLabel.lineBreakMode = NSLineBreakByWordWrapping;
-        _messageTextLabel.linkTextAttributes = @{NSForegroundColorAttributeName:[UIColor blueColor]};
-        _messageTextLabel.activeLinkTextAttributes = @{NSForegroundColorAttributeName:[UIColor blueColor],NSBackgroundColorAttributeName:kDefaultActiveLinkBackgroundColorForMLLinkLabel};
         __weak __typeof(self) weakSelf = self;
         [_messageTextLabel setDidClickLinkBlock:^(MLLink *link, NSString *linkText, MLLinkLabel *label) {
             if ([weakSelf.delegate respondsToSelector:@selector(messageCell:didTapLinkText:linkType:)]) {
@@ -91,13 +118,13 @@ static CGFloat LCCK_MSG_TEXT_FONT_SIZE = 14;
 
 - (NSDictionary *)textStyle {
     if (!_textStyle) {
-        UIFont *font = [UIFont systemFontOfSize:LCCK_MSG_TEXT_FONT_SIZE];
+        UIFont *font = [LCCKSettingService sharedInstance].defaultThemeTextMessageFont;
         NSMutableParagraphStyle *style = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
         style.alignment = NSTextAlignmentLeft;
         style.paragraphSpacing = 0.25 * font.lineHeight;
         style.hyphenationFactor = 1.0;
         _textStyle = @{NSFontAttributeName: font,
-                 NSParagraphStyleAttributeName: style};
+                       NSParagraphStyleAttributeName: style};
     }
     return _textStyle;
 }
@@ -111,6 +138,46 @@ static CGFloat LCCK_MSG_TEXT_FONT_SIZE = 14;
 
 + (AVIMMessageMediaType)classMediaType {
     return kAVIMMessageMediaTypeText;
+}
+
+- (UIColor *)conversationViewMessageLeftTextColor {
+    if (_conversationViewMessageLeftTextColor) {
+        return _conversationViewMessageLeftTextColor;
+    }
+    _conversationViewMessageLeftTextColor = [[LCCKSettingService sharedInstance] defaultThemeColorForKey:@"ConversationView-Message-Left-TextColor"];
+    return _conversationViewMessageLeftTextColor;
+}
+
+- (UIColor *)conversationViewMessageRightTextColor {
+    if (_conversationViewMessageRightTextColor) {
+        return _conversationViewMessageRightTextColor;
+    }
+    _conversationViewMessageRightTextColor = [[LCCKSettingService sharedInstance] defaultThemeColorForKey:@"ConversationView-Message-Right-TextColor"];
+    return _conversationViewMessageRightTextColor;
+}
+
+- (UIColor *)conversationViewMessageLinkColorLeft {
+    if (_conversationViewMessageLinkColorLeft) {
+        return _conversationViewMessageLinkColorLeft;
+    }
+    _conversationViewMessageLinkColorLeft = [[LCCKSettingService sharedInstance] defaultThemeColorForKey:@"ConversationView-Message-LinkColor-Left"];
+    return _conversationViewMessageLinkColorLeft;
+}
+
+- (UIColor *)conversationViewMessageLinkColorRight {
+    if (_conversationViewMessageLinkColorRight) {
+        return  _conversationViewMessageLinkColorRight;
+    }
+    _conversationViewMessageLinkColorRight = [[LCCKSettingService sharedInstance] defaultThemeColorForKey:@"ConversationView-Message-LinkColor-Right"];
+    return _conversationViewMessageLinkColorRight;
+}
+
+- (UIColor *)conversationViewMessageLinkColor {
+    if (_conversationViewMessageLinkColor) {
+        return _conversationViewMessageLinkColor;
+    }
+    _conversationViewMessageLinkColor = [[LCCKSettingService sharedInstance] defaultThemeColorForKey:@"ConversationView-Message-LinkColor"];
+    return _conversationViewMessageLinkColor;
 }
 
 @end

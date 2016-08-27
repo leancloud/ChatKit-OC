@@ -2,7 +2,7 @@
 //  LCCKConversationViewController.m
 //  LCCKChatBarExample
 //
-//  v0.6.2 Created by ElonChan (微信向我报BUG:chenyilong1010) ( https://github.com/leancloud/ChatKit-OC ) on 15/11/20.
+//  v0.7.0 Created by ElonChan (微信向我报BUG:chenyilong1010) ( https://github.com/leancloud/ChatKit-OC ) on 15/11/20.
 //  Copyright © 2015年 https://LeanCloud.cn . All rights reserved.
 //
 
@@ -94,6 +94,13 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
     _peerId = [peerId copy];
     [self setup];
     return self;
+}
+
+- (AVIMConversation *)getConversationIfExists {
+    if (_conversation) {
+        return _conversation;
+    }
+    return nil;
 }
 
 /**
@@ -198,12 +205,11 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.navigationController.interactivePopGestureRecognizer.delaysTouchesBegan = NO;
     self.tableView.delegate = self.chatViewModel;
     self.tableView.dataSource = self.chatViewModel;
     self.chatBar.delegate = self;
     [LCCKAVAudioPlayer sharePlayer].delegate = self;
-    self.tableView.backgroundColor = LCCK_CONVERSATIONVIEWCONTROLLER_BACKGROUNDCOLOR;
-    self.view.backgroundColor = self.tableView.backgroundColor;
     [self.view addSubview:self.chatBar];
     [self.view addSubview:self.clientStatusView];
     [self updateStatusView];
@@ -211,6 +217,8 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
     [[LCCKUserSystemService sharedInstance] fetchCurrentUserInBackground:^(id<LCCKUserDelegate> user, NSError *error) {
         self.user = user;
     }];
+    [self.chatViewModel setDefaultBackgroundImage];
+    self.navigationItem.title = @"聊天";
     [self conversation];
     !self.viewDidLoadBlock ?: self.viewDidLoadBlock(self);
 }
@@ -462,7 +470,9 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
         }
     } while (NO);
     if (fetchConversationHandler) {
-        fetchConversationHandler(conversation, self);
+        dispatch_async(dispatch_get_main_queue(),^{
+            fetchConversationHandler(conversation, self);
+        });
     }
 }
 
@@ -480,7 +490,9 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
         }
     } while (NO);
     if (loadLatestMessagesHandler) {
-        loadLatestMessagesHandler(self, succeeded, error);
+        dispatch_async(dispatch_get_main_queue(),^{
+            loadLatestMessagesHandler(self, succeeded, error);
+        });
     }
 }
 
@@ -561,7 +573,10 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
             LCCKLog(@"🔴类名与方法名：%@（在第%@行），描述：%@", @(__PRETTY_FUNCTION__), @(__LINE__), @"imClient is nil");
         }
         self.conversationId = conversation.conversationId;
-        [self setupNavigationItemTitleWithConversation:conversation];
+        [self.chatViewModel resetBackgroundImage];
+        if (!self.disableTitleAutoConfig) {
+            [self setupNavigationItemTitleWithConversation:conversation];
+        }
         [[LCChatKit sharedInstance] getProfilesInBackgroundForUserIds:conversation.members callback:^(NSArray<id<LCCKUserDelegate>> *users, NSError *error) {
             [self fetchConversationHandler:conversation];
             !callback ?: callback(YES, nil);

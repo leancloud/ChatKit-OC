@@ -2,7 +2,7 @@
 //  LCCKServiceDefinition.h
 //  LeanCloudChatKit-iOS
 //
-//  v0.6.2 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/2/22.
+//  v0.7.0 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/2/22.
 //  Copyright © 2016年 LeanCloud. All rights reserved.
 //  All the Typedefine for all kinds of services.
 
@@ -95,6 +95,13 @@ typedef void(^LCCKFetchProfilesBlock)(NSArray<NSString *> *userIds, LCCKFetchPro
  * Remove all cached profiles.
  */
 - (void)removeAllCachedProfiles;
+
+/**
+ *  remove person profile cache
+ *
+ *  @param person id
+ */
+- (void)removeCachedProfileForPeerId:(NSString *)peerId;
 
 - (void)getCachedProfileIfExists:(NSString *)userId name:(NSString **)name avatarURL:(NSURL **)avatarURL error:(NSError * __autoreleasing *)error;
 - (NSArray<id<LCCKUserDelegate>> *)getCachedProfilesIfExists:(NSArray<NSString *> *)userIds error:(NSError * __autoreleasing *)error;
@@ -326,6 +333,8 @@ typedef CGFloat (^LCCKAvatarImageViewCornerRadiusBlock)(CGSize avatarImageViewSi
  *  参考 https://github.com/leancloud/leanchat-cloudcode/blob/master/cloud/mchat.js
  */
 @property (nonatomic, assign) BOOL useDevPushCerticate;
+- (void)setCurrentConversationBackgroundImage:(UIImage *)image scaledToSize:(CGSize)scaledToSize;
+- (void)setBackgroundImage:(UIImage *)image forConversationId:(NSString *)conversationId scaledToSize:(CGSize)scaledToSize;
 
 @end
 

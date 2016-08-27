@@ -2,7 +2,7 @@
 //  LCCKChatVoiceMessageCell.m
 //  LCCKChatExample
 //
-//  v0.6.2 Created by ElonChan (微信向我报BUG:chenyilong1010) ( https://github.com/leancloud/ChatKit-OC ) on 15/11/16.
+//  v0.7.0 Created by ElonChan (微信向我报BUG:chenyilong1010) ( https://github.com/leancloud/ChatKit-OC ) on 15/11/16.
 //  Copyright © 2015年 https://LeanCloud.cn . All rights reserved.
 //
 
@@ -32,7 +32,6 @@ static void * const LCCKChatVoiceMessageCellVoiceMessageStateContext = (void*)&L
 
 - (void)updateConstraints {
     [super updateConstraints];
-
     if (self.messageOwner == LCCKMessageOwnerTypeSelf) {
         [self.messageVoiceStatusImageView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.right.equalTo(self.messageContentView.mas_right).with.offset(-12);

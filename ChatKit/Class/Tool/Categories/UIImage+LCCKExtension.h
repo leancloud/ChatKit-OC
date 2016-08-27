@@ -2,7 +2,7 @@
 //  UIImage+LCCKExtension.h
 //  LeanCloudChatKit-iOS
 //
-//  v0.6.2 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/5/7.
+//  v0.7.0 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/5/7.
 //  Copyright © 2016年 LeanCloud. All rights reserved.
 //
 
@@ -22,5 +22,7 @@
 
 + (UIImage *)lcck_imageNamed:(NSString *)imageName bundleName:(NSString *)bundleName bundleForClass:(Class)aClass;
 + (UIImage *)lcck_imageNamed:(NSString *)name;
+
+- (UIImage *)lcck_scalingPatternImageToSize:(CGSize)size;
 
 @end

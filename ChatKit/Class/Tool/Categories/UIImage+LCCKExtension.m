@@ -2,12 +2,13 @@
 //  UIImage+LCCKExtension.m
 //  LeanCloudChatKit-iOS
 //
-//  v0.6.2 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/5/7.
+//  v0.7.0 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/5/7.
 //  Copyright © 2016年 LeanCloud. All rights reserved.
 //
 
 #import "UIImage+LCCKExtension.h"
 #import "LCCKImageManager.h"
+#import "LCCKConstants.h"
 
 @implementation NSBundle (MyCategory)
 
@@ -120,6 +121,34 @@
     UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
     return newImage;
+}
+
+- (UIImage *)lcck_scalingPatternImageToSize:(CGSize)size {
+    CGFloat scale = 0.0f;
+    CGFloat x = 0.0f;
+    CGFloat y = 0.0f;
+    CGFloat width = size.width;
+    CGFloat height = size.height;
+    if (CGSizeEqualToSize(self.size, size) == NO) {
+        CGFloat widthFactor = size.width / self.size.width;
+        CGFloat heightFactor = size.height / self.size.height;
+        scale = (widthFactor > heightFactor ? widthFactor : heightFactor);
+        width  = self.size.width * scale;
+        height = self.size.height * scale;
+        y = (size.height - height) * 0.5;
+        
+        x = (size.width - width) * 0.5;
+    }
+    // this is actually the interesting part:
+    UIGraphicsBeginImageContext(size);
+    [self drawInRect:CGRectMake(x, y, width, height)];
+    UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    if(newImage == nil) {
+        LCCKLog(@"绘制指定大小的图片失败");
+        return self;
+    }
+    return newImage ;
 }
 
 @end

@@ -2,7 +2,7 @@
 //  NSString+LCCKExtension.h
 //  ChatKit
 //
-//  v0.6.2 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/7/12.
+//  v0.7.0 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/7/12.
 //  Copyright © 2016年 LeanCloud. All rights reserved.
 //
 
@@ -39,5 +39,9 @@ FOUNDATION_EXTERN NSString *const LCCKPhoneRegex;
 - (NSArray<NSString *> *)lcck_allCheckingTypeWithPattern:(NSString *)pattern error:(NSError **)error;
 
 - (NSArray<NSValue *> *)lcck_allURLsWithPattern:(NSString *)pattern error:(NSError **)error;
+
+- (UIColor *)lcck_hexStringToColor;
+
+- (NSString *)lcck_pathForConversationBackgroundImage;
 
 @end

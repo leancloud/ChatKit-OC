@@ -2,7 +2,7 @@
 //  LCCKConversationListService.m
 //  LeanCloudChatKit-iOS
 //
-//  v0.6.2 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/3/22.
+//  v0.7.0 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/3/22.
 //  Copyright © 2016年 LeanCloud. All rights reserved.
 //
 
@@ -30,7 +30,7 @@
 
 
 #import "LCCKConversationListService.h"
-#import "AVIMConversation+LCCKAddition.h"
+#import "AVIMConversation+LCCKExtension.h"
 #import <AVOSCloudIM/AVOSCloudIM.h>
 #import "LCCKUserSystemService.h"
 #import "LCCKSessionService.h"
@@ -95,7 +95,7 @@
         for (AVIMConversation *conversation in conversations) {
             [conversationIds addObject:conversation.conversationId];
         }
-        [self fetchConversationsWithConversationIds:conversationIds callback:^(NSArray *objects, NSError *error) {
+        [[LCCKConversationService sharedInstance] fetchConversationsWithConversationIds:conversationIds callback:^(NSArray *objects, NSError *error) {
             if (error) {
                 !block ?: block(conversations, nil);
             } else {
@@ -107,34 +107,6 @@
     } else {
         !block ?: block(conversations, nil);
     }
-}
-
-- (void)fetchConversationsWithConversationIds:(NSSet *)conversationIds
-                                     callback:(LCCKArrayResultBlock)callback {
-        AVIMConversationQuery *query = [[LCCKSessionService sharedInstance].client conversationQuery];
-        [query whereKey:@"objectId" containedIn:[conversationIds allObjects]];
-        query.cachePolicy = kAVCachePolicyNetworkElseCache;
-        query.limit = 1000;  // default limit:10
-        [query findConversationsWithCallback: ^(NSArray *objects, NSError *error) {
-            if (error) {
-                !callback ?: callback(nil, error);
-            } else {
-                if (objects.count == 0) {
-                    NSString *errorReasonText = [NSString stringWithFormat:@"conversations in %@  are not exists", conversationIds];
-                    NSInteger code = 0;
-                    NSDictionary *errorInfo = @{
-                                                @"code":@(code),
-                                                NSLocalizedDescriptionKey : errorReasonText,
-                                                };
-                    NSError *error = [NSError errorWithDomain:LCCKConversationServiceErrorDomain
-                                                         code:code
-                                                     userInfo:errorInfo];
-                    !callback ?: callback(nil, error);
-                } else {
-                    !callback ?: callback(objects, error);
-                }
-            }
-        }];
 }
 
 #pragma mark -

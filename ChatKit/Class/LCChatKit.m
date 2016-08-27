@@ -2,7 +2,7 @@
 //  LCChatKit.m
 //  LeanCloudChatKit-iOS
 //
-//  v0.6.2 Created by ElonChan (wechat:chenyilong1010) on 16/2/22.
+//  v0.7.0 Created by ElonChan (wechat:chenyilong1010) on 16/2/22.
 //  Copyright © 2016年 LeanCloud. All rights reserved.
 //
 
@@ -148,6 +148,10 @@
     [self.userSystemService setFetchProfilesBlock:fetchProfilesBlock];
 }
 
+- (void)removeCachedProfileForPeerId:(NSString *)peerId {
+    [self.userSystemService removeCachedProfileForPeerId:peerId];
+}
+
 - (void)removeAllCachedProfiles {
     [self.userSystemService removeAllCachedProfiles];
 }
@@ -246,15 +250,23 @@
 }
 
 - (void)syncBadge {
-    [[LCCKSettingService sharedInstance] syncBadge];
+    [self.settingService syncBadge];
 }
 
 - (BOOL)useDevPushCerticate {
-    return [[LCCKSettingService sharedInstance] useDevPushCerticate];
+    return [self.settingService useDevPushCerticate];
 }
 
 - (void)setUseDevPushCerticate:(BOOL)useDevPushCerticate {
-    [LCCKSettingService sharedInstance].useDevPushCerticate = useDevPushCerticate;
+    self.settingService.useDevPushCerticate = useDevPushCerticate;
+}
+
+- (void)setCurrentConversationBackgroundImage:(UIImage *)image scaledToSize:(CGSize)scaledToSize {
+    [self.settingService setCurrentConversationBackgroundImage:image scaledToSize:scaledToSize];
+}
+
+- (void)setBackgroundImage:(UIImage *)image forConversationId:(NSString *)conversationId scaledToSize:(CGSize)scaledToSize {
+    [self.settingService setBackgroundImage:image forConversationId:conversationId scaledToSize:scaledToSize];
 }
 
 #pragma mark - LCCKConversationService
