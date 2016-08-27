@@ -21,7 +21,7 @@
 #import "LCCKVCardMessageCell.h"
 #import "LCCKExampleConstants.h"
 #import "LCCKContactManager.h"
-#import "RedpacketDemoViewController.h"
+//#import "RedpacketDemoViewController.h"
 //==================================================================================================================================
 //If you want to see the storage of this demo, log in public account of leancloud.cn, search for the app named `ChatKit`.
 //======================================== username : leancloud@163.com , password : Public123 =====================================
@@ -497,7 +497,8 @@ typedef void (^UITableViewRowActionHandler)(UITableViewRowAction *action, NSInde
  */
 + (void)exampleOpenConversationViewControllerWithPeerId:(NSString *)peerId fromNavigationController:(UINavigationController *)navigationController {
 
-    LCCKConversationViewController *conversationViewController = [[RedpacketDemoViewController alloc] initWithPeerId:peerId];
+//    LCCKConversationViewController *conversationViewController = [[RedpacketDemoViewController alloc] initWithPeerId:peerId];
+    LCCKConversationViewController *conversationViewController = [[LCCKConversationViewController alloc] initWithPeerId:peerId];
 //    [conversationViewController setViewDidLoadBlock:^(LCCKBaseViewController *viewController) {
 //        [self lcck_showText:@"加载历史记录..." toView:viewController.view];
 //    }];
@@ -508,7 +509,8 @@ typedef void (^UITableViewRowActionHandler)(UITableViewRowAction *action, NSInde
 }
 
 + (void)exampleOpenConversationViewControllerWithConversaionId:(NSString *)conversationId fromNavigationController:(UINavigationController *)aNavigationController {
-    LCCKConversationViewController *conversationViewController = [[RedpacketDemoViewController alloc] initWithConversationId:conversationId];
+//    LCCKConversationViewController *conversationViewController = [[RedpacketDemoViewController alloc] initWithConversationId:conversationId];
+    LCCKConversationViewController *conversationViewController = [[LCCKConversationViewController alloc] initWithPeerId:conversationId];
     conversationViewController.enableAutoJoin = YES;
     [conversationViewController setViewWillDisappearBlock:^(LCCKBaseViewController *viewController, BOOL aAnimated) {
         [self lcck_hideHUDForView:viewController.view];
@@ -734,7 +736,8 @@ void dispatch_async_limit(dispatch_queue_t queue, NSUInteger limitSemaphoreCount
         subtitle = [NSString stringWithFormat:@"我自己的name是 : %@", user.name];
     } else if ([parentController isKindOfClass:[LCCKConversationViewController class]] ) {
 //        if (conversationViewController.conversation.lcck_type == LCCKConversationTypeGroup) {
-            LCCKConversationViewController *conversationViewController_ = [[RedpacketDemoViewController alloc] initWithPeerId:user.clientId ?: userId];
+            LCCKConversationViewController *conversationViewController_ = [[LCCKConversationViewController alloc] initWithPeerId:user.clientId ?: userId];
+//        LCCKConversationViewController *conversationViewController_ = [[RedpacketDemoViewController alloc] initWithPeerId:user.clientId ?: userId];
 
             [[self class] pushToViewController:conversationViewController_];
             return;

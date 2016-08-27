@@ -17,7 +17,7 @@
 #import "LCChatKit.h"
 #endif
 #import "LCCKLoginViewController.h"
-#import "RedpacketConfig.h"
+//#import "RedpacketConfig.h"
 
 @interface AppDelegate ()
 
@@ -43,7 +43,7 @@
         }];
     }];
     
-    [[RedpacketConfig sharedConfig] config];
+//    [[RedpacketConfig sharedConfig] config];
     self.window.rootViewController = loginViewController;
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
