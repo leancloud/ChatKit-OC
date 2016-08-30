@@ -2,7 +2,7 @@
 //  LCChatKitExample.m
 //  LeanCloudChatKit-iOS
 //
-//  Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/2/24.
+//  v0.7.3 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/2/24.
 //  Copyright © 2016年 LeanCloud. All rights reserved.
 //
 #import "LCChatKitExample.h"
@@ -45,7 +45,8 @@ static NSString *const LCCKAPPKEY = @"ye24iIK6ys8IvaISMC4Bs5WK";
 #pragma mark - SDK Life Control
 
 + (void)invokeThisMethodInDidFinishLaunching {
-    //    [AVOSCloud setServiceRegion:AVServiceRegionUS];
+    // 如果APP是在国外使用，开启北美节点
+    // [AVOSCloud setServiceRegion:AVServiceRegionUS];
     // 启用未读消息
     [AVIMClient setUserOptions:@{
                                  AVIMUserOptionUseUnread: @(YES)
@@ -76,6 +77,7 @@ static NSString *const LCCKAPPKEY = @"ye24iIK6ys8IvaISMC4Bs5WK";
         }
     }];
 }
+
 + (void)saveLocalClientInfo:(NSString *)clientId {
     // 在系统偏好保存信息
     NSUserDefaults *defaultsSet = [NSUserDefaults standardUserDefaults];
@@ -190,7 +192,7 @@ static NSString *const LCCKAPPKEY = @"ye24iIK6ys8IvaISMC4Bs5WK";
             }
         }];
         // 模拟网络延时，3秒
-        // sleep(3);
+         sleep(3);
 
 #warning 重要：completionHandler 这个 Bock 必须执行，需要在你**获取到用户信息结束**后，将信息传给该Block！
         !completionHandler ?: completionHandler([users copy], nil);
@@ -235,7 +237,7 @@ static NSString *const LCCKAPPKEY = @"ye24iIK6ys8IvaISMC4Bs5WK";
             /**
              * 下列情景下会执行
              - 当前用户被踢出群，也会执行
-             - 用户不在当前群众，且未开启 `enableAutoJoin` (自动进群)
+             - 用户不在当前群中，且未开启 `enableAutoJoin` (自动进群)
              */
             [conversationController.navigationController popToRootViewControllerAnimated:YES];
             title = @"进群失败！";
@@ -318,7 +320,7 @@ static NSString *const LCCKAPPKEY = @"ye24iIK6ys8IvaISMC4Bs5WK";
         [self exampleOpenProfileForUser:user userId:userId parentController:parentController];
     }];
     
-    //    开启圆角可能导致4S等低端机型卡顿，谨慎开启。
+    //    开启圆角
     //    [[LCChatKit sharedInstance] setAvatarImageViewCornerRadiusBlock:^CGFloat(CGSize avatarImageViewSize) {
     //        if (avatarImageViewSize.height > 0) {
     //            return avatarImageViewSize.height/2;
@@ -335,7 +337,7 @@ static NSString *const LCCKAPPKEY = @"ye24iIK6ys8IvaISMC4Bs5WK";
         return [self exampleConversationEditActionAtIndexPath:indexPath conversation:conversation controller:controller];
     }];
     
-    //    如果不是TabBar样式，请实现该 Blcok 来设置 Badge 红标。
+    //    TabBar样式，自动设置。如果不是TabBar样式，请实现该 Blcok 来设置 Badge 红标。
     //    [[LCChatKit sharedInstance] setMarkBadgeWithTotalUnreadCountBlock:^(NSInteger totalUnreadCount, UIViewController *controller) {
     //        [self exampleMarkBadgeWithTotalUnreadCount:totalUnreadCount controller:controller];
     //    }];
@@ -565,7 +567,7 @@ typedef void (^UITableViewRowActionHandler)(UITableViewRowAction *action, NSInde
     if (totalUnreadCount > 0) {
         NSString *badgeValue = [NSString stringWithFormat:@"%ld", (long)totalUnreadCount];
         if (totalUnreadCount > 99) {
-            badgeValue = @"...";
+            badgeValue = LCCKBadgeTextForNumberGreaterThanLimit;
         }
         [controller tabBarItem].badgeValue = badgeValue;
         [[UIApplication sharedApplication] setApplicationIconBadgeNumber:totalUnreadCount];

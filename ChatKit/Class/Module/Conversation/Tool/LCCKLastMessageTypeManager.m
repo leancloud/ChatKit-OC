@@ -2,7 +2,7 @@
 //  LCCKLastMessageTypeManager.m
 //  LeanCloudChatKit-iOS
 //
-//  v0.7.0 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/3/22.
+//  v0.7.3 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/3/22.
 //  Copyright © 2016年 LeanCloud. All rights reserved.
 //
 
@@ -77,7 +77,12 @@ static NSMutableDictionary *attributedStringCache = nil;
 + (NSAttributedString *)attributedStringWithMessage:(AVIMTypedMessage *)message conversation:(AVIMConversation *)conversation userName:(NSString *)userName {
     NSString *title = [self getMessageTitle:message];
     if (conversation.lcck_type == LCCKConversationTypeGroup) {
-        title = [NSString stringWithFormat:@"%@: %@", userName, title];
+        if (!userName) {
+            userName = @"";
+        } else {
+            userName = [NSString stringWithFormat:@"%@: ", userName];
+        }
+        title = [NSString stringWithFormat:@"%@%@", userName, title];
     }
     if (conversation.muted && conversation.lcck_unreadCount > 0) {
         title = [NSString stringWithFormat:@"[%@条] %@", @(conversation.lcck_unreadCount), title];

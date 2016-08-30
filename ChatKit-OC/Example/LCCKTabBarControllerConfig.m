@@ -52,6 +52,7 @@
 
 - (NSArray *)viewControllers {
     LCCKConversationListViewController *firstViewController = [[LCCKConversationListViewController alloc] init];
+    // firstViewController.disablePreviewUserId = YES;
     UINavigationController *firstNavigationController = [[LCCKBaseNavigationController alloc]
                                                          initWithRootViewController:firstViewController];
     [firstViewController configureBarButtonItemStyle:LCCKBarButtonItemStyleAdd action:^(UIBarButtonItem *sender, UIEvent *event) {
@@ -223,10 +224,9 @@
                            if (selectedIndex == 0) {
                                [self createGroupConversation:sender];
                            }
-                       } dismissBlock:^{
-                           
-                       }];
+                       } dismissBlock:nil];
 }
+
 - (void)signOut {
     [LCChatKitExample signOutFromViewController:self.secondViewController];
 }
