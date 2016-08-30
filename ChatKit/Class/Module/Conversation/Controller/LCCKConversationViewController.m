@@ -869,7 +869,10 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
     if (messageCell.message.senderId == [LCChatKit sharedInstance].clientId || self.conversation.lcck_type == LCCKConversationTypeSingle) {
         return;
     }
-    NSString *userName = messageCell.message.sender.name ?: messageCell.message.senderId;
+    NSString *userName = messageCell.message.localDisplayName;
+    if (userName.length == 0 || !userName) {
+        return;
+    }
     NSString *appendString = [NSString stringWithFormat:@"@%@ ", userName];
     [self.chatBar appendString:appendString];
 }

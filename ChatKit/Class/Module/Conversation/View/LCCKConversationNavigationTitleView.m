@@ -89,6 +89,9 @@ static void * const LCCKConversationNavigationTitleViewShowRemindMuteImageViewCo
         } else {
             conversationName = conversation.lcck_title;
         }
+        if (conversationName.length == 0 || !conversationName) {
+            conversationName = LCCKLocalizedStrings(@"Chat");
+        }
         [self setupWithConversationName:conversationName membersCount:membersCount navigationController:navigationController];
         self.remindMuteImageView.hidden = !conversation.muted;
     }

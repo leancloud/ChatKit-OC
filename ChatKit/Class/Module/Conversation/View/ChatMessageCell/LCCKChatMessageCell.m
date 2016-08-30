@@ -310,13 +310,14 @@ static CGFloat const LCCK_MSG_CELL_NICKNAME_FONT_SIZE = 12;
     if ([message lcck_isCustomMessage]) {
         NSString *senderClientId = [(AVIMTypedMessage *)message clientId];
         NSError *error;
+        //TODO:如果我正在群里聊天，这时有人进入群聊，需要异步获取头像等信息，模仿ConversationList的做法。
         [[LCCKUserSystemService sharedInstance] getCachedProfileIfExists:senderClientId name:&nickName avatarURL:&avatarURL error:&error];
         if (!nickName)  { nickName = senderClientId; }
         self.message = nil;
         sendStatus = [(AVIMTypedMessage *)message status];
     } else {
         self.message = message;
-        nickName = self.message.sender.name ?: self.message.senderId;
+        nickName = self.message.localDisplayName;
         avatarURL = self.message.sender.avatarURL;
         sendStatus = self.message.sendStatus;
         //FIXME: SDK 暂不支持已读未读
@@ -324,9 +325,7 @@ static CGFloat const LCCK_MSG_CELL_NICKNAME_FONT_SIZE = 12;
         //            self.messageReadState = self.message.messageReadState;
         //        }
     }
-//    if (self.showName) {
-        self.nicknameLabel.text = nickName;
-//    }
+    self.nicknameLabel.text = nickName;
     [self.avatarImageView sd_setImageWithURL:avatarURL
                             placeholderImage:({
         NSString *imageName = @"Placeholder_Avatar";

@@ -87,6 +87,14 @@
     return nil;
 }
 
+- (NSString *)localDisplayName {
+    NSString *localDisplayName = self.sender.name ?: self.senderId;
+    if (!self.sender.name && [LCCKSettingService sharedInstance].isDisablePreviewUserId) {
+        localDisplayName = @"";
+    }
+    return localDisplayName;
+}
+
 - (BOOL)isLocalMessage {
     if (!_serverMessageId &&_localMessageId) {
         return YES;

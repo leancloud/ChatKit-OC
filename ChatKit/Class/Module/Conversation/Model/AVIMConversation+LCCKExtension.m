@@ -69,6 +69,8 @@
 }
 
 - (NSString *)lcck_displayName {
+    BOOL disablePreviewUserId = [LCCKSettingService sharedInstance].isDisablePreviewUserId;
+    NSString *displayName;
     if ([self lcck_type] == LCCKConversationTypeSingle) {
         NSString *peerId = [self lcck_peerId];
         NSError *error = nil;
@@ -77,9 +79,13 @@
         if (peers.count > 0) {
             peer = peers[0];
         }
-        return peer.name ?: peerId;
+        displayName = peer.name ?: peerId;
+        if (!peer.name && disablePreviewUserId) {
+            displayName = @"";
+        }
+        return displayName;
     } else {
-        return self.name;
+        return self.name ?: LCCKLocalizedStrings(@"GroupConversation");
     }
 }
 
@@ -101,10 +107,11 @@
 }
 
 - (NSString *)lcck_title {
+    NSString *displayName = self.lcck_displayName ?: LCCKLocalizedStrings(@"Chat");
     if (self.lcck_type == LCCKConversationTypeSingle) {
-        return self.lcck_displayName;
+        return displayName;
     } else {
-        return [NSString stringWithFormat:@"%@(%ld)", self.lcck_displayName, (long)self.members.count];
+        return [NSString stringWithFormat:@"%@(%ld)", displayName, (long)self.members.count];
     }
 }
 

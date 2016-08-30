@@ -52,7 +52,6 @@
 
 - (NSArray *)viewControllers {
     LCCKConversationListViewController *firstViewController = [[LCCKConversationListViewController alloc] init];
-    // firstViewController.disablePreviewUserId = YES;
     UINavigationController *firstNavigationController = [[LCCKBaseNavigationController alloc]
                                                          initWithRootViewController:firstViewController];
     [firstViewController configureBarButtonItemStyle:LCCKBarButtonItemStyleAdd action:^(UIBarButtonItem *sender, UIEvent *event) {

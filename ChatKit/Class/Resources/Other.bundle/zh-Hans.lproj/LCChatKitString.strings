@@ -54,6 +54,8 @@
 "SingleWelcomeMessage" = "我们已经是好友啦，一起来聊天吧！";
 "GroupWelcomeMessage" = "大家好";
 "GroupWelcomeMessageWithNickName" = "大家好，我是";
+"SingleConversation" = "单聊";
+"GroupConversation" = "群聊";
 "message.bar.error.title" = "错误";
 "message.bar.error.message" = "错误";
 "message.bar.success.title" = "成功";

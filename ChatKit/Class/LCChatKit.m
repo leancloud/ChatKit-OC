@@ -261,6 +261,14 @@
     self.settingService.useDevPushCerticate = useDevPushCerticate;
 }
 
+- (BOOL)isDisablePreviewUserId {
+    return self.settingService.isDisablePreviewUserId;
+}
+
+- (void)setDisablePreviewUserId:(BOOL)disablePreviewUserId {
+    self.settingService.disablePreviewUserId = disablePreviewUserId;
+}
+
 - (void)setCurrentConversationBackgroundImage:(UIImage *)image scaledToSize:(CGSize)scaledToSize {
     [self.settingService setCurrentConversationBackgroundImage:image scaledToSize:scaledToSize];
 }

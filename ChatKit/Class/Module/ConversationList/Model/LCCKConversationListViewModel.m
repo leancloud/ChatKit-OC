@@ -150,7 +150,7 @@
     }
     //头像消息一般和昵称消息一同返回，故假设如果服务端返回了昵称，那么如果该用户有头像就一定会返回头像。反之，没返回昵称，一定是还未缓存用户信息。如果你的App中，不是这样的逻辑，可联系维护者将这一逻辑修改得严谨些，邮箱luohanchenyilong@163.com.
     if (!*name) {
-        if (peerId != NULL && !self.conversationListViewController.isDisablePreviewUserId) {
+        if (peerId != NULL && ![LCCKSettingService sharedInstance].isDisablePreviewUserId) {
             *name = peerId;
         }
         __weak __typeof(self) weakSelf = self;

@@ -52,6 +52,8 @@
  */
 @property (nonatomic, copy, readwrite) NSString *localMessageId;
 
+@property (nonatomic, copy, readonly) NSString *localDisplayName;
+
 - (instancetype)initWithText:(NSString *)text
                       senderId:(NSString *)senderId
                        sender:(id<LCCKUserDelegate>)sender

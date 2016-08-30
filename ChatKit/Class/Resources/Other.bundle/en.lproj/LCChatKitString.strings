@@ -51,6 +51,10 @@
 "SingleWelcomeMessage" = "Hello!";
 "GroupWelcomeMessage" = "Hello!";
 "GroupWelcomeMessageWithNickName" = "Hello! I am ";
+"SingleConversation" = "单聊";
+"GroupConversation" = "群聊";
+
+
 "message.bar.error.title" = "Error Title";
 "message.bar.error.message" = "This is an error message!";
 "message.bar.success.title" = "Success Title";

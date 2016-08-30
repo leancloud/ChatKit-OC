@@ -27,6 +27,7 @@ static BOOL LCCKAllLogsEnabled;
 
 @implementation LCCKSettingService
 @synthesize useDevPushCerticate = _useDevPushCerticate;
+@synthesize disablePreviewUserId = _disablePreviewUserId;
 
 + (void)setAllLogsEnabled:(BOOL)enabled {
     LCCKAllLogsEnabled = enabled;

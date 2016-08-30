@@ -143,6 +143,7 @@ static NSString *const LCCKAPPKEY = @"ye24iIK6ys8IvaISMC4Bs5WK";
  *  初始化的示例代码
  */
 - (void)exampleInit {
+    // [[LCChatKit sharedInstance] setDisablePreviewUserId:YES];
 #ifndef __OPTIMIZE__
     //        [LCChatKit setAllLogsEnabled:YES];
     [[LCChatKit sharedInstance] setUseDevPushCerticate:YES];
