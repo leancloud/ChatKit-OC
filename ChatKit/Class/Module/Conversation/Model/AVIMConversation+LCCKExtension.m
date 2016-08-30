@@ -81,7 +81,8 @@
         }
         displayName = peer.name ?: peerId;
         if (!peer.name && disablePreviewUserId) {
-            displayName = @"";
+            NSString *defaultNickNameWhenNil = LCCKLocalizedStrings(@"nickNameIsNil");
+            displayName = defaultNickNameWhenNil.length > 0 ? defaultNickNameWhenNil : @"";
         }
         return displayName;
     } else {
@@ -107,7 +108,10 @@
 }
 
 - (NSString *)lcck_title {
-    NSString *displayName = self.lcck_displayName ?: LCCKLocalizedStrings(@"Chat");
+    NSString *displayName = self.lcck_displayName;
+    if (!self.lcck_displayName || self.lcck_displayName.length == 0 ||  [self.lcck_displayName isEqualToString:LCCKLocalizedStrings(@"nickNameIsNil")]) {
+        displayName = LCCKLocalizedStrings(@"Chat");
+    }
     if (self.lcck_type == LCCKConversationTypeSingle) {
         return displayName;
     } else {

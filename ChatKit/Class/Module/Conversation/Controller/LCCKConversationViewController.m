@@ -870,7 +870,7 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
         return;
     }
     NSString *userName = messageCell.message.localDisplayName;
-    if (userName.length == 0 || !userName) {
+    if (userName.length == 0 || !userName || [userName isEqualToString:LCCKLocalizedStrings(@"nickNameIsNil")]) {
         return;
     }
     NSString *appendString = [NSString stringWithFormat:@"@%@ ", userName];

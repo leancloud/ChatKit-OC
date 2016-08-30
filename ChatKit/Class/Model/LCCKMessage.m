@@ -90,7 +90,8 @@
 - (NSString *)localDisplayName {
     NSString *localDisplayName = self.sender.name ?: self.senderId;
     if (!self.sender.name && [LCCKSettingService sharedInstance].isDisablePreviewUserId) {
-        localDisplayName = @"";
+        NSString *defaultNickNameWhenNil = LCCKLocalizedStrings(@"nickNameIsNil");
+        localDisplayName = defaultNickNameWhenNil.length > 0 ? defaultNickNameWhenNil : @"";
     }
     return localDisplayName;
 }
