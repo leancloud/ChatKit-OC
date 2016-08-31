@@ -419,6 +419,15 @@ UI自定义，需要实现 `LCCKInputViewPluginDelegate` 方法：
  
  这里注意在 `-sendCustomMessageHandler` 定义时记得在 Block 执行结束时，执行 `_sendCustomMessageHandler = nil;` ，避免循环引用。
 
+插件的排序问题：
+
+排序优先级规则：
+
+ － 负数（默认插件）> 正数（自定义插件）
+ － 绝对值小 > 绝对值大
+
+如果 type 分别有：－1、－2、－3、1、2、3，那么 ChatKit 会将它们排序为－1、－2、－3、1、2、3。且自定义 type 时只能从 1 连续递增。
+
 
 ### 删除自定义插件、自定义消息、自定义 Cell 
 
@@ -430,6 +439,10 @@ UI自定义，需要实现 `LCCKInputViewPluginDelegate` 方法：
     [self registerCustomInputViewPlugin];
 }
  ```
+
+并且由于 VCard 被删除，那么自定义插件的 type 值也会跟着中断、不连续，比如demo中 VCard 的 type 值是 1， 
+
+删除前是：－1、－2、－3、1、2、3，然后变成了 －1、－2、－3、2、3，不连续了，你需要重新调整 type 的定义，使 type 重新连续，将之前的 2 变为 1 ，3 变为 2，确保 type 是从 1 开始连续递增。详情见 [issue 讨论：删除插件后程序crash](https://github.com/leancloud/ChatKit-OC/issues/49#issuecomment-243652387) 。
 
 另外因为一个插件往往搭配一个自定义 Cell 和自定义消息，这个也需要一并删除：
 

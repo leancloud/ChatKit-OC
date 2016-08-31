@@ -397,6 +397,12 @@ typedef void (^LCCKLoadLatestMessagesHandler)(LCCKConversationViewController *co
 - (void)didReceiveRemoteNotification:(NSDictionary *)userInfo;
 
 /**
+ *  插入一条最近对话
+ *  @param conversation
+ */
+- (void)insertRecentConversation:(AVIMConversation *)conversation;
+
+/**
  *  增加未读数
  *  @param conversation 相应对话
  */

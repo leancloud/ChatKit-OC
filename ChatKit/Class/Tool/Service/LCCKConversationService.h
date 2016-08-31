@@ -90,11 +90,6 @@ FOUNDATION_EXTERN NSString *const LCCKConversationServiceErrorDomain;
  */
 - (void)setupDatabaseWithUserId:(NSString *)userId;
 
-/**
- *  插入一条最近对话
- *  @param conversation
- */
-- (void)insertRecentConversation:(AVIMConversation *)conversation;
 - (void)insertRecentConversation:(AVIMConversation *)conversation shouldRefreshWhenFinished:(BOOL)shouldRefreshWhenFinished;
 
 - (void)increaseUnreadCount:(NSUInteger)increaseUnreadCount withConversationId:(NSString *)conversationId shouldRefreshWhenFinished:(BOOL)shouldRefreshWhenFinished;

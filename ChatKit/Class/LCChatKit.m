@@ -314,6 +314,10 @@
     [self.conversationService didReceiveRemoteNotification:userInfo];
 }
 
+- (void)insertRecentConversation:(AVIMConversation *)conversation {
+    [self.conversationService insertRecentConversation:conversation];
+}
+
 - (void)increaseUnreadCountWithConversationId:(NSString *)conversationId {
     [self.conversationService increaseUnreadCountWithConversationId:conversationId];
 }

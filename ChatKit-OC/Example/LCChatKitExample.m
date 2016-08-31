@@ -694,7 +694,7 @@ void dispatch_async_limit(dispatch_queue_t queue, NSUInteger limitSemaphoreCount
             if (succeeded) {
                 [self lcck_showSuccess:@"设置群头像成功"];
                 if (shouldInsert) {
-                    [[LCCKConversationService sharedInstance] insertRecentConversation:conversation];
+                    [[LCChatKit sharedInstance] insertRecentConversation:conversation];
                 }
                 [[NSNotificationCenter defaultCenter] postNotificationName:LCCKNotificationConversationListDataSourceUpdated object:self];
             } else {
