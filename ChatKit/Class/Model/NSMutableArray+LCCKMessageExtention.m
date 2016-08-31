@@ -42,7 +42,7 @@
             !filterdMessageCallback ?: filterdMessageCallback(avimTypedMessages);
         }
     });
-    dispatch_group_wait(group, DISPATCH_TIME_FOREVER);//doSomethingWith:
+    dispatch_group_wait(group, DISPATCH_TIME_FOREVER);
     return messages;
 }
 

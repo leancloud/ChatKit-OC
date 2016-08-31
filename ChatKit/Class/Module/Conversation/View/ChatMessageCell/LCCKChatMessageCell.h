@@ -71,7 +71,7 @@
 /**
  *  显示用户昵称的UILabel
  */
-@property (nonatomic, strong) UILabel *nicknameLabel;
+@property (nonatomic, strong) UILabel *nickNameLabel;
 
 /**
  *  显示用户消息主体的View,所有的消息用到的textView,imageView都会被添加到这个view中 -> LCCKContentView 自带一个CAShapeLayer的蒙版
