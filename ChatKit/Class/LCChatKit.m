@@ -41,11 +41,6 @@
 
 #pragma mark -
 
-//+ (id)allocWithZone:(NSZone *)zone {
-//    // Not allow allocating memory in a different zone
-//    return [self sharedInstance];
-//}
-//
 + (id)copyWithZone:(NSZone *)zone {
     // Not allow copying to a different zone
     return [self sharedInstance];

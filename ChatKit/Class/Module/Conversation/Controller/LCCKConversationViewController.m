@@ -219,21 +219,18 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
     }];
     [self.chatViewModel setDefaultBackgroundImage];
     self.navigationItem.title = @"聊天";
-    [self conversation];
     !self.viewDidLoadBlock ?: self.viewDidLoadBlock(self);
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    [self conversation];
     !self.viewWillAppearBlock ?: self.viewWillAppearBlock(self, animated);
 }
 
 - (void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
     [self.chatBar open];
-    if (_conversation.lcck_draft.length > 0) {
-        [self loadDraft];
-    }
     [self saveCurrentConversationInfoIfExists];
     !self.viewDidAppearBlock ?: self.viewDidAppearBlock(self, animated);
 }
@@ -572,12 +569,16 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
             [conversation setValue:[LCCKSessionService sharedInstance].client forKey:@"imClient"];
             LCCKLog(@"🔴类名与方法名：%@（在第%@行），描述：%@", @(__PRETTY_FUNCTION__), @(__LINE__), @"imClient is nil");
         }
+        BOOL hasDraft = (conversation.lcck_draft.length > 0);
+        if (hasDraft) {
+            [self loadDraft];
+        }
         self.conversationId = conversation.conversationId;
         [self.chatViewModel resetBackgroundImage];
-        if (!self.disableTitleAutoConfig) {
-            [self setupNavigationItemTitleWithConversation:conversation];
-        }
         [[LCChatKit sharedInstance] getProfilesInBackgroundForUserIds:conversation.members callback:^(NSArray<id<LCCKUserDelegate>> *users, NSError *error) {
+            if (!self.disableTitleAutoConfig && (users.count > 0)) {
+                [self setupNavigationItemTitleWithConversation:conversation];
+            }
             [self fetchConversationHandler:conversation];
             !callback ?: callback(YES, nil);
         }];

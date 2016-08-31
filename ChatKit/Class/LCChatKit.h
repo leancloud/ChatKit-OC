@@ -37,7 +37,6 @@
 @property (nonatomic, copy, readonly) NSString *appKey;
 
 /*!
- /*!
  *
  * @brief Set up application id(appId) and client key(appKey) to start LeanCloud service.
  * @attention 请区别 `[AVOSCloud setApplicationId:appId clientKey:appKey];` 与 `[LCChatKit setAppId:appId appKey:appKey];`。
