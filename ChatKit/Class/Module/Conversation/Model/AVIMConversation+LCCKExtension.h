@@ -2,7 +2,7 @@
 //  AVIMConversation+LCCKExtension.h
 //  LeanCloudChatKit-iOS
 //
-//  v0.7.0 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/3/11.
+//  v0.7.10 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/3/11.
 //  Copyright © 2016年 ElonChan (wechat:chenyilong1010). All rights reserved.
 //
 #import <AVOSCloudIM/AVIMConversation.h>
@@ -39,7 +39,7 @@
 @property (nonatomic, copy) NSString *lcck_draft;
 
 /**
- *  对话的类型，因为可能是两个人的群聊。所以不能通过成员数量来判断
+ *  对话的类型，通过成员数量来判断。系统对话按照群聊来处理。
  *
  *  @return 单聊或群聊
  */

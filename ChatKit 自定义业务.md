@@ -27,7 +27,7 @@
 
 ## 设置单聊用户的头像和昵称
 
-当你的应用想要集成一个IM服务时，可能这时候，你的APP已经上架了，已经有自己的注册、登录等流程了。用 ChatKit 进行聊天很简单，只需要给 ChatKit 一个 id 就够了，就像 Demo 里做的那样。聊天是正常了，但是双方只能看到一个id，这样体验很不好。但是如果展示头像、昵称呢？于是就设计了这样一个接口，`-setFetchProfilesBlock:` 。
+当你的应用想要集成一个IM服务时，可能这时候，你的APP已经上架了，已经有自己的注册、登录等流程了。用 ChatKit 进行聊天很简单，只需要给 ChatKit 一个 id 就够了，就像 Demo 里做的那样。聊天是正常了，但是双方只能看到一个id，这样体验很不好。但是如何展示头像、昵称呢？于是就设计了这样一个接口，`-setFetchProfilesBlock:` 。
 
 这是上层（APP）提供用户信息的 Block，由于 ChatKit 并不关心业务逻辑信息，比如用户昵称，用户头像等。用户可以通过 ChatKit 单例向 ChatKit 注入一个用户信息内容提供 Block，通过这个用户信息提供 Block，ChatKit 才能够正确的进行业务逻辑数据的绘制。
 
@@ -156,9 +156,9 @@
 
 最简单的一种是：
 
-### 需要显示自定义 Cell 的消息
+### 不需要显示自定义 Cell 的消息
 
-[暂态消息](https://leancloud.cn/docs/realtime_guide-ios.html#暂态消息) ，且不需要显示自定义 Cell 的自定义消息。
+也即[暂态消息](https://leancloud.cn/docs/realtime_guide-ios.html#暂态消息) ，且不需要显示自定义 Cell 的自定义消息。
 
 请自行监听 `LCCKNotificationCustomTransientMessageReceived` 通知，自行处理响应事件。
 
@@ -188,7 +188,7 @@
 
 ### 需要显示自定义 Cell 的消息
 
-这里以Demo里的 VCard 名片消息为例：
+这里以 Demo 里的 VCard 名片消息为例：
 
 效果如下，ChatKit 默认实现是不支持这种消息类型，需要自定义：
 
@@ -419,6 +419,15 @@ UI自定义，需要实现 `LCCKInputViewPluginDelegate` 方法：
  
  这里注意在 `-sendCustomMessageHandler` 定义时记得在 Block 执行结束时，执行 `_sendCustomMessageHandler = nil;` ，避免循环引用。
 
+插件的排序问题：
+
+排序优先级规则：
+
+ - 负数（默认插件）> 正数（自定义插件）
+ - 绝对值小 > 绝对值大
+
+如果 type 分别有：－1、－2、－3、1、2、3，那么 ChatKit 会将它们排序为－1、－2、－3、1、2、3。默认插件只能从 -1 开始连续递增，自定义 type 时只能从 1 连续递增。在选取使用默认插件时，如发现无法保证从 -1 开始时，请选择使用自定义插件来完成对应功能。
+
 
 ### 删除自定义插件、自定义消息、自定义 Cell 
 
@@ -430,6 +439,10 @@ UI自定义，需要实现 `LCCKInputViewPluginDelegate` 方法：
     [self registerCustomInputViewPlugin];
 }
  ```
+
+并且由于 VCard 被删除，那么自定义插件的 type 值也会跟着中断、不连续，比如demo中 VCard 的 type 值是 1， 
+
+删除前是：－1、－2、－3、1、2、3，然后变成了 －1、－2、－3、2、3，不连续了，你需要重新调整 type 的定义，使 type 重新连续，将之前的 2 变为 1 ，3 变为 2，确保 type 是从 1 开始连续递增。详情见 [issue 讨论：删除插件后程序crash](https://github.com/leancloud/ChatKit-OC/issues/49#issuecomment-243652387) 。
 
 另外因为一个插件往往搭配一个自定义 Cell 和自定义消息，这个也需要一并删除：
 

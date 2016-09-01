@@ -2,7 +2,7 @@
 //  LCChatKitExample.m
 //  LeanCloudChatKit-iOS
 //
-//  Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/2/24.
+//  v0.7.10 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/2/24.
 //  Copyright © 2016年 LeanCloud. All rights reserved.
 //
 #import "LCChatKitExample.h"
@@ -45,7 +45,8 @@ static NSString *const LCCKAPPKEY = @"ye24iIK6ys8IvaISMC4Bs5WK";
 #pragma mark - SDK Life Control
 
 + (void)invokeThisMethodInDidFinishLaunching {
-    //    [AVOSCloud setServiceRegion:AVServiceRegionUS];
+    // 如果APP是在国外使用，开启北美节点
+    // [AVOSCloud setServiceRegion:AVServiceRegionUS];
     // 启用未读消息
     [AVIMClient setUserOptions:@{
                                  AVIMUserOptionUseUnread: @(YES)
@@ -76,6 +77,7 @@ static NSString *const LCCKAPPKEY = @"ye24iIK6ys8IvaISMC4Bs5WK";
         }
     }];
 }
+
 + (void)saveLocalClientInfo:(NSString *)clientId {
     // 在系统偏好保存信息
     NSUserDefaults *defaultsSet = [NSUserDefaults standardUserDefaults];
@@ -141,6 +143,7 @@ static NSString *const LCCKAPPKEY = @"ye24iIK6ys8IvaISMC4Bs5WK";
  *  初始化的示例代码
  */
 - (void)exampleInit {
+    // [[LCChatKit sharedInstance] setDisablePreviewUserId:YES];
 #ifndef __OPTIMIZE__
     //        [LCChatKit setAllLogsEnabled:YES];
     [[LCChatKit sharedInstance] setUseDevPushCerticate:YES];
@@ -190,7 +193,7 @@ static NSString *const LCCKAPPKEY = @"ye24iIK6ys8IvaISMC4Bs5WK";
             }
         }];
         // 模拟网络延时，3秒
-        // sleep(3);
+         sleep(3);
 
 #warning 重要：completionHandler 这个 Bock 必须执行，需要在你**获取到用户信息结束**后，将信息传给该Block！
         !completionHandler ?: completionHandler([users copy], nil);
@@ -215,7 +218,7 @@ static NSString *const LCCKAPPKEY = @"ye24iIK6ys8IvaISMC4Bs5WK";
                 NSString *subTitle = [NSString stringWithFormat:@"群聊id：%@", conversation.conversationId];
                 [LCCKUtil showNotificationWithTitle:title subtitle:subTitle type:LCCKMessageNotificationTypeMessage];
             }];
-        } else {
+        } else if (conversation.members.count == 2) {
             [aConversationController configureBarButtonItemStyle:LCCKBarButtonItemStyleSingleProfile action:^(UIBarButtonItem *sender, UIEvent *event) {
                 NSString *title = @"打开用户详情";
                 NSArray *members = conversation.members;
@@ -225,6 +228,7 @@ static NSString *const LCCKAPPKEY = @"ye24iIK6ys8IvaISMC4Bs5WK";
                 [LCCKUtil showNotificationWithTitle:title subtitle:subTitle type:LCCKMessageNotificationTypeMessage];
             }];
         }
+        //系统对话，成员为0，单独处理。参考：系统对话文档 https://leancloud.cn/docs/realtime_v2.html#%E7%B3%BB%E7%BB%9F%E5%AF%B9%E8%AF%9D_System_Conversation_
     }];
     
     [[LCChatKit sharedInstance] setConversationInvalidedHandler:^(NSString *conversationId, LCCKConversationViewController *conversationController, id<LCCKUserDelegate> administrator, NSError *error) {
@@ -235,7 +239,7 @@ static NSString *const LCCKAPPKEY = @"ye24iIK6ys8IvaISMC4Bs5WK";
             /**
              * 下列情景下会执行
              - 当前用户被踢出群，也会执行
-             - 用户不在当前群众，且未开启 `enableAutoJoin` (自动进群)
+             - 用户不在当前群中，且未开启 `enableAutoJoin` (自动进群)
              */
             [conversationController.navigationController popToRootViewControllerAnimated:YES];
             title = @"进群失败！";
@@ -318,7 +322,7 @@ static NSString *const LCCKAPPKEY = @"ye24iIK6ys8IvaISMC4Bs5WK";
         [self exampleOpenProfileForUser:user userId:userId parentController:parentController];
     }];
     
-    //    开启圆角可能导致4S等低端机型卡顿，谨慎开启。
+    //    开启圆角
     //    [[LCChatKit sharedInstance] setAvatarImageViewCornerRadiusBlock:^CGFloat(CGSize avatarImageViewSize) {
     //        if (avatarImageViewSize.height > 0) {
     //            return avatarImageViewSize.height/2;
@@ -335,7 +339,7 @@ static NSString *const LCCKAPPKEY = @"ye24iIK6ys8IvaISMC4Bs5WK";
         return [self exampleConversationEditActionAtIndexPath:indexPath conversation:conversation controller:controller];
     }];
     
-    //    如果不是TabBar样式，请实现该 Blcok 来设置 Badge 红标。
+    //    TabBar样式，自动设置。如果不是TabBar样式，请实现该 Blcok 来设置 Badge 红标。
     //    [[LCChatKit sharedInstance] setMarkBadgeWithTotalUnreadCountBlock:^(NSInteger totalUnreadCount, UIViewController *controller) {
     //        [self exampleMarkBadgeWithTotalUnreadCount:totalUnreadCount controller:controller];
     //    }];
@@ -569,7 +573,7 @@ typedef void (^UITableViewRowActionHandler)(UITableViewRowAction *action, NSInde
     if (totalUnreadCount > 0) {
         NSString *badgeValue = [NSString stringWithFormat:@"%ld", (long)totalUnreadCount];
         if (totalUnreadCount > 99) {
-            badgeValue = @"...";
+            badgeValue = LCCKBadgeTextForNumberGreaterThanLimit;
         }
         [controller tabBarItem].badgeValue = badgeValue;
         [[UIApplication sharedApplication] setApplicationIconBadgeNumber:totalUnreadCount];
@@ -630,6 +634,11 @@ void dispatch_async_limit(dispatch_queue_t queue, NSUInteger limitSemaphoreCount
         allPersonIds = [[LCCKContactManager defaultManager] fetchContactPeerIds];
     } else {
         allPersonIds = conversation.members;
+    }
+    if (allPersonIds.count == 0) {
+        NSString *title = @"系统消息不支持转发";
+    [LCCKUtil showNotificationWithTitle:title subtitle:nil type:LCCKMessageNotificationTypeError];
+        return;
     }
     dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
     NSArray *users = [[LCChatKit sharedInstance] getCachedProfilesIfExists:allPersonIds shouldSameCount:YES error:nil];
@@ -695,10 +704,11 @@ void dispatch_async_limit(dispatch_queue_t queue, NSUInteger limitSemaphoreCount
             if (succeeded) {
                 [self lcck_showSuccess:@"设置群头像成功"];
                 if (shouldInsert) {
-                    [[LCCKConversationService sharedInstance] insertRecentConversation:conversation];
+                    [[LCChatKit sharedInstance] insertRecentConversation:conversation];
                 }
                 [[NSNotificationCenter defaultCenter] postNotificationName:LCCKNotificationConversationListDataSourceUpdated object:self];
             } else {
+                LCCKLog(@"系统对话请通过REST API修改，或者直接到控制台修改，APP端不支持直接修改");
                 [self lcck_showError:@"设置群头像失败"];
             }
         }];
@@ -768,6 +778,7 @@ void dispatch_async_limit(dispatch_queue_t queue, NSUInteger limitSemaphoreCount
         title = [NSString stringWithFormat:@"打开自己的主页 \nClientId是 : %@", userId];
         subtitle = [NSString stringWithFormat:@"我自己的name是 : %@", user.name];
     } else if ([parentController isKindOfClass:[LCCKConversationViewController class]] ) {
+
 //        if (conversationViewController.conversation.lcck_type == LCCKConversationTypeGroup) {
         LCCKConversationViewController *conversationViewController_ = [[RedpacketDemoViewController alloc] initWithPeerId:user.clientId ?: userId];
 

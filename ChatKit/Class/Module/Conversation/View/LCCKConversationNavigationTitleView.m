@@ -2,7 +2,7 @@
 //  LCCKConversationNavigationTitleView.m
 //  Pods
 //
-//  v0.7.0 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/7/19.
+//  v0.7.10 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/7/19.
 //
 //
 
@@ -88,6 +88,9 @@ static void * const LCCKConversationNavigationTitleViewShowRemindMuteImageViewCo
             conversationName = conversation.lcck_displayName;
         } else {
             conversationName = conversation.lcck_title;
+        }
+        if (conversationName.length == 0 || !conversationName) {
+            conversationName = LCCKLocalizedStrings(@"Chat");
         }
         [self setupWithConversationName:conversationName membersCount:membersCount navigationController:navigationController];
         self.remindMuteImageView.hidden = !conversation.muted;

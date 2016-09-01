@@ -2,7 +2,7 @@
 //  AVIMConversation+LCCKExtension.m
 //  LeanCloudChatKit-iOS
 //
-//  v0.7.0 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/3/11.
+//  v0.7.10 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/3/11.
 //  Copyright © 2016年 LeanCloud. All rights reserved.
 //
 
@@ -31,7 +31,7 @@
     NSString *badgeText;
     NSUInteger unreadCount = self.lcck_unreadCount;
     if (unreadCount > 99) {
-        badgeText = @"···";
+        badgeText = LCCKBadgeTextForNumberGreaterThanLimit;
     } else {
         badgeText = [NSString stringWithFormat:@"%@", @(unreadCount)];
     }
@@ -62,25 +62,39 @@
 }
 
 - (LCCKConversationType)lcck_type {
-    if (self.members.count > 2) {
-        return LCCKConversationTypeGroup;
+    if (self.members.count == 2) {
+        return LCCKConversationTypeSingle;
     }
-    return LCCKConversationTypeSingle;
+    //系统对话按照群聊处理
+    return LCCKConversationTypeGroup;
 }
 
 - (NSString *)lcck_displayName {
+    BOOL disablePreviewUserId = [LCCKSettingService sharedInstance].isDisablePreviewUserId;
+    NSString *displayName;
     if ([self lcck_type] == LCCKConversationTypeSingle) {
         NSString *peerId = [self lcck_peerId];
         NSError *error = nil;
-       NSArray *peers = [[LCCKUserSystemService sharedInstance] getCachedProfilesIfExists:@[peerId] error:&error];
+        NSArray *peers = [[LCCKUserSystemService sharedInstance] getCachedProfilesIfExists:@[peerId] error:&error];
         id<LCCKUserDelegate> peer;
         if (peers.count > 0) {
             peer = peers[0];
         }
-        return peer.name ?: peerId;
-    } else {
+        displayName = peer.name ?: peerId;
+        if (!peer.name && disablePreviewUserId) {
+            NSString *defaultNickNameWhenNil = LCCKLocalizedStrings(@"nickNameIsNil");
+            displayName = defaultNickNameWhenNil.length > 0 ? defaultNickNameWhenNil : @"";
+        }
+        return displayName;
+    }
+    if (self.name.length > 0) {
         return self.name;
     }
+    if (self.members.count == 0) {
+        return LCCKLocalizedStrings(@"SystemConversation");
+    }
+    return LCCKLocalizedStrings(@"GroupConversation");
+    
 }
 
 - (NSString *)lcck_peerId {
@@ -101,10 +115,15 @@
 }
 
 - (NSString *)lcck_title {
-    if (self.lcck_type == LCCKConversationTypeSingle) {
-        return self.lcck_displayName;
+    NSString *displayName = self.lcck_displayName;
+    if (!self.lcck_displayName || self.lcck_displayName.length == 0 ||  [self.lcck_displayName isEqualToString:LCCKLocalizedStrings(@"nickNameIsNil")]) {
+        displayName = LCCKLocalizedStrings(@"Chat");
+    }
+    if (self.lcck_type == LCCKConversationTypeSingle || self.members.count == 0) {
+        return displayName;
     } else {
-        return [NSString stringWithFormat:@"%@(%ld)", self.lcck_displayName, (long)self.members.count];
+        return [NSString stringWithFormat:@"%@(%ld)", displayName, (long)self.members.count];
+        
     }
 }
 

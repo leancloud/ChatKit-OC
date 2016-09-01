@@ -223,10 +223,9 @@
                            if (selectedIndex == 0) {
                                [self createGroupConversation:sender];
                            }
-                       } dismissBlock:^{
-                           
-                       }];
+                       } dismissBlock:nil];
 }
+
 - (void)signOut {
     [LCChatKitExample signOutFromViewController:self.secondViewController];
 }

@@ -2,7 +2,7 @@
 //  LCCKSettingService.m
 //  LeanCloudChatKit-iOS
 //
-//  v0.7.0 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/2/23.
+//  v0.7.10 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/2/23.
 //  Copyright © 2016年 LeanCloud. All rights reserved.
 //
 
@@ -27,6 +27,7 @@ static BOOL LCCKAllLogsEnabled;
 
 @implementation LCCKSettingService
 @synthesize useDevPushCerticate = _useDevPushCerticate;
+@synthesize disablePreviewUserId = _disablePreviewUserId;
 
 + (void)setAllLogsEnabled:(BOOL)enabled {
     LCCKAllLogsEnabled = enabled;
@@ -38,7 +39,7 @@ static BOOL LCCKAllLogsEnabled;
 }
 
 + (NSString *)ChatKitVersion {
-    return @"1.0.0";
+    return @"v0.7.10";
 }
 
 - (NSString *)tmpPath {

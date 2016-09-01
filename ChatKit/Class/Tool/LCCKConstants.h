@@ -2,7 +2,7 @@
 //  LCCKConstants.h
 //  LeanCloudChatKit-iOS
 //
-//  v0.7.0 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/2/19.
+//  v0.7.10 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/2/19.
 //  Copyright © 2016年 LeanCloud. All rights reserved.
 //  Common typdef and constants, and so on.
 
@@ -41,6 +41,8 @@ typedef void (^LCCKProgressBlock)(NSInteger percentDone);
 ///=============================================================================
 /// @name Common Define
 ///=============================================================================
+
+static NSString *const LCCKBadgeTextForNumberGreaterThanLimit = @"···";
 
 #define LCCK_DEPRECATED(explain) __attribute__((deprecated(explain)))
 

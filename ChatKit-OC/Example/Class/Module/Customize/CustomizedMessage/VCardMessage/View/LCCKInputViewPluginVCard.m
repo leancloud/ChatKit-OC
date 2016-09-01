@@ -2,7 +2,7 @@
 //  LCCKInputViewPluginVCard.m
 //  ChatKit-OC
 //
-//  v0.7.0 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/8/12.
+//  v0.7.10 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/8/12.
 //  Copyright © 2016年 LeanCloud. All rights reserved.
 //
 
@@ -98,10 +98,10 @@
 - (void)presentSelectMemberViewController {
     AVIMConversation *conversation = [self.conversationViewController getConversationIfExists];
     NSArray *allPersonIds;
-    if (conversation.lcck_type == LCCKConversationTypeSingle) {
-        allPersonIds = [[LCCKContactManager defaultManager] fetchContactPeerIds];
-    } else {
+    if (conversation.lcck_type == LCCKConversationTypeGroup) {
         allPersonIds = conversation.members;
+    } else {
+        allPersonIds = [[LCCKContactManager defaultManager] fetchContactPeerIds];
     }
     NSArray *users = [[LCChatKit sharedInstance] getCachedProfilesIfExists:allPersonIds shouldSameCount:YES error:nil];
     NSString *currentClientID = [[LCChatKit sharedInstance] clientId];

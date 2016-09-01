@@ -2,11 +2,10 @@
 
 <p align="center">
 ![enter image description here](https://img.shields.io/badge/pod-v0.7.1-brightgreen.svg)  ![enter image description here](https://img.shields.io/badge/platform-iOS%207.0%2B-ff69b5618733984.svg) 
-<a href="https://github.com/leancloud/ChatKit-OC/blob/master/LICENSE"><img src="https://img.shields.io/badge/license-MIT-green.svg?style=flat"></a>
+<a href="https://github.com/leancloud/ChatKit-OC/blob/master/LICENSE"><img src="https://img.shields.io/badge/license-MIT-green.svg?style=flat"></a>[ CocoaPods-Doc](http://cocoapods.org/pods/ChatKit) 
 </a>
 
-在使用中有任何问题都可以到[我们的官方论坛](https://forum.leancloud.cn/c/jing-xuan-faq)提问题，会有专业工程师回复，平均响应时间在24小时内。
-
+在使用中有任何问题都可以到[我们的官方论坛](https://forum.leancloud.cn/c/jing-xuan-faq)提问题，会有专业工程师回复，平均响应时间在24小时内。 
 该篇为快速入门，更多自定义需求请前往这里：
 
  1.  [《ChatKit 自定义样式》]( https://github.com/leancloud/ChatKit-OC/blob/master/ChatKit%20自定义样式.md )
@@ -58,6 +57,15 @@ git clone --depth=1 https://github.com/leancloud/ChatKit-OC
 
 我们在 ChatKit 中重点完成了这两个页面的开发，大家可以看看效果：
 
+![enter image description here](http://ww3.sinaimg.cn/large/64dfd849jw1f77b0oxnfqg20nl0l77wk.gif)
+
+![enter image description here](http://ww1.sinaimg.cn/large/64dfd849jw1f77b510x7dg20nl0l74r6.gif)
+
+![enter image description here](http://ww2.sinaimg.cn/mw690/64dfd849jw1f77b3wfkuyg20br0krqve.gif)
+
+![enter image description here](http://ww1.sinaimg.cn/mw690/64dfd849jw1f77azzgfmmg20bl0kl1ky.gif) 
+
+
 最近联系人 | 语音消息，根据语音长度调整宽度 | 图片消息，尺寸自适应 
 -------------|-------------|-------------|-------------
 ![enter image description here](http://i63.tinypic.com/1zxqjns.jpg)|![enter image description here](http://i68.tinypic.com/2rx9sfq.jpg)  | ![enter image description here](http://i64.tinypic.com/aw87wl.jpg) 
@@ -66,9 +74,9 @@ git clone --depth=1 https://github.com/leancloud/ChatKit-OC
  -------------|-------------|-------------
 ![enter image description here](http://i65.tinypic.com/2vmuaf4.jpg) | ![enter image description here](http://i68.tinypic.com/n6b29v.jpg)| ![enter image description here](http://i66.tinypic.com/orrrxh.jpg)
 
-图片消息支持多图联播，支持多种分享 |文本消息支持图文混排| 文本消息支持双击全屏展示 | 健壮的输入框
--------------|-------------|-------------|----
-![enter image description here](http://i65.tinypic.com/wmjuvs.jpg) | ![enter image description here](http://i63.tinypic.com/2eoa4j6.jpg) | ![enter image description here](http://i63.tinypic.com/1z1z5ur.jpg) | ![enter image description here](http://image18-c.poco.cn/mypoco/myphoto/20160805/13/17338872420160805133757084.gif?408x758_110) 
+图片消息支持多图联播，支持多种分享 |文本消息支持图文混排| 文本消息支持双击全屏展示 
+-------------|-------------|------------
+![enter image description here](http://i65.tinypic.com/wmjuvs.jpg) | ![enter image description here](http://i63.tinypic.com/2eoa4j6.jpg) | ![enter image description here](http://i63.tinypic.com/1z1z5ur.jpg)
 
 ## 项目结构
 

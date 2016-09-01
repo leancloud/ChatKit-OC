@@ -2,7 +2,7 @@
 //  LCChatKit.h
 //  LeanCloudChatKit-iOS
 //
-//  v0.7.0 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/2/22.
+//  v0.7.10 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/2/22.
 //  Copyright © 2016年 LeanCloud. All rights reserved.
 //  Core class of LeanCloudChatKit
 
@@ -37,7 +37,6 @@
 @property (nonatomic, copy, readonly) NSString *appKey;
 
 /*!
- /*!
  *
  * @brief Set up application id(appId) and client key(appKey) to start LeanCloud service.
  * @attention 请区别 `[AVOSCloud setApplicationId:appId clientKey:appKey];` 与 `[LCChatKit setAppId:appId appKey:appKey];`。
