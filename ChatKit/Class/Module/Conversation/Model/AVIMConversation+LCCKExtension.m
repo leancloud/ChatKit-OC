@@ -119,10 +119,11 @@
     if (!self.lcck_displayName || self.lcck_displayName.length == 0 ||  [self.lcck_displayName isEqualToString:LCCKLocalizedStrings(@"nickNameIsNil")]) {
         displayName = LCCKLocalizedStrings(@"Chat");
     }
-    if (self.lcck_type == LCCKConversationTypeSingle) {
+    if (self.lcck_type == LCCKConversationTypeSingle || self.members.count == 0) {
         return displayName;
     } else {
         return [NSString stringWithFormat:@"%@(%ld)", displayName, (long)self.members.count];
+        
     }
 }
 

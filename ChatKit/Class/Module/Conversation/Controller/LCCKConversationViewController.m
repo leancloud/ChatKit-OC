@@ -625,6 +625,10 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
 }
 
 - (void)sendWelcomeMessageIfNeeded:(BOOL)isFirstTimeMeet {
+    //系统对话
+    if (_conversation.members.count == 0) {
+        return;
+    }
     __block NSString *welcomeMessage;
     LCCKConversationType conversationType = _conversation.lcck_type;
     switch (conversationType) {
@@ -674,6 +678,10 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
 }
 
 - (void)didInputAtSign:(LCCKChatBar *)chatBar {
+    //系统对话
+    if (_conversation.members.count == 0) {
+        return;
+    }
     if (self.conversation.lcck_type == LCCKConversationTypeGroup) {
         [self presentSelectMemberViewController];
     }
