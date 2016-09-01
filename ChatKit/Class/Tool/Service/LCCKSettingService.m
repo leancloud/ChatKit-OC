@@ -269,12 +269,10 @@ static BOOL LCCKAllLogsEnabled;
     return defaultThemeTextMessageFont;
 }
 
-- (void)setCurrentConversationBackgroundImage:(UIImage *)image scaledToSize:(CGSize)scaledToSize {
-    NSString *conversationId = [LCCKConversationService sharedInstance].currentConversation.conversationId;
-    [self setBackgroundImage:image forConversationId:conversationId scaledToSize:scaledToSize];
-}
-
 - (void)setBackgroundImage:(UIImage *)image forConversationId:(NSString *)conversationId scaledToSize:(CGSize)scaledToSize {
+    if (conversationId.length == 0 || !conversationId) {
+        return;
+    }
     image = [image lcck_scalingPatternImageToSize:scaledToSize];
     NSData *imageData = (UIImagePNGRepresentation(image) ? UIImagePNGRepresentation(image) : UIImageJPEGRepresentation(image, 1));
     NSString *imageName = [NSString stringWithFormat:@"%@.jpg", [[NSUUID UUID] UUIDString]];

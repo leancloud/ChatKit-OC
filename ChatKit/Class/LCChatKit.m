@@ -264,10 +264,6 @@
     self.settingService.disablePreviewUserId = disablePreviewUserId;
 }
 
-- (void)setCurrentConversationBackgroundImage:(UIImage *)image scaledToSize:(CGSize)scaledToSize {
-    [self.settingService setCurrentConversationBackgroundImage:image scaledToSize:scaledToSize];
-}
-
 - (void)setBackgroundImage:(UIImage *)image forConversationId:(NSString *)conversationId scaledToSize:(CGSize)scaledToSize {
     [self.settingService setBackgroundImage:image forConversationId:conversationId scaledToSize:scaledToSize];
 }

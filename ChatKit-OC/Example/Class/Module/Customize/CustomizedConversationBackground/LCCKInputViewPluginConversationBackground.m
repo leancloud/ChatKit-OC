@@ -69,7 +69,7 @@
         if (object) {
             UIImage *image = (UIImage *)object;
             //            [self.conversationViewController sendImageMessage:image];
-            [[LCChatKit sharedInstance] setCurrentConversationBackgroundImage:image scaledToSize:self.conversationViewController.view.frame.size];
+            [[LCChatKit sharedInstance] setBackgroundImage:image forConversationId:self.conversationViewController.conversationId scaledToSize:self.conversationViewController.view.frame.size];
         } else {
             LCCKLog(@"%@", error.description);
         }

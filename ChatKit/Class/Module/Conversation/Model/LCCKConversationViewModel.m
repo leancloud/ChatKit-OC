@@ -187,7 +187,7 @@
 
 - (void)conversationInvalided:(NSNotification *)notification {
     NSString *clientId = notification.object;
-    [[LCChatKit sharedInstance] deleteRecentConversationWithConversationId:[LCCKConversationService sharedInstance].currentConversationId];
+    [[LCChatKit sharedInstance] deleteRecentConversationWithConversationId:self.currentConversationId];
     [[LCCKUserSystemService sharedInstance] getProfilesInBackgroundForUserIds:@[ clientId ] callback:^(NSArray<id<LCCKUserDelegate>> *users, NSError *error) {
         id<LCCKUserDelegate> user;
         @try {
@@ -207,7 +207,7 @@
         
         LCCKConversationInvalidedHandler conversationInvalidedHandler = [[LCCKConversationService sharedInstance] conversationInvalidedHandler];
         if (conversationInvalidedHandler) {
-            conversationInvalidedHandler([LCCKConversationService sharedInstance].currentConversation, user, error_, self.parentConversationViewController);
+            conversationInvalidedHandler(self.currentConversation, user, error_, self.parentConversationViewController);
         }
     }];
 }
@@ -240,7 +240,7 @@
  */
 - (NSArray *)allFailedMessages {
     if (_allFailedMessages == nil) {
-        NSArray *allFailedMessages = [[LCCKConversationService sharedInstance] failedMessagesByConversationId:[LCCKConversationService sharedInstance].currentConversationId];
+        NSArray *allFailedMessages = [[LCCKConversationService sharedInstance] failedMessagesByConversationId:self.currentConversationId];
         _allFailedMessages = allFailedMessages;
     }
     return _allFailedMessages;
@@ -412,7 +412,9 @@ fromTimestamp     |    toDate   |                |  上次上拉刷新顶端，�
                   __strong __typeof(wself)self = wself;
                   if (![message lcck_isCustomMessage]) {
                       [(LCCKMessage *)message setSendStatus:LCCKMessageSendStateFailed];
-                      [[LCCKConversationService sharedInstance] insertFailedLCCKMessage:message];
+                      if (self.currentConversationId.length > 0) {
+                          [[LCCKConversationService sharedInstance] insertFailedLCCKMessage:message];
+                      }
                   } else {
                       //TODO:自定义消息的失败缓存
                   }
@@ -443,6 +445,7 @@ fromTimestamp     |    toDate   |                |  上次上拉刷新顶端，�
                                          userInfo:errorInfo];
         
         !failed ?: failed(YES, error);
+        return;
     }
     self.parentConversationViewController.allowScrollToBottom = YES;
     NSString *messageUUID =  [NSString stringWithFormat:@"%@", @(LCCK_CURRENT_TIMESTAMP)];
@@ -456,8 +459,8 @@ fromTimestamp     |    toDate   |                |  上次上拉刷新顶端，�
     AVIMTypedMessage *avimTypedMessage;
     if (![aMessage lcck_isCustomMessage]) {
         LCCKMessage *message = (LCCKMessage *)aMessage;
-        message.conversationId = [LCCKConversationService sharedInstance].currentConversationId ?: [LCCKConversationService sharedInstance].currentConversation.conversationId;
-        NSAssert(message.conversationId, @"currentConversationId is nil");
+        message.conversationId = self.currentConversationId;
+
         message.sendStatus = LCCKMessageSendStateSending;
         id<LCCKUserDelegate> sender = [[LCCKUserSystemService sharedInstance] fetchCurrentUser];
         message.sender = sender;
@@ -469,8 +472,21 @@ fromTimestamp     |    toDate   |                |  上次上拉刷新顶端，�
     [avimTypedMessage lcck_setObject:@([self.parentConversationViewController getConversationIfExists].lcck_type) forKey:LCCKCustomMessageConversationTypeKey];
     [self.avimTypedMessage addObject:avimTypedMessage];
     [self preloadMessageToTableView:aMessage callback:^{
+        if (!self.currentConversationId || self.currentConversationId.length == 0) {
+            NSInteger code = 0;
+            NSString *errorReasonText = @"Conversation invalid";
+            NSDictionary *errorInfo = @{
+                                        @"code":@(code),
+                                        NSLocalizedDescriptionKey : errorReasonText,
+                                        };
+            NSError *error = [NSError errorWithDomain:NSStringFromClass([self class])
+                                                 code:code
+                                             userInfo:errorInfo];
+            
+            !failed ?: failed(YES, error);
+        }
         [[LCCKConversationService sharedInstance] sendMessage:avimTypedMessage
-                                                 conversation:[LCCKConversationService sharedInstance].currentConversation
+                                                 conversation:self.currentConversation
                                                 progressBlock:progressBlock
                                                      callback:^(BOOL succeeded, NSError *error) {
                                                          if (error) {
@@ -568,8 +584,15 @@ fromTimestamp     |    toDate   |                |  上次上拉刷新顶端，�
     return self.dataArray.count;
 }
 
+- (AVIMConversation *)currentConversation {
+    return [self.parentConversationViewController getConversationIfExists];
+}
+
+- (NSString *)currentConversationId {
+    return self.currentConversation.conversationId;
+}
+
 - (void)loadMessagesFirstTimeWithCallback:(LCCKIdBoolResultBlock)callback {
-    AVIMConversation *conversation = [LCCKConversationService sharedInstance].currentConversation;
     BOOL socketOpened = [LCCKSessionService sharedInstance].connect;
     [self queryAndCacheMessagesWithTimestamp:0 block:^(NSArray *avimTypedMessages, NSError *error) {
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
@@ -603,7 +626,7 @@ fromTimestamp     |    toDate   |                |  上次上拉刷新顶端，�
         timestamp = 0;
     }
     self.parentConversationViewController.loadingMoreMessage = YES;
-    [[LCCKConversationService sharedInstance] queryTypedMessagesWithConversation:[LCCKConversationService sharedInstance].currentConversation
+    [[LCCKConversationService sharedInstance] queryTypedMessagesWithConversation:self.currentConversation
                                                                        timestamp:timestamp
                                                                            limit:kLCCKOnePageSize
                                                                            block:^(NSArray *avimTypedMessages, NSError *error) {

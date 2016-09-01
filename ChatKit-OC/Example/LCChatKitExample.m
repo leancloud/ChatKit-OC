@@ -193,7 +193,7 @@ static NSString *const LCCKAPPKEY = @"ye24iIK6ys8IvaISMC4Bs5WK";
             }
         }];
         // 模拟网络延时，3秒
-         sleep(3);
+//         sleep(3);
 
 #warning 重要：completionHandler 这个 Bock 必须执行，需要在你**获取到用户信息结束**后，将信息传给该Block！
         !completionHandler ?: completionHandler([users copy], nil);

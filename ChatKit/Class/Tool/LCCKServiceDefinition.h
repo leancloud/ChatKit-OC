@@ -339,7 +339,6 @@ typedef CGFloat (^LCCKAvatarImageViewCornerRadiusBlock)(CGSize avatarImageViewSi
  *  参考 https://github.com/leancloud/leanchat-cloudcode/blob/master/cloud/mchat.js
  */
 @property (nonatomic, assign) BOOL useDevPushCerticate;
-- (void)setCurrentConversationBackgroundImage:(UIImage *)image scaledToSize:(CGSize)scaledToSize;
 - (void)setBackgroundImage:(UIImage *)image forConversationId:(NSString *)conversationId scaledToSize:(CGSize)scaledToSize;
 
 @end
