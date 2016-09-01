@@ -630,6 +630,11 @@ void dispatch_async_limit(dispatch_queue_t queue, NSUInteger limitSemaphoreCount
     } else {
         allPersonIds = conversation.members;
     }
+    if (allPersonIds.count == 0) {
+        NSString *title = @"系统消息不支持转发";
+    [LCCKUtil showNotificationWithTitle:title subtitle:nil type:LCCKMessageNotificationTypeError];
+        return;
+    }
     dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
     NSArray *users = [[LCChatKit sharedInstance] getCachedProfilesIfExists:allPersonIds shouldSameCount:YES error:nil];
     NSString *currentClientID = [[LCChatKit sharedInstance] clientId];

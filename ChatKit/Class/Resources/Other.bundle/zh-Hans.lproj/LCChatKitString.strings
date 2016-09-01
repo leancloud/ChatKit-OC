@@ -56,6 +56,7 @@
 "GroupWelcomeMessageWithNickName" = "大家好，我是";
 "SingleConversation" = "单聊";
 "GroupConversation" = "群聊";
+"SystemConversation" = "系统通知";
 "nickNameIsNil" = "[该用户未设置昵称]";
 "message.bar.error.title" = "错误";
 "message.bar.error.message" = "错误";

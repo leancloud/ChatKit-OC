@@ -53,6 +53,7 @@
 "GroupWelcomeMessageWithNickName" = "Hello! I am ";
 "SingleConversation" = "single chat";
 "GroupConversation" = "group chat";
+"SystemConversation" = "system notification";
 "nickNameIsNil" = "[no nick name]";
 "message.bar.error.title" = "Error Title";
 "message.bar.error.message" = "This is an error message!";

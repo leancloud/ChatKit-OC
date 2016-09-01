@@ -236,12 +236,6 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
 }
 
 - (void)loadDraft {
-    //在对象生命周期内，不添加 flag 属性的情况下，防止多次调进这个方法
-    if (objc_getAssociatedObject(self, _cmd)) {
-        return;
-    } else {
-        objc_setAssociatedObject(self, _cmd, @"isLoadingDraft", OBJC_ASSOCIATION_RETAIN);
-    }
     [self.chatBar appendString:_conversation.lcck_draft];
     [self.chatBar beginInputing];
 }

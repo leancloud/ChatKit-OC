@@ -62,10 +62,11 @@
 }
 
 - (LCCKConversationType)lcck_type {
-    if (self.members.count > 2) {
-        return LCCKConversationTypeGroup;
+    if (self.members.count == 2) {
+        return LCCKConversationTypeSingle;
     }
-    return LCCKConversationTypeSingle;
+    //系统对话按照群聊处理
+    return LCCKConversationTypeGroup;
 }
 
 - (NSString *)lcck_displayName {
@@ -74,7 +75,7 @@
     if ([self lcck_type] == LCCKConversationTypeSingle) {
         NSString *peerId = [self lcck_peerId];
         NSError *error = nil;
-       NSArray *peers = [[LCCKUserSystemService sharedInstance] getCachedProfilesIfExists:@[peerId] error:&error];
+        NSArray *peers = [[LCCKUserSystemService sharedInstance] getCachedProfilesIfExists:@[peerId] error:&error];
         id<LCCKUserDelegate> peer;
         if (peers.count > 0) {
             peer = peers[0];
@@ -85,9 +86,15 @@
             displayName = defaultNickNameWhenNil.length > 0 ? defaultNickNameWhenNil : @"";
         }
         return displayName;
-    } else {
-        return self.name ?: LCCKLocalizedStrings(@"GroupConversation");
     }
+    if (self.name.length > 0) {
+        return self.name;
+    }
+    if (self.members.count == 0) {
+        return LCCKLocalizedStrings(@"SystemConversation");
+    }
+    return LCCKLocalizedStrings(@"GroupConversation");
+    
 }
 
 - (NSString *)lcck_peerId {

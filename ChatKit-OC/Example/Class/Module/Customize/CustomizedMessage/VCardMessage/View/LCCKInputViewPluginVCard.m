@@ -98,10 +98,10 @@
 - (void)presentSelectMemberViewController {
     AVIMConversation *conversation = [self.conversationViewController getConversationIfExists];
     NSArray *allPersonIds;
-    if (conversation.lcck_type == LCCKConversationTypeSingle) {
-        allPersonIds = [[LCCKContactManager defaultManager] fetchContactPeerIds];
-    } else {
+    if (conversation.lcck_type == LCCKConversationTypeGroup) {
         allPersonIds = conversation.members;
+    } else {
+        allPersonIds = [[LCCKContactManager defaultManager] fetchContactPeerIds];
     }
     NSArray *users = [[LCChatKit sharedInstance] getCachedProfilesIfExists:allPersonIds shouldSameCount:YES error:nil];
     NSString *currentClientID = [[LCChatKit sharedInstance] clientId];
