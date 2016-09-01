@@ -2,7 +2,7 @@
 //  LCCKConversationViewController.m
 //  LCCKChatBarExample
 //
-//  v0.7.3 Created by ElonChan (微信向我报BUG:chenyilong1010) ( https://github.com/leancloud/ChatKit-OC ) on 15/11/20.
+//  v0.7.10 Created by ElonChan (微信向我报BUG:chenyilong1010) ( https://github.com/leancloud/ChatKit-OC ) on 15/11/20.
 //  Copyright © 2015年 https://LeanCloud.cn . All rights reserved.
 //
 
@@ -128,6 +128,11 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
                     return;
                 }
                 NSString *currentClientId = [LCCKSessionService sharedInstance].clientId;
+                //系统对话
+                if (conversation.members.count == 0) {
+                    [self refreshConversation:conversation isJoined:YES];
+                    return;
+                }
                 BOOL containsCurrentClientId = [conversation.members containsObject:currentClientId];
                 if (containsCurrentClientId) {
                     [self refreshConversation:conversation isJoined:YES];
@@ -569,6 +574,13 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
         }
         self.conversationId = conversation.conversationId;
         [self.chatViewModel resetBackgroundImage];
+        //系统对话
+        if (conversation.members.count == 0) {
+            self.navigationItem.title = conversation.lcck_title;
+            [self fetchConversationHandler:conversation];
+            !callback ?: callback(YES, nil);
+            return;
+        }
         [[LCChatKit sharedInstance] getProfilesInBackgroundForUserIds:conversation.members callback:^(NSArray<id<LCCKUserDelegate>> *users, NSError *error) {
             if (!self.disableTitleAutoConfig && (users.count > 0)) {
                 [self setupNavigationItemTitleWithConversation:conversation];
