@@ -2,7 +2,7 @@
 //  LCChatKit.m
 //  LeanCloudChatKit-iOS
 //
-//  v0.7.3 Created by ElonChan (wechat:chenyilong1010) on 16/2/22.
+//  v0.7.10 Created by ElonChan (wechat:chenyilong1010) on 16/2/22.
 //  Copyright © 2016年 LeanCloud. All rights reserved.
 //
 
@@ -66,7 +66,7 @@
     [LCChatKit sharedInstance].appId = appId;
     [LCChatKit sharedInstance].appKey = appKey;
     if ([LCCKSettingService allLogsEnabled]) {
-        NSLog(@"LeanCloudKit Version is %@", [LCCKSettingService ChatKitVersion]);
+        LCCKLog(@"ChatKit Version is %@", [LCCKSettingService ChatKitVersion]);
     }
 }
 

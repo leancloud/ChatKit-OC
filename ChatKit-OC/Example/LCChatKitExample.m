@@ -2,7 +2,7 @@
 //  LCChatKitExample.m
 //  LeanCloudChatKit-iOS
 //
-//  v0.7.3 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/2/24.
+//  v0.7.10 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/2/24.
 //  Copyright © 2016年 LeanCloud. All rights reserved.
 //
 #import "LCChatKitExample.h"
@@ -218,7 +218,7 @@ static NSString *const LCCKAPPKEY = @"ye24iIK6ys8IvaISMC4Bs5WK";
                 NSString *subTitle = [NSString stringWithFormat:@"群聊id：%@", conversation.conversationId];
                 [LCCKUtil showNotificationWithTitle:title subtitle:subTitle type:LCCKMessageNotificationTypeMessage];
             }];
-        } else {
+        } else if (conversation.members.count == 2) {
             [aConversationController configureBarButtonItemStyle:LCCKBarButtonItemStyleSingleProfile action:^(UIBarButtonItem *sender, UIEvent *event) {
                 NSString *title = @"打开用户详情";
                 NSArray *members = conversation.members;
@@ -228,6 +228,7 @@ static NSString *const LCCKAPPKEY = @"ye24iIK6ys8IvaISMC4Bs5WK";
                 [LCCKUtil showNotificationWithTitle:title subtitle:subTitle type:LCCKMessageNotificationTypeMessage];
             }];
         }
+        //系统对话，成员为0，单独处理。参考：系统对话文档 https://leancloud.cn/docs/realtime_v2.html#%E7%B3%BB%E7%BB%9F%E5%AF%B9%E8%AF%9D_System_Conversation_
     }];
     
     [[LCChatKit sharedInstance] setConversationInvalidedHandler:^(NSString *conversationId, LCCKConversationViewController *conversationController, id<LCCKUserDelegate> administrator, NSError *error) {
@@ -703,6 +704,7 @@ void dispatch_async_limit(dispatch_queue_t queue, NSUInteger limitSemaphoreCount
                 }
                 [[NSNotificationCenter defaultCenter] postNotificationName:LCCKNotificationConversationListDataSourceUpdated object:self];
             } else {
+                LCCKLog(@"系统对话请通过REST API修改，或者直接到控制台修改，APP端不支持直接修改");
                 [self lcck_showError:@"设置群头像失败"];
             }
         }];
@@ -772,9 +774,9 @@ void dispatch_async_limit(dispatch_queue_t queue, NSUInteger limitSemaphoreCount
         title = [NSString stringWithFormat:@"打开自己的主页 \nClientId是 : %@", userId];
         subtitle = [NSString stringWithFormat:@"我自己的name是 : %@", user.name];
     } else if ([parentController isKindOfClass:[LCCKConversationViewController class]] ) {
-            LCCKConversationViewController *conversationViewController_ = [[LCCKConversationViewController alloc] initWithPeerId:user.clientId ?: userId];
-            [[self class] pushToViewController:conversationViewController_];
-            return;
+        LCCKConversationViewController *conversationViewController_ = [[LCCKConversationViewController alloc] initWithPeerId:user.clientId ?: userId];
+        [[self class] pushToViewController:conversationViewController_];
+        return;
     }
     [LCCKUtil showNotificationWithTitle:title subtitle:subtitle type:LCCKMessageNotificationTypeMessage];
 }
