@@ -66,9 +66,9 @@
 }
 - (void)chatBarWillSendRedPacket{
     if (self.peerId) {
-        [self.redpacketControl presentRedPacketViewController];
+        [self.redpacketControl presentRedPacketViewControllerWithType:RPSendRedPacketViewControllerSingle memberCount:0];
     }else if(self.conversationId){
-        [self.redpacketControl presentRedPacketMoreViewControllerWithGroupMembers:@[]];
+        [self.redpacketControl presentRedPacketViewControllerWithType:RPSendRedPacketViewControllerGroup memberCount:0];
     }
 }
 - (NSString*)clientId{
@@ -101,6 +101,7 @@
 - (void)sendRedpacketMessage:(RedpacketMessageModel *)redpacket
 {
     AVIMTypedMessageRedPacket * message = [[AVIMTypedMessageRedPacket alloc]initWithClientId:self.clientId ConversationType:LCCKConversationTypeSingle];
+    message.attributes = redpacket.redpacketMessageModelToDic;
     [self.chatViewModel sendCustomMessage:message];
 }
 
@@ -112,20 +113,27 @@
         [self.chatViewModel sendLocalFeedbackTextMessge:@"您给自己发了一个红包"];
     }
     else {
-        if (NO == self.redpacketControl.converstationInfo.isGroup) {//如果不是群红包
-            NSString * receiveString = [NSString stringWithFormat:@"%@抢了你的红包",redpacket.currentUser.userNickname];
-            AVIMTypedMessageRedPacketTaken * message = [AVIMTypedMessageRedPacketTaken messageWithText:receiveString file:nil attributes:redpacket.redpacketMessageModelToDic ];
-            [self.chatViewModel sendCustomMessage:message];
-            
-        }else {
-            AVIMTypedMessageRedPacketTaken * message = [[AVIMTypedMessageRedPacketTaken alloc]initWithClientId:self.clientId ConversationType:LCCKConversationTypeSingle receiveMembers:@[redpacket.redpacketSender.userId]];
-            [self.chatViewModel sendCustomMessage:message];
+        switch (redpacket.redpacketType) {
+            case RedpacketTypeSingle: {
+                AVIMTypedMessageRedPacketTaken * message = [[AVIMTypedMessageRedPacketTaken alloc]initWithClientId:self.clientId ConversationType:LCCKConversationTypeSingle receiveMembers:@[redpacket.redpacketSender.userId]];
+                [self.chatViewModel sendCustomMessage:message];
+                break;
+            }
+            case RedpacketTypeGroup:
+            case RedpacketTypeRand:
+            case RedpacketTypeAvg:
+            case RedpacketTypeRandpri:
+            case RedpacketTypeMember: {
+                NSString * receiveString = [NSString stringWithFormat:@"%@抢了你的红包",redpacket.currentUser.userNickname];
+                AVIMTypedMessageRedPacketTaken * message = [AVIMTypedMessageRedPacketTaken messageWithText:receiveString file:nil attributes:redpacket.redpacketMessageModelToDic ];
+                [self.chatViewModel sendCustomMessage:message];
+                break;
+            }
         }
     }
 }
 
-- (NSArray *)groupMemberList{
-
-    return self.usersArray;
+- (void)getGroupMemberListCompletionHandle:(void (^)(NSArray<RedpacketUserInfo *> *))completionHandle{
+    completionHandle(self.usersArray);
 }
 @end

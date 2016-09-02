@@ -45,11 +45,87 @@
 		E700C71D1D7193AB00056E3C /* RedPacketInputViewPluginTest.m in Sources */ = {isa = PBXBuildFile; fileRef = E700C7021D7193AB00056E3C /* RedPacketInputViewPluginTest.m */; };
 		E700C71E1D7193AB00056E3C /* RedpacketMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = E700C7041D7193AB00056E3C /* RedpacketMessageCell.m */; };
 		E700C71F1D7193AB00056E3C /* RedpacketTakenMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = E700C7061D7193AB00056E3C /* RedpacketTakenMessageCell.m */; };
-		E700C7201D7193AB00056E3C /* AlipaySDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E700C7091D7193AB00056E3C /* AlipaySDK.a */; };
-		E700C7211D7193AB00056E3C /* AlipaySDK.bundle in Resources */ = {isa = PBXBuildFile; fileRef = E700C70C1D7193AB00056E3C /* AlipaySDK.bundle */; };
-		E700C7221D7193AB00056E3C /* libRedpacketLib.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E700C70E1D7193AB00056E3C /* libRedpacketLib.a */; };
-		E700C7231D7193AB00056E3C /* RedPacketResource.bundle in Resources */ = {isa = PBXBuildFile; fileRef = E700C7141D7193AB00056E3C /* RedPacketResource.bundle */; };
 		E7586C4F1D630681000C18B4 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E7586C4E1D630681000C18B4 /* CoreMotion.framework */; };
+		E75E22151D78284A005F6F8D /* AlipaySDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E75E21BB1D78284A005F6F8D /* AlipaySDK.a */; };
+		E75E22161D78284A005F6F8D /* AlipaySDK.bundle in Resources */ = {isa = PBXBuildFile; fileRef = E75E21BE1D78284A005F6F8D /* AlipaySDK.bundle */; };
+		E75E22171D78284A005F6F8D /* libRedpacketLib.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E75E21C01D78284A005F6F8D /* libRedpacketLib.a */; };
+		E75E22181D78284A005F6F8D /* anyoneToRedpacket@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E75E21C61D78284A005F6F8D /* anyoneToRedpacket@2x.png */; };
+		E75E22191D78284A005F6F8D /* button_blue_disable@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E75E21C71D78284A005F6F8D /* button_blue_disable@2x.png */; };
+		E75E221A1D78284A005F6F8D /* button_blue_high@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E75E21C81D78284A005F6F8D /* button_blue_high@2x.png */; };
+		E75E221B1D78284A005F6F8D /* button_blue_normal@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E75E21C91D78284A005F6F8D /* button_blue_normal@2x.png */; };
+		E75E221C1D78284A005F6F8D /* button_red_disabel@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E75E21CA1D78284A005F6F8D /* button_red_disabel@2x.png */; };
+		E75E221D1D78284A005F6F8D /* button_red_high@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E75E21CB1D78284A005F6F8D /* button_red_high@2x.png */; };
+		E75E221E1D78284A005F6F8D /* button_red_normal@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E75E21CC1D78284A005F6F8D /* button_red_normal@2x.png */; };
+		E75E221F1D78284A005F6F8D /* changePurse_cell_cardList@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E75E21CD1D78284A005F6F8D /* changePurse_cell_cardList@2x.png */; };
+		E75E22201D78284A005F6F8D /* changePurse_cell_list@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E75E21CE1D78284A005F6F8D /* changePurse_cell_list@2x.png */; };
+		E75E22211D78284A005F6F8D /* changePurse_cell_lock@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E75E21CF1D78284A005F6F8D /* changePurse_cell_lock@2x.png */; };
+		E75E22221D78284A005F6F8D /* changePurse_cell_question@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E75E21D01D78284A005F6F8D /* changePurse_cell_question@2x.png */; };
+		E75E22231D78284A005F6F8D /* changePurse_cell_redpacktLIst@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E75E21D11D78284A005F6F8D /* changePurse_cell_redpacktLIst@2x.png */; };
+		E75E22241D78284A005F6F8D /* changePurse_cell_verify@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E75E21D21D78284A005F6F8D /* changePurse_cell_verify@2x.png */; };
+		E75E22251D78284A005F6F8D /* changepurse_validate_faile@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E75E21D31D78284A005F6F8D /* changepurse_validate_faile@2x.png */; };
+		E75E22261D78284A005F6F8D /* changepurse_validate_success@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E75E21D41D78284A005F6F8D /* changepurse_validate_success@2x.png */; };
+		E75E22271D78284A005F6F8D /* checkBox.png in Resources */ = {isa = PBXBuildFile; fileRef = E75E21D51D78284A005F6F8D /* checkBox.png */; };
+		E75E22281D78284A005F6F8D /* checkBoxSelected.png in Resources */ = {isa = PBXBuildFile; fileRef = E75E21D61D78284A005F6F8D /* checkBoxSelected.png */; };
+		E75E22291D78284A005F6F8D /* checkBtnNormal.png in Resources */ = {isa = PBXBuildFile; fileRef = E75E21D71D78284A005F6F8D /* checkBtnNormal.png */; };
+		E75E222A1D78284A005F6F8D /* checkBtnSelected.png in Resources */ = {isa = PBXBuildFile; fileRef = E75E21D81D78284A005F6F8D /* checkBtnSelected.png */; };
+		E75E222B1D78284A005F6F8D /* GroupRedpacketDetailHeaderView~iphone.nib in Resources */ = {isa = PBXBuildFile; fileRef = E75E21D91D78284A005F6F8D /* GroupRedpacketDetailHeaderView~iphone.nib */; };
+		E75E222C1D78284A005F6F8D /* hudError@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E75E21DA1D78284A005F6F8D /* hudError@2x.png */; };
+		E75E222D1D78284A005F6F8D /* hudRefresh@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E75E21DB1D78284A005F6F8D /* hudRefresh@2x.png */; };
+		E75E222E1D78284A005F6F8D /* hudSuccess@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E75E21DC1D78284A005F6F8D /* hudSuccess@2x.png */; };
+		E75E222F1D78284A005F6F8D /* hudView_button_error@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E75E21DD1D78284A005F6F8D /* hudView_button_error@2x.png */; };
+		E75E22301D78284A005F6F8D /* hudView_error@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E75E21DE1D78284A005F6F8D /* hudView_error@2x.png */; };
+		E75E22311D78284A005F6F8D /* InComeRedpacketCell~iphone.nib in Resources */ = {isa = PBXBuildFile; fileRef = E75E21DF1D78284A005F6F8D /* InComeRedpacketCell~iphone.nib */; };
+		E75E22321D78284A005F6F8D /* InComeRedpacketSendCell~iphone.nib in Resources */ = {isa = PBXBuildFile; fileRef = E75E21E01D78284A005F6F8D /* InComeRedpacketSendCell~iphone.nib */; };
+		E75E22331D78284A005F6F8D /* MemberSearchTableViewCell.nib in Resources */ = {isa = PBXBuildFile; fileRef = E75E21E11D78284A005F6F8D /* MemberSearchTableViewCell.nib */; };
+		E75E22341D78284A005F6F8D /* MyInComeHeaderView~iphone.nib in Resources */ = {isa = PBXBuildFile; fileRef = E75E21E21D78284A005F6F8D /* MyInComeHeaderView~iphone.nib */; };
+		E75E22351D78284A005F6F8D /* noBankcardView@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E75E21E31D78284A005F6F8D /* noBankcardView@2x.png */; };
+		E75E22361D78284A005F6F8D /* password_in@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E75E21E41D78284A005F6F8D /* password_in@2x.png */; };
+		E75E22371D78284A005F6F8D /* password_in@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = E75E21E51D78284A005F6F8D /* password_in@3x.png */; };
+		E75E22381D78284A005F6F8D /* paypassView_addIcon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E75E21E61D78284A005F6F8D /* paypassView_addIcon@2x.png */; };
+		E75E22391D78284A005F6F8D /* payPassVIew_Alipay_disable@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E75E21E71D78284A005F6F8D /* payPassVIew_Alipay_disable@2x.png */; };
+		E75E223A1D78284A005F6F8D /* paypassView_changeMoney@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E75E21E81D78284A005F6F8D /* paypassView_changeMoney@2x.png */; };
+		E75E223B1D78284A005F6F8D /* paypassView_changeMoneyDisable@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E75E21E91D78284A005F6F8D /* paypassView_changeMoneyDisable@2x.png */; };
+		E75E223C1D78284A005F6F8D /* paypassView_jdPay@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E75E21EA1D78284A005F6F8D /* paypassView_jdPay@2x.png */; };
+		E75E223D1D78284A005F6F8D /* payPassView_jdPay_Disable@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E75E21EB1D78284A005F6F8D /* payPassView_jdPay_Disable@2x.png */; };
+		E75E223E1D78284A005F6F8D /* paypassView_wechat@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E75E21EC1D78284A005F6F8D /* paypassView_wechat@2x.png */; };
+		E75E223F1D78284A005F6F8D /* paypassView_zhifubao@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E75E21ED1D78284A005F6F8D /* paypassView_zhifubao@2x.png */; };
+		E75E22401D78284A005F6F8D /* payView_arrow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E75E21EE1D78284A005F6F8D /* payView_arrow@2x.png */; };
+		E75E22411D78284A005F6F8D /* payView_arrow_left@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E75E21EF1D78284A005F6F8D /* payView_arrow_left@2x.png */; };
+		E75E22421D78284A005F6F8D /* payView_close@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E75E21F01D78284A005F6F8D /* payView_close@2x.png */; };
+		E75E22431D78284A005F6F8D /* payView_close_high@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E75E21F11D78284A005F6F8D /* payView_close_high@2x.png */; };
+		E75E22441D78284A005F6F8D /* redPackert_luckCard@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E75E21F21D78284A005F6F8D /* redPackert_luckCard@2x.png */; };
+		E75E22451D78284A005F6F8D /* redPackert_toSomebody@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E75E21F31D78284A005F6F8D /* redPackert_toSomebody@2x.png */; };
+		E75E22461D78284A005F6F8D /* redpacket_background@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E75E21F41D78284A005F6F8D /* redpacket_background@2x.png */; };
+		E75E22471D78284A005F6F8D /* redpacket_FAQ@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E75E21F51D78284A005F6F8D /* redpacket_FAQ@2x.png */; };
+		E75E22481D78284A005F6F8D /* redpacket_header@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E75E21F61D78284A005F6F8D /* redpacket_header@2x.png */; };
+		E75E22491D78284A005F6F8D /* redpacket_help@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E75E21F71D78284A005F6F8D /* redpacket_help@2x.png */; };
+		E75E224A1D78284A005F6F8D /* redpacket_help_high@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E75E21F81D78284A005F6F8D /* redpacket_help_high@2x.png */; };
+		E75E224B1D78284A005F6F8D /* redpacket_luckyBest@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E75E21F91D78284A005F6F8D /* redpacket_luckyBest@2x.png */; };
+		E75E224C1D78284A005F6F8D /* redpacket_navigationbar_return@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E75E21FA1D78284A005F6F8D /* redpacket_navigationbar_return@2x.png */; };
+		E75E224D1D78284A005F6F8D /* redpacket_navigationbar_return@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = E75E21FB1D78284A005F6F8D /* redpacket_navigationbar_return@3x.png */; };
+		E75E224E1D78284A005F6F8D /* redpacket_question.png in Resources */ = {isa = PBXBuildFile; fileRef = E75E21FC1D78284A005F6F8D /* redpacket_question.png */; };
+		E75E224F1D78284A005F6F8D /* redpacket_redpacket@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E75E21FD1D78284A005F6F8D /* redpacket_redpacket@2x.png */; };
+		E75E22501D78284A005F6F8D /* redpacket_redpacket_high@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E75E21FE1D78284A005F6F8D /* redpacket_redpacket_high@2x.png */; };
+		E75E22511D78284A005F6F8D /* redpacket_redpacketSend_luckBless@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E75E21FF1D78284A005F6F8D /* redpacket_redpacketSend_luckBless@2x.png */; };
+		E75E22521D78284A005F6F8D /* RedpacketCell.nib in Resources */ = {isa = PBXBuildFile; fileRef = E75E22001D78284A005F6F8D /* RedpacketCell.nib */; };
+		E75E22531D78284A005F6F8D /* redpacketDetailHeader@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E75E22011D78284A005F6F8D /* redpacketDetailHeader@2x.png */; };
+		E75E22541D78284A005F6F8D /* redpacketDetailHeader@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = E75E22021D78284A005F6F8D /* redpacketDetailHeader@3x.png */; };
+		E75E22551D78284A005F6F8D /* RedPacketDetailHeaderView~iphone.nib in Resources */ = {isa = PBXBuildFile; fileRef = E75E22031D78284A005F6F8D /* RedPacketDetailHeaderView~iphone.nib */; };
+		E75E22561D78284A005F6F8D /* RedPacketResource.bundle in Resources */ = {isa = PBXBuildFile; fileRef = E75E22041D78284A005F6F8D /* RedPacketResource.bundle */; };
+		E75E22571D78284A005F6F8D /* SendRedPacketToMoreViewController.nib in Resources */ = {isa = PBXBuildFile; fileRef = E75E22051D78284A005F6F8D /* SendRedPacketToMoreViewController.nib */; };
+		E75E22581D78284A005F6F8D /* toRedPacketLogo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E75E22061D78284A005F6F8D /* toRedPacketLogo@2x.png */; };
+		E75E22591D78284A005F6F8D /* validate_idCard@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E75E22071D78284A005F6F8D /* validate_idCard@2x.png */; };
+		E75E225A1D78284A005F6F8D /* validate_idCard@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = E75E22081D78284A005F6F8D /* validate_idCard@3x.png */; };
+		E75E225B1D78284A005F6F8D /* validate_IDCard_bord@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E75E22091D78284A005F6F8D /* validate_IDCard_bord@2x.png */; };
+		E75E225C1D78284A005F6F8D /* validate_IDCard_success@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E75E220A1D78284A005F6F8D /* validate_IDCard_success@2x.png */; };
+		E75E225D1D78284A005F6F8D /* validate_IDCard_upload@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E75E220B1D78284A005F6F8D /* validate_IDCard_upload@2x.png */; };
+		E75E225E1D78284A005F6F8D /* validate_IDCard_upload_error@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E75E220C1D78284A005F6F8D /* validate_IDCard_upload_error@2x.png */; };
+		E75E225F1D78284A005F6F8D /* validate_IDCard_upload_success@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E75E220D1D78284A005F6F8D /* validate_IDCard_upload_success@2x.png */; };
+		E75E22601D78284A005F6F8D /* ValidateIDView~iphone.nib in Resources */ = {isa = PBXBuildFile; fileRef = E75E220E1D78284A005F6F8D /* ValidateIDView~iphone.nib */; };
+		E75E22611D78284A005F6F8D /* yuan@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E75E220F1D78284A005F6F8D /* yuan@2x.png */; };
+		E75E22621D78284A005F6F8D /* yuan@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = E75E22101D78284A005F6F8D /* yuan@3x.png */; };
+		E75E22631D78284A005F6F8D /* YZRedPacketView~iphone.nib in Resources */ = {isa = PBXBuildFile; fileRef = E75E22111D78284A005F6F8D /* YZRedPacketView~iphone.nib */; };
+		E75E22641D78284A005F6F8D /* YZTelphoneValidateView~iphone.nib in Resources */ = {isa = PBXBuildFile; fileRef = E75E22121D78284A005F6F8D /* YZTelphoneValidateView~iphone.nib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -139,19 +215,95 @@
 		E700C7041D7193AB00056E3C /* RedpacketMessageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RedpacketMessageCell.m; sourceTree = "<group>"; };
 		E700C7051D7193AB00056E3C /* RedpacketTakenMessageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RedpacketTakenMessageCell.h; sourceTree = "<group>"; };
 		E700C7061D7193AB00056E3C /* RedpacketTakenMessageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RedpacketTakenMessageCell.m; sourceTree = "<group>"; };
-		E700C7091D7193AB00056E3C /* AlipaySDK.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = AlipaySDK.a; sourceTree = "<group>"; };
-		E700C70A1D7193AB00056E3C /* AlipaySDK.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlipaySDK.h; sourceTree = "<group>"; };
-		E700C70B1D7193AB00056E3C /* APayAuthInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APayAuthInfo.h; sourceTree = "<group>"; };
-		E700C70C1D7193AB00056E3C /* AlipaySDK.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = AlipaySDK.bundle; sourceTree = "<group>"; };
-		E700C70E1D7193AB00056E3C /* libRedpacketLib.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libRedpacketLib.a; sourceTree = "<group>"; };
-		E700C70F1D7193AB00056E3C /* RedpacketErrorCode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RedpacketErrorCode.h; sourceTree = "<group>"; };
-		E700C7101D7193AB00056E3C /* RedpacketMessageModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RedpacketMessageModel.h; sourceTree = "<group>"; };
-		E700C7111D7193AB00056E3C /* RedpacketOpenConst.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RedpacketOpenConst.h; sourceTree = "<group>"; };
-		E700C7121D7193AB00056E3C /* RedpacketViewControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RedpacketViewControl.h; sourceTree = "<group>"; };
-		E700C7141D7193AB00056E3C /* RedPacketResource.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = RedPacketResource.bundle; sourceTree = "<group>"; };
-		E700C7151D7193AB00056E3C /* YZHRedpacketBridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YZHRedpacketBridge.h; sourceTree = "<group>"; };
-		E700C7161D7193AB00056E3C /* YZHRedpacketBridgeProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YZHRedpacketBridgeProtocol.h; sourceTree = "<group>"; };
 		E7586C4E1D630681000C18B4 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
+		E75E21BB1D78284A005F6F8D /* AlipaySDK.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = AlipaySDK.a; sourceTree = "<group>"; };
+		E75E21BC1D78284A005F6F8D /* AlipaySDK.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlipaySDK.h; sourceTree = "<group>"; };
+		E75E21BD1D78284A005F6F8D /* APayAuthInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APayAuthInfo.h; sourceTree = "<group>"; };
+		E75E21BE1D78284A005F6F8D /* AlipaySDK.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = AlipaySDK.bundle; sourceTree = "<group>"; };
+		E75E21C01D78284A005F6F8D /* libRedpacketLib.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libRedpacketLib.a; sourceTree = "<group>"; };
+		E75E21C11D78284A005F6F8D /* RedpacketErrorCode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RedpacketErrorCode.h; sourceTree = "<group>"; };
+		E75E21C21D78284A005F6F8D /* RedpacketMessageModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RedpacketMessageModel.h; sourceTree = "<group>"; };
+		E75E21C31D78284A005F6F8D /* RedpacketOpenConst.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RedpacketOpenConst.h; sourceTree = "<group>"; };
+		E75E21C41D78284A005F6F8D /* RedpacketViewControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RedpacketViewControl.h; sourceTree = "<group>"; };
+		E75E21C61D78284A005F6F8D /* anyoneToRedpacket@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "anyoneToRedpacket@2x.png"; sourceTree = "<group>"; };
+		E75E21C71D78284A005F6F8D /* button_blue_disable@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "button_blue_disable@2x.png"; sourceTree = "<group>"; };
+		E75E21C81D78284A005F6F8D /* button_blue_high@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "button_blue_high@2x.png"; sourceTree = "<group>"; };
+		E75E21C91D78284A005F6F8D /* button_blue_normal@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "button_blue_normal@2x.png"; sourceTree = "<group>"; };
+		E75E21CA1D78284A005F6F8D /* button_red_disabel@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "button_red_disabel@2x.png"; sourceTree = "<group>"; };
+		E75E21CB1D78284A005F6F8D /* button_red_high@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "button_red_high@2x.png"; sourceTree = "<group>"; };
+		E75E21CC1D78284A005F6F8D /* button_red_normal@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "button_red_normal@2x.png"; sourceTree = "<group>"; };
+		E75E21CD1D78284A005F6F8D /* changePurse_cell_cardList@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "changePurse_cell_cardList@2x.png"; sourceTree = "<group>"; };
+		E75E21CE1D78284A005F6F8D /* changePurse_cell_list@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "changePurse_cell_list@2x.png"; sourceTree = "<group>"; };
+		E75E21CF1D78284A005F6F8D /* changePurse_cell_lock@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "changePurse_cell_lock@2x.png"; sourceTree = "<group>"; };
+		E75E21D01D78284A005F6F8D /* changePurse_cell_question@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "changePurse_cell_question@2x.png"; sourceTree = "<group>"; };
+		E75E21D11D78284A005F6F8D /* changePurse_cell_redpacktLIst@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "changePurse_cell_redpacktLIst@2x.png"; sourceTree = "<group>"; };
+		E75E21D21D78284A005F6F8D /* changePurse_cell_verify@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "changePurse_cell_verify@2x.png"; sourceTree = "<group>"; };
+		E75E21D31D78284A005F6F8D /* changepurse_validate_faile@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "changepurse_validate_faile@2x.png"; sourceTree = "<group>"; };
+		E75E21D41D78284A005F6F8D /* changepurse_validate_success@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "changepurse_validate_success@2x.png"; sourceTree = "<group>"; };
+		E75E21D51D78284A005F6F8D /* checkBox.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = checkBox.png; sourceTree = "<group>"; };
+		E75E21D61D78284A005F6F8D /* checkBoxSelected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = checkBoxSelected.png; sourceTree = "<group>"; };
+		E75E21D71D78284A005F6F8D /* checkBtnNormal.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = checkBtnNormal.png; sourceTree = "<group>"; };
+		E75E21D81D78284A005F6F8D /* checkBtnSelected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = checkBtnSelected.png; sourceTree = "<group>"; };
+		E75E21D91D78284A005F6F8D /* GroupRedpacketDetailHeaderView~iphone.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; path = "GroupRedpacketDetailHeaderView~iphone.nib"; sourceTree = "<group>"; };
+		E75E21DA1D78284A005F6F8D /* hudError@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "hudError@2x.png"; sourceTree = "<group>"; };
+		E75E21DB1D78284A005F6F8D /* hudRefresh@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "hudRefresh@2x.png"; sourceTree = "<group>"; };
+		E75E21DC1D78284A005F6F8D /* hudSuccess@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "hudSuccess@2x.png"; sourceTree = "<group>"; };
+		E75E21DD1D78284A005F6F8D /* hudView_button_error@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "hudView_button_error@2x.png"; sourceTree = "<group>"; };
+		E75E21DE1D78284A005F6F8D /* hudView_error@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "hudView_error@2x.png"; sourceTree = "<group>"; };
+		E75E21DF1D78284A005F6F8D /* InComeRedpacketCell~iphone.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; path = "InComeRedpacketCell~iphone.nib"; sourceTree = "<group>"; };
+		E75E21E01D78284A005F6F8D /* InComeRedpacketSendCell~iphone.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; path = "InComeRedpacketSendCell~iphone.nib"; sourceTree = "<group>"; };
+		E75E21E11D78284A005F6F8D /* MemberSearchTableViewCell.nib */ = {isa = PBXFileReference; lastKnownFileType = file; path = MemberSearchTableViewCell.nib; sourceTree = "<group>"; };
+		E75E21E21D78284A005F6F8D /* MyInComeHeaderView~iphone.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; path = "MyInComeHeaderView~iphone.nib"; sourceTree = "<group>"; };
+		E75E21E31D78284A005F6F8D /* noBankcardView@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "noBankcardView@2x.png"; sourceTree = "<group>"; };
+		E75E21E41D78284A005F6F8D /* password_in@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "password_in@2x.png"; sourceTree = "<group>"; };
+		E75E21E51D78284A005F6F8D /* password_in@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "password_in@3x.png"; sourceTree = "<group>"; };
+		E75E21E61D78284A005F6F8D /* paypassView_addIcon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "paypassView_addIcon@2x.png"; sourceTree = "<group>"; };
+		E75E21E71D78284A005F6F8D /* payPassVIew_Alipay_disable@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "payPassVIew_Alipay_disable@2x.png"; sourceTree = "<group>"; };
+		E75E21E81D78284A005F6F8D /* paypassView_changeMoney@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "paypassView_changeMoney@2x.png"; sourceTree = "<group>"; };
+		E75E21E91D78284A005F6F8D /* paypassView_changeMoneyDisable@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "paypassView_changeMoneyDisable@2x.png"; sourceTree = "<group>"; };
+		E75E21EA1D78284A005F6F8D /* paypassView_jdPay@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "paypassView_jdPay@2x.png"; sourceTree = "<group>"; };
+		E75E21EB1D78284A005F6F8D /* payPassView_jdPay_Disable@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "payPassView_jdPay_Disable@2x.png"; sourceTree = "<group>"; };
+		E75E21EC1D78284A005F6F8D /* paypassView_wechat@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "paypassView_wechat@2x.png"; sourceTree = "<group>"; };
+		E75E21ED1D78284A005F6F8D /* paypassView_zhifubao@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "paypassView_zhifubao@2x.png"; sourceTree = "<group>"; };
+		E75E21EE1D78284A005F6F8D /* payView_arrow@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "payView_arrow@2x.png"; sourceTree = "<group>"; };
+		E75E21EF1D78284A005F6F8D /* payView_arrow_left@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "payView_arrow_left@2x.png"; sourceTree = "<group>"; };
+		E75E21F01D78284A005F6F8D /* payView_close@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "payView_close@2x.png"; sourceTree = "<group>"; };
+		E75E21F11D78284A005F6F8D /* payView_close_high@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "payView_close_high@2x.png"; sourceTree = "<group>"; };
+		E75E21F21D78284A005F6F8D /* redPackert_luckCard@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "redPackert_luckCard@2x.png"; sourceTree = "<group>"; };
+		E75E21F31D78284A005F6F8D /* redPackert_toSomebody@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "redPackert_toSomebody@2x.png"; sourceTree = "<group>"; };
+		E75E21F41D78284A005F6F8D /* redpacket_background@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "redpacket_background@2x.png"; sourceTree = "<group>"; };
+		E75E21F51D78284A005F6F8D /* redpacket_FAQ@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "redpacket_FAQ@2x.png"; sourceTree = "<group>"; };
+		E75E21F61D78284A005F6F8D /* redpacket_header@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "redpacket_header@2x.png"; sourceTree = "<group>"; };
+		E75E21F71D78284A005F6F8D /* redpacket_help@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "redpacket_help@2x.png"; sourceTree = "<group>"; };
+		E75E21F81D78284A005F6F8D /* redpacket_help_high@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "redpacket_help_high@2x.png"; sourceTree = "<group>"; };
+		E75E21F91D78284A005F6F8D /* redpacket_luckyBest@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "redpacket_luckyBest@2x.png"; sourceTree = "<group>"; };
+		E75E21FA1D78284A005F6F8D /* redpacket_navigationbar_return@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "redpacket_navigationbar_return@2x.png"; sourceTree = "<group>"; };
+		E75E21FB1D78284A005F6F8D /* redpacket_navigationbar_return@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "redpacket_navigationbar_return@3x.png"; sourceTree = "<group>"; };
+		E75E21FC1D78284A005F6F8D /* redpacket_question.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = redpacket_question.png; sourceTree = "<group>"; };
+		E75E21FD1D78284A005F6F8D /* redpacket_redpacket@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "redpacket_redpacket@2x.png"; sourceTree = "<group>"; };
+		E75E21FE1D78284A005F6F8D /* redpacket_redpacket_high@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "redpacket_redpacket_high@2x.png"; sourceTree = "<group>"; };
+		E75E21FF1D78284A005F6F8D /* redpacket_redpacketSend_luckBless@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "redpacket_redpacketSend_luckBless@2x.png"; sourceTree = "<group>"; };
+		E75E22001D78284A005F6F8D /* RedpacketCell.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; path = RedpacketCell.nib; sourceTree = "<group>"; };
+		E75E22011D78284A005F6F8D /* redpacketDetailHeader@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "redpacketDetailHeader@2x.png"; sourceTree = "<group>"; };
+		E75E22021D78284A005F6F8D /* redpacketDetailHeader@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "redpacketDetailHeader@3x.png"; sourceTree = "<group>"; };
+		E75E22031D78284A005F6F8D /* RedPacketDetailHeaderView~iphone.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; path = "RedPacketDetailHeaderView~iphone.nib"; sourceTree = "<group>"; };
+		E75E22041D78284A005F6F8D /* RedPacketResource.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = RedPacketResource.bundle; sourceTree = "<group>"; };
+		E75E22051D78284A005F6F8D /* SendRedPacketToMoreViewController.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; path = SendRedPacketToMoreViewController.nib; sourceTree = "<group>"; };
+		E75E22061D78284A005F6F8D /* toRedPacketLogo@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "toRedPacketLogo@2x.png"; sourceTree = "<group>"; };
+		E75E22071D78284A005F6F8D /* validate_idCard@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "validate_idCard@2x.png"; sourceTree = "<group>"; };
+		E75E22081D78284A005F6F8D /* validate_idCard@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "validate_idCard@3x.png"; sourceTree = "<group>"; };
+		E75E22091D78284A005F6F8D /* validate_IDCard_bord@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "validate_IDCard_bord@2x.png"; sourceTree = "<group>"; };
+		E75E220A1D78284A005F6F8D /* validate_IDCard_success@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "validate_IDCard_success@2x.png"; sourceTree = "<group>"; };
+		E75E220B1D78284A005F6F8D /* validate_IDCard_upload@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "validate_IDCard_upload@2x.png"; sourceTree = "<group>"; };
+		E75E220C1D78284A005F6F8D /* validate_IDCard_upload_error@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "validate_IDCard_upload_error@2x.png"; sourceTree = "<group>"; };
+		E75E220D1D78284A005F6F8D /* validate_IDCard_upload_success@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "validate_IDCard_upload_success@2x.png"; sourceTree = "<group>"; };
+		E75E220E1D78284A005F6F8D /* ValidateIDView~iphone.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; path = "ValidateIDView~iphone.nib"; sourceTree = "<group>"; };
+		E75E220F1D78284A005F6F8D /* yuan@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "yuan@2x.png"; sourceTree = "<group>"; };
+		E75E22101D78284A005F6F8D /* yuan@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "yuan@3x.png"; sourceTree = "<group>"; };
+		E75E22111D78284A005F6F8D /* YZRedPacketView~iphone.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; path = "YZRedPacketView~iphone.nib"; sourceTree = "<group>"; };
+		E75E22121D78284A005F6F8D /* YZTelphoneValidateView~iphone.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; path = "YZTelphoneValidateView~iphone.nib"; sourceTree = "<group>"; };
+		E75E22131D78284A005F6F8D /* YZHRedpacketBridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YZHRedpacketBridge.h; sourceTree = "<group>"; };
+		E75E22141D78284A005F6F8D /* YZHRedpacketBridgeProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YZHRedpacketBridgeProtocol.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -159,12 +311,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E700C7201D7193AB00056E3C /* AlipaySDK.a in Frameworks */,
-				E700C7221D7193AB00056E3C /* libRedpacketLib.a in Frameworks */,
 				E7586C4F1D630681000C18B4 /* CoreMotion.framework in Frameworks */,
 				9AD665CF1D22779A0040A4E3 /* CoreLocation.framework in Frameworks */,
 				9AD665CE1D2277920040A4E3 /* CoreTelephony.framework in Frameworks */,
+				E75E22151D78284A005F6F8D /* AlipaySDK.a in Frameworks */,
 				9AD665CD1D22778B0040A4E3 /* MobileCoreServices.framework in Frameworks */,
+				E75E22171D78284A005F6F8D /* libRedpacketLib.a in Frameworks */,
 				9AD665CC1D2277830040A4E3 /* SystemConfiguration.framework in Frameworks */,
 				5D29D14B40B384F14AEF67FB /* libPods-ChatKit-OC.a in Frameworks */,
 			);
@@ -410,8 +562,8 @@
 		9A754D421CECAC3E000967F1 = {
 			isa = PBXGroup;
 			children = (
+				E75E21B91D78284A005F6F8D /* RedpacketStaticLib */,
 				E700C6F51D7193AB00056E3C /* RedpacketSDK */,
-				E700C7071D7193AB00056E3C /* RedpacketStaticLib */,
 				9A4730281CECAEC500AEB86F /* Example */,
 				9A754D4C1CECAC3E000967F1 /* Products */,
 				578A4ED63A7AFF3EA27EF73A /* Frameworks */,
@@ -462,46 +614,122 @@
 			path = ../RedpacketSDK;
 			sourceTree = "<group>";
 		};
-		E700C7071D7193AB00056E3C /* RedpacketStaticLib */ = {
+		E75E21B91D78284A005F6F8D /* RedpacketStaticLib */ = {
 			isa = PBXGroup;
 			children = (
-				E700C7081D7193AB00056E3C /* AlipayLib */,
-				E700C70C1D7193AB00056E3C /* AlipaySDK.bundle */,
-				E700C70D1D7193AB00056E3C /* lib */,
-				E700C70F1D7193AB00056E3C /* RedpacketErrorCode.h */,
-				E700C7101D7193AB00056E3C /* RedpacketMessageModel.h */,
-				E700C7111D7193AB00056E3C /* RedpacketOpenConst.h */,
-				E700C7121D7193AB00056E3C /* RedpacketViewControl.h */,
-				E700C7131D7193AB00056E3C /* resources */,
-				E700C7151D7193AB00056E3C /* YZHRedpacketBridge.h */,
-				E700C7161D7193AB00056E3C /* YZHRedpacketBridgeProtocol.h */,
+				E75E21BA1D78284A005F6F8D /* AlipayLib */,
+				E75E21BE1D78284A005F6F8D /* AlipaySDK.bundle */,
+				E75E21BF1D78284A005F6F8D /* lib */,
+				E75E21C11D78284A005F6F8D /* RedpacketErrorCode.h */,
+				E75E21C21D78284A005F6F8D /* RedpacketMessageModel.h */,
+				E75E21C31D78284A005F6F8D /* RedpacketOpenConst.h */,
+				E75E21C41D78284A005F6F8D /* RedpacketViewControl.h */,
+				E75E21C51D78284A005F6F8D /* resources */,
+				E75E22131D78284A005F6F8D /* YZHRedpacketBridge.h */,
+				E75E22141D78284A005F6F8D /* YZHRedpacketBridgeProtocol.h */,
 			);
 			name = RedpacketStaticLib;
-			path = ../RedpacketStaticLib;
+			path = ../../RedpacketStaticLib;
 			sourceTree = "<group>";
 		};
-		E700C7081D7193AB00056E3C /* AlipayLib */ = {
+		E75E21BA1D78284A005F6F8D /* AlipayLib */ = {
 			isa = PBXGroup;
 			children = (
-				E700C7091D7193AB00056E3C /* AlipaySDK.a */,
-				E700C70A1D7193AB00056E3C /* AlipaySDK.h */,
-				E700C70B1D7193AB00056E3C /* APayAuthInfo.h */,
+				E75E21BB1D78284A005F6F8D /* AlipaySDK.a */,
+				E75E21BC1D78284A005F6F8D /* AlipaySDK.h */,
+				E75E21BD1D78284A005F6F8D /* APayAuthInfo.h */,
 			);
 			path = AlipayLib;
 			sourceTree = "<group>";
 		};
-		E700C70D1D7193AB00056E3C /* lib */ = {
+		E75E21BF1D78284A005F6F8D /* lib */ = {
 			isa = PBXGroup;
 			children = (
-				E700C70E1D7193AB00056E3C /* libRedpacketLib.a */,
+				E75E21C01D78284A005F6F8D /* libRedpacketLib.a */,
 			);
 			path = lib;
 			sourceTree = "<group>";
 		};
-		E700C7131D7193AB00056E3C /* resources */ = {
+		E75E21C51D78284A005F6F8D /* resources */ = {
 			isa = PBXGroup;
 			children = (
-				E700C7141D7193AB00056E3C /* RedPacketResource.bundle */,
+				E75E21C61D78284A005F6F8D /* anyoneToRedpacket@2x.png */,
+				E75E21C71D78284A005F6F8D /* button_blue_disable@2x.png */,
+				E75E21C81D78284A005F6F8D /* button_blue_high@2x.png */,
+				E75E21C91D78284A005F6F8D /* button_blue_normal@2x.png */,
+				E75E21CA1D78284A005F6F8D /* button_red_disabel@2x.png */,
+				E75E21CB1D78284A005F6F8D /* button_red_high@2x.png */,
+				E75E21CC1D78284A005F6F8D /* button_red_normal@2x.png */,
+				E75E21CD1D78284A005F6F8D /* changePurse_cell_cardList@2x.png */,
+				E75E21CE1D78284A005F6F8D /* changePurse_cell_list@2x.png */,
+				E75E21CF1D78284A005F6F8D /* changePurse_cell_lock@2x.png */,
+				E75E21D01D78284A005F6F8D /* changePurse_cell_question@2x.png */,
+				E75E21D11D78284A005F6F8D /* changePurse_cell_redpacktLIst@2x.png */,
+				E75E21D21D78284A005F6F8D /* changePurse_cell_verify@2x.png */,
+				E75E21D31D78284A005F6F8D /* changepurse_validate_faile@2x.png */,
+				E75E21D41D78284A005F6F8D /* changepurse_validate_success@2x.png */,
+				E75E21D51D78284A005F6F8D /* checkBox.png */,
+				E75E21D61D78284A005F6F8D /* checkBoxSelected.png */,
+				E75E21D71D78284A005F6F8D /* checkBtnNormal.png */,
+				E75E21D81D78284A005F6F8D /* checkBtnSelected.png */,
+				E75E21D91D78284A005F6F8D /* GroupRedpacketDetailHeaderView~iphone.nib */,
+				E75E21DA1D78284A005F6F8D /* hudError@2x.png */,
+				E75E21DB1D78284A005F6F8D /* hudRefresh@2x.png */,
+				E75E21DC1D78284A005F6F8D /* hudSuccess@2x.png */,
+				E75E21DD1D78284A005F6F8D /* hudView_button_error@2x.png */,
+				E75E21DE1D78284A005F6F8D /* hudView_error@2x.png */,
+				E75E21DF1D78284A005F6F8D /* InComeRedpacketCell~iphone.nib */,
+				E75E21E01D78284A005F6F8D /* InComeRedpacketSendCell~iphone.nib */,
+				E75E21E11D78284A005F6F8D /* MemberSearchTableViewCell.nib */,
+				E75E21E21D78284A005F6F8D /* MyInComeHeaderView~iphone.nib */,
+				E75E21E31D78284A005F6F8D /* noBankcardView@2x.png */,
+				E75E21E41D78284A005F6F8D /* password_in@2x.png */,
+				E75E21E51D78284A005F6F8D /* password_in@3x.png */,
+				E75E21E61D78284A005F6F8D /* paypassView_addIcon@2x.png */,
+				E75E21E71D78284A005F6F8D /* payPassVIew_Alipay_disable@2x.png */,
+				E75E21E81D78284A005F6F8D /* paypassView_changeMoney@2x.png */,
+				E75E21E91D78284A005F6F8D /* paypassView_changeMoneyDisable@2x.png */,
+				E75E21EA1D78284A005F6F8D /* paypassView_jdPay@2x.png */,
+				E75E21EB1D78284A005F6F8D /* payPassView_jdPay_Disable@2x.png */,
+				E75E21EC1D78284A005F6F8D /* paypassView_wechat@2x.png */,
+				E75E21ED1D78284A005F6F8D /* paypassView_zhifubao@2x.png */,
+				E75E21EE1D78284A005F6F8D /* payView_arrow@2x.png */,
+				E75E21EF1D78284A005F6F8D /* payView_arrow_left@2x.png */,
+				E75E21F01D78284A005F6F8D /* payView_close@2x.png */,
+				E75E21F11D78284A005F6F8D /* payView_close_high@2x.png */,
+				E75E21F21D78284A005F6F8D /* redPackert_luckCard@2x.png */,
+				E75E21F31D78284A005F6F8D /* redPackert_toSomebody@2x.png */,
+				E75E21F41D78284A005F6F8D /* redpacket_background@2x.png */,
+				E75E21F51D78284A005F6F8D /* redpacket_FAQ@2x.png */,
+				E75E21F61D78284A005F6F8D /* redpacket_header@2x.png */,
+				E75E21F71D78284A005F6F8D /* redpacket_help@2x.png */,
+				E75E21F81D78284A005F6F8D /* redpacket_help_high@2x.png */,
+				E75E21F91D78284A005F6F8D /* redpacket_luckyBest@2x.png */,
+				E75E21FA1D78284A005F6F8D /* redpacket_navigationbar_return@2x.png */,
+				E75E21FB1D78284A005F6F8D /* redpacket_navigationbar_return@3x.png */,
+				E75E21FC1D78284A005F6F8D /* redpacket_question.png */,
+				E75E21FD1D78284A005F6F8D /* redpacket_redpacket@2x.png */,
+				E75E21FE1D78284A005F6F8D /* redpacket_redpacket_high@2x.png */,
+				E75E21FF1D78284A005F6F8D /* redpacket_redpacketSend_luckBless@2x.png */,
+				E75E22001D78284A005F6F8D /* RedpacketCell.nib */,
+				E75E22011D78284A005F6F8D /* redpacketDetailHeader@2x.png */,
+				E75E22021D78284A005F6F8D /* redpacketDetailHeader@3x.png */,
+				E75E22031D78284A005F6F8D /* RedPacketDetailHeaderView~iphone.nib */,
+				E75E22041D78284A005F6F8D /* RedPacketResource.bundle */,
+				E75E22051D78284A005F6F8D /* SendRedPacketToMoreViewController.nib */,
+				E75E22061D78284A005F6F8D /* toRedPacketLogo@2x.png */,
+				E75E22071D78284A005F6F8D /* validate_idCard@2x.png */,
+				E75E22081D78284A005F6F8D /* validate_idCard@3x.png */,
+				E75E22091D78284A005F6F8D /* validate_IDCard_bord@2x.png */,
+				E75E220A1D78284A005F6F8D /* validate_IDCard_success@2x.png */,
+				E75E220B1D78284A005F6F8D /* validate_IDCard_upload@2x.png */,
+				E75E220C1D78284A005F6F8D /* validate_IDCard_upload_error@2x.png */,
+				E75E220D1D78284A005F6F8D /* validate_IDCard_upload_success@2x.png */,
+				E75E220E1D78284A005F6F8D /* ValidateIDView~iphone.nib */,
+				E75E220F1D78284A005F6F8D /* yuan@2x.png */,
+				E75E22101D78284A005F6F8D /* yuan@3x.png */,
+				E75E22111D78284A005F6F8D /* YZRedPacketView~iphone.nib */,
+				E75E22121D78284A005F6F8D /* YZTelphoneValidateView~iphone.nib */,
 			);
 			path = resources;
 			sourceTree = "<group>";
@@ -569,14 +797,90 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E75E223C1D78284A005F6F8D /* paypassView_jdPay@2x.png in Resources */,
+				E75E22331D78284A005F6F8D /* MemberSearchTableViewCell.nib in Resources */,
+				E75E22461D78284A005F6F8D /* redpacket_background@2x.png in Resources */,
+				E75E22161D78284A005F6F8D /* AlipaySDK.bundle in Resources */,
+				E75E22281D78284A005F6F8D /* checkBoxSelected.png in Resources */,
+				E75E222B1D78284A005F6F8D /* GroupRedpacketDetailHeaderView~iphone.nib in Resources */,
 				9A4730711CECAEC500AEB86F /* LaunchScreen.storyboard in Resources */,
+				E75E22351D78284A005F6F8D /* noBankcardView@2x.png in Resources */,
+				E75E223B1D78284A005F6F8D /* paypassView_changeMoneyDisable@2x.png in Resources */,
+				E75E224F1D78284A005F6F8D /* redpacket_redpacket@2x.png in Resources */,
+				E75E22201D78284A005F6F8D /* changePurse_cell_list@2x.png in Resources */,
+				E75E22231D78284A005F6F8D /* changePurse_cell_redpacktLIst@2x.png in Resources */,
+				E75E22641D78284A005F6F8D /* YZTelphoneValidateView~iphone.nib in Resources */,
+				E75E22591D78284A005F6F8D /* validate_idCard@2x.png in Resources */,
 				9A4730701CECAEC500AEB86F /* Assets.xcassets in Resources */,
-				E700C7211D7193AB00056E3C /* AlipaySDK.bundle in Resources */,
-				E700C7231D7193AB00056E3C /* RedPacketResource.bundle in Resources */,
+				E75E22541D78284A005F6F8D /* redpacketDetailHeader@3x.png in Resources */,
+				E75E22431D78284A005F6F8D /* payView_close_high@2x.png in Resources */,
+				E75E22371D78284A005F6F8D /* password_in@3x.png in Resources */,
+				E75E224B1D78284A005F6F8D /* redpacket_luckyBest@2x.png in Resources */,
+				E75E22531D78284A005F6F8D /* redpacketDetailHeader@2x.png in Resources */,
+				E75E222A1D78284A005F6F8D /* checkBtnSelected.png in Resources */,
+				E75E223E1D78284A005F6F8D /* paypassView_wechat@2x.png in Resources */,
+				E75E22411D78284A005F6F8D /* payView_arrow_left@2x.png in Resources */,
+				E75E22551D78284A005F6F8D /* RedPacketDetailHeaderView~iphone.nib in Resources */,
+				E75E222E1D78284A005F6F8D /* hudSuccess@2x.png in Resources */,
+				E75E224E1D78284A005F6F8D /* redpacket_question.png in Resources */,
+				E75E22341D78284A005F6F8D /* MyInComeHeaderView~iphone.nib in Resources */,
+				E75E221E1D78284A005F6F8D /* button_red_normal@2x.png in Resources */,
+				E75E221D1D78284A005F6F8D /* button_red_high@2x.png in Resources */,
+				E75E22621D78284A005F6F8D /* yuan@3x.png in Resources */,
 				9A2669CE1D6DA89100B66545 /* LCCKVCardView.xib in Resources */,
+				E75E221A1D78284A005F6F8D /* button_blue_high@2x.png in Resources */,
+				E75E22441D78284A005F6F8D /* redPackert_luckCard@2x.png in Resources */,
+				E75E22241D78284A005F6F8D /* changePurse_cell_verify@2x.png in Resources */,
+				E75E222F1D78284A005F6F8D /* hudView_button_error@2x.png in Resources */,
+				E75E22631D78284A005F6F8D /* YZRedPacketView~iphone.nib in Resources */,
+				E75E22401D78284A005F6F8D /* payView_arrow@2x.png in Resources */,
+				E75E221C1D78284A005F6F8D /* button_red_disabel@2x.png in Resources */,
 				9A2669CA1D6DA89100B66545 /* calling_card_bg@2x.png in Resources */,
+				E75E22181D78284A005F6F8D /* anyoneToRedpacket@2x.png in Resources */,
+				E75E223A1D78284A005F6F8D /* paypassView_changeMoney@2x.png in Resources */,
+				E75E225B1D78284A005F6F8D /* validate_IDCard_bord@2x.png in Resources */,
+				E75E22501D78284A005F6F8D /* redpacket_redpacket_high@2x.png in Resources */,
+				E75E22381D78284A005F6F8D /* paypassView_addIcon@2x.png in Resources */,
+				E75E223D1D78284A005F6F8D /* payPassView_jdPay_Disable@2x.png in Resources */,
+				E75E221F1D78284A005F6F8D /* changePurse_cell_cardList@2x.png in Resources */,
+				E75E22361D78284A005F6F8D /* password_in@2x.png in Resources */,
+				E75E22611D78284A005F6F8D /* yuan@2x.png in Resources */,
+				E75E224A1D78284A005F6F8D /* redpacket_help_high@2x.png in Resources */,
+				E75E22471D78284A005F6F8D /* redpacket_FAQ@2x.png in Resources */,
+				E75E224C1D78284A005F6F8D /* redpacket_navigationbar_return@2x.png in Resources */,
+				E75E22191D78284A005F6F8D /* button_blue_disable@2x.png in Resources */,
+				E75E22211D78284A005F6F8D /* changePurse_cell_lock@2x.png in Resources */,
+				E75E22221D78284A005F6F8D /* changePurse_cell_question@2x.png in Resources */,
+				E75E22521D78284A005F6F8D /* RedpacketCell.nib in Resources */,
+				E75E225E1D78284A005F6F8D /* validate_IDCard_upload_error@2x.png in Resources */,
+				E75E225C1D78284A005F6F8D /* validate_IDCard_success@2x.png in Resources */,
+				E75E22391D78284A005F6F8D /* payPassVIew_Alipay_disable@2x.png in Resources */,
+				E75E22581D78284A005F6F8D /* toRedPacketLogo@2x.png in Resources */,
 				9A4730681CECAEC500AEB86F /* LCCKLoginViewController.xib in Resources */,
+				E75E225D1D78284A005F6F8D /* validate_IDCard_upload@2x.png in Resources */,
+				E75E22421D78284A005F6F8D /* payView_close@2x.png in Resources */,
+				E75E22271D78284A005F6F8D /* checkBox.png in Resources */,
+				E75E22481D78284A005F6F8D /* redpacket_header@2x.png in Resources */,
 				E700C71A1D7193AB00056E3C /* RedpacketCellResource.bundle in Resources */,
+				E75E224D1D78284A005F6F8D /* redpacket_navigationbar_return@3x.png in Resources */,
+				E75E225A1D78284A005F6F8D /* validate_idCard@3x.png in Resources */,
+				E75E22491D78284A005F6F8D /* redpacket_help@2x.png in Resources */,
+				E75E22561D78284A005F6F8D /* RedPacketResource.bundle in Resources */,
+				E75E225F1D78284A005F6F8D /* validate_IDCard_upload_success@2x.png in Resources */,
+				E75E222D1D78284A005F6F8D /* hudRefresh@2x.png in Resources */,
+				E75E22251D78284A005F6F8D /* changepurse_validate_faile@2x.png in Resources */,
+				E75E223F1D78284A005F6F8D /* paypassView_zhifubao@2x.png in Resources */,
+				E75E22291D78284A005F6F8D /* checkBtnNormal.png in Resources */,
+				E75E22321D78284A005F6F8D /* InComeRedpacketSendCell~iphone.nib in Resources */,
+				E75E22261D78284A005F6F8D /* changepurse_validate_success@2x.png in Resources */,
+				E75E22451D78284A005F6F8D /* redPackert_toSomebody@2x.png in Resources */,
+				E75E22571D78284A005F6F8D /* SendRedPacketToMoreViewController.nib in Resources */,
+				E75E22511D78284A005F6F8D /* redpacket_redpacketSend_luckBless@2x.png in Resources */,
+				E75E221B1D78284A005F6F8D /* button_blue_normal@2x.png in Resources */,
+				E75E22301D78284A005F6F8D /* hudView_error@2x.png in Resources */,
+				E75E222C1D78284A005F6F8D /* hudError@2x.png in Resources */,
+				E75E22311D78284A005F6F8D /* InComeRedpacketCell~iphone.nib in Resources */,
+				E75E22601D78284A005F6F8D /* ValidateIDView~iphone.nib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -772,6 +1076,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 2CAFBFA5C96378C343A25F5B /* Pods-ChatKit-OC.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
@@ -801,7 +1106,8 @@
 					"\"$PODS_CONFIGURATION_BUILD_DIR/TWMessageBarManager\"",
 					"\"$PODS_CONFIGURATION_BUILD_DIR/UITableView+FDTemplateLayoutCell\"",
 					"\"$PODS_CONFIGURATION_BUILD_DIR/pop\"",
-					"\"$(SRCROOT)/../RedpacketStaticLib\"/**",
+					"\"$(SRCROOT)/../../RedpacketStaticLib\"/**",
+					"\"$(SRCROOT)/../../RedpacketStaticLib/AlipayLib\"/**",
 				);
 				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = com.redpacket.chatkit;
@@ -814,6 +1120,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 154945A33B10139C70F5F077 /* Pods-ChatKit-OC.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
@@ -843,7 +1150,8 @@
 					"\"$PODS_CONFIGURATION_BUILD_DIR/TWMessageBarManager\"",
 					"\"$PODS_CONFIGURATION_BUILD_DIR/UITableView+FDTemplateLayoutCell\"",
 					"\"$PODS_CONFIGURATION_BUILD_DIR/pop\"",
-					"\"$(SRCROOT)/../RedpacketStaticLib\"/**",
+					"\"$(SRCROOT)/../../RedpacketStaticLib\"/**",
+					"\"$(SRCROOT)/../../RedpacketStaticLib/AlipayLib\"/**",
 				);
 				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = com.redpacket.chatkit;

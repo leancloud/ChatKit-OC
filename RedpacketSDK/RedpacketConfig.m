@@ -11,7 +11,7 @@
 #import "RedpacketConfig.h"
 #import "YZHRedpacketBridge.h"
 #import "RedpacketMessageModel.h"
-
+#import "AppDelegate+RedPacket.h"
 //	*此为演示地址* App需要修改为自己AppServer上的地址, 数据格式参考此地址给出的格式。
 static NSString *requestUrl = @"https://rpv2.yunzhanghu.com/api/sign?duid=";
 
@@ -53,6 +53,7 @@ static NSString *requestUrl = @"https://rpv2.yunzhanghu.com/api/sign?duid=";
 
 - (void)config
 {
+    [AppDelegate swizzleRedPacketMethod];
     [[YZHRedpacketBridge sharedBridge] setRedacketURLScheme:@"redpacket.chatkit"];
     
     NSString *userId = self.redpacketUserInfo.userId;

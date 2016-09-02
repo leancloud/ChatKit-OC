@@ -9,7 +9,9 @@
 #import "AVIMTypedMessageRedPacketTaken.h"
 
 @implementation AVIMTypedMessageRedPacketTaken
-
++ (void)load{
+    [self registerSubclass];
+}
 + (AVIMMessageMediaType)classMediaType;{
     return 4;
 }

@@ -34,6 +34,8 @@
     
     self.contentView.backgroundColor = [UIColor clearColor];
     
+    [self.contentView addSubview:self.messageContentBackgroundImageView];
+    
     self.bgView = [[UIView alloc] initWithFrame:self.contentView.bounds];
     self.bgView.userInteractionEnabled = NO;
     self.bgView.backgroundColor = [UIColor colorWithRed:221/255.0 green:221/255.0 blue:221/255.0 alpha:1];

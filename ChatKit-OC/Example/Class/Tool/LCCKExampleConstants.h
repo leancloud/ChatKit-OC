@@ -28,6 +28,8 @@
     @{ LCCKProfileKeyPeerId:@"Harry", LCCKProfileKeyName:@"Harry", LCCKProfileKeyAvatarURL:@"http://www.avatarsdb.com/avatars/young_harry.jpg" },\
     @{ LCCKProfileKeyPeerId:@"William", LCCKProfileKeyName:@"William", LCCKProfileKeyAvatarURL:@"http://www.avatarsdb.com/avatars/william_shakespeare.jpg" },\
     @{ LCCKProfileKeyPeerId:@"Bob", LCCKProfileKeyName:@"Bob", LCCKProfileKeyAvatarURL:@"http://www.avatarsdb.com/avatars/bath_bob.jpg" },\
+    @{ LCCKProfileKeyPeerId:@"RP", LCCKProfileKeyName:@"RP", LCCKProfileKeyAvatarURL:@"http://www.avatarsdb.com/avatars/bath_bob.jpg" },\
+    @{ LCCKProfileKeyPeerId:@"RP1", LCCKProfileKeyName:@"RP1", LCCKProfileKeyAvatarURL:@"http://www.avatarsdb.com/avatars/bath_bob.jpg" },\
 ]
 
 #define LCCKContactPeerIds \
@@ -40,6 +42,8 @@
     @{ LCCKProfileKeyPeerId:@"Harry" },\
     @{ LCCKProfileKeyPeerId:@"William" },\
     @{ LCCKProfileKeyPeerId:@"Bob" },\
+    @{ LCCKProfileKeyPeerId:@"RP1" },\
+    @{ LCCKProfileKeyPeerId:@"RP" },\
 ]
 
 #define LCCKTestPeerIds \

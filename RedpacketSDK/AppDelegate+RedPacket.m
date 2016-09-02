@@ -13,19 +13,35 @@
 
 BOOL ClassMethodSwizzle(Class aClass, SEL originalSelector, SEL swizzleSelector){
     
-    Method originalMethod = class_getClassMethod(aClass, originalSelector);
-    Method swizzleMethod = class_getClassMethod(aClass, swizzleSelector);
-    if (originalMethod && swizzleMethod) {
+    Method originalMethod = class_getInstanceMethod(aClass, originalSelector);
+    Method swizzleMethod = class_getInstanceMethod(aClass, swizzleSelector);
+    
+    
+    BOOL didAddMethod =
+    class_addMethod(aClass,
+                    originalSelector,
+                    method_getImplementation(swizzleMethod),
+                    method_getTypeEncoding(swizzleMethod));
+    if (didAddMethod) {
+        class_replaceMethod(aClass,
+                            swizzleSelector,
+                            method_getImplementation(originalMethod),
+                            method_getTypeEncoding(originalMethod));
+    } else {
         method_exchangeImplementations(originalMethod, swizzleMethod);
     }
+    
     return YES;
 }
 
 @implementation AppDelegate (RedPacket)
-+ (void)load{
-    ClassMethodSwizzle(self, @selector(application:openURL:sourceApplication:annotation:), @selector(rp_application:openURL:sourceApplication:annotation:));
-    ClassMethodSwizzle(self, @selector(application:openURL:options:), @selector(rp_application:openURL:options:));
-    ClassMethodSwizzle(self, @selector(applicationDidBecomeActive:), @selector(rp_applicationDidBecomeActive:));
++ (void)swizzleRedPacketMethod{
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        ClassMethodSwizzle([self class], @selector(application:openURL:sourceApplication:annotation:), @selector(rp_application:openURL:sourceApplication:annotation:));
+        ClassMethodSwizzle([self class], @selector(application:openURL:options:), @selector(rp_application:openURL:options:));
+        ClassMethodSwizzle([self class], @selector(applicationDidBecomeActive:), @selector(rp_applicationDidBecomeActive:));
+    });
 }
 
 // NOTE: 9.0之前使用的API接口
