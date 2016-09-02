@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = "ChatKit"
-  s.version      = "0.7.11"
+  s.version      = "0.7.12"
   s.summary      = "An IM App Framework, support sending text, pictures, audio, video, location messaging, managing address book, more interesting features."
   s.homepage     = "https://github.com/LeanCloud/ChatKit-OC"
   s.license      = { :type => 'MIT', :file => 'LICENSE' }
@@ -13,8 +13,8 @@ Pod::Spec.new do |s|
   s.resources    = 'ChatKit/Class/Resources/*', 'ChatKit/**/*.xib'
 
   s.requires_arc = true
-  s.dependency "AVOSCloud" , "~> 3.4.0-beta.2"
-  s.dependency "AVOSCloudIM", "~> 3.4.0-beta.2"
+  s.dependency "AVOSCloud" , "~> 3.4.0-beta.4"
+  s.dependency "AVOSCloudIM", "~> 3.4.0-beta.4"
   s.dependency "MJRefresh" , "~> 3.1.9"
   s.dependency "Masonry" , "~> 1.0.1"
   s.dependency "SDWebImage" , "~> 3.8.0"
@@ -24,6 +24,6 @@ Pod::Spec.new do |s|
   s.dependency "FDStackView" , "~> 1.0"
   s.dependency "DACircularProgress" , "~> 2.3.1"
   s.dependency "MLLabel" , "~> 1.9.2"
-  s.dependency "MWPhotoBrowser", "2.1.2"
+  s.dependency "MWPhotoBrowser", "~> 2.1.2"
 
 end
