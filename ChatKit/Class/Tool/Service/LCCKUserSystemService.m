@@ -41,7 +41,7 @@ NSString *const LCCKUserSystemServiceErrorDomain = @"LCCKUserSystemServiceErrorD
 }
 
 - (void)getProfilesInBackgroundForUserIds:(NSArray<NSString *> *)userIds callback:(LCCKUserResultsCallBack)callback {
-    if (userIds.count == 0) {
+    if (!userIds || userIds.count == 0) {
         dispatch_async(dispatch_get_main_queue(),^{
             NSInteger code = 0;
             NSString *errorReasonText = @"members is 0";
