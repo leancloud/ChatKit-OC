@@ -54,6 +54,7 @@
 "SingleConversation" = "single chat";
 "GroupConversation" = "group chat";
 "SystemConversation" = "system notification";
+"ConversationAvatarURLKey" = "avatarURL"; 
 "nickNameIsNil" = "[no nick name]";
 "message.bar.error.title" = "Error Title";
 "message.bar.error.message" = "This is an error message!";
