@@ -46,8 +46,6 @@
     self.redpacketControl.delegate = self;
     self.redpacketControl.conversationController = self;
 
-    self.redpacketControl.converstationInfo = [RedpacketConfig sharedConfig].redpacketUserInfo;
-    
     // 设置红包 SDK 功能回调
     [self.redpacketControl setRedpacketGrabBlock:^(RedpacketMessageModel *redpacket) {
         // 用户发出的红包收到被抢的通知
@@ -63,14 +61,30 @@
     [[YZHRedpacketBridge sharedBridge] reRequestRedpacketUserToken:^(NSInteger code, NSString *msg) {
         //to do token失效重请求策略
     }];
+
+
 }
 - (void)chatBarWillSendRedPacket{
-    if (self.peerId) {
-        [self.redpacketControl presentRedPacketViewControllerWithType:RPSendRedPacketViewControllerSingle memberCount:0];
-    }else if(self.conversationId){
-        [self.redpacketControl presentRedPacketViewControllerWithType:RPSendRedPacketViewControllerGroup memberCount:0];
+    AVIMConversation *conversation = [self getConversationIfExists];
+    RedpacketUserInfo * userInfo = [RedpacketUserInfo new];
+    RPSendRedPacketViewControllerType rptype;
+    if (conversation) {
+        if (conversation.members.count > 2) {
+            userInfo.userId = self.conversationId;
+            rptype = RPSendRedPacketViewControllerMember;
+        }else{
+            rptype = RPSendRedPacketViewControllerSingle;
+            [conversation.members enumerateObjectsUsingBlock:^(NSString *  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                if (![[RedpacketConfig sharedConfig].redpacketUserInfo.userId isEqualToString:obj]) {
+                    userInfo.userId = obj;
+                }
+            }];
+        }
     }
+    self.redpacketControl.converstationInfo = userInfo;
+    [self.redpacketControl presentRedPacketViewControllerWithType:rptype memberCount:conversation.members.count];
 }
+
 - (NSString*)clientId{
     NSString * clientID = @"";
     clientID = self.peerId?self.peerId:@"";
@@ -94,13 +108,12 @@
     }else{
         [super messageCellTappedMessage:messageCell];
     }
-    
 }
 
 // 发送融云红包消息
 - (void)sendRedpacketMessage:(RedpacketMessageModel *)redpacket
 {
-    AVIMTypedMessageRedPacket * message = [[AVIMTypedMessageRedPacket alloc]initWithClientId:self.clientId ConversationType:LCCKConversationTypeSingle];
+    AVIMTypedMessageRedPacket * message = [[AVIMTypedMessageRedPacket alloc]init];
     message.attributes = redpacket.redpacketMessageModelToDic;
     [self.chatViewModel sendCustomMessage:message];
 }
@@ -110,12 +123,13 @@
 {
 
     if ([redpacket.currentUser.userId isEqualToString:redpacket.redpacketSender.userId]) {//如果发送者是自己
-        [self.chatViewModel sendLocalFeedbackTextMessge:@"您给自己发了一个红包"];
+        [self.chatViewModel sendLocalFeedbackTextMessge:@"您抢了自己的红包"];
     }
     else {
         switch (redpacket.redpacketType) {
             case RedpacketTypeSingle: {
                 AVIMTypedMessageRedPacketTaken * message = [[AVIMTypedMessageRedPacketTaken alloc]initWithClientId:self.clientId ConversationType:LCCKConversationTypeSingle receiveMembers:@[redpacket.redpacketSender.userId]];
+                message.attributes = redpacket.redpacketMessageModelToDic;
                 [self.chatViewModel sendCustomMessage:message];
                 break;
             }
@@ -124,9 +138,9 @@
             case RedpacketTypeAvg:
             case RedpacketTypeRandpri:
             case RedpacketTypeMember: {
-                NSString * receiveString = [NSString stringWithFormat:@"%@抢了你的红包",redpacket.currentUser.userNickname];
-                AVIMTypedMessageRedPacketTaken * message = [AVIMTypedMessageRedPacketTaken messageWithText:receiveString file:nil attributes:redpacket.redpacketMessageModelToDic ];
-                [self.chatViewModel sendCustomMessage:message];
+//                NSString * receiveString = [NSString stringWithFormat:@"%@抢了你的红包",redpacket.currentUser.userNickname];
+//                AVIMTypedMessageRedPacketTaken * message = [AVIMTypedMessageRedPacketTaken messageWithText:receiveString file:nil attributes:redpacket.redpacketMessageModelToDic ];
+//                [self.chatViewModel sendCustomMessage:message];
                 break;
             }
         }

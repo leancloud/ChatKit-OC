@@ -11,8 +11,5 @@
 #define REDPACKET_MESSAGE_TOP_BOTTOM_PADDING 40
 
 @interface RedpacketTakenMessageCell : LCCKChatMessageCell<LCCKChatMessageCellSubclassing>
-@property(strong, nonatomic) UILabel *tipMessageLabel;
-@property(strong, nonatomic) UIImageView *iconView;
-
 
 @end

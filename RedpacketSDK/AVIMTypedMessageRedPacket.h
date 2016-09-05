@@ -12,5 +12,5 @@
 #import "LCCKConstants.h"
 
 @interface AVIMTypedMessageRedPacket : AVIMTypedMessage<AVIMTypedMessageSubclassing>
-- (instancetype)initWithClientId:(NSString *)clientId ConversationType:(LCCKConversationType)conversationType;
+
 @end
