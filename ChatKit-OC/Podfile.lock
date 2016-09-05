@@ -1,0 +1,84 @@
+PODS:
+  - AVOSCloud (3.4.0-beta.4)
+  - AVOSCloudIM (3.4.0-beta.4):
+    - AVOSCloud (= 3.4.0-beta.4)
+    - AVOSCloudIM/_ARC (= 3.4.0-beta.4)
+    - AVOSCloudIM/_NOARC (= 3.4.0-beta.4)
+  - AVOSCloudIM/_ARC (3.4.0-beta.4):
+    - AVOSCloud (= 3.4.0-beta.4)
+    - AVOSCloudIM/_NOARC (= 3.4.0-beta.4)
+  - AVOSCloudIM/_NOARC (3.4.0-beta.4):
+    - AVOSCloud (= 3.4.0-beta.4)
+  - ChatKit (0.7.11):
+    - AVOSCloud (~> 3.4.0-beta.4)
+    - AVOSCloudIM (~> 3.4.0-beta.4)
+    - DACircularProgress (~> 2.3.1)
+    - FDStackView (~> 1.0)
+    - FMDB (~> 2.6.2)
+    - Masonry (~> 1.0.1)
+    - MJRefresh (~> 3.1.9)
+    - MLLabel (~> 1.9.2)
+    - MWPhotoBrowser (~> 2.1.2)
+    - pop (~> 1.0.9)
+    - SDWebImage (~> 3.8.0)
+    - UITableView+FDTemplateLayoutCell (~> 1.5.beta)
+  - CYLTabBarController (1.6.0)
+  - CYLTableViewRowAction (1.0.0)
+  - DACircularProgress (2.3.1)
+  - FDStackView (1.0)
+  - FMDB (2.6.2):
+    - FMDB/standard (= 2.6.2)
+  - FMDB/standard (2.6.2)
+  - FTPopOverMenu (1.1.9)
+  - Masonry (1.0.1)
+  - MBProgressHUD (0.9.2)
+  - MJRefresh (3.1.12)
+  - MLLabel (1.9.2)
+  - MLPAutoCompleteTextField (1.5)
+  - MWPhotoBrowser (2.1.2):
+    - DACircularProgress (~> 2.3)
+    - MBProgressHUD (~> 0.9)
+    - SDWebImage (!= 3.7.2, ~> 3.7)
+  - pop (1.0.9)
+  - SDWebImage (3.8.1):
+    - SDWebImage/Core (= 3.8.1)
+  - SDWebImage/Core (3.8.1)
+  - TWMessageBarManager (1.8.1)
+  - UITableView+FDTemplateLayoutCell (1.5.beta)
+
+DEPENDENCIES:
+  - ChatKit (from `../`)
+  - CYLTabBarController
+  - CYLTableViewRowAction (= 1.0.0)
+  - FTPopOverMenu
+  - MLPAutoCompleteTextField
+  - TWMessageBarManager
+
+EXTERNAL SOURCES:
+  ChatKit:
+    :path: ../
+
+SPEC CHECKSUMS:
+  AVOSCloud: aacde3dcb0b35658cc72d0c04ec029b254dbf1e3
+  AVOSCloudIM: 4e91aa7068d367270338289ff4b8d1be6d278919
+  ChatKit: 6c2128dbb3191fbb66c5d91b365f373567975c84
+  CYLTabBarController: efbdd574772be17f17965acd7ee993f5972ff02f
+  CYLTableViewRowAction: 66bd3f7478b46894ff40b74d892fc85aed41656b
+  DACircularProgress: 4dd437c0fc3da5161cb289e07ac449493d41db71
+  FDStackView: 3a4bbe0ce9c35e974246a585168b9da8c32213f1
+  FMDB: 854a0341b4726e53276f2a8996f06f1b80f9259a
+  FTPopOverMenu: 7306ce4f378dc3f9e80c356284634ef0df886e61
+  Masonry: a1a931a0d08870ed8ae415a2ea5ea68ebcac77df
+  MBProgressHUD: 1569cf7ace17a8bac47aabfbb8580a49690386d1
+  MJRefresh: b96cdb21c4aa75a7b07654311ab2f315c497e806
+  MLLabel: df58127ce0bd1f87890ecc3232db77a85ce4cd97
+  MLPAutoCompleteTextField: ba4d507bbff2bd4f139d4197814fc8dd39caf77e
+  MWPhotoBrowser: 5836d7aa041dc05a13de380c246826578adc5ea5
+  pop: f667631a5108a2e60d9e8797c9b32ddaf2080bce
+  SDWebImage: 35f9627a3e44b4f292a8a8ce6a531fa488239b91
+  TWMessageBarManager: fd84e7948ba7968a2b5d9454859135761214ec56
+  UITableView+FDTemplateLayoutCell: 02b508ab1cb4cea16a8c17ac83d2cd1fd72124f9
+
+PODFILE CHECKSUM: 59e8f81007bb919dcbbdb0bdcd6cc0da08104505
+
+COCOAPODS: 1.0.0

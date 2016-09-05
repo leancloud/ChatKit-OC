@@ -1,0 +1,1 @@
+../../../../../ChatKit/Class/LCChatKit.h

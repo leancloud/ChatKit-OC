@@ -27,8 +27,8 @@ xcuserdata
 *.ipa
 
 # CocoaPods
-Pods/
-Podfile.lock
+#Pods/
+#Podfile.lock
 Third-Lib-For-Debug/
 
 *.gcda
