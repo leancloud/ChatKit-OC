@@ -12,7 +12,11 @@
 NSString *const LCCKUserSystemServiceErrorDomain = @"LCCKUserSystemServiceErrorDomain";
 
 @interface LCCKUserSystemService ()
+
 @property (nonatomic, strong) NSMutableDictionary<NSString *, id<LCCKUserDelegate>> *cachedUsers;
+
+@property (nonatomic, strong) dispatch_queue_t isolationQueue;
+
 @end
 
 @implementation LCCKUserSystemService
@@ -41,7 +45,7 @@ NSString *const LCCKUserSystemServiceErrorDomain = @"LCCKUserSystemServiceErrorD
 }
 
 - (void)getProfilesInBackgroundForUserIds:(NSArray<NSString *> *)userIds callback:(LCCKUserResultsCallBack)callback {
-    if (userIds.count == 0) {
+    if (!userIds || userIds.count == 0) {
         dispatch_async(dispatch_get_main_queue(),^{
             NSInteger code = 0;
             NSString *errorReasonText = @"members is 0";
@@ -171,7 +175,7 @@ NSString *const LCCKUserSystemServiceErrorDomain = @"LCCKUserSystemServiceErrorD
     NSArray *allCachedUserIds = [self.cachedUsers allKeys];
     [userIds enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         if ([allCachedUserIds containsObject:obj]) {
-            [cachedProfiles addObject:self.cachedUsers[obj]];
+            [cachedProfiles addObject:[self getUserForClientId:obj]];
         }
     }];
     return [cachedProfiles copy];
@@ -181,7 +185,8 @@ NSString *const LCCKUserSystemServiceErrorDomain = @"LCCKUserSystemServiceErrorD
     if (userId) {
         NSString *userName_ = nil;
         NSURL *avatarURL_ = nil;
-        id<LCCKUserDelegate> user = self.cachedUsers[userId];
+        id<LCCKUserDelegate> user;
+        user = [self getUserForClientId:userId];
         userName_ = user.name;
         avatarURL_ = user.avatarURL;
         if (userName_ || avatarURL_) {
@@ -210,11 +215,19 @@ NSString *const LCCKUserSystemServiceErrorDomain = @"LCCKUserSystemServiceErrorD
 }
 
 - (void)removeCachedProfileForPeerId:(NSString *)peerId {
-    [self.cachedUsers removeObjectForKey:peerId];
+    NSString *clientId_ = [peerId copy];
+    if (!clientId_) {
+        return;
+    }
+    dispatch_async(self.isolationQueue, ^(){
+        [self.cachedUsers removeObjectForKey:peerId];
+    });
 }
 
 - (void)removeAllCachedProfiles {
-    self.cachedUsers = nil;
+    dispatch_async(self.isolationQueue, ^(){
+        self.cachedUsers = nil;
+    });
 }
 
 - (id<LCCKUserDelegate>)fetchCurrentUser {
@@ -252,7 +265,7 @@ NSString *const LCCKUserSystemServiceErrorDomain = @"LCCKUserSystemServiceErrorD
 - (id<LCCKUserDelegate>)getCachedProfileIfExists:(NSString *)userId error:(NSError * __autoreleasing *)theError {
     id<LCCKUserDelegate> user;
     if (userId) {
-        user = self.cachedUsers[userId];
+        user = [self getUserForClientId:userId];
     }
     if (user) {
         return user;
@@ -295,10 +308,7 @@ NSString *const LCCKUserSystemServiceErrorDomain = @"LCCKUserSystemServiceErrorD
 - (void)cacheUsers:(NSArray<id<LCCKUserDelegate>> *)users {
     if (users.count > 0) {
         for (id<LCCKUserDelegate> user in users) {
-            @try {
-                NSString *clientId = [NSString stringWithString:user.clientId];
-                [self.cachedUsers setObject:user forKey:clientId];
-            } @catch (NSException *exception) {}
+            [self setUser:user forClientId:user.clientId];
         }
     }
 }
@@ -314,8 +324,36 @@ NSString *const LCCKUserSystemServiceErrorDomain = @"LCCKUserSystemServiceErrorD
 - (NSMutableDictionary *)cachedUsers {
     if (_cachedUsers == nil) {
         _cachedUsers = [[NSMutableDictionary alloc] init];
+        NSString *queueBaseLabel = [NSString stringWithFormat:@"com.ChatKit.%@", NSStringFromClass([self class])];
+        const char *queueName = [[NSString stringWithFormat:@"%@.ForIsolation",queueBaseLabel] UTF8String];
+        self.isolationQueue = dispatch_queue_create(queueName, NULL);
     }
     return _cachedUsers;
+}
+
+- (void)setUser:(id<LCCKUserDelegate>)user forClientId:(NSString *)clientId {
+    NSString *clientId_ = [clientId copy];
+    if (!clientId_) {
+        return;
+    }
+    dispatch_async(self.isolationQueue, ^(){
+        if (!user) {
+            [self.cachedUsers removeObjectForKey:clientId_];
+        } else {
+            [self.cachedUsers setObject:user forKey:clientId_];
+        }
+    });
+}
+
+- (id<LCCKUserDelegate>)getUserForClientId:(NSString *)clientId {
+    if (!clientId) {
+        return nil;
+    }
+    __block id<LCCKUserDelegate> user = nil;
+    dispatch_sync(self.isolationQueue, ^(){
+        user = self.cachedUsers[clientId];
+    });
+    return user;
 }
 
 @end

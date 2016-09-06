@@ -1,0 +1,1 @@
+../../../../../ChatKit/Class/Module/Conversation/View/ChatBar/LCCKFacePageView.h
