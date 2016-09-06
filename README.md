@@ -1,11 +1,12 @@
 # ChatKit 快速入门 · iOS
 
 <p align="center">
-![enter image description here](https://img.shields.io/badge/pod-v0.7.1-brightgreen.svg)  ![enter image description here](https://img.shields.io/badge/platform-iOS%207.0%2B-ff69b5618733984.svg) 
+![enter image description here](https://img.shields.io/badge/pod-v0.7.13-brightgreen.svg)  ![enter image description here](https://img.shields.io/badge/platform-iOS%207.0%2B-ff69b5618733984.svg) 
 <a href="https://github.com/leancloud/ChatKit-OC/blob/master/LICENSE"><img src="https://img.shields.io/badge/license-MIT-green.svg?style=flat"></a>[ CocoaPods-Doc](http://cocoapods.org/pods/ChatKit) 
 </a>
 
-在使用中有任何问题都可以到[我们的官方论坛](https://forum.leancloud.cn/c/jing-xuan-faq)提问题，会有专业工程师回复，平均响应时间在24小时内。 
+在使用中有任何问题都可以提 issue，同时也欢迎提 PR。
+
 该篇为快速入门，更多自定义需求请前往这里：
 
  1.  [《ChatKit 自定义样式》]( https://github.com/leancloud/ChatKit-OC/blob/master/ChatKit%20自定义样式.md )
@@ -376,7 +377,7 @@ typedef NS_ENUM(NSInteger, LCCKBarButtonItemStyle) {
 ## 常见问题
 
 **ChatKit 组件收费么？**<br/>
-ChatKit 是完全开源并且免费给开发者使用，使用聊天所产生的费用以账单为准。
+ChatKit 是完全开源并且免费给开发者使用，使用聊天所产生的费用以 [这里](https://leancloud.cn/pricing.html) 为准。
 
 **接入 ChatKit 有什么好处？**<br/>
 它可以减轻应用或者新功能研发初期的调研成本，直接引入使用即可。ChatKit 从底层到 UI 提供了一整套的聊天解决方案。
