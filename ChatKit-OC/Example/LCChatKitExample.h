@@ -44,7 +44,7 @@
 /*!
  *  入口胶水函数：登入入口函数
  *
- *  用户即将退出登录时调用
+ *  用户登录时调用
  */
 + (void)invokeThisMethodAfterLoginSuccessWithClientId:(NSString *)clientId success:(LCCKVoidBlock)success failed:(LCCKErrorBlock)failed;
 /*!
