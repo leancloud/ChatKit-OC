@@ -912,6 +912,9 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
     switch (linkType) {
         case MLLinkTypeURL: {
             LCCKWebViewController *webViewController = [[LCCKWebViewController alloc] init];
+            if (![linkText hasPrefix:@"http"]) {
+                linkText = [NSString stringWithFormat:@"http://%@", linkText];
+            }
             webViewController.URL = [NSURL URLWithString:linkText];
             LCCKSafariActivity *activity = [[LCCKSafariActivity alloc] init];
             webViewController.applicationActivities = @[activity];

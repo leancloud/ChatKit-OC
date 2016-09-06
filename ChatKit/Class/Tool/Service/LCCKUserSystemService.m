@@ -324,7 +324,6 @@ NSString *const LCCKUserSystemServiceErrorDomain = @"LCCKUserSystemServiceErrorD
 - (NSMutableDictionary *)cachedUsers {
     if (_cachedUsers == nil) {
         _cachedUsers = [[NSMutableDictionary alloc] init];
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {});
         NSString *queueBaseLabel = [NSString stringWithFormat:@"com.ChatKit.%@", NSStringFromClass([self class])];
         const char *queueName = [[NSString stringWithFormat:@"%@.ForIsolation",queueBaseLabel] UTF8String];
         self.isolationQueue = dispatch_queue_create(queueName, NULL);
@@ -352,8 +351,7 @@ NSString *const LCCKUserSystemServiceErrorDomain = @"LCCKUserSystemServiceErrorD
     }
     __block id<LCCKUserDelegate> user = nil;
     dispatch_sync(self.isolationQueue, ^(){
-        NSString *clientId_ = [NSString stringWithString:clientId];
-        user = self.cachedUsers[clientId_];
+        user = self.cachedUsers[clientId];
     });
     return user;
 }
