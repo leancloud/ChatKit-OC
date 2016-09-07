@@ -87,6 +87,7 @@
                                    (UINavigationController *)navigationController;
 
 + (void)exampleChangeGroupAvatarURLsForConversationId:(NSString *)conversationId;
+
 /*!
  * 拉群
  */

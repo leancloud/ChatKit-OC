@@ -209,10 +209,10 @@
 		9A4730281CECAEC500AEB86F /* Example */ = {
 			isa = PBXGroup;
 			children = (
-				2523FF6E1D7FCF5000479FD2 /* LCChatKitExample+Setting.h */,
-				2523FF6F1D7FCF5000479FD2 /* LCChatKitExample+Setting.m */,
 				2523FF711D7FCF5000479FD2 /* LCChatKitExample.h */,
 				2523FF701D7FCF5000479FD2 /* LCChatKitExample.m */,
+				2523FF6E1D7FCF5000479FD2 /* LCChatKitExample+Setting.h */,
+				2523FF6F1D7FCF5000479FD2 /* LCChatKitExample+Setting.m */,
 				9A4730291CECAEC500AEB86F /* AppDelegate.h */,
 				9A47302A1CECAEC500AEB86F /* AppDelegate.m */,
 				9A47305F1CECAEC500AEB86F /* LCCKTabBarControllerConfig.h */,
