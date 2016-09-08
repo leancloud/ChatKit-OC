@@ -65,6 +65,7 @@
 
 }
 - (void)chatBarWillSendRedPacket{
+
     AVIMConversation *conversation = [self getConversationIfExists];
     RedpacketUserInfo * userInfo = [RedpacketUserInfo new];
     RPSendRedPacketViewControllerType rptype;
