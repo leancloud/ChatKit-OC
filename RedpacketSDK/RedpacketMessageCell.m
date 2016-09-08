@@ -107,29 +107,31 @@
 
 - (void)configureCellWithData:(AVIMTypedMessageRedPacket *)message{
     [super configureCellWithData:message];
-    _message = message;
-    NSDictionary * redpacketDictionary = message.attributes;
-    
-    RedpacketMessageModel *redpacketMessageModel = [RedpacketMessageModel redpacketMessageModelWithDic:redpacketDictionary];
-    NSString *messageString = redpacketMessageModel.redpacket.redpacketGreeting;
-    self.greetingLabel.text = messageString;
-    
-    NSString *orgString = redpacketMessageModel.redpacket.redpacketOrgName;
-    self.orgLabel.text = orgString;
-    
-    switch (message.ioType) {
-        case AVIMMessageIOTypeOut:{
+    if ([message isKindOfClass:[AVIMTypedMessageRedPacket class]]) {
+        _message = message;
+        NSDictionary * redpacketDictionary = message.attributes;
+        
+        RedpacketMessageModel *redpacketMessageModel = [RedpacketMessageModel redpacketMessageModelWithDic:redpacketDictionary];
+        NSString *messageString = redpacketMessageModel.redpacket.redpacketGreeting;
+        self.greetingLabel.text = messageString;
+        
+        NSString *orgString = redpacketMessageModel.redpacket.redpacketOrgName;
+        self.orgLabel.text = orgString;
+        
+        switch (message.ioType) {
+            case AVIMMessageIOTypeOut:{
                 UIImage *image = [self imageNamed:@"redpacket_sender_bg" ofBundle:@"RedpacketCellResource.bundle"];
                 self.messageContentBackgroundImageView.image = [image resizableImageWithCapInsets:UIEdgeInsetsMake(70, 9, 25, 20)];
             }
-            break;
-        case AVIMMessageIOTypeIn:{
+                break;
+            case AVIMMessageIOTypeIn:{
                 UIImage *image = [self imageNamed:@"redpacket_receiver_bg" ofBundle:@"RedpacketCellResource.bundle"];
                 self.messageContentBackgroundImageView.image = [image resizableImageWithCapInsets:UIEdgeInsetsMake(70, 9, 25, 20)];
             }
-            break;
-        default:
-            break;
+                break;
+            default:
+                break;
+        }
     }
 }
 @end

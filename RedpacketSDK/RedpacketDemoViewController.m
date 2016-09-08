@@ -128,20 +128,23 @@
     }
     else {
         switch (redpacket.redpacketType) {
-            case RedpacketTypeSingle: {
+            case RedpacketTypeSingle:
+            case RedpacketTypeGroup:
+            case RedpacketTypeRand:
+            case RedpacketTypeAvg:
+            case RedpacketTypeRandpri:{
                 AVIMTypedMessageRedPacketTaken * message = [[AVIMTypedMessageRedPacketTaken alloc]initWithClientId:self.clientId ConversationType:LCCKConversationTypeSingle receiveMembers:@[redpacket.redpacketSender.userId]];
                 message.attributes = redpacket.redpacketMessageModelToDic;
                 [self.chatViewModel sendCustomMessage:message];
                 break;
             }
-            case RedpacketTypeGroup:
-            case RedpacketTypeRand:
-            case RedpacketTypeAvg:
-            case RedpacketTypeRandpri:
             case RedpacketTypeMember: {
-//                NSString * receiveString = [NSString stringWithFormat:@"%@抢了你的红包",redpacket.currentUser.userNickname];
-//                AVIMTypedMessageRedPacketTaken * message = [AVIMTypedMessageRedPacketTaken messageWithText:receiveString file:nil attributes:redpacket.redpacketMessageModelToDic ];
-//                [self.chatViewModel sendCustomMessage:message];
+                AVIMTypedMessageRedPacketTaken * message = [[AVIMTypedMessageRedPacketTaken alloc]initWithClientId:self.clientId ConversationType:LCCKConversationTypeSingle receiveMembers:@[redpacket.toRedpacketReceiver.userId]];
+                [self.chatViewModel sendCustomMessage:message];
+                break;
+            }
+            default:{
+                
                 break;
             }
         }

@@ -23,6 +23,7 @@
     if (!self) {
         return nil;
     }
+    [self setText:@"抢红包"];
     [self lcck_setObject:@"抢红包消息" forKey:LCCKCustomMessageTypeTitleKey];
     [self lcck_setObject:@"这是一条抢红包消息，当前版本过低无法显示，请尝试升级APP查看" forKey:LCCKCustomMessageDegradeKey];
     [self lcck_setObject:@"有人向您发送了一条抢红包，请打开APP查看" forKey:LCCKCustomMessageSummaryKey];
@@ -35,5 +36,18 @@
         [self lcck_setObject:[memberString substringToIndex:memberString.length -1] forKey:@"OnlyVisiableForClientId"];
     }
     return self;
+}
+- (void)setAttributes:(NSDictionary *)attributes{
+    [attributes enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
+        [self setObject:obj forKey:key];
+    }];
+}
+- (NSDictionary *)attributes{
+    
+    NSError * error;
+    NSDictionary * attributes = [NSJSONSerialization JSONObjectWithData:[self.payload dataUsingEncoding:NSUTF8StringEncoding] options:NSJSONReadingMutableLeaves error:&error];
+    if (!error) return attributes;
+    
+    return nil;
 }
 @end

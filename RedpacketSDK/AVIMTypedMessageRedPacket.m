@@ -7,8 +7,6 @@
 //
 
 #import "AVIMTypedMessageRedPacket.h"
-//#import <AVOSCloudIM/AVIMTypedMessageObject.h>
-//#import <AVOSCloudIM/AVIMTypedMessage_Internal.h>
 
 @implementation AVIMTypedMessageRedPacket
 + (void)load{

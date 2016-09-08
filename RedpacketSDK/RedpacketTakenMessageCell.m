@@ -66,13 +66,10 @@
 }
 - (void)configureCellWithData:(AVIMTypedMessageRedPacketTaken *)message{
     [super configureCellWithData:message];
-    _message = message;
-    
-    
-    RedpacketMessageModel * rpModel = [RedpacketMessageModel redpacketMessageModelWithDic:message.attributes];
-    NSString *tip = @"[云红包]";
-    
-    if(RedpacketMessageTypeTedpacketTakenMessage == rpModel.messageType) {
+    if ([message isKindOfClass:[AVIMTypedMessageRedPacketTaken class]]){
+        _message = message;
+        RedpacketMessageModel * rpModel = [RedpacketMessageModel redpacketMessageModelWithDic:message.attributes];
+        NSString *tip = @"[云红包]";
         
         if([rpModel.currentUser.userId isEqualToString:rpModel.redpacketSender.userId]) {
             if ([rpModel.currentUser.userId isEqualToString:rpModel.redpacketReceiver.userId]) {
@@ -80,9 +77,10 @@
             }
             else {
                 // 收到了别人抢了我的红包的消息提示
+                NSString * nikeName = (rpModel.redpacketReceiver.userNickname.length > 0)?rpModel.redpacketReceiver.userNickname:rpModel.redpacketReceiver.userId;
                 tip =[NSString stringWithFormat:@"%@%@", // XXX 领取了你的红包
                       // 当前红包 SDK 不返回用户的昵称，需要 app 自己获取
-                      rpModel.redpacketReceiver.userNickname,
+                      nikeName,
                       NSLocalizedString(@"领取了你的红包", @"领取红包消息")];
             }
         }
@@ -94,8 +92,11 @@
                   NSLocalizedString(@"的红包", @"领取红包消息结尾")
                   ];
         }
+        
+        [self.tipMessageLabel setText:tip];
     }
-    [self.tipMessageLabel setText:tip];
-    
+    [self updateConstraintsIfNeeded];
+    [self updateConstraints];
+    [self layoutIfNeeded];
 }
 @end
