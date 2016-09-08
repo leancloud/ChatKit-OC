@@ -31,7 +31,6 @@
 		9A4730751CECAEC500AEB86F /* NSObject+LCCKHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A47305E1CECAEC500AEB86F /* NSObject+LCCKHUD.m */; };
 		9A4730761CECAEC500AEB86F /* LCCKTabBarControllerConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A4730601CECAEC500AEB86F /* LCCKTabBarControllerConfig.m */; };
 		9A7E2DE91D5F1040003A7312 /* LCCKContactManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A7E2DE81D5F1040003A7312 /* LCCKContactManager.m */; };
-		9A9E84511D13A66B008590B4 /* LCChatKitExample.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A9E84501D13A66B008590B4 /* LCChatKitExample.m */; };
 		9AD665CC1D2277830040A4E3 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A0B721B1CED662D004FDACC /* SystemConfiguration.framework */; };
 		9AD665CD1D22778B0040A4E3 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A0B721D1CED6637004FDACC /* MobileCoreServices.framework */; };
 		9AD665CE1D2277920040A4E3 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A0B721F1CED6644004FDACC /* CoreTelephony.framework */; };
@@ -45,6 +44,8 @@
 		E700C71D1D7193AB00056E3C /* RedPacketInputViewPluginTest.m in Sources */ = {isa = PBXBuildFile; fileRef = E700C7021D7193AB00056E3C /* RedPacketInputViewPluginTest.m */; };
 		E700C71E1D7193AB00056E3C /* RedpacketMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = E700C7041D7193AB00056E3C /* RedpacketMessageCell.m */; };
 		E700C71F1D7193AB00056E3C /* RedpacketTakenMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = E700C7061D7193AB00056E3C /* RedpacketTakenMessageCell.m */; };
+		E7302D811D81117700E8CDDE /* LCChatKitExample.m in Sources */ = {isa = PBXBuildFile; fileRef = E7302D7E1D81117700E8CDDE /* LCChatKitExample.m */; };
+		E7302D821D81117700E8CDDE /* LCChatKitExample+Setting.m in Sources */ = {isa = PBXBuildFile; fileRef = E7302D801D81117700E8CDDE /* LCChatKitExample+Setting.m */; };
 		E7586C4F1D630681000C18B4 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E7586C4E1D630681000C18B4 /* CoreMotion.framework */; };
 		E75E22151D78284A005F6F8D /* AlipaySDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E75E21BB1D78284A005F6F8D /* AlipaySDK.a */; };
 		E75E22161D78284A005F6F8D /* AlipaySDK.bundle in Resources */ = {isa = PBXBuildFile; fileRef = E75E21BE1D78284A005F6F8D /* AlipaySDK.bundle */; };
@@ -118,8 +119,6 @@
 		9A7E2DE61D5F0B59003A7312 /* LCCKExampleConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKExampleConstants.h; sourceTree = "<group>"; };
 		9A7E2DE71D5F1040003A7312 /* LCCKContactManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKContactManager.h; sourceTree = "<group>"; };
 		9A7E2DE81D5F1040003A7312 /* LCCKContactManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCKContactManager.m; sourceTree = "<group>"; };
-		9A9E844F1D13A66B008590B4 /* LCChatKitExample.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCChatKitExample.h; sourceTree = "<group>"; };
-		9A9E84501D13A66B008590B4 /* LCChatKitExample.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCChatKitExample.m; sourceTree = "<group>"; };
 		9AAFE6571D48C863004A0309 /* zh-Hans-CN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans-CN"; path = "zh-Hans-CN.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
 		E519B8F873AC1DDD1A5C1645 /* Pods-ChatKit-OC.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChatKit-OC.release.xcconfig"; path = "Pods/Target Support Files/Pods-ChatKit-OC/Pods-ChatKit-OC.release.xcconfig"; sourceTree = "<group>"; };
 		E700C6F61D7193AB00056E3C /* AppDelegate+RedPacket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "AppDelegate+RedPacket.h"; sourceTree = "<group>"; };
@@ -139,6 +138,10 @@
 		E700C7041D7193AB00056E3C /* RedpacketMessageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RedpacketMessageCell.m; sourceTree = "<group>"; };
 		E700C7051D7193AB00056E3C /* RedpacketTakenMessageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RedpacketTakenMessageCell.h; sourceTree = "<group>"; };
 		E700C7061D7193AB00056E3C /* RedpacketTakenMessageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RedpacketTakenMessageCell.m; sourceTree = "<group>"; };
+		E7302D7D1D81117700E8CDDE /* LCChatKitExample.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCChatKitExample.h; sourceTree = "<group>"; };
+		E7302D7E1D81117700E8CDDE /* LCChatKitExample.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCChatKitExample.m; sourceTree = "<group>"; };
+		E7302D7F1D81117700E8CDDE /* LCChatKitExample+Setting.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "LCChatKitExample+Setting.h"; sourceTree = "<group>"; };
+		E7302D801D81117700E8CDDE /* LCChatKitExample+Setting.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "LCChatKitExample+Setting.m"; sourceTree = "<group>"; };
 		E7586C4E1D630681000C18B4 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
 		E75E21BB1D78284A005F6F8D /* AlipaySDK.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = AlipaySDK.a; sourceTree = "<group>"; };
 		E75E21BC1D78284A005F6F8D /* AlipaySDK.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlipaySDK.h; sourceTree = "<group>"; };
@@ -265,10 +268,12 @@
 		9A4730281CECAEC500AEB86F /* Example */ = {
 			isa = PBXGroup;
 			children = (
+				E7302D7D1D81117700E8CDDE /* LCChatKitExample.h */,
+				E7302D7E1D81117700E8CDDE /* LCChatKitExample.m */,
+				E7302D7F1D81117700E8CDDE /* LCChatKitExample+Setting.h */,
+				E7302D801D81117700E8CDDE /* LCChatKitExample+Setting.m */,
 				9A4730291CECAEC500AEB86F /* AppDelegate.h */,
 				9A47302A1CECAEC500AEB86F /* AppDelegate.m */,
-				9A9E844F1D13A66B008590B4 /* LCChatKitExample.h */,
-				9A9E84501D13A66B008590B4 /* LCChatKitExample.m */,
 				9A47305F1CECAEC500AEB86F /* LCCKTabBarControllerConfig.h */,
 				9A4730601CECAEC500AEB86F /* LCCKTabBarControllerConfig.m */,
 				9A47302B1CECAEC500AEB86F /* Class */,
@@ -635,11 +640,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9A9E84511D13A66B008590B4 /* LCChatKitExample.m in Sources */,
+				E7302D811D81117700E8CDDE /* LCChatKitExample.m in Sources */,
 				E700C71D1D7193AB00056E3C /* RedPacketInputViewPluginTest.m in Sources */,
 				9A47306F1CECAEC500AEB86F /* LCCKPlusButtonSubclass.m in Sources */,
 				9A4730671CECAEC500AEB86F /* LCCKLoginViewController.m in Sources */,
 				9A4730611CECAEC500AEB86F /* AppDelegate.m in Sources */,
+				E7302D821D81117700E8CDDE /* LCChatKitExample+Setting.m in Sources */,
 				E700C71F1D7193AB00056E3C /* RedpacketTakenMessageCell.m in Sources */,
 				9A2669C81D6DA89100B66545 /* LCCKInputViewPluginConversationBackground.m in Sources */,
 				9A2669CC1D6DA89100B66545 /* LCCKVCardMessageCell.m in Sources */,

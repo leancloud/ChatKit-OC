@@ -128,8 +128,8 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
                     return;
                 }
                 NSString *currentClientId = [LCCKSessionService sharedInstance].clientId;
-                //系统对话
-                if (conversation.members.count == 0) {
+                //系统对话无成员概念，对应字段的优先顺序 sys > tr > memeber
+                if (conversation.members.count == 0 && (!conversation.transient)) {
                     [self refreshConversation:conversation isJoined:YES];
                     return;
                 }
@@ -527,7 +527,7 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
         conversationInvalidedHandler(conversationId, self, user, error);
     };
     
-    if (conversation) {
+    if (conversation && (conversation.creator.length > 0)) {
         [[LCCKUserSystemService sharedInstance] getProfilesInBackgroundForUserIds:@[ conversation.creator ] callback:^(NSArray<id<LCCKUserDelegate>> *users, NSError *error) {
             id<LCCKUserDelegate> user;
             @try {
@@ -912,6 +912,9 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
     switch (linkType) {
         case MLLinkTypeURL: {
             LCCKWebViewController *webViewController = [[LCCKWebViewController alloc] init];
+            if (![linkText hasPrefix:@"http"]) {
+                linkText = [NSString stringWithFormat:@"http://%@", linkText];
+            }
             webViewController.URL = [NSURL URLWithString:linkText];
             LCCKSafariActivity *activity = [[LCCKSafariActivity alloc] init];
             webViewController.applicationActivities = @[activity];

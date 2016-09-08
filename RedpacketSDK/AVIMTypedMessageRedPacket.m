@@ -7,7 +7,8 @@
 //
 
 #import "AVIMTypedMessageRedPacket.h"
-
+//#import <AVOSCloudIM/AVIMTypedMessageObject.h>
+//#import <AVOSCloudIM/AVIMTypedMessage_Internal.h>
 
 @implementation AVIMTypedMessageRedPacket
 + (void)load{
@@ -27,5 +28,17 @@
     [self lcck_setObject:@"有人向您发送了一条红包消息，请打开APP查看" forKey:LCCKCustomMessageSummaryKey];
     return self;
 }
-
+- (void)setAttributes:(NSDictionary *)attributes{
+    [attributes enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
+        [self setObject:obj forKey:key];
+    }];
+}
+- (NSDictionary *)attributes{
+    
+    NSError * error;
+    NSDictionary * attributes = [NSJSONSerialization JSONObjectWithData:[self.payload dataUsingEncoding:NSUTF8StringEncoding] options:NSJSONReadingMutableLeaves error:&error];
+    if (!error) return attributes;
+    
+    return nil;
+}
 @end

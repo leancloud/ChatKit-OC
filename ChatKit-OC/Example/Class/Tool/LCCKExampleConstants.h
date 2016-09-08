@@ -30,6 +30,7 @@
     @{ LCCKProfileKeyPeerId:@"Bob", LCCKProfileKeyName:@"Bob", LCCKProfileKeyAvatarURL:@"http://www.avatarsdb.com/avatars/bath_bob.jpg" },\
     @{ LCCKProfileKeyPeerId:@"RP", LCCKProfileKeyName:@"RP", LCCKProfileKeyAvatarURL:@"http://www.avatarsdb.com/avatars/bath_bob.jpg" },\
     @{ LCCKProfileKeyPeerId:@"RP1", LCCKProfileKeyName:@"RP1", LCCKProfileKeyAvatarURL:@"http://www.avatarsdb.com/avatars/bath_bob.jpg" },\
+    @{ LCCKProfileKeyPeerId:@"5771e7656be3ff0063a0dada", LCCKProfileKeyName:@"hhx2", LCCKProfileKeyAvatarURL:@"http://ac-x3o016bx.clouddn.com/jXyGZv2B2W4oc3OaEQtYDo3w7fJjgovHeXGuyfFD" },\
 ]
 
 #define LCCKContactPeerIds \
