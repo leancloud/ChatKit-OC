@@ -21,6 +21,7 @@ typedef enum : NSUInteger {
     LCCKContactListModeSingleSelection,
     LCCKContactListModeMultipleSelection
 } LCCKContactListMode;
+NS_ASSUME_NONNULL_BEGIN
 
 typedef void (^LCCKSelectedContactCallback)(UIViewController *viewController, NSString *peerId);
 typedef void (^LCCKSelectedContactsCallback)(UIViewController *viewController, NSArray<NSString *> *peerIds);
@@ -48,8 +49,6 @@ typedef BOOL (^LCCKDeleteContactCallback)(UIViewController *viewController, NSSt
 - (LCCKSelectedContactCallback)selectedContactCallback;
 - (void)setSelectedContactsCallback:(LCCKSelectedContactsCallback)selectedContactsCallback;
 - (LCCKSelectedContactsCallback)selectedContactsCallback;
-
-NS_ASSUME_NONNULL_BEGIN
 - (instancetype)initWithContacts:(NSSet<LCCKContact *> *)contacts
                             mode:(LCCKContactListMode)mode;
 

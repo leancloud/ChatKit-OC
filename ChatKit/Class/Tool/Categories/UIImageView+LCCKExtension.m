@@ -129,10 +129,17 @@
 }
 
 - (LCCKImageObserver *)lcck_imageObserver {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wundeclared-selector"
     LCCKImageObserver *imageObserver = objc_getAssociatedObject(self, @selector(imageObserver));
+#pragma clang diagnostic pop
+    
     if (!imageObserver) {
         imageObserver = [[LCCKImageObserver alloc] initWithImageView:self];
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wundeclared-selector"
         objc_setAssociatedObject(self, @selector(imageObserver), imageObserver, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+#pragma clang diagnostic pop
     }
     return imageObserver;
 }
