@@ -114,7 +114,11 @@ FOUNDATION_EXTERN NSString *const LCCKConversationServiceErrorDomain;
  */
 - (void)updateRecentConversation:(NSArray *)conversations;
 - (void)updateRecentConversation:(NSArray *)conversations shouldRefreshWhenFinished:(BOOL)shouldRefreshWhenFinished;
+- (void)increaseUnreadCountWithConversationId:(NSString *)conversationId shouldRefreshWhenFinished:(BOOL)shouldRefreshWhenFinished;
 
+- (void)deleteRecentConversationWithConversationId:(NSString *)conversationId shouldRefreshWhenFinished:(BOOL)shouldRefreshWhenFinished;
+- (void)updateUnreadCountToZeroWithConversationId:(NSString *)conversationId shouldRefreshWhenFinished:(BOOL)shouldRefreshWhenFinished;
+ 
 /**
  *  从数据库查找所有的对话，即所有的最近对话
  *  @return 对话数据

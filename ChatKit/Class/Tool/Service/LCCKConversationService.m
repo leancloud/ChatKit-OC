@@ -677,7 +677,6 @@ NSString *const LCCKConversationServiceErrorDomain = @"LCCKConversationServiceEr
 }
 
 + (void)cacheFileTypeMessages:(NSArray<AVIMTypedMessage *> *)messages callback:(AVBooleanResultBlock)callback {
-    NSMutableSet *userIds = [[NSMutableSet alloc] init];
     NSString *queueBaseLabel = [NSString stringWithFormat:@"com.chatkit.%@", NSStringFromClass([self class])];
     const char *queueName = [[NSString stringWithFormat:@"%@.ForBarrier",queueBaseLabel] UTF8String];
     dispatch_queue_t queue = dispatch_queue_create(queueName, DISPATCH_QUEUE_CONCURRENT);

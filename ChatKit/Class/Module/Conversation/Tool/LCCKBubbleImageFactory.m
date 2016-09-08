@@ -17,8 +17,6 @@
                         messageType:(AVIMMessageMediaType)messageMediaType
                       isHighlighted:(BOOL)isHighlighted {
     BOOL isCustomMessage = NO;
-    
-    NSString *imageNamed = nil;
     NSString *messageTypeString = @"message_";
     switch (messageMediaType) {
         case kAVIMMessageMediaTypeImage:

@@ -360,7 +360,7 @@ NSString *const LCCKSessionServiceErrorDomain = @"LCCKSessionServiceErrorDomain"
 
 #pragma mark - mention
 
-- (void)isMentionedByMessages:(NSArray<AVIMTextMessage *> *)messages callback:(LCCKBooleanResultBlock)callback {
+- (void)isMentionedByMessages:(NSArray<AVIMTypedMessage *> *)messages callback:(LCCKBooleanResultBlock)callback {
     if (!messages || messages.count == 0) {
         NSInteger code = 0;
         NSString *errorReasonText = @"no message to check";
@@ -381,7 +381,7 @@ NSString *const LCCKSessionServiceErrorDomain = @"LCCKSessionServiceErrorDomain"
         const char *queueName = [[NSString stringWithFormat:@"%@.%@.ForBarrier",queueBaseLabel, [[NSUUID UUID] UUIDString]] UTF8String];
         dispatch_queue_t queue = dispatch_queue_create(queueName, DISPATCH_QUEUE_CONCURRENT);
         
-        [messages enumerateObjectsUsingBlock:^(AVIMTextMessage * _Nonnull message, NSUInteger idx, BOOL * _Nonnull stop) {
+        [messages enumerateObjectsUsingBlock:^(AVIMTypedMessage * _Nonnull message, NSUInteger idx, BOOL * _Nonnull stop) {
             if (![message isKindOfClass:[AVIMTextMessage class]]) {
                 return;
             }

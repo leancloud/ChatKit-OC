@@ -20,7 +20,7 @@
 #import "MWPhotoBrowser.h"
 #import "NSObject+LCCKHUD.h"
 
-#warning TODO: CHANGE TO YOUR AppId and AppKey
+#warning TODO: CHANGE TO YOUR OWN AppId and AppKey
 static NSString *const LCCKAPPID = @"dYRQ8YfHRiILshUnfFJu2eQM-gzGzoHsz";
 static NSString *const LCCKAPPKEY = @"ye24iIK6ys8IvaISMC4Bs5WK";
 
@@ -42,13 +42,13 @@ static NSString *const LCCKAPPKEY = @"ye24iIK6ys8IvaISMC4Bs5WK";
     //设置最近联系人列表cell的操作
     [self lcck_setupConversationsCellOperation];
     //自定义Cell菜单
-    [self lcck_setupCustomCellForConversationList];
+    [self lcck_setupConversationEditActionForConversationList];
 }
 
 - (void)lcck_setupConversation {
     //设置打开会话的操作
     [self lcck_setupOpenConversation];
-    [self lcck_setupInvalided];
+    [self lcck_setupConversationInvalidedHandler];
     [self lcck_setupLoadLatestMessages];
     //点击图片，放大查看的设置。不设置则使用默认方式
     //[self lcck_setupPreviewImageMessage];
@@ -63,7 +63,8 @@ static NSString *const LCCKAPPKEY = @"ye24iIK6ys8IvaISMC4Bs5WK";
     [self lcck_setupOpenProfile];
     //开启圆角
     //[self lcck_setupAvatarImageCornerRadius];
-    [self lcck_setupFilterMessage];
+    //筛选消息
+    //[self lcck_setupFilterMessage];
     [self lcck_setupNotification];
     [self lcck_setupPreviewLocationMessage];
 }
@@ -142,7 +143,7 @@ static NSString *const LCCKAPPKEY = @"ye24iIK6ys8IvaISMC4Bs5WK";
 
 #pragma mark - 最近联系人列表的设置
 
-- (void)lcck_setupCustomCellForConversationList {
+- (void)lcck_setupConversationEditActionForConversationList {
     // 自定义Cell菜单
     [[LCChatKit sharedInstance] setConversationEditActionBlock:^NSArray *(
                                                NSIndexPath *indexPath, NSArray<UITableViewRowAction *> *editActions,
@@ -186,39 +187,28 @@ static NSString *const LCCKAPPKEY = @"ye24iIK6ys8IvaISMC4Bs5WK";
         [[self class] lcck_showMessage:@"加载历史记录..." toView:aConversationController.view];
         //判断会话的成员是否超过两个(即是否为群聊)
         if (conversation.members.count > 2) { //设置点击rightButton为群聊Style,和对应事件
-            [aConversationController
-             configureBarButtonItemStyle:LCCKBarButtonItemStyleGroupProfile
-             action:^(UIBarButtonItem *sender, UIEvent *event) {
-                 NSString *title = @"打开群聊详情";
-                 NSString *subTitle =
-                 [NSString stringWithFormat:@"群聊id：%@",
-                  conversation.conversationId];
-                 [LCCKUtil
-                  showNotificationWithTitle:title
-                  subtitle:subTitle
-                  type:
-                  LCCKMessageNotificationTypeMessage];
-             }];
+            [aConversationController configureBarButtonItemStyle:LCCKBarButtonItemStyleGroupProfile
+                                                          action:^(UIBarButtonItem *sender, UIEvent *event) {
+                                                              NSString *title = @"打开群聊详情";
+                                                              NSString *subTitle = [NSString stringWithFormat:@"群聊id：%@", conversation.conversationId];
+                                                              [LCCKUtil showNotificationWithTitle:title
+                                                                                         subtitle:subTitle
+                                                                                             type:LCCKMessageNotificationTypeMessage];
+                                                          }];
         } else if (conversation.members.count == 2) { //设置点击rightButton为单聊的Style,和对应事件
             [aConversationController
              configureBarButtonItemStyle:LCCKBarButtonItemStyleSingleProfile
              action:^(UIBarButtonItem *sender, UIEvent *event) {
                  NSString *title = @"打开用户详情";
                  NSArray *members = conversation.members;
-                 NSPredicate *predicate =
-                 [NSPredicate predicateWithFormat:@"NOT (SELF IN %@)", @[
-                                                                         [LCChatKit sharedInstance]
-                                                                         .clientId
-                                                                         ]];
-                 NSString *peerId =
-                 [members filteredArrayUsingPredicate:predicate][0];
-                 NSString *subTitle =
-                 [NSString stringWithFormat:@"用户id：%@", peerId];
-                 [LCCKUtil
-                  showNotificationWithTitle:title
-                  subtitle:subTitle
-                  type:
-                  LCCKMessageNotificationTypeMessage];
+                 NSPredicate *predicate = [NSPredicate predicateWithFormat:@"NOT (SELF IN %@)", @[
+                                                                                                  [LCChatKit sharedInstance].clientId
+                                                                                                  ]];
+                 NSString *peerId = [members filteredArrayUsingPredicate:predicate][0];
+                 NSString *subTitle = [NSString stringWithFormat:@"用户id：%@", peerId];
+                 [LCCKUtil showNotificationWithTitle:title
+                                            subtitle:subTitle
+                                                type:LCCKMessageNotificationTypeMessage];
              }];
         }
         //系统对话，或暂态聊天室，成员为0，单独处理。参考：系统对话文档
@@ -229,7 +219,7 @@ static NSString *const LCCKAPPKEY = @"ye24iIK6ys8IvaISMC4Bs5WK";
 /**
  *  设置会话出错的回调处理
  */
-- (void)lcck_setupInvalided {
+- (void)lcck_setupConversationInvalidedHandler {
     [[LCChatKit sharedInstance] setConversationInvalidedHandler:^(NSString *conversationId,
                                        LCCKConversationViewController *conversationController,
                                        id<LCCKUserDelegate> administrator, NSError *error) {
@@ -475,8 +465,7 @@ setLoadLatestMessagesHandler:^(LCCKConversationViewController *conversationContr
                                                   valueForKey:LCCKCustomMessageOnlyVisiableForPartClientIds];
              if (!visiableForPartClientIds) {
                  [filterMessages addObject:typedMessage];
-             }
-             else if (visiableForPartClientIds.count > 0) {
+             } else if (visiableForPartClientIds.count > 0) {
                  BOOL visiableForCurrentClientId =
                  [visiableForPartClientIds containsObject:[LCChatKit sharedInstance].clientId];
                  if (visiableForCurrentClientId) {
@@ -615,8 +604,7 @@ setLoadLatestMessagesHandler:^(LCCKConversationViewController *conversationContr
  */
 - (NSArray *)lcck_exampleConversationEditActionAtIndexPath:(NSIndexPath *)indexPath
                                               conversation:(AVIMConversation *)conversation
-                                                controller:
-(LCCKConversationListViewController *)controller {
+                                                controller:(LCCKConversationListViewController *)controller {
     // 如果需要自定义其他会话的菜单，在此编辑
     return [self lcck_rightButtonsAtIndexPath:indexPath conversation:conversation controller:controller];
 }
@@ -710,6 +698,7 @@ typedef void (^UITableViewRowActionHandler)(UITableViewRowAction *action, NSInde
         [rootViewController presentViewController:viewController animated:YES completion:nil];
     }
 }
+
 #pragma mark 清除Client信息
 + (void)lcck_clearLocalClientInfo {
     // 在系统偏好保存信息

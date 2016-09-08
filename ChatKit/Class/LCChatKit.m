@@ -38,6 +38,11 @@
 @synthesize didDeleteConversationsListCellBlock = _didDeleteConversationsListCellBlock;
 @synthesize conversationEditActionBlock = _conversationEditActionBlock;
 @synthesize markBadgeWithTotalUnreadCountBlock = _markBadgeWithTotalUnreadCountBlock;
+@synthesize conversationInvalidedHandler = _conversationInvalidedHandler;
+@synthesize fetchConversationHandler = _fetchConversationHandler;
+@synthesize loadLatestMessagesHandler = _loadLatestMessagesHandler;
+@synthesize disableSingleSignOn = _disableSingleSignOn;
+@synthesize filterMessagesBlock = _filterMessagesBlock;
 
 #pragma mark -
 

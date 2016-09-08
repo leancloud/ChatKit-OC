@@ -16,15 +16,7 @@
 
 #import "LCCKConstants.h"
 
-@protocol LCCKAVAudioPlayerDelegate <NSObject>
-
-- (void)audioPlayerStateDidChanged:(LCCKVoiceMessageState)audioPlayerState identifier:(NSString *)identifier;
-
-@end
-
 @interface LCCKAVAudioPlayer : NSObject
-
-@property (nonatomic, weak) id<LCCKAVAudioPlayerDelegate> delegate;
 
 @property (nonatomic, copy) NSString *URLString;
 

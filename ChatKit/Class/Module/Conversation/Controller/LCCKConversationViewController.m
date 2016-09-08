@@ -41,7 +41,7 @@
 
 NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationViewControllerErrorDomain";
 
-@interface LCCKConversationViewController () <LCCKChatBarDelegate, LCCKAVAudioPlayerDelegate, LCCKChatMessageCellDelegate, LCCKConversationViewModelDelegate, LCCKPhotoBrowserDelegate>
+@interface LCCKConversationViewController () <LCCKChatBarDelegate, LCCKChatMessageCellDelegate, LCCKConversationViewModelDelegate, LCCKPhotoBrowserDelegate>
 
 @property (nonatomic, strong, readwrite) AVIMConversation *conversation;
 //@property (copy, nonatomic) NSString *messageSender /**< 正在聊天的用户昵称 */;
@@ -214,7 +214,6 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
     self.tableView.delegate = self.chatViewModel;
     self.tableView.dataSource = self.chatViewModel;
     self.chatBar.delegate = self;
-    [LCCKAVAudioPlayer sharePlayer].delegate = self;
     [self.view addSubview:self.chatBar];
     [self.view addSubview:self.clientStatusView];
     [self updateStatusView];
@@ -270,7 +269,6 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
 
 - (void)dealloc {
     _chatViewModel.delegate = nil;
-    [[LCCKAVAudioPlayer sharePlayer] setDelegate:nil];
     !self.viewControllerWillDeallocBlock ?: self.viewControllerWillDeallocBlock(self);
 }
 

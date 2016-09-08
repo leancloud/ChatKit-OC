@@ -53,11 +53,11 @@
         self.originImageView = imageView;
         [imageView addObserver:self forKeyPath:@"image" options:NSKeyValueObservingOptionNew context:nil];
         [imageView addObserver:self forKeyPath:@"contentMode" options:NSKeyValueObservingOptionNew context:nil];
-            __unsafe_unretained typeof(self) weakSelf = self;
-            [self lcck_executeAtDealloc:^{
+        __unsafe_unretained typeof(self) weakSelf = self;
+        [self lcck_executeAtDealloc:^{
             [weakSelf.originImageView removeObserver:weakSelf forKeyPath:@"image"];
             [weakSelf.originImageView removeObserver:weakSelf forKeyPath:@"contentMode"];
-                }];
+        }];
     }
     return self;
 }

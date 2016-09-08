@@ -40,11 +40,6 @@ typedef void (^LCCKSendMessageSuccessFailedBlock)(NSString *messageUUID, NSError
 @property (nonatomic, strong, readonly) NSMutableArray<AVIMTypedMessage *> *avimTypedMessage;
 
 /**
- *  添加一条消息到LCCKConversationViewModel,并不会出发发送消息到服务器的方法
- */
-- (void)addMessage:(LCCKMessage *)message;
-
-/**
  *  发送一条消息,消息已经通过addMessage添加到LCCKConversationViewModel数组中了,此方法主要为了LCCKChatServer发送消息过程
  */
 - (void)sendMessage:(id)message;
