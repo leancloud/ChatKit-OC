@@ -18,11 +18,11 @@
       4.  [删除自定义插件、自定义消息、自定义 Cell (可选) ](https://github.com/leancloud/ChatKit-OC/blob/master/ChatKit%20自定义业务.md#删除自定义插件自定义消息自定义-cell) 
   8.  [国际化与本地化](https://github.com/leancloud/ChatKit-OC/blob/master/ChatKit%20自定义业务.md#国际化与本地化) 
   9.  [其他事件及属性](https://github.com/leancloud/ChatKit-OC/blob/master/ChatKit%20自定义业务.md#其他事件及属性) 
-        -  [监听并筛选或处理消息](https://github.com/leancloud/ChatKit-OC/blob/master/ChatKit%20自定义业务.md#监听并筛选或处理消息) 
-        -  [预览大图](https://github.com/leancloud/ChatKit-OC/blob/master/ChatKit%20自定义业务.md#预览大图) 
-        -  [预览地理位置](https://github.com/leancloud/ChatKit-OC/blob/master/ChatKit%20自定义业务.md#预览地理位置)
-        -  [消息未读数](https://github.com/leancloud/ChatKit-OC/blob/master/ChatKit%20自定义业务.md#消息未读数)
-        -  [设置单点登录与强制重连](https://github.com/leancloud/ChatKit-OC/blob/master/ChatKit%20自定义业务.md#设置单点登录与强制重连)
+      -  [监听并筛选或处理消息](https://github.com/leancloud/ChatKit-OC/blob/master/ChatKit%20自定义业务.md#监听并筛选或处理消息) 
+      -  [预览大图](https://github.com/leancloud/ChatKit-OC/blob/master/ChatKit%20自定义业务.md#预览大图) 
+      -  [预览地理位置](https://github.com/leancloud/ChatKit-OC/blob/master/ChatKit%20自定义业务.md#预览地理位置)
+      -  [消息未读数](https://github.com/leancloud/ChatKit-OC/blob/master/ChatKit%20自定义业务.md#消息未读数)
+      -  [设置单点登录与强制重连](https://github.com/leancloud/ChatKit-OC/blob/master/ChatKit%20自定义业务.md#设置单点登录与强制重连)
 
 
 ## 设置单聊用户的头像和昵称
@@ -478,7 +478,7 @@ UI自定义，需要实现 `LCCKInputViewPluginDelegate` 方法：
 
 ### 监听并筛选或处理消息
 
-可以接口 `-[LCChatKit setFilterMessagesBlock:]` 实现拦截新消息，包括实时接收的消息，和拉取历史记录消息。
+可以通过接口 `-[LCChatKit setFilterMessagesBlock:]` 实现拦截新消息，包括实时接收的消息，和拉取历史记录消息。
 
 Demo中演示了，群定向消息的实现： 
 
