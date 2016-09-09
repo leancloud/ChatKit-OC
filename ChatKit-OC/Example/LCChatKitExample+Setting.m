@@ -17,7 +17,7 @@
 #import "LCCKExampleConstants.h"
 #import "LCCKLoginViewController.h"
 #import "LCChatKitExample+Setting.h"
-#import "MWPhotoBrowser.h"
+//#import "MWPhotoBrowser.h"
 #import "NSObject+LCCKHUD.h"
 
 #warning TODO: CHANGE TO YOUR OWN AppId and AppKey

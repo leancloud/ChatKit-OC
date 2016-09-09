@@ -6,7 +6,6 @@
 //  Copyright © 2016年 zzgo. All rights reserved.
 //
 #import "LCChatKitExample.h"
-#import "MWPhotoBrowser.h"
 #import <Foundation/Foundation.h>
 
 @interface LCChatKitExample (Setting) //<MWPhotoBrowserDelegate>
