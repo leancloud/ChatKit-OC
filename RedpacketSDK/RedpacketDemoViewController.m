@@ -26,7 +26,6 @@
 @interface RedpacketDemoViewController ()<RedpacketViewControlDelegate,LCCKConversationViewModelDelegate>
 @property (nonatomic, strong)LCCKConversationViewModel * chatViewModel;
 @property (nonatomic, strong) RedpacketViewControl *redpacketControl;
-@property (nonatomic, strong)NSMutableArray * usersArray;
 @property (nonatomic, strong)id<LCCKUserDelegate> user;
 @end
 
@@ -34,7 +33,6 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.usersArray = [NSMutableArray array];
     
     __weak typeof(self) weakSelf = self;
     [[LCCKUserSystemService sharedInstance] fetchCurrentUserInBackground:^(id<LCCKUserDelegate> user, NSError *error) {
@@ -151,6 +149,16 @@
 }
 
 - (void)getGroupMemberListCompletionHandle:(void (^)(NSArray<RedpacketUserInfo *> *))completionHandle{
-    completionHandle(self.usersArray);
+    
+    NSMutableArray * usersArray = [NSMutableArray array];
+    AVIMConversation *conversation = [self getConversationIfExists];
+    [conversation.members enumerateObjectsUsingBlock:^(NSString *  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        RedpacketUserInfo * userInfo = [RedpacketUserInfo new];
+        userInfo.userId = obj;
+        userInfo.userNickname = obj;
+        [usersArray addObject:userInfo];
+    }];
+    
+    completionHandle(usersArray);
 }
 @end

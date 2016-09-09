@@ -1,21 +1,21 @@
 //
-//  LCCKInputViewPluginTest.m
+//  RedPacketChangeInputViewPlugin.m
 //  ChatKit-OC
 //
-//  Created by 都基鹏 on 16/8/16.
+//  Created by 都基鹏 on 16/9/9.
 //  Copyright © 2016年 ElonChan. All rights reserved.
 //
 
-#import "RedPacketInputViewPluginTest.h"
+#import "RedPacketChangeInputViewPlugin.h"
 #import "RedpacketDemoViewController.h"
 #import "RedpacketViewControl.h"
 
-@interface RedPacketInputViewPluginTest()
+@interface RedPacketChangeInputViewPlugin()
 
 @property (nonatomic, copy) LCCKIdResultBlock sendCustomMessageHandler;
 @property (nonatomic, strong) RedpacketViewControl *redpacketControl;
 @end
-@implementation RedPacketInputViewPluginTest
+@implementation RedPacketChangeInputViewPlugin
 @synthesize inputViewRef = _inputViewRef;
 @synthesize sendCustomMessageHandler = _sendCustomMessageHandler;
 + (void)load {
@@ -23,7 +23,7 @@
 }
 
 + (LCCKInputViewPluginType)classPluginType {
-    return 2;
+    return 3;
 }
 
 #pragma mark -
@@ -40,7 +40,7 @@
  * 插件名称
  */
 - (NSString *)pluginTitle {
-    return @"红包";
+    return @"零钱";
 }
 
 /*!
@@ -51,9 +51,11 @@
 }
 
 - (void)pluginDidClicked {
-
+    
     if ([self.conversationViewController isKindOfClass:[RedpacketDemoViewController class]]) {
-        [(RedpacketDemoViewController*)self.conversationViewController chatBarWillSendRedPacket];
+        self.redpacketControl = [[RedpacketViewControl alloc] init];
+        self.redpacketControl.conversationController = self.conversationViewController;
+        [self.redpacketControl presentChangeMoneyViewController];
     }
 }
 
