@@ -2,7 +2,7 @@
 //  LCCKSettingService.m
 //  LeanCloudChatKit-iOS
 //
-//  v0.7.10 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/2/23.
+//  v0.7.15 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/2/23.
 //  Copyright © 2016年 LeanCloud. All rights reserved.
 //
 
@@ -39,7 +39,7 @@ static BOOL LCCKAllLogsEnabled;
 }
 
 + (NSString *)ChatKitVersion {
-    return @"v0.7.10";
+    return @"v0.7.15";
 }
 
 - (NSString *)tmpPath {
@@ -77,7 +77,7 @@ static BOOL LCCKAllLogsEnabled;
 - (void)saveInstallationWithDeviceToken:(NSData *)deviceToken userId:(NSString *)userId {
     AVInstallation *currentInstallation = [AVInstallation currentInstallation];
     [currentInstallation setDeviceTokenFromData:deviceToken];
-    // openClient 的时候也会将 clientId 注册到 channels，这里多余了？
+    //FIXME: openClient 的时候也会将 clientId 注册到 channels，这里多余了？
     if (userId) {
         [currentInstallation addUniqueObject:userId forKey:LCCKInstallationKeyChannels];
     }
@@ -86,6 +86,7 @@ static BOOL LCCKAllLogsEnabled;
     }];
 }
 
+//TODO:Never used
 - (void)pushMessage:(NSString *)message userIds:(NSArray *)userIds block:(AVBooleanResultBlock)block {
     AVPush *push = [[AVPush alloc] init];
     [push setChannels:userIds];

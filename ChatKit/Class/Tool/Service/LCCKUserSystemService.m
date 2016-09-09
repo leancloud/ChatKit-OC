@@ -2,7 +2,7 @@
 //  LCCKUserSystemService.m
 //  ChatKit-iOS
 //
-//  v0.7.10 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/2/22.
+//  v0.7.15 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/2/22.
 //  Copyright © 2016年 LeanCloud. All rights reserved.
 //
 
@@ -145,7 +145,7 @@ NSString *const LCCKUserSystemServiceErrorDomain = @"LCCKUserSystemServiceErrorD
 }
 
 - (NSArray<id<LCCKUserDelegate>> *)getCachedProfilesIfExists:(NSArray<NSString *> *)userIds shouldSameCount:(BOOL)shouldSameCount error:(NSError * __autoreleasing *)theError {
-   NSArray *cachedProfiles = [self getCachedProfilesIfExists:userIds error:theError];
+    NSArray *cachedProfiles = [self getCachedProfilesIfExists:userIds error:theError];
     if (!shouldSameCount) {
         return cachedProfiles;
     }
@@ -299,7 +299,7 @@ NSString *const LCCKUserSystemServiceErrorDomain = @"LCCKUserSystemServiceErrorD
             !callback ?: callback(YES, error);
         }];
     } else {
-       !callback ?: callback(YES, nil);
+        !callback ?: callback(YES, nil);
     }
 }
 
@@ -323,11 +323,18 @@ NSString *const LCCKUserSystemServiceErrorDomain = @"LCCKUserSystemServiceErrorD
 - (NSMutableDictionary *)cachedUsers {
     if (_cachedUsers == nil) {
         _cachedUsers = [[NSMutableDictionary alloc] init];
-        NSString *queueBaseLabel = [NSString stringWithFormat:@"com.ChatKit.%@", NSStringFromClass([self class])];
-        const char *queueName = [[NSString stringWithFormat:@"%@.ForIsolation",queueBaseLabel] UTF8String];
-        self.isolationQueue = dispatch_queue_create(queueName, NULL);
     }
     return _cachedUsers;
+}
+
+- (dispatch_queue_t)isolationQueue {
+    if (_isolationQueue) {
+        return _isolationQueue;
+    }
+    NSString *queueBaseLabel = [NSString stringWithFormat:@"com.ChatKit.%@", NSStringFromClass([self class])];
+    const char *queueName = [[NSString stringWithFormat:@"%@.ForIsolation",queueBaseLabel] UTF8String];
+    _isolationQueue = dispatch_queue_create(queueName, NULL);
+    return _isolationQueue;
 }
 
 #pragma mark -

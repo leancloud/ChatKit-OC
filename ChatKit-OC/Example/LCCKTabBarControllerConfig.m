@@ -1,9 +1,9 @@
 //
-//  LCCKTabBarControllerConfig.m
-//  CYLTabBarController
+//  LCChatKitExample.m
+//  LeanCloudChatKit-iOS
 //
-//  Created by 微博@iOS程序犭袁 ( http://weibo.com/luohanchenyilong/ ) on 10/20/15.
-//  Copyright © 2015 https://github.com/ChenYilong . All rights reserved.
+//  v0.7.15 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/2/24.
+//  Copyright © 2016年 LeanCloud. All rights reserved.
 //
 
 #import "LCCKTabBarControllerConfig.h"
