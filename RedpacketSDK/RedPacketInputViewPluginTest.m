@@ -51,7 +51,7 @@
 }
 
 - (void)pluginDidClicked {
-    
+
     if ([self.conversationViewController isKindOfClass:[RedpacketDemoViewController class]]) {
         [(RedpacketDemoViewController*)self.conversationViewController chatBarWillSendRedPacket];
     }

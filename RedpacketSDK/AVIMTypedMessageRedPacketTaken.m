@@ -34,6 +34,7 @@
             [memberString appendFormat:@"%@,",obj];
         }];
         [self lcck_setObject:[memberString substringToIndex:memberString.length -1] forKey:@"OnlyVisiableForClientId"];
+        //    [self lcck_setObject:@[ @"Tom", @"Jerry"] forKey:LCCKCustomMessageOnlyVisiableForPartClientIds];
     }
     return self;
 }

@@ -27,7 +27,7 @@
 #import "RedpacketDemoViewController.h"
 
 #import "LCChatKitExample+Setting.h"
-
+#import "RedpacketConfig.h"
 
 //==================================================================================================================================
 // If you want to see the storage of this demo, log in public account of leancloud.cn, search for
@@ -151,6 +151,7 @@
  */
 - (void)exampleInit {
     [self lcck_setting];
+    [[RedpacketConfig sharedConfig] lcck_setting];
 }
 
 #pragma -

@@ -17,7 +17,6 @@
 #import "AVIMTypedMessageRedPacket.h"
 #import "AVIMTypedMessageRedPacketTaken.h"
 #import "RedpacketConfig.h"
-
 #pragma mark -
 #pragma mark - 红包相关的宏定义
 #define REDPACKET_BUNDLE(name) @"RedpacketCellResource.bundle/" name
