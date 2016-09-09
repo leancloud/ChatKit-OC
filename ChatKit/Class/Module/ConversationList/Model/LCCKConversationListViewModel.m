@@ -36,7 +36,7 @@
 
 @interface LCCKConversationListViewModel ()
 
-@property (nonatomic, strong) LCCKConversationListViewController *conversationListViewController;
+@property (nonatomic, weak) LCCKConversationListViewController *conversationListViewController;
 @property (nonatomic, assign, getter=isFreshing) BOOL freshing;
 
 @end
@@ -55,10 +55,10 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refresh) name:LCCKNotificationMessageReceived object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refresh) name:LCCKNotificationUnreadsUpdated object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refresh) name:LCCKNotificationConversationListDataSourceUpdated object:nil];
-        __unsafe_unretained typeof(self) weakSelf = self;
-        [self lcck_executeAtDealloc:^{
-               [[NSNotificationCenter defaultCenter] removeObserver:weakSelf];
-            }];
+    __unsafe_unretained typeof(self) weakSelf = self;
+    [self lcck_executeAtDealloc:^{
+        [[NSNotificationCenter defaultCenter] removeObserver:weakSelf];
+    }];
     _conversationListViewController = conversationListViewController;
     return self;
 }

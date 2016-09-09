@@ -162,7 +162,6 @@ static BOOL LCCKAllLogsEnabled;
  * @param position 主要分为：CommonLeft、CommonRight等
  */
 - (UIEdgeInsets)messageBubbleCustomizeSettingsForPosition:(NSString *)position capOrEdge:(NSString *)capOrEdge {
-    NSString *leftOrRight = position;
     NSDictionary *CapOrEdgeDict = self.messageBubbleCustomizeSettings[@"BubbleStyle"][position][@"background"][capOrEdge];
     CGFloat top = [(NSNumber *)CapOrEdgeDict[@"top"] floatValue];
     CGFloat left = [(NSNumber *)CapOrEdgeDict[@"left"] floatValue];

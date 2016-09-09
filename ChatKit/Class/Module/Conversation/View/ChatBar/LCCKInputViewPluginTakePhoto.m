@@ -10,7 +10,6 @@
 
 @interface LCCKInputViewPluginTakePhoto()<UIImagePickerControllerDelegate>
 
-@property (nonatomic) LCCKConversationViewController *conversationViewController;
 @property (nonatomic, copy) LCCKIdResultBlock sendCustomMessageHandler;
 @property (nonatomic, copy) UIImagePickerController *pickerController;
 

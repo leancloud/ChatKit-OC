@@ -132,7 +132,7 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
 }
 
 - (UIViewController *)controllerRef {
-    return self.delegate;
+    return (UIViewController *)self.delegate;
 }
 
 - (void)setDelegate:(id<LCCKChatBarDelegate>)delegate {

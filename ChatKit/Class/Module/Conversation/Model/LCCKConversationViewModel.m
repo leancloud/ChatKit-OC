@@ -65,11 +65,11 @@
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveMessage:) name:LCCKNotificationMessageReceived object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(conversationInvalided:) name:LCCKNotificationCurrentConversationInvalided object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(backgroundImageChanged:) name:LCCKNotificationConversationViewControllerBackgroundImageDidChanged object:nil];
-            __unsafe_unretained typeof(self) weakSelf = self;
-            [self lcck_executeAtDealloc:^{
+        __unsafe_unretained typeof(self) weakSelf = self;
+        [self lcck_executeAtDealloc:^{
             weakSelf.delegate = nil;
-                   [[NSNotificationCenter defaultCenter] removeObserver:weakSelf];
-                }];
+            [[NSNotificationCenter defaultCenter] removeObserver:weakSelf];
+        }];
     }
     return self;
 }
@@ -207,7 +207,7 @@
         
         LCCKConversationInvalidedHandler conversationInvalidedHandler = [[LCCKConversationService sharedInstance] conversationInvalidedHandler];
         if (conversationInvalidedHandler) {
-            conversationInvalidedHandler(self.currentConversation, user, error_, self.parentConversationViewController);
+            conversationInvalidedHandler(self.currentConversation.conversationId, self.parentConversationViewController, user, error_);
         }
     }];
 }
@@ -593,7 +593,6 @@ fromTimestamp     |    toDate   |                |  上次上拉刷新顶端，�
 }
 
 - (void)loadMessagesFirstTimeWithCallback:(LCCKIdBoolResultBlock)callback {
-    BOOL socketOpened = [LCCKSessionService sharedInstance].connect;
     [self queryAndCacheMessagesWithTimestamp:0 block:^(NSArray *avimTypedMessages, NSError *error) {
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
             BOOL succeed = [self.parentConversationViewController filterAVIMError:error];

@@ -33,7 +33,13 @@ NSMutableArray const *LCCKInputViewPluginArray = nil;
 @end
 
 @implementation LCCKInputViewPlugin
+@synthesize delegate = _delegate;
+@synthesize inputViewRef = _inputViewRef;
+@synthesize pluginContentView = _pluginContentView;
 @synthesize pluginType = _pluginType;
+@synthesize pluginIconImage = _pluginIconImage;
+@synthesize pluginTitle = _pluginTitle;
+@synthesize sendCustomMessageHandler = _sendCustomMessageHandler;
 
 - (instancetype)init {
     if (![self conformsToProtocol:@protocol(LCCKInputViewPluginSubclassing)]) {

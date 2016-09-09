@@ -185,8 +185,7 @@ NSString *const LCCKUserSystemServiceErrorDomain = @"LCCKUserSystemServiceErrorD
     if (userId) {
         NSString *userName_ = nil;
         NSURL *avatarURL_ = nil;
-        id<LCCKUserDelegate> user;
-        user = [self getUserForClientId:userId];
+        id<LCCKUserDelegate> user = [self getUserForClientId:userId];
         userName_ = user.name;
         avatarURL_ = user.avatarURL;
         if (userName_ || avatarURL_) {
@@ -330,6 +329,9 @@ NSString *const LCCKUserSystemServiceErrorDomain = @"LCCKUserSystemServiceErrorD
     }
     return _cachedUsers;
 }
+
+#pragma mark -
+#pragma mark - set or get cached user Method
 
 - (void)setUser:(id<LCCKUserDelegate>)user forClientId:(NSString *)clientId {
     NSString *clientId_ = [clientId copy];

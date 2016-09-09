@@ -257,9 +257,6 @@ NSString *const kLCCKAudioDataKey;
 
 - (void)setAudioPlayerState:(LCCKVoiceMessageState)audioPlayerState {
     _audioPlayerState = audioPlayerState;
-    if (self.delegate && [self.delegate respondsToSelector:@selector(audioPlayerStateDidChanged:identifier:)]) {
-        [self.delegate audioPlayerStateDidChanged:_audioPlayerState identifier:self.identifier];
-    }
     if (_audioPlayerState == LCCKVoiceMessageStateCancel || _audioPlayerState == LCCKVoiceMessageStateNormal) {
         _URLString = nil;
         _identifier = nil;

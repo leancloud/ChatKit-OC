@@ -281,7 +281,7 @@ NSLocalizedStringFromTableInBundle((key), nil, [NSBundle bundleWithPath:[[NSBund
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     [self releaseAllUnderlyingPhotos];
     
-    LCCKLog(@"%@, %@, %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [NSString stringWithFormat:@"%i", __LINE__]);
+    LCCKPBLog(@"%@, %@, %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [NSString stringWithFormat:@"%i", __LINE__]);
 }
 
 - (void)releaseAllUnderlyingPhotos {
@@ -983,7 +983,7 @@ NSLocalizedStringFromTableInBundle((key), nil, [NSBundle bundleWithPath:[[NSBund
                 id <LCCKPhoto> photo = [self photoAtIndex:pageIndex-1];
                 if (![photo underlyingImageExisted]) {
                     [photo loadUnderlyingImageAndNotify];
-                    LCCKLog(@"Pre-loading image at index %@", @(pageIndex-1));
+                    LCCKPBLog(@"Pre-loading image at index %@", @(pageIndex-1));
                 }
             }
             if (pageIndex < [self numberOfPhotos] - 1) {
@@ -991,7 +991,7 @@ NSLocalizedStringFromTableInBundle((key), nil, [NSBundle bundleWithPath:[[NSBund
                 id <LCCKPhoto> photo = [self photoAtIndex:pageIndex+1];
                 if (![photo underlyingImageExisted]) {
                     [photo loadUnderlyingImageAndNotify];
-                    LCCKLog(@"Pre-loading image at index %@", @(pageIndex+1));
+                    LCCKPBLog(@"Pre-loading image at index %@", @(pageIndex+1));
                 }
             }
         }
@@ -1011,11 +1011,11 @@ NSLocalizedStringFromTableInBundle((key), nil, [NSBundle bundleWithPath:[[NSBund
             [page animateImage];
             // Load adjacent photos
             [self loadAdjacentPhotosIfNecessary:photo];
-            LCCKLog(@"Success to load image");
+            LCCKPBLog(@"Success to load image");
         } else {
             // Failed to load
             [page displayImageFailure];
-            LCCKLog(@"Failed to load image");
+            LCCKPBLog(@"Failed to load image");
         }
     }
 }
@@ -1042,7 +1042,7 @@ NSLocalizedStringFromTableInBundle((key), nil, [NSBundle bundleWithPath:[[NSBund
 			[_recycledPages addObject:page];
             [page prepareForReuse];
 			[page removeFromSuperview];
-			LCCKLog(@"Removed page at index %@", @(PAGE_INDEX(page)));
+			LCCKPBLog(@"Removed page at index %@", @(PAGE_INDEX(page)));
 		}
 	}
 	[_visiblePages minusSet:_recycledPages];
@@ -1062,7 +1062,7 @@ NSLocalizedStringFromTableInBundle((key), nil, [NSBundle bundleWithPath:[[NSBund
 			[self configurePage:page forIndex:index];
 			[_visiblePages addObject:page];
 			[_pagingScrollView addSubview:page];
-			LCCKLog(@"Added page at index %@", @(index));
+			LCCKPBLog(@"Added page at index %@", @(index));
 
             // Add caption
             LCCKCaptionView *captionView = [self captionViewForPhotoAtIndex:index];

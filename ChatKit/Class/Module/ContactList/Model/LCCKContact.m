@@ -39,4 +39,21 @@
             ];
 }
 
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+    [aCoder encodeObject:self.userId forKey:@"userId"];
+    [aCoder encodeObject:self.name forKey:@"name"];
+    [aCoder encodeObject:self.avatarURL forKey:@"avatarURL"];
+    [aCoder encodeObject:self.clientId forKey:@"clientId"];
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+    if(self = [super init]){
+        _userId = [aDecoder decodeObjectForKey:@"userId"];
+        _name = [aDecoder decodeObjectForKey:@"name"];
+        _avatarURL = [aDecoder decodeObjectForKey:@"avatarURL"];
+        _clientId = [aDecoder decodeObjectForKey:@"clientId"];
+    }
+    return self;
+}
+
 @end

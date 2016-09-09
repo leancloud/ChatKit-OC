@@ -29,13 +29,6 @@
 #import "LCChatKitExample+Setting.h"
 #import "RedpacketConfig.h"
 
-//==================================================================================================================================
-// If you want to see the storage of this demo, log in public account of leancloud.cn, search for
-// the app named `ChatKit`.
-//======================================== username : leancloud@163.com , password : Public123
-//=====================================
-//==================================================================================================================================
-
 @interface LCChatKitExample ()
 
 @property (nonatomic, strong) NSMutableArray *photos;
@@ -123,12 +116,12 @@
         /*!
          *  当使用 https://github.com/leancloud/leanchat-cloudcode 云代码更改推送内容的时候
          {
-            aps =     {
-                alert = "lcckkit : sdfsdf";
-                badge = 4;
-                sound = default;
-            };
-            convid = 55bae86300b0efdcbe3e742e;
+         aps =     {
+         alert = "lcckkit : sdfsdf";
+         badge = 4;
+         sound = default;
+         };
+         convid = 55bae86300b0efdcbe3e742e;
          }
          */
         [[LCChatKit sharedInstance] didReceiveRemoteNotification:userInfo];
@@ -277,8 +270,8 @@
         title = [NSString stringWithFormat:@"打开自己的主页 \nClientId是 : %@", userId];
         subtitle = [NSString stringWithFormat:@"我自己的name是 : %@", user.name];
 
-    }
-    else if ([parentController isKindOfClass:[LCCKConversationViewController class]]) {
+    } else if ([parentController isKindOfClass:[LCCKConversationViewController class]]) {
+
         LCCKConversationViewController *conversationViewController_ =
         [[RedpacketDemoViewController alloc] initWithPeerId:user.clientId ?: userId];
         [[self class] lcck_pushToViewController:conversationViewController_];

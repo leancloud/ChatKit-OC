@@ -8,7 +8,6 @@
 #import "LCCKConstants.h"
 
 @protocol LCCKUserDelegate;
-@class LCCKMessageBody;
 
 @protocol LCCKMessageDelegate <NSObject, NSCopying, NSCoding>
 
@@ -36,11 +35,6 @@
  * 所属会话
  */
 @property (nonatomic, copy) NSString *conversationId;
-
-/*!
- * 消息内容
- */
-@property (nonatomic, strong, readonly) LCCKMessageBody *messageBody;
 
 /*!
  * 精确到毫秒，比如：1469413969460.018
