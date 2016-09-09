@@ -44,7 +44,8 @@
     [rpModel.redpacketMessageModelToDic enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
         [self setObject:obj forKey:key];
     }];
-    [self lcck_setObject:[NSString stringWithFormat:@"%@抢了你的红包",rpModel.redpacketReceiver.userNickname] forKey:LCCKCustomMessageTypeTitleKey];
+    NSString * nickName = rpModel.redpacketReceiver.userNickname?:rpModel.redpacketReceiver.userId;
+    [self lcck_setObject:[NSString stringWithFormat:@"%@抢了你的红包",nickName] forKey:LCCKCustomMessageTypeTitleKey];
 }
 
 - (RedpacketMessageModel *)rpModel{

@@ -68,7 +68,7 @@
     [super configureCellWithData:message];
     if ([message isKindOfClass:[AVIMTypedMessageRedPacketTaken class]]){
         _message = message;
-        RedpacketMessageModel * rpModel = [RedpacketMessageModel redpacketMessageModelWithDic:message.attributes];
+        RedpacketMessageModel * rpModel = message.rpModel;
         NSString *tip = @"[云红包]";
         
         if([rpModel.currentUser.userId isEqualToString:rpModel.redpacketSender.userId]) {

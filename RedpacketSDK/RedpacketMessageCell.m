@@ -109,9 +109,7 @@
     [super configureCellWithData:message];
     if ([message isKindOfClass:[AVIMTypedMessageRedPacket class]]) {
         _message = message;
-        NSDictionary * redpacketDictionary = message.attributes;
-        
-        RedpacketMessageModel *redpacketMessageModel = [RedpacketMessageModel redpacketMessageModelWithDic:redpacketDictionary];
+        RedpacketMessageModel *redpacketMessageModel = message.rpModel;
         NSString *messageString = redpacketMessageModel.redpacket.redpacketGreeting;
         self.greetingLabel.text = messageString;
         
