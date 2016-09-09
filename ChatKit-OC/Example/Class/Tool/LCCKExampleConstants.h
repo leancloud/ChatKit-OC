@@ -45,6 +45,7 @@
     @{ LCCKProfileKeyPeerId:@"Bob" },\
     @{ LCCKProfileKeyPeerId:@"RP1" },\
     @{ LCCKProfileKeyPeerId:@"RP" },\
+    @{ LCCKProfileKeyPeerId:@"5771e7656be3ff0063a0dada" },\
 ]
 
 #define LCCKTestPeerIds \

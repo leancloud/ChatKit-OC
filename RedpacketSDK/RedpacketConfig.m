@@ -103,12 +103,14 @@ static NSString *requestUrl = @"https://rpv2.yunzhanghu.com/api/sign?duid=";
 - (void)lcck_setting{
     LCCKFilterMessagesBlock filterMessagesBlock = [LCCKConversationService sharedInstance].filterMessagesBlock;
     [[LCCKConversationService sharedInstance] setFilterMessagesBlock:^(AVIMConversation *conversation, NSArray<AVIMTypedMessage *> *messages, LCCKFilterMessagesCompletionHandler completionHandler) {
-        NSMutableArray * messageArray = [NSMutableArray array];
+        NSMutableArray * messageArray = [messages mutableCopy];
         [messages enumerateObjectsUsingBlock:^(AVIMTypedMessage *  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-            [messageArray addObject:obj];
+            
             if ([obj isKindOfClass:[AVIMTypedMessageRedPacketTaken class]]) {
                 RedpacketMessageModel * rpModel = [RedpacketMessageModel redpacketMessageModelWithDic:obj.attributes];
-                if (rpModel.redpacketSender.userId != self.redpacketUserInfo.userId || rpModel.redpacketReceiver.userId != self.redpacketUserInfo.userId) {
+                if (![rpModel.redpacketSender.userId isEqualToString:self.redpacketUserInfo.userId] &&
+                    ![rpModel.redpacketReceiver.userId isEqualToString:self.redpacketUserInfo.userId] )
+                {
                     [messageArray removeObject:obj];
                 }
             }
