@@ -10,7 +10,8 @@
 #import <AVOSCloudIM/AVIMTypedMessage.h>
 #import "AVIMTypedMessage+LCCKExtension.h"
 #import "LCCKConstants.h"
+#import "RedpacketMessageModel.h"
 
 @interface AVIMTypedMessageRedPacket : AVIMTypedMessage<AVIMTypedMessageSubclassing>
-
+@property (nonatomic,strong)RedpacketMessageModel * rpModel;
 @end

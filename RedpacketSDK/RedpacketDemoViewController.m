@@ -101,7 +101,7 @@
 - (void)messageCellTappedMessage:(LCCKChatMessageCell *)messageCell{
     if ([messageCell.message isKindOfClass:[AVIMTypedMessageRedPacket class]]) {
         AVIMTypedMessageRedPacket * message = (AVIMTypedMessageRedPacket*)messageCell.message;
-        [self.redpacketControl redpacketCellTouchedWithMessageModel:[RedpacketMessageModel redpacketMessageModelWithDic:message.attributes]];
+        [self.redpacketControl redpacketCellTouchedWithMessageModel:message.rpModel];
         
     }else{
         [super messageCellTappedMessage:messageCell];
@@ -112,7 +112,7 @@
 - (void)sendRedpacketMessage:(RedpacketMessageModel *)redpacket
 {
     AVIMTypedMessageRedPacket * message = [[AVIMTypedMessageRedPacket alloc]init];
-    message.attributes = redpacket.redpacketMessageModelToDic;
+    message.rpModel = redpacket;
     [self.chatViewModel sendCustomMessage:message];
 }
 
@@ -131,12 +131,13 @@
             case RedpacketTypeAvg:
             case RedpacketTypeRandpri:{
                 AVIMTypedMessageRedPacketTaken * message = [[AVIMTypedMessageRedPacketTaken alloc]initWithClientId:self.clientId ConversationType:LCCKConversationTypeSingle receiveMembers:@[redpacket.redpacketSender.userId]];
-                message.attributes = redpacket.redpacketMessageModelToDic;
+                message.rpModel = redpacket;
                 [self.chatViewModel sendCustomMessage:message];
                 break;
             }
             case RedpacketTypeMember: {
                 AVIMTypedMessageRedPacketTaken * message = [[AVIMTypedMessageRedPacketTaken alloc]initWithClientId:self.clientId ConversationType:LCCKConversationTypeSingle receiveMembers:@[redpacket.toRedpacketReceiver.userId]];
+                message.rpModel = redpacket;
                 [self.chatViewModel sendCustomMessage:message];
                 break;
             }

@@ -9,6 +9,7 @@
 #import "AVIMTypedMessageRedPacketTaken.h"
 
 @implementation AVIMTypedMessageRedPacketTaken
+@synthesize rpModel = _rpModel;
 + (void)load{
     [self registerSubclass];
 }
@@ -38,17 +39,24 @@
     }
     return self;
 }
-- (void)setAttributes:(NSDictionary *)attributes{
-    [attributes enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
+- (void)setRpModel:(RedpacketMessageModel *)rpModel{
+    _rpModel = rpModel;
+    [rpModel.redpacketMessageModelToDic enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
         [self setObject:obj forKey:key];
     }];
+    [self lcck_setObject:[NSString stringWithFormat:@"%@抢了你的红包",rpModel.redpacketReceiver.userNickname] forKey:LCCKCustomMessageTypeTitleKey];
 }
-- (NSDictionary *)attributes{
-    
-    NSError * error;
-    NSDictionary * attributes = [NSJSONSerialization JSONObjectWithData:[self.payload dataUsingEncoding:NSUTF8StringEncoding] options:NSJSONReadingMutableLeaves error:&error];
-    if (!error) return attributes;
-    
-    return nil;
+
+- (RedpacketMessageModel *)rpModel{
+    if (!_rpModel) {
+        NSError * error;
+        NSDictionary * attributes = [NSJSONSerialization JSONObjectWithData:[self.payload dataUsingEncoding:NSUTF8StringEncoding] options:NSJSONReadingMutableLeaves error:&error];
+        if (!error) {
+            _rpModel = [RedpacketMessageModel redpacketMessageModelWithDic:attributes];
+        }else{
+            _rpModel = nil;
+        }
+    }
+    return _rpModel;
 }
 @end
