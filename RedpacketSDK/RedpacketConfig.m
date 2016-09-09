@@ -118,6 +118,8 @@ static NSString *requestUrl = @"https://rpv2.yunzhanghu.com/api/sign?duid=";
         
         if (filterMessagesBlock) {
             filterMessagesBlock(conversation,messageArray,completionHandler);
+        }else{
+            completionHandler([messageArray copy], nil);
         }
     }];
 
