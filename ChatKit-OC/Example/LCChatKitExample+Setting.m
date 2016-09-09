@@ -8,7 +8,7 @@
 #import "LCCKTabBarControllerConfig.h"
 #import "LCCKUser.h"
 #import "LCCKUtil.h"
-#if __has_include(<ChatKit / LCChatKit.h>)
+#if __has_include(<ChatKit/LCChatKit.h>)
 #import <ChatKit/LCChatKit.h>
 #else
 #import "LCChatKit.h"

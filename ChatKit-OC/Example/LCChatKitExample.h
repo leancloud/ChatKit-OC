@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#if __has_include(<ChatKit / LCChatKit.h>)
+#if __has_include(<ChatKit/LCChatKit.h>)
 #import <ChatKit/LCChatKit.h>
 #else
 #import "LCChatKit.h"
