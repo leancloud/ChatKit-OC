@@ -2,9 +2,10 @@
 //  LCChatKitExample.m
 //  LeanCloudChatKit-iOS
 //
-//  v0.7.10 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/2/24.
+//  v0.7.15 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/2/24.
 //  Copyright © 2016年 LeanCloud. All rights reserved.
 //
+
 #import "LCCKTabBarControllerConfig.h"
 #import "LCCKUser.h"
 #import "LCCKUtil.h"
@@ -12,7 +13,7 @@
 
 #import "NSObject+LCCKHUD.h"
 #import <objc/runtime.h>
-#if __has_include(<ChatKit / LCChatKit.h>)
+#if __has_include(<ChatKit/LCChatKit.h>)
 #import <ChatKit/LCChatKit.h>
 #else
 #import "LCChatKit.h"

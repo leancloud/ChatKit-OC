@@ -2,7 +2,7 @@
 //  LCCKMessageSendStateView.h
 //  LCCKChatBarExample
 //
-//  v0.7.10 Created by ElonChan (微信向我报BUG:chenyilong1010) ( https://github.com/leancloud/ChatKit-OC ) on 15/11/23.
+//  v0.7.15 Created by ElonChan (微信向我报BUG:chenyilong1010) ( https://github.com/leancloud/ChatKit-OC ) on 15/11/23.
 //  Copyright © 2015年 https://LeanCloud.cn . All rights reserved.
 //
 

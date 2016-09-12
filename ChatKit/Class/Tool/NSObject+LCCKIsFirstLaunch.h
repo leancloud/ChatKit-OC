@@ -2,7 +2,7 @@
 //  NSObject+IsFirstLaunch.h
 //  ElonChan (微信向我报BUG:chenyilong1010)
 //
-//  v0.7.10 Created by chenyilong on 15/6/15.
+//  v0.7.15 Created by chenyilong on 15/6/15.
 //  Copyright © 2015年 ElonChan (微信向我报BUG:chenyilong1010). All rights reserved.
 //
 
