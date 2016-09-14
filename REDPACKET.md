@@ -43,24 +43,21 @@
     执行`红包 SDK` 的信息注册
 
     如对注册信息有其他要求,请自行参考`RedpacketConfig`实现和`YZHRedpacketBridge`所提供API```
-5.demo提供两个Plugin.对应零钱和发红包。如要修改零钱页面入口请查看`RedPacketChangeInputViewPlugin`类
+
+5.demo提供两个Plugin.对应零钱`RedPacketChangeInputViewPlugin`和发红包`RedPacketInputViewPlugin`。如要修改零钱页面入口请查看`RedPacketChangeInputViewPlugin`类
+
 6.在聊天对话中添加红包支持
 
-    1) 添加类支持
-    将会话详情入口`LCCKConversationViewController`
-    替换为Redpacket`DemoViewController`
-    
+    1）发送红包事件参考`RedPacketInputViewPlugin`插件
     2) 添加红包功能
-    查看 `RedpacketDemoViewController.m` 的 源代码注释了解红包功能的。
+    查看 `RedPacketInputViewPlugin.m` 的 源代码注释了解红包功能的。
     添加的部分包括：
 
-       (1) 注册消息显示 Cell
-       (2) 设置红包插件界面
-       (3) 设置红包功能相关的参数
-       (4) 设置红包接收用户信息
-       (5) 设置红包 SDK 功能回调
-
-
+       (1) 设置红包插件界面
+       (2) 设置红包功能相关的参数
+       (3) 设置红包接收用户信息
+       (4) 设置红包 SDK 功能回调
+  
 
 IM在使用中有任何问题都可以到[我们的官方论坛](https://forum.leancloud.cn/c/jing-xuan-faq)提问题，会有专业工程师回复，平均响应时间在24小时内。
-红包在使用中有任何问题可以添加官方开发QQ472624215.进行咨询.
+红包在使用中有任何问题可以添加官方开发QQ472624215.进行咨询.平均响应时间在24小时内。
