@@ -2,7 +2,7 @@
 //  LCCKInputViewPlugin.h
 //  Pods
 //
-// v0.5.1 Created by 陈宜龙 on 16/7/19.
+//  v0.7.15 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/7/19.
 //
 //
 
@@ -13,7 +13,7 @@
 
 #import "LCCKConstants.h"
 
-@protocol LCCKInputViewPluginSubclassing <NSObject>
+@protocol LCCKInputViewPluginSubclassing <NSObject>
 @required
 
 /*!
@@ -49,6 +49,9 @@
 
 @property (nonatomic, weak) id<LCCKInputViewPluginDelegate> delegate;
 
+/*!
+ * 发送自定消息的实现
+ */
 @property (nonatomic, copy) LCCKIdResultBlock sendCustomMessageHandler;
 
 /*!
@@ -66,7 +69,7 @@
 @property (nonatomic, readonly) LCCKInputViewPluginType pluginType;
 @property (nonatomic, readonly) LCCKConversationViewController *conversationViewController;
 
-- (instancetype)fillWithPluginTitle:(NSString *)pluginTitle
+- (void)fillWithPluginTitle:(NSString *)pluginTitle
                     pluginIconImage:(UIImage *)pluginIconImage;
 
 + (void)registerSubclass;

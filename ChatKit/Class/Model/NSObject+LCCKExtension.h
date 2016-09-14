@@ -2,7 +2,7 @@
 //  NSObject+LCCKExtension.h
 //  Pods
 //
-// v0.5.1 Created by 陈宜龙 on 16/8/10.
+//  v0.7.15 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/8/10.
 //
 //
 
@@ -27,5 +27,7 @@ typedef void (^LCCKShouldDisplayTimestampCallBack)(BOOL shouldDisplayTimestamp, 
  * 是否显示时间轴Label
  */
 - (void)lcck_shouldDisplayTimestampForMessages:(NSArray *)messages callback:(LCCKShouldDisplayTimestampCallBack)callback;
+
+- (NSDictionary *)lcck_JSONValue;
 
 @end

@@ -2,42 +2,37 @@
 //  LCChatKit_Internal.h
 //  LeanCloudChatKit-iOS
 //
-// v0.5.1 Created by 陈宜龙 on 16/3/9.
-//  Copyright © 2016年 ElonChan. All rights reserved.
+//  v0.7.15 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/3/9.
+//  Copyright © 2016年 LeanCloud. All rights reserved.
 //
 
 #import "LCCKSingleton.h"
 
-// Dictionary that holds all instances of LCCKSingleton subclasses
-static NSMutableDictionary *_sharedInstances = nil;
+NSMutableDictionary const *_sharedInstances = nil;
 
 @implementation LCCKSingleton
 
 #pragma mark -
 
-+ (void)initialize
-{
++ (void)initialize {
 	if (_sharedInstances == nil) {
 		_sharedInstances = [NSMutableDictionary dictionary];
 	}
 }
 
-+ (id)allocWithZone:(NSZone *)zone
-{
++ (id)allocWithZone:(NSZone *)zone {
 	// Not allow allocating memory in a different zone
 	return [self sharedInstance];
 }
 
-+ (id)copyWithZone:(NSZone *)zone
-{
++ (id)copyWithZone:(NSZone *)zone {
 	// Not allow copying to a different zone
 	return [self sharedInstance];
 }
 
 #pragma mark -
 
-+ (instancetype)sharedInstance
-{
++ (instancetype)sharedInstance {
 	id sharedInstance = nil;
 	@synchronized(self) {
 		NSString *instanceClass = NSStringFromClass(self);
@@ -55,22 +50,23 @@ static NSMutableDictionary *_sharedInstances = nil;
 	return sharedInstance;
 }
 
-+ (instancetype)instance
-{
++ (instancetype)instance {
 	return [self sharedInstance];
 }
 
 #pragma mark -
 
-+ (void)destroyInstance
-{
++ (void)destroyInstance {
 	[_sharedInstances removeObjectForKey:NSStringFromClass(self)];
+}
+
++ (void)destroyAllInstance {
+    [_sharedInstances removeAllObjects];
 }
 
 #pragma mark -
 
-- (id)init
-{
+- (id)init {
 	self = [super init];
 	
 	if (self && !self.isInitialized) {

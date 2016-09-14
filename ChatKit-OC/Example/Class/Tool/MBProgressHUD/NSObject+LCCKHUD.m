@@ -2,14 +2,13 @@
 //  MBProgressHUD+LCCKHUD.m
 //  UberHackathon
 //
-// v0.5.1 Created by 陈宜龙 on 16/1/16.
+//  v0.7.15 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/1/16.
 //  Copyright © 2016年 微博@iOS程序犭袁. All rights reserved.
 //
 
 #import "NSObject+LCCKHUD.h"
 
-// 正常是2秒
-static CGFloat const kTime = 2.0f;
+static CGFloat const kTime = 20;
 static CGFloat const kSuccessMessageTime = 0.3f;
 static CGFloat const kFailureMessageTime = 0.3f;
 

@@ -1,15 +1,38 @@
-# ChatKit 使用指南 · iOS
+# ChatKit 快速入门 · iOS
 
 <p align="center">
-![enter image description here](https://img.shields.io/badge/pod-v0.5.0-brightgreen.svg)  ![enter image description here](https://img.shields.io/badge/platform-iOS%207.0%2B-ff69b5618733984.svg) 
-<a href="https://github.com/leancloud/ChatKit-OC/blob/master/LICENSE"><img src="https://img.shields.io/badge/license-MIT-green.svg?style=flat"></a>
+![enter image description here](https://img.shields.io/badge/pod-v0.7.13-brightgreen.svg)  ![enter image description here](https://img.shields.io/badge/platform-iOS%207.0%2B-ff69b5618733984.svg) 
+<a href="https://github.com/leancloud/ChatKit-OC/blob/master/LICENSE"><img src="https://img.shields.io/badge/license-MIT-green.svg?style=flat"></a>[ CocoaPods-Doc](http://cocoapods.org/pods/ChatKit) 
 </a>
 
-在使用中有任何问题都可以到[我们的官方论坛](https://forum.leancloud.cn/c/jing-xuan-faq)提问题，会有专业工程师回复，平均响应时间在24小时内。
+在使用中有任何问题都可以提 issue，同时也欢迎提 PR。
+
+该篇为快速入门，更多自定义需求请前往这里：
+
+ 1.  [《ChatKit 自定义样式》]( https://github.com/leancloud/ChatKit-OC/blob/master/ChatKit%20自定义样式.md )
+ 2. [《ChatKit 自定义业务》]( https://github.com/leancloud/ChatKit-OC/blob/master/ChatKit%20自定义业务.md) 
+
+
+
+##  导航
+ 
+ 1. [简介](https://github.com/leancloud/ChatKit-OC#简介) 
+ 2. [获取项目](https://github.com/leancloud/ChatKit-OC#获取项目) 
+ 2. [集成效果](https://github.com/leancloud/ChatKit-OC#集成效果) 
+ 3. [项目结构](https://github.com/leancloud/ChatKit-OC#项目结构) 
+ 4. [使用方法](https://github.com/leancloud/ChatKit-OC#使用方法) 
+      1. [CocoaPods 导入](https://github.com/leancloud/ChatKit-OC#cocoapods-导入) 
+      2. [胶水函数快速集成](https://github.com/leancloud/ChatKit-OC#胶水函数快速集成) 
+      3. [最近联系人界面](https://github.com/leancloud/ChatKit-OC#最近联系人界面) 
+      4. [由最近联系人进入聊天界面](https://github.com/leancloud/ChatKit-OC#由最近联系人进入聊天界面) 
+      4. [聊天界面](https://github.com/leancloud/ChatKit-OC#聊天界面) 
+      5. [响应聊天界面的几类操作](https://github.com/leancloud/ChatKit-OC#响应聊天界面的几类操作) 
+      5. [手动集成](https://github.com/leancloud/ChatKit-OC#手动集成) 
+ 8. [常见问题](https://github.com/leancloud/ChatKit-OC#常见问题) 
 
 ## 简介
 
-[ChatKit](https://github.com/leancloud/ChatKit-OC) 是一个免费且开源的 UI 聊天组件，由 LeanCloud 官方推出，底层聊天服务基于 LeanCloud 的 IM 实时通信服务「LeanMessage」而开发。它可以帮助开发者快速集成 IM 服务，轻松实现聊天功能，提供完全自由的授权协议，支持二次开发。其最大特点是把聊天常用的一些功能配合 UI 一起提供给开发者。
+[ChatKit](https://github.com/leancloud/ChatKit-OC) 是一个免费且开源的 UI 聊天组件，自带云服务器，自带推送，支持消息漫游，消息永久存储。底层聊天服务基于 [LeanCloud（原名 `AVOS` ）](https://leancloud.cn/?source=T6M35E4H) 的 IM 实时通信服务「LeanMessage」而开发，采用 Protobuf 协议进行消息传输。ChatKit 可以帮助开发者快速集成 IM 服务，轻松实现聊天功能，提供完全自由的授权协议，支持二次开发。其最大特点是把聊天常用的一些功能配合 UI 一起提供给开发者。
 
 ## 获取项目 
 
@@ -35,6 +58,15 @@ git clone --depth=1 https://github.com/leancloud/ChatKit-OC
 
 我们在 ChatKit 中重点完成了这两个页面的开发，大家可以看看效果：
 
+![enter image description here](http://ww3.sinaimg.cn/large/64dfd849jw1f77b0oxnfqg20nl0l77wk.gif)
+
+![enter image description here](http://ww1.sinaimg.cn/large/64dfd849jw1f77b510x7dg20nl0l74r6.gif)
+
+![enter image description here](http://ww2.sinaimg.cn/mw690/64dfd849jw1f77b3wfkuyg20br0krqve.gif)
+
+![enter image description here](http://ww1.sinaimg.cn/mw690/64dfd849jw1f77azzgfmmg20bl0kl1ky.gif) 
+
+
 最近联系人 | 语音消息，根据语音长度调整宽度 | 图片消息，尺寸自适应 
 -------------|-------------|-------------|-------------
 ![enter image description here](http://i63.tinypic.com/1zxqjns.jpg)|![enter image description here](http://i68.tinypic.com/2rx9sfq.jpg)  | ![enter image description here](http://i64.tinypic.com/aw87wl.jpg) 
@@ -43,9 +75,9 @@ git clone --depth=1 https://github.com/leancloud/ChatKit-OC
  -------------|-------------|-------------
 ![enter image description here](http://i65.tinypic.com/2vmuaf4.jpg) | ![enter image description here](http://i68.tinypic.com/n6b29v.jpg)| ![enter image description here](http://i66.tinypic.com/orrrxh.jpg)
 
-图片消息支持多图联播，支持多种分享 |文本消息支持图文混排| 文本消息支持双击全屏展示 | 健壮的输入框
--------------|-------------|-------------|----
-![enter image description here](http://i65.tinypic.com/wmjuvs.jpg) | ![enter image description here](http://i63.tinypic.com/2eoa4j6.jpg) | ![enter image description here](http://i63.tinypic.com/1z1z5ur.jpg) | ![enter image description here](http://image18-c.poco.cn/mypoco/myphoto/20160805/13/17338872420160805133757084.gif?408x758_110) 
+图片消息支持多图联播，支持多种分享 |文本消息支持图文混排| 文本消息支持双击全屏展示 
+-------------|-------------|------------
+![enter image description here](http://i65.tinypic.com/wmjuvs.jpg) | ![enter image description here](http://i63.tinypic.com/2eoa4j6.jpg) | ![enter image description here](http://i63.tinypic.com/1z1z5ur.jpg)
 
 ## 项目结构
 
@@ -104,7 +136,8 @@ git clone --depth=1 https://github.com/leancloud/ChatKit-OC
 
  使用 ChatKit 大体有几个步骤：
 
- 1. 在 `-[AppDelegate application:didFinishLaunchingWithOptions:]` 中调用 `-[LCChatKit setAppId:appKey:]` 来开启 LeanCloud 服务。
+ 1. 在 `-[AppDelegate application:didFinishLaunchingWithOptions:]` 中调用 `-[LCChatKit setAppId:appKey:]` 来开启 LeanCloud 服务。需要到
+ [LeanCloud（原名 `AVOS` ）](https://leancloud.cn/?source=T6M35E4H) 申请一个 AppId 和一个 AppKey，可以在控制台里创建应用，替换 Demo 中的 AppId 和 AppKey。
  2. 调用 `-[LCChatKit sharedInstance]` 来初始化一个单例对象。
  3. 调用 `-[[LCChatKit sharedInstance] openWithClientId:callback:]` 开启 LeanCloud 的 IM 服务 LeanMessage，开始聊天。
  4. 调用 `-[[LCChatKit sharedInstance] closeWithCallback:]` 关闭 LeanCloud 的 IM 服务，结束聊天。
@@ -270,7 +303,7 @@ LCCKConversationViewController *conversationViewController = [[LCCKConversationV
 
 这里注意，通过 `peerId` 初始化，内部实现时，如果没有一个 unique 对话刚好包含这两个成员，则会先创建一个 unique 对话，所以调用该方法时可能会导致 _Conversation 表中自动增加一条记录。同理，通过 `conversationId` 初始化群聊，内部实现时，如果不是对话成员会先把当前用户加入对话，并开启群聊。
 
-#### 响应聊天界面的几类操作
+### 响应聊天界面的几类操作
 
 由于有了 ChatKit 的帮助，聊天界面的初始化和展示非常简单，但是这里面交互上还有很多地方需要自定义扩展。
 
@@ -312,14 +345,12 @@ typedef NS_ENUM(NSInteger, LCCKBarButtonItemStyle) {
 示例代码如下：
 
 ```objective-c
-[conversationController configureBarButtonItemStyle:LCCKBarButtonItemStyleGroupProfile action:^{
+[conversationController configureBarButtonItemStyle:LCCKBarButtonItemStyleGroupProfile action:^(UIBarButtonItem *sender, UIEvent *event) {
     ConversationDetailViewController *detailVC = [[ConversationDetailViewController alloc] init];// 自己实现的对话详情页
     detailVC.conversation = conversation;
     [conversationController.navigationController pushViewController:detailVC animated:YES];
 }];
 ```
-
-
 
 ### 手动集成
 
@@ -341,11 +372,12 @@ typedef NS_ENUM(NSInteger, LCCKBarButtonItemStyle) {
 - [FMDB](https://github.com/ccgus/fmdb) 2.6.2 
 - [UITableView+FDTemplateLayoutCell](https://github.com/forkingdog/UITableView-FDTemplateLayoutCell) 1.5.beta
 
+具体以  [这里](https://github.com/leancloud/ChatKit-OC/blob/master/ChatKit.podspec) 为准。
 
 ## 常见问题
 
 **ChatKit 组件收费么？**<br/>
-ChatKit 是完全开源并且免费给开发者使用，使用聊天所产生的费用以账单为准。
+ChatKit 是完全开源并且免费给开发者使用，使用聊天所产生的费用以 [这里](https://leancloud.cn/pricing.html) 为准。
 
 **接入 ChatKit 有什么好处？**<br/>
 它可以减轻应用或者新功能研发初期的调研成本，直接引入使用即可。ChatKit 从底层到 UI 提供了一整套的聊天解决方案。

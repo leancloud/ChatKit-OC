@@ -26,7 +26,7 @@
 }
 
 - (UIImage *)activityImage {
-    return [UIImage lcck_imageNamed:@"safari-icon" bundleName:@"Common" bundleForClass:[self class]];
+    return [UIImage lcck_imageNamed:@"safari-icon" bundleName:@"Other" bundleForClass:[self class]];
 }
 
 - (BOOL)canPerformWithActivityItems:(NSArray *)activityItems {

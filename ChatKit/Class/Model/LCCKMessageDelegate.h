@@ -2,13 +2,12 @@
 //  LCCKMessageDelegate.h
 //  Pods
 //
-// v0.5.1 Created by 陈宜龙 on 16/7/26.
+//  v0.7.15 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/7/26.
 //
 //
 #import "LCCKConstants.h"
 
 @protocol LCCKUserDelegate;
-@class LCCKMessageBody;
 
 @protocol LCCKMessageDelegate <NSObject, NSCopying, NSCoding>
 
@@ -36,11 +35,6 @@
  * 所属会话
  */
 @property (nonatomic, copy) NSString *conversationId;
-
-/*!
- * 消息内容
- */
-@property (nonatomic, strong, readonly) LCCKMessageBody *messageBody;
 
 /*!
  * 精确到毫秒，比如：1469413969460.018

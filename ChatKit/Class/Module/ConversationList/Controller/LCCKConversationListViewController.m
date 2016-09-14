@@ -2,7 +2,7 @@
 //  LCCKConversationListViewController.m
 //  LeanCloudChatKit-iOS
 //
-//  Created by ElonChan on 16/2/22.
+//  v0.7.15 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/2/22.
 //  Copyright © 2016年 LeanCloud. All rights reserved.
 //
 
@@ -11,7 +11,6 @@
 #import "LCCKSessionService.h"
 #import "LCCKConversationService.h"
 #import "LCCKConversationListViewModel.h"
-#import "LCChatKit.h"
 
 #if __has_include(<MJRefresh/MJRefresh.h>)
     #import <MJRefresh/MJRefresh.h>
@@ -48,28 +47,44 @@
             [weakSelf.conversationListViewModel refresh];
             // 设置颜色
         }];
-        header.stateLabel.textColor = [UIColor grayColor];
-        header.lastUpdatedTimeLabel.textColor = [UIColor grayColor];
+        header.stateLabel.textColor = [[LCCKSettingService sharedInstance] defaultThemeColorForKey:@"TableView-PullRefresh-TextColor"];
+        header.lastUpdatedTimeLabel.textColor = [[LCCKSettingService sharedInstance] defaultThemeColorForKey:@"TableView-PullRefresh-TextColor"];
+        header.backgroundColor = [[LCCKSettingService sharedInstance] defaultThemeColorForKey:@"TableView-PullRefresh-BackgroundColor"];
         header;
     });
+    self.tableView.backgroundColor = [[LCCKSettingService sharedInstance] defaultThemeColorForKey:@"TableView-BackgroundColor"];
     [self.tableView.mj_header beginRefreshing];
     self.tableView.separatorInset = UIEdgeInsetsMake(0, 0, 0, 0);
+    !self.viewDidLoadBlock ?: self.viewDidLoadBlock(self);
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    !self.viewWillAppearBlock ?: self.viewWillAppearBlock(self, animated);
 }
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
+    !self.viewDidAppearBlock ?: self.viewDidAppearBlock(self, animated);
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
+    !self.viewWillDisappearBlock ?: self.viewWillDisappearBlock(self, animated);
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
+    !self.viewDidDisappearBlock ?: self.viewDidDisappearBlock(self, animated);
+}
+
+- (void)dealloc {
+    !self.viewControllerWillDeallocBlock ?: self.viewControllerWillDeallocBlock(self);
+}
+
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    !self.didReceiveMemoryWarningBlock ?: self.didReceiveMemoryWarningBlock(self);
 }
 
 #pragma mark -
@@ -102,6 +117,9 @@
 }
 
 - (void)updateStatusView {
+    if (!self.shouldCheckSessionStatus) {
+        return;
+    }
     BOOL isConnected = [LCCKSessionService sharedInstance].connect;
     if (isConnected) {
         self.tableView.tableHeaderView = nil ;

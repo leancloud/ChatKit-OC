@@ -2,14 +2,18 @@
 //  LCCKFaceManager.m
 //  LCCKChatBarExample
 //
-//  Created by ElonChan ( https://github.com/leancloud/ChatKit-OC ) on 15/8/25.
+//  v0.7.15 Created by ElonChan (微信向我报BUG:chenyilong1010) ( https://github.com/leancloud/ChatKit-OC ) on 15/8/25.
 //  Copyright (c) 2015年 https://LeanCloud.cn . All rights reserved.
 //
 
 #import "LCCKFaceManager.h"
 #import "UIImage+LCCKExtension.h"
 #import "LCCKConstants.h"
+#if __has_include(<ChatKit/LCChatKit.h>)
 #import <ChatKit/LCChatKit.h>
+#else
+#import "LCChatKit.h"
+#endif
 
 @interface LCCKFaceManager ()
 
@@ -57,7 +61,7 @@
 }
 
 + (NSString *)defaultEmojiFacePath {
-    NSBundle *bundle = [NSBundle lcck_bundleForbundleName:@"Emoji" class:[self class]];
+    NSBundle *bundle = [NSBundle lcck_bundleForName:@"Emoji" class:[self class]];
     NSString *defaultEmojiFacePath = [bundle pathForResource:@"face" ofType:@"plist"];
     return defaultEmojiFacePath;
 }

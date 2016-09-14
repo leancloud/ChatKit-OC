@@ -2,7 +2,7 @@
 //  LCCKAVAudioPlayer.m
 //  LCCKChatExample
 //
-//  Created by ElonChan ( https://github.com/leancloud/ChatKit-OC ) on 15/11/18.
+//  v0.7.15 Created by ElonChan (微信向我报BUG:chenyilong1010) ( https://github.com/leancloud/ChatKit-OC ) on 15/11/18.
 //  Copyright © 2015年 https://LeanCloud.cn . All rights reserved.
 //
 
@@ -257,9 +257,6 @@ NSString *const kLCCKAudioDataKey;
 
 - (void)setAudioPlayerState:(LCCKVoiceMessageState)audioPlayerState {
     _audioPlayerState = audioPlayerState;
-    if (self.delegate && [self.delegate respondsToSelector:@selector(audioPlayerStateDidChanged:identifier:)]) {
-        [self.delegate audioPlayerStateDidChanged:_audioPlayerState identifier:self.identifier];
-    }
     if (_audioPlayerState == LCCKVoiceMessageStateCancel || _audioPlayerState == LCCKVoiceMessageStateNormal) {
         _URLString = nil;
         _identifier = nil;

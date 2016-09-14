@@ -2,7 +2,7 @@
 //  LCCKConstants.h
 //  LeanCloudChatKit-iOS
 //
-//  Created by ElonChan on 16/2/19.
+//  v0.7.15 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/2/19.
 //  Copyright © 2016年 LeanCloud. All rights reserved.
 //  Common typdef and constants, and so on.
 
@@ -28,6 +28,9 @@ typedef void (^LCCKArrayResultBlock)(NSArray *objects, NSError *error);
 typedef void (^LCCKSetResultBlock)(NSSet *channels, NSError *error);
 typedef void (^LCCKDataResultBlock)(NSData *data, NSError *error);
 typedef void (^LCCKIdResultBlock)(id object, NSError *error);
+typedef void (^LCCKIdBoolResultBlock)(BOOL succeeded, id object, NSError *error);
+typedef void (^LCCKRequestAuthorizationBoolResultBlock)(BOOL granted, NSError *error);
+
 //Callback with Function object
 typedef void (^LCCKVoidBlock)(void);
 typedef void (^LCCKErrorBlock)(NSError *error);
@@ -39,11 +42,13 @@ typedef void (^LCCKProgressBlock)(NSInteger percentDone);
 /// @name Common Define
 ///=============================================================================
 
+static NSString *const LCCKBadgeTextForNumberGreaterThanLimit = @"···";
+
 #define LCCK_DEPRECATED(explain) __attribute__((deprecated(explain)))
 
 #ifndef LCCKLocalizedStrings
 #define LCCKLocalizedStrings(key) \
-    NSLocalizedStringFromTableInBundle(key, @"LCChatKitString", [NSBundle bundleWithPath:[[[NSBundle bundleForClass:[LCChatKit class]] resourcePath] stringByAppendingPathComponent:@"Common.bundle"]], nil)
+    NSLocalizedStringFromTableInBundle(key, @"LCChatKitString", [NSBundle bundleWithPath:[[[NSBundle bundleForClass:[LCChatKit class]] resourcePath] stringByAppendingPathComponent:@"Other.bundle"]], nil)
 #endif
 
 
@@ -72,6 +77,8 @@ static NSString *const LCCKNotificationMessageReceived = @"LCCKNotificationMessa
  */
 static NSString *const LCCKNotificationCustomMessageReceived = @"LCCKNotificationCustomMessageReceived";
 
+static NSString *const LCCKNotificationCustomTransientMessageReceived = @"LCCKNotificationCustomTransientMessageReceived";
+
 /**
  *  消息到达对方了，通知聊天页面更改消息状态
  */
@@ -91,8 +98,24 @@ static NSString *const LCCKNotificationConnectivityUpdated = @"LCCKNotificationC
  * 会话失效，如当群被解散或当前用户不再属于该会话时，对应会话会失效应当被删除并且关闭聊天窗口
  */
 static NSString *const LCCKNotificationCurrentConversationInvalided = @"LCCKNotificationCurrentConversationInvalided";
+
+/**
+ * 对话聊天背景切换
+ */
+static NSString *const LCCKNotificationConversationViewControllerBackgroundImageDidChanged = @"LCCKNotificationConversationViewControllerBackgroundImageDidChanged";
+
+static NSString *const LCCKNotificationConversationViewControllerBackgroundImageDidChangedUserInfoConversationIdKey = @"LCCKNotificationConversationViewControllerBackgroundImageDidChangedUserInfoConversationIdKey";
+
+
 static NSString *const LCCKNotificationConversationInvalided = @"LCCKNotificationConversationInvalided";
 static NSString *const LCCKNotificationConversationListDataSourceUpdated = @"LCCKNotificationConversationListDataSourceUpdated";
+static NSString *const LCCKNotificationContactListDataSourceUpdated = @"LCCKNotificationContactListDataSourceUpdated";
+
+static NSString *const LCCKNotificationContactListDataSourceUpdatedUserInfoDataSourceKey = @"LCCKNotificationContactListDataSourceUpdatedUserInfoDataSourceKey";
+
+static NSString *const LCCKNotificationContactListDataSourceUserIdType = @"LCCKNotificationContactListDataSourceUserIdType";
+static NSString *const LCCKNotificationContactListDataSourceContactObjType = @"LCCKNotificationContactListDataSourceContactObjType";
+static NSString *const LCCKNotificationContactListDataSourceUpdatedUserInfoDataSourceTypeKey = @"LCCKNotificationContactListDataSourceUpdatedUserInfoDataSourceTypeKey";
 
 #pragma mark - Conversation Enum : Message Type and operation
 ///=============================================================================
@@ -116,21 +139,6 @@ typedef NS_ENUM(NSUInteger, LCCKMessageOwnerType){
     LCCKMessageOwnerTypeSelf /**< 自己发送的消息 */,
     LCCKMessageOwnerTypeOther /**< 接收到的他人消息 */,
 };
-
-//TODO: to delete
-/**
- *  消息类型
- */
-//typedef NS_ENUM(NSUInteger, LCCKMessageType){
-//    kAVIMMessageMediaTypeNone = 0, /**< 未知的消息类型 */
-//    kAVIMMessageMediaTypeText = -1, /**< 文本消息 */
-//    kAVIMMessageMediaTypeImage = -2, /**< 图片消息 */
-//    kAVIMMessageMediaTypeAudio = -3, /**< 语音消息 */
-//    kAVIMMessageMediaTypeVideo = -4, /**< 视频文件消息 */
-//    kAVIMMessageMediaTypeLocation = -5, /**< 地理位置消息 */
-//    LCCKMessageTypeFile = -6, /**< 文件消息 */
-//    kAVIMMessageMediaTypeSystem = -7 /**< 系统消息 */,
-//};
 
 static AVIMMessageMediaType const kAVIMMessageMediaTypeSystem = -7;
 
@@ -176,6 +184,10 @@ static NSInteger const kLCCKOnePageSize = 10;
 static NSString *const LCCK_CONVERSATION_TYPE = @"type";
 static NSString *const LCCKInstallationKeyChannels = @"channels";
 
+static NSString *const LCCKDidReceiveMessagesUserInfoConversationKey = @"conversation";
+static NSString *const LCCKDidReceiveMessagesUserInfoMessagesKey = @"receivedMessages";
+static NSString *const LCCKDidReceiveCustomMessageUserInfoMessageKey = @"receivedCustomMessage";
+
 #define LCCK_CURRENT_TIMESTAMP ([[NSDate date] timeIntervalSince1970] * 1000)
 #define LCCK_FUTURE_TIMESTAMP ([[NSDate distantFuture] timeIntervalSince1970] * 1000)
 //整数或小数
@@ -200,6 +212,17 @@ static NSString *const LCCKCustomMessageTypeTitleKey = @"typeTitle";
  * 用来显示在push提示中。
  */
 static NSString *const LCCKCustomMessageSummaryKey = @"summary";
+
+static NSString *const LCCKCustomMessageIsCustomKey = @"isCustom";
+static NSString *const LCCKCustomMessageOnlyVisiableForPartClientIds = @"OnlyVisiableForPartClientIds";
+
+/*!
+ * 对话类型，用来展示在推送提示中，以达到这样的效果： [群消息]Tom：hello gays!
+ * 以枚举 LCCKConversationType 定义为准，0为单聊，1为群聊
+ */
+static NSString *const LCCKCustomMessageConversationTypeKey = @"conversationType";
+
+#define LCCKConversationGroupAvatarURLKey (LCCKLocalizedStrings(@"ConversationAvatarURLKey") ?: @"avatarURL")
 
 #pragma mark - Custom Message Cell
 ///=============================================================================
@@ -252,7 +275,9 @@ typedef NS_ENUM(NSUInteger, LCCKInputViewPluginType) {
 ///=============================================================================
 /// @name 自定义UI行为
 ///=============================================================================
-
+static NSString *const LCCKCustomConversationViewControllerBackgroundImageNamePrefix = @"CONVERSATION_BACKGROUND_";
+static NSString *const LCCKDefaultConversationViewControllerBackgroundImageName = @"CONVERSATION_BACKGROUND_ALL";
+    
 static CGFloat const LCCKAnimateDuration = .25f;
 
 #define LCCKMessageCellLimit ([UIApplication sharedApplication].keyWindow.frame.size.width/5*3)
@@ -363,8 +388,15 @@ typedef NS_ENUM(NSInteger, LCCKBubbleMessageMenuSelectedType) {
 #define LCCKConversationTableIncreaseUnreadCountSQL              \
     @"UPDATE " LCCKConversationTableName         @" "            \
     @"SET " LCCKConversationTableKeyUnreadCount  @" = "          \
+            LCCKConversationTableKeyUnreadCount  @" + ?"        \
+    LCCKConversationTableWhereClause
+
+#define LCCKConversationTableIncreaseOneUnreadCountSQL              \
+    @"UPDATE " LCCKConversationTableName         @" "            \
+    @"SET " LCCKConversationTableKeyUnreadCount  @" = "          \
             LCCKConversationTableKeyUnreadCount  @" + 1 "        \
     LCCKConversationTableWhereClause
+
 
 #define LCCKConversationTableUpdateUnreadCountSQL                \
     @"UPDATE " LCCKConversationTableName         @" "            \

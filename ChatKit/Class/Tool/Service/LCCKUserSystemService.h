@@ -2,7 +2,7 @@
 //  LCCKUserSystemService.h
 //  LeanCloudChatKit-iOS
 //
-//  Created by ElonChan on 16/2/22.
+//  v0.7.15 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/2/22.
 //  Copyright © 2016年 LeanCloud. All rights reserved.
 //  Service for User-System.
 
@@ -67,14 +67,5 @@ FOUNDATION_EXTERN NSString *const LCCKUserSystemServiceErrorDomain;
 - (void)cacheUsersWithIds:(NSSet<id<LCCKUserDelegate>> *)userIds callback:(LCCKBooleanResultBlock)callback;
 
 - (void)cacheUsers:(NSArray<id<LCCKUserDelegate>> *)users;
-
-/**
- *  清除对指定 person 的 profile 缓存
- *
- *  @param person 用户对象
- */
-- (void)removeCachedProfileForPeerId:(NSString *)peerId;
-
-- (void)removeAllCachedProfiles;
 
 @end

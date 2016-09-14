@@ -1,0 +1,70 @@
+//  LCChatKitString.strings
+//  LeanCloudChatKit-iOS
+//
+//  v0.7.15 Created by ElonChan (wechat:chenyilong1010) on 16/3/1.
+//  Copyright © 2016年 LeanCloud. All rights reserved.
+//
+"Delete" = "Delete";
+"draft" = "Draft";
+"mentioned" = "You are mentioned";
+"copy" = "copy";
+"transpond" = "transpond";
+"resend" = "resend";
+"cancel" = "cancel";
+"done" = "done";
+"ok" = "ok";
+"favorites" = "favorites";
+"more" = "more";
+"Location" = "Location";
+"Photo" = "Photo";
+"TextDetail" = "TextDetail";
+"Video" = "Video";
+"News" = "News";
+"Contact" = "Contact";
+"Chat" = "Chat";
+"Emotion" = "Emotion";
+"Album" = "Album";
+"Bottle" = "Bottle";
+"NearbyPeople" = "NearbyPeople";
+"Shake" = "Shake";
+"Scanning" = "Scanning";
+"Gamge" = "Gamge";
+"Expression" = "Expression";
+"MyAlbum" = "MyAlbum";
+"MyBankCard" = "MyBankCard";
+"MyFavorites" = "MyFavorites";
+"MyProfileInfo" = "MyProfileInfo";
+"Setting" = "Setting";
+"Profile" = "Profile";
+"News" = "News";
+"Voice" = "Voice";
+"Sight" = "Sight";
+"Community" = "Community";
+"ConfirmDeletion" = "Confirm deletion";
+"netDisconnected" = "Network unavailable, Check network";
+"connectSucceeded" = "connect succeeded";
+"connectFailed" = "connect failed";
+"requestForceSingleSignOnAuthorization" = "Force sign on?";
+"call" = "call";
+"unknownMessage" = "unknown message type, please update your APP";
+"unknownMessageType" = "unknown message type";
+"SingleWelcomeMessage" = "Hello!";
+"GroupWelcomeMessage" = "Hello!";
+"GroupWelcomeMessageWithNickName" = "Hello! I am ";
+"SingleConversation" = "single chat";
+"GroupConversation" = "group chat";
+"SystemConversation" = "system notification";
+"ConversationAvatarURLKey" = "avatarURL"; 
+"nickNameIsNil" = "[no nick name]";
+"message.bar.error.title" = "Error Title";
+"message.bar.error.message" = "This is an error message!";
+"message.bar.success.title" = "Success Title";
+"message.bar.success.message" = "This is a success message!";
+"message.bar.info.title" = "--------";
+"message.bar.info.message" = "--------";
+
+
+"button.label.success.message" = "Success Message";
+"button.label.error.message" = "Error Message";
+"button.label.info.message" = "Information Message";
+"button.label.hide.all" = "Hide All";

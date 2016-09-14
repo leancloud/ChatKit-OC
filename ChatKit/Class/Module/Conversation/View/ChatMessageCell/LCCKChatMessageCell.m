@@ -2,7 +2,7 @@
 //  LCCKChatMessageCell.m
 //  LCCKChatExample
 //
-//  Created by ElonChan ( https://github.com/leancloud/ChatKit-OC ) on 15/11/13.
+//  v0.7.15 Created by ElonChan (微信向我报BUG:chenyilong1010) ( https://github.com/leancloud/ChatKit-OC ) on 15/11/13.
 //  Copyright © 2015年 https://LeanCloud.cn . All rights reserved.
 //
 
@@ -14,7 +14,6 @@
 #import "LCCKChatSystemMessageCell.h"
 #import "LCCKChatLocationMessageCell.h"
 
-#import "Masonry.h"
 #import <objc/runtime.h>
 #import "LCCKBubbleImageFactory.h"
 
@@ -24,7 +23,12 @@
 #import "UIImageView+WebCache.h"
 #endif
 
+#if __has_include(<ChatKit/LCChatKit.h>)
+#import <ChatKit/LCChatKit.h>
+#else
 #import "LCChatKit.h"
+#endif
+
 #import "UIImageView+LCCKExtension.h"
 #import "UIImage+LCCKExtension.h"
 #import "NSObject+LCCKExtension.h"
@@ -38,16 +42,18 @@ static CGFloat const LCCKMessageSendStateViewWidthHeight = 30.f;
 static CGFloat const LCCKMessageSendStateViewLeftOrRightToMessageContentView = 2.f;
 static CGFloat const LCCKAvatarToMessageContent = 5.f;
 
+static CGFloat const LCCKAvatarBottomToMessageContentTop = -1.f;
+
+
 static CGFloat const LCCK_MSG_CELL_EDGES_OFFSET = 16;
-static CGFloat const LCCK_MSG_CELL_EDGES_TOP = LCCK_MSG_CELL_EDGES_OFFSET;
 static CGFloat const LCCK_MSG_CELL_NICKNAME_HEIGHT = 16;
 static CGFloat const LCCK_MSG_CELL_NICKNAME_FONT_SIZE = 12;
-#define LCCK_MSG_CELL_NICKNAME_COLOR [UIColor blackColor]
 
 @interface LCCKChatMessageCell ()<LCCKSendImageViewDelegate>
 
 @property (nonatomic, strong, readwrite) LCCKMessage *message;
 @property (nonatomic, assign, readwrite) AVIMMessageMediaType mediaType;
+@property (nonatomic, strong) UIColor *conversationViewSenderNameTextColor;
 
 @end
 
@@ -66,7 +72,7 @@ static CGFloat const LCCK_MSG_CELL_NICKNAME_FONT_SIZE = 12;
 }
 
 + (Class)classForMediaType:(AVIMMessageMediaType)mediaType {
-    NSNumber *key = [NSNumber numberWithInt:mediaType];
+    NSNumber *key = [NSNumber numberWithInteger:mediaType];
     Class class = [LCCKChatMessageCellMediaTypeDict objectForKey:key];
     if (!class) {
         class = self;
@@ -78,7 +84,7 @@ static CGFloat const LCCK_MSG_CELL_NICKNAME_FONT_SIZE = 12;
     if (!LCCKChatMessageCellMediaTypeDict) {
         LCCKChatMessageCellMediaTypeDict = [[NSMutableDictionary alloc] init];
     }
-    NSNumber *key = [NSNumber numberWithInt:mediaType];
+    NSNumber *key = [NSNumber numberWithInteger:mediaType];
     Class c = [LCCKChatMessageCellMediaTypeDict objectForKey:key];
     if (!c || [class isSubclassOfClass:c]) {
         [LCCKChatMessageCellMediaTypeDict setObject:class forKey:key];
@@ -112,6 +118,17 @@ static CGFloat const LCCK_MSG_CELL_NICKNAME_FONT_SIZE = 12;
 
 #pragma mark - Override Methods
 
+- (BOOL)showName {
+    BOOL isMessageOwner = self.messageOwner == LCCKMessageOwnerTypeOther;
+    BOOL isMessageChatTypeGroup = self.messageChatType == LCCKConversationTypeGroup;
+    if (isMessageOwner && isMessageChatTypeGroup) {
+        self.nickNameLabel.hidden = NO;
+        return YES;
+    }
+    self.nickNameLabel.hidden = YES;
+    return NO;
+}
+
 - (void)updateConstraints {
     [super updateConstraints];
     if (self.messageOwner == LCCKMessageOwnerTypeSystem || self.messageOwner == LCCKMessageOwnerTypeUnknown) {
@@ -126,18 +143,18 @@ static CGFloat const LCCK_MSG_CELL_NICKNAME_FONT_SIZE = 12;
                 make.height.equalTo(@(kAvatarImageViewHeight));
             }];
         }
-        if (self.nicknameLabel.superview) {
-            [self.nicknameLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        if (self.nickNameLabel.superview) {
+            [self.nickNameLabel mas_makeConstraints:^(MASConstraintMaker *make) {
                 make.top.equalTo(self.avatarImageView.mas_top);
                 make.right.equalTo(self.avatarImageView.mas_left).with.offset(-LCCK_MSG_CELL_EDGES_OFFSET);
                 make.width.mas_lessThanOrEqualTo(@120);
-                make.height.equalTo(self.messageChatType == LCCKConversationTypeGroup ? @(LCCK_MSG_CELL_NICKNAME_HEIGHT) : @0);
+                make.height.equalTo(@0);
             }];
         }
         if (self.messageContentView.superview) {
             [self.messageContentView mas_makeConstraints:^(MASConstraintMaker *make) {
                 make.right.equalTo(self.avatarImageView.mas_left).with.offset(-LCCKAvatarToMessageContent);
-                make.top.equalTo(self.nicknameLabel.mas_bottom).with.offset(4);
+                make.top.equalTo(self.nickNameLabel.mas_bottom).with.offset(self.showName ? 0 : LCCKAvatarBottomToMessageContentTop);
                 CGFloat width = [UIApplication sharedApplication].keyWindow.frame.size.width;
                 CGFloat height = [UIApplication sharedApplication].keyWindow.frame.size.height;
                 CGFloat widthLimit = MIN(width, height)/5 * 3;
@@ -171,8 +188,8 @@ static CGFloat const LCCK_MSG_CELL_NICKNAME_FONT_SIZE = 12;
                 make.height.equalTo(@(kAvatarImageViewHeight));
             }];
         }
-        if (self.nicknameLabel.superview) {
-            [self.nicknameLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        if (self.nickNameLabel.superview) {
+            [self.nickNameLabel mas_makeConstraints:^(MASConstraintMaker *make) {
                 make.top.equalTo(self.avatarImageView.mas_top);
                 make.left.equalTo(self.avatarImageView.mas_right).with.offset(LCCK_MSG_CELL_EDGES_OFFSET);
                 make.width.mas_lessThanOrEqualTo(@120);
@@ -182,7 +199,7 @@ static CGFloat const LCCK_MSG_CELL_NICKNAME_FONT_SIZE = 12;
         if (self.messageContentView.superview) {
             [self.messageContentView mas_makeConstraints:^(MASConstraintMaker *make) {
                 make.left.equalTo(self.avatarImageView.mas_right).with.offset(LCCKAvatarToMessageContent);
-                make.top.equalTo(self.nicknameLabel.mas_bottom).with.offset(4);
+                make.top.equalTo(self.nickNameLabel.mas_bottom).with.offset(self.showName ? 0 : LCCKAvatarBottomToMessageContentTop);
                 CGFloat width = [UIApplication sharedApplication].keyWindow.frame.size.width;
                 CGFloat height = [UIApplication sharedApplication].keyWindow.frame.size.height;
                 CGFloat widthLimit = MIN(width, height)/5 * 3;
@@ -214,9 +231,9 @@ static CGFloat const LCCK_MSG_CELL_NICKNAME_FONT_SIZE = 12;
         }];
     }
     
-    if (self.messageChatType == LCCKConversationTypeSingle) {
-        if (self.nicknameLabel.superview) {
-            [self.nicknameLabel mas_updateConstraints:^(MASConstraintMaker *make) {
+    if (!self.showName) {
+        if (self.nickNameLabel.superview) {
+            [self.nickNameLabel mas_updateConstraints:^(MASConstraintMaker *make) {
                 make.height.equalTo(@0);
             }];
         }
@@ -245,7 +262,7 @@ static CGFloat const LCCK_MSG_CELL_NICKNAME_FONT_SIZE = 12;
 
 - (void)addGeneralView {
     [self.contentView addSubview:self.avatarImageView];
-    [self.contentView addSubview:self.nicknameLabel];
+    [self.contentView addSubview:self.nickNameLabel];
     [self.contentView addSubview:self.messageContentView];
     [self.contentView addSubview:self.messageReadStateImageView];
     [self.contentView addSubview:self.messageSendStateView];
@@ -280,7 +297,7 @@ static CGFloat const LCCK_MSG_CELL_NICKNAME_FONT_SIZE = 12;
     }
     self.mediaType = [[self class] classMediaType];
     self.selectionStyle = UITableViewCellSelectionStyleNone;
-    self.backgroundColor = LCCK_CONVERSATIONVIEWCONTROLLER_BACKGROUNDCOLOR;
+    self.backgroundColor = [UIColor clearColor];;
 }
 
 #pragma mark - Public Methods
@@ -292,13 +309,14 @@ static CGFloat const LCCK_MSG_CELL_NICKNAME_FONT_SIZE = 12;
     if ([message lcck_isCustomMessage]) {
         NSString *senderClientId = [(AVIMTypedMessage *)message clientId];
         NSError *error;
+        //TODO:如果我正在群里聊天，这时有人进入群聊，需要异步获取头像等信息，模仿ConversationList的做法。
         [[LCCKUserSystemService sharedInstance] getCachedProfileIfExists:senderClientId name:&nickName avatarURL:&avatarURL error:&error];
         if (!nickName)  { nickName = senderClientId; }
         self.message = nil;
-        sendStatus = [(AVIMTypedMessage *)message status];
+        sendStatus = (LCCKMessageSendState)[(AVIMTypedMessage *)message status];
     } else {
         self.message = message;
-        nickName = self.message.sender.name ?: self.message.senderId;
+        nickName = self.message.localDisplayName;
         avatarURL = self.message.sender.avatarURL;
         sendStatus = self.message.sendStatus;
         //FIXME: SDK 暂不支持已读未读
@@ -306,7 +324,7 @@ static CGFloat const LCCK_MSG_CELL_NICKNAME_FONT_SIZE = 12;
         //            self.messageReadState = self.message.messageReadState;
         //        }
     }
-    self.nicknameLabel.text = nickName;
+    self.nickNameLabel.text = nickName;
     [self.avatarImageView sd_setImageWithURL:avatarURL
                             placeholderImage:({
         NSString *imageName = @"Placeholder_Avatar";
@@ -371,21 +389,22 @@ static CGFloat const LCCK_MSG_CELL_NICKNAME_FONT_SIZE = 12;
         if (avatarImageViewCornerRadiusBlock) {
             CGSize avatarImageViewSize = CGSizeMake(kAvatarImageViewWidth, kAvatarImageViewHeight);
             CGFloat avatarImageViewCornerRadius = avatarImageViewCornerRadiusBlock(avatarImageViewSize);
-            [_avatarImageView lcck_cornerRadiusAdvance:avatarImageViewCornerRadius rectCornerType:UIRectCornerAllCorners];
+            self.avatarImageView.lcck_cornerRadius = avatarImageViewCornerRadius;
         }
         [self bringSubviewToFront:_avatarImageView];
     }
     return _avatarImageView;
 }
 
-- (UILabel *)nicknameLabel {
-    if (!_nicknameLabel) {
-        _nicknameLabel = [[UILabel alloc] init];
-        _nicknameLabel.font = [UIFont systemFontOfSize:LCCK_MSG_CELL_NICKNAME_FONT_SIZE];
-        _nicknameLabel.textColor = LCCK_MSG_CELL_NICKNAME_COLOR;
-        _nicknameLabel.text = @"nickname";
+- (UILabel *)nickNameLabel {
+    if (!_nickNameLabel) {
+        _nickNameLabel = [[UILabel alloc] init];
+        _nickNameLabel.font = [UIFont systemFontOfSize:LCCK_MSG_CELL_NICKNAME_FONT_SIZE];
+        _nickNameLabel.textColor = self.conversationViewSenderNameTextColor;
+        _nickNameLabel.text = @"nickname";
+        [_nickNameLabel sizeToFit];
     }
-    return _nicknameLabel;
+    return _nickNameLabel;
 }
 
 - (LCCKContentView *)messageContentView {
@@ -513,5 +532,12 @@ static CGFloat const LCCK_MSG_CELL_NICKNAME_FONT_SIZE = 12;
     }
 }
 
+- (UIColor *)conversationViewSenderNameTextColor {
+    if (_conversationViewSenderNameTextColor) {
+        return _conversationViewSenderNameTextColor;
+    }
+    _conversationViewSenderNameTextColor = [[LCCKSettingService sharedInstance] defaultThemeColorForKey:@"ConversationView-SenderName-TextColor"];
+    return _conversationViewSenderNameTextColor;
+}
 @end
 

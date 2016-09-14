@@ -3,7 +3,7 @@
 //  LCCKChatExample
 //  LCCKChatMessageCell 是所有LCCKChatCell的父类
 //  提供了delegate,messageOwner,messageType属性
-//  Created by ElonChan ( https://github.com/leancloud/ChatKit-OC ) on 15/11/13.
+//  v0.7.15 Created by ElonChan (微信向我报BUG:chenyilong1010) ( https://github.com/leancloud/ChatKit-OC ) on 15/11/13.
 //  Copyright © 2015年 https://LeanCloud.cn . All rights reserved.
 //
 
@@ -12,7 +12,14 @@
 #import "LCCKContentView.h"
 #import "LCCKConstants.h"
 #import "LCCKMessage.h"
+#import "LCCKSettingService.h"
+#import "NSString+LCCKExtension.h"
+
+#if __has_include(<Masonry/Masonry.h>)
+#import <Masonry/Masonry.h>
+#else
 #import "Masonry.h"
+#endif
 #import <AVOSCloudIM/AVOSCloudIM.h>
 
 #if __has_include(<MLLabel/MLLinkLabel.h>)
@@ -64,7 +71,7 @@
 /**
  *  显示用户昵称的UILabel
  */
-@property (nonatomic, strong) UILabel *nicknameLabel;
+@property (nonatomic, strong) UILabel *nickNameLabel;
 
 /**
  *  显示用户消息主体的View,所有的消息用到的textView,imageView都会被添加到这个view中 -> LCCKContentView 自带一个CAShapeLayer的蒙版

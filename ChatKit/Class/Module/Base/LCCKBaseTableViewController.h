@@ -2,8 +2,8 @@
 //  LCCKBaseTableViewController.h
 //  LeanCloudChatKit-iOS
 //
-// v0.5.1 Created by 陈宜龙 on 16/3/9.
-//  Copyright © 2016年 ElonChan. All rights reserved.
+//  v0.7.15 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/3/9.
+//  Copyright © 2016年 LeanCloud. All rights reserved.
 //
 
 #import "LCCKBaseViewController.h"
@@ -33,10 +33,11 @@ typedef enum : NSUInteger {
  *  大量数据的数据源
  */
 @property (nonatomic, strong) NSMutableArray *dataSource;
+@property (nonatomic, assign, getter=shouldCheckSessionStatus) BOOL checkSessionStatus;
 
 /**
  *  加载本地或者网络数据源
  */
 - (void)loadDataSource;
-
+- (void)updateStatusView;
 @end

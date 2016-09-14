@@ -2,7 +2,7 @@
 //  LCCKConversationViewController.h
 //  LCCKChatBarExample
 //
-//  Created by ElonChan ( https://github.com/leancloud/ChatKit-OC ) on 15/11/20.
+//  v0.7.15 Created by ElonChan (微信向我报BUG:chenyilong1010) ( https://github.com/leancloud/ChatKit-OC ) on 15/11/20.
 //  Copyright © 2015年 https://LeanCloud.cn . All rights reserved.
 //
 @import UIKit;
@@ -26,8 +26,6 @@ FOUNDATION_EXTERN NSString *const LCCKConversationViewControllerErrorDomain;
  *  @details Initialization method is `-initWithPeerId:`.
  */
 @property (nonatomic, copy, readonly) NSString *peerId;
-
-@property (nonatomic, strong, readonly) AVIMConversation *conversation;
 
 #pragma mark - Initialize a unique single chat type object of LCCKConversationViewController
 ///=============================================================================
@@ -60,8 +58,16 @@ FOUNDATION_EXTERN NSString *const LCCKConversationViewControllerErrorDomain;
 
 /*!
  * 如果不在对话中，是否自动加入对话，默认为 NO.
+ * @attention 仅适用于使用 ConversationId 初始化。
  */
 @property (nonatomic, assign, getter=isEnableAutoJoin) BOOL enableAutoJoin;
+
+@property (nonatomic, assign, getter=isAvailable, readonly) BOOL available;
+
+/*!
+ * If `isAvailable` is NO, it will return nil
+ */
+- (AVIMConversation *)getConversationIfExists;
 
 #pragma mark - send Message
 ///=============================================================================
@@ -70,34 +76,53 @@ FOUNDATION_EXTERN NSString *const LCCKConversationViewControllerErrorDomain;
 
 /*!
  *  文本发送
+ * @attention 发送前必须检查 `isAvailable` 属性是否为YES
  */
 - (void)sendTextMessage:(NSString *)text;
+
 /*
  * 图片发送 包含图片上传交互
  * 默认图片压缩比0.6，如想自定义压缩比，请使用 `-sendImageMessageData` 方法
  *
  * @param image, 要发送的图片
+ * @attention Remember to check if `isAvailable` is ture, making sure sending message after conversation has been fetched
+ *            发送前必须检查 `isAvailable` 属性是否为YES, 确保发送行为是在 conversation 被 fetch 之后进行的。
  */
 - (void)sendImageMessage:(UIImage *)image;
+
 - (void)sendImageMessageData:(NSData *)imageData;
 
 /*!
  * 语音发送
+ * @attention Remember to check if `isAvailable` is ture, making sure sending message after conversation has been fetched
+ *            发送前必须检查 `isAvailable` 属性是否为YES, 确保发送行为是在 conversation 被 fetch 之后进行的。
  */
 - (void)sendVoiceMessageWithPath:(NSString *)voicePath time:(NSTimeInterval)recordingSeconds;
 
 /*!
  * 地理位置发送
+ * @attention Remember to check if `isAvailable` is ture, making sure sending message after conversation has been fetched
+ *            发送前必须检查 `isAvailable` 属性是否为YES, 确保发送行为是在 conversation 被 fetch 之后进行的。
  */
 - (void)sendLocationMessageWithLocationCoordinate:(CLLocationCoordinate2D)locationCoordinate locatioTitle:(NSString *)locationTitle;
+
+/*!
+ * 本地消息，仅仅在本地展示，不会发送到服务端
+ */
 - (void)sendLocalFeedbackTextMessge:(NSString *)localFeedbackTextMessge;
+
 /*!
  * 自定义消息位置发送
+ * @attention Remember to check if `isAvailable` is ture, making sure sending message after conversation has been fetched
+ *            发送前必须检查 `isAvailable` 属性是否为YES, 确保发送行为是在 conversation 被 fetch 之后进行的。
  */
 - (void)sendCustomMessage:(AVIMTypedMessage *)customMessage;
 
 /*!
  * 自定义消息位置发送
+ * @attention 自定义消息暂时支持失败消息本地缓存
+ * @attention Remember to check if `isAvailable` is ture, making sure sending message after conversation has been fetched
+ *            发送前必须检查 `isAvailable` 属性是否为YES, 确保发送行为是在 conversation 被 fetch 之后进行的。
  */
 - (void)sendCustomMessage:(AVIMTypedMessage *)customMessage
             progressBlock:(AVProgressBlock)progressBlock
@@ -115,6 +140,14 @@ FOUNDATION_EXTERN NSString *const LCCKConversationViewControllerErrorDomain;
  */
 @property (nonatomic, assign) BOOL disableTextShowInFullScreen;
 
+/*!
+ * 是否禁用标题自动配置
+ * 默认配置如下：
+ *          - 最右侧显示静音状态
+ *          - 单聊默认显示对方昵称，群聊显示 `conversation` 的 name 字段值
+ */
+@property (nonatomic, assign, getter=isDisableTitleAutoConfig) BOOL disableTitleAutoConfig;
+
 #pragma mark - Handler
 ///=============================================================================
 /// @name Handler
@@ -123,12 +156,14 @@ FOUNDATION_EXTERN NSString *const LCCKConversationViewControllerErrorDomain;
 /*!
  * 设置获取 AVIMConversation 对象结束后的 Handler。 这里可以做异常处理，比如获取失败等操作。
  * 获取失败时，LCCKConversationHandler 返回值中的AVIMConversation 为 nil，成功时为正确的 conversation 值。
+ * @attention 执行优先级高于 LCChatKit 类中的同名方法，如果在 LCChatKit 中设置过同名方法，就可以不设置本类中的该方法。
  */
 - (void)setFetchConversationHandler:(LCCKFetchConversationHandler)fetchConversationHandler;
 
 /*!
  * 设置获取历史纪录结束时的 Handler。 这里可以做异常处理，比如获取失败等操作。
  * 获取失败时，LCCKViewControllerBooleanResultBlock 返回值中的 error 不为 nil，包含错误原因，成功时 succeeded 值为 YES。
+ * @attention 执行优先级高于 LCChatKit 类中的同名方法，如果在 LCChatKit 中设置过同名方法，就可以不设置本类中的该方法。
  */
 - (void)setLoadLatestMessagesHandler:(LCCKLoadLatestMessagesHandler)loadLatestMessagesHandler;
 

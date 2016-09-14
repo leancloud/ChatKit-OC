@@ -1,20 +1,23 @@
 //
-//  LCCKTabBarControllerConfig.m
-//  CYLTabBarController
+//  LCChatKitExample.m
+//  LeanCloudChatKit-iOS
 //
-//  Created by 微博@iOS程序犭袁 ( http://weibo.com/luohanchenyilong/ ) on 10/20/15.
-//  Copyright © 2015 https://github.com/ChenYilong . All rights reserved.
+//  v0.7.15 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/2/24.
+//  Copyright © 2016年 LeanCloud. All rights reserved.
 //
 
 #import "LCCKTabBarControllerConfig.h"
 #import <AVOSCloud/AVOSCloud.h>
 #import "LCChatKitExample.h"
 #import "LCCKContactManager.h"
+#import "NSObject+LCCKHUD.h"
+#import "FTPopOverMenu.h"
+#import "LCCKExampleConstants.h"
 
 #if __has_include(<ChatKit/LCChatKit.h>)
-    #import <ChatKit/LCChatKit.h>
+#import <ChatKit/LCChatKit.h>
 #else
-    #import "LCChatKit.h"
+#import "LCChatKit.h"
 #endif
 
 @interface LCCKTabBarControllerConfig ()
@@ -51,22 +54,19 @@
     LCCKConversationListViewController *firstViewController = [[LCCKConversationListViewController alloc] init];
     UINavigationController *firstNavigationController = [[LCCKBaseNavigationController alloc]
                                                          initWithRootViewController:firstViewController];
-    firstViewController.navigationItem.rightBarButtonItem = ({
-        UIButton *createGroupConversationButton = [UIButton buttonWithType:UIButtonTypeContactAdd];
-        [createGroupConversationButton addTarget:self action:@selector(createGroupConversation:) forControlEvents:UIControlEventTouchUpInside];
-        UIBarButtonItem *rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:createGroupConversationButton];
-        rightBarButtonItem;
-    }
-                                                             );
+    [firstViewController configureBarButtonItemStyle:LCCKBarButtonItemStyleAdd action:^(UIBarButtonItem *sender, UIEvent *event) {
+        [self showPopOverMenu:sender event:event];
+    }];
     self.firstViewController = firstViewController;
     NSArray *users = [[LCChatKit sharedInstance] getCachedProfilesIfExists:self.allPersonIds shouldSameCount:YES error:nil];
     NSString *currentClientID = [[LCChatKit sharedInstance] clientId];
-    LCCKContactListViewController *secondViewController = [[LCCKContactListViewController alloc] initWithContacts:users userIds:self.allPersonIds excludedUserIds:@[currentClientID] mode:LCCKContactListModeNormal];
+    LCCKContactListViewController *secondViewController = [[LCCKContactListViewController alloc] initWithContacts:[NSSet setWithArray:users] userIds:[NSSet setWithArray:self.allPersonIds] excludedUserIds:[NSSet setWithArray:@[currentClientID]] mode:LCCKContactListModeNormal];
     [secondViewController setSelectedContactCallback:^(UIViewController *viewController, NSString *peerId) {
         [LCChatKitExample exampleOpenConversationViewControllerWithPeerId:peerId fromNavigationController:self.tabBarController.navigationController];
     }];
     [secondViewController setDeleteContactCallback:^BOOL(UIViewController *viewController, NSString *peerId) {
-        return [[LCCKContactManager defaultManager] removeContactForPeerId:peerId];
+        [[LCCKContactManager defaultManager] removeContactForPeerId:peerId];
+        return YES;
     }];
     self.secondViewController = secondViewController;
     UINavigationController *secondNavigationController = [[LCCKBaseNavigationController alloc]
@@ -75,6 +75,10 @@
                                                                                               style:UIBarButtonItemStylePlain
                                                                                              target:self
                                                                                              action:@selector(signOut)];
+    secondViewController.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"添加好友"
+                                                                                             style:UIBarButtonItemStylePlain
+                                                                                            target:self
+                                                                                            action:@selector(addFriend)];
     NSArray *viewControllers = @[
                                  firstNavigationController,
                                  secondNavigationController,
@@ -84,12 +88,12 @@
 
 - (NSArray *)tabBarItemsAttributesForController {
     NSDictionary *dict1 = @{
-                         // CYLTabBarItemTitle : @"消息",
+                            // CYLTabBarItemTitle : @"消息",
                             CYLTabBarItemImage : @"tabbar_chat_normal",
                             CYLTabBarItemSelectedImage : @"tabbar_chat_active",
                             };
     NSDictionary *dict2 = @{
-                         // CYLTabBarItemTitle : @"联系人",
+                            // CYLTabBarItemTitle : @"联系人",
                             CYLTabBarItemImage : @"tabbar_contacts_normal",
                             CYLTabBarItemSelectedImage : @"tabbar_contacts_active",
                             };
@@ -198,8 +202,36 @@
 - (void)createGroupConversation:(id)sender {
     [LCChatKitExample exampleCreateGroupConversationFromViewController:self.firstViewController];
 }
+
+- (NSString *)arc4randomString {
+    int a = arc4random_uniform(100000000);
+    NSString *arc4randomString = [NSString stringWithFormat:@"%@", @(a)];
+    return @"5771e7656be3ff0063a0dada";
+}
+
+- (void)addFriend {
+    NSString *additionUserId = self.arc4randomString;
+    NSMutableSet *addedUserIds = [NSMutableSet setWithSet:self.secondViewController.userIds];
+    [addedUserIds addObject:additionUserId];
+    self.secondViewController.userIds = [addedUserIds copy];
+}
+
+- (void)showPopOverMenu:(UIBarButtonItem *)sender event:(UIEvent *)event {
+    [FTPopOverMenu showFromEvent:event
+                        withMenu:@[ @"创建群聊" ]
+                       doneBlock:^(NSInteger selectedIndex) {
+                           if (selectedIndex == 0) {
+                               [self createGroupConversation:sender];
+                           }
+                       } dismissBlock:nil];
+}
+
 - (void)signOut {
     [LCChatKitExample signOutFromViewController:self.secondViewController];
+}
+
+- (void)changeGroupAvatar {
+    [LCChatKitExample exampleChangeGroupAvatarURLsForConversationId:@"570da6a9daeb3a63ca5b07b0"];
 }
 
 @end

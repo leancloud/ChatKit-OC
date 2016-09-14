@@ -2,7 +2,7 @@
 //  LCCKServiceDefinition.h
 //  LeanCloudChatKit-iOS
 //
-//  Created by ElonChan on 16/2/22.
+//  v0.7.15 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/2/22.
 //  Copyright © 2016年 LeanCloud. All rights reserved.
 //  All the Typedefine for all kinds of services.
 
@@ -28,10 +28,15 @@
 
 typedef void (^LCCKReconnectSessionCompletionHandler)(BOOL succeeded, NSError *error);
 
-typedef void (^LCCKForceReconnectSessionBlock)(__kindof UIViewController *viewController, LCCKReconnectSessionCompletionHandler completionHandler);
+/*!
+ * @param granted granted fore single signOn
+ * 默认允许重连，error的code为4111时，需要额外请求权限，才可标记为YES。
+ */
+typedef void (^LCCKForceReconnectSessionBlock)(NSError *error, BOOL granted, __kindof UIViewController *viewController, LCCKReconnectSessionCompletionHandler completionHandler);
 
 @property (nonatomic, copy, readonly) NSString *clientId;
 @property (nonatomic, strong, readonly) AVIMClient *client;
+@property (nonatomic, assign) BOOL disableSingleSignOn;
 @property (nonatomic, copy, readonly) LCCKForceReconnectSessionBlock forceReconnectSessionBlock;
 
 /*!
@@ -40,6 +45,10 @@ typedef void (^LCCKForceReconnectSessionBlock)(__kindof UIViewController *viewCo
  */
 - (void)openWithClientId:(NSString *)clientId callback:(LCCKBooleanResultBlock)callback;
 
+/*!
+ * @param force Just for Single Sign On
+ */
+- (void)openWithClientId:(NSString *)clientId force:(BOOL)force callback:(AVIMBooleanResultBlock)callback;
 /*!
  * @brief Close the client
  * @param callback Callback
@@ -86,6 +95,13 @@ typedef void(^LCCKFetchProfilesBlock)(NSArray<NSString *> *userIds, LCCKFetchPro
  * Remove all cached profiles.
  */
 - (void)removeAllCachedProfiles;
+
+/**
+ *  remove person profile cache
+ *
+ *  @param person id
+ */
+- (void)removeCachedProfileForPeerId:(NSString *)peerId;
 
 - (void)getCachedProfileIfExists:(NSString *)userId name:(NSString **)name avatarURL:(NSURL **)avatarURL error:(NSError * __autoreleasing *)error;
 - (NSArray<id<LCCKUserDelegate>> *)getCachedProfilesIfExists:(NSArray<NSString *> *)userIds error:(NSError * __autoreleasing *)error;
@@ -313,10 +329,17 @@ typedef CGFloat (^LCCKAvatarImageViewCornerRadiusBlock)(CGSize avatarImageViewSi
 - (void)syncBadge;
 
 /*!
+ * 禁止预览id
+ * 如果不设置，或者设置为NO，在群聊需要显示最后一条消息的发送者时，会在网络请求用户昵称成功前，先显示id，然后，成功后再显示昵称。
+ */
+@property (nonatomic, assign, getter=isDisablePreviewUserId) BOOL disablePreviewUserId;
+
+/*!
  *  是否使用开发证书去推送，默认为 NO。如果设为 YES 的话每条消息会带上这个参数，云代码利用 Hook 设置证书
  *  参考 https://github.com/leancloud/leanchat-cloudcode/blob/master/cloud/mchat.js
  */
 @property (nonatomic, assign) BOOL useDevPushCerticate;
+- (void)setBackgroundImage:(UIImage *)image forConversationId:(NSString *)conversationId scaledToSize:(CGSize)scaledToSize;
 
 @end
 
@@ -346,6 +369,18 @@ typedef void (^LCCKConversationInvalidedHandler) (NSString *conversationId, LCCK
  */
 - (void)setConversationInvalidedHandler:(LCCKConversationInvalidedHandler)conversationInvalidedHandler;
 
+typedef void (^LCCKFilterMessagesCompletionHandler)(NSArray *filterMessages, NSError *error);
+typedef void (^LCCKFilterMessagesBlock)(AVIMConversation *conversation, NSArray<AVIMTypedMessage *> *messages, LCCKFilterMessagesCompletionHandler completionHandler);
+
+/*!
+ * 用于筛选消息，比如：群定向消息、筛选黑名单消息、黑名单消息
+ * @attention 同步方法异步方法皆可
+ */
+- (void)setFilterMessagesBlock:(LCCKFilterMessagesBlock)filterMessagesBlock;
+
+@property (nonatomic, copy) LCCKFilterMessagesBlock filterMessagesBlock;
+
+//TODO:未实现
 typedef void (^LCCKLoadLatestMessagesHandler)(LCCKConversationViewController *conversationController, BOOL succeeded, NSError *error);
 
 @property (nonatomic, copy) LCCKLoadLatestMessagesHandler loadLatestMessagesHandler;
@@ -359,6 +394,12 @@ typedef void (^LCCKLoadLatestMessagesHandler)(LCCKConversationViewController *co
 - (void)createConversationWithMembers:(NSArray *)members type:(LCCKConversationType)type unique:(BOOL)unique callback:(AVIMConversationResultBlock)callback;
 
 - (void)didReceiveRemoteNotification:(NSDictionary *)userInfo;
+
+/**
+ *  插入一条最近对话
+ *  @param conversation
+ */
+- (void)insertRecentConversation:(AVIMConversation *)conversation;
 
 /**
  *  增加未读数
@@ -377,10 +418,14 @@ typedef void (^LCCKLoadLatestMessagesHandler)(LCCKConversationViewController *co
  *  @param conversation 相应的对话
  */
 - (void)updateUnreadCountToZeroWithConversationId:(NSString *)conversationId;
+
 /**
  *  删除全部缓存，比如当切换用户时，如果同一个人显示的名称和头像需要变更
  */
 - (BOOL)removeAllCachedRecentConversations;
+
+- (void)sendWelcomeMessageToPeerId:(NSString *)peerId text:(NSString *)text block:(LCCKBooleanResultBlock)block;
+- (void)sendWelcomeMessageToConversationId:(NSString *)conversationId text:(NSString *)text block:(LCCKBooleanResultBlock)block;
 
 @end
 

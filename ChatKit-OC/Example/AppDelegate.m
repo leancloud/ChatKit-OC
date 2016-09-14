@@ -2,7 +2,7 @@
 //  AppDelegate.m
 //  LeanCloudChatKit-iOS
 //
-//  Created by ElonChan on 16/2/2.
+//  v0.7.15 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/2/2.
 //  Copyright © 2016年 LeanCloud. All rights reserved.
 //
 
@@ -17,6 +17,7 @@
 #import "LCChatKit.h"
 #endif
 #import "LCCKLoginViewController.h"
+#import "RedpacketConfig.h"
 
 @interface AppDelegate ()
 
@@ -28,7 +29,8 @@
     [LCChatKitExample invokeThisMethodInDidFinishLaunching];
     [self customizeNavigationBar];
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    LCCKLoginViewController *loginViewController = [[LCCKLoginViewController alloc] initWithNibName:@"LCCKLoginViewController" bundle:[NSBundle mainBundle]];
+    LCCKLoginViewController *loginViewController = [[LCCKLoginViewController alloc] initWithNibName:NSStringFromClass([LCCKLoginViewController class]) bundle:[NSBundle mainBundle]];
+    loginViewController.autoLogin = YES;
     [loginViewController setClientIDHandler:^(NSString *clientID) {
         [LCCKUtil showProgressText:@"open client ..." duration:10.0f];
         [LCChatKitExample invokeThisMethodAfterLoginSuccessWithClientId:clientID success:^{
@@ -40,6 +42,8 @@
             NSLog(@"%@",error);
         }];
     }];
+    
+    [[RedpacketConfig sharedConfig] config];
     self.window.rootViewController = loginViewController;
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
@@ -71,4 +75,14 @@
     [LCChatKitExample invokeThisMethodInApplication:application didReceiveRemoteNotification:userInfo];
 }
 
+- (BOOL)application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary<NSString *,id> *)options{
+    return YES;
+}
+- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation{
+    
+    return YES;
+}
+- (void)applicationDidBecomeActive:(UIApplication *)application{
+    
+}
 @end

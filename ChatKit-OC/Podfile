@@ -12,11 +12,11 @@ pod 'ChatKit', :path => '../'
 #======================== Demo Dependency ================
 #=========================================================
 
-pod 'MBProgressHUD'
 pod 'CYLTabBarController'
-pod 'TWMessageBarManager'
-pod "MWPhotoBrowser", "2.1.2"
-pod 'MLPAutoCompleteTextField'
 pod "CYLTableViewRowAction", "1.0.0"
+pod 'TWMessageBarManager'
+pod 'MLPAutoCompleteTextField'
 #pod 'MLeaksFinder'
+pod 'FTPopOverMenu'
+
 end

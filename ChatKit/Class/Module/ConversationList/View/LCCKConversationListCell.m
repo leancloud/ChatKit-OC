@@ -2,13 +2,19 @@
 //  LCCKConversationListCell.m
 //  LeanCloudChatKit-iOS
 //
-// v0.5.1 Created by 陈宜龙 on 16/3/22.
-//  Copyright © 2016年 ElonChan. All rights reserved.
+//  v0.7.15 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/3/22.
+//  Copyright © 2016年 LeanCloud. All rights reserved.
 //
 
 #import "LCCKConversationListCell.h"
 #import "LCCKBadgeView.h"
+
+#if __has_include(<ChatKit/LCChatKit.h>)
+#import <ChatKit/LCChatKit.h>
+#else
 #import "LCChatKit.h"
+#endif
+
 #import "UIImageView+LCCKExtension.h"
 
 static CGFloat LCCKImageSize = 45;
@@ -23,6 +29,13 @@ static CGFloat LCCKLittleBadgeSize = 10;
 static CGFloat LCCKRemindMuteSize = 18;
 
 CGFloat const LCCKConversationListCellDefaultHeight = 61; //LCCKImageSize + LCCKVerticalSpacing * 2;
+
+@interface LCCKConversationListCell ()
+
+@property (nonatomic, strong) UIColor *conversationListUnreadBackgroundColor;
+@property (nonatomic, strong) UIColor *conversationListUnreadTextColor;
+
+@end
 
 @implementation LCCKConversationListCell
 
@@ -51,10 +64,13 @@ CGFloat const LCCKConversationListCellDefaultHeight = 61; //LCCKImageSize + LCCK
 }
 
 - (void)setup {
+    self.backgroundColor = [[LCCKSettingService sharedInstance] defaultThemeColorForKey:@"TableView-CellBackgroundColor"];
+    UIView *selectionColor = [[UIView alloc] init];
+    selectionColor.backgroundColor = [[LCCKSettingService sharedInstance] defaultThemeColorForKey:@"TableView-CellBackgroundColor_Highlighted"];
+    self.selectedBackgroundView = selectionColor;
     LCCKNameLabelHeight = LCCKImageSize * LCCKNameLabelHeightProportion;
     LCCKMessageLabelHeight = LCCKImageSize - LCCKNameLabelHeight;
     [self addSubview:self.avatarImageView];
-    [self.avatarImageView addSubview:self.badgeView];
     [self addSubview:self.timestampLabel];
     [self.contentView addSubview:self.litteBadgeView];
     [self.contentView addSubview:self.nameLabel];
@@ -68,7 +84,7 @@ CGFloat const LCCKConversationListCellDefaultHeight = 61; //LCCKImageSize + LCCK
         LCCKAvatarImageViewCornerRadiusBlock avatarImageViewCornerRadiusBlock = [LCChatKit sharedInstance].avatarImageViewCornerRadiusBlock;
         if (avatarImageViewCornerRadiusBlock) {
             CGFloat avatarImageViewCornerRadius = avatarImageViewCornerRadiusBlock(avatarImageView.frame.size);
-            [avatarImageView lcck_cornerRadiusAdvance:avatarImageViewCornerRadius rectCornerType:UIRectCornerAllCorners];
+            avatarImageView.lcck_cornerRadius = avatarImageViewCornerRadius;
         }
         _avatarImageView = avatarImageView;
     }
@@ -78,7 +94,7 @@ CGFloat const LCCKConversationListCellDefaultHeight = 61; //LCCKImageSize + LCCK
 - (UIView *)litteBadgeView {
     if (_litteBadgeView == nil) {
         UIView *litteBadgeView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, LCCKLittleBadgeSize, LCCKLittleBadgeSize)];
-        litteBadgeView.layer.masksToBounds = YES;
+//        litteBadgeView.layer.masksToBounds = YES;
         litteBadgeView.layer.cornerRadius = LCCKLittleBadgeSize / 2;
         litteBadgeView.center = CGPointMake(CGRectGetMaxX(_avatarImageView.frame), CGRectGetMinY(_avatarImageView.frame));
         litteBadgeView.hidden = YES;
@@ -92,7 +108,7 @@ CGFloat const LCCKConversationListCellDefaultHeight = 61; //LCCKImageSize + LCCK
         UILabel *timestampLabel = [[UILabel alloc] initWithFrame:CGRectMake(LCCKAutoResizingDefaultScreenWidth - LCCKHorizontalSpacing - LCCKTimestampeLabelWidth, CGRectGetMinY(_avatarImageView.frame), LCCKTimestampeLabelWidth, LCCKNameLabelHeight)];
         timestampLabel.font = [UIFont systemFontOfSize:13];
         timestampLabel.textAlignment = NSTextAlignmentRight;
-        timestampLabel.textColor = [UIColor grayColor];
+        timestampLabel.textColor = [[LCCKSettingService sharedInstance] defaultThemeColorForKey:@"TableView-CellMinor"];
         timestampLabel.autoresizingMask =  UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleBottomMargin;
         _timestampLabel = timestampLabel;
     }
@@ -103,6 +119,7 @@ CGFloat const LCCKConversationListCellDefaultHeight = 61; //LCCKImageSize + LCCK
     if (_nameLabel == nil) {
         UILabel *nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(_avatarImageView.frame) + LCCKHorizontalSpacing, CGRectGetMinY(_avatarImageView.frame), CGRectGetMinX(_timestampLabel.frame) - LCCKHorizontalSpacing * 3 - LCCKImageSize, LCCKNameLabelHeight)];
         nameLabel.font = [UIFont systemFontOfSize:17];
+        nameLabel.textColor = [[LCCKSettingService sharedInstance] defaultThemeColorForKey:@"TableView-CellTitle"];
         nameLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         _nameLabel = nameLabel;
     }
@@ -114,6 +131,7 @@ CGFloat const LCCKConversationListCellDefaultHeight = 61; //LCCKImageSize + LCCK
         UILabel *messageTextLabel = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMinX(_nameLabel.frame), CGRectGetMaxY(_nameLabel.frame), LCCKAutoResizingDefaultScreenWidth - 4 * LCCKHorizontalSpacing - LCCKImageSize - LCCKRemindMuteSize, LCCKMessageLabelHeight)];
         messageTextLabel.backgroundColor = [UIColor clearColor];
         messageTextLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+        messageTextLabel.textColor = [[LCCKSettingService sharedInstance] defaultThemeColorForKey:@"TableView-CellDetail"];
         _messageTextLabel = messageTextLabel;
     }
     return _messageTextLabel;
@@ -125,7 +143,7 @@ CGFloat const LCCKConversationListCellDefaultHeight = 61; //LCCKImageSize + LCCK
         remindMuteImageView.frame = CGRectMake(CGRectGetMaxX(_messageTextLabel.frame) + LCCKHorizontalSpacing, CGRectGetMinY(_messageTextLabel.frame), LCCKRemindMuteSize, LCCKRemindMuteSize);
         NSString *remindMuteImageName = @"Connectkeyboad_banner_mute";
 //        remindMuteImageView.imageEdgeInsets = UIEdgeInsetsMake(2.5, 2.5, 2.5, 2.5);
-        UIImage *remindMuteImage = [UIImage lcck_imageNamed:remindMuteImageName bundleName:@"Common" bundleForClass:[LCChatKit class]];
+        UIImage *remindMuteImage = [UIImage lcck_imageNamed:remindMuteImageName bundleName:@"Other" bundleForClass:[LCChatKit class]];
         [remindMuteImageView setImage:remindMuteImage forState:UIControlStateNormal];
         remindMuteImageView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
         remindMuteImageView.hidden = YES;
@@ -134,15 +152,32 @@ CGFloat const LCCKConversationListCellDefaultHeight = 61; //LCCKImageSize + LCCK
     return _remindMuteImageView;
 }
 
-
 - (LCCKBadgeView *)badgeView {
     if (_badgeView == nil) {
         LCCKBadgeView *badgeView = [[LCCKBadgeView alloc] initWithParentView:self.avatarImageView
                                                                alignment:LCCKBadgeViewAlignmentTopRight];
+        badgeView.badgeBackgroundColor = self.conversationListUnreadBackgroundColor;
+        badgeView.badgeTextColor = self.conversationListUnreadTextColor;
         [self.avatarImageView addSubview:(_badgeView = badgeView)];
         [self.avatarImageView bringSubviewToFront:_badgeView];
     }
     return _badgeView;
+}
+
+- (UIColor *)conversationListUnreadBackgroundColor {
+    if (_conversationListUnreadBackgroundColor) {
+        return _conversationListUnreadBackgroundColor;
+    }
+    _conversationListUnreadBackgroundColor = [[LCCKSettingService sharedInstance] defaultThemeColorForKey:@"ConversationList-UnreadBackground"];
+    return _conversationListUnreadBackgroundColor;
+}
+
+- (UIColor *)conversationListUnreadTextColor {
+    if (_conversationListUnreadTextColor) {
+        return _conversationListUnreadTextColor;
+    }
+    _conversationListUnreadTextColor = [[LCCKSettingService sharedInstance] defaultThemeColorForKey:@"ConversationList-UnreadText"];
+    return _conversationListUnreadTextColor;
 }
 
 - (void)prepareForReuse {

@@ -2,14 +2,21 @@
 //  LCCKChatMoreView.m
 //  LCCKChatBarExample
 //
-//  Created by ElonChan ( https://github.com/leancloud/ChatKit-OC ) on 15/8/18.
+//  v0.7.15 Created by ElonChan (微信向我报BUG:chenyilong1010) ( https://github.com/leancloud/ChatKit-OC ) on 15/8/18.
 //  Copyright (c) 2015年 https://LeanCloud.cn . All rights reserved.
 //
 
 #import "LCCKChatMoreView.h"
 #import "LCCKConstants.h"
 #import "LCCKInputViewPlugin.h"
+#import "LCCKSettingService.h"
+#import "NSString+LCCKExtension.h"
+
+#if __has_include(<Masonry/Masonry.h>)
+#import <Masonry/Masonry.h>
+#else
 #import "Masonry.h"
+#endif
 
 #define kLCCKTopLineBackgroundColor [UIColor colorWithRed:184/255.0f green:184/255.0f blue:184/255.0f alpha:1.0f]
 
@@ -24,6 +31,7 @@
 
 @property (assign, nonatomic) CGSize itemSize;
 @property (nonatomic, copy) NSArray<Class> *sortedInputViewPluginArray;
+@property (nonatomic, strong) UIColor *messageInputViewMorePanelBackgroundColor;
 
 @end
 
@@ -100,8 +108,8 @@
     return _sortedInputViewPluginArray;
 }
 
-- (void)moreView:(LCCKChatMoreView *)moreView selectIndex:(LCCKInputViewPluginType)itemType {
-    NSNumber *typeKey = [NSNumber numberWithInt:itemType];
+- (void)moreView:(LCCKChatMoreView *)moreView selectIndex:(NSInteger)itemType {
+    NSNumber *typeKey = @(itemType);
     id<LCCKInputViewPluginDelegate> inputViewPlugin = [[LCCKInputViewPluginDict objectForKey:typeKey] new];
     inputViewPlugin.inputViewRef = self.inputViewRef;
     [inputViewPlugin pluginDidClicked];
@@ -127,8 +135,8 @@
     return [images copy];
 }
 
-- (LCCKInputViewPluginType)inputViewPluginTypeForItemTag:(NSInteger)tag {
-    NSArray *allPlugins = [LCCKInputViewPluginDict allKeys];
+- (NSInteger)inputViewPluginTypeForItemTag:(NSInteger)tag {
+    NSArray<NSNumber *> *allPlugins = [LCCKInputViewPluginDict allKeys];
     NSArray *allDefalutPlugins = [allPlugins filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"SELF < 0"]];
     NSInteger allDefalutPluginsCount = [allDefalutPlugins count];
     if (tag >= allDefalutPluginsCount) {
@@ -165,6 +173,7 @@
         make.left.and.right.mas_equalTo(self);
         make.bottom.mas_equalTo(self).offset(-10);
     }];
+    self.backgroundColor = self.messageInputViewMorePanelBackgroundColor;
     [self reloadData];
 }
 
@@ -172,7 +181,7 @@
     __block NSUInteger line = 0;   //行数
     __block NSUInteger column = 0; //列数
     __block NSUInteger page = 0;
-    [self.titles enumerateObjectsUsingBlock:^(NSString *obj, NSUInteger idx, BOOL *stop) {
+    [self.titles enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         if (column > 3) {
             line ++ ;
             column = 0;
@@ -187,13 +196,28 @@
         CGFloat scrollViewHeight = kFunctionViewHeight - self.edgeInsets.top - self.edgeInsets.bottom;
         CGFloat startX = column * self.itemSize.width + page * scrollViewWidth;
         CGFloat startY = line * self.itemSize.height;
-        LCCKInputViewPluginType type = [self inputViewPluginTypeForItemTag:idx];
-        NSNumber *typeKey = [NSNumber numberWithInt:type];
+        NSInteger type = [self inputViewPluginTypeForItemTag:idx];
+        NSNumber *typeKey = @(type);
         LCCKInputViewPlugin *item = [[[LCCKInputViewPluginDict objectForKey:typeKey] alloc] initWithFrame:CGRectMake(startX, startY, self.itemSize.width, self.itemSize.height)];
         [item fillWithPluginTitle:obj pluginIconImage:self.images[idx]];
         item.tag = idx;
         [item addTarget:self action:@selector(itemClickAction:) forControlEvents:UIControlEventTouchUpInside];
         [self.scrollView addSubview:item];
+        if (!item) {
+            NSString *formatString = @"\n\n\
+            ------ BEGIN NSException Log ---------------\n \
+            class name: %@                              \n \
+            ------line: %@                              \n \
+            ----reason: %@                              \n \
+            ------ END -------------------------------- \n\n";
+            NSString *reason = [NSString stringWithFormat:formatString,
+                                @(__PRETTY_FUNCTION__),
+                                @(__LINE__),
+                                @"Please make sure the custom InputViewPlugin type increase from 1 consecutively.[Chinese:]请确保自定义插件的 type 值从1开始连续递增，详情请查看文档：https://github.com/leancloud/ChatKit-OC/blob/master/ChatKit%20%E8%87%AA%E5%AE%9A%E4%B9%89%E4%B8%9A%E5%8A%A1.md#%E8%87%AA%E5%AE%9A%E4%B9%89%E8%BE%93%E5%85%A5%E6%A1%86%E6%8F%92%E4%BB%B6"];
+            @throw [NSException exceptionWithName:NSGenericException
+                                           reason:reason
+                                         userInfo:nil];
+        }
         [self.itemViews addObject:item];
         column ++;
         if (idx == self.titles.count - 1) {
@@ -203,23 +227,6 @@
         }
     }];
 }
-
-#pragma mark - Setters
-
-//- (void)setDataSource:(id<LCCKChatMoreViewDataSource>)dataSource {
-//    _dataSource = dataSource;
-//    [self reloadData];
-//}
-//
-//- (void)setEdgeInsets:(UIEdgeInsets)edgeInsets{
-//    _edgeInsets = edgeInsets;
-//    [self reloadData];
-//}
-//
-//- (void)setNumberPerLine:(NSUInteger)numberPerLine {
-//    _numberPerLine = numberPerLine;
-//    [self reloadData];
-//}
 
 #pragma mark - Getters
 
@@ -243,6 +250,14 @@
         [self addSubview:(_pageControl = pageControl)];
     }
     return _pageControl;
+}
+
+- (UIColor *)messageInputViewMorePanelBackgroundColor {
+    if (_messageInputViewMorePanelBackgroundColor) {
+        return _messageInputViewMorePanelBackgroundColor;
+    }
+    _messageInputViewMorePanelBackgroundColor = [[LCCKSettingService sharedInstance] defaultThemeColorForKey:@"MessageInputView-MorePanel-BackgroundColor"];
+    return _messageInputViewMorePanelBackgroundColor;
 }
 
 @end

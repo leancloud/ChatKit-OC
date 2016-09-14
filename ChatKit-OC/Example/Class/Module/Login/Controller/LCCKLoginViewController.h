@@ -20,6 +20,7 @@ typedef void (^LCCKClientIDHandler)(NSString *clientID);
 @property (weak) IBOutlet MLPAutoCompleteTextField *autocompleteTextField;
 @property (strong, nonatomic) IBOutlet UILabel *demoTitle;
 @property (strong, nonatomic) IBOutlet UILabel *author;
+@property (nonatomic, assign, getter=isAutoLogin) BOOL autoLogin;
 
 - (void)setClientIDHandler:(LCCKClientIDHandler)clientIDHandler;
 

@@ -15,4 +15,5 @@
 - (void)config;
 
 - (RedpacketUserInfo *)redpacketUserInfo;
+- (void)lcck_setting;
 @end

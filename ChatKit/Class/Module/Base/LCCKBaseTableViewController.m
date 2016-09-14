@@ -2,8 +2,8 @@
 //  LCCKBaseTableViewController.h
 //  LeanCloudChatKit-iOS
 //
-// v0.5.1 Created by 陈宜龙 on 16/3/9.
-//  Copyright © 2016年 ElonChan. All rights reserved.
+//  v0.7.15 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/3/9.
+//  Copyright © 2016年 LeanCloud. All rights reserved.
 //
 
 
@@ -40,7 +40,7 @@
         CGRect tableViewFrame = self.view.bounds;
         UITableView *tableView = [[UITableView alloc] initWithFrame:tableViewFrame style:self.tableViewStyle];
         tableView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-        tableView.backgroundColor = self.view.backgroundColor;
+        tableView.backgroundColor = [UIColor clearColor];
         tableView.contentInset = UIEdgeInsetsMake(0, 0, 0, 0);
         if (self.tableViewStyle == UITableViewStyleGrouped) {
             UIView *backgroundView = [[UIView alloc] initWithFrame:tableView.bounds];
@@ -74,6 +74,9 @@
     if (self.viewControllerStyle == LCCKViewControllerStylePresenting) {
         self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"取消" style:UIBarButtonItemStylePlain target:self action:@selector(dismissViewController:)];
     }
+    self.checkSessionStatus = YES;
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidBecomeActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationWillResignActive:) name:UIApplicationWillResignActiveNotification object:nil];
 }
 
 - (void)dismissViewController:(id)sender {
@@ -121,6 +124,14 @@
 
 - (void)statusViewClicked:(id)sender {
     [[LCCKSessionService sharedInstance] reconnectForViewController:self callback:nil];
+}
+
+- (void)applicationDidBecomeActive:(NSNotification*)note {
+    self.checkSessionStatus = YES;
+}
+
+- (void)applicationWillResignActive:(NSNotification*)note {
+    self.checkSessionStatus = NO;
 }
 
 @end

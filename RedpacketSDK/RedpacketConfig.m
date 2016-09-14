@@ -5,13 +5,18 @@
 //  Created by YANG HONGBO on 2016-4-25.
 //  Copyright © 2016年 云帐户. All rights reserved.
 //
-
+#if __has_include(<ChatKit/LCChatKit.h>)
+#import <ChatKit/LCChatKit.h>
+#else
+#import "LCChatKit.h"
+#endif
 #import <UIKit/UIKit.h>
 #import "LCCKExampleConstants.h"
 #import "RedpacketConfig.h"
 #import "YZHRedpacketBridge.h"
 #import "RedpacketMessageModel.h"
-
+#import "AppDelegate+RedPacket.h"
+#import "AVIMTypedMessageRedPacketTaken.h"
 //	*此为演示地址* App需要修改为自己AppServer上的地址, 数据格式参考此地址给出的格式。
 static NSString *requestUrl = @"https://rpv2.yunzhanghu.com/api/sign?duid=";
 
@@ -53,6 +58,9 @@ static NSString *requestUrl = @"https://rpv2.yunzhanghu.com/api/sign?duid=";
 
 - (void)config
 {
+    [AppDelegate swizzleRedPacketMethod];
+    [[YZHRedpacketBridge sharedBridge] setRedacketURLScheme:@"redpacket.chatkit"];
+    
     NSString *userId = self.redpacketUserInfo.userId;
     if(userId && [[YZHRedpacketBridge sharedBridge] isNeedUpdateSignWithUserId:userId]) {
 
@@ -92,5 +100,28 @@ static NSString *requestUrl = @"https://rpv2.yunzhanghu.com/api/sign?duid=";
     user.userAvatar = avatarURL;
     return user;
 }
+- (void)lcck_setting{
+    LCCKFilterMessagesBlock filterMessagesBlock = [LCCKConversationService sharedInstance].filterMessagesBlock;
+    [[LCCKConversationService sharedInstance] setFilterMessagesBlock:^(AVIMConversation *conversation, NSArray<AVIMTypedMessage *> *messages, LCCKFilterMessagesCompletionHandler completionHandler) {
+        NSMutableArray * messageArray = [messages mutableCopy];
+        [messages enumerateObjectsUsingBlock:^(AVIMTypedMessage *  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            
+            if ([obj isKindOfClass:[AVIMTypedMessageRedPacketTaken class]]) {
+                RedpacketMessageModel * rpModel = [RedpacketMessageModel redpacketMessageModelWithDic:obj.attributes];
+                if (![rpModel.redpacketSender.userId isEqualToString:self.redpacketUserInfo.userId] &&
+                    ![rpModel.redpacketReceiver.userId isEqualToString:self.redpacketUserInfo.userId] )
+                {
+                    [messageArray removeObject:obj];
+                }
+            }
+        }];
+        
+        if (filterMessagesBlock) {
+            filterMessagesBlock(conversation,messageArray,completionHandler);
+        }else{
+            completionHandler([messageArray copy], nil);
+        }
+    }];
 
+}
 @end

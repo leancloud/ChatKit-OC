@@ -2,8 +2,8 @@
 //  AVIMTypedMessage+LCCKExtension.m
 //  ChatKit
 //
-// v0.5.1 Created by 陈宜龙 on 16/5/26.
-//  Copyright © 2016年 ElonChan. All rights reserved.
+//  v0.7.15 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/5/26.
+//  Copyright © 2016年 LeanCloud. All rights reserved.
 //
 
 #import "AVIMTypedMessage+LCCKExtension.h"
@@ -34,19 +34,12 @@
             avimTypedMessage = [AVIMAudioMessage messageWithText:nil attachedFilePath:message.voicePath attributes:nil];
             break;
         }
-            
-//        case LCCKMessageTypeEmotion:
-            //#import "AVIMEmotionMessage.h"
-            //            avimTypedMessage = [AVIMEmotionMessage messageWithEmotionPath:message.emotionName];
-//            break;
-            
         case kAVIMMessageMediaTypeLocation: {
             avimTypedMessage = [AVIMLocationMessage messageWithText:message.geolocations
                                                            latitude:message.location.coordinate.latitude
                                                           longitude:message.location.coordinate.longitude
                                                          attributes:nil];
             break;
-//        case kAVIMMessageMediaTypeSystem:
         case kAVIMMessageMediaTypeNone:
             //TODO:
             break;

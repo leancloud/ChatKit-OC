@@ -2,8 +2,8 @@
 //  LCCKMessage.m
 //  LeanCloudChatKit-iOS
 //
-// v0.5.1 Created by 陈宜龙 on 16/3/21.
-//  Copyright © 2016年 ElonChan. All rights reserved.
+//  v0.7.15 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/3/21.
+//  Copyright © 2016年 LeanCloud. All rights reserved.
 //
 
 #import "LCCKMessage.h"
@@ -15,7 +15,7 @@
 #else
 #import "AVIMTypedMessage.h"
 #endif
-#import "AVIMConversation+LCCKAddition.h"
+#import "AVIMConversation+LCCKExtension.h"
 #import "UIImage+LCCKExtension.h"
 //#define LCCKIsDebugging 1
 #import "NSObject+LCCKExtension.h"
@@ -84,6 +84,16 @@
     if (_localMessageId) {
         return _localMessageId;
     }
+    return nil;
+}
+
+- (NSString *)localDisplayName {
+    NSString *localDisplayName = self.sender.name ?: self.senderId;
+    if (!self.sender.name && [LCCKSettingService sharedInstance].isDisablePreviewUserId) {
+        NSString *defaultNickNameWhenNil = LCCKLocalizedStrings(@"nickNameIsNil");
+        localDisplayName = defaultNickNameWhenNil.length > 0 ? defaultNickNameWhenNil : @"";
+    }
+    return localDisplayName;
 }
 
 - (BOOL)isLocalMessage {
@@ -265,7 +275,7 @@
     return self;
 }
 
-+ (LCCKMessage *)messageWithAVIMTypedMessage:(AVIMTypedMessage *)message {
++ (id)messageWithAVIMTypedMessage:(AVIMTypedMessage *)message {
     //FIXME:自定义消息
     if ([message lcck_isCustomMessage]) {
         if ([message lcck_isSupportThisCustomMessage]) {
@@ -353,7 +363,7 @@
     } else {
         lcckMessage.ownerType = LCCKMessageOwnerTypeOther;
     }
-    lcckMessage.sendStatus = message.status;
+    lcckMessage.sendStatus = (LCCKMessageSendState)message.status;
 
     return lcckMessage;
 }
@@ -393,7 +403,7 @@
         _localMessageId = [aDecoder decodeObjectForKey:@"localMessageId"];
         
         _conversationId = [aDecoder decodeObjectForKey:@"conversationId"];
-        _mediaType = [aDecoder decodeIntForKey:@"messageMediaType"];
+        _mediaType = [aDecoder decodeIntForKey:@"mediaType"];
 //        _messageGroupType = [aDecoder decodeIntForKey:@"messageGroupType"];
         _messageReadState = [aDecoder decodeIntForKey:@"messageReadState"];
         _ownerType = [aDecoder decodeIntForKey:@"ownerType"];

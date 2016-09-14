@@ -2,12 +2,11 @@
 //  LCCKChatLocationMessageCell.m
 //  LCCKChatExample
 //
-//  Created by ElonChan ( https://github.com/leancloud/ChatKit-OC ) on 15/11/17.
+//  v0.7.15 Created by ElonChan (微信向我报BUG:chenyilong1010) ( https://github.com/leancloud/ChatKit-OC ) on 15/11/17.
 //  Copyright © 2015年 https://LeanCloud.cn . All rights reserved.
 //
 
 #import "LCCKChatLocationMessageCell.h"
-#import "Masonry.h"
 #import "UIImage+LCCKExtension.h"
 
 @interface LCCKChatLocationMessageCell ()
@@ -27,10 +26,22 @@
     self.locationAddressLabel.text = message.geolocations;
 }
 
-- (void)updateConstraints {
-    [super updateConstraints];
+#pragma mark - Public Methods
+
+- (void)setup {
+    [self.messageContentView addSubview:self.locationImageView];
+    [self.messageContentView addSubview:self.locationAddressOverlay];
+    
+    UIEdgeInsets edgeMessageBubbleCustomize;
+    if (self.messageOwner == LCCKMessageOwnerTypeSelf) {
+        UIEdgeInsets rightEdgeMessageBubbleCustomize = [LCCKSettingService sharedInstance].rightHollowEdgeMessageBubbleCustomize;
+        edgeMessageBubbleCustomize = rightEdgeMessageBubbleCustomize;
+    } else {
+        UIEdgeInsets leftEdgeMessageBubbleCustomize = [LCCKSettingService sharedInstance].leftHollowEdgeMessageBubbleCustomize;
+        edgeMessageBubbleCustomize = leftEdgeMessageBubbleCustomize;
+    }
     [self.locationImageView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.edges.equalTo(self.messageContentView);
+        make.edges.equalTo(self.messageContentView).with.insets(edgeMessageBubbleCustomize);
         make.height.equalTo(@(141));
         make.width.equalTo(@(250));
     }];
@@ -45,14 +56,7 @@
     [self.locationAddressLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.edges.equalTo(self.locationAddressOverlay).with.insets(UIEdgeInsetsMake(offset, offset, offset, offset));
     }];
-
-}
-
-#pragma mark - Public Methods
-
-- (void)setup {
-    [self.messageContentView addSubview:self.locationImageView];
-    [self.messageContentView addSubview:self.locationAddressOverlay];   
+    
     [super setup];
     [self addGeneralView];
 

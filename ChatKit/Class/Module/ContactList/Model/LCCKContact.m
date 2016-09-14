@@ -2,8 +2,8 @@
 //  LCCKContact.m
 //  ChatKit
 //
-// v0.5.1 Created by 陈宜龙 on 16/7/11.
-//  Copyright © 2016年 ElonChan. All rights reserved.
+//  v0.7.15 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/7/11.
+//  Copyright © 2016年 LeanCloud. All rights reserved.
 //
 
 #import "LCCKContact.h"
@@ -37,6 +37,23 @@
                                   avatarURL:self.avatarURL
                                    clientId:self.clientId
             ];
+}
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+    [aCoder encodeObject:self.userId forKey:@"userId"];
+    [aCoder encodeObject:self.name forKey:@"name"];
+    [aCoder encodeObject:self.avatarURL forKey:@"avatarURL"];
+    [aCoder encodeObject:self.clientId forKey:@"clientId"];
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+    if(self = [super init]){
+        _userId = [aDecoder decodeObjectForKey:@"userId"];
+        _name = [aDecoder decodeObjectForKey:@"name"];
+        _avatarURL = [aDecoder decodeObjectForKey:@"avatarURL"];
+        _clientId = [aDecoder decodeObjectForKey:@"clientId"];
+    }
+    return self;
 }
 
 @end

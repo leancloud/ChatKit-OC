@@ -2,8 +2,8 @@
 //  ChatKitHeaders.h
 //  LeanCloudIMKit-iOS
 //
-// v0.5.1 Created by 陈宜龙 on 16/3/11.
-//  Copyright © 2016年 ElonChan. All rights reserved.
+//  v0.7.15 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/3/11.
+//  Copyright © 2016年 LeanCloud. All rights reserved.
 //
 
 FOUNDATION_EXPORT double LCChatKitVersionNumber;
@@ -32,7 +32,7 @@ FOUNDATION_EXPORT const unsigned char LCChatKitVersionString[];
     #import <ChatKit/LCCKServiceDefinition.h>
     #import <ChatKit/LCCKConversationViewController.h>
     #import <ChatKit/LCCKConversationListViewController.h>
-    #import <ChatKit/AVIMConversation+LCCKAddition.h>
+    #import <ChatKit/AVIMConversation+LCCKExtension.h>
     #import <ChatKit/UIImageView+LCCKExtension.h>
     #import <ChatKit/LCCKBaseTableViewController.h>
     #import <ChatKit/LCCKBaseNavigationController.h>
@@ -48,6 +48,11 @@ FOUNDATION_EXPORT const unsigned char LCChatKitVersionString[];
     #import <ChatKit/LCCKContact.h>
     #import <ChatKit/AVIMTypedMessage+LCCKExtension.h>
     #import <ChatKit/LCCKInputViewPlugin.h>
+    #import <ChatKit/LCCKInputViewPluginPickImage.h>
+    #import <ChatKit/LCCKInputViewPluginTakePhoto.h>
+    #import <ChatKit/LCCKInputViewPluginLocation.h>
+    #import <ChatKit/LCCKAlertController.h>
+    #import <ChatKit/NSFileManager+LCCKExtension.h>
 
 #else
 
@@ -61,7 +66,7 @@ FOUNDATION_EXPORT const unsigned char LCChatKitVersionString[];
     #import "LCCKServiceDefinition.h"
     #import "LCCKConversationViewController.h"
     #import "LCCKConversationListViewController.h"
-    #import "AVIMConversation+LCCKAddition.h"
+    #import "AVIMConversation+LCCKExtension.h"
     #import "UIImageView+LCCKExtension.h"
     #import "LCCKBaseTableViewController.h"
     #import "LCCKBaseNavigationController.h"
@@ -77,6 +82,11 @@ FOUNDATION_EXPORT const unsigned char LCChatKitVersionString[];
     #import "LCCKContact.h"
     #import "AVIMTypedMessage+LCCKExtension.h"
     #import "LCCKInputViewPlugin.h"
+    #import "LCCKInputViewPluginPickImage.h"
+    #import "LCCKInputViewPluginTakePhoto.h"
+    #import "LCCKInputViewPluginLocation.h"
+    #import "LCCKAlertController.h"
+    #import "NSFileManager+LCCKExtension.h"
 
 #endif
 

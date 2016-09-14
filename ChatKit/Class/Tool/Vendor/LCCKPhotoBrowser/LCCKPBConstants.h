@@ -12,9 +12,9 @@
 
 // Debug Logging
 #if 1 // Set to 1 to enable debug logging
-  #define LCCKLog(x, ...) NSLog(x, ## __VA_ARGS__);
+  #define LCCKPBLog(x, ...) NSLog(x, ## __VA_ARGS__);
 #else
-  #define LCCKLog(x, ...)
+  #define LCCKPBLog(x, ...)
 #endif
 
 //

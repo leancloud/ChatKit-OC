@@ -2,8 +2,8 @@
 //  NSBundle+LCCKExtension.m
 //  ChatKit
 //
-// v0.5.1 Created by 陈宜龙 on 16/5/19.
-//  Copyright © 2016年 ElonChan. All rights reserved.
+//  v0.7.15 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/5/19.
+//  Copyright © 2016年 LeanCloud. All rights reserved.
 //
 
 #import "NSBundle+LCCKExtension.h"
@@ -16,7 +16,18 @@
     return bundlePath;
 }
 
-+ (NSBundle *)lcck_bundleForbundleName:(NSString *)bundleName class:(Class)aClass {
++ (NSString *)lcck_customizedBundlePathForBundleName:(NSString *)bundleName {
+    NSString *customizedBundlePathComponent = [NSString stringWithFormat:@"CustomizedChatKit.%@.bundle", bundleName];
+    NSString *customizedBundlePath =[[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:customizedBundlePathComponent];
+    return customizedBundlePath;
+}
+
++ (NSBundle *)lcck_bundleForName:(NSString *)bundleName class:(Class)aClass {
+    NSString *customizedBundlePath = [NSBundle lcck_customizedBundlePathForBundleName:bundleName];
+    NSBundle *customizedBundle = [NSBundle bundleWithPath:customizedBundlePath];
+    if (customizedBundle) {
+        return customizedBundle;
+    }
     NSString *bundlePath = [NSBundle lcck_bundlePathForBundleName:bundleName class:aClass];
     NSBundle *bundle = [NSBundle bundleWithPath:bundlePath];
     return bundle;

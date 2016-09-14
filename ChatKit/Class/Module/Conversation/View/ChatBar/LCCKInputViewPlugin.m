@@ -2,13 +2,23 @@
 //  LCCKInputViewPlugin.m
 //  Pods
 //
-// v0.5.1 Created by 陈宜龙 on 16/7/19.
+//  v0.7.15 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/7/19.
 //
 //
 
 #import "LCCKInputViewPlugin.h"
+
+#if __has_include(<ChatKit/LCChatKit.h>)
 #import <ChatKit/LCChatKit.h>
+#else
+#import "LCChatKit.h"
+#endif
+
+#if __has_include(<Masonry/Masonry.h>)
+#import <Masonry/Masonry.h>
+#else
 #import "Masonry.h"
+#endif
 
 NSMutableDictionary const *LCCKInputViewPluginDict = nil;
 NSMutableArray const *LCCKInputViewPluginArray = nil;
@@ -18,11 +28,18 @@ NSMutableArray const *LCCKInputViewPluginArray = nil;
 @property (nonatomic, readwrite) LCCKInputViewPluginType pluginType;
 @property (strong, nonatomic) UIButton *button;
 @property (strong, nonatomic) UILabel *titleLabel;
+@property (nonatomic, strong) UIColor *messageInputViewMorePanelTextColor;
 
 @end
 
 @implementation LCCKInputViewPlugin
+@synthesize delegate = _delegate;
+@synthesize inputViewRef = _inputViewRef;
+@synthesize pluginContentView = _pluginContentView;
 @synthesize pluginType = _pluginType;
+@synthesize pluginIconImage = _pluginIconImage;
+@synthesize pluginTitle = _pluginTitle;
+@synthesize sendCustomMessageHandler = _sendCustomMessageHandler;
 
 - (instancetype)init {
     if (![self conformsToProtocol:@protocol(LCCKInputViewPluginSubclassing)]) {
@@ -47,7 +64,7 @@ NSMutableArray const *LCCKInputViewPluginArray = nil;
 }
 
 + (Class)classForMediaType:(LCCKInputViewPluginType)type {
-    NSNumber *typeKey = [NSNumber numberWithInt:type];
+    NSNumber *typeKey = [NSNumber numberWithInteger:type];
     Class class = [LCCKInputViewPluginDict objectForKey:typeKey];
     if (!class) {
         class = self;
@@ -62,7 +79,7 @@ NSMutableArray const *LCCKInputViewPluginArray = nil;
     if (!LCCKInputViewPluginArray) {
         LCCKInputViewPluginArray = [[NSMutableArray alloc] init];
     }
-    NSNumber *typeKey = [NSNumber numberWithInt:type];
+    NSNumber *typeKey = [NSNumber numberWithInteger:type];
     Class c = [LCCKInputViewPluginDict objectForKey:typeKey];
     if (!c || [class isSubclassOfClass:c]) {
         [LCCKInputViewPluginDict setObject:class forKey:typeKey];
@@ -102,12 +119,11 @@ NSMutableArray const *LCCKInputViewPluginArray = nil;
 
 #pragma mark - Public Methods
 
-- (instancetype)fillWithPluginTitle:(NSString *)pluginTitle
-                    pluginIconImage:(UIImage *)pluginIconImage {
+- (void)fillWithPluginTitle:(NSString *)pluginTitle
+            pluginIconImage:(UIImage *)pluginIconImage {
     self.titleLabel.text = pluginTitle;
     [self.button setBackgroundImage:pluginIconImage forState:UIControlStateNormal];
 }
-
 
 #pragma mark - Private Methods
 
@@ -144,7 +160,7 @@ NSMutableArray const *LCCKInputViewPluginArray = nil;
     if (!_titleLabel) {
         _titleLabel = [[UILabel alloc] init];
         _titleLabel.font = [UIFont systemFontOfSize:13.0f];
-        _titleLabel.textColor = [UIColor darkTextColor];
+        _titleLabel.textColor = self.messageInputViewMorePanelTextColor;
     }
     return _titleLabel;
 }
@@ -159,6 +175,14 @@ NSMutableArray const *LCCKInputViewPluginArray = nil;
     } else {
         return nil;
     }
+}
+
+- (UIColor *)messageInputViewMorePanelTextColor {
+    if (_messageInputViewMorePanelTextColor) {
+        return _messageInputViewMorePanelTextColor;
+    }
+    _messageInputViewMorePanelTextColor = [[LCCKSettingService sharedInstance] defaultThemeColorForKey:@"MessageInputView-MorePanel-TextColor"];
+    return _messageInputViewMorePanelTextColor;
 }
 
 @end
