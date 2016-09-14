@@ -418,24 +418,13 @@ NSString *const LCCKConversationServiceErrorDomain = @"LCCKConversationServiceEr
 }
 
 - (void)updateRecentConversation:(NSArray *)conversations shouldRefreshWhenFinished:(BOOL)shouldRefreshWhenFinished {
-    //仅复制需要存储到数据库的值
-    for (AVIMConversation *conversation in conversations) {
-        AVIMConversation *cachedConversation = [self.conversationDictionary objectForKey:conversation.conversationId];
-        if (cachedConversation) {
-            cachedConversation.lcck_unreadCount = conversation.lcck_unreadCount;
-            cachedConversation.lcck_draft = [conversation.lcck_draft copy];
-            cachedConversation.lcck_mentioned = conversation.lcck_mentioned;
+    [self.databaseQueue inDatabase:^(FMDatabase *db) {
+        [db beginTransaction];
+        for (AVIMConversation *conversation in conversations) {
+            [db executeUpdate:LCCKConversationTableUpdateDataSQL, [self dataFromConversation:conversation], conversation.conversationId];
         }
-    }
-    dispatch_async(self.sqliteQueue, ^{
-        [self.databaseQueue inDatabase:^(FMDatabase *db) {
-            [db beginTransaction];
-            for (AVIMConversation *conversation in conversations) {
-                [db executeUpdate:LCCKConversationTableUpdateDataSQL, [self dataFromConversation:conversation], conversation.conversationId];
-            }
-            [db commit];
-        }];
-    });
+        [db commit];
+    }];
     if (shouldRefreshWhenFinished) {
         [[NSNotificationCenter defaultCenter] postNotificationName:LCCKNotificationConversationListDataSourceUpdated object:self];
     }
@@ -462,7 +451,9 @@ NSString *const LCCKConversationServiceErrorDomain = @"LCCKConversationServiceEr
     }
     return removeAllCachedRecentConversationsSuccess;
 }
+
 #pragma mark - conversationDictionary
+
 /**
  *  在内存中缓存对话，避免反复查询数据库，与数据库保持一致，只对数据库只做增、删、改操作。
  */
@@ -483,6 +474,7 @@ NSString *const LCCKConversationServiceErrorDomain = @"LCCKConversationServiceEr
     }
     return _conversationDictionary;
 }
+
 /**
  *  数据库增删改queue，对数据库的操作在这个queue上执行。
  */
@@ -493,6 +485,7 @@ NSString *const LCCKConversationServiceErrorDomain = @"LCCKConversationServiceEr
     }
     return _sqliteQueue;
 }
+
 #pragma mark - FailedMessageStore
 ///=============================================================================
 /// @name FailedMessageStore
