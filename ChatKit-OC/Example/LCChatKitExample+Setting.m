@@ -21,10 +21,9 @@
 //#import "MWPhotoBrowser.h"
 #import "NSObject+LCCKHUD.h"
 
-
-#warning TODO: CHANGE TO YOUR AppId and AppKey
-static NSString *const LCCKAPPID = @"x3o016bxnkpyee7e9pa5pre6efx2dadyerdlcez0wbzhw25g";
-static NSString *const LCCKAPPKEY = @"057x24cfdzhffnl3dzk14jh9xo2rq6w1hy1fdzt5tv46ym78";
+#warning TODO: CHANGE TO YOUR OWN AppId and AppKey
+static NSString *const LCCKAPPID = @"dYRQ8YfHRiILshUnfFJu2eQM-gzGzoHsz";
+static NSString *const LCCKAPPKEY = @"ye24iIK6ys8IvaISMC4Bs5WK";
 
 @implementation LCChatKitExample (Setting)
 
@@ -242,8 +241,7 @@ static NSString *const LCCKAPPKEY = @"057x24cfdzhffnl3dzk14jh9xo2rq6w1hy1fdzt5tv
              [LCCKUtil showNotificationWithTitle:title
                                         subtitle:subTitle
                                             type:LCCKMessageNotificationTypeError];
-         }
-         else if (error.code == 4304) {
+         } else if (error.code == 4304) {
              title = @"群已满";
              [LCCKUtil showNotificationWithTitle:title
                                         subtitle:subTitle

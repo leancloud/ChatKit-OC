@@ -23,9 +23,6 @@
 #import "LCCKLoginViewController.h"
 #import "LCCKVCardMessageCell.h"
 
-#import "LCCKExampleConstants.h"
-#import "LCCKContactManager.h"
-
 #import "LCChatKitExample+Setting.h"
 #import "RedpacketConfig.h"
 
@@ -77,17 +74,6 @@
     }];
 }
 
-+ (void)saveLocalClientInfo:(NSString *)clientId {
-    // 在系统偏好保存信息
-    NSUserDefaults *defaultsSet = [NSUserDefaults standardUserDefaults];
-    [defaultsSet setObject:clientId forKey:LCCK_KEY_USERID];
-    [defaultsSet synchronize];
-    NSString *subtitle = [NSString stringWithFormat:@"User Id 是 : %@", clientId];
-    [LCCKUtil showNotificationWithTitle:@"登陆成功"
-                               subtitle:subtitle
-                                   type:LCCKMessageNotificationTypeSuccess];
-}
-
 + (void)invokeThisMethodAfterLoginSuccessWithClientId:(NSString *)clientId
                                               success:(LCCKVoidBlock)success
                                                failed:(LCCKErrorBlock)failed {
@@ -116,12 +102,12 @@
         /*!
          *  当使用 https://github.com/leancloud/leanchat-cloudcode 云代码更改推送内容的时候
          {
-         aps =     {
-         alert = "lcckkit : sdfsdf";
-         badge = 4;
-         sound = default;
-         };
-         convid = 55bae86300b0efdcbe3e742e;
+         aps = {
+                alert = "lcckkit : sdfsdf";
+                badge = 4;
+                sound = default;
+            };
+          convid = 55bae86300b0efdcbe3e742e;
          }
          */
         [[LCChatKit sharedInstance] didReceiveRemoteNotification:userInfo];
@@ -145,6 +131,7 @@
 - (void)exampleInit {
     [self lcck_setting];
     [[RedpacketConfig sharedConfig] lcck_setting];
+
 }
 
 #pragma -
@@ -152,7 +139,6 @@
 
 + (void)exampleChangeGroupAvatarURLsForConversationId:(NSString *)conversationId {
     [self lcck_exampleChangeGroupAvatarURLsForConversationId:conversationId shouldInsert:YES];
-
 }
 
 + (void)exampleCreateGroupConversationFromViewController:(UIViewController *)fromViewController {
@@ -205,8 +191,8 @@
  *  打开单聊页面
  */
 + (void)exampleOpenConversationViewControllerWithPeerId:(NSString *)peerId
-                               fromNavigationController:
-(UINavigationController *)navigationController {
+                               fromNavigationController:(UINavigationController *)navigationControlle {
+
     LCCKConversationViewController *conversationViewController =
     [[LCCKConversationViewController alloc] initWithPeerId:peerId];
     [conversationViewController
@@ -269,14 +255,12 @@
     if ([userId isEqualToString:currentClientId]) {
         title = [NSString stringWithFormat:@"打开自己的主页 \nClientId是 : %@", userId];
         subtitle = [NSString stringWithFormat:@"我自己的name是 : %@", user.name];
-
+    
     } else if ([parentController isKindOfClass:[LCCKConversationViewController class]]) {
-
         LCCKConversationViewController *conversationViewController_ =
         [[LCCKConversationViewController alloc] initWithPeerId:user.clientId ?: userId];
         [[self class] lcck_pushToViewController:conversationViewController_];
         return;
-
     }
     [LCCKUtil showNotificationWithTitle:title
                                subtitle:subtitle
@@ -296,6 +280,17 @@
         _sharedLCChatKitExample = [[self alloc] init];
     });
     return _sharedLCChatKitExample;
+}
+
++ (void)saveLocalClientInfo:(NSString *)clientId {
+    // 在系统偏好保存信息
+    NSUserDefaults *defaultsSet = [NSUserDefaults standardUserDefaults];
+    [defaultsSet setObject:clientId forKey:LCCK_KEY_USERID];
+    [defaultsSet synchronize];
+    NSString *subtitle = [NSString stringWithFormat:@"User Id 是 : %@", clientId];
+    [LCCKUtil showNotificationWithTitle:@"登陆成功"
+                               subtitle:subtitle
+                                   type:LCCKMessageNotificationTypeSuccess];
 }
 
 @end

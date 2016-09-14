@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		5D29D14B40B384F14AEF67FB /* libPods-ChatKit-OC.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 22BD12010D514C847BA7FC61 /* libPods-ChatKit-OC.a */; };
+		2523FF721D7FCF5000479FD2 /* LCChatKitExample+Setting.m in Sources */ = {isa = PBXBuildFile; fileRef = 2523FF6F1D7FCF5000479FD2 /* LCChatKitExample+Setting.m */; };
 		9A2669C81D6DA89100B66545 /* LCCKInputViewPluginConversationBackground.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A2669B81D6DA89100B66545 /* LCCKInputViewPluginConversationBackground.m */; };
 		9A2669C91D6DA89100B66545 /* LCCKVCardMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A2669BD1D6DA89100B66545 /* LCCKVCardMessage.m */; };
 		9A2669CA1D6DA89100B66545 /* calling_card_bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9A2669BF1D6DA89100B66545 /* calling_card_bg@2x.png */; };
@@ -35,6 +35,7 @@
 		9AD665CD1D22778B0040A4E3 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A0B721D1CED6637004FDACC /* MobileCoreServices.framework */; };
 		9AD665CE1D2277920040A4E3 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A0B721F1CED6644004FDACC /* CoreTelephony.framework */; };
 		9AD665CF1D22779A0040A4E3 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A0B72211CED664D004FDACC /* CoreLocation.framework */; };
+		CC6C2964FBC150C0C5153E17 /* libPods-ChatKit-OC.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D62193C0ECACB72DC928AD70 /* libPods-ChatKit-OC.a */; };
 		E700C7171D7193AB00056E3C /* AppDelegate+RedPacket.m in Sources */ = {isa = PBXBuildFile; fileRef = E700C6F71D7193AB00056E3C /* AppDelegate+RedPacket.m */; };
 		E700C7181D7193AB00056E3C /* AVIMTypedMessageRedPacket.m in Sources */ = {isa = PBXBuildFile; fileRef = E700C6F91D7193AB00056E3C /* AVIMTypedMessageRedPacket.m */; };
 		E700C7191D7193AB00056E3C /* AVIMTypedMessageRedPacketTaken.m in Sources */ = {isa = PBXBuildFile; fileRef = E700C6FB1D7193AB00056E3C /* AVIMTypedMessageRedPacketTaken.m */; };
@@ -67,10 +68,11 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		154945A33B10139C70F5F077 /* Pods-ChatKit-OC.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChatKit-OC.release.xcconfig"; path = "Pods/Target Support Files/Pods-ChatKit-OC/Pods-ChatKit-OC.release.xcconfig"; sourceTree = "<group>"; };
-		22BD12010D514C847BA7FC61 /* libPods-ChatKit-OC.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ChatKit-OC.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		2CAFBFA5C96378C343A25F5B /* Pods-ChatKit-OC.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChatKit-OC.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ChatKit-OC/Pods-ChatKit-OC.debug.xcconfig"; sourceTree = "<group>"; };
-		67C93A87F6B56BE4939A1E34 /* Pods-ChatKit-OC.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChatKit-OC.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ChatKit-OC/Pods-ChatKit-OC.debug.xcconfig"; sourceTree = "<group>"; };
+		2523FF6E1D7FCF5000479FD2 /* LCChatKitExample+Setting.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "LCChatKitExample+Setting.h"; sourceTree = "<group>"; };
+		2523FF6F1D7FCF5000479FD2 /* LCChatKitExample+Setting.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "LCChatKitExample+Setting.m"; sourceTree = "<group>"; };
+		2523FF701D7FCF5000479FD2 /* LCChatKitExample.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCChatKitExample.m; sourceTree = "<group>"; };
+		2523FF711D7FCF5000479FD2 /* LCChatKitExample.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCChatKitExample.h; sourceTree = "<group>"; };
+		7404AB0E0935F68A63803D6D /* Pods-ChatKit-OC.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChatKit-OC.release.xcconfig"; path = "Pods/Target Support Files/Pods-ChatKit-OC/Pods-ChatKit-OC.release.xcconfig"; sourceTree = "<group>"; };
 		9A0B721B1CED662D004FDACC /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		9A0B721D1CED6637004FDACC /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		9A0B721F1CED6644004FDACC /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
@@ -120,7 +122,8 @@
 		9A7E2DE71D5F1040003A7312 /* LCCKContactManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKContactManager.h; sourceTree = "<group>"; };
 		9A7E2DE81D5F1040003A7312 /* LCCKContactManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCKContactManager.m; sourceTree = "<group>"; };
 		9AAFE6571D48C863004A0309 /* zh-Hans-CN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans-CN"; path = "zh-Hans-CN.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
-		E519B8F873AC1DDD1A5C1645 /* Pods-ChatKit-OC.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChatKit-OC.release.xcconfig"; path = "Pods/Target Support Files/Pods-ChatKit-OC/Pods-ChatKit-OC.release.xcconfig"; sourceTree = "<group>"; };
+		D62193C0ECACB72DC928AD70 /* libPods-ChatKit-OC.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ChatKit-OC.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		E55D34EC8F162DB5443587B0 /* Pods-ChatKit-OC.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChatKit-OC.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ChatKit-OC/Pods-ChatKit-OC.debug.xcconfig"; sourceTree = "<group>"; };
 		E700C6F61D7193AB00056E3C /* AppDelegate+RedPacket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "AppDelegate+RedPacket.h"; sourceTree = "<group>"; };
 		E700C6F71D7193AB00056E3C /* AppDelegate+RedPacket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "AppDelegate+RedPacket.m"; sourceTree = "<group>"; };
 		E700C6F81D7193AB00056E3C /* AVIMTypedMessageRedPacket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVIMTypedMessageRedPacket.h; sourceTree = "<group>"; };
@@ -169,7 +172,7 @@
 				9AD665CD1D22778B0040A4E3 /* MobileCoreServices.framework in Frameworks */,
 				E75E22171D78284A005F6F8D /* libRedpacketLib.a in Frameworks */,
 				9AD665CC1D2277830040A4E3 /* SystemConfiguration.framework in Frameworks */,
-				5D29D14B40B384F14AEF67FB /* libPods-ChatKit-OC.a in Frameworks */,
+				CC6C2964FBC150C0C5153E17 /* libPods-ChatKit-OC.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -184,18 +187,9 @@
 				9A0B721F1CED6644004FDACC /* CoreTelephony.framework */,
 				9A0B721D1CED6637004FDACC /* MobileCoreServices.framework */,
 				9A0B721B1CED662D004FDACC /* SystemConfiguration.framework */,
-				22BD12010D514C847BA7FC61 /* libPods-ChatKit-OC.a */,
+				D62193C0ECACB72DC928AD70 /* libPods-ChatKit-OC.a */,
 			);
 			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		8A42ACE7FD4924496AFD414D /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				67C93A87F6B56BE4939A1E34 /* Pods-ChatKit-OC.debug.xcconfig */,
-				E519B8F873AC1DDD1A5C1645 /* Pods-ChatKit-OC.release.xcconfig */,
-			);
-			name = Pods;
 			sourceTree = "<group>";
 		};
 		9A2669B51D6DA89100B66545 /* Customize */ = {
@@ -274,6 +268,10 @@
 				E7302D801D81117700E8CDDE /* LCChatKitExample+Setting.m */,
 				9A4730291CECAEC500AEB86F /* AppDelegate.h */,
 				9A47302A1CECAEC500AEB86F /* AppDelegate.m */,
+				2523FF711D7FCF5000479FD2 /* LCChatKitExample.h */,
+				2523FF701D7FCF5000479FD2 /* LCChatKitExample.m */,
+				2523FF6E1D7FCF5000479FD2 /* LCChatKitExample+Setting.h */,
+				2523FF6F1D7FCF5000479FD2 /* LCChatKitExample+Setting.m */,
 				9A47305F1CECAEC500AEB86F /* LCCKTabBarControllerConfig.h */,
 				9A4730601CECAEC500AEB86F /* LCCKTabBarControllerConfig.m */,
 				9A47302B1CECAEC500AEB86F /* Class */,
@@ -421,7 +419,7 @@
 				9A754D4C1CECAC3E000967F1 /* Products */,
 				578A4ED63A7AFF3EA27EF73A /* Frameworks */,
 				E700C6F41D7192E800056E3C /* Recovered References */,
-				8A42ACE7FD4924496AFD414D /* Pods */,
+				DA96A2E70997437673F17F60 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -433,11 +431,18 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		DA96A2E70997437673F17F60 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				E55D34EC8F162DB5443587B0 /* Pods-ChatKit-OC.debug.xcconfig */,
+				7404AB0E0935F68A63803D6D /* Pods-ChatKit-OC.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 		E700C6F41D7192E800056E3C /* Recovered References */ = {
 			isa = PBXGroup;
 			children = (
-				2CAFBFA5C96378C343A25F5B /* Pods-ChatKit-OC.debug.xcconfig */,
-				154945A33B10139C70F5F077 /* Pods-ChatKit-OC.release.xcconfig */,
 			);
 			name = "Recovered References";
 			sourceTree = "<group>";
@@ -644,6 +649,7 @@
 				E700C71D1D7193AB00056E3C /* RedPacketInputViewPlugin.m in Sources */,
 				9A47306F1CECAEC500AEB86F /* LCCKPlusButtonSubclass.m in Sources */,
 				9A4730671CECAEC500AEB86F /* LCCKLoginViewController.m in Sources */,
+				2523FF721D7FCF5000479FD2 /* LCChatKitExample+Setting.m in Sources */,
 				9A4730611CECAEC500AEB86F /* AppDelegate.m in Sources */,
 				E7302DAE1D829A1000E8CDDE /* RedPacketChangeInputViewPlugin.m in Sources */,
 				E7302D821D81117700E8CDDE /* LCChatKitExample+Setting.m in Sources */,
@@ -776,7 +782,7 @@
 		};
 		9A754D631CECAC3E000967F1 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2CAFBFA5C96378C343A25F5B /* Pods-ChatKit-OC.debug.xcconfig */;
+			baseConfigurationReference = E55D34EC8F162DB5443587B0 /* Pods-ChatKit-OC.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -820,7 +826,7 @@
 		};
 		9A754D641CECAC3E000967F1 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 154945A33B10139C70F5F077 /* Pods-ChatKit-OC.release.xcconfig */;
+			baseConfigurationReference = 7404AB0E0935F68A63803D6D /* Pods-ChatKit-OC.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;

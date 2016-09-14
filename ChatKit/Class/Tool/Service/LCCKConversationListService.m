@@ -60,7 +60,7 @@
                     (!userId || !conversation.lcck_lastMessage) ?: [userIds addObject:userId];
                 }
             }
-            if (conversation.muted == NO) {
+            if (conversation.muted == NO && conversation.lcck_unreadCount > 0) {
                 totalUnreadCount += conversation.lcck_unreadCount;
             }
         }

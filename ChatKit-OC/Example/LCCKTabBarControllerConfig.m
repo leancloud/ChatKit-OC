@@ -206,7 +206,7 @@
 - (NSString *)arc4randomString {
     int a = arc4random_uniform(100000000);
     NSString *arc4randomString = [NSString stringWithFormat:@"%@", @(a)];
-    return @"5771e7656be3ff0063a0dada";
+    return arc4randomString;
 }
 
 - (void)addFriend {

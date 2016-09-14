@@ -116,8 +116,11 @@ typedef NS_ENUM(NSInteger, LCCKAlertActionStyle) {
 
 @property (nullable, nonatomic, strong, readonly) UIAlertController *alertController;
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
 @property (nullable, nonatomic, strong, readonly) UIActionSheet *actionSheet;
 @property (nullable, nonatomic, strong, readonly) UIAlertView *alertView;
+#pragma clang diagnostic pop
 
 // One if the above three.
 @property (nullable, nonatomic, strong, readonly) id presentedObject;
