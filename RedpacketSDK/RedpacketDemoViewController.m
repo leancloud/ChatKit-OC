@@ -125,20 +125,25 @@
     }
     else {
         switch (redpacket.redpacketType) {
-            case RedpacketTypeSingle:
-            case RedpacketTypeGroup:
-            case RedpacketTypeRand:
-            case RedpacketTypeAvg:
-            case RedpacketTypeRandpri:{
+            case RedpacketTypeSingle:{
                 AVIMTypedMessageRedPacketTaken * message = [[AVIMTypedMessageRedPacketTaken alloc]initWithClientId:self.clientId ConversationType:LCCKConversationTypeSingle receiveMembers:@[redpacket.redpacketSender.userId]];
                 message.rpModel = redpacket;
                 [self.chatViewModel sendCustomMessage:message];
                 break;
             }
+            case RedpacketTypeGroup:
+            case RedpacketTypeRand:
+            case RedpacketTypeAvg:
+            case RedpacketTypeRandpri:{
+//                AVIMTypedMessageRedPacketTaken * message = [[AVIMTypedMessageRedPacketTaken alloc]initWithClientId:self.clientId ConversationType:LCCKConversationTypeSingle receiveMembers:@[redpacket.redpacketSender.userId]];
+//                message.rpModel = redpacket;
+//                [self.chatViewModel sendCustomMessage:message];
+                break;
+            }
             case RedpacketTypeMember: {
-                AVIMTypedMessageRedPacketTaken * message = [[AVIMTypedMessageRedPacketTaken alloc]initWithClientId:self.clientId ConversationType:LCCKConversationTypeSingle receiveMembers:@[redpacket.toRedpacketReceiver.userId]];
-                message.rpModel = redpacket;
-                [self.chatViewModel sendCustomMessage:message];
+//                AVIMTypedMessageRedPacketTaken * message = [[AVIMTypedMessageRedPacketTaken alloc]initWithClientId:self.clientId ConversationType:LCCKConversationTypeSingle receiveMembers:@[redpacket.toRedpacketReceiver.userId]];
+//                message.rpModel = redpacket;
+//                [self.chatViewModel sendCustomMessage:message];
                 break;
             }
             default:{
@@ -150,16 +155,18 @@
 }
 
 - (void)getGroupMemberListCompletionHandle:(void (^)(NSArray<RedpacketUserInfo *> *))completionHandle{
-    
-    NSMutableArray * usersArray = [NSMutableArray array];
-    AVIMConversation *conversation = [self getConversationIfExists];
-    [conversation.members enumerateObjectsUsingBlock:^(NSString *  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        RedpacketUserInfo * userInfo = [RedpacketUserInfo new];
-        userInfo.userId = obj;
-        userInfo.userNickname = obj;
-        [usersArray addObject:userInfo];
-    }];
-    
-    completionHandle(usersArray);
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        NSMutableArray * usersArray = [NSMutableArray array];
+        AVIMConversation *conversation = [self getConversationIfExists];
+        [conversation.members enumerateObjectsUsingBlock:^(NSString *  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            RedpacketUserInfo * userInfo = [RedpacketUserInfo new];
+            userInfo.userId = obj;
+            userInfo.userNickname = obj;
+            [usersArray addObject:userInfo];
+        }];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            completionHandle(usersArray);
+        });
+    });
 }
 @end
