@@ -7,23 +7,27 @@
 //
 
 #import "RedPacketChangeInputViewPlugin.h"
-#import "RedpacketDemoViewController.h"
 #import "RedpacketViewControl.h"
 
 @interface RedPacketChangeInputViewPlugin()
 
-@property (nonatomic, copy) LCCKIdResultBlock sendCustomMessageHandler;
+/**
+ *  发红包的控制器
+ */
 @property (nonatomic, strong) RedpacketViewControl *redpacketControl;
+
 @end
+
+
 @implementation RedPacketChangeInputViewPlugin
 @synthesize inputViewRef = _inputViewRef;
-@synthesize sendCustomMessageHandler = _sendCustomMessageHandler;
+
 + (void)load {
     [self registerSubclass];
 }
 
 + (LCCKInputViewPluginType)classPluginType {
-    return 3;
+    return 4;
 }
 
 #pragma mark -
@@ -51,12 +55,9 @@
 }
 
 - (void)pluginDidClicked {
-    
-    if ([self.conversationViewController isKindOfClass:[RedpacketDemoViewController class]]) {
-        self.redpacketControl = [[RedpacketViewControl alloc] init];
-        self.redpacketControl.conversationController = self.conversationViewController;
-        [self.redpacketControl presentChangeMoneyViewController];
-    }
+    self.redpacketControl = [[RedpacketViewControl alloc] init];
+    self.redpacketControl.conversationController = self.conversationViewController;
+    [self.redpacketControl presentChangeMoneyViewController];
 }
 
 #pragma mark -

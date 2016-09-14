@@ -9,5 +9,7 @@
 #import "AppDelegate.h"
 
 @interface AppDelegate (RedPacket)
+
 + (void)swizzleRedPacketMethod;
+
 @end

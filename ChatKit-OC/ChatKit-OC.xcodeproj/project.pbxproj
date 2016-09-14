@@ -40,7 +40,6 @@
 		E700C7191D7193AB00056E3C /* AVIMTypedMessageRedPacketTaken.m in Sources */ = {isa = PBXBuildFile; fileRef = E700C6FB1D7193AB00056E3C /* AVIMTypedMessageRedPacketTaken.m */; };
 		E700C71A1D7193AB00056E3C /* RedpacketCellResource.bundle in Resources */ = {isa = PBXBuildFile; fileRef = E700C6FC1D7193AB00056E3C /* RedpacketCellResource.bundle */; };
 		E700C71B1D7193AB00056E3C /* RedpacketConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = E700C6FE1D7193AB00056E3C /* RedpacketConfig.m */; };
-		E700C71C1D7193AB00056E3C /* RedpacketDemoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E700C7001D7193AB00056E3C /* RedpacketDemoViewController.m */; };
 		E700C71D1D7193AB00056E3C /* RedPacketInputViewPlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = E700C7021D7193AB00056E3C /* RedPacketInputViewPlugin.m */; };
 		E700C71E1D7193AB00056E3C /* RedpacketMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = E700C7041D7193AB00056E3C /* RedpacketMessageCell.m */; };
 		E700C71F1D7193AB00056E3C /* RedpacketTakenMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = E700C7061D7193AB00056E3C /* RedpacketTakenMessageCell.m */; };
@@ -131,8 +130,6 @@
 		E700C6FC1D7193AB00056E3C /* RedpacketCellResource.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = RedpacketCellResource.bundle; sourceTree = "<group>"; };
 		E700C6FD1D7193AB00056E3C /* RedpacketConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RedpacketConfig.h; sourceTree = "<group>"; };
 		E700C6FE1D7193AB00056E3C /* RedpacketConfig.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RedpacketConfig.m; sourceTree = "<group>"; };
-		E700C6FF1D7193AB00056E3C /* RedpacketDemoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RedpacketDemoViewController.h; sourceTree = "<group>"; };
-		E700C7001D7193AB00056E3C /* RedpacketDemoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RedpacketDemoViewController.m; sourceTree = "<group>"; };
 		E700C7011D7193AB00056E3C /* RedPacketInputViewPlugin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RedPacketInputViewPlugin.h; sourceTree = "<group>"; };
 		E700C7021D7193AB00056E3C /* RedPacketInputViewPlugin.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RedPacketInputViewPlugin.m; sourceTree = "<group>"; };
 		E700C7031D7193AB00056E3C /* RedpacketMessageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RedpacketMessageCell.h; sourceTree = "<group>"; };
@@ -457,8 +454,6 @@
 				E700C6FC1D7193AB00056E3C /* RedpacketCellResource.bundle */,
 				E700C6FD1D7193AB00056E3C /* RedpacketConfig.h */,
 				E700C6FE1D7193AB00056E3C /* RedpacketConfig.m */,
-				E700C6FF1D7193AB00056E3C /* RedpacketDemoViewController.h */,
-				E700C7001D7193AB00056E3C /* RedpacketDemoViewController.m */,
 				E700C7011D7193AB00056E3C /* RedPacketInputViewPlugin.h */,
 				E700C7021D7193AB00056E3C /* RedPacketInputViewPlugin.m */,
 				E7302DAC1D829A1000E8CDDE /* RedPacketChangeInputViewPlugin.h */,
@@ -673,7 +668,6 @@
 				9A47306B1CECAEC500AEB86F /* LCCKLoginDataSource.m in Sources */,
 				9A7E2DE91D5F1040003A7312 /* LCCKContactManager.m in Sources */,
 				9A2669C91D6DA89100B66545 /* LCCKVCardMessage.m in Sources */,
-				E700C71C1D7193AB00056E3C /* RedpacketDemoViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

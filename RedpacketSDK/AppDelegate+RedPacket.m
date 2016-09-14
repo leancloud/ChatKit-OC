@@ -11,11 +11,10 @@
 #import "RedpacketOpenConst.h"
 #import "AlipaySDK.h"
 
-BOOL ClassMethodSwizzle(Class aClass, SEL originalSelector, SEL swizzleSelector){
+BOOL ClassMethodSwizzle(Class aClass, SEL originalSelector, SEL swizzleSelector) {
     
     Method originalMethod = class_getInstanceMethod(aClass, originalSelector);
     Method swizzleMethod = class_getInstanceMethod(aClass, swizzleSelector);
-    
     
     BOOL didAddMethod =
     class_addMethod(aClass,
@@ -30,12 +29,12 @@ BOOL ClassMethodSwizzle(Class aClass, SEL originalSelector, SEL swizzleSelector)
     } else {
         method_exchangeImplementations(originalMethod, swizzleMethod);
     }
-    
     return YES;
 }
 
 @implementation AppDelegate (RedPacket)
-+ (void)swizzleRedPacketMethod{
+
++ (void)swizzleRedPacketMethod {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         ClassMethodSwizzle([self class], @selector(application:openURL:sourceApplication:annotation:), @selector(rp_application:openURL:sourceApplication:annotation:));
@@ -45,11 +44,7 @@ BOOL ClassMethodSwizzle(Class aClass, SEL originalSelector, SEL swizzleSelector)
 }
 
 // NOTE: 9.0之前使用的API接口
-- (BOOL)rp_application:(UIApplication *)application
-            openURL:(NSURL *)url
-  sourceApplication:(NSString *)sourceApplication
-         annotation:(id)annotation {
-    
+- (BOOL)rp_application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
     if ([url.host isEqualToString:@"safepay"]) {
         //跳转支付宝钱包进行支付，处理支付结果
         [[AlipaySDK defaultService] processOrderWithPaymentResult:url standbyCallback:^(NSDictionary *resultDic) {
@@ -60,10 +55,7 @@ BOOL ClassMethodSwizzle(Class aClass, SEL originalSelector, SEL swizzleSelector)
 }
 
 // NOTE: 9.0以后使用新API接口
-- (BOOL)rp_application:(UIApplication *)app
-            openURL:(NSURL *)url
-            options:(NSDictionary<NSString*, id> *)options
-{
+- (BOOL)rp_application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary<NSString*, id> *)options{
     if ([url.host isEqualToString:@"safepay"]) {
         //跳转支付宝钱包进行支付，处理支付结果
         [[AlipaySDK defaultService] processOrderWithPaymentResult:url standbyCallback:^(NSDictionary *resultDic) {
@@ -72,8 +64,8 @@ BOOL ClassMethodSwizzle(Class aClass, SEL originalSelector, SEL swizzleSelector)
     }
     return [self rp_application:app openURL:url options:options];
 }
+
 - (void)rp_applicationDidBecomeActive:(UIApplication *)application {
-    
     [[NSNotificationCenter defaultCenter] postNotificationName:RedpacketAlipayNotifaction object:nil];
     [self rp_applicationDidBecomeActive:application];
 }

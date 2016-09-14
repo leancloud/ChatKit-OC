@@ -25,7 +25,6 @@
 
 #import "LCCKExampleConstants.h"
 #import "LCCKContactManager.h"
-#import "RedpacketDemoViewController.h"
 
 #import "LCChatKitExample+Setting.h"
 #import "RedpacketConfig.h"
@@ -221,7 +220,7 @@
                                       fromNavigationController:
 (UINavigationController *)aNavigationController {
     LCCKConversationViewController *conversationViewController =
-    [[RedpacketDemoViewController alloc] initWithConversationId:conversationId];
+    [[LCCKConversationViewController alloc] initWithConversationId:conversationId];
     conversationViewController.enableAutoJoin = YES;
     [conversationViewController
      setViewWillDisappearBlock:^(LCCKBaseViewController *viewController, BOOL aAnimated) {
@@ -274,7 +273,7 @@
     } else if ([parentController isKindOfClass:[LCCKConversationViewController class]]) {
 
         LCCKConversationViewController *conversationViewController_ =
-        [[RedpacketDemoViewController alloc] initWithPeerId:user.clientId ?: userId];
+        [[LCCKConversationViewController alloc] initWithPeerId:user.clientId ?: userId];
         [[self class] lcck_pushToViewController:conversationViewController_];
         return;
 

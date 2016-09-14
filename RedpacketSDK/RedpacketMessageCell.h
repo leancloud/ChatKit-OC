@@ -10,12 +10,30 @@
 #import "LCCKChatMessageCell.h"
 
 @interface RedpacketMessageCell : LCCKChatMessageCell<LCCKChatMessageCellSubclassing>
-@property(strong, nonatomic) UILabel *greetingLabel;
-@property(strong, nonatomic) UILabel *subLabel; // 显示 "查看红包"
-@property(strong, nonatomic) UILabel *orgLabel;
-@property(strong, nonatomic) UIImageView *iconView;
-@property(strong, nonatomic) UIImageView *orgIconView;
 
-@property(nonatomic, strong) UIImageView *bubbleBackgroundView;
+/**
+ *  红包祝福语Lable
+ */
+@property(strong, nonatomic) UILabel *greetingLabel;
+
+/**
+ *  次级文字Lable
+ */
+@property(strong, nonatomic) UILabel *subLabel;
+
+/**
+ *  次级文字Lable
+ */
+@property(strong, nonatomic) UILabel *orgLabel;
+
+/**
+ *  红包图标
+ */
+@property(strong, nonatomic) UIImageView *iconView;
+
+/**
+ *  红包厂商图标
+ */
+@property(strong, nonatomic) UIImageView *orgIconView;
 
 @end

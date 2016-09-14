@@ -9,15 +9,20 @@
 #import "RedpacketMessageCell.h"
 #import "AVIMTypedMessageRedPacket.h"
 #import "RedpacketMessageModel.h"
+#import "RedpacketViewControl.h"
+static const CGFloat Redpacket_SubMessage_Font_Size = 12.0f;
 
-#define Redpacket_Message_Font_Size 14
-#define Redpacket_SubMessage_Font_Size 12
-#define Redpacket_Background_Extra_Height 25
-#define Redpacket_SubMessage_Text NSLocalizedString(@"查看红包", @"查看红包")
-#define Redpacket_Label_Padding 2
+@interface RedpacketMessageCell()
+
+/**
+ *  红包消息体
+ */
+@property (nonatomic,strong)AVIMTypedMessageRedPacket * rpMessage;
+
+@end
 
 @implementation RedpacketMessageCell
-@synthesize message = _message;
+
 + (void)load {
     [self registerCustomMessageCell];
 }
@@ -25,14 +30,14 @@
 + (AVIMMessageMediaType)classMediaType {
     return 3;
 }
-- (void)setup{
+- (void)setup {
     [self initialize];
     [super setup];
     [self addGeneralView];
     
 }
 
-- (void)updateConstraints{
+- (void)updateConstraints {
     [super updateConstraints];
     [self.messageContentBackgroundImageView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.edges.equalTo(self.messageContentView);
@@ -52,7 +57,7 @@
     
     // 设置红包文字
     self.greetingLabel = [[UILabel alloc] initWithFrame:CGRectZero];
-    self.greetingLabel.font = [UIFont systemFontOfSize:Redpacket_Message_Font_Size];
+    self.greetingLabel.font = [UIFont systemFontOfSize:14];
     self.greetingLabel.textColor = [UIColor whiteColor];
     self.greetingLabel.numberOfLines = 1;
     [self.greetingLabel setLineBreakMode:NSLineBreakByCharWrapping];
@@ -61,7 +66,7 @@
     
     // 设置次级文字
     self.subLabel = [[UILabel alloc] initWithFrame:CGRectZero];
-    self.subLabel.text = Redpacket_SubMessage_Text;
+    self.subLabel.text = NSLocalizedString(@"查看红包", @"查看红包");
     self.subLabel.font = [UIFont systemFontOfSize:Redpacket_SubMessage_Font_Size];
     self.subLabel.numberOfLines = 1;
     self.subLabel.textColor = [UIColor whiteColor];
@@ -72,7 +77,7 @@
     
     // 设置次级文字
     self.orgLabel = [[UILabel alloc] initWithFrame:CGRectZero];
-    self.orgLabel.text = Redpacket_SubMessage_Text;
+    self.orgLabel.text = NSLocalizedString(@"查看红包", @"查看红包");
     self.orgLabel.font = [UIFont systemFontOfSize:Redpacket_SubMessage_Font_Size];
     self.orgLabel.numberOfLines = 1;
     self.orgLabel.textColor = [UIColor lightGrayColor];
@@ -97,9 +102,20 @@
     frame.origin.y = 41;
     self.subLabel.frame = frame;
     
+    UITapGestureRecognizer *tapGestureRecognizer =[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(redpacketClicked)];
+    [self addGestureRecognizer:tapGestureRecognizer];
 }
 
-- (UIImage*)imageNamed:(NSString*)imageNamed ofBundle:(NSString*)bundleName{
+- (void)redpacketClicked {
+    if ([self.rpMessage isKindOfClass:[AVIMTypedMessageRedPacket class]]) {
+        AVIMTypedMessageRedPacket * message = (AVIMTypedMessageRedPacket*)self.rpMessage;
+        RedpacketViewControl * redpacketControl = [RedpacketViewControl new];
+        redpacketControl.delegate = (UIViewController *)self.delegate;
+        [redpacketControl redpacketCellTouchedWithMessageModel:message.rpModel];
+    }
+}
+
+- (UIImage*)imageNamed:(NSString*)imageNamed ofBundle:(NSString*)bundleName {
     NSString *resPath = [NSString stringWithFormat:@"%@/%@",bundleName,imageNamed];
     UIImage *image = [UIImage imageNamed:resPath];
     return image;
@@ -108,7 +124,7 @@
 - (void)configureCellWithData:(AVIMTypedMessageRedPacket *)message{
     [super configureCellWithData:message];
     if ([message isKindOfClass:[AVIMTypedMessageRedPacket class]]) {
-        _message = message;
+        _rpMessage = message;
         RedpacketMessageModel *redpacketMessageModel = message.rpModel;
         NSString *messageString = redpacketMessageModel.redpacket.redpacketGreeting;
         self.greetingLabel.text = messageString;
@@ -132,4 +148,5 @@
         }
     }
 }
+
 @end

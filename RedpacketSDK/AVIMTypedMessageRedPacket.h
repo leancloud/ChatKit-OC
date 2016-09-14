@@ -13,5 +13,10 @@
 #import "RedpacketMessageModel.h"
 
 @interface AVIMTypedMessageRedPacket : AVIMTypedMessage<AVIMTypedMessageSubclassing>
+
+/**
+ *  红包相关数据模型
+ */
 @property (nonatomic,strong)RedpacketMessageModel * rpModel;
+
 @end

@@ -10,16 +10,16 @@
 
 @implementation AVIMTypedMessageRedPacketTaken
 @synthesize rpModel = _rpModel;
-+ (void)load{
+
++ (void)load {
     [self registerSubclass];
 }
-+ (AVIMMessageMediaType)classMediaType;{
+
++ (AVIMMessageMediaType)classMediaType {
     return 4;
 }
-- (instancetype)initWithClientId:(NSString *)clientId
-                ConversationType:(LCCKConversationType)conversationType
-                  receiveMembers:(NSArray<NSString*>*)members
-{
+
+- (instancetype)initWithClientId:(NSString *)clientId ConversationType:(LCCKConversationType)conversationType receiveMembers:(NSArray<NSString*>*)members {
     self = [super init];
     if (!self) {
         return nil;
@@ -34,12 +34,13 @@
         [members enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
             [memberString appendFormat:@"%@,",obj];
         }];
-        [self lcck_setObject:[memberString substringToIndex:memberString.length -1] forKey:@"OnlyVisiableForClientId"];
-        //    [self lcck_setObject:@[ @"Tom", @"Jerry"] forKey:LCCKCustomMessageOnlyVisiableForPartClientIds];
+        [self lcck_setObject:[memberString substringToIndex:memberString.length -1] forKey:LCCKCustomMessageOnlyVisiableForPartClientIds];
+        
     }
     return self;
 }
-- (void)setRpModel:(RedpacketMessageModel *)rpModel{
+
+- (void)setRpModel:(RedpacketMessageModel *)rpModel {
     _rpModel = rpModel;
     [rpModel.redpacketMessageModelToDic enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
         [self setObject:obj forKey:key];
@@ -48,16 +49,17 @@
     [self lcck_setObject:[NSString stringWithFormat:@"%@抢了你的红包",nickName] forKey:LCCKCustomMessageTypeTitleKey];
 }
 
-- (RedpacketMessageModel *)rpModel{
+- (RedpacketMessageModel *)rpModel {
     if (!_rpModel) {
         NSError * error;
         NSDictionary * attributes = [NSJSONSerialization JSONObjectWithData:[self.payload dataUsingEncoding:NSUTF8StringEncoding] options:NSJSONReadingMutableLeaves error:&error];
         if (!error) {
             _rpModel = [RedpacketMessageModel redpacketMessageModelWithDic:attributes];
-        }else{
+        } else {
             _rpModel = nil;
         }
     }
     return _rpModel;
 }
+
 @end

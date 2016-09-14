@@ -26,8 +26,7 @@ static NSString *requestUrl = @"https://rpv2.yunzhanghu.com/api/sign?duid=";
 
 @implementation RedpacketConfig
 
-+ (instancetype)sharedConfig
-{
++ (instancetype)sharedConfig {
     static RedpacketConfig *config = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
@@ -37,13 +36,11 @@ static NSString *requestUrl = @"https://rpv2.yunzhanghu.com/api/sign?duid=";
     return config;
 }
 
-+ (void)config
-{
++ (void)config {
     [[self sharedConfig] config];
 }
 
-- (void)configWithSignDict:(NSDictionary *)dict
-{
+- (void)configWithSignDict:(NSDictionary *)dict {
     NSString *partner = [dict valueForKey:@"partner"];
     NSString *appUserId = [dict valueForKey:@"user_id"];
     unsigned long timeStamp = [[dict valueForKey:@"timestamp"] unsignedLongValue];
@@ -56,8 +53,7 @@ static NSString *requestUrl = @"https://rpv2.yunzhanghu.com/api/sign?duid=";
                                             timestamp:[NSString stringWithFormat:@"%@",@(timeStamp)]];
 }
 
-- (void)config
-{
+- (void)config {
     [AppDelegate swizzleRedPacketMethod];
     [[YZHRedpacketBridge sharedBridge] setRedacketURLScheme:@"redpacket.chatkit"];
     
@@ -82,8 +78,7 @@ static NSString *requestUrl = @"https://rpv2.yunzhanghu.com/api/sign?duid=";
     }
 }
 
-- (RedpacketUserInfo *)redpacketUserInfo
-{
+- (RedpacketUserInfo *)redpacketUserInfo {
     NSUserDefaults *defaultsGet = [NSUserDefaults standardUserDefaults];
     NSString *clientId = [defaultsGet stringForKey:LCCK_KEY_USERID];
     NSString *avatarURL;
@@ -100,7 +95,8 @@ static NSString *requestUrl = @"https://rpv2.yunzhanghu.com/api/sign?duid=";
     user.userAvatar = avatarURL;
     return user;
 }
-- (void)lcck_setting{
+
+- (void)lcck_setting {
     LCCKFilterMessagesBlock filterMessagesBlock = [LCCKConversationService sharedInstance].filterMessagesBlock;
     [[LCCKConversationService sharedInstance] setFilterMessagesBlock:^(AVIMConversation *conversation, NSArray<AVIMTypedMessage *> *messages, LCCKFilterMessagesCompletionHandler completionHandler) {
         NSMutableArray * messageArray = [messages mutableCopy];
@@ -118,10 +114,10 @@ static NSString *requestUrl = @"https://rpv2.yunzhanghu.com/api/sign?duid=";
         
         if (filterMessagesBlock) {
             filterMessagesBlock(conversation,messageArray,completionHandler);
-        }else{
+        } else {
             completionHandler([messageArray copy], nil);
         }
     }];
-
 }
+
 @end

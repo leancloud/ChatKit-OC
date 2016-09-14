@@ -10,8 +10,21 @@
 #import "AVIMTypedMessage+LCCKExtension.h"
 #import "LCCKConstants.h"
 #import "RedpacketMessageModel.h"
-// 按照 Android 方面的格式修改消息格式
+
 @interface AVIMTypedMessageRedPacketTaken : AVIMTypedMessage<AVIMTypedMessageSubclassing>
-- (instancetype)initWithClientId:(NSString *)clientId ConversationType:(LCCKConversationType)conversationType receiveMembers:(NSArray<NSString*>*)members;
+
+/**
+ *  红包相关数据模型
+ */
 @property (nonatomic,strong)RedpacketMessageModel * rpModel;
+
+/**
+ *  初始胡抢红包消息
+ *
+ *  @param clientId         会话ID
+ *  @param conversationType 会话类型
+ *  @param members          接收人IDs
+ */
+- (instancetype)initWithClientId:(NSString *)clientId ConversationType:(LCCKConversationType)conversationType receiveMembers:(NSArray<NSString*>*)members;
+
 @end

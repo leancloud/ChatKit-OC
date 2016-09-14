@@ -10,13 +10,16 @@
 
 @implementation AVIMTypedMessageRedPacket
 @synthesize rpModel = _rpModel;
-+ (void)load{
+
++ (void)load {
     [self registerSubclass];
 }
-+ (AVIMMessageMediaType)classMediaType{
+
++ (AVIMMessageMediaType)classMediaType {
     return 3;
 }
-- (instancetype)init{
+
+- (instancetype)init {
     self = [super init];
     if (!self) {
         return nil;
@@ -27,7 +30,8 @@
     [self lcck_setObject:@"有人向您发送了一条红包消息，请打开APP查看" forKey:LCCKCustomMessageSummaryKey];
     return self;
 }
-- (void)setRpModel:(RedpacketMessageModel *)rpModel{
+
+- (void)setRpModel:(RedpacketMessageModel *)rpModel {
     _rpModel = rpModel;
     [rpModel.redpacketMessageModelToDic enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
         [self setObject:obj forKey:key];
@@ -35,7 +39,7 @@
     [self lcck_setObject:[NSString stringWithFormat:@"%@：[红包]%@",rpModel.redpacketSender.userNickname,rpModel.redpacket.redpacketGreeting] forKey:LCCKCustomMessageTypeTitleKey];
 }
 
-- (RedpacketMessageModel *)rpModel{
+- (RedpacketMessageModel *)rpModel {
     if (!_rpModel) {
         NSError * error;
         NSDictionary * attributes = [NSJSONSerialization JSONObjectWithData:[self.payload dataUsingEncoding:NSUTF8StringEncoding] options:NSJSONReadingMutableLeaves error:&error];
@@ -47,4 +51,5 @@
     }
     return _rpModel;
 }
+
 @end
