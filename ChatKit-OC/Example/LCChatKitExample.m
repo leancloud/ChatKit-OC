@@ -72,17 +72,6 @@
     }];
 }
 
-+ (void)saveLocalClientInfo:(NSString *)clientId {
-    // 在系统偏好保存信息
-    NSUserDefaults *defaultsSet = [NSUserDefaults standardUserDefaults];
-    [defaultsSet setObject:clientId forKey:LCCK_KEY_USERID];
-    [defaultsSet synchronize];
-    NSString *subtitle = [NSString stringWithFormat:@"User Id 是 : %@", clientId];
-    [LCCKUtil showNotificationWithTitle:@"登陆成功"
-                               subtitle:subtitle
-                                   type:LCCKMessageNotificationTypeSuccess];
-}
-
 + (void)invokeThisMethodAfterLoginSuccessWithClientId:(NSString *)clientId
                                               success:(LCCKVoidBlock)success
                                                failed:(LCCKErrorBlock)failed {
@@ -111,12 +100,12 @@
         /*!
          *  当使用 https://github.com/leancloud/leanchat-cloudcode 云代码更改推送内容的时候
          {
-         aps =     {
-         alert = "lcckkit : sdfsdf";
-         badge = 4;
-         sound = default;
-         };
-         convid = 55bae86300b0efdcbe3e742e;
+         aps = {
+                alert = "lcckkit : sdfsdf";
+                badge = 4;
+                sound = default;
+            };
+          convid = 55bae86300b0efdcbe3e742e;
          }
          */
         [[LCChatKit sharedInstance] didReceiveRemoteNotification:userInfo];
@@ -198,8 +187,7 @@
  *  打开单聊页面
  */
 + (void)exampleOpenConversationViewControllerWithPeerId:(NSString *)peerId
-                               fromNavigationController:
-(UINavigationController *)navigationController {
+                               fromNavigationController:(UINavigationController *)navigationControlle {
     LCCKConversationViewController *conversationViewController =
     [[LCCKConversationViewController alloc] initWithPeerId:peerId];
     [conversationViewController
@@ -286,6 +274,17 @@
         _sharedLCChatKitExample = [[self alloc] init];
     });
     return _sharedLCChatKitExample;
+}
+
++ (void)saveLocalClientInfo:(NSString *)clientId {
+    // 在系统偏好保存信息
+    NSUserDefaults *defaultsSet = [NSUserDefaults standardUserDefaults];
+    [defaultsSet setObject:clientId forKey:LCCK_KEY_USERID];
+    [defaultsSet synchronize];
+    NSString *subtitle = [NSString stringWithFormat:@"User Id 是 : %@", clientId];
+    [LCCKUtil showNotificationWithTitle:@"登陆成功"
+                               subtitle:subtitle
+                                   type:LCCKMessageNotificationTypeSuccess];
 }
 
 @end

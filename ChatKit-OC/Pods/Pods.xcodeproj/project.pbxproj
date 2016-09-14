@@ -145,7 +145,6 @@
 		26B975A7E756785794DD1E7BB94A21B4 /* LCDatabaseCoordinator.h in Headers */ = {isa = PBXBuildFile; fileRef = 34A971B40D381302A64EF42868557983 /* LCDatabaseCoordinator.h */; settings = {ATTRIBUTES = (Project, ); }; };
 		26E0B7134147F4E8A342A3D7D04BFF63 /* CYLTabBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 9EABB92C9E7D8FA1AE4731DD80BAD295 /* CYLTabBar.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		26E1A6BF9D405DCA4F4D4F11CB4763F2 /* NSAttributedString+MLLabel.h in Headers */ = {isa = PBXBuildFile; fileRef = DF98A04CAC388836131139EE8C583374 /* NSAttributedString+MLLabel.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		273BF75AE01B248A0E405A359329A13F /* UIColor+LCCKExtension.h in Headers */ = {isa = PBXBuildFile; fileRef = 59D5F393BA6479165A4B21E3B8C17439 /* UIColor+LCCKExtension.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		274F35D990A05971E85BF934C70CA31B /* MJRefreshAutoStateFooter.m in Sources */ = {isa = PBXBuildFile; fileRef = CCAAFC393948FBCCEC7E63D8452BB02A /* MJRefreshAutoStateFooter.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		2787F10B0FEE7831ED66837D10FEEC2C /* LCCKChatTextMessageCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 1ED6D152C279D7F0AFD61051DDCCC1C7 /* LCCKChatTextMessageCell.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		27A2C99B62BE7596E9FB3BA5FA30A61E /* AVIMMessageObject.h in Headers */ = {isa = PBXBuildFile; fileRef = 8EAD0346457429616D99EA3786D15EF9 /* AVIMMessageObject.h */; settings = {ATTRIBUTES = (Project, ); }; };
@@ -765,7 +764,6 @@
 		D5DF467600CE8F071868250CD710798D /* UIImage+MultiFormat.h in Headers */ = {isa = PBXBuildFile; fileRef = 028A6A77FE968AF1224FEDB111DB08FB /* UIImage+MultiFormat.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D601305235A26433D8F243CB7B95C8FD /* FTPopOverMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = F376F3944FF2F2A54FBA89B3868B9207 /* FTPopOverMenu.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0 -w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		D6AAFF1DCF2D44FD9818DBC3C378AE82 /* NSString+LCCKExtension.h in Headers */ = {isa = PBXBuildFile; fileRef = 065056F676D65A49371618B57B289C4E /* NSString+LCCKExtension.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		D6FB170BA0D028CF76BD53D767B5DCB6 /* UIColor+LCCKExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = B53A668302A3F1357C2DC359F8208CBC /* UIColor+LCCKExtension.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		D715808767CCC925C9958C527F126EBB /* LCCKChatMessageCell.h in Headers */ = {isa = PBXBuildFile; fileRef = DB06EBE9EB852B811D967D20FEB6C075 /* LCCKChatMessageCell.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D71823A6C90649E856E03500782627B7 /* AVNetworking.h in Headers */ = {isa = PBXBuildFile; fileRef = D638174B83286BA99426FA3A9395CEA6 /* AVNetworking.h */; settings = {ATTRIBUTES = (Project, ); }; };
 		D7EC05E6AEF465B6509E1F282BEB395E /* UIView+MJExtension.h in Headers */ = {isa = PBXBuildFile; fileRef = C6D3F96EF6CBCD0A258423ED2A0BF5B3 /* UIView+MJExtension.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1539,7 +1537,6 @@
 		58C401605F1FE69B9152CAFB5CE51484 /* PlayButtonOverlayLargeTap@2x.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = "PlayButtonOverlayLargeTap@2x.png"; path = "Pod/Assets/PlayButtonOverlayLargeTap@2x.png"; sourceTree = "<group>"; };
 		58F155204FEA5180F301A6DF8DA24719 /* PlayButtonOverlayLarge@3x.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = "PlayButtonOverlayLarge@3x.png"; path = "Pod/Assets/PlayButtonOverlayLarge@3x.png"; sourceTree = "<group>"; };
 		5906B60682097B174C04CCB79449C7DA /* SDWebImage-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "SDWebImage-dummy.m"; sourceTree = "<group>"; };
-		59D5F393BA6479165A4B21E3B8C17439 /* UIColor+LCCKExtension.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "UIColor+LCCKExtension.h"; sourceTree = "<group>"; };
 		5A518A490E783EFEC0AC3E285199C25C /* LCURLRequestSerialization.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = LCURLRequestSerialization.m; path = AVOS/AVOSCloud/ThirdParty/LCNetworking/LCURLRequestSerialization.m; sourceTree = "<group>"; };
 		5A5221911FAA79EFB0938582FAF48067 /* LCDatabaseAdditions.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = LCDatabaseAdditions.m; path = AVOS/AVOSCloud/ThirdParty/LCDB/LCDatabaseAdditions.m; sourceTree = "<group>"; };
 		5A6934D7AC28F50C89ABEA27A2D0E627 /* LCCKChatMoreView.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = LCCKChatMoreView.h; sourceTree = "<group>"; };
@@ -1881,7 +1878,6 @@
 		B4E63DF4F8EF7FA750DB9FDED5018F3E /* AVIMConversation.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = AVIMConversation.m; path = AVOS/AVOSCloudIM/AVIMConversation.m; sourceTree = "<group>"; };
 		B522B7671D00C1C1DEE1AEAE2DD04ECB /* UIImageView+LCCKExtension.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "UIImageView+LCCKExtension.h"; sourceTree = "<group>"; };
 		B52A0FCC11AA380760CFF7B961200E21 /* AVIMMessage.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = AVIMMessage.h; path = AVOS/AVOSCloudIM/AVIMMessage.h; sourceTree = "<group>"; };
-		B53A668302A3F1357C2DC359F8208CBC /* UIColor+LCCKExtension.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "UIColor+LCCKExtension.m"; sourceTree = "<group>"; };
 		B54BC990ADDAAD68EA5CC9BBF1A8AEFA /* Masonry-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Masonry-dummy.m"; sourceTree = "<group>"; };
 		B5A370A533E3564E853860E7391605A5 /* MJRefresh-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "MJRefresh-prefix.pch"; sourceTree = "<group>"; };
 		B5C678BB3326842FA9DF35632C403581 /* LCCKConversationService.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = LCCKConversationService.m; sourceTree = "<group>"; };
@@ -3707,8 +3703,6 @@
 				ED623546D01771BC3AA2E805DDAABA24 /* NSString+LCCKExtension.m */,
 				C729D517CF26C4926FB391A12F1BAF86 /* NSString+LCCKMD5.h */,
 				8B8064246E8EF4F6FA6C8539EBA92E79 /* NSString+LCCKMD5.m */,
-				59D5F393BA6479165A4B21E3B8C17439 /* UIColor+LCCKExtension.h */,
-				B53A668302A3F1357C2DC359F8208CBC /* UIColor+LCCKExtension.m */,
 				BF57D282010F6BE15173138F77B2903B /* UIImage+LCCKExtension.h */,
 				019071F09106BAA5F7747FDF7C154AD2 /* UIImage+LCCKExtension.m */,
 				B522B7671D00C1C1DEE1AEAE2DD04ECB /* UIImageView+LCCKExtension.h */,
@@ -4278,7 +4272,6 @@
 				CCCF006347B313655862DB83E0E8D80C /* NSString+LCCKAddScale.h in Headers */,
 				D6AAFF1DCF2D44FD9818DBC3C378AE82 /* NSString+LCCKExtension.h in Headers */,
 				C384BC5EA71D47F8494369F3F9071B46 /* NSString+LCCKMD5.h in Headers */,
-				273BF75AE01B248A0E405A359329A13F /* UIColor+LCCKExtension.h in Headers */,
 				EB4418467C108F4E3805CCBAFF2DC136 /* UIImage+LCCKExtension.h in Headers */,
 				FE68A19CB0072F83DC87A281F17A5B1F /* UIImageView+LCCKExtension.h in Headers */,
 				D9EA4B72E8957197A05FDCAF4EDB4885 /* UIView+LCCKExtension.h in Headers */,
@@ -5703,7 +5696,6 @@
 				D4BE8C4FE8C4D5FB5BDA71B6AF69558A /* NSString+LCCKAddScale.m in Sources */,
 				87295B19778D5CDD8B2B6B42510162EB /* NSString+LCCKExtension.m in Sources */,
 				A13D4950CD12434E5303D135A75597BA /* NSString+LCCKMD5.m in Sources */,
-				D6FB170BA0D028CF76BD53D767B5DCB6 /* UIColor+LCCKExtension.m in Sources */,
 				1B372B61ADE8ECC2F5E27C49640DAD38 /* UIImage+LCCKExtension.m in Sources */,
 				04B79248B5E89F3F08075BB6510BA549 /* UIImageView+LCCKExtension.m in Sources */,
 				D8D2C0593B8A573C3814AEC1EE201EB5 /* UIView+LCCKExtension.m in Sources */,

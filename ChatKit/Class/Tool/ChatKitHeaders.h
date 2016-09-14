@@ -22,6 +22,7 @@ FOUNDATION_EXPORT const unsigned char LCChatKitVersionString[];
 #endif
 
 #if __has_include(<ChatKit/LCChatKit.h>)
+
     #import <ChatKit/LCCKSessionService.h>
     #import <ChatKit/LCCKUserSystemService.h>
     #import <ChatKit/LCCKSignatureService.h>

@@ -241,8 +241,7 @@ static NSString *const LCCKAPPKEY = @"ye24iIK6ys8IvaISMC4Bs5WK";
              [LCCKUtil showNotificationWithTitle:title
                                         subtitle:subTitle
                                             type:LCCKMessageNotificationTypeError];
-         }
-         else if (error.code == 4304) {
+         } else if (error.code == 4304) {
              title = @"群已满";
              [LCCKUtil showNotificationWithTitle:title
                                         subtitle:subTitle
