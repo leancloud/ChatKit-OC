@@ -183,7 +183,8 @@ CGFloat const LCCKConversationListCellDefaultHeight = 61; //LCCKImageSize + LCCK
 - (void)prepareForReuse {
     [super prepareForReuse];
     self.badgeView.badgeText = nil;
-    self.badgeView = nil;
+// 长列表下会引起badgeView频繁创建和销毁，导致卡顿
+//    self.badgeView = nil;
     self.litteBadgeView.hidden = YES;
     self.messageTextLabel.text = nil;
     self.timestampLabel.text = nil;
