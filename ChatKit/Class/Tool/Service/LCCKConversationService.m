@@ -409,7 +409,7 @@ NSString *const LCCKConversationServiceErrorDomain = @"LCCKConversationServiceEr
 }
 
 - (NSArray *)allRecentConversations {
-    NSMutableArray *conversations = [self.conversationDictionary allValues];
+    NSArray *conversations = [self.conversationDictionary allValues];
     return conversations;
 }
 
