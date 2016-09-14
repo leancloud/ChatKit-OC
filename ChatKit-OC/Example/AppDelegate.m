@@ -17,6 +17,7 @@
 #import "LCChatKit.h"
 #endif
 #import "LCCKLoginViewController.h"
+#import "RedpacketConfig.h"
 
 @interface AppDelegate ()
 
@@ -41,6 +42,8 @@
             NSLog(@"%@",error);
         }];
     }];
+    
+    [[RedpacketConfig sharedConfig] config];
     self.window.rootViewController = loginViewController;
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
@@ -72,4 +75,14 @@
     [LCChatKitExample invokeThisMethodInApplication:application didReceiveRemoteNotification:userInfo];
 }
 
+- (BOOL)application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary<NSString *,id> *)options{
+    return YES;
+}
+- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation{
+    
+    return YES;
+}
+- (void)applicationDidBecomeActive:(UIApplication *)application{
+    
+}
 @end

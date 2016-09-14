@@ -1,0 +1,30 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "48D2519E63807ACF172C8338EB1277CDFCF66063",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "82CBDC087A6F613CAD4621A5793B220E3F46D112" : 0,
+    "48D2519E63807ACF172C8338EB1277CDFCF66063" : 0
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "6748F21C-CCBA-4512-967C-C4F6A51CCB38",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "82CBDC087A6F613CAD4621A5793B220E3F46D112" : "yzh-redpacket\/",
+    "48D2519E63807ACF172C8338EB1277CDFCF66063" : "ChatKit-OC\/"
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "ChatKit-OC",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "ChatKit-OC\/ChatKit-OC.xcworkspace",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/YunzhanghuOpen\/ChatKit-OC.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "48D2519E63807ACF172C8338EB1277CDFCF66063"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "http:\/\/github.com\/YunzhanghuOpen\/yzh-redpacket.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "82CBDC087A6F613CAD4621A5793B220E3F46D112"
+    }
+  ]
+}

@@ -22,7 +22,13 @@
 #import "LCCKExampleConstants.h"
 #import "LCCKLoginViewController.h"
 #import "LCCKVCardMessageCell.h"
+
+#import "LCCKExampleConstants.h"
+#import "LCCKContactManager.h"
+#import "RedpacketDemoViewController.h"
+
 #import "LCChatKitExample+Setting.h"
+#import "RedpacketConfig.h"
 
 @interface LCChatKitExample ()
 
@@ -139,6 +145,7 @@
  */
 - (void)exampleInit {
     [self lcck_setting];
+    [[RedpacketConfig sharedConfig] lcck_setting];
 }
 
 #pragma -
@@ -146,6 +153,7 @@
 
 + (void)exampleChangeGroupAvatarURLsForConversationId:(NSString *)conversationId {
     [self lcck_exampleChangeGroupAvatarURLsForConversationId:conversationId shouldInsert:YES];
+
 }
 
 + (void)exampleCreateGroupConversationFromViewController:(UIViewController *)fromViewController {
@@ -213,7 +221,7 @@
                                       fromNavigationController:
 (UINavigationController *)aNavigationController {
     LCCKConversationViewController *conversationViewController =
-    [[LCCKConversationViewController alloc] initWithConversationId:conversationId];
+    [[RedpacketDemoViewController alloc] initWithConversationId:conversationId];
     conversationViewController.enableAutoJoin = YES;
     [conversationViewController
      setViewWillDisappearBlock:^(LCCKBaseViewController *viewController, BOOL aAnimated) {
@@ -262,11 +270,14 @@
     if ([userId isEqualToString:currentClientId]) {
         title = [NSString stringWithFormat:@"打开自己的主页 \nClientId是 : %@", userId];
         subtitle = [NSString stringWithFormat:@"我自己的name是 : %@", user.name];
+
     } else if ([parentController isKindOfClass:[LCCKConversationViewController class]]) {
+
         LCCKConversationViewController *conversationViewController_ =
-        [[LCCKConversationViewController alloc] initWithPeerId:user.clientId ?: userId];
+        [[RedpacketDemoViewController alloc] initWithPeerId:user.clientId ?: userId];
         [[self class] lcck_pushToViewController:conversationViewController_];
         return;
+
     }
     [LCCKUtil showNotificationWithTitle:title
                                subtitle:subtitle
