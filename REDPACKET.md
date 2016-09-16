@@ -1,13 +1,21 @@
 # ChatKit 红包快速入门 · iOS
 
+##导航
+
+ 1. [下载最新的红包 SDK 库文件](https://github.com/leancloud/ChatKit-OC/blob/master/REDPACKET.md#下载最新的红包-sdk-库文件) 
+ 2. [下载最新的支付宝 SDK 库文件](https://github.com/leancloud/ChatKit-OC/blob/master/REDPACKET.md#下载最新的支付宝-sdk-库文件) 
+ 3. [集成红包功能](https://github.com/leancloud/ChatKit-OC/blob/master/REDPACKET.md#集成红包功能) 
+ 4. [设置红包信息](https://github.com/leancloud/ChatKit-OC/blob/master/REDPACKET.md#设置红包信息) 
+ 5. [在聊天对话中添加红包支持](https://github.com/leancloud/ChatKit-OC/blob/master/REDPACKET.md#在聊天对话中添加红包支持) 
+
 ## 下载最新的红包 SDK 库文件
 
-ChatKit 默认已经添加了红包SDK，因为红包 SDK 在一直更新维护，所以如果想获取更新过的 SDK ，可前往[这里](https://www.yunzhanghu.com/download.html)下载 zip 包。
+ChatKit 默认已经添加了红包 SDK，因为红包 SDK 在一直更新维护，所以如果想获取更新过的 SDK ，可前往[这里](https://www.yunzhanghu.com/download.html)下载 zip 包。
 
   解压后将 RedpacketStaticLib 复制替换至 ChatKit-OC 对应目录下。
 
 ## 下载最新的支付宝 SDK 库文件
-ChatKit 同样也默认集成了一个支付宝SDK，如想更新，请前往[支付宝对应页面](https://doc.open.alipay.com/doc2/detail.htm?spm=a219a.7629140.0.0.CeDJVo&treeId=54&articleId=104509&docType=1)下载最新版本。
+ChatKit 同样也默认集成了一个支付宝 SDK，如想更新，请前往[支付宝对应页面](https://doc.open.alipay.com/doc2/detail.htm?spm=a219a.7629140.0.0.CeDJVo&treeId=54&articleId=104509&docType=1)下载最新版本。
 
 ## 集成红包功能
 
@@ -42,7 +50,7 @@ ChatKit Demo中已经默认集成了红包功能，Demo 的做法如下：
     #pragma mark - 配置红包信息GIT
 
     [RedpacketConfig configRedpacket];
-    执行`红包 SDK` 的信息注册
+    执行 `红包 SDK` 的信息注册
 
 如对注册信息有其他要求,请自行参考 `RedpacketConfig` 实现和`YZHRedpacketBridge` 所提供API
 
