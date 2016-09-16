@@ -33,7 +33,9 @@ static const CGFloat Redpacket_SubMessage_Font_Size = 12.0f;
 - (void)setup {
     [self initialize];
     [super setup];
-    [self addGeneralView];
+    [self.contentView addSubview:self.avatarImageView];
+    [self.contentView addSubview:self.nickNameLabel];
+    [self.contentView addSubview:self.messageContentView];
     
 }
 
@@ -110,7 +112,7 @@ static const CGFloat Redpacket_SubMessage_Font_Size = 12.0f;
     if ([self.rpMessage isKindOfClass:[AVIMTypedMessageRedPacket class]]) {
         AVIMTypedMessageRedPacket * message = (AVIMTypedMessageRedPacket*)self.rpMessage;
         RedpacketViewControl * redpacketControl = [RedpacketViewControl new];
-        redpacketControl.delegate = (UIViewController *)self.delegate;
+        redpacketControl.delegate = (UIViewController <RedpacketViewControlDelegate>*)self.delegate;
         [redpacketControl redpacketCellTouchedWithMessageModel:message.rpModel];
     }
 }
@@ -148,5 +150,6 @@ static const CGFloat Redpacket_SubMessage_Font_Size = 12.0f;
         }
     }
 }
+
 
 @end
