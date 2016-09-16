@@ -260,6 +260,15 @@ static CGFloat const LCCK_MSG_CELL_NICKNAME_FONT_SIZE = 12;
 
 #pragma mark - Private Methods
 
+- (BOOL)isAbleToTap {
+    BOOL isAbleToTap = NO;
+    //For Link handle
+    if (self.mediaType < 0 && ![self isKindOfClass:[LCCKChatTextMessageCell class]]) {
+        isAbleToTap = YES;
+    }
+    return isAbleToTap;
+}
+
 - (void)addGeneralView {
     [self.contentView addSubview:self.avatarImageView];
     [self.contentView addSubview:self.nickNameLabel];
@@ -277,8 +286,8 @@ static CGFloat const LCCK_MSG_CELL_NICKNAME_FONT_SIZE = 12;
     self.messageSendStateView.hidden = YES;
     self.messageReadStateImageView.hidden = YES;
     
-    //For Link handle
-    if (![self isKindOfClass:[LCCKChatTextMessageCell class]]) {
+
+    if (self.isAbleToTap) {
         UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTap:)];
         [self.contentView addGestureRecognizer:tap];
     }

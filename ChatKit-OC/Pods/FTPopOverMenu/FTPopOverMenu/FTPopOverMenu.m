@@ -68,7 +68,7 @@ typedef NS_ENUM(NSUInteger, FTPopOverMenuArrowDirection) {
             _iconImageView = [[UIImageView alloc]initWithFrame:iconImageRect];
             _iconImageView.backgroundColor = [UIColor clearColor];
             _iconImageView.image = iconImage;
-            [self addSubview:_iconImageView];
+            [self.contentView addSubview:_iconImageView];
         }else{
             menuNameRect = CGRectMake(margin, margin, self.bounds.size.width - margin*2, FTDefaultMenuIconWidth);
         }
@@ -77,12 +77,17 @@ typedef NS_ENUM(NSUInteger, FTPopOverMenuArrowDirection) {
         _menuNameLabel.font = [UIFont systemFontOfSize:13];
         _menuNameLabel.textColor = textColor;
         _menuNameLabel.text = menuName;
-        [self addSubview:_menuNameLabel];
+        [self.contentView addSubview:_menuNameLabel];
     }
     return self;
 }
 
-
+- (BOOL)isValidateUrl:(NSString *)candidate {
+    NSString *urlRegEx =
+    @"(http|https)://((\\w)*|([0-9]*)|([-|_])*)+([\\.|/]((\\w)*|([0-9]*)|([-|_])*))+";
+    NSPredicate *urlTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", urlRegEx];
+    return [urlTest evaluateWithObject:candidate];
+}
 
 @end
 
@@ -182,7 +187,7 @@ typedef NS_ENUM(NSUInteger, FTPopOverMenuArrowDirection) {
             [path moveToPoint:anglePoint];
             [path addLineToPoint:CGPointMake( anglePoint.x - FTDefaultMenuArrowWidth, anglePoint.y - FTDefaultMenuArrowHeight)];
             [path addLineToPoint:CGPointMake( FTDefaultMenuCornerRadius, anglePoint.y - FTDefaultMenuArrowHeight)];
-            [path addArcWithCenter:CGPointMake(FTDefaultMenuCornerRadius, anglePoint.y - FTDefaultMenuArrowHeight - FTDefaultMenuCornerRadius) radius:FTDefaultMenuCornerRadius startAngle:-M_PI_2 endAngle:-M_PI clockwise:YES];
+            [path addArcWithCenter:CGPointMake(FTDefaultMenuCornerRadius, anglePoint.y - FTDefaultMenuArrowHeight - FTDefaultMenuCornerRadius) radius:FTDefaultMenuCornerRadius startAngle:M_PI_2 endAngle:M_PI clockwise:YES];
             [path addLineToPoint:CGPointMake( 0, FTDefaultMenuCornerRadius)];
             [path addArcWithCenter:CGPointMake(FTDefaultMenuCornerRadius, FTDefaultMenuCornerRadius) radius:FTDefaultMenuCornerRadius startAngle:M_PI endAngle:-M_PI_2 clockwise:YES];
             [path addLineToPoint:CGPointMake( self.bounds.size.width - FTDefaultMenuCornerRadius, 0)];
@@ -208,7 +213,7 @@ typedef NS_ENUM(NSUInteger, FTPopOverMenuArrowDirection) {
 #pragma mark - UITableViewDelegate,UITableViewDataSource
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    return 0.01;
+    return 0.;
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -216,7 +221,7 @@ typedef NS_ENUM(NSUInteger, FTPopOverMenuArrowDirection) {
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
-    return 0.01;
+    return 0.;
 }
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
@@ -454,6 +459,8 @@ typedef NS_ENUM(NSUInteger, FTPopOverMenuArrowDirection) {
     
     if (self.sender) {
         senderRect = [self.sender.superview convertRect:self.sender.frame toView:_backgroundView];
+        // if run into touch problems
+//        senderRect.origin.y = MAX(64-senderRect.origin.y, senderRect.origin.y);
     }else{
         senderRect = self.senderFrame;
     }
@@ -528,7 +535,12 @@ typedef NS_ENUM(NSUInteger, FTPopOverMenuArrowDirection) {
 #pragma mark - UIGestureRecognizerDelegate
 -(BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch
 {
+    NSLog(@"%@",NSStringFromClass([touch.view class]));
+    CGPoint point = [touch locationInView:_popMenuView];
     if ([NSStringFromClass([touch.view class]) isEqualToString:@"UITableViewCellContentView"]) {
+        return NO;
+    }else if (CGRectContainsPoint(CGRectMake(0, 0, self.preferedWidth, FTDefaultMenuRowHeight), point)) {
+        [self doneActionWithSelectedIndex:0];
         return NO;
     }
     return YES;

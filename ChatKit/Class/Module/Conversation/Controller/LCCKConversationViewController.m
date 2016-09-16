@@ -822,21 +822,21 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
         }
             break;
         default: {
-            //TODO:自定义消息的点击事件
-            NSString *formatString = @"\n\n\
-            ------ BEGIN NSException Log ---------------\n \
-            class name: %@                              \n \
-            ------line: %@                              \n \
-            ----reason: %@                              \n \
-            ------ END -------------------------------- \n\n";
-            NSString *reason = [NSString stringWithFormat:formatString,
-                                @(__PRETTY_FUNCTION__),
-                                @(__LINE__),
-                                @"messageCell.messageType not handled"];
-            //手动创建一个异常导致的崩溃事件 http://is.gd/EfVfN0
-            @throw [NSException exceptionWithName:NSGenericException
-                                           reason:reason
-                                         userInfo:nil];
+//            //TODO:自定义消息的点击事件
+//            NSString *formatString = @"\n\n\
+//            ------ BEGIN NSException Log ---------------\n \
+//            class name: %@                              \n \
+//            ------line: %@                              \n \
+//            ----reason: %@                              \n \
+//            ------ END -------------------------------- \n\n";
+//            NSString *reason = [NSString stringWithFormat:formatString,
+//                                @(__PRETTY_FUNCTION__),
+//                                @(__LINE__),
+//                                @"messageCell.messageType not handled"];
+//            //手动创建一个异常导致的崩溃事件 http://is.gd/EfVfN0
+//            @throw [NSException exceptionWithName:NSGenericException
+//                                           reason:reason
+//                                         userInfo:nil];
         }
             break;
     }

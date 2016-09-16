@@ -11,6 +11,7 @@
 #import "AVObjectUtils.h"
 #import "AVObject_Internal.h"
 #import "AVACL_Internal.h"
+#import "EXTScope.h"
 
 typedef enum {
     SET,
@@ -31,7 +32,9 @@ typedef enum {
 #define kAVOpAdd @"Add"
 #define kAVOpRemove @"Remove"
 
-@implementation AVRequestManager
+@implementation AVRequestManager {
+    NSRecursiveLock *_lock;
+}
 
 + (NSString *)serverOpForOp:(AVOp)op {
     switch (op) {
@@ -76,32 +79,62 @@ typedef enum {
     return dict;
 }
 
--(id)init {
+-(instancetype)init {
     self = [super init];
-    _dictArray = [NSMutableArray array];
-    for(int i = SET; i <= REMOVE_RELATION; ++i) {
-        NSMutableDictionary * dict = [NSMutableDictionary dictionary];
-        [_dictArray addObject:dict];
+
+    if (self) {
+        _dictArray = [NSMutableArray array];
+
+        for(int i = SET; i <= REMOVE_RELATION; ++i) {
+            NSMutableDictionary * dict = [NSMutableDictionary dictionary];
+            [_dictArray addObject:dict];
+        }
+
+        _lock = [[NSRecursiveLock alloc] init];
     }
+
     return self;
+}
+
+- (void)synchronize:(void (^)(void))action {
+    if (!action)
+        return;
+
+    [_lock lock];
+
+    @onExit {
+        [_lock unlock];
+    };
+
+    action();
 }
 
 -(NSMutableArray *)findArrayInDict:(NSMutableDictionary *)dict
                              byKey:(NSString *)key
                             create:(BOOL)create {
-    NSMutableArray * list = [dict objectForKey:key];
-    if (!create) {
-        return list;
-    }
-    if (list == nil) {
-        list = [[NSMutableArray alloc] init];
-        [dict setObject:list forKey:key];
-    }
-    return list;
+    __block NSMutableArray *array = nil;
+
+    [self synchronize:^{
+        array = [dict objectForKey:key];
+
+        // Create array if needed.
+        if (!array && create) {
+            array = [[NSMutableArray alloc] init];
+            [dict setObject:array forKey:key];
+        }
+    }];
+
+    return array;
 }
 
 -(NSMutableDictionary *)requestDictForOp:(AVOp)type {
-    return [self.dictArray objectAtIndex:type];
+    __block NSMutableDictionary *dictionary = nil;
+
+    [self synchronize:^{
+        dictionary = [self.dictArray objectAtIndex:type];
+    }];
+
+    return dictionary;
 }
 
 -(NSMutableDictionary *)setDict {
@@ -149,35 +182,51 @@ typedef enum {
 
 -(void)setRequestForKey:(NSString *)key
                  object:(id)object {
-    [self removeAllForKey:key exceptDict:nil];
-    if (object) {
-        [[self setDict] setObject:object forKey:key];
-    } else {
-        [[self setDict] removeObjectForKey:key];
-    }
-    
+    [self synchronize:^{
+        [self removeAllForKey:key exceptDict:nil];
+
+        if (object) {
+            [[self setDict] setObject:object forKey:key];
+        } else {
+            [[self setDict] removeObjectForKey:key];
+        }
+    }];
 }
 
 -(void)unsetRequestForKey:(NSString *)key {
-    [self removeAllForKey:key exceptDict:nil];
-    [[self unsetDict] setObject:@"" forKey:key];
+    [self synchronize:^{
+        [self removeAllForKey:key exceptDict:nil];
+        [[self unsetDict] setObject:@"" forKey:key];
+    }];
 }
 
 -(void)incRequestForKey:(NSString *)key
                   value:(double)value {
-    [self removeAllForKey:key exceptDict:[self incDict]];
-    double current = [[[self incDict] objectForKey:key] doubleValue];
-    current += value;
-    [[self incDict] setObject:@(current) forKey:key];
+    [self synchronize:^{
+        NSMutableDictionary *incDict = [self incDict];
+        [self removeAllForKey:key exceptDict:incDict];
+
+        double current = [[[self incDict] objectForKey:key] doubleValue];
+        current += value;
+
+        [incDict setObject:@(current) forKey:key];
+    }];
 }
 
-- (void)addRequestForKey:(NSString *)key object:(id)object toDict:(NSMutableDictionary *)dict removeFrom:(NSMutableDictionary *)removeDict {
-    if (removeDict) {
-        NSMutableArray * rm = [self findArrayInDict:removeDict byKey:key create:NO];
-        [rm removeObject:object];
-    }
-    NSMutableArray * array = [self findArrayInDict:dict byKey:key create:YES];
-    [array addObject:object];
+- (void)addRequestForKey:(NSString *)key
+                  object:(id)object
+                  toDict:(NSMutableDictionary *)dict
+              removeFrom:(NSMutableDictionary *)removeDict
+{
+    [self synchronize:^{
+        if (removeDict) {
+            NSMutableArray *array = [self findArrayInDict:removeDict byKey:key create:NO];
+            [array removeObject:object];
+        }
+
+        NSMutableArray *array = [self findArrayInDict:dict byKey:key create:YES];
+        [array addObject:object];
+    }];
 }
 
 -(void)addObjectRequestForKey:(NSString *)key
@@ -268,37 +317,27 @@ typedef enum {
 
 -(NSMutableDictionary *)initialSetDict {
     NSMutableDictionary * result = [NSMutableDictionary dictionary];
-    NSDictionary * dict = [self jsonForSetWithIgnoreAVObject:YES];
-    [self addDictionary:dict to:result update:[self setDict]];
-    
-    // for op, cannot be used in initial save, ignore.
-    /*    
-    dict = [self jsonForUnset];
-    [self addDictionary:dict to:result update:[self unsetDict]];
 
-    dict = [self jsonForAddRelation];
-    [self addDictionary:dict to:result update:[self addRelationDict]];
-    
-    dict = [self jsonForRemoveRelation];
-    [self addDictionary:dict to:result update:[self removeRelationDict]];
-    
-    dict = [self jsonForInc];
-    [self addDictionary:dict to:result update:[self incDict]];
-    
-    dict = [self jsonForAddUnique];
-    [self addDictionary:dict to:result update:[self addUniqueDict]];
-    */
+    [self synchronize:^{
+        NSDictionary * dict = [self jsonForSetWithIgnoreAVObject:YES];
+        [self addDictionary:dict to:result update:[self setDict]];
+    }];
+
     return result;
 }
 
 // Todo, 只有在 AVRole 中调用，应该可以移除
 -(NSMutableDictionary *)initialSetAndAddRelationDict {
     NSMutableDictionary * result = [NSMutableDictionary dictionary];
-    NSDictionary * dict = [self jsonForSetWithIgnoreAVObject:YES];
-    [self addDictionary:dict to:result update:[self setDict]];
 
-    dict = [self jsonForOp:ADD_RELATION];
-    [self addDictionary:dict to:result update:[self addRelationDict]];
+    [self synchronize:^{
+        NSDictionary * dict = [self jsonForSetWithIgnoreAVObject:YES];
+        [self addDictionary:dict to:result update:[self setDict]];
+
+        dict = [self jsonForOp:ADD_RELATION];
+        [self addDictionary:dict to:result update:[self addRelationDict]];
+    }];
+
     return result;
 }
 
@@ -324,46 +363,50 @@ typedef enum {
 
 // generate a list of json dictionary for LeanCloud.
 -(NSMutableArray *)jsonForCloud {
-    NSMutableArray * array = [self allJsonDict];
     NSMutableArray * result = [NSMutableArray array];
-    NSMutableDictionary * current = [NSMutableDictionary dictionary];
-    for(NSMutableDictionary * item in array) {
-        if (![self hasCommonKeys:current target:item]) {
-            [current addEntriesFromDictionary:item];
-        } else {
-            [result addObject:current];
-            current =  [NSMutableDictionary dictionaryWithDictionary:item];
+
+    [self synchronize:^{
+        NSMutableArray * array = [self allJsonDict];
+        NSMutableDictionary * current = [NSMutableDictionary dictionary];
+
+        for(NSMutableDictionary * item in array) {
+            if (![self hasCommonKeys:current target:item]) {
+                [current addEntriesFromDictionary:item];
+            } else {
+                [result addObject:current];
+                current = [NSMutableDictionary dictionaryWithDictionary:item];
+            }
         }
-    }
-    if (current.count > 0) {
-        [result addObject:current];
-    }
+
+        if (current.count > 0) {
+            [result addObject:current];
+        }
+    }];
+
     return result;
 }
 
 -(BOOL)containsRequest {
-    for(NSDictionary * dict in self.dictArray) {
-        if (dict.count > 0) {
-            return YES;
+    __block BOOL result = NO;
+
+    [self synchronize:^{
+        for(NSDictionary * dict in self.dictArray) {
+            if (dict.count > 0) {
+                result = YES;
+                return;
+            }
         }
-    }
-    return NO;
+    }];
+
+    return result;
 }
 
 -(void)clear {
-    for(NSMutableDictionary * dict in self.dictArray) {
-        [dict removeAllObjects];
-    }
+    [self synchronize:^{
+        for(NSMutableDictionary * dict in self.dictArray) {
+            [dict removeAllObjects];
+        }
+    }];
 }
-
--(void)addObjectACL:(AVObject *)object
-               dict:(NSMutableDictionary *)dict {
-    if (object.ACL)
-    {
-        NSDictionary * aclDict = @{ACLTag: object.ACL.permissionsById};
-        [dict addEntriesFromDictionary:aclDict];
-    }
-}
-
 
 @end

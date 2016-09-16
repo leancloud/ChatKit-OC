@@ -1,3 +1,5 @@
+![FTPopOverMenu](https://raw.githubusercontent.com/liufengting/FTResourceRepo/master/Resource/FTPopOverMenu/FTPopOverMenu.jpg)
+
 # FTPopOverMenu
 
 [![Twitter](https://img.shields.io/badge/twitter-@liufengting-blue.svg?style=flat)](http://twitter.com/liufengting) 
@@ -125,7 +127,9 @@ pod 'FTPopOverMenu'
 }
 ```
 
+# CHANGELOG
 
+[CHANGELOG](https://github.com/liufengting/FTPopOverMenu/blob/master/CHANGELOG.md)
 
 # More
 

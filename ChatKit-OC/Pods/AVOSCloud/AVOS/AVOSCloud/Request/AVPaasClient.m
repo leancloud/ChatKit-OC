@@ -136,6 +136,7 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
 
 @property (nonatomic, readwrite, copy) NSString * apiVersion;
 @property (nonatomic, readwrite, strong) AVHTTPClient * clientImpl;
+@property (nonatomic, strong) LCURLSessionManager *sessionManager;
 
 // The client is singleton, so the queue doesn't need release
 #if OS_OBJECT_USE_OBJC
@@ -179,6 +180,18 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
     if (self) {
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(routerDidUpdate:) name:LCRouterDidUpdateNotification object:nil];
         _requestTable = [NSMapTable strongToWeakObjectsMapTable];
+        _completionQueue = dispatch_queue_create("avos.paas.completionQueue", DISPATCH_QUEUE_CONCURRENT);
+        _sessionManager = ({
+            NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
+            LCURLSessionManager *manager = [[LCURLSessionManager alloc] initWithSessionConfiguration:configuration];
+            manager.completionQueue = _completionQueue;
+
+            /* Remove all null value of result. */
+            LCJSONResponseSerializer *responseSerializer = (LCJSONResponseSerializer *)manager.responseSerializer;
+            responseSerializer.removesKeysWithNullValues = YES;
+
+            manager;
+        });
     }
 
     return self;
@@ -195,6 +208,7 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
 
 - (void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [_sessionManager invalidateSessionCancelingTasks:YES];
 }
 
 -(void)setIsLastModifyEnabled:(BOOL)isLastModifyEnabled{
@@ -258,13 +272,6 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
     NSString *headerValue=[NSString stringWithFormat:@"%@,%@",sign,timestamp];
 
     return headerValue;
-}
-
-- (dispatch_queue_t)completionQueue {
-    if (!_completionQueue) {
-        _completionQueue = dispatch_queue_create("avos.paas.completionQueue", DISPATCH_QUEUE_CONCURRENT);
-    }
-    return _completionQueue;
 }
 
 +(NSMutableDictionary *)batchMethod:(NSString *)method
@@ -646,15 +653,7 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
     NSString *path = request.URL.path;
     AVLoggerDebug(AVLoggerDomainNetwork, LC_REST_REQUEST_LOG_FORMAT, path, [request cURLCommand]);
 
-    NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
-    LCURLSessionManager *manager = [[LCURLSessionManager alloc] initWithSessionConfiguration:configuration];
-    manager.completionQueue = self.completionQueue;
-
-    /* Remove all null value of result. */
-    LCJSONResponseSerializer *responseSerializer = (LCJSONResponseSerializer *)manager.responseSerializer;
-    responseSerializer.removesKeysWithNullValues = YES;
-
-    NSURLSessionDataTask *dataTask = [manager dataTaskWithRequest:request completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
+    NSURLSessionDataTask *dataTask = [self.sessionManager dataTaskWithRequest:request completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
         /* As Apple say:
          > Whenever you make an HTTP request,
          > the NSURLResponse object you get back is actually an instance of the NSHTTPURLResponse class.
