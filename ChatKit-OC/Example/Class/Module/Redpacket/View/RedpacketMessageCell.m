@@ -34,7 +34,7 @@ static const CGFloat Redpacket_SubMessage_Font_Size = 12.0f;
     [self initialize];
     [super setup];
     [self addGeneralView];
-    
+    [self updateConstraintsIfNeeded];
 }
 
 - (void)updateConstraints {

@@ -94,7 +94,7 @@
     } andRedpacketBlock:^(RedpacketMessageModel *redpacket) {
         // 用户发红包的通知
         // SDK 默认的消息需要改变
-        redpacket.redpacket.redpacketOrgName = @"LeacCLoud红包";
+        redpacket.redpacket.redpacketOrgName = @"LeacCloud红包";
         [self sendRedpacketMessage:redpacket];
         _redpacketControl = nil;
     }];
