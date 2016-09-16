@@ -11,7 +11,7 @@
 
  1.  [《ChatKit 自定义样式》]( https://github.com/leancloud/ChatKit-OC/blob/master/ChatKit%20自定义样式.md )
  2. [《ChatKit 自定义业务》]( https://github.com/leancloud/ChatKit-OC/blob/master/ChatKit%20自定义业务.md) 
-
+ 3. [《集成红包功能》]( https://github.com/leancloud/ChatKit-OC/blob/master/REDPACKET.md ) 
 
 
 ##  导航

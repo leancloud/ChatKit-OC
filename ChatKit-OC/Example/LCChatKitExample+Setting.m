@@ -446,6 +446,7 @@ setLoadLatestMessagesHandler:^(LCCKConversationViewController *conversationContr
  *  筛选消息的设置
  */
 - (void)lcck_setupFilterMessage {
+    //注意：在 `[RedpacketConfig lcck_setting]` 中已经设置过该 `setFilterMessagesBlock:` ，注意不要重复设置。
     //这里演示如何筛选新的消息记录，以及新接收到的消息，以群定向消息为例：
     [[LCChatKit sharedInstance] setFilterMessagesBlock:^(AVIMConversation *conversation,
                               NSArray<AVIMTypedMessage *> *messages,
