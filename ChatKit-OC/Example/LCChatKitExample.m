@@ -22,7 +22,9 @@
 #import "LCCKExampleConstants.h"
 #import "LCCKLoginViewController.h"
 #import "LCCKVCardMessageCell.h"
+
 #import "LCChatKitExample+Setting.h"
+#import "RedpacketConfig.h"
 
 @interface LCChatKitExample ()
 
@@ -47,6 +49,7 @@
     [LCCKInputViewPluginTakePhoto registerSubclass];
     [LCCKInputViewPluginPickImage registerSubclass];
     [LCCKInputViewPluginLocation registerSubclass];
+    [[RedpacketConfig sharedConfig] config];
 }
 
 + (void)invokeThisMethodInDidRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
@@ -128,6 +131,8 @@
  */
 - (void)exampleInit {
     [self lcck_setting];
+    [[RedpacketConfig sharedConfig] lcck_setting];
+
 }
 
 #pragma -
@@ -188,6 +193,7 @@
  */
 + (void)exampleOpenConversationViewControllerWithPeerId:(NSString *)peerId
                                fromNavigationController:(UINavigationController *)navigationControlle {
+
     LCCKConversationViewController *conversationViewController =
     [[LCCKConversationViewController alloc] initWithPeerId:peerId];
     [conversationViewController
@@ -250,6 +256,7 @@
     if ([userId isEqualToString:currentClientId]) {
         title = [NSString stringWithFormat:@"打开自己的主页 \nClientId是 : %@", userId];
         subtitle = [NSString stringWithFormat:@"我自己的name是 : %@", user.name];
+    
     } else if ([parentController isKindOfClass:[LCCKConversationViewController class]]) {
         LCCKConversationViewController *conversationViewController_ =
         [[LCCKConversationViewController alloc] initWithPeerId:user.clientId ?: userId];
