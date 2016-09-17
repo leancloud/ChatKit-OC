@@ -11,7 +11,6 @@
 #import "CYLTabBarController.h"
 #import "RedpacketConfig.h"
 #import "AVIMTypedMessageRedPacket.h"
-#import "AVIMTypedMessageRedPacketTaken.h"
 
 @interface RedPacketInputViewPlugin()<RedpacketViewControlDelegate>
 
@@ -87,14 +86,10 @@
     _redpacketControl.delegate = self;
     
     // 设置红包 SDK 功能回调
-    [_redpacketControl setRedpacketGrabBlock:^(RedpacketMessageModel *redpacket) {
-        // 用户发出的红包收到被抢的通知
-        [self onRedpacketTakenMessage:redpacket];
-        _redpacketControl = nil;
-    } andRedpacketBlock:^(RedpacketMessageModel *redpacket) {
+    [_redpacketControl setRedpacketGrabBlock:nil andRedpacketBlock:^(RedpacketMessageModel *redpacket) {
         // 用户发红包的通知
         // SDK 默认的消息需要改变
-        redpacket.redpacket.redpacketOrgName = @"LeacCLoud红包";
+        redpacket.redpacket.redpacketOrgName = @"LeacCloud红包";
         [self sendRedpacketMessage:redpacket];
         _redpacketControl = nil;
     }];
@@ -106,45 +101,6 @@
     AVIMTypedMessageRedPacket * message = [[AVIMTypedMessageRedPacket alloc]init];
     message.rpModel = redpacket;
     [self.conversationViewController sendCustomMessage:message];
-}
-
-// 红包被抢消息处理
-- (void)onRedpacketTakenMessage:(RedpacketMessageModel *)redpacket {
-    if ([redpacket.currentUser.userId isEqualToString:redpacket.redpacketSender.userId]) {//如果发送者是自己
-        [self.conversationViewController sendLocalFeedbackTextMessge:@"您抢了自己的红包"];
-    }
-    else {
-        switch (redpacket.redpacketType) {
-            case RedpacketTypeSingle:{
-                AVIMTypedMessageRedPacketTaken * message = [[AVIMTypedMessageRedPacketTaken alloc]initWithClientId:self.clientId ConversationType:LCCKConversationTypeSingle receiveMembers:@[redpacket.redpacketSender.userId]];
-                message.rpModel = redpacket;
-                [self.conversationViewController sendCustomMessage:message];
-                break;
-            }
-            case RedpacketTypeGroup:
-            case RedpacketTypeRand:
-            case RedpacketTypeAvg:
-            case RedpacketTypeRandpri:{
-                //TODO 需用户自定义
-                break;
-            }
-            case RedpacketTypeMember: {
-                //TODO 需用户自定义
-                break;
-            }
-            default:{
-                //TODO 需用户自定义
-                break;
-            }
-        }
-    }
-}
-
-- (NSString*)clientId {
-    NSString * clientID = @"";
-    clientID = self.conversationViewController.peerId?self.conversationViewController.peerId:@"";
-    clientID = self.conversationViewController.conversationId?self.conversationViewController.conversationId:@"";
-    return clientID;
 }
 
 - (void)getGroupMemberListCompletionHandle:(void (^)(NSArray<RedpacketUserInfo *> *))completionHandle {

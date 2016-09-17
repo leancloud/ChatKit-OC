@@ -36,10 +36,10 @@
 - (void)setup {
     [super setup];
     [self initialize];
+    [self updateConstraintsIfNeeded];
 }
 
 - (void)initialize {
-    
     self.contentView.backgroundColor = [UIColor clearColor];
     self.tipMessageLabel = [[UILabel alloc] initWithFrame:CGRectZero];
     self.tipMessageLabel.textAlignment = NSTextAlignmentCenter;
