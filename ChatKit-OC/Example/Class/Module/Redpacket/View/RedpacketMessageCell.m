@@ -5,11 +5,17 @@
 //  Created by YANG HONGBO on 2016-4-25.
 //  Copyright © 2016年 云帐户. All rights reserved.
 //
-
+#if __has_include(<ChatKit/LCChatKit.h>)
+#import <ChatKit/LCChatKit.h>
+#else
+#import "LCChatKit.h"
+#endif
 #import "RedpacketMessageCell.h"
 #import "AVIMTypedMessageRedPacket.h"
 #import "RedpacketMessageModel.h"
 #import "RedpacketViewControl.h"
+#import "AVIMTypedMessageRedPacketTaken.h"
+
 static const CGFloat Redpacket_SubMessage_Font_Size = 12.0f;
 
 @interface RedpacketMessageCell()
@@ -19,6 +25,10 @@ static const CGFloat Redpacket_SubMessage_Font_Size = 12.0f;
  */
 @property (nonatomic,strong)AVIMTypedMessageRedPacket * rpMessage;
 
+/**
+ *  发红包的控制器
+ */
+@property (nonatomic,strong)RedpacketViewControl * rpControl;
 @end
 
 @implementation RedpacketMessageCell
@@ -33,7 +43,9 @@ static const CGFloat Redpacket_SubMessage_Font_Size = 12.0f;
 - (void)setup {
     [self initialize];
     [super setup];
-    [self addGeneralView];
+    [self.contentView addSubview:self.avatarImageView];
+    [self.contentView addSubview:self.nickNameLabel];
+    [self.contentView addSubview:self.messageContentView];
     [self updateConstraintsIfNeeded];
 }
 
@@ -110,8 +122,61 @@ static const CGFloat Redpacket_SubMessage_Font_Size = 12.0f;
     if ([self.rpMessage isKindOfClass:[AVIMTypedMessageRedPacket class]]) {
         AVIMTypedMessageRedPacket * message = (AVIMTypedMessageRedPacket*)self.rpMessage;
         RedpacketViewControl * redpacketControl = [RedpacketViewControl new];
-        redpacketControl.delegate = (UIViewController *)self.delegate;
+        redpacketControl.conversationController = self.delegate;
+        
+        __weak typeof(self) weakSelf = self;
+        // 设置红包 SDK 功能回调
+        [redpacketControl setRedpacketGrabBlock:^(RedpacketMessageModel *redpacket) {
+            // 用户发出的红包收到被抢的通知
+            [weakSelf onRedpacketTakenMessage:redpacket];
+        } andRedpacketBlock:nil];
+        self.rpControl = redpacketControl;
         [redpacketControl redpacketCellTouchedWithMessageModel:message.rpModel];
+    }
+}
+
+- (NSString*)clientId {
+    NSString * clientID = @"";
+    if ([self.delegate isKindOfClass:[LCCKConversationViewController class]]) {
+        LCCKConversationViewController * conversationViewController = (LCCKConversationViewController*)self.delegate;
+        clientID = conversationViewController.peerId?conversationViewController.peerId:@"";
+        clientID = conversationViewController.conversationId?conversationViewController.conversationId:@"";
+    }
+    return clientID;
+}
+
+// 红包被抢消息处理
+- (void)onRedpacketTakenMessage:(RedpacketMessageModel *)redpacket {
+    if (![self.delegate isKindOfClass:[LCCKConversationViewController class]]) return;
+    
+    LCCKConversationViewController * conversationViewController = (LCCKConversationViewController*)self.delegate;
+    if ([redpacket.currentUser.userId isEqualToString:redpacket.redpacketSender.userId]) {//如果发送者是自己
+        [conversationViewController sendLocalFeedbackTextMessge:@"您抢了自己的红包"];
+    }
+    else {
+        switch (redpacket.redpacketType) {
+            case RedpacketTypeSingle:{
+                AVIMTypedMessageRedPacketTaken * message = [[AVIMTypedMessageRedPacketTaken alloc]initWithClientId:self.clientId ConversationType:LCCKConversationTypeSingle receiveMembers:@[redpacket.redpacketSender.userId]];
+                message.rpModel = redpacket;
+                [conversationViewController sendCustomMessage:message];
+                break;
+            }
+            case RedpacketTypeGroup:
+            case RedpacketTypeRand:
+            case RedpacketTypeAvg:
+            case RedpacketTypeRandpri:{
+                //TODO 需用户自定义
+                break;
+            }
+            case RedpacketTypeMember: {
+                //TODO 需用户自定义
+                break;
+            }
+            default:{
+                //TODO 需用户自定义
+                break;
+            }
+        }
     }
 }
 
@@ -148,5 +213,6 @@ static const CGFloat Redpacket_SubMessage_Font_Size = 12.0f;
         }
     }
 }
+
 
 @end

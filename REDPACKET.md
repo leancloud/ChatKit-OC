@@ -52,6 +52,11 @@ ChatKit Demo中已经默认集成了红包功能，Demo 的做法如下：
     [RedpacketConfig configRedpacket];
     执行 `红包 SDK` 的信息注册
 
+### 设置支付宝URLScheme,需在info.plist中设置URL Types。同时保持一致传入红包设置中。方便用支付宝发送红包。
+
+    [[YZHRedpacketBridge sharedBridge] setRedacketURLScheme:@"redpacket.chatkit"];
+    
+
 如对注册信息有其他要求,请自行参考 `RedpacketConfig` 实现和`YZHRedpacketBridge` 所提供API
 
 demo 提供两个 Plugin 底部插件.分别是零钱 `RedPacketChangeInputViewPlugin` 和发红包`RedPacketInputViewPlugin`。
