@@ -61,7 +61,7 @@ ChatKit Demo中已经默认集成了红包功能，Demo 的做法如下：
 
 demo 提供两个 Plugin 底部插件.分别是零钱 `RedPacketChangeInputViewPlugin` 和发红包`RedPacketInputViewPlugin`。
 
-![](http://ww2.sinaimg.cn/large/801b780ajw1f7vg21w5waj20bi0kgtac.jpg)
+![](http://ww1.sinaimg.cn/large/801b780ajw1f7wnumd6x0j20bi0kg405.jpg)
 
 如要修改零钱页面入口请查看`RedPacketChangeInputViewPlugin`类
 

@@ -66,6 +66,7 @@ git clone --depth=1 https://github.com/leancloud/ChatKit-OC
 
 ![enter image description here](http://ww1.sinaimg.cn/mw690/64dfd849jw1f77azzgfmmg20bl0kl1ky.gif) 
 
+![](http://ww3.sinaimg.cn/large/801b780ajw1f7wntd30ljj20bi0kgq4a.jpg)
 
 最近联系人 | 语音消息，根据语音长度调整宽度 | 图片消息，尺寸自适应 
 -------------|-------------|-------------|-------------
