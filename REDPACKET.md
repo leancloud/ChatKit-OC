@@ -8,6 +8,14 @@
  4. [设置红包信息](https://github.com/leancloud/ChatKit-OC/blob/master/REDPACKET.md#设置红包信息) 
  5. [在聊天对话中添加红包支持](https://github.com/leancloud/ChatKit-OC/blob/master/REDPACKET.md#在聊天对话中添加红包支持) 
 
+
+效果图：
+
+- | - | -
+-------------|-------------|-------------
+![](http://ww1.sinaimg.cn/large/7853084cjw1f7ynh6lno3j20bi0kg0ug.jpg) | ![](http://ww3.sinaimg.cn/large/7853084cjw1f7ynh6q4p8j20bi0kgdgm.jpg) | ![](http://ww3.sinaimg.cn/large/7853084cjw1f7ynh6nodqj20bi0kgdgl.jpg) 
+![](http://ww4.sinaimg.cn/large/7853084cjw1f7ynh6hcqlj20bi0kg74x.jpg) | ![](http://ww1.sinaimg.cn/large/7853084cjw1f7ynh6fj58j20bi0kgab8.jpg) | ![](http://ww1.sinaimg.cn/large/7853084cjw1f7ynh6be0lj20bi0kg75n.jpg)
+ 
 ## 下载最新的红包 SDK 库文件
 
 ChatKit 默认已经添加了红包 SDK，因为红包 SDK 在一直更新维护，所以如果想获取更新过的 SDK ，可前往[这里](https://www.yunzhanghu.com/download.html)下载 zip 包。
