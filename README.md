@@ -399,6 +399,12 @@ Demo 中也是通过这个方式来兼容iOS7的。
 
 这种情况，请检查下，这里是否进行了正确的设置：
 
+比如可以这样设置：
+
+ ```Objective-C
+{"alert":"您有新的消息","badge":"Increment"}
+ ```
+
 ![](http://ww2.sinaimg.cn/large/7853084cjw1f7y0ltdaprj20r20fiacf.jpg)
 
 在使用中有任何问题都可以到[我们的官方论坛](https://forum.leancloud.cn/c/jing-xuan-faq)提问题，会有专业工程师回复，平均响应时间在24小时内。
