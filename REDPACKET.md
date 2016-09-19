@@ -18,8 +18,15 @@ ChatKit 默认已经添加了红包 SDK，因为红包 SDK 在一直更新维护
 ChatKit 同样也默认集成了一个支付宝 SDK，如想更新，请前往[支付宝对应页面](https://doc.open.alipay.com/doc2/detail.htm?spm=a219a.7629140.0.0.CeDJVo&treeId=54&articleId=104509&docType=1)下载最新版本。
 
 ## 集成红包功能
-
 ChatKit Demo中已经默认集成了红包功能，Demo 的做法如下：
+
+需要实现的对应几个API：
+
+ 自定义项 | 公开API | 备注
+ -------------|-------------|-------------
+ 自定义消息 | 2 | `-registerSubclass`、 `+classMediaType`
+ 自定义Cell | 4 | `-registerCustomMessageCell`、`+classMediaType`、`-setup`、 `-configureCellWithData:`
+ 自定义插件 | 6 | `-registerCustomInputViewPlugin`、`+classPluginType`、`-pluginIconImage`、`-pluginTitle`、`-pluginDidClicked`、`sendCustomMessageHandler`
 
 在 Appdelegate 中写入以下方法
 

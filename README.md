@@ -394,5 +394,11 @@ Demo 中也是通过这个方式来兼容iOS7的。
 
 如果不使用 Pod，你可以直接下载 [CYLTableViewRowAction](https://github.com/ChenYilong/CYLTableViewRowAction) 将里面的文件夹拖拽到项目中就可以了，不兼容 iOS7 的问题就解决了。
 
+**为什么收不到推送消息 ？**<br/>
+问题描述：推送的证书已经配置好，在控制台里测试推送，手机也能接收到，但是另一个好友发送的消息就是接收不到。
+
+这种情况，请检查下，这里是否进行了正确的设置：
+
+![](http://ww2.sinaimg.cn/large/7853084cjw1f7y0ltdaprj20r20fiacf.jpg)
 
 在使用中有任何问题都可以到[我们的官方论坛](https://forum.leancloud.cn/c/jing-xuan-faq)提问题，会有专业工程师回复，平均响应时间在24小时内。
