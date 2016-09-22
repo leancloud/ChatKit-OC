@@ -424,6 +424,7 @@ NSString *const LCCKConversationServiceErrorDomain = @"LCCKConversationServiceEr
             conversation.lcck_unreadCount = cachedConversation.lcck_unreadCount;
             conversation.lcck_draft = [cachedConversation.lcck_draft copy];
             conversation.lcck_mentioned = cachedConversation.lcck_mentioned;
+            [self.conversationDictionary setObject:conversation forKey:conversation.conversationId];
         }
     }
     dispatch_async(self.sqliteQueue, ^{
