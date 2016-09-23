@@ -135,6 +135,8 @@
     if ((NSUInteger)indexPath.row < self.dataArray.count) {
         conversation = [self.dataArray objectAtIndex:indexPath.row];
     }
+    else
+        return nil;
     NSArray *editActions = [NSArray array];
     if (conversationEditActionBlock) {
         editActions = conversationEditActionBlock(indexPath, [self defaultRightButtons], conversation, self.conversationListViewController);
