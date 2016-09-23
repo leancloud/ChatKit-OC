@@ -612,8 +612,7 @@ static NSString *const LCCKContactListViewControllerIdentifier = @"LCCKContactLi
 
 - (NSDictionary *)searchSections {
     if (!_searchSections) {
-        NSSet *set = [[NSSet alloc] init];
-        [set setByAddingObjectsFromArray:self.searchContacts];
+        NSSet *set = [NSSet setWithArray:self.searchContacts];
         _searchSections = [self sortedSectionForUserNames:[self contactsFromContactsOrUserIds:set userIds:self.searchUserIds]];
     }
     return _searchSections;
