@@ -2,9 +2,9 @@ version: 2
 groups:
   code-review:
     approve_by_comment:
-      approve_regex: '^(Approved|Reviewed|LGTM)'
+      approve_regex: ^(Approved|Reviewed|LGTM)
       enabled: true
-      reject_regex: '^Rejected'
+      reject_regex: ^Rejected
     required: 1
     reset_on_push: false
     users:
