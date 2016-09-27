@@ -1,13 +1,11 @@
-version: 2
-groups:
-  code-review:
-    approve_by_comment:
-      approve_regex: ^(Approved|Reviewed|LGTM)
-      enabled: true
-      reject_regex: ^Rejected
-    required: 1
-    reset_on_push: false
-    users:
-      - jwfing
-      - tang3w
-      - ChenYilong
+approve_by_comment: true
+approve_regex: '^(Reviewed|Approved|LGTM)'
+reject_regex: '^Rejected'
+reset_on_push: false
+reviewers:
+  required: 1
+  members:
+    - ChenYilong
+    - tang3w
+    - jwfing
+  name: default 
