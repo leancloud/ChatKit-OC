@@ -8,6 +8,6 @@ groups:
     required: 1
     reset_on_push: false
     users:
-    - jwfing
-    - tang3w
-    - ChenYilong
+      - jwfing
+      - tang3w
+      - ChenYilong
