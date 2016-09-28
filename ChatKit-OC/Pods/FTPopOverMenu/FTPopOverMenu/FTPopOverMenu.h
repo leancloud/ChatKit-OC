@@ -20,43 +20,66 @@ typedef void (^FTPopOverMenuDoneBlock)(NSInteger selectedIndex);
 typedef void (^FTPopOverMenuDismissBlock)();
 
 /**
- *  FTPopOverMenuCell
+ *  -----------------------FTPopOverMenuConfiguration-----------------------
+ */
+@interface FTPopOverMenuConfiguration : NSObject
+
+@property (nonatomic, assign)CGFloat menuRowHeight;
+@property (nonatomic, assign)CGFloat menuWidth;
+@property (nonatomic, strong)UIColor *textColor;
+@property (nonatomic, strong)UIColor *tintColor;
+@property (nonatomic, strong)UIColor *borderColor;
+@property (nonatomic, assign)CGFloat borderWidth;
+@property (nonatomic, strong)UIFont *textFont;
+@property (nonatomic, assign)NSTextAlignment textAlignment;
+@property (nonatomic, assign)BOOL ignoreImageOriginalColor;// Default is 'NO', if sets to 'YES', images color will be same as textColor.
+/**
+ *  defaultConfiguration
+ *
+ *  @return curren configuration
+ */
++ (FTPopOverMenuConfiguration *)defaultConfiguration;
+
+@end
+
+/**
+ *  -----------------------FTPopOverMenuCell-----------------------
  */
 @interface FTPopOverMenuCell : UITableViewCell
 
 @end
 /**
- *  FTPopOverMenuView
+ *  -----------------------FTPopOverMenuView-----------------------
  */
 @interface FTPopOverMenuView : UIControl
 
 @end
 
-/**---------------------------------------------------------------------
+/**
  *  -----------------------FTPopOverMenu-----------------------
  */
 @interface FTPopOverMenu : NSObject
 
 /**
- *  setTintColor
+ *  setTintColor "Function deprecated. User '[FTPopOverMenuConfiguration defaultConfiguration]' instead."
  *
  *  @param tintColor tintColor
  */
-+(void)setTintColor:(UIColor *)tintColor;
++(void)setTintColor:(UIColor *)tintColor __deprecated_msg("Function deprecated. User '[FTPopOverMenuConfiguration defaultConfiguration]' instead.");
 
 /**
- *  setTextColor
+ *  setTextColor "Function deprecated. User '[FTPopOverMenuConfiguration defaultConfiguration]' instead."
  *
  *  @param textColor textColor
  */
-+(void)setTextColor:(UIColor *)textColor;
++(void)setTextColor:(UIColor *)textColor __deprecated_msg("Function deprecated. User '[FTPopOverMenuConfiguration defaultConfiguration]' instead.");
 
 /**
- *  setPreferedWidth
+ *  setPreferedWidth "Function deprecated. User '[FTPopOverMenuConfiguration defaultConfiguration]' instead."
  *
  *  @param preferedWidth preferedWidth
  */
-+(void)setPreferedWidth:(CGFloat )preferedWidth;
++(void)setPreferedWidth:(CGFloat )preferedWidth __deprecated_msg("Function deprecated. User '[FTPopOverMenuConfiguration defaultConfiguration]' instead.");
 
 /**
  *  show method with sender without images

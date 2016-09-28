@@ -1,17 +1,17 @@
 PODS:
-  - AVOSCloud (3.4.0)
-  - AVOSCloudIM (3.4.0):
-    - AVOSCloud (= 3.4.0)
-    - AVOSCloudIM/_ARC (= 3.4.0)
-    - AVOSCloudIM/_NOARC (= 3.4.0)
-  - AVOSCloudIM/_ARC (3.4.0):
-    - AVOSCloud (= 3.4.0)
-    - AVOSCloudIM/_NOARC (= 3.4.0)
-  - AVOSCloudIM/_NOARC (3.4.0):
-    - AVOSCloud (= 3.4.0)
-  - ChatKit (0.7.15):
-    - AVOSCloud (~> 3.4.0)
-    - AVOSCloudIM (~> 3.4.0)
+  - AVOSCloud (3.4.3)
+  - AVOSCloudIM (3.4.3):
+    - AVOSCloud (= 3.4.3)
+    - AVOSCloudIM/_ARC (= 3.4.3)
+    - AVOSCloudIM/_NOARC (= 3.4.3)
+  - AVOSCloudIM/_ARC (3.4.3):
+    - AVOSCloud (= 3.4.3)
+    - AVOSCloudIM/_NOARC (= 3.4.3)
+  - AVOSCloudIM/_NOARC (3.4.3):
+    - AVOSCloud (= 3.4.3)
+  - ChatKit (0.7.17):
+    - AVOSCloud (~> 3.4.3)
+    - AVOSCloudIM (~> 3.4.3)
     - DACircularProgress (~> 2.3.1)
     - FDStackView (~> 1.0)
     - FMDB (~> 2.6.2)
@@ -29,7 +29,7 @@ PODS:
   - FMDB (2.6.2):
     - FMDB/standard (= 2.6.2)
   - FMDB/standard (2.6.2)
-  - FTPopOverMenu (1.2.0)
+  - FTPopOverMenu (1.2.1)
   - Masonry (1.0.2)
   - MBProgressHUD (0.9.2)
   - MJRefresh (3.1.12)
@@ -59,15 +59,15 @@ EXTERNAL SOURCES:
     :path: ../
 
 SPEC CHECKSUMS:
-  AVOSCloud: 771c8d77bc9b9f2cc8ac2eb4b58eaf368337ac95
-  AVOSCloudIM: 288597efc0cff96620fc380ea146ccf89a8a8d48
-  ChatKit: ec8395b82c0ee8575407a3e52abe7ca3104ed1fd
+  AVOSCloud: 0108153c6b7130c399707442f3059ea6016da6c3
+  AVOSCloudIM: b8e6dba33a4f9af6e3137e09d8e9722570720af7
+  ChatKit: 23add8db7461d91985c0284a79defb0d9aefc15b
   CYLTabBarController: efbdd574772be17f17965acd7ee993f5972ff02f
   CYLTableViewRowAction: 66bd3f7478b46894ff40b74d892fc85aed41656b
   DACircularProgress: 4dd437c0fc3da5161cb289e07ac449493d41db71
   FDStackView: 3a4bbe0ce9c35e974246a585168b9da8c32213f1
   FMDB: 854a0341b4726e53276f2a8996f06f1b80f9259a
-  FTPopOverMenu: f4c2e004c1b6594e72c71393a54a3f23733a9e72
+  FTPopOverMenu: 645bf589f3adb6598efa05cab67cced988d5352f
   Masonry: 7c429b56da9d4ee0bbb3ed77a5ea710d6a5df39e
   MBProgressHUD: 1569cf7ace17a8bac47aabfbb8580a49690386d1
   MJRefresh: b96cdb21c4aa75a7b07654311ab2f315c497e806

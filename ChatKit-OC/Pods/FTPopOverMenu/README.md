@@ -36,18 +36,36 @@ pod 'FTPopOverMenu'
 
 # Usage
 
-## setTintColor, default is gray color.
+## Customize
+
+Do any of the following settings to set the style (Only set the ones you want to change), maybe do this when app starts or when you want it to show a different style, but remember it's global change.
+
+```objective-c
+    FTPopOverMenuConfiguration *configuration = [FTPopOverMenuConfiguration defaultConfiguration];
+    configuration.menuRowHeight = ...
+    configuration.menuWidth = ...
+    configuration.textColor = ...
+    configuration.textFont = ...
+    configuration.tintColor = ...
+    configuration.borderColor = ...
+    configuration.borderWidth = ...
+    configuration.textAlignment = ...
+    configuration.ignoreImageOriginalColor = ...;// set 'ignoreImageOriginalColor' to YES, images color will be same as textColor
+```
+
+
+## ~~setTintColor, default is gray color.~~ deprecated after 1.2.0
 
 ```objective-c
     [FTPopOverMenu setTintColor:[UIColor redColor]];
 ```
-## setTextColor, default is white color.
+## ~~setTextColor, default is white color.~~ deprecated after 1.2.0
 
 ```objective-c
     [FTPopOverMenu setTextColor:[UIColor blackColor]];
 ```
 
-## setPreferedWidth, default is 120, should not be less than 50.
+## ~~setPreferedWidth, default is 120, should not be less than 50.~~ deprecated after 1.2.0
 
 ```objective-c
     [FTPopOverMenu setPreferedWidth:200];
@@ -133,6 +151,7 @@ pod 'FTPopOverMenu'
 
 # More
 
+* Images in the demo from [https://www.iconfinder.com/iconsets/pokemon-go](https://www.iconfinder.com/iconsets/pokemon-go).
 * If you like it, or maybe wanna use it in your own projects, please give me a `star`.
 * Looking for another way of doing this? Take a look at my another [FTPopMenu at here](https://github.com/liufengting/FTPopMenu).  It was another way of showing pop over menus, which is wrapped from `UIPopoverViewController`, and more genetic and more good-looking. Feel free to try it.
  

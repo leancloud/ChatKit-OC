@@ -180,10 +180,9 @@ static uint64_t const QCloudSliceSize = 512 * 1024;
 
 - (void)uploadToS3WithAVFile:(AVFile *)file
               fileTokensInfo:(NSDictionary *)fileTokensInfo
-               progressBlock:(AVProgressBlock)progressBlock resultBlock:(AVBooleanResultBlock)resultBlock {
-    NSDictionary *parameters = [self parametersForFile:file];
-    NSString *token = [fileTokensInfo valueForKey:@"token"];
-    NSString *bucket = [fileTokensInfo valueForKey:@"bucket"];
+               progressBlock:(AVProgressBlock)progressBlock
+                 resultBlock:(AVBooleanResultBlock)resultBlock
+{
     NSString *objectId = [fileTokensInfo valueForKey:@"objectId"];
     NSString *originUrl = [fileTokensInfo valueForKey:@"url"];
     NSString *uploadURLString = [fileTokensInfo valueForKey:@"upload_url"];
@@ -211,10 +210,18 @@ static uint64_t const QCloudSliceSize = 512 * 1024;
         }
         [AVUtils callBooleanResultBlock:resultBlock error:error];
     };
-    NSString *key = parameters[@"key"];
+
     NSURL *url = [NSURL URLWithString:uploadURLString];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
+
+    [request setValue:USER_AGENT    forHTTPHeaderField:@"User-Agent"];
+    [request setValue:file.mimeType forHTTPHeaderField:@"Content-Type"];
+
+    request.HTTPMethod = @"PUT";
+    request.HTTPBody = file.data;
+
     self.httpClient = [[AVHTTPClient alloc] initWithBaseURL:url];
-    [self uploadFileToBucket:bucket withToken:token file:file key:key method:@"PUT" progressBlock:progressBlock resultBlock:uploadResultBlock];
+    [self uploadFile:file request:request progressBlock:progressBlock resultBlock:uploadResultBlock];
 }
 
 #pragma mark - Upload to Qiniu
@@ -327,10 +334,17 @@ static uint64_t const QCloudSliceSize = 512 * 1024;
     if (!file.data) file.data = [NSData dataWithContentsOfFile:file.localPath];
     NSData *uploadData = file.data;
     NSMutableURLRequest *request = [self.httpClient multipartFormRequestWithMethod:method path:nil parameters:param constructingBodyWithBlock: ^(id <AVMultipartFormData>formData) {
-        
         [formData appendPartWithFileData:uploadData name:@"file" fileName:file.name mimeType:file.mimeType];
     }];
-    
+
+    [self uploadFile:file request:request progressBlock:progressBlock resultBlock:resultBlock];
+}
+
+-(void)uploadFile:(AVFile *)file
+          request:(NSURLRequest *)request
+    progressBlock:(AVProgressBlock)progressBlock
+      resultBlock:(AVBooleanResultBlock)resultBlock
+{
     AVFileHTTPRequestOperation *operation = [[AVFileHTTPRequestOperation alloc] initWithRequest:request];
     operation.localPath = file.localPath;
     [operation setUploadProgressBlock:^(AVURLConnectionOperation *operation, NSUInteger bytesWritten, long long totalBytesWritten, long long totalBytesExpectedToWrite) {
