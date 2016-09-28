@@ -31,6 +31,8 @@ static NSString *const LCCKAPPKEY = @"ye24iIK6ys8IvaISMC4Bs5WK";
     [self lcck_setupAppInfo];
     //设置用户体系
     [self lcck_setFetchProfiles];
+    //设置签名机制
+    //[self lcck_setGenerateSignature];
     //设置聊天列表
     [self lcck_setupConversationsList];
     //设置聊天
@@ -141,6 +143,49 @@ static NSString *const LCCKAPPKEY = @"ye24iIK6ys8IvaISMC4Bs5WK";
          !completionHandler ?: completionHandler([users copy], nil);
      }];
 }
+
+#pragma mark - 签名机制设置
+
+/*!
+ * 参考 https://leancloud.cn/docs/realtime_v2.html#权限和认证
+ * 需要使用同步请求
+ */
+//- (void)lcck_setGenerateSignature {
+//    [[LCChatKit sharedInstance] setGenerateSignatureBlock:^(NSString *clientId, NSString     *conversationId, NSString *action, NSArray *clientIds, LCCKGenerateSignatureCompletionHandler completionHandler) {
+//        NSMutableDictionary *paramsM = [NSMutableDictionary   dictionaryWithDictionary:@{@"token": [AccountManager sharedAccountManager].bestoneAccount.authentication_token}];
+//        if (clientIds.count) {
+//            [paramsM addEntriesFromDictionary:@{@"member_ids": clientIds}];
+//        }
+//        if (conversationId.length) {
+//            [paramsM addEntriesFromDictionary:@{@"conversation_id": conversationId}];
+//        }
+//        if (action.length) {
+//            [paramsM addEntriesFromDictionary:@{@"conv_action": action}];
+//        }
+//        
+//        dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+//        
+//        __block AVIMSignature *signature_ = nil;
+//        [HTTPSolution responseObjectWithMethod:@"GET" URLString:kSignatureURLStr parameters:[paramsM copy] wantData:NO success:^(NSURLResponse *response, id responseObject) {
+//            signature_ = [[AVIMSignature alloc] init];
+//            signature_.signature = responseObject[@"signature"];
+//            signature_.timestamp = [responseObject[@"timestamp"] longLongValue];
+//            signature_.nonce = responseObject[@"nonce"];
+//            !completionHandler ?: completionHandler(signature_, nil);
+//            LCCKLog(@"签名请求成功。。。。");
+//            dispatch_semaphore_signal(semaphore);
+//        } failure:^(NSError *error) {
+//            
+//            signature_ = [[AVIMSignature alloc] init];
+//            signature_.error = error;
+//            NSLog(@"error: %@", error.localizedDescription);
+//            !completionHandler ?: completionHandler(signature_, error);
+//            dispatch_semaphore_signal(semaphore);
+//        }];
+//        dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
+//        LCCKLog(@"我在等待信号量增加！。。。。。");
+//    }];
+//}
 
 #pragma mark - 最近联系人列表的设置
 
