@@ -358,6 +358,11 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
         }
         [dic removeObjectForKey:key];
     }
+    if ([AVUtils containsProperty:key inClass:[self class] containSuper:YES filterDynamic:YES]) {
+        /* Create a clean object to produce an empty value. */
+        [self setValue:[[[self class] alloc] valueForKey:key] forKey:key];
+        hasKey = YES;
+    }
     if (hasKey || [self hasValidObjectId]) {
         [self.requestManager unsetRequestForKey:key];
     }
