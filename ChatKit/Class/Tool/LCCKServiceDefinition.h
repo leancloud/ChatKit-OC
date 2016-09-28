@@ -37,7 +37,7 @@ typedef void (^LCCKForceReconnectSessionBlock)(NSError *error, BOOL granted, __k
 @property (nonatomic, copy, readonly) NSString *clientId;
 @property (nonatomic, strong, readonly) AVIMClient *client;
 @property (nonatomic, assign) BOOL disableSingleSignOn;
-@property (nonatomic, copy, readonly) LCCKForceReconnectSessionBlock forceReconnectSessionBlock;
+@property (nonatomic, copy) LCCKForceReconnectSessionBlock forceReconnectSessionBlock;
 
 /*!
  * @param clientId You can use the user id in your user system as clientId, ChatKit will get the current user's information by both this id and the method `-[LCCKChatService getProfilesForUserIds:callback:]`.
