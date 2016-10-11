@@ -158,6 +158,11 @@ gem install cocoapods
 
 如果不想使用 CocoaPods 进行集成，也可以选择使用 [源码集成](https://github.com/leancloud/ChatKit-OC#手动集成)。
 
+然后在需要的地方导入 ChatKit：
+
+ ```Objective-C
+#import <ChatKit/LCChatKit.h>
+ ```
 
  使用 ChatKit 有几个关键性的步骤：
 
