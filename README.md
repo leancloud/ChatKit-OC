@@ -273,7 +273,8 @@ LCCKConversationViewController *conversationViewController = [[LCCKConversationV
 }];
 ```
 
-对于联系人列表页面，我们在 LCChatKit 可以响应如下四种操作：
+对于联系人列表页面，可以使用 `[LCChatKit sharedInstance]` 来调用如下四种操作接口：
+
 
 ```objective-c
 /*!
@@ -308,8 +309,6 @@ typedef NSArray *(^LCCKConversationEditActionsBlock)(NSIndexPath *indexPath, NSA
  */
 - (void)setConversationEditActionBlock:(LCCKConversationEditActionsBlock)conversationEditActionBlock;
 ```
-
-这些都是由 `[LCChatKit sharedInstance]` 来调用。
 
 ### 响应聊天界面的几类操作
 
