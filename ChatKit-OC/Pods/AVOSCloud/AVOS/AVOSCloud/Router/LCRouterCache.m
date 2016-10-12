@@ -28,13 +28,11 @@ extern NSString *LCTTLKey;
 @end
 
 #define LOCK_ROUTER_INFO_TABLE()            \
-do {                                        \
     [self.routerInfoTableLock lock];        \
                                             \
     @onExit {                               \
         [self.routerInfoTableLock unlock];  \
-    };                                      \
-} while(0)
+    }
 
 @implementation LCRouterCache
 

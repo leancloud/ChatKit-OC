@@ -19,20 +19,26 @@
 static NSTimeInterval LCNetworkStatisticsCheckInterval  = 60; // A minute
 static NSTimeInterval LCNetworkStatisticsUploadInterval = 24 * 60 * 60; // A day
 
-static NSString *LCNetworkStatisticsInfoKey = @"LCNetworkStatisticsInfoKey";
+static NSString *LCNetworkStatisticsInfoKey       = @"LCNetworkStatisticsInfoKey";
 static NSString *LCNetworkStatisticsLastUpdateKey = @"LCNetworkStatisticsLastUpdateKey";
-static NSInteger LCNetworkStatisticsMaxCount = 100;
-static NSInteger LCNetworkStatisticsCacheSize = 20;
+static NSInteger LCNetworkStatisticsMaxCount      = 10;
+static NSInteger LCNetworkStatisticsCacheSize     = 20;
 
 @interface LCNetworkStatistics ()
 
-@property (atomic, assign) BOOL enable;
-@property (atomic, strong) NSMutableDictionary *cachedStatisticDict;
-@property (atomic, assign) NSTimeInterval cachedLastUpdatedAt;
-
-@property (nonatomic, strong) NSRecursiveLock *lock;
+@property (nonatomic, assign) BOOL                 enable;
+@property (nonatomic, strong) NSMutableDictionary *cachedStatisticDict;
+@property (nonatomic, strong) NSRecursiveLock     *cachedStatisticDictLock;
+@property (nonatomic, assign) NSTimeInterval       cachedLastUpdatedAt;
 
 @end
+
+#define LOCK_CACHED_STATISTIC_DICT()            \
+    [self.cachedStatisticDictLock lock];        \
+                                                \
+    @onExit {                                   \
+        [self.cachedStatisticDictLock unlock];  \
+    }
 
 @implementation LCNetworkStatistics
 
@@ -51,26 +57,15 @@ static NSInteger LCNetworkStatisticsCacheSize = 20;
     self = [super init];
 
     if (self) {
-        _lock = [[NSRecursiveLock alloc] init];
+        _cachedStatisticDictLock = [[NSRecursiveLock alloc] init];
     }
 
     return self;
 }
 
-- (void)synchronize:(void (^)(void))action {
-    if (!action)
-        return;
-
-    [_lock lock];
-
-    @onExit {
-        [_lock unlock];
-    };
-
-    action();
-}
-
 - (NSMutableDictionary *)statisticsInfo {
+    LOCK_CACHED_STATISTIC_DICT();
+
     if (self.cachedStatisticDict) {
         return self.cachedStatisticDict;
     }
@@ -91,53 +86,53 @@ static NSInteger LCNetworkStatisticsCacheSize = 20;
 }
 
 - (void)saveStatisticsDict:(NSDictionary *)statisticsDict {
-    [self synchronize:^{
-        self.cachedStatisticDict = [statisticsDict mutableCopy];
-    }];
+    LOCK_CACHED_STATISTIC_DICT();
+
+    self.cachedStatisticDict = [statisticsDict mutableCopy];
 }
 
 - (void)writeCachedStatisticsDict {
-    [self synchronize:^{
-        if (!self.cachedStatisticDict) return;
+    LOCK_CACHED_STATISTIC_DICT();
 
-        LCKeyValueStore *store = [LCKeyValueStore sharedInstance];
+    if (!self.cachedStatisticDict) return;
 
-        NSData *data = [NSKeyedArchiver archivedDataWithRootObject:self.cachedStatisticDict];
+    LCKeyValueStore *store = [LCKeyValueStore sharedInstance];
 
-        [store setData:data forKey:LCNetworkStatisticsInfoKey];
-    }];
+    NSData *data = [NSKeyedArchiver archivedDataWithRootObject:self.cachedStatisticDict];
+
+    [store setData:data forKey:LCNetworkStatisticsInfoKey];
 }
 
 - (void)addIncrementalAttribute:(NSInteger)amount forKey:(NSString *)key {
-    [self synchronize:^{
-        NSMutableDictionary *statisticsInfo = [self statisticsInfo];
+    LOCK_CACHED_STATISTIC_DICT();
 
-        NSNumber *value = statisticsInfo[key];
+    NSMutableDictionary *statisticsInfo = [self statisticsInfo];
 
-        if (value) {
-            statisticsInfo[key] = @([value integerValue] + amount);
-        } else {
-            statisticsInfo[key] = @(amount);
-        }
+    NSNumber *value = statisticsInfo[key];
 
-        [self saveStatisticsDict:statisticsInfo];
-    }];
+    if (value) {
+        statisticsInfo[key] = @([value integerValue] + amount);
+    } else {
+        statisticsInfo[key] = @(amount);
+    }
+
+    [self saveStatisticsDict:statisticsInfo];
 }
 
 - (void)addAverageAttribute:(double)amount forKey:(NSString *)key {
-    [self synchronize:^{
-        NSMutableDictionary *statisticsInfo = [self statisticsInfo];
+    LOCK_CACHED_STATISTIC_DICT();
 
-        NSNumber *value = statisticsInfo[key];
+    NSMutableDictionary *statisticsInfo = [self statisticsInfo];
 
-        if (value) {
-            statisticsInfo[key] = @(([value doubleValue] + amount) / 2.0);
-        } else {
-            statisticsInfo[key] = @(amount);
-        }
+    NSNumber *value = statisticsInfo[key];
 
-        [self saveStatisticsDict:statisticsInfo];
-    }];
+    if (value) {
+        statisticsInfo[key] = @(([value doubleValue] + amount) / 2.0);
+    } else {
+        statisticsInfo[key] = @(amount);
+    }
+
+    [self saveStatisticsDict:statisticsInfo];
 }
 
 - (void)uploadStatisticsInfo:(NSDictionary *)statisticsInfo {
@@ -168,19 +163,19 @@ static NSInteger LCNetworkStatisticsCacheSize = 20;
 }
 
 - (void)statisticsInfoDidUpload {
-    [self synchronize:^{
-         // Reset network statistics data
-         LCKeyValueStore *store = [LCKeyValueStore sharedInstance];
-         [store deleteKey:LCNetworkStatisticsInfoKey];
+    LOCK_CACHED_STATISTIC_DICT();
 
-         // Clean cached statistic dict
-         self.cachedStatisticDict = nil;
+    // Reset network statistics data
+    LCKeyValueStore *store = [LCKeyValueStore sharedInstance];
+    [store deleteKey:LCNetworkStatisticsInfoKey];
 
-         // Increase check interval to save CPU time
-         LCNetworkStatisticsCheckInterval = LC_INTERVAL_HALF_AN_HOUR;
+    // Clean cached statistic dict
+    [self.cachedStatisticDict removeAllObjects];
 
-         [self updateLastUpdateAt];
-    }];
+    // Increase check interval to save CPU time
+    LCNetworkStatisticsCheckInterval = LC_INTERVAL_HALF_AN_HOUR;
+
+    [self updateLastUpdateAt];
 }
 
 - (void)updateLastUpdateAt {
@@ -234,7 +229,7 @@ static NSInteger LCNetworkStatisticsCacheSize = 20;
     NSAssert(![NSThread isMainThread], @"This method must run in background.");
 
     AV_WAIT_WITH_ROUTINE_TIL_TRUE(!self.enable, LCNetworkStatisticsCheckInterval, ({
-        NSMutableDictionary *statisticsInfo = [self statisticsInfo];
+        NSDictionary *statisticsInfo = [[self statisticsInfo] copy];
 
         NSInteger total = [statisticsInfo[@"total"] integerValue];
 

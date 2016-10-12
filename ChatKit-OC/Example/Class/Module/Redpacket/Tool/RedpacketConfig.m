@@ -97,6 +97,7 @@ static NSString *requestUrl = @"https://rpv2.yunzhanghu.com/api/sign?duid=";
 }
 
 - (void)lcck_setting {
+    [self config];
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         LCCKFilterMessagesBlock filterMessagesBlock = [LCCKConversationService sharedInstance].filterMessagesBlock;

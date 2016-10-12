@@ -1,0 +1,1 @@
+../../../AVOSCloud/AVOS/AVOSCloud/File/AVUploaderManager.h

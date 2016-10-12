@@ -11,6 +11,7 @@
 #import "CYLTabBarController.h"
 #import "RedpacketConfig.h"
 #import "AVIMTypedMessageRedPacket.h"
+#import "LCCKContactManager.h"
 
 @interface RedPacketInputViewPlugin()<RedpacketViewControlDelegate>
 
@@ -106,17 +107,28 @@
 - (void)getGroupMemberListCompletionHandle:(void (^)(NSArray<RedpacketUserInfo *> *))completionHandle {
     __weak typeof(self) weakSlef = self;
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        AVIMConversation *conversation = [self.conversationViewController getConversationIfExists];
+        NSArray *allPersonIds;
         NSMutableArray * usersArray = [NSMutableArray array];
-        AVIMConversation *conversation = [weakSlef.conversationViewController getConversationIfExists];
-        [conversation.members enumerateObjectsUsingBlock:^(NSString *  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-            RedpacketUserInfo * userInfo = [RedpacketUserInfo new];
-            userInfo.userId = obj;
-            userInfo.userNickname = obj;
-            [usersArray addObject:userInfo];
-        }];
-        dispatch_async(dispatch_get_main_queue(), ^{
-            completionHandle(usersArray);
-        });
+        if (conversation.lcck_type == LCCKConversationTypeGroup) {
+            allPersonIds = conversation.members;
+        } else {
+            allPersonIds = [[LCCKContactManager defaultManager] fetchContactPeerIds];
+        }
+        NSError * error;
+        NSArray<id<LCCKUserDelegate>> *users = [[LCChatKit sharedInstance] getCachedProfilesIfExists:allPersonIds shouldSameCount:YES error:&error];
+        if (users.count && !error) {
+            [users enumerateObjectsUsingBlock:^(id<LCCKUserDelegate>  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                RedpacketUserInfo * userInfo = [RedpacketUserInfo new];
+                userInfo.userId = obj.clientId;
+                userInfo.userNickname = obj.name?obj.name:obj.clientId;
+                userInfo.userAvatar = obj.avatarURL.absoluteString;
+                [usersArray addObject:userInfo];
+            }];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                completionHandle(usersArray);
+            });
+        }
     });
 }
 #pragma mark -
