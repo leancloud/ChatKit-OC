@@ -18,5 +18,6 @@ pod 'TWMessageBarManager'
 pod 'MLPAutoCompleteTextField'
 #pod 'MLeaksFinder'
 pod 'FTPopOverMenu'
-
+pod ‘RedPacketAlipay’
+pod ‘RedpacketLib’
 end

@@ -1,1 +1,0 @@
-../../../../../ChatKit/Class/View/LCCKBadgeView.h

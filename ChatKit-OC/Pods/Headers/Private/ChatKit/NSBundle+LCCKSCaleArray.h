@@ -1,1 +1,0 @@
-../../../../../ChatKit/Class/Module/Conversation/Tool/DisableImageMemoryCache/NSBundle+LCCKSCaleArray.h
