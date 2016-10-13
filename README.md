@@ -241,9 +241,10 @@ pod 'ChatKit', '0.7.13'
 pod repo update
  ```
  
- - 升级工程的 SDK 版本
+ - 升级工程的Pod版本
 
- 更新您工程目录中 Podfile 指定的 SDK 版本后，在终端中执行以下命令。
+ 更新您工程目录中 Podfile 指定版本后，在终端中执行以下命令。
+
  ```shell
 pod update
  ```
