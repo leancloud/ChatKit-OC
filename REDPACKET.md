@@ -2,10 +2,10 @@
 
 ##导航
  1. [下载最新的红包 SDK 库文件] 
-
-    1.1 [CocoaPods](#cocoapod)
     
-    1.2 [源码集成](#block)
+    1.1 [源码集成](#block)
+
+    1.2 [CocoaPods](#cocoapod)
  2. [集成红包功能](https://github.com/leancloud/ChatKit-OC/blob/master/REDPACKET.md#集成红包功能) 
  3. [设置红包信息](https://github.com/leancloud/ChatKit-OC/blob/master/REDPACKET.md#设置红包信息) 
  4. [在聊天对话中添加红包支持](https://github.com/leancloud/ChatKit-OC/blob/master/REDPACKET.md#在聊天对话中添加红包支持) 

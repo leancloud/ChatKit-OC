@@ -260,17 +260,23 @@ static BOOL AVIMClientHasInstantiated = NO;
 }
 
 - (void)sendCommand:(AVIMGenericCommand *)command {
-    if (!_socketWrapper) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            AVIMCommandResultBlock callback = command.callback;
-            if (callback) {
-                NSError *error = [AVIMErrorUtil errorWithCode:kAVIMErrorClientNotOpen reason:@"Client not open when send a message."];
+    if (_socketWrapper) {
+        switch (_status) {
+        case AVIMClientStatusClosing:
+        case AVIMClientStatusClosed: return;
+        default: break;
+        }
+
+        [_socketWrapper sendCommand:command];
+    } else {
+        AVIMCommandResultBlock callback = command.callback;
+        if (callback) {
+            NSError *error = [AVIMErrorUtil errorWithCode:kAVIMErrorClientNotOpen reason:@"Client not open when send a message."];
+            dispatch_async(dispatch_get_main_queue(), ^{
                 callback(command, nil, error);
-            }
-        });
-        return;
+            });
+        }
     }
-    [_socketWrapper sendCommand:command];
 }
 
 - (void)changeStatus:(AVIMClientStatus)status {
@@ -564,8 +570,6 @@ static BOOL AVIMClientHasInstantiated = NO;
 
 - (void)closeWithCallback:(AVIMBooleanResultBlock)callback {
     dispatch_async(imClientQueue, ^{
-        [self changeStatus:AVIMClientStatusClosing];
-        
         AVIMGenericCommand *genericCommand = [[AVIMGenericCommand alloc] init];
         genericCommand.needResponse = YES;
         genericCommand.cmd = AVIMCommandType_Session;
@@ -587,6 +591,7 @@ static BOOL AVIMClientHasInstantiated = NO;
             [AVIMBlockHelper callBooleanResultBlock:callback error:error];
         }];
         [self sendCommand:genericCommand];
+        [self changeStatus:AVIMClientStatusClosing];
     });
 }
 

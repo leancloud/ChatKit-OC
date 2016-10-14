@@ -1,17 +1,17 @@
 PODS:
-  - AVOSCloud (3.4.4)
-  - AVOSCloudIM (3.4.4):
-    - AVOSCloud (= 3.4.4)
-    - AVOSCloudIM/_ARC (= 3.4.4)
-    - AVOSCloudIM/_NOARC (= 3.4.4)
-  - AVOSCloudIM/_ARC (3.4.4):
-    - AVOSCloud (= 3.4.4)
-    - AVOSCloudIM/_NOARC (= 3.4.4)
-  - AVOSCloudIM/_NOARC (3.4.4):
-    - AVOSCloud (= 3.4.4)
-  - ChatKit (0.7.17):
-    - AVOSCloud (~> 3.4.3)
-    - AVOSCloudIM (~> 3.4.3)
+  - AVOSCloud (3.5.1)
+  - AVOSCloudIM (3.5.1):
+    - AVOSCloud (= 3.5.1)
+    - AVOSCloudIM/_ARC (= 3.5.1)
+    - AVOSCloudIM/_NOARC (= 3.5.1)
+  - AVOSCloudIM/_ARC (3.5.1):
+    - AVOSCloud (= 3.5.1)
+    - AVOSCloudIM/_NOARC (= 3.5.1)
+  - AVOSCloudIM/_NOARC (3.5.1):
+    - AVOSCloud (= 3.5.1)
+  - ChatKit (0.7.18):
+    - AVOSCloud (~> 3.5.1)
+    - AVOSCloudIM (~> 3.5.1)
     - DACircularProgress (~> 2.3.1)
     - FDStackView (~> 1.0)
     - FMDB (~> 2.6.2)
@@ -29,7 +29,7 @@ PODS:
   - FMDB (2.6.2):
     - FMDB/standard (= 2.6.2)
   - FMDB/standard (2.6.2)
-  - FTPopOverMenu (1.2.1)
+  - FTPopOverMenu (1.2.2)
   - Masonry (1.0.2)
   - MBProgressHUD (0.9.2)
   - MJRefresh (3.1.12)
@@ -63,15 +63,15 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  AVOSCloud: 50a81ba9fe043750592355d13589b108771f3724
-  AVOSCloudIM: ad650bf0635e95b12d1aec156131b71d320086d2
-  ChatKit: 23add8db7461d91985c0284a79defb0d9aefc15b
+  AVOSCloud: 3dfc202ae8c8b543e2332c0f019e08972c4092c0
+  AVOSCloudIM: a8a89cbdc9387079f6da7bd4f371c523086a7635
+  ChatKit: 2ad4522fd4de9fc47ef6e252b1dc7550a2788b3b
   CYLTabBarController: efbdd574772be17f17965acd7ee993f5972ff02f
   CYLTableViewRowAction: 66bd3f7478b46894ff40b74d892fc85aed41656b
   DACircularProgress: 4dd437c0fc3da5161cb289e07ac449493d41db71
   FDStackView: 3a4bbe0ce9c35e974246a585168b9da8c32213f1
   FMDB: 854a0341b4726e53276f2a8996f06f1b80f9259a
-  FTPopOverMenu: 645bf589f3adb6598efa05cab67cced988d5352f
+  FTPopOverMenu: 6a535b7664b20d52d5a299d1f34414414e996caf
   Masonry: 7c429b56da9d4ee0bbb3ed77a5ea710d6a5df39e
   MBProgressHUD: 1569cf7ace17a8bac47aabfbb8580a49690386d1
   MJRefresh: b96cdb21c4aa75a7b07654311ab2f315c497e806

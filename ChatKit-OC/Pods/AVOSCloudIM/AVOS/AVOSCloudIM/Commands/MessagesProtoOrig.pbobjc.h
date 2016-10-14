@@ -98,6 +98,8 @@ typedef GPB_ENUM(AVIMOpType) {
   AVIMOpType_Updated = 46,
   AVIMOpType_Mute = 47,
   AVIMOpType_Unmute = 48,
+  AVIMOpType_Status = 49,
+  AVIMOpType_Members = 50,
 
   /// room
   AVIMOpType_Join = 80,
@@ -268,6 +270,7 @@ typedef GPB_ENUM(AVIMSessionCommand_FieldNumber) {
   AVIMSessionCommand_FieldNumber_Reason = 13,
   AVIMSessionCommand_FieldNumber_DeviceToken = 14,
   AVIMSessionCommand_FieldNumber_Sp = 15,
+  AVIMSessionCommand_FieldNumber_Detail = 16,
 };
 
 @interface AVIMSessionCommand : LCIMMessage
@@ -327,6 +330,10 @@ typedef GPB_ENUM(AVIMSessionCommand_FieldNumber) {
 @property(nonatomic, readwrite) BOOL sp;
 
 @property(nonatomic, readwrite) BOOL hasSp;
+@property(nonatomic, readwrite, copy, null_resettable) NSString *detail;
+/// Test to see if @c detail has been set.
+@property(nonatomic, readwrite) BOOL hasDetail;
+
 @end
 
 #pragma mark - AVIMErrorCommand
@@ -372,6 +379,7 @@ typedef GPB_ENUM(AVIMDirectCommand_FieldNumber) {
   AVIMDirectCommand_FieldNumber_Transient = 13,
   AVIMDirectCommand_FieldNumber_Dt = 14,
   AVIMDirectCommand_FieldNumber_RoomId = 15,
+  AVIMDirectCommand_FieldNumber_PushData = 16,
 };
 
 @interface AVIMDirectCommand : LCIMMessage
@@ -422,6 +430,10 @@ typedef GPB_ENUM(AVIMDirectCommand_FieldNumber) {
 @property(nonatomic, readwrite, copy, null_resettable) NSString *roomId;
 /// Test to see if @c roomId has been set.
 @property(nonatomic, readwrite) BOOL hasRoomId;
+
+@property(nonatomic, readwrite, copy, null_resettable) NSString *pushData;
+/// Test to see if @c pushData has been set.
+@property(nonatomic, readwrite) BOOL hasPushData;
 
 @end
 
@@ -516,6 +528,10 @@ typedef GPB_ENUM(AVIMConvCommand_FieldNumber) {
   AVIMConvCommand_FieldNumber_T = 13,
   AVIMConvCommand_FieldNumber_N = 14,
   AVIMConvCommand_FieldNumber_S = 15,
+  AVIMConvCommand_FieldNumber_StatusSub = 16,
+  AVIMConvCommand_FieldNumber_StatusPub = 17,
+  AVIMConvCommand_FieldNumber_StatusTtl = 18,
+  AVIMConvCommand_FieldNumber_MembersArray = 19,
   AVIMConvCommand_FieldNumber_Results = 100,
   AVIMConvCommand_FieldNumber_Where = 101,
   AVIMConvCommand_FieldNumber_Attr = 103,
@@ -576,6 +592,19 @@ typedef GPB_ENUM(AVIMConvCommand_FieldNumber) {
 @property(nonatomic, readwrite, copy, null_resettable) NSString *s;
 /// Test to see if @c s has been set.
 @property(nonatomic, readwrite) BOOL hasS;
+
+@property(nonatomic, readwrite) BOOL statusSub;
+
+@property(nonatomic, readwrite) BOOL hasStatusSub;
+@property(nonatomic, readwrite) BOOL statusPub;
+
+@property(nonatomic, readwrite) BOOL hasStatusPub;
+@property(nonatomic, readwrite) int32_t statusTtl;
+
+@property(nonatomic, readwrite) BOOL hasStatusTtl;
+@property(nonatomic, readwrite, strong, null_resettable) NSMutableArray<NSString*> *membersArray;
+/// The number of items in @c membersArray without causing the array to be created.
+@property(nonatomic, readonly) NSUInteger membersArray_Count;
 
 @property(nonatomic, readwrite, strong, null_resettable) AVIMJsonObjectMessage *results;
 /// Test to see if @c results has been set.
@@ -762,6 +791,7 @@ typedef GPB_ENUM(AVIMReadCommand_FieldNumber) {
 typedef GPB_ENUM(AVIMPresenceCommand_FieldNumber) {
   AVIMPresenceCommand_FieldNumber_Status = 1,
   AVIMPresenceCommand_FieldNumber_SessionPeerIdsArray = 2,
+  AVIMPresenceCommand_FieldNumber_Cid = 3,
 };
 
 @interface AVIMPresenceCommand : LCIMMessage
@@ -772,6 +802,10 @@ typedef GPB_ENUM(AVIMPresenceCommand_FieldNumber) {
 @property(nonatomic, readwrite, strong, null_resettable) NSMutableArray<NSString*> *sessionPeerIdsArray;
 /// The number of items in @c sessionPeerIdsArray without causing the array to be created.
 @property(nonatomic, readonly) NSUInteger sessionPeerIdsArray_Count;
+
+@property(nonatomic, readwrite, copy, null_resettable) NSString *cid;
+/// Test to see if @c cid has been set.
+@property(nonatomic, readwrite) BOOL hasCid;
 
 @end
 
@@ -807,6 +841,7 @@ typedef GPB_ENUM(AVIMGenericCommand_FieldNumber) {
   AVIMGenericCommand_FieldNumber_PeerId = 4,
   AVIMGenericCommand_FieldNumber_I = 5,
   AVIMGenericCommand_FieldNumber_InstallationId = 6,
+  AVIMGenericCommand_FieldNumber_Priority = 7,
   AVIMGenericCommand_FieldNumber_LoginMessage = 100,
   AVIMGenericCommand_FieldNumber_DataMessage = 101,
   AVIMGenericCommand_FieldNumber_SessionMessage = 102,
@@ -846,6 +881,9 @@ typedef GPB_ENUM(AVIMGenericCommand_FieldNumber) {
 /// Test to see if @c installationId has been set.
 @property(nonatomic, readwrite) BOOL hasInstallationId;
 
+@property(nonatomic, readwrite) int32_t priority;
+
+@property(nonatomic, readwrite) BOOL hasPriority;
 @property(nonatomic, readwrite, strong, null_resettable) AVIMLoginCommand *loginMessage;
 /// Test to see if @c loginMessage has been set.
 @property(nonatomic, readwrite) BOOL hasLoginMessage;
