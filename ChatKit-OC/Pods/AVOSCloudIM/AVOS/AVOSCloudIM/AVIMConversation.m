@@ -345,19 +345,21 @@
 - (void)sendMessage:(AVIMMessage *)message
            callback:(AVIMBooleanResultBlock)callback
 {
-    [self sendMessage:message
-              options:AVIMMessageSendOptionNone
-             callback:callback];
+    [self sendMessage:message option:nil callback:callback];
+}
+
+- (void)sendMessage:(AVIMMessage *)message
+             option:(AVIMMessageOption *)option
+           callback:(AVIMBooleanResultBlock)callback
+{
+    [self sendMessage:message option:option progressBlock:nil callback:callback];
 }
 
 - (void)sendMessage:(AVIMMessage *)message
       progressBlock:(AVProgressBlock)progressBlock
            callback:(AVIMBooleanResultBlock)callback
 {
-    [self sendMessage:message
-              options:AVIMMessageSendOptionNone
-        progressBlock:progressBlock
-             callback:callback];
+    [self sendMessage:message option:nil progressBlock:progressBlock callback:callback];
 }
 
 - (void)sendMessage:(AVIMMessage *)message
@@ -375,6 +377,22 @@
       progressBlock:(AVProgressBlock)progressBlock
            callback:(AVIMBooleanResultBlock)callback
 {
+    AVIMMessageOption *option = [[AVIMMessageOption alloc] init];
+
+    if (options & AVIMMessageSendOptionTransient)
+        option.transient = YES;
+
+    if (options & AVIMMessageSendOptionRequestReceipt)
+        option.receipt = YES;
+
+    [self sendMessage:message option:option progressBlock:progressBlock callback:callback];
+}
+
+- (void)sendMessage:(AVIMMessage *)message
+             option:(AVIMMessageOption *)option
+      progressBlock:(AVProgressBlock)progressBlock
+           callback:(AVIMBooleanResultBlock)callback
+{
     message.clientId = _imClient.clientId;
     message.conversationId = _conversationId;
     if (self.imClient.status != AVIMClientStatusOpened) {
@@ -384,7 +402,6 @@
         return;
     }
     message.status = AVIMMessageStatusSending;
-
     
     if ([message isKindOfClass:[AVIMTypedMessage class]]) {
         AVIMTypedMessage *typedMessage = (AVIMTypedMessage *)message;
@@ -414,7 +431,7 @@
                         /* If uploading is success, bind file to message */
                         [self fillTypedMessage:typedMessage withFile:file];
                         [self fillTypedMessageForLocationIfNeeded:typedMessage];
-                        [self sendRealMessage:message options:options callback:callback];
+                        [self sendRealMessage:message option:option callback:callback];
                     } else {
                         message.status = AVIMMessageStatusFailed;
                         [AVIMBlockHelper callBooleanResultBlock:callback error:error];
@@ -424,14 +441,14 @@
                 /* File has already been uploaded, bind file to message */
                 [self fillTypedMessage:typedMessage withFile:file];
                 [self fillTypedMessageForLocationIfNeeded:typedMessage];
-                [self sendRealMessage:message options:options callback:callback];
+                [self sendRealMessage:message option:option callback:callback];
             }
         } else {
             [self fillTypedMessageForLocationIfNeeded:typedMessage];
-            [self sendRealMessage:message options:options callback:callback];
+            [self sendRealMessage:message option:option callback:callback];
         }
     } else {
-        [self sendRealMessage:message options:options callback:callback];
+        [self sendRealMessage:message option:option callback:callback];
     }
 }
 
@@ -518,22 +535,34 @@
     }
 }
 
-- (void)sendRealMessage:(AVIMMessage *)message options:(AVIMMessageSendOption)options callback:(AVIMBooleanResultBlock)callback {
+- (void)sendRealMessage:(AVIMMessage *)message option:(AVIMMessageOption *)option callback:(AVIMBooleanResultBlock)callback {
     dispatch_async([AVIMClient imClientQueue], ^{
-        bool transient = options & AVIMMessageSendOptionTransient;
-        bool requestReceipt = options & AVIMMessageSendOptionRequestReceipt;
+        bool transient = option.transient;
+        bool requestReceipt = option.receipt;
+
         if ([message isKindOfClass:[AVIMTypedMessage class]]) {
             AVIMTypedMessage *typedMessage = (AVIMTypedMessage *)message;
             if (!typedMessage.messageObject._lctext && !typedMessage.messageObject._lcloc && !typedMessage.messageObject._lcfile && !typedMessage.messageObject._lcattrs) {
                 [NSException raise:NSInternalInconsistencyException format:@"AVIMTypedMessage should have one of text, file, location or attributes not be nil."];
             }
         }
+
         AVIMGenericCommand *genericCommand = [[AVIMGenericCommand alloc] init];
         genericCommand.needResponse = YES;
         genericCommand.cmd = AVIMCommandType_Direct;
+
+        if (option.priority > 0) {
+            if (self.transient) {
+                genericCommand.priority = option.priority;
+            } else {
+                AVLoggerInfo(AVLoggerDomainIM, @"Message priority has no effect in non-transient conversation.");
+            }
+        }
+
         AVIMDirectCommand *directCommand = [[AVIMDirectCommand alloc] init];
         [genericCommand avim_addRequiredKeyWithCommand:directCommand];
         [genericCommand avim_addRequiredKeyForDirectMessageWithMessage:message transient:NO];
+
         if (transient) {
             directCommand.transient = YES;
             genericCommand.needResponse = NO;
@@ -541,6 +570,21 @@
         if (requestReceipt) {
             directCommand.r = YES;
         }
+        if (option.pushData) {
+            if (option.transient || self.transient) {
+                AVLoggerInfo(AVLoggerDomainIM, @"Push data cannot applied to transient message or transient conversation.");
+            } else {
+                NSError *error = nil;
+                NSData  *data  = [NSJSONSerialization dataWithJSONObject:option.pushData options:0 error:&error];
+
+                if (error) {
+                    AVLoggerInfo(AVLoggerDomainIM, @"Push data cannot be serialize to JSON string. Error: %@.", error.localizedDescription);
+                } else {
+                    directCommand.pushData = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+                }
+            }
+        }
+
         [genericCommand setCallback:^(AVIMGenericCommand *outCommand, AVIMGenericCommand *inCommand, NSError *error) {
             AVIMDirectCommand *directOutCommand = outCommand.directMessage;
             AVIMMessage *message = outCommand.directMessage.message;

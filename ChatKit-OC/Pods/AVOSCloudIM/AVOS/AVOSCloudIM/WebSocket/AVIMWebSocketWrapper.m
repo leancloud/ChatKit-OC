@@ -8,7 +8,7 @@
 
 #import "AVIMWebSocketWrapper.h"
 #import "AVIMWebSocket.h"
-#import "AVIMReachability.h"
+#import "LCNetworkReachabilityManager.h"
 #import "AVIMErrorUtil.h"
 #import "AVIMBlockHelper.h"
 #import "AVIMClient_Internal.h"
@@ -17,6 +17,7 @@
 #import "AVOSCloud_Internal.h"
 #import "LCRouter.h"
 #import "SDMacros.h"
+#import <arpa/inet.h>
 
 #define PING_INTERVAL 60*3
 #define TIMEOUT_CHECK_INTERVAL 1
@@ -26,14 +27,14 @@
     @"------ BEGIN LeanCloud IM Out Command ------\n" \
     @"cmd: %@\n"                                      \
     @"type: %@\n"                                     \
-    @"content: %@\n"                                     \
+    @"content: %@\n"                                  \
     @"------ END ---------------------------------\n" \
     @"\n"
 
 #define LCIM_IN_COMMAND_LOG_FORMAT \
     @"\n\n" \
     @"------ BEGIN LeanCloud IM In Command ------\n" \
-    @"content: %@\n"                                    \
+    @"content: %@\n"                                 \
     @"------ END --------------------------------\n" \
     @"\n"
 
@@ -97,7 +98,7 @@ NSString *const AVIMProtocolPROTOBUF2 = @"lc.protobuf.2";
 @property (nonatomic, assign) BOOL useSecondary;
 @property (nonatomic, assign) BOOL needRetry;
 @property (nonatomic, strong) NSData *routerData;
-@property (nonatomic, strong) AVIMReachability *reachability;
+@property (nonatomic, strong) LCNetworkReachabilityManager *reachabilityMonitor;
 @property (nonatomic, strong) NSTimer *reconnectTimer;
 @property (nonatomic, strong) AVIMWebSocket *webSocket;
 @property (nonatomic, copy)   AVIMBooleanResultBlock openCallback;
@@ -191,20 +192,31 @@ NSString *const AVIMProtocolPROTOBUF2 = @"lc.protobuf.2";
 }
 
 - (void)startNotifyReachability {
-    AVIMReachability *reachability = [AVIMReachability reachabilityForInternetConnection];
-    reachability.reachableOnWWAN = YES;
-    reachability.reachableBlock = ^(AVIMReachability *reach) {
-        [self networkDidBecomeReachable];
-    };
-    reachability.unreachableBlock = ^(AVIMReachability *reach) {
-        [self networkDidBecomeUnreachable];
-    };
-    [reachability startNotifier];
-    _reachability = reachability;
+    @weakify(self, ws);
+
+    _reachabilityMonitor = [LCNetworkReachabilityManager manager];
+    [_reachabilityMonitor setReachabilityStatusChangeBlock:^(AFNetworkReachabilityStatus status) {
+        switch (status) {
+        case AFNetworkReachabilityStatusUnknown:
+        case AFNetworkReachabilityStatusNotReachable:
+            [ws networkDidBecomeUnreachable];
+            break;
+        case AFNetworkReachabilityStatusReachableViaWWAN:
+        case AFNetworkReachabilityStatusReachableViaWiFi:
+            [ws networkDidBecomeReachable];
+            break;
+        }
+    }];
+
+    [_reachabilityMonitor startMonitoring];
+}
+
+- (BOOL)isReachable {
+    return _reachabilityMonitor.networkReachabilityStatus != AFNetworkReachabilityStatusNotReachable;
 }
 
 - (void)dealloc {
-    [_reachability stopNotifier];
+    [_reachabilityMonitor stopMonitoring];
     if (!_isClosed) {
         [self closeWebSocketConnectionRetry:NO];
     }
@@ -253,7 +265,7 @@ NSString *const AVIMProtocolPROTOBUF2 = @"lc.protobuf.2";
 - (void)applicationWillEnterForeground:(id)sender {
     _messageIdArray = [[[NSUserDefaults standardUserDefaults] arrayForKey:@"AVIMMessageIdArray"] mutableCopy];
     _reconnectInterval = 1;
-    if (_reachability.isReachable && _observerCount > 0) {
+    if (_observerCount > 0) {
         [self openWebSocketConnection];
     }
 }
@@ -388,15 +400,6 @@ NSString *const AVIMProtocolPROTOBUF2 = @"lc.protobuf.2";
 
         if (self.isOpening) {
             AVLoggerError(AVLoggerDomainIM, @"Return because websocket is opening.");
-            return;
-        }
-
-        if (!self.reachability.isReachable) {
-            if (self.openCallback) {
-                NSError *error = [AVIMErrorUtil errorWithCode:kAVIMErrorConnectionLost reason:@"Your device not connect to any network"];
-                [AVIMBlockHelper callBooleanResultBlock:self.openCallback error:error];
-                self.openCallback = nil;
-            }
             return;
         }
         
@@ -833,7 +836,7 @@ SecCertificateRef LCGetCertificateFromBase64String(NSString *base64);
     if (_webSocket.readyState != AVIM_CLOSED) {
         [[NSNotificationCenter defaultCenter] postNotificationName:AVIM_NOTIFICATION_WEBSOCKET_CLOSED object:self userInfo:@{@"error": error}];
     }
-    if ([_reachability isReachable]) {
+    if ([self isReachable]) {
         [self retryIfNeeded];
     }
 }
@@ -869,7 +872,7 @@ SecCertificateRef LCGetCertificateFromBase64String(NSString *base64);
         [AVIMBlockHelper callBooleanResultBlock:self.openCallback error:error];
         self.openCallback = nil;
     } else {
-        if ([_reachability isReachable]) {
+        if ([self isReachable]) {
             [self retryIfNeeded];
         }
     }
@@ -933,7 +936,9 @@ SecCertificateRef LCGetCertificateFromBase64String(NSString *base64);
 
 - (void)reconnect {
     AVLoggerDebug(AVLoggerDomainIM, @"Websocket connection reconnect in %ld seconds.", (long)_reconnectInterval);
-    _reconnectTimer = [NSTimer scheduledTimerWithTimeInterval:_reconnectInterval target:self selector:@selector(openWebSocketConnection) userInfo:nil repeats:NO];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        _reconnectTimer = [NSTimer scheduledTimerWithTimeInterval:_reconnectInterval target:self selector:@selector(openWebSocketConnection) userInfo:nil repeats:NO];
+    });
     _reconnectInterval *= 2;
 }
 

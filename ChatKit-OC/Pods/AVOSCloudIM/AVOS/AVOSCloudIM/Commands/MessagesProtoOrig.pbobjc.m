@@ -102,8 +102,9 @@ LCIMEnumDescriptor *AVIMOpType_EnumDescriptor(void) {
         "y\000QueryResult\000Conflict\000Added\000Removed\000Sta"
         "rt\000Started\000Joined\000MembersJoined\000Left\000Mem"
         "bersLeft\000Results\000Count\000Result\000Update\000Upd"
-        "ated\000Mute\000Unmute\000Join\000Invite\000Leave\000Kick\000"
-        "Reject\000Invited\000Kicked\000Upload\000Uploaded\000";
+        "ated\000Mute\000Unmute\000Status\000Members\000Join\000Inv"
+        "ite\000Leave\000Kick\000Reject\000Invited\000Kicked\000Upl"
+        "oad\000Uploaded\000";
     static const int32_t values[] = {
         AVIMOpType_Open,
         AVIMOpType_Add,
@@ -129,6 +130,8 @@ LCIMEnumDescriptor *AVIMOpType_EnumDescriptor(void) {
         AVIMOpType_Updated,
         AVIMOpType_Mute,
         AVIMOpType_Unmute,
+        AVIMOpType_Status,
+        AVIMOpType_Members,
         AVIMOpType_Join,
         AVIMOpType_Invite,
         AVIMOpType_Leave,
@@ -139,7 +142,7 @@ LCIMEnumDescriptor *AVIMOpType_EnumDescriptor(void) {
         AVIMOpType_Upload,
         AVIMOpType_Uploaded,
     };
-    static const char *extraTextFormatInfo = "!\000$\000\001#\000\002&\000\003%\000\004&\000\005&\000\006%\000\007%\246\000\010(\000\t%\000\n\'\000\013%\000\014\'\000\r&\000\016\'\246\000\017$\000\020\'\244\000\021\'\000\022%\000\023&\000\024&\000\025\'\000\026$\000\027&\000\030$\000\031&\000\032%\000\033$\000\034&\000\035\'\000\036&\000\037&\000 (\000";
+    static const char *extraTextFormatInfo = "#\000$\000\001#\000\002&\000\003%\000\004&\000\005&\000\006%\000\007%\246\000\010(\000\t%\000\n\'\000\013%\000\014\'\000\r&\000\016\'\246\000\017$\000\020\'\244\000\021\'\000\022%\000\023&\000\024&\000\025\'\000\026$\000\027&\000\030&\000\031\'\000\032$\000\033&\000\034%\000\035$\000\036&\000\037\'\000 &\000!&\000\"(\000";
     LCIMEnumDescriptor *worker =
         [LCIMEnumDescriptor allocDescriptorForName:GPBNSStringifySymbol(AVIMOpType)
                                        valueNames:valueNames
@@ -180,6 +183,8 @@ BOOL AVIMOpType_IsValidValue(int32_t value__) {
     case AVIMOpType_Updated:
     case AVIMOpType_Mute:
     case AVIMOpType_Unmute:
+    case AVIMOpType_Status:
+    case AVIMOpType_Members:
     case AVIMOpType_Join:
     case AVIMOpType_Invite:
     case AVIMOpType_Leave:
@@ -555,6 +560,7 @@ typedef struct AVIMDataCommand__storage_ {
 @dynamic hasReason, reason;
 @dynamic hasDeviceToken, deviceToken;
 @dynamic hasSp, sp;
+@dynamic hasDetail, detail;
 
 typedef struct AVIMSessionCommand__storage_ {
   uint32_t _has_storage_[1];
@@ -570,6 +576,7 @@ typedef struct AVIMSessionCommand__storage_ {
   NSString *st;
   NSString *reason;
   NSString *deviceToken;
+  NSString *detail;
   int64_t t;
 } AVIMSessionCommand__storage_;
 
@@ -714,6 +721,15 @@ typedef struct AVIMSessionCommand__storage_ {
         .flags = GPBFieldOptional,
         .dataType = GPBDataTypeBool,
       },
+      {
+        .name = "detail",
+        .dataTypeSpecific.className = NULL,
+        .number = AVIMSessionCommand_FieldNumber_Detail,
+        .hasIndex = 15,
+        .offset = (uint32_t)offsetof(AVIMSessionCommand__storage_, detail),
+        .flags = GPBFieldOptional,
+        .dataType = GPBDataTypeString,
+      },
     };
     LCIMDescriptor *localDescriptor =
         [LCIMDescriptor allocDescriptorForClass:[AVIMSessionCommand class]
@@ -835,6 +851,7 @@ typedef struct AVIMErrorCommand__storage_ {
 @dynamic hasTransient, transient;
 @dynamic hasDt, dt;
 @dynamic hasRoomId, roomId;
+@dynamic hasPushData, pushData;
 
 typedef struct AVIMDirectCommand__storage_ {
   uint32_t _has_storage_[1];
@@ -846,6 +863,7 @@ typedef struct AVIMDirectCommand__storage_ {
   NSString *id_p;
   NSString *dt;
   NSString *roomId;
+  NSString *pushData;
   int64_t timestamp;
 } AVIMDirectCommand__storage_;
 
@@ -972,6 +990,15 @@ typedef struct AVIMDirectCommand__storage_ {
         .flags = GPBFieldOptional | GPBFieldTextFormatNameCustom,
         .dataType = GPBDataTypeString,
       },
+      {
+        .name = "pushData",
+        .dataTypeSpecific.className = NULL,
+        .number = AVIMDirectCommand_FieldNumber_PushData,
+        .hasIndex = 16,
+        .offset = (uint32_t)offsetof(AVIMDirectCommand__storage_, pushData),
+        .flags = GPBFieldOptional | GPBFieldTextFormatNameCustom,
+        .dataType = GPBDataTypeString,
+      },
     };
     LCIMDescriptor *localDescriptor =
         [LCIMDescriptor allocDescriptorForClass:[AVIMDirectCommand class]
@@ -983,7 +1010,7 @@ typedef struct AVIMDirectCommand__storage_ {
                                          flags:0];
 #if !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
     static const char *extraTextFormatInfo =
-        "\004\003\n\000\006\007\000\007\000toPeerIds\000\017\006\000";
+        "\005\003\n\000\006\007\000\007\000toPeerIds\000\017\006\000\020\010\000";
     [localDescriptor setupExtraTextInfo:extraTextFormatInfo];
 #endif  // !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
     NSAssert(descriptor == nil, @"Startup recursed!");
@@ -1214,6 +1241,10 @@ typedef struct AVIMUnreadCommand__storage_ {
 @dynamic hasT, t;
 @dynamic hasN, n;
 @dynamic hasS, s;
+@dynamic hasStatusSub, statusSub;
+@dynamic hasStatusPub, statusPub;
+@dynamic hasStatusTtl, statusTtl;
+@dynamic membersArray, membersArray_Count;
 @dynamic hasResults, results;
 @dynamic hasWhere, where;
 @dynamic hasAttr, attr;
@@ -1224,6 +1255,7 @@ typedef struct AVIMConvCommand__storage_ {
   int32_t skip;
   int32_t flag;
   int32_t count;
+  int32_t statusTtl;
   NSMutableArray *mArray;
   NSString *cid;
   NSString *cdate;
@@ -1232,6 +1264,7 @@ typedef struct AVIMConvCommand__storage_ {
   NSString *udate;
   NSString *n;
   NSString *s;
+  NSMutableArray *membersArray;
   AVIMJsonObjectMessage *results;
   AVIMJsonObjectMessage *where;
   AVIMJsonObjectMessage *attr;
@@ -1380,10 +1413,46 @@ typedef struct AVIMConvCommand__storage_ {
         .dataType = GPBDataTypeString,
       },
       {
+        .name = "statusSub",
+        .dataTypeSpecific.className = NULL,
+        .number = AVIMConvCommand_FieldNumber_StatusSub,
+        .hasIndex = 16,
+        .offset = 17,  // Stored in _has_storage_ to save space.
+        .flags = GPBFieldOptional | GPBFieldTextFormatNameCustom,
+        .dataType = GPBDataTypeBool,
+      },
+      {
+        .name = "statusPub",
+        .dataTypeSpecific.className = NULL,
+        .number = AVIMConvCommand_FieldNumber_StatusPub,
+        .hasIndex = 18,
+        .offset = 19,  // Stored in _has_storage_ to save space.
+        .flags = GPBFieldOptional | GPBFieldTextFormatNameCustom,
+        .dataType = GPBDataTypeBool,
+      },
+      {
+        .name = "statusTtl",
+        .dataTypeSpecific.className = NULL,
+        .number = AVIMConvCommand_FieldNumber_StatusTtl,
+        .hasIndex = 20,
+        .offset = (uint32_t)offsetof(AVIMConvCommand__storage_, statusTtl),
+        .flags = GPBFieldOptional | GPBFieldTextFormatNameCustom,
+        .dataType = GPBDataTypeInt32,
+      },
+      {
+        .name = "membersArray",
+        .dataTypeSpecific.className = NULL,
+        .number = AVIMConvCommand_FieldNumber_MembersArray,
+        .hasIndex = GPBNoHasBit,
+        .offset = (uint32_t)offsetof(AVIMConvCommand__storage_, membersArray),
+        .flags = GPBFieldRepeated,
+        .dataType = GPBDataTypeString,
+      },
+      {
         .name = "results",
         .dataTypeSpecific.className = GPBStringifySymbol(AVIMJsonObjectMessage),
         .number = AVIMConvCommand_FieldNumber_Results,
-        .hasIndex = 16,
+        .hasIndex = 21,
         .offset = (uint32_t)offsetof(AVIMConvCommand__storage_, results),
         .flags = GPBFieldOptional,
         .dataType = GPBDataTypeMessage,
@@ -1392,7 +1461,7 @@ typedef struct AVIMConvCommand__storage_ {
         .name = "where",
         .dataTypeSpecific.className = GPBStringifySymbol(AVIMJsonObjectMessage),
         .number = AVIMConvCommand_FieldNumber_Where,
-        .hasIndex = 17,
+        .hasIndex = 22,
         .offset = (uint32_t)offsetof(AVIMConvCommand__storage_, where),
         .flags = GPBFieldOptional,
         .dataType = GPBDataTypeMessage,
@@ -1401,7 +1470,7 @@ typedef struct AVIMConvCommand__storage_ {
         .name = "attr",
         .dataTypeSpecific.className = GPBStringifySymbol(AVIMJsonObjectMessage),
         .number = AVIMConvCommand_FieldNumber_Attr,
-        .hasIndex = 18,
+        .hasIndex = 23,
         .offset = (uint32_t)offsetof(AVIMConvCommand__storage_, attr),
         .flags = GPBFieldOptional,
         .dataType = GPBDataTypeMessage,
@@ -1417,7 +1486,7 @@ typedef struct AVIMConvCommand__storage_ {
                                          flags:0];
 #if !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
     static const char *extraTextFormatInfo =
-        "\001\006\006\000";
+        "\004\006\006\000\020\t\000\021\t\000\022\007b\000";
     [localDescriptor setupExtraTextInfo:extraTextFormatInfo];
 #endif  // !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
     NSAssert(descriptor == nil, @"Startup recursed!");
@@ -1883,11 +1952,13 @@ typedef struct AVIMReadCommand__storage_ {
 
 @dynamic hasStatus, status;
 @dynamic sessionPeerIdsArray, sessionPeerIdsArray_Count;
+@dynamic hasCid, cid;
 
 typedef struct AVIMPresenceCommand__storage_ {
   uint32_t _has_storage_[1];
   AVIMStatusType status;
   NSMutableArray *sessionPeerIdsArray;
+  NSString *cid;
 } AVIMPresenceCommand__storage_;
 
 // This method is threadsafe because it is initially called
@@ -1914,6 +1985,16 @@ typedef struct AVIMPresenceCommand__storage_ {
         .core.hasIndex = GPBNoHasBit,
         .core.offset = (uint32_t)offsetof(AVIMPresenceCommand__storage_, sessionPeerIdsArray),
         .core.flags = GPBFieldRepeated | GPBFieldTextFormatNameCustom,
+        .core.dataType = GPBDataTypeString,
+      },
+      {
+        .defaultValue.valueString = nil,
+        .core.name = "cid",
+        .core.dataTypeSpecific.className = NULL,
+        .core.number = AVIMPresenceCommand_FieldNumber_Cid,
+        .core.hasIndex = 1,
+        .core.offset = (uint32_t)offsetof(AVIMPresenceCommand__storage_, cid),
+        .core.flags = GPBFieldOptional,
         .core.dataType = GPBDataTypeString,
       },
     };
@@ -2012,6 +2093,7 @@ typedef struct AVIMReportCommand__storage_ {
 @dynamic hasPeerId, peerId;
 @dynamic hasI, i;
 @dynamic hasInstallationId, installationId;
+@dynamic hasPriority, priority;
 @dynamic hasLoginMessage, loginMessage;
 @dynamic hasDataMessage, dataMessage;
 @dynamic hasSessionMessage, sessionMessage;
@@ -2032,6 +2114,7 @@ typedef struct AVIMGenericCommand__storage_ {
   AVIMCommandType cmd;
   AVIMOpType op;
   int32_t i;
+  int32_t priority;
   NSString *appId;
   NSString *peerId;
   NSString *installationId;
@@ -2118,11 +2201,21 @@ typedef struct AVIMGenericCommand__storage_ {
         .core.dataType = GPBDataTypeString,
       },
       {
+        .defaultValue.valueInt32 = 0,
+        .core.name = "priority",
+        .core.dataTypeSpecific.className = NULL,
+        .core.number = AVIMGenericCommand_FieldNumber_Priority,
+        .core.hasIndex = 6,
+        .core.offset = (uint32_t)offsetof(AVIMGenericCommand__storage_, priority),
+        .core.flags = GPBFieldOptional,
+        .core.dataType = GPBDataTypeInt32,
+      },
+      {
         .defaultValue.valueMessage = nil,
         .core.name = "loginMessage",
         .core.dataTypeSpecific.className = GPBStringifySymbol(AVIMLoginCommand),
         .core.number = AVIMGenericCommand_FieldNumber_LoginMessage,
-        .core.hasIndex = 6,
+        .core.hasIndex = 7,
         .core.offset = (uint32_t)offsetof(AVIMGenericCommand__storage_, loginMessage),
         .core.flags = GPBFieldOptional | GPBFieldTextFormatNameCustom,
         .core.dataType = GPBDataTypeMessage,
@@ -2132,7 +2225,7 @@ typedef struct AVIMGenericCommand__storage_ {
         .core.name = "dataMessage",
         .core.dataTypeSpecific.className = GPBStringifySymbol(AVIMDataCommand),
         .core.number = AVIMGenericCommand_FieldNumber_DataMessage,
-        .core.hasIndex = 7,
+        .core.hasIndex = 8,
         .core.offset = (uint32_t)offsetof(AVIMGenericCommand__storage_, dataMessage),
         .core.flags = GPBFieldOptional | GPBFieldTextFormatNameCustom,
         .core.dataType = GPBDataTypeMessage,
@@ -2142,7 +2235,7 @@ typedef struct AVIMGenericCommand__storage_ {
         .core.name = "sessionMessage",
         .core.dataTypeSpecific.className = GPBStringifySymbol(AVIMSessionCommand),
         .core.number = AVIMGenericCommand_FieldNumber_SessionMessage,
-        .core.hasIndex = 8,
+        .core.hasIndex = 9,
         .core.offset = (uint32_t)offsetof(AVIMGenericCommand__storage_, sessionMessage),
         .core.flags = GPBFieldOptional | GPBFieldTextFormatNameCustom,
         .core.dataType = GPBDataTypeMessage,
@@ -2152,7 +2245,7 @@ typedef struct AVIMGenericCommand__storage_ {
         .core.name = "errorMessage",
         .core.dataTypeSpecific.className = GPBStringifySymbol(AVIMErrorCommand),
         .core.number = AVIMGenericCommand_FieldNumber_ErrorMessage,
-        .core.hasIndex = 9,
+        .core.hasIndex = 10,
         .core.offset = (uint32_t)offsetof(AVIMGenericCommand__storage_, errorMessage),
         .core.flags = GPBFieldOptional | GPBFieldTextFormatNameCustom,
         .core.dataType = GPBDataTypeMessage,
@@ -2162,7 +2255,7 @@ typedef struct AVIMGenericCommand__storage_ {
         .core.name = "directMessage",
         .core.dataTypeSpecific.className = GPBStringifySymbol(AVIMDirectCommand),
         .core.number = AVIMGenericCommand_FieldNumber_DirectMessage,
-        .core.hasIndex = 10,
+        .core.hasIndex = 11,
         .core.offset = (uint32_t)offsetof(AVIMGenericCommand__storage_, directMessage),
         .core.flags = GPBFieldOptional | GPBFieldTextFormatNameCustom,
         .core.dataType = GPBDataTypeMessage,
@@ -2172,7 +2265,7 @@ typedef struct AVIMGenericCommand__storage_ {
         .core.name = "ackMessage",
         .core.dataTypeSpecific.className = GPBStringifySymbol(AVIMAckCommand),
         .core.number = AVIMGenericCommand_FieldNumber_AckMessage,
-        .core.hasIndex = 11,
+        .core.hasIndex = 12,
         .core.offset = (uint32_t)offsetof(AVIMGenericCommand__storage_, ackMessage),
         .core.flags = GPBFieldOptional | GPBFieldTextFormatNameCustom,
         .core.dataType = GPBDataTypeMessage,
@@ -2182,7 +2275,7 @@ typedef struct AVIMGenericCommand__storage_ {
         .core.name = "unreadMessage",
         .core.dataTypeSpecific.className = GPBStringifySymbol(AVIMUnreadCommand),
         .core.number = AVIMGenericCommand_FieldNumber_UnreadMessage,
-        .core.hasIndex = 12,
+        .core.hasIndex = 13,
         .core.offset = (uint32_t)offsetof(AVIMGenericCommand__storage_, unreadMessage),
         .core.flags = GPBFieldOptional | GPBFieldTextFormatNameCustom,
         .core.dataType = GPBDataTypeMessage,
@@ -2192,7 +2285,7 @@ typedef struct AVIMGenericCommand__storage_ {
         .core.name = "readMessage",
         .core.dataTypeSpecific.className = GPBStringifySymbol(AVIMReadCommand),
         .core.number = AVIMGenericCommand_FieldNumber_ReadMessage,
-        .core.hasIndex = 13,
+        .core.hasIndex = 14,
         .core.offset = (uint32_t)offsetof(AVIMGenericCommand__storage_, readMessage),
         .core.flags = GPBFieldOptional | GPBFieldTextFormatNameCustom,
         .core.dataType = GPBDataTypeMessage,
@@ -2202,7 +2295,7 @@ typedef struct AVIMGenericCommand__storage_ {
         .core.name = "rcpMessage",
         .core.dataTypeSpecific.className = GPBStringifySymbol(AVIMRcpCommand),
         .core.number = AVIMGenericCommand_FieldNumber_RcpMessage,
-        .core.hasIndex = 14,
+        .core.hasIndex = 15,
         .core.offset = (uint32_t)offsetof(AVIMGenericCommand__storage_, rcpMessage),
         .core.flags = GPBFieldOptional | GPBFieldTextFormatNameCustom,
         .core.dataType = GPBDataTypeMessage,
@@ -2212,7 +2305,7 @@ typedef struct AVIMGenericCommand__storage_ {
         .core.name = "logsMessage",
         .core.dataTypeSpecific.className = GPBStringifySymbol(AVIMLogsCommand),
         .core.number = AVIMGenericCommand_FieldNumber_LogsMessage,
-        .core.hasIndex = 15,
+        .core.hasIndex = 16,
         .core.offset = (uint32_t)offsetof(AVIMGenericCommand__storage_, logsMessage),
         .core.flags = GPBFieldOptional | GPBFieldTextFormatNameCustom,
         .core.dataType = GPBDataTypeMessage,
@@ -2222,7 +2315,7 @@ typedef struct AVIMGenericCommand__storage_ {
         .core.name = "convMessage",
         .core.dataTypeSpecific.className = GPBStringifySymbol(AVIMConvCommand),
         .core.number = AVIMGenericCommand_FieldNumber_ConvMessage,
-        .core.hasIndex = 16,
+        .core.hasIndex = 17,
         .core.offset = (uint32_t)offsetof(AVIMGenericCommand__storage_, convMessage),
         .core.flags = GPBFieldOptional | GPBFieldTextFormatNameCustom,
         .core.dataType = GPBDataTypeMessage,
@@ -2232,7 +2325,7 @@ typedef struct AVIMGenericCommand__storage_ {
         .core.name = "roomMessage",
         .core.dataTypeSpecific.className = GPBStringifySymbol(AVIMRoomCommand),
         .core.number = AVIMGenericCommand_FieldNumber_RoomMessage,
-        .core.hasIndex = 17,
+        .core.hasIndex = 18,
         .core.offset = (uint32_t)offsetof(AVIMGenericCommand__storage_, roomMessage),
         .core.flags = GPBFieldOptional | GPBFieldTextFormatNameCustom,
         .core.dataType = GPBDataTypeMessage,
@@ -2242,7 +2335,7 @@ typedef struct AVIMGenericCommand__storage_ {
         .core.name = "presenceMessage",
         .core.dataTypeSpecific.className = GPBStringifySymbol(AVIMPresenceCommand),
         .core.number = AVIMGenericCommand_FieldNumber_PresenceMessage,
-        .core.hasIndex = 18,
+        .core.hasIndex = 19,
         .core.offset = (uint32_t)offsetof(AVIMGenericCommand__storage_, presenceMessage),
         .core.flags = GPBFieldOptional | GPBFieldTextFormatNameCustom,
         .core.dataType = GPBDataTypeMessage,
@@ -2252,7 +2345,7 @@ typedef struct AVIMGenericCommand__storage_ {
         .core.name = "reportMessage",
         .core.dataTypeSpecific.className = GPBStringifySymbol(AVIMReportCommand),
         .core.number = AVIMGenericCommand_FieldNumber_ReportMessage,
-        .core.hasIndex = 19,
+        .core.hasIndex = 20,
         .core.offset = (uint32_t)offsetof(AVIMGenericCommand__storage_, reportMessage),
         .core.flags = GPBFieldOptional | GPBFieldTextFormatNameCustom,
         .core.dataType = GPBDataTypeMessage,

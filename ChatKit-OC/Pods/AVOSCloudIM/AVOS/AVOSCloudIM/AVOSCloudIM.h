@@ -19,6 +19,7 @@
 #import "AVIMConversationQuery.h"
 #import "AVIMConversationUpdateBuilder.h"
 #import "AVIMMessage.h"
+#import "AVIMMessageOption.h"
 #import "AVIMTypedMessage.h"
 #import "AVIMTextMessage.h"
 #import "AVIMImageMessage.h"
@@ -37,7 +38,7 @@
  * Register remote notification with all types (badge, alert, sound) and empty categories.
  */
 + (void)registerForRemoteNotification AVIM_TV_UNAVAILABLE AVIM_WATCH_UNAVAILABLE \
-    AVIM_DEPRECATED("Deprecated in AVOSCloud SDK 3.2.8. Use +[AVOSCloud registerForRemoteNotification] instead.");
+    AVIM_DEPRECATED("Deprecated in AVOSCloud SDK 3.2.8. It will be removed in future.");
 
 /**
  * Register remote notification with types.
@@ -46,7 +47,7 @@
  * NOTE: categories only supported by iOS 8 and later. If application run below iOS 8, categories will be ignored.
  */
 + (void)registerForRemoteNotificationTypes:(NSUInteger)types categories:(NSSet *)categories AVIM_TV_UNAVAILABLE AVIM_WATCH_UNAVAILABLE \
-    AVIM_DEPRECATED("Deprecated in AVOSCloud SDK 3.2.8. Use +[AVOSCloud registerForRemoteNotificationTypes:categories:] instead.");
+    AVIM_DEPRECATED("Deprecated in AVOSCloud SDK 3.2.8. It will be removed in future.");
 
 /**
  * Handle device token registered from APNs.

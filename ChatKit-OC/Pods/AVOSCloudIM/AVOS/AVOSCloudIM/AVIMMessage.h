@@ -8,18 +8,18 @@
 
 #import "AVIMCommon.h"
 
-typedef enum : int8_t {
+typedef NS_ENUM(int8_t, AVIMMessageIOType) {
     AVIMMessageIOTypeIn = 1,
     AVIMMessageIOTypeOut,
-} AVIMMessageIOType;
+};
 
-typedef enum : int8_t {
+typedef NS_ENUM(int8_t, AVIMMessageStatus) {
     AVIMMessageStatusNone = 0,
     AVIMMessageStatusSending = 1,
     AVIMMessageStatusSent,
     AVIMMessageStatusDelivered,
     AVIMMessageStatusFailed,
-} AVIMMessageStatus;
+};
 
 @interface AVIMMessage : NSObject <NSCopying, NSCoding>
 
