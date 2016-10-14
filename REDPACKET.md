@@ -119,16 +119,14 @@ demo 提供两个 Plugin 底部插件.分别是零钱 `RedPacketChangeInputViewP
 如要修改零钱页面入口请查看`RedPacketChangeInputViewPlugin`类
 
 ### 在聊天对话中添加红包支持
+查看 `RedPacketInputViewPlugin.m` 的源代码注释了解红包功能的。
+    
+添加的部分包括：
 
-    1）发送红包事件参考 `RedPacketInputViewPlugin` 插件
-    2) 添加红包功能
-    查看 `RedPacketInputViewPlugin.m` 的源代码注释了解红包功能的。
-    添加的部分包括：
-
-       (1) 设置红包插件界面
-       (2) 设置红包功能相关的参数
-       (3) 设置红包接收用户信息
-       (4) 设置红包 SDK 功能回调
+     (1) 设置红包插件界面
+     (2) 设置红包功能相关的参数
+     (3) 设置红包接收用户信息
+     (4) 设置红包 SDK 功能回调
   
 
 IM在使用中有任何问题都可以到[我们的官方论坛](https://forum.leancloud.cn/)提问题，或添加红包 SDK 的技术支持QQ：472624215。会有专业工程师回复，平均响应时间在24小时内，
