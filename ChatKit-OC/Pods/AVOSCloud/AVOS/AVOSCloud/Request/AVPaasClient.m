@@ -743,9 +743,17 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
     @weakify(self);
     [self performRequest:request saveResult:NO block:^(id object, NSError *error) {
         @strongify(self);
-        if (!error || [self isErrorFromServer:error]) {
-            /* Server did response. */
-            [fileManager removeItemAtPath:path error:&error];
+
+        if (!error) {
+            [fileManager removeItemAtPath:path error:NULL];
+        } else {
+            NSInteger errorCode = error.code;
+            BOOL isServerError = errorCode >= 500 && errorCode < 600;
+
+            /* If error is a server error, we need retain the cached request. */
+            if (!isServerError && [self isErrorFromServer:error]) {
+                [fileManager removeItemAtPath:path error:NULL];
+            }
         }
 
         @synchronized (self.runningArchivedRequests) {

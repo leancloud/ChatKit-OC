@@ -484,7 +484,7 @@ typedef NS_ENUM(NSUInteger, FTPopOverMenuArrowDirection) {
         senderRect.origin.y = KSCREEN_HEIGHT;
     }
     
-    CGFloat menuHeight = FTDefaultMenuRowHeight * self.menuArray.count + FTDefaultMenuArrowHeight;
+    CGFloat menuHeight = [FTPopOverMenuConfiguration defaultConfiguration].menuRowHeight * self.menuArray.count + FTDefaultMenuArrowHeight;
     CGPoint menuArrowPoint = CGPointMake(senderRect.origin.x + (senderRect.size.width)/2, 0);
     CGFloat menuX = 0;
     CGRect menuRect = CGRectZero;
@@ -552,7 +552,7 @@ typedef NS_ENUM(NSUInteger, FTPopOverMenuArrowDirection) {
     CGPoint point = [touch locationInView:_popMenuView];
     if ([NSStringFromClass([touch.view class]) isEqualToString:@"UITableViewCellContentView"]) {
         return NO;
-    }else if (CGRectContainsPoint(CGRectMake(0, 0, [FTPopOverMenuConfiguration defaultConfiguration].menuWidth, FTDefaultMenuRowHeight), point)) {
+    }else if (CGRectContainsPoint(CGRectMake(0, 0, [FTPopOverMenuConfiguration defaultConfiguration].menuWidth, [FTPopOverMenuConfiguration defaultConfiguration].menuRowHeight), point)) {
         [self doneActionWithSelectedIndex:0];
         return NO;
     }
