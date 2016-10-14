@@ -1,25 +1,24 @@
 # ChatKit 红包快速入门 · iOS
 
-##导航
- 1. [下载最新的红包 SDK 库文件] 
-    
-    1.1 [源码集成](#block)
 
-    1.2 [CocoaPods](#cocoapod)
+## 导航
+
+ 1. [下载最新的红包 SDK 库文件] 
+
+    1.1 [源码集成](https://github.com/leancloud/ChatKit-OC/blob/master/REDPACKET.md#源码集成)
+    
+    1.2 [CocoaPods](https://github.com/leancloud/ChatKit-OC/blob/master/REDPACKET.md#CocoaPods导入)
  2. [集成红包功能](https://github.com/leancloud/ChatKit-OC/blob/master/REDPACKET.md#集成红包功能) 
  3. [设置红包信息](https://github.com/leancloud/ChatKit-OC/blob/master/REDPACKET.md#设置红包信息) 
  4. [在聊天对话中添加红包支持](https://github.com/leancloud/ChatKit-OC/blob/master/REDPACKET.md#在聊天对话中添加红包支持) 
-
-<span id = "block"></span>
-
-### 源码集成
-
- 1. [下载最新的红包 SDK 库文件](#redpacket) 
- 2. [下载最新的支付宝 SDK 库文件](#alipay) 
     
-    
-<span id = "cocoapod"></span>
-### CocoaPods 导入
+## 源码集成
+
+ 1. [下载最新的红包 SDK 库文件](https://github.com/leancloud/ChatKit-OC/blob/master/REDPACKET.md#下载最新的支付宝SDK库文件) 
+ 2. [下载最新的支付宝 SDK 库文件](https://github.com/leancloud/ChatKit-OC/blob/master/REDPACKET.md#下载最新的支付宝SDK库文件) 
+
+
+## CocoaPods导入
 在文件 `Podfile` 中加入以下内容：
 
 ```shell
@@ -44,23 +43,22 @@ gem install cocoapods
 如果不想使用 CocoaPods 进行集成，也可以选择使用源码集成 [红包-sdk-库文件](https://www.yunzhanghu.com/download.html#手动集成)。[支付宝-sdk-库文件](https://doc.open.alipay.com/doc2/detail.htm?spm=a219a.7629140.0.0.CeDJVo&treeId=54&articleId=104509&docType=1#手动集成)。
 
 
+效果图：
 - | - | -
 -------------|-------------|-------------
 
-效果图：
 
 ![](http://ww1.sinaimg.cn/large/7853084cjw1f7ynh6lno3j20bi0kg0ug.jpg) | ![](http://ww3.sinaimg.cn/large/7853084cjw1f7ynh6q4p8j20bi0kgdgm.jpg) | ![](http://ww3.sinaimg.cn/large/7853084cjw1f7ynh6nodqj20bi0kgdgl.jpg) 
 ![](http://ww4.sinaimg.cn/large/7853084cjw1f7ynh6hcqlj20bi0kg74x.jpg) | ![](http://ww1.sinaimg.cn/large/7853084cjw1f7ynh6fj58j20bi0kgab8.jpg) | ![](http://ww1.sinaimg.cn/large/7853084cjw1f7ynh6be0lj20bi0kg75n.jpg)
  
 <span id = "redpacket"></span>
-## 下载最新的红包 SDK 库文件
+## 下载最新的红包SDK库文件
 
 ChatKit 默认已经添加了红包 SDK，因为红包 SDK 在一直更新维护，所以如果想获取更新过的 SDK ，可前往[这里](https://www.yunzhanghu.com/download.html)下载 zip 包。
 
   解压后将 RedpacketStaticLib 复制替换至 ChatKit-OC 对应目录下。
 
-<span id = "alipay"></span>
-## 下载最新的支付宝 SDK 库文件
+## 下载最新的支付宝SDK库文件
 ChatKit 同样也默认集成了一个支付宝 SDK，如想更新，请前往[支付宝对应页面](https://doc.open.alipay.com/doc2/detail.htm?spm=a219a.7629140.0.0.CeDJVo&treeId=54&articleId=104509&docType=1)下载最新版本。
 
 ## 集成红包功能
