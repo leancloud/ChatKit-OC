@@ -131,7 +131,16 @@ git clone --depth=1 https://github.com/leancloud/ChatKit-OC
 * `ChatKit-OC` 为Demo 演示部分，其中 `LCChatKitExample` 这个类提供了很多胶水函数，可完成初步的集成。
 
 
- ## 使用方法
+## 使用方法
+
+ChatKit 支持以下两种方式导入到您的项目中：
+
+ 1. 通过 CocoaPods 管理依赖
+ 2. 手动集成并管理依赖，参考下文的[手动集成](https://github.com/leancloud/ChatKit-OC#手动集成)部分。
+
+这里推荐通过 CocoaPods 管理依赖
+
+> CocoaPods 是目前最流行的 Cocoa 项目库依赖管理工具之一，考虑到便捷与项目的可维护性，我们更推荐您使用 CocoaPods 导入并管理 SDK。
 
 ### CocoaPods 导入
 
@@ -206,9 +215,6 @@ git clone --depth=1 https://github.com/leancloud/ChatKit-OC
   如果提示找不到库，则可去掉 `--no-repo-update`。
 
   完成后，CocoaPods 会在您的工程根目录下生成一个 `.xcworkspace` 文件。您需要通过此文件打开您的工程，而不是之前的 `.xcodeproj`。
-
-  如果不想使用 CocoaPods 进行集成，也可以选择使用 [源码集成](https://github.com/leancloud/ChatKit-OC#手动集成)。
-
 
 然后在需要的地方导入 ChatKit：
 
