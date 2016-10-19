@@ -49,7 +49,7 @@
     [LCCKInputViewPluginTakePhoto registerSubclass];
     [LCCKInputViewPluginPickImage registerSubclass];
     [LCCKInputViewPluginLocation registerSubclass];
-    [[RedpacketConfig sharedConfig] config];
+    [[RedpacketConfig sharedConfig] lcck_setting];
 }
 
 + (void)invokeThisMethodInDidRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
@@ -84,6 +84,7 @@
      callback:^(BOOL succeeded, NSError *error) {
          if (succeeded) {
              [self saveLocalClientInfo:clientId];
+             [[RedpacketConfig sharedConfig] lcck_setting];
              !success ?: success();
          } else {
              [LCCKUtil showNotificationWithTitle:@"登陆失败"
