@@ -3,11 +3,11 @@
 
 ## 导航
 
- 1. [下载最新的红包 SDK 库文件] 
+ 1. 集成红包 SDK
 
     1.1 [源码集成](https://github.com/leancloud/ChatKit-OC/blob/master/REDPACKET.md#源码集成)
-    
-    1.2 [CocoaPods](https://github.com/leancloud/ChatKit-OC/blob/master/REDPACKET.md#CocoaPods导入)
+
+    1.2 [CocoaPods导入](https://github.com/leancloud/ChatKit-OC/blob/master/REDPACKET.md#cocoapods导入)
  2. [集成红包功能](https://github.com/leancloud/ChatKit-OC/blob/master/REDPACKET.md#集成红包功能) 
  3. [设置红包信息](https://github.com/leancloud/ChatKit-OC/blob/master/REDPACKET.md#设置红包信息) 
  4. [在聊天对话中添加红包支持](https://github.com/leancloud/ChatKit-OC/blob/master/REDPACKET.md#在聊天对话中添加红包支持) 
@@ -44,6 +44,7 @@ gem install cocoapods
 
 
 效果图：
+
 - | - | -
 -------------|-------------|-------------
 
@@ -69,7 +70,6 @@ ChatKit Demo中已经默认集成了红包功能，Demo 的做法如下：
  自定义项 | 公开API | 备注
  -------------|-------------|-------------
  自定义消息 | 2 | `-registerSubclass`、 `+classMediaType`
- 
  自定义Cell | 4 | `-registerCustomMessageCell`、`+classMediaType`、`-setup`、 `-configureCellWithData:`
  
  自定义插件 | 6 | `-registerCustomInputViewPlugin`、`+classPluginType`、`-pluginIconImage`、`-pluginTitle`、`-pluginDidClicked`、`sendCustomMessageHandler`
