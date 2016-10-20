@@ -392,7 +392,7 @@ setLoadLatestMessagesHandler:^(LCCKConversationViewController *conversationContr
                 title = @"正在强制登录...";
             }
             [[self class] lcck_showMessage:title toView:viewController.view];
-            [[LCChatKit sharedInstance]         openWithClientId:[LCChatKit sharedInstance].clientId
+            [[LCChatKit sharedInstance] openWithClientId:[LCChatKit sharedInstance].clientId
              force:force
              callback:^(BOOL succeeded, NSError *error) {
                  [[self class] lcck_hideHUDForView:viewController.view];

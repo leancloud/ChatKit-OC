@@ -33,7 +33,7 @@ NSString *const LCCKSessionServiceErrorDomain = @"LCCKSessionServiceErrorDomain"
 @synthesize disableSingleSignOn = _disableSingleSignOn;
 
 - (void)openWithClientId:(NSString *)clientId callback:(LCCKBooleanResultBlock)callback {
-    [self openWithClientId:clientId force:NO callback:callback];
+    [self openWithClientId:clientId force:YES callback:callback];
 }
 
 - (void)openWithClientId:(NSString *)clientId force:(BOOL)force callback:(AVIMBooleanResultBlock)callback {
