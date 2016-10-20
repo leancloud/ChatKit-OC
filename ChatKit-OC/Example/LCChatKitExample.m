@@ -53,11 +53,6 @@
 
 + (void)invokeThisMethodInDidRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
     [AVOSCloud handleRemoteNotificationsWithDeviceToken:deviceToken];
-    //正确写法
-    NSString *deviceString = [[deviceToken description] stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"<>"]];
-    deviceString = [deviceString stringByReplacingOccurrencesOfString:@" " withString:@""];
-    
-    NSLog(@"deviceToken===========%@",deviceString);
 }
 
 + (void)invokeThisMethodBeforeLogoutSuccess:(LCCKVoidBlock)success failed:(LCCKErrorBlock)failed {
