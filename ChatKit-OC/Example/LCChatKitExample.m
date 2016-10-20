@@ -43,7 +43,6 @@
     // [AVOSCloud setServiceRegion:AVServiceRegionUS];
     // 启用未读消息
     [AVIMClient setUserOptions:@{ AVIMUserOptionUseUnread : @(YES) }];
-    [AVOSCloud registerForRemoteNotification];
     [AVIMClient setTimeoutIntervalInSeconds:20];
     //添加输入框底部插件，如需更换图标标题，可子类化，然后调用 `+registerSubclass`
     [LCCKInputViewPluginTakePhoto registerSubclass];
@@ -54,6 +53,11 @@
 
 + (void)invokeThisMethodInDidRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
     [AVOSCloud handleRemoteNotificationsWithDeviceToken:deviceToken];
+    //正确写法
+    NSString *deviceString = [[deviceToken description] stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"<>"]];
+    deviceString = [deviceString stringByReplacingOccurrencesOfString:@" " withString:@""];
+    
+    NSLog(@"deviceToken===========%@",deviceString);
 }
 
 + (void)invokeThisMethodBeforeLogoutSuccess:(LCCKVoidBlock)success failed:(LCCKErrorBlock)failed {
@@ -79,20 +83,19 @@
                                               success:(LCCKVoidBlock)success
                                                failed:(LCCKErrorBlock)failed {
     [[self sharedInstance] exampleInit];
-    [[LCChatKit sharedInstance]
-     openWithClientId:clientId
-     callback:^(BOOL succeeded, NSError *error) {
-         if (succeeded) {
-             [self saveLocalClientInfo:clientId];
-             [[RedpacketConfig sharedConfig] lcck_setting];
-             !success ?: success();
-         } else {
-             [LCCKUtil showNotificationWithTitle:@"登陆失败"
-                                        subtitle:nil
-                                            type:LCCKMessageNotificationTypeError];
-             !failed ?: failed(error);
-         }
-     }];
+    [[LCChatKit sharedInstance] openWithClientId:clientId
+                                        callback:^(BOOL succeeded, NSError *error) {
+                                            if (succeeded) {
+                                                [self saveLocalClientInfo:clientId];
+                                                [[RedpacketConfig sharedConfig] lcck_setting];
+                                                !success ?: success();
+                                            } else {
+                                                [LCCKUtil showNotificationWithTitle:@"登陆失败"
+                                                                           subtitle:nil
+                                                                               type:LCCKMessageNotificationTypeError];
+                                                !failed ?: failed(error);
+                                            }
+                                        }];
     // TODO:
 }
 
