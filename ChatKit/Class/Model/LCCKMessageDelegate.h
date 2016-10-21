@@ -2,7 +2,7 @@
 //  LCCKMessageDelegate.h
 //  Pods
 //
-//  v0.7.15 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/7/26.
+//  v0.7.19 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/7/26.
 //
 //
 #import "LCCKConstants.h"
