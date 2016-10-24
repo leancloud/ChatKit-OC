@@ -50,7 +50,18 @@
             NSArray *lastestMessages = [conversation queryMessagesFromCacheWithLimit:1];
             if (lastestMessages.count > 0) {
                 AVIMTypedMessage *avimTypedMessage = [lastestMessages[0] lcck_getValidTypedMessage];
-                conversation.lcck_lastMessage = avimTypedMessage;
+                
+                NSArray *visiableForPartClientIds = [avimTypedMessage.attributes
+                                                     valueForKey:LCCKCustomMessageOnlyVisiableForPartClientIds];
+                if (!visiableForPartClientIds) {
+                    conversation.lcck_lastMessage = avimTypedMessage;
+                } else if (visiableForPartClientIds.count > 0) {
+                    BOOL visiableForCurrentClientId =
+                    [visiableForPartClientIds containsObject:[LCChatKit sharedInstance].clientId];
+                    if (visiableForCurrentClientId) {
+                        conversation.lcck_lastMessage = avimTypedMessage;
+                    }
+                }
             }
             if (conversation.lcck_type == LCCKConversationTypeSingle) {
                 [userIds addObject:conversation.lcck_peerId];

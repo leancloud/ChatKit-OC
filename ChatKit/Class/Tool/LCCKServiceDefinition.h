@@ -369,7 +369,7 @@ typedef void (^LCCKConversationInvalidedHandler) (NSString *conversationId, LCCK
  */
 - (void)setConversationInvalidedHandler:(LCCKConversationInvalidedHandler)conversationInvalidedHandler;
 
-typedef void (^LCCKFilterMessagesCompletionHandler)(NSArray *filterMessages, NSError *error);
+typedef void (^LCCKFilterMessagesCompletionHandler)(NSArray *filteredMessages, NSError *error);
 typedef void (^LCCKFilterMessagesBlock)(AVIMConversation *conversation, NSArray<AVIMTypedMessage *> *messages, LCCKFilterMessagesCompletionHandler completionHandler);
 
 /*!

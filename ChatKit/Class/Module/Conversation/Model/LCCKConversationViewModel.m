@@ -112,31 +112,16 @@
     if (!isCurrentConversationMessage) {
         return;
     }
-    
-    void(^filterdMessageCallback)(NSArray *messages) = ^(NSArray *messages) {
-        AVIMConversation *currentConversation = [self.parentConversationViewController getConversationIfExists];
-        if (currentConversation.muted == NO) {
-            [[LCCKSoundManager defaultManager] playReceiveSoundIfNeed];
-        }
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
-            NSArray *lcckMessages = [NSMutableArray lcck_messagesWithAVIMMessages:messages];
-            dispatch_async(dispatch_get_main_queue(),^{
-                [self receivedNewMessages:lcckMessages];
-            });
-        });
-    };
-    
-    LCCKFilterMessagesBlock filterMessagesBlock = [LCCKConversationService sharedInstance].filterMessagesBlock;
-    if (filterMessagesBlock) {
-        LCCKFilterMessagesCompletionHandler filterMessagesCompletionHandler = ^(NSArray *filterMessages, NSError *error) {
-            if (!error) {
-                !filterdMessageCallback ?: filterdMessageCallback([filterMessages copy]);
-            }
-        };
-        filterMessagesBlock(conversation, messages, filterMessagesCompletionHandler);
-    } else {
-        !filterdMessageCallback ?: filterdMessageCallback(messages);
+    AVIMConversation *currentConversation = [self.parentConversationViewController getConversationIfExists];
+    if (currentConversation.muted == NO) {
+        [[LCCKSoundManager defaultManager] playReceiveSoundIfNeed];
     }
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
+        NSArray *lcckMessages = [NSMutableArray lcck_messagesWithAVIMMessages:messages];
+        dispatch_async(dispatch_get_main_queue(),^{
+            [self receivedNewMessages:lcckMessages];
+        });
+    });
 }
 
 - (void)backgroundImageChanged:(NSNotification *)notification {
