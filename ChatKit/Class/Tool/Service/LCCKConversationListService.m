@@ -2,7 +2,7 @@
 //  LCCKConversationListService.m
 //  LeanCloudChatKit-iOS
 //
-//  v0.7.19 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/3/22.
+//  v0.7.20 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/3/22.
 //  Copyright © 2016年 LeanCloud. All rights reserved.
 //
 
@@ -50,7 +50,18 @@
             NSArray *lastestMessages = [conversation queryMessagesFromCacheWithLimit:1];
             if (lastestMessages.count > 0) {
                 AVIMTypedMessage *avimTypedMessage = [lastestMessages[0] lcck_getValidTypedMessage];
-                conversation.lcck_lastMessage = avimTypedMessage;
+                
+                NSArray *visiableForPartClientIds = [avimTypedMessage.attributes
+                                                     valueForKey:LCCKCustomMessageOnlyVisiableForPartClientIds];
+                if (!visiableForPartClientIds) {
+                    conversation.lcck_lastMessage = avimTypedMessage;
+                } else if (visiableForPartClientIds.count > 0) {
+                    BOOL visiableForCurrentClientId =
+                    [visiableForPartClientIds containsObject:[LCChatKit sharedInstance].clientId];
+                    if (visiableForCurrentClientId) {
+                        conversation.lcck_lastMessage = avimTypedMessage;
+                    }
+                }
             }
             if (conversation.lcck_type == LCCKConversationTypeSingle) {
                 [userIds addObject:conversation.lcck_peerId];

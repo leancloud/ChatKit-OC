@@ -2,7 +2,7 @@
 //  LCCKConversationViewModel.m
 //  LCCKChatExample
 //
-//  v0.7.19 Created by ElonChan (微信向我报BUG:chenyilong1010) ( https://github.com/leancloud/ChatKit-OC ) on 15/11/18.
+//  v0.7.20 Created by ElonChan (微信向我报BUG:chenyilong1010) ( https://github.com/leancloud/ChatKit-OC ) on 15/11/18.
 //  Copyright © 2015年 https://LeanCloud.cn . All rights reserved.
 //
 #if __has_include(<ChatKit/LCChatKit.h>)
@@ -112,31 +112,16 @@
     if (!isCurrentConversationMessage) {
         return;
     }
-    
-    void(^filterdMessageCallback)(NSArray *messages) = ^(NSArray *messages) {
-        AVIMConversation *currentConversation = [self.parentConversationViewController getConversationIfExists];
-        if (currentConversation.muted == NO) {
-            [[LCCKSoundManager defaultManager] playReceiveSoundIfNeed];
-        }
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
-            NSArray *lcckMessages = [NSMutableArray lcck_messagesWithAVIMMessages:messages];
-            dispatch_async(dispatch_get_main_queue(),^{
-                [self receivedNewMessages:lcckMessages];
-            });
-        });
-    };
-    
-    LCCKFilterMessagesBlock filterMessagesBlock = [LCCKConversationService sharedInstance].filterMessagesBlock;
-    if (filterMessagesBlock) {
-        LCCKFilterMessagesCompletionHandler filterMessagesCompletionHandler = ^(NSArray *filterMessages, NSError *error) {
-            if (!error) {
-                !filterdMessageCallback ?: filterdMessageCallback([filterMessages copy]);
-            }
-        };
-        filterMessagesBlock(conversation, messages, filterMessagesCompletionHandler);
-    } else {
-        !filterdMessageCallback ?: filterdMessageCallback(messages);
+    AVIMConversation *currentConversation = [self.parentConversationViewController getConversationIfExists];
+    if (currentConversation.muted == NO) {
+        [[LCCKSoundManager defaultManager] playReceiveSoundIfNeed];
     }
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
+        NSArray *lcckMessages = [NSMutableArray lcck_messagesWithAVIMMessages:messages];
+        dispatch_async(dispatch_get_main_queue(),^{
+            [self receivedNewMessages:lcckMessages];
+        });
+    });
 }
 
 - (void)backgroundImageChanged:(NSNotification *)notification {

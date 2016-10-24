@@ -2,7 +2,7 @@
 //  LCCKSessionService.m
 //  LeanCloudChatKit-iOS
 //
-//  v0.7.19 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/3/1.
+//  v0.7.20 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/3/1.
 //  Copyright © 2016年 LeanCloud. All rights reserved.
 //
 
@@ -300,37 +300,52 @@ NSString *const LCCKSessionServiceErrorDomain = @"LCCKSessionServiceErrorDomain"
 
 - (void)receiveMessages:(NSArray<AVIMTypedMessage *> *)messages conversation:(AVIMConversation *)conversation isUnreadMessage:(BOOL)isUnreadMessage {
     
-    void (^afterMentionedBlock)() = ^() {
+    void (^checkMentionedMessageCallback)() = ^(NSArray *filterdMessages) {
         // - 插入最近对话列表
         // 下面的LCCKNotificationMessageReceived也会通知ConversationListVC刷新
         [[LCCKConversationService sharedInstance] insertRecentConversation:conversation shouldRefreshWhenFinished:NO];
-        [[LCCKConversationService sharedInstance] increaseUnreadCount:messages.count withConversationId:conversation.conversationId shouldRefreshWhenFinished:NO];
+        [[LCCKConversationService sharedInstance] increaseUnreadCount:filterdMessages.count withConversationId:conversation.conversationId shouldRefreshWhenFinished:NO];
         // - 播放接收音
         if (!isUnreadMessage) {
             [self playLoudReceiveSoundIfNeededForConversation:conversation];
         }
         NSDictionary *userInfo = @{
                                    LCCKDidReceiveMessagesUserInfoConversationKey : conversation,
-                                   LCCKDidReceiveMessagesUserInfoMessagesKey : messages,
+                                   LCCKDidReceiveMessagesUserInfoMessagesKey : filterdMessages,
                                    };
         // - 通知相关页面接收到了消息：“当前对话页面”、“最近对话页面”；
         
         [[NSNotificationCenter defaultCenter] postNotificationName:LCCKNotificationMessageReceived object:userInfo];
     };
     
-    // - 在最近对话列表页时，检查是否有人@我
-    if (![[LCCKConversationService sharedInstance].currentConversationId isEqualToString:conversation.conversationId]) {
-        // 没有在聊天的时候才增加未读数和设置mentioned
-        [self isMentionedByMessages:messages callback:^(BOOL succeeded, NSError *error) {
-            !afterMentionedBlock ?: afterMentionedBlock();
-            if (succeeded) {
-                [[LCCKConversationService sharedInstance] updateMentioned:YES conversationId:conversation.conversationId];
-                // 下面的LCCKNotificationMessageReceived也会通知ConversationListVC刷新
-                // [[NSNotificationCenter defaultCenter] postNotificationName:LCCKNotificationUnreadsUpdated object:nil];
+    void(^filteredMessageCallback)(NSArray *originalMessages) = ^(NSArray *filterdMessages) {
+        if (filterdMessages.count == 0) { return; }
+        // - 在最近对话列表页时，检查是否有人@我
+        if (![[LCCKConversationService sharedInstance].currentConversationId isEqualToString:conversation.conversationId]) {
+            // 没有在聊天的时候才增加未读数和设置mentioned
+            [self isMentionedByMessages:filterdMessages callback:^(BOOL succeeded, NSError *error) {
+                !checkMentionedMessageCallback ?: checkMentionedMessageCallback(filterdMessages);
+                if (succeeded) {
+                    [[LCCKConversationService sharedInstance] updateMentioned:YES conversationId:conversation.conversationId];
+                    // 下面的LCCKNotificationMessageReceived也会通知ConversationListVC刷新
+                    // [[NSNotificationCenter defaultCenter] postNotificationName:LCCKNotificationUnreadsUpdated object:nil];
+                }
+            }];
+        } else {
+            !checkMentionedMessageCallback ?: checkMentionedMessageCallback(filterdMessages);
+        }
+    };
+    
+    LCCKFilterMessagesBlock filterMessagesBlock = [LCCKConversationService sharedInstance].filterMessagesBlock;
+    if (filterMessagesBlock) {
+        LCCKFilterMessagesCompletionHandler filterMessagesCompletionHandler = ^(NSArray *filteredMessages, NSError *error) {
+            if (!error) {
+                !filteredMessageCallback ?: filteredMessageCallback([filteredMessages copy]);
             }
-        }];
+        };
+        filterMessagesBlock(conversation, messages, filterMessagesCompletionHandler);
     } else {
-        !afterMentionedBlock ?: afterMentionedBlock();
+        !filteredMessageCallback ?: filteredMessageCallback(messages);
     }
 }
 
@@ -405,7 +420,7 @@ NSString *const LCCKSessionServiceErrorDomain = @"LCCKSessionServiceErrorDomain"
             NSError *error = nil;
             if (!isMentioned) {
                 NSInteger code = 0;
-                NSString *errorReasonText = @"not metioned";
+                NSString *errorReasonText = @"not mentioned";
                 NSDictionary *errorInfo = @{
                                             @"code":@(code),
                                             NSLocalizedDescriptionKey : errorReasonText,
