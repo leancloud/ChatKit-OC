@@ -48,7 +48,7 @@ static NSString *const LCCKBadgeTextForNumberGreaterThanLimit = @"···";
 
 #ifndef LCCKLocalizedStrings
 #define LCCKLocalizedStrings(key) \
-    NSLocalizedStringFromTableInBundle(key, @"LCChatKitString", [NSBundle bundleWithPath:[[[NSBundle bundleForClass:[LCChatKit class]] resourcePath] stringByAppendingPathComponent:@"Other.bundle"]], nil)
+    NSLocalizedStringFromTableInBundle(key, @"LCChatKitString", [NSBundle lcck_bundleForName:@"Other" class:[self class]], nil)
 #endif
 
 
