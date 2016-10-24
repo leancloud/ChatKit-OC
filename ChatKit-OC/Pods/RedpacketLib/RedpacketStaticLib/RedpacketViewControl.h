@@ -19,7 +19,7 @@ typedef NS_ENUM(NSInteger,RPSendRedPacketViewControllerType){
 @protocol RedpacketViewControlDelegate <NSObject>
 
 @optional
-- (NSArray<RedpacketUserInfo *> *)groupMemberList __attribute__((deprecated("请用getGroupMemberListCompletionHandle：方法替换")));
+- (NSArray<RedpacketUserInfo *> *)groupMemberList __deprecated_msg("请用getGroupMemberListCompletionHandle：方法替换");
 - (void)getGroupMemberListCompletionHandle:(void (^)(NSArray<RedpacketUserInfo *> * groupMemberList))completionHandle;
 
 @end
@@ -46,9 +46,14 @@ typedef void(^RedpacketSendBlock)(RedpacketMessageModel *model);
 @property (nonatomic, weak) UIViewController *conversationController;
 
 /**
- *  定向红包返回时的代理
+ *  定向红包获取群成员的代理
  */
 @property (nonatomic, weak) id <RedpacketViewControlDelegate> delegate;
+
+/**
+ *  零钱接口返回零钱
+ */
++ (void)getChangeMoney:(void (^)(NSString *amount))amount;
 
 /**
  *  用户抢红包触发事件
@@ -65,47 +70,44 @@ typedef void(^RedpacketSendBlock)(RedpacketMessageModel *model);
  */
 - (void)setRedpacketGrabBlock:(RedpacketGrabBlock)grabTouch andRedpacketBlock:(RedpacketSendBlock)sendBlock;
 
-#pragma mark - Controllers
 
-- (UIViewController *)redpacketViewController __attribute__((deprecated("请用presentRedPacketViewControllerWithType: memberCount:替换")));
-- (UIViewController *)redPacketMoreViewControllerWithGroupMembers:(NSArray *)groupMemberArray __attribute__((deprecated("请用presentRedPacketViewControllerWithType: memberCount:替换")));
-- (void)presentRedPacketMoreViewControllerWithGroupMembers:(NSArray *)groupMemberArray __attribute__((deprecated("请用presentRedPacketViewControllerWithType: memberCount:替换")));
-- (void)presentRedPacketViewController __attribute__((deprecated("请用presentRedPacketViewControllerWithType: memberCount:替换")));
+@end
 
+
+
+
+@interface RedpacketViewControl (RedpacketControllers)
 /**
  *  弹出红包控制器
  *
  *  @param rpType 红包页面类型
- *  @param count  群红包群人数
+ *  @param count  群红包群人数，如果是单聊，请传入0
  */
 - (void)presentRedPacketViewControllerWithType:(RPSendRedPacketViewControllerType)rpType memberCount:(NSInteger)count;
+
+/**
+ *  转账控制器
+ *  @param userInfo 接收人的用户信息
+ */
+- (void)presentTransferViewControllerWithReceiver:(RedpacketUserInfo *)userInfo;
+
+/**
+ *  转账详情控制器
+ */
+- (void)presentTransferDetailViewController:(RedpacketMessageModel *)model;
+
+/**
+ *  显示零钱页面
+ */
+- (void)presentChangeMoneyViewController;
+
 /**
  *  生成红包Controller
  *
  *  @param rpType 红包页面类型
  *  @param count  群红包群人数
- *
- *  @return 红包Controller
  */
 - (UIViewController *)redPacketViewControllerWithType:(RPSendRedPacketViewControllerType)rpType memberCount:(NSInteger)count;
-
-/**
- *  生成转账Controller
- *  
- *  @param userInfo 用户相关属性
- *
- *  @return 转账Controller
- */
-- (void)presentTransferViewControllerWithReceiver:(RedpacketUserInfo *)userInfo;
-
-/**
- *  生成转账DetailController
- *
- *
- *
- *  @return 转账Controller
- */
-- (void)presentTransferDetailViewController:(RedpacketMessageModel *)model;
 
 /**
  *  零钱页面
@@ -121,18 +123,17 @@ typedef void(^RedpacketSendBlock)(RedpacketMessageModel *model);
  */
 + (UIViewController *)changeMoneyListController;
 
-#pragma mark - ShowViewControllers
 
-/**
- *  Present的方式显示零钱页面
- */
-- (void)presentChangeMoneyViewController;
+@end
 
-/**
- *  零钱接口返回零钱
- *
- *  @param amount 零钱金额
+@interface RedpacketViewControl (Deprecated_Nonfunctional)
+
+/*
+ *  以下方法不再使用，请替换
  */
-+ (void)getChangeMoney:(void (^)(NSString *amount))amount;
+- (UIViewController *)redpacketViewController __deprecated_msg("请用presentRedPacketViewControllerWithType: memberCount:替换");
+- (UIViewController *)redPacketMoreViewControllerWithGroupMembers:(NSArray *)groupMemberArray __deprecated_msg("请用presentRedPacketViewControllerWithType: memberCount:替换");
+- (void)presentRedPacketMoreViewControllerWithGroupMembers:(NSArray *)groupMemberArray __deprecated_msg("请用presentRedPacketViewControllerWithType: memberCount:替换");
+- (void)presentRedPacketViewController __deprecated_msg("请用presentRedPacketViewControllerWithType: memberCount:替换");
 
 @end
