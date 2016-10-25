@@ -2,7 +2,7 @@
 //  LCCKConstants.h
 //  LeanCloudChatKit-iOS
 //
-//  v0.7.19 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/2/19.
+//  v0.7.20 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/2/19.
 //  Copyright © 2016年 LeanCloud. All rights reserved.
 //  Common typdef and constants, and so on.
 
@@ -48,7 +48,7 @@ static NSString *const LCCKBadgeTextForNumberGreaterThanLimit = @"···";
 
 #ifndef LCCKLocalizedStrings
 #define LCCKLocalizedStrings(key) \
-    NSLocalizedStringFromTableInBundle(key, @"LCChatKitString", [NSBundle bundleWithPath:[[[NSBundle bundleForClass:[LCChatKit class]] resourcePath] stringByAppendingPathComponent:@"Other.bundle"]], nil)
+    NSLocalizedStringFromTableInBundle(key, @"LCChatKitString", [NSBundle lcck_bundleForName:@"Other" class:[self class]], nil)
 #endif
 
 

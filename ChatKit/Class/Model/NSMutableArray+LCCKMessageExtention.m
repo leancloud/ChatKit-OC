@@ -2,7 +2,7 @@
 //  NSMutableArray+LCCKMessageExtention.m
 //  ChatKit
 //
-//  v0.7.19 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/5/26.
+//  v0.7.20 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/5/26.
 //  Copyright © 2016年 LeanCloud. All rights reserved.
 //
 
@@ -21,7 +21,7 @@
     dispatch_group_t group = dispatch_group_create();
     dispatch_group_async(group, queue, ^{
         
-        void(^filterdMessageCallback)(NSArray *_avimTypedMessages) = ^(NSArray *_avimTypedMessages) {
+        void(^filteredMessageCallback)(NSArray *_avimTypedMessages) = ^(NSArray *_avimTypedMessages) {
             for (AVIMTypedMessage *typedMessage in _avimTypedMessages) {
                 id message = [LCCKMessage messageWithAVIMTypedMessage:typedMessage];
                 if (message) {
@@ -34,12 +34,12 @@
         if (filterMessagesBlock) {
             LCCKFilterMessagesCompletionHandler filterMessagesCompletionHandler = ^(NSArray *filterMessages, NSError *error) {
                 if (!error) {
-                    !filterdMessageCallback ?: filterdMessageCallback([filterMessages copy]);
+                    !filteredMessageCallback ?: filteredMessageCallback([filterMessages copy]);
                 }
             };
             filterMessagesBlock([LCCKConversationService sharedInstance].currentConversation, avimTypedMessages, filterMessagesCompletionHandler);
         } else {
-            !filterdMessageCallback ?: filterdMessageCallback(avimTypedMessages);
+            !filteredMessageCallback ?: filteredMessageCallback(avimTypedMessages);
         }
     });
     dispatch_group_wait(group, DISPATCH_TIME_FOREVER);
