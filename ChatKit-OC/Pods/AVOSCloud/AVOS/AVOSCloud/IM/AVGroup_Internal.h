@@ -14,8 +14,8 @@
     NSString *_peerId;
 }
 - (void)setGroupId:(NSString *)groupId;
-+ (AVGroup *)getGroupWithGroupId:(NSString *)groupId session:(AVSession *)session useDefaultDelegate:(BOOL)useDefaultDelegate;
-+ (AVGroup *)getGroupNoCreateWithGroupId:(NSString *)groupId session:(AVSession *)session;
++ (instancetype)getGroupWithGroupId:(NSString *)groupId session:(AVSession *)session useDefaultDelegate:(BOOL)useDefaultDelegate;
++ (instancetype)getGroupNoCreateWithGroupId:(NSString *)groupId session:(AVSession *)session;
 + (void)onReceiveGroupCreatedCommand:(AVRoomCommand *)command;
 + (void)onWebSocketClosed;
 + (void)addGroup:(AVGroup *)group;

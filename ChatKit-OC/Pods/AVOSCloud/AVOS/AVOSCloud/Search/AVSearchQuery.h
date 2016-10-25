@@ -10,6 +10,8 @@
 #import "AVConstants.h"
 @class AVSearchSortBuilder;
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface AVSearchQuery : NSObject
 
 /*!
@@ -21,7 +23,7 @@
 /*!
  *  查询的 className，默认为 nil，即包括所有启用了应用内搜索的 Class
  */
-@property (nonatomic, retain) NSString *className;
+@property (nonatomic, copy, nullable) NSString *className;
 
 /*!
  The number of objects to skip before returning any.
@@ -36,35 +38,35 @@
 /*!
  * 查询字符串，具体语法参考 http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/query-dsl-query-string-query.html#query-string-syntax
  */
-@property (nonatomic, retain) NSString *queryString;
+@property (nonatomic, copy, nullable) NSString *queryString;
 
 /*!
  *  查询的AVSearchSortBuilder，使用更丰富的排序选项
  */
-@property (nonatomic, retain) AVSearchSortBuilder *sortBuilder;
+@property (nonatomic, strong, nullable) AVSearchSortBuilder *sortBuilder;
 
 /*!
  *  符合查询条件的记录条数
  */
-@property (nonatomic, readonly) NSInteger hits;
+@property (nonatomic, assign, readonly) NSInteger hits;
 
 /*!
  *  当前页面的scroll id，用于分页，可选。
  #  @warning 如非特殊需求，请不要手动设置 sid。每次 findObjects 之后，SDK 会自动更新 sid。如果手动设置了错误的sid，将无法获取到搜索结果。
  *  有关scroll id，可以参考 http://www.elasticsearch.org/guide/en/elasticsearch/guide/current/scan-scroll.html
  */
-@property (nonatomic, retain) NSString *sid;
+@property (nonatomic, copy, nullable) NSString *sid;
 
 /*!
  *  查询的字段列表，可选。
  */
-@property (nonatomic, retain) NSArray *fields;
+@property (nonatomic, strong, nullable) NSArray *fields;
 
 /*!
  *  返回结果的高亮语法，默认为 "*"
  *  语法规则可以参考 http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/search-request-highlighting.html#highlighting-settings
  */
-@property (nonatomic, retain) NSString *highlights;
+@property (nonatomic, copy, nullable) NSString *highlights;
 
 /*!
  * 缓存策略
@@ -82,14 +84,14 @@
  *  根据查询条件获取结果对象
  *  @return AVObjects 数组
  */
-- (NSArray *)findObjects;
+- (nullable NSArray *)findObjects;
 
 /*!
  *  根据查询条件获取结果对象，如果有 error，则设置一个 error
  *  @param error 指针
  *  @return AVObjects 数组
  */
-- (NSArray *)findObjects:(NSError **)error;
+- (nullable NSArray *)findObjects:(NSError **)error;
 
 /*!
  *  异步获取搜索结果，并回调block
@@ -135,3 +137,5 @@
 - (void)orderBySortDescriptors:(NSArray *)sortDescriptors;
 
 @end
+
+NS_ASSUME_NONNULL_END

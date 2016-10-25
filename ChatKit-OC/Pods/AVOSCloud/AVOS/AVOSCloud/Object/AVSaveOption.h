@@ -10,9 +10,13 @@
 
 @class AVQuery;
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface AVSaveOption : NSObject
 
-@property (nonatomic, assign) BOOL     fetchWhenSave;
-@property (nonatomic, strong) AVQuery *query;
+@property (nonatomic, assign) BOOL fetchWhenSave;
+@property (nonatomic, strong, nullable) AVQuery *query;
 
 @end
+
+NS_ASSUME_NONNULL_END

@@ -16,6 +16,8 @@ typedef enum : NSUInteger {
     AVLoggerLevelAll = AVLoggerLevelInfo | AVLoggerLevelDebug | AVLoggerLevelError,
 } AVLoggerLevel;
 
+NS_ASSUME_NONNULL_BEGIN
+
 extern NSString *const AVLoggerDomainCURL;
 extern NSString *const AVLoggerDomainNetwork;
 extern NSString *const AVLoggerDomainIM;
@@ -27,10 +29,12 @@ extern NSString *const AVLoggerDomainDefault;
 + (void)setLoggerLevelMask:(NSUInteger)levelMask;
 + (void)addLoggerDomain:(NSString *)domain;
 + (void)removeLoggerDomain:(NSString *)domain;
-+ (void)logFunc:(const char *)func line:(const int)line domain:(NSString *)domain level:(AVLoggerLevel)level message:(NSString *)fmt, ... NS_FORMAT_FUNCTION(5, 6);
++ (void)logFunc:(const char *)func line:(const int)line domain:(nullable NSString *)domain level:(AVLoggerLevel)level message:(NSString *)fmt, ... NS_FORMAT_FUNCTION(5, 6);
 + (BOOL)levelEnabled:(AVLoggerLevel)level;
 + (BOOL)containDomain:(NSString *)domain;
 @end
+
+NS_ASSUME_NONNULL_END
 
 #define _AVLoggerInfo(_domain, ...) [AVLogger logFunc:__func__ line:__LINE__ domain:_domain level:AVLoggerLevelInfo message:__VA_ARGS__]
 #define _AVLoggerDebug(_domain, ...) [AVLogger logFunc:__func__ line:__LINE__ domain:_domain level:AVLoggerLevelDebug message:__VA_ARGS__]

@@ -8,6 +8,8 @@
 
 #import "AVIMCommon.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 /**
  *  Dictionary Builder to update conversation
  */
@@ -15,12 +17,12 @@
 /*!
  名称
  */
-@property(nonatomic, strong)NSString *name;
+@property (nonatomic, copy, nullable) NSString *name;
 
 /*!
  属性合集，修改此属性会覆盖 setObject:forKey: 和 removeObjectForKey: 所做的修改
  */
-@property(nonatomic, strong)NSDictionary *attributes;
+@property (nonatomic, strong, nullable) NSDictionary *attributes;
 
 /*!
  生成更新字典。之后可调用 -[AVIMConversation update:callback:] 来更新对话。
@@ -33,14 +35,14 @@
  @param key 获取数据的 key 值
  @return key 对应的值
  */
-- (id)objectForKey:(NSString *)key;
+- (nullable id)objectForKey:(NSString *)key;
 
 /*!
  设置 attributes 中 key 对应的值为 object
  @param object 设置的对象，传 [NSNull null] 将在服务器端删除对应的 key
  @param key 设置的 key 值
  */
-- (void)setObject:(id)object forKey:(NSString *)key;
+- (void)setObject:(nullable id)object forKey:(NSString *)key;
 
 /*!
  移除 attributes 中的 key
@@ -49,3 +51,5 @@
 - (void)removeObjectForKey:(NSString *)key;
 
 @end
+
+NS_ASSUME_NONNULL_END

@@ -8,11 +8,13 @@
 
 #import <Foundation/Foundation.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface AVCloudQueryResult : NSObject
 /**
  *  查询结果的 className
  */
-@property(nonatomic, strong, readonly) NSString *className;
+@property(nonatomic, copy, readonly) NSString *className;
 
 /**
  *  查询的结果 AVObject 对象列表
@@ -22,7 +24,10 @@
 /**
  *  查询 count 结果, 只有使用 select count(*) ... 时有效
  */
-@property(nonatomic, readonly) NSUInteger count;
+@property(nonatomic, assign, readonly) NSUInteger count;
+
 @end
 
-typedef void(^AVCloudQueryCallback)(AVCloudQueryResult *result, NSError *error);
+typedef void(^AVCloudQueryCallback)(AVCloudQueryResult * _Nullable result, NSError * _Nullable error);
+
+NS_ASSUME_NONNULL_END

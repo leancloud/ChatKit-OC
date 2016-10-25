@@ -1307,7 +1307,7 @@ static void AppendTextFormatForMessageField(LCIMMessage *message,
             FIELD_CASE(Float, float, Float, @"%.*g", FLT_DIG)
             FIELD_CASE(Double, double, Double, @"%.*lg", DBL_DIG)
             
-
+#undef FIELD_CASE
 
       case GPBDataTypeEnum: {
         int32_t v = (isRepeated ? [(LCIMEnumArray *)array rawValueAtIndex:j]

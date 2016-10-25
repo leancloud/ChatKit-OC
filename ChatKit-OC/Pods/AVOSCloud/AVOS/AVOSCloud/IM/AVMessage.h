@@ -17,15 +17,18 @@ typedef enum : NSUInteger {
     AVMessageTypeGroupOut,
 } AVMessageType;
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface AVMessage : NSObject <NSCopying>
-@property(nonatomic)AVMessageType type;
-@property(nonatomic, strong)NSString *payload;
-@property(nonatomic, strong)NSString *fromPeerId;
-@property(nonatomic, strong)NSString *toPeerId;
-@property(nonatomic, strong)NSString *groupId;
-@property(nonatomic)int64_t timestamp;
-@property(nonatomic)int64_t receiptTimestamp;
-@property(nonatomic)BOOL offline;
+
+@property (nonatomic, assign) AVMessageType type;
+@property (nonatomic, copy, nullable) NSString *payload;
+@property (nonatomic, copy, nullable) NSString *fromPeerId;
+@property (nonatomic, copy, nullable) NSString *toPeerId;
+@property (nonatomic, copy, nullable) NSString *groupId;
+@property (nonatomic, assign) int64_t timestamp;
+@property (nonatomic, assign) int64_t receiptTimestamp;
+@property (nonatomic, assign) BOOL offline;
 
 /*!
  *  构造一个发送到group的message对象
@@ -33,7 +36,7 @@ typedef enum : NSUInteger {
  *  @param payload 消息载体
  *  @return message 对象
  */
-+ (AVMessage *)messageForGroup:(AVGroup *)group payload:(NSString *)payload;
++ (instancetype)messageForGroup:(AVGroup *)group payload:(NSString *)payload;
 
 /*!
  *  构造一个发送给 toPeerId 的message对象
@@ -42,8 +45,10 @@ typedef enum : NSUInteger {
  *  @param payload 消息载体
  *  @return message 对象
  */
-+ (AVMessage *)messageForPeerWithSession:(AVSession *)session
-                                toPeerId:(NSString *)toPeerId
-                                 payload:(NSString *)payload;
++ (instancetype)messageForPeerWithSession:(AVSession *)session
+                                 toPeerId:(NSString *)toPeerId
+                                  payload:(NSString *)payload;
 
 @end
+
+NS_ASSUME_NONNULL_END

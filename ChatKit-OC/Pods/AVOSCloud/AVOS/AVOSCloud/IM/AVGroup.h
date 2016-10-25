@@ -31,12 +31,15 @@ enum : AVGroupOption {
     AVGroupOptionTransient = 1 << 0,
 };
 
-typedef void (^AVGroupResultBlock)(AVGroup *group, NSError *error);
+typedef void (^AVGroupResultBlock)(AVGroup * _Nullable group, NSError * _Nullable error);
+
+NS_ASSUME_NONNULL_BEGIN
+
 @interface AVGroup : NSObject
 
-@property (nonatomic, weak) id <AVGroupDelegate> delegate;
-@property (nonatomic, readonly) NSString *groupId;
-@property (nonatomic, weak) AVSession *session;
+@property (nonatomic, copy, nullable, readonly) NSString *groupId;
+@property (nonatomic, weak, nullable) AVSession *session;
+@property (nonatomic, weak, nullable) id <AVGroupDelegate> delegate;
 
 /*!
  *  异步创建一个新group并加入此group
@@ -45,7 +48,7 @@ typedef void (^AVGroupResultBlock)(AVGroup *group, NSError *error);
  *  @param callback group创建成功或失败的回调
  */
 + (void)createGroupWithSession:(AVSession *)session
-                 groupDelegate:(id<AVGroupDelegate>)groupDelegate
+                 groupDelegate:(nullable id<AVGroupDelegate>)groupDelegate
                       callback:(AVGroupResultBlock)callback;
 
 /*!
@@ -56,7 +59,7 @@ typedef void (^AVGroupResultBlock)(AVGroup *group, NSError *error);
  *  @param callback group创建成功或失败的回调
  */
 + (void)createGroupWithSession:(AVSession *)session
-                 groupDelegate:(id<AVGroupDelegate>)groupDelegate
+                 groupDelegate:(nullable id<AVGroupDelegate>)groupDelegate
                        options:(AVGroupOption)options
                       callback:(AVGroupResultBlock)callback;
 
@@ -66,13 +69,13 @@ typedef void (^AVGroupResultBlock)(AVGroup *group, NSError *error);
  *  @param session group依赖的服务器会话
  *  @return 返回group对象
  */
-+ (AVGroup *)getGroupWithGroupId:(NSString *)groupId session:(AVSession *)session;
++ (instancetype)getGroupWithGroupId:(NSString *)groupId session:(AVSession *)session;
 
 /*!
  *  当生成一个AVGroup对象时默认使用此delegate，主要用于构建非主动创建的AVGroup对象，如被邀请加入某个Group
  *  @param delegate 默认的delegate
  */
-+ (void)setDefaultDelegate:(id<AVGroupDelegate>)delegate;
++ (void)setDefaultDelegate:(nullable id<AVGroupDelegate>)delegate;
 
 /*!
  *  加入group
@@ -141,7 +144,9 @@ typedef void (^AVGroupResultBlock)(AVGroup *group, NSError *error);
 
 
 - (void)session:(AVSession *)session group:(AVGroup *)group didReceiveGroupMessage:(NSString *)message fromPeerId:(NSString *)peerId  AV_DEPRECATED("2.6.4");
-- (void)session:(AVSession *)session group:(AVGroup *)group didReceiveGroupEvent:(AVGroupEvent)event memberIds:(NSArray *)memberIds  AV_DEPRECATED("2.6.4");
+- (void)session:(AVSession *)session group:(AVGroup *)group didReceiveGroupEvent:(AVGroupEvent)event memberIds:(nullable NSArray *)memberIds  AV_DEPRECATED("2.6.4");
 - (void)session:(AVSession *)session group:(AVGroup *)group messageSent:(NSString *)message success:(BOOL)success  AV_DEPRECATED("2.6.4");
 
 @end
+
+NS_ASSUME_NONNULL_END

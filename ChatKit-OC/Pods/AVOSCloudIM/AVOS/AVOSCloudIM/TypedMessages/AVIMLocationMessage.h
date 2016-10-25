@@ -8,6 +8,8 @@
 
 #import "AVIMTypedMessage.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 /**
  *  Location Message.
  */
@@ -16,12 +18,12 @@
 /**
  *  Latitude. Should be 0~90.
  */
-@property(nonatomic, readonly)float latitude;
+@property(nonatomic, assign, readonly) float latitude;
 
 /**
  *  Longitude, Should be 0~360.
  */
-@property(nonatomic, readonly)float longitude;
+@property(nonatomic, assign, readonly) float longitude;
 
 /*!
  创建位置消息。
@@ -33,5 +35,8 @@
 + (instancetype)messageWithText:(NSString *)text
                        latitude:(float)latitude
                       longitude:(float)longitude
-                     attributes:(NSDictionary *)attributes;
+                     attributes:(nullable NSDictionary *)attributes;
+
 @end
+
+NS_ASSUME_NONNULL_END

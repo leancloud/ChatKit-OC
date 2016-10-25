@@ -19,15 +19,17 @@ typedef enum : NSUInteger {
     AVPeerStatusOnline,
 } AVPeerStatus;
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface AVSession : NSObject
 
-@property (nonatomic, weak) id <AVSessionDelegate> sessionDelegate;
-@property (nonatomic, weak) id <AVSignatureDelegate> signatureDelegate;
+@property (nonatomic, weak, nullable) id <AVSessionDelegate> sessionDelegate;
+@property (nonatomic, weak, nullable) id <AVSignatureDelegate> signatureDelegate;
 
 /*!
  *  自身的peerId
  */
-@property (nonatomic, strong) NSString *peerId;
+@property (nonatomic, strong, nullable) NSString *peerId;
 
 /*!
  *  发送消息Timeout，默认10秒
@@ -39,7 +41,7 @@ typedef enum : NSUInteger {
  *  @param peerId session打开时使用的peerId
  *  @return 返回使用peerId打开的session，不存在或session已关闭返回nil
  */
-+ (AVSession *)getSessionWithPeerId:(NSString *)peerId;
++ (nullable instancetype)getSessionWithPeerId:(NSString *)peerId;
 
 /*!
  *  通过peerId获取已经打开的session
@@ -47,10 +49,10 @@ typedef enum : NSUInteger {
  *  @param createAndOpen 如果不存在是否创建
  *  @return 返回使用peerId打开的session，不存在或session已关闭返回nil
  */
-+ (AVSession *)getSessionWithPeerId:(NSString *)peerId
-         createAndOpenWhenNotExists:(BOOL)createAndOpen
-                    sessionDelegate:(id<AVSessionDelegate>)sessionDelegate
-                  signatureDelegate:(id<AVSignatureDelegate>)signatureDelegate;
++ (nullable instancetype)getSessionWithPeerId:(NSString *)peerId
+                   createAndOpenWhenNotExists:(BOOL)createAndOpen
+                              sessionDelegate:(nullable id<AVSessionDelegate>)sessionDelegate
+                            signatureDelegate:(nullable id<AVSignatureDelegate>)signatureDelegate;
 
 /*!
  *  打开 session
@@ -63,7 +65,7 @@ typedef enum : NSUInteger {
  *  @param peerId 用户自己的peer id
  *  @param peerIds 关注的peer id 数组
  */
-- (void)openWithPeerId:(NSString *)peerId watchedPeerIds:(NSArray *)peerIds;
+- (void)openWithPeerId:(NSString *)peerId watchedPeerIds:(nullable NSArray *)peerIds;
 
 - (void)open:(NSString *)selfId withPeerIds:(NSArray *)peerIds AV_DEPRECATED("2.6.4");
 
@@ -221,3 +223,5 @@ typedef enum : NSUInteger {
 - (void)onSessionError:(AVSession *)session withException:(NSException *)exception AV_DEPRECATED("2.6.4");
 
 @end
+
+NS_ASSUME_NONNULL_END

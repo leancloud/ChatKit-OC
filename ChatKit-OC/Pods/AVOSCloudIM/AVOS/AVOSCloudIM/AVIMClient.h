@@ -46,30 +46,31 @@ typedef NS_OPTIONS(uint64_t, AVIMConversationOption) {
     AVIMConversationOptionUnique    = 1 << 1,
 };
 
+NS_ASSUME_NONNULL_BEGIN
 
 @interface AVIMClient : NSObject
 
 /**
  *  The delegate which implements AVIMClientDelegate protocol. It handles these events: connecting status changes, message coming and members of the conversation changes.
  */
-@property (nonatomic, weak) id<AVIMClientDelegate> delegate;
+@property (nonatomic, weak, nullable) id<AVIMClientDelegate> delegate;
 
 /**
  *  The delegate which implements AVIMSignatureDataSource protocol. It is used to fetching signature from your server, and return an AVIMSignature object.
  */
-@property (nonatomic, weak) id<AVIMSignatureDataSource> signatureDataSource;
+@property (nonatomic, weak, nullable) id<AVIMSignatureDataSource> signatureDataSource;
 
 /**
  *  The ID of the current client. Usually the user's ID.
  */
-@property (nonatomic, readonly, copy) NSString *clientId;
+@property (nonatomic, copy, readonly, nullable) NSString *clientId;
 
 /**
  * Tag of current client.
  * @brief If tag is not nil and "default", offline mechanism is enabled.
  * @discussion If one client id login on two different devices, previous opened client will be gone offline by later opened client.
  */
-@property (nonatomic, readonly, copy) NSString *tag;
+@property (nonatomic, copy, readonly, nullable) NSString *tag;
 
 /**
  *  The connecting status of the current client.
@@ -92,7 +93,7 @@ typedef NS_OPTIONS(uint64_t, AVIMConversationOption) {
  @param clientId Identifier of client, nonnull requierd.
  @param tag      Tag of client.
  */
-- (instancetype)initWithClientId:(NSString *)clientId tag:(NSString *)tag;
+- (instancetype)initWithClientId:(NSString *)clientId tag:(nullable NSString *)tag;
 
 /*!
  默认 AVIMClient 实例
@@ -132,7 +133,7 @@ typedef NS_OPTIONS(uint64_t, AVIMConversationOption) {
  * @param callback Callback for openning client.
  * @brief Open client with option of which the properties will override client's default option.
  */
-- (void)openWithOption:(AVIMClientOpenOption *)option callback:(AVIMBooleanResultBlock)callback;
+- (void)openWithOption:(nullable AVIMClientOpenOption *)option callback:(AVIMBooleanResultBlock)callback;
 
 /*!
  结束某个账户的聊天
@@ -165,7 +166,7 @@ typedef NS_OPTIONS(uint64_t, AVIMConversationOption) {
  */
 - (void)createConversationWithName:(NSString *)name
                          clientIds:(NSArray *)clientIds
-                        attributes:(NSDictionary *)attributes
+                        attributes:(nullable NSDictionary *)attributes
                            options:(AVIMConversationOption)options
                           callback:(AVIMConversationResultBlock)callback;
 
@@ -175,7 +176,7 @@ typedef NS_OPTIONS(uint64_t, AVIMConversationOption) {
  @param conversationId Conversation 的 id。
  @return 与 conversationId 匹配的会话，若找不到，返回 nil。
  */
-- (AVIMConversation *)conversationForId:(NSString *)conversationId;
+- (nullable AVIMConversation *)conversationForId:(NSString *)conversationId;
 
 /*!
  创建一个绑定到当前 client 的会话。
@@ -297,7 +298,9 @@ typedef NS_OPTIONS(uint64_t, AVIMConversationOption) {
                 callback:(AVIMBooleanResultBlock)callback AVIM_DEPRECATED("Deprecated in AVOSCloudIM SDK 3.1.7.2. Use -[AVIMClient openWithCallback:] or -[AVIMClient openWithOption:callback:] instead.");
 
 - (void)openWithClientId:(NSString *)clientId
-                     tag:(NSString *)tag
+                     tag:(nullable NSString *)tag
                 callback:(AVIMBooleanResultBlock)callback AVIM_DEPRECATED("Deprecated in AVOSCloudIM SDK 3.1.7.2. Use -[AVIMClient openWithCallback:] or -[AVIMClient openWithOption:callback:] instead.");
 
 @end
+
+NS_ASSUME_NONNULL_END

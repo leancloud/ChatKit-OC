@@ -90,11 +90,11 @@ static id<AVGroupDelegate> _defaultDelegate = nil;
     });
 }
 
-+ (AVGroup *)getGroupWithGroupId:(NSString *)groupId session:(AVSession *)session {
++ (instancetype)getGroupWithGroupId:(NSString *)groupId session:(AVSession *)session {
     return [self getGroupWithGroupId:groupId session:session useDefaultDelegate:NO];
 }
 
-+ (AVGroup *)getGroupWithGroupId:(NSString *)groupId session:(AVSession *)session useDefaultDelegate:(BOOL)useDefaultDelegate {
++ (instancetype)getGroupWithGroupId:(NSString *)groupId session:(AVSession *)session useDefaultDelegate:(BOOL)useDefaultDelegate {
     if (!groupId || !session) {
         return nil;
     }
@@ -108,7 +108,7 @@ static id<AVGroupDelegate> _defaultDelegate = nil;
     return group;
 }
 
-+ (AVGroup *)getGroupNoCreateWithGroupId:(NSString *)groupId session:(AVSession *)session {
++ (instancetype)getGroupNoCreateWithGroupId:(NSString *)groupId session:(AVSession *)session {
     NSString *key = [self keyForGroupId:groupId session:session];
     AVGroup *group = [_groupDict objectForKey:key];
     group.session = session;
@@ -218,7 +218,9 @@ static id<AVGroupDelegate> _defaultDelegate = nil;
 }
 
 - (void)kickPeerIds:(NSArray *)peerIds {
-    [self kickPeerIds:peerIds callback:nil];
+    [self kickPeerIds:peerIds callback:^(NSArray * _Nullable objects, NSError * _Nullable error) {
+        /* Ignore result intentionally. */
+    }];
 }
 
 - (void)kickPeerIds:(NSArray *)peerIds callback:(AVArrayResultBlock)callback {
@@ -267,7 +269,9 @@ static id<AVGroupDelegate> _defaultDelegate = nil;
 }
 
 - (void)invitePeerIds:(NSArray *)peerIds {
-    [self invitePeerIds:peerIds callback:nil];
+    [self invitePeerIds:peerIds callback:^(NSArray * _Nullable objects, NSError * _Nullable error) {
+        /* Ignore result intentionally. */
+    }];
 }
 
 - (void)invitePeerIds:(NSArray *)peerIds callback:(AVArrayResultBlock)callback {

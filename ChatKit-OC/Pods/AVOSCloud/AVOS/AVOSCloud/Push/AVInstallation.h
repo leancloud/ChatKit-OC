@@ -7,6 +7,8 @@
 #import "AVObject.h"
 #import "AVQuery.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 /*!
  A LeanCloud Framework Installation Object that is a local representation of an
  installation persisted to the LeanCloud. This class is a subclass of a
@@ -62,24 +64,26 @@
 /** @name Properties */
 
 /// The device type for the AVInstallation.
-@property (nonatomic, readonly, retain) NSString *deviceType;
+@property (nonatomic, copy, readonly) NSString *deviceType;
 
 /// The installationId for the AVInstallation.
-@property (nonatomic, readonly, retain) NSString *installationId;
+@property (nonatomic, copy, readonly, nullable) NSString *installationId;
 
 /// The device token for the AVInstallation.
-@property (nonatomic, retain) NSString *deviceToken;
+@property (nonatomic, copy, nullable) NSString *deviceToken;
 
 /// The device profile for the AVInstallation.
-@property (nonatomic, retain) NSString *deviceProfile;
+@property (nonatomic, copy, nullable) NSString *deviceProfile;
 
 /// The badge for the AVInstallation.
 @property (nonatomic, assign) NSInteger badge;
 
 /// The timeZone for the AVInstallation.
-@property (nonatomic, readonly, retain) NSString *timeZone;
+@property (nonatomic, copy, readonly) NSString *timeZone;
 
 /// The channels for the AVInstallation.
-@property (nonatomic, retain) NSArray *channels;
+@property (nonatomic, strong, nullable) NSArray *channels;
 
 @end
+
+NS_ASSUME_NONNULL_END

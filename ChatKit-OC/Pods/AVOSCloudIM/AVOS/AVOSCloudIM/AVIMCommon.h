@@ -11,6 +11,8 @@
 
 @class AVIMConversation;
 
+NS_ASSUME_NONNULL_BEGIN
+
 extern NSString *AVOSCloudIMErrorDomain;
 
 extern NSInteger const kAVIMErrorInvalidCommand;  //非法的请求命令
@@ -31,11 +33,13 @@ FOUNDATION_EXPORT NSString *const kAVIMReasonKey;
 /* AVOSCloud IM detail key */
 FOUNDATION_EXPORT NSString *const kAVIMDetailKey;
 
-typedef void (^AVIMBooleanResultBlock)(BOOL succeeded, NSError *error);
-typedef void (^AVIMIntegerResultBlock)(NSInteger number, NSError *error);
-typedef void (^AVIMArrayResultBlock)(NSArray *objects, NSError *error);
-typedef void (^AVIMConversationResultBlock)(AVIMConversation *conversation, NSError *error);
+typedef void (^AVIMBooleanResultBlock)(BOOL succeeded, NSError * _Nullable error);
+typedef void (^AVIMIntegerResultBlock)(NSInteger number, NSError * _Nullable error);
+typedef void (^AVIMArrayResultBlock)(NSArray * _Nullable objects, NSError * _Nullable error);
+typedef void (^AVIMConversationResultBlock)(AVIMConversation * _Nullable conversation, NSError * _Nullable error);
 typedef void (^AVIMProgressBlock)(NSInteger percentDone);
+
+NS_ASSUME_NONNULL_END
 
 /* Cache policy */
 typedef NS_ENUM(int, AVIMCachePolicy) {

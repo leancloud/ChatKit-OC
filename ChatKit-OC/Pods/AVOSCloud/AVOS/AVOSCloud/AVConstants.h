@@ -162,19 +162,19 @@ extern NSInteger const kAVErrorLinkedIdMissing;
 /*! @abstract 251: Invalid linked session */
 extern NSInteger const kAVErrorInvalidLinkedSession;
 
-typedef void (^AVBooleanResultBlock)(BOOL succeeded, NSError *error);
-typedef void (^AVIntegerResultBlock)(NSInteger number, NSError *error);
-typedef void (^AVArrayResultBlock)(NSArray *objects, NSError *error);
-typedef void (^AVObjectResultBlock)(AVObject *object, NSError *error);
-typedef void (^AVSetResultBlock)(NSSet *channels, NSError *error);
-typedef void (^AVUserResultBlock)(AVUser *user, NSError *error);
-typedef void (^AVDataResultBlock)(NSData *data, NSError *error);
-typedef void (^AVImageResultBlock)(UIImage * image, NSError *error);
-typedef void (^AVDataStreamResultBlock)(NSInputStream *stream, NSError *error);
-typedef void (^AVStringResultBlock)(NSString *string, NSError *error);
-typedef void (^AVIdResultBlock)(id object, NSError *error);
+typedef void (^AVBooleanResultBlock)(BOOL succeeded,  NSError * _Nullable error);
+typedef void (^AVIntegerResultBlock)(NSInteger number, NSError * _Nullable error);
+typedef void (^AVArrayResultBlock)(NSArray * _Nullable objects, NSError * _Nullable error);
+typedef void (^AVObjectResultBlock)(AVObject * _Nullable object, NSError * _Nullable error);
+typedef void (^AVSetResultBlock)(NSSet * _Nullable channels, NSError * _Nullable error);
+typedef void (^AVUserResultBlock)(AVUser * _Nullable user, NSError * _Nullable error);
+typedef void (^AVDataResultBlock)(NSData * _Nullable data, NSError * _Nullable error);
+typedef void (^AVImageResultBlock)(UIImage * _Nullable image, NSError * _Nullable error);
+typedef void (^AVDataStreamResultBlock)(NSInputStream * _Nullable stream, NSError * _Nullable error);
+typedef void (^AVStringResultBlock)(NSString * _Nullable string, NSError * _Nullable error);
+typedef void (^AVIdResultBlock)(id _Nullable object, NSError * _Nullable error);
 typedef void (^AVProgressBlock)(NSInteger percentDone);
-typedef void (^AVFileResultBlock)(AVFile * file, NSError *error);
-typedef void (^AVDictionaryResultBlock)(NSDictionary * dict, NSError *error);
+typedef void (^AVFileResultBlock)(AVFile * _Nullable file, NSError * _Nullable error);
+typedef void (^AVDictionaryResultBlock)(NSDictionary * _Nullable dict, NSError * _Nullable error);
 
 #define AV_DEPRECATED(explain) __attribute__((deprecated(explain)))

@@ -680,7 +680,7 @@ NSString *LCStringFromDistanceUnit(AVQueryDistanceUnit unit) {
  */
 + (AVQuery *)queryForUser __attribute__ ((deprecated))
 {
-    return nil;
+    return [AVUser query];
 }
 
 #pragma mark -

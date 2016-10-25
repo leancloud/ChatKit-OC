@@ -8,8 +8,12 @@
 
 #import <Foundation/Foundation.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface AVIMClientOpenOption : NSObject
 
 @property (nonatomic, assign) BOOL force;
 
 @end
+
+NS_ASSUME_NONNULL_END

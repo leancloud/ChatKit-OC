@@ -9,14 +9,16 @@
 #import <Foundation/Foundation.h>
 #import "AVConstants.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface AVSignature : NSObject
 
-@property (nonatomic, strong) NSString *signature;
-@property (nonatomic) int64_t timestamp;
-@property (nonatomic, strong) NSString *nonce;
-@property (nonatomic, strong) NSString *action  AV_DEPRECATED("2.6.4");
-@property (nonatomic, strong) NSArray *signedPeerIds;
-@property (nonatomic, strong) NSError *error;
+@property (nonatomic, copy,   nullable) NSString *signature;
+@property (nonatomic, assign)           int64_t   timestamp;
+@property (nonatomic, copy,   nullable) NSString *nonce;
+@property (nonatomic, copy,   nullable) NSString *action AV_DEPRECATED("2.6.4");
+@property (nonatomic, strong, nullable) NSArray  *signedPeerIds;
+@property (nonatomic, strong, nullable) NSError  *error;
 
 @end
 
@@ -31,3 +33,5 @@
 - (AVSignature *)createGroupSignature:(NSString *)peerId groupPeerIds:(NSArray *)groupPeerIds action:(NSString *)action AV_DEPRECATED("2.6.4");
 - (AVSignature *)createGroupSignature:(NSString *)peerId groupId:(NSString *)groupId groupPeerIds:(NSArray *)groupPeerIds action:(NSString *)action AV_DEPRECATED("2.6.4");
 @end
+
+NS_ASSUME_NONNULL_END

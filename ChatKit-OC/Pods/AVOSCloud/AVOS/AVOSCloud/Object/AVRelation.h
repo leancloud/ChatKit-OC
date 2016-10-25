@@ -8,6 +8,8 @@
 #import "AVObject.h"
 #import "AVQuery.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 /*!
  A class that is used to access all of the children of a many-to-many relationship.  Each instance
  of AVRelation is associated with a particular parent object and key.
@@ -16,7 +18,7 @@
     
 }
 
-@property (nonatomic, retain) NSString *targetClass;
+@property (nonatomic, copy, nullable) NSString *targetClass;
 
 
 #pragma mark Accessing objects
@@ -59,6 +61,4 @@
 
 @end
 
-
-
-
+NS_ASSUME_NONNULL_END

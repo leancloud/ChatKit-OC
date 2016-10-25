@@ -7,6 +7,8 @@
 #import "AVConstants.h"
 #import "AVQuery.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 extern NSString *const kAVPushTargetPlatformIOS;
 extern NSString *const kAVPushTargetPlatformAndroid;
 extern NSString *const kAVPushTargetPlatformWindowsPhone;
@@ -331,7 +333,7 @@ extern NSString *const kAVPushTargetPlatformWindowsPhone;
  @param error Pointer to an NSError that will be set if necessary.
  @return an NSSet containing all the channel names this device is subscribed to.
  */
-+ (NSSet *)getSubscribedChannels:(NSError **)error;
++ (nullable NSSet *)getSubscribedChannels:(NSError **)error;
 
 /*!
  Get all the channels that this device is subscribed to.
@@ -418,3 +420,5 @@ extern NSString *const kAVPushTargetPlatformWindowsPhone;
                                   selector:(SEL)selector;
 
 @end
+
+NS_ASSUME_NONNULL_END

@@ -162,7 +162,9 @@ static BOOL enableAutomatic = NO;
 
 - (void)signUpInBackground
 {
-    [self signUpInBackgroundWithBlock:nil];
+    [self signUpInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
+        /* Ignore result intentionally. */
+    }];
 }
 
 - (void)signUpInBackgroundWithBlock:(AVBooleanResultBlock)block
