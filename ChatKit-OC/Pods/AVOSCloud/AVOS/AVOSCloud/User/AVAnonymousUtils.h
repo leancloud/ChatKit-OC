@@ -10,6 +10,8 @@
 #import "AVUser.h"
 #import "AVConstants.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 /*!
  Provides utility functions for working with Anonymously logged-in users.  Anonymous users have some unique characteristics:
  <ul>
@@ -55,3 +57,5 @@
 + (BOOL)isLinkedWithUser:(AVUser *)user;
 
 @end
+
+NS_ASSUME_NONNULL_END

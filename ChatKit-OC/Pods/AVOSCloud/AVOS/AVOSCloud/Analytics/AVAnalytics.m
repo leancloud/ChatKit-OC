@@ -207,9 +207,7 @@ static NSString * currentSessionId;
 
 + (void)updateOnlineConfig
 {
-    [AVAnalytics updateOnlineConfigWithBlock:^(NSDictionary *dict, NSError *error) {
-        
-    }];
+    [AVAnalytics updateOnlineConfigWithBlock:nil];
 }
 
 + (void)updateOnlineConfigWithBlock:(AVDictionaryResultBlock)block {
@@ -217,17 +215,17 @@ static NSString * currentSessionId;
     NSString *endpoint = [[[AVOSCloud RESTBaseURL] URLByAppendingPathComponent:pathComponent] absoluteString];
     
     [[AVPaasClient sharedInstance] getObject:endpoint withParameters:nil block:^(id object, NSError *error) {
-        dispatch_async(dispatch_get_main_queue(), ^{
+        if (error == nil) {
             // make sure we call the onlineConfigChanged in main thread
             // otherwise timer may not work correctly.
-            if (error == nil) {
+            dispatch_async(dispatch_get_main_queue(), ^{
                 [[AVAnalyticsImpl sharedInstance] onlineConfigChanged:object];
-                block([AVAnalyticsImpl sharedInstance].onlineConfig, nil);
-            } else {
-                AVLoggerE(@"Update online config failed %@", error);
-                block(nil, error);
-            }
-        });
+            });
+        } else {
+            AVLoggerE(@"Update online config failed %@", error);
+        }
+
+        [AVUtils callIdResultBlock:block object:object error:error];
     }];
 }
 

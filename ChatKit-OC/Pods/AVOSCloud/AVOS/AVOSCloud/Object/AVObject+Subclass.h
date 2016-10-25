@@ -37,6 +37,9 @@
  ```
  
  */
+
+NS_ASSUME_NONNULL_BEGIN
+
 @interface AVObject(Subclass)
 
 ///*! @name Methods for Subclasses */
@@ -75,3 +78,5 @@
 + (AVQuery *)query;
 
 @end
+
+NS_ASSUME_NONNULL_END

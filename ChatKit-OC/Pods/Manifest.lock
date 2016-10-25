@@ -1,17 +1,17 @@
 PODS:
-  - AVOSCloud (3.5.1)
-  - AVOSCloudIM (3.5.1):
-    - AVOSCloud (= 3.5.1)
-    - AVOSCloudIM/_ARC (= 3.5.1)
-    - AVOSCloudIM/_NOARC (= 3.5.1)
-  - AVOSCloudIM/_ARC (3.5.1):
-    - AVOSCloud (= 3.5.1)
-    - AVOSCloudIM/_NOARC (= 3.5.1)
-  - AVOSCloudIM/_NOARC (3.5.1):
-    - AVOSCloud (= 3.5.1)
-  - ChatKit (0.7.19):
-    - AVOSCloud (~> 3.5.1)
-    - AVOSCloudIM (~> 3.5.1)
+  - AVOSCloud (3.6.0)
+  - AVOSCloudIM (3.6.0):
+    - AVOSCloud (= 3.6.0)
+    - AVOSCloudIM/_ARC (= 3.6.0)
+    - AVOSCloudIM/_NOARC (= 3.6.0)
+  - AVOSCloudIM/_ARC (3.6.0):
+    - AVOSCloud (= 3.6.0)
+    - AVOSCloudIM/_NOARC (= 3.6.0)
+  - AVOSCloudIM/_NOARC (3.6.0):
+    - AVOSCloud (= 3.6.0)
+  - ChatKit (0.7.21):
+    - AVOSCloud (~> 3.6.0)
+    - AVOSCloudIM (~> 3.6.0)
     - DACircularProgress (~> 2.3.1)
     - FDStackView (~> 1.0)
     - FMDB (~> 2.6.2)
@@ -22,7 +22,7 @@ PODS:
     - pop (~> 1.0.9)
     - SDWebImage (~> 3.8.0)
     - UITableView+FDTemplateLayoutCell (~> 1.5.beta)
-  - CYLTabBarController (1.6.0)
+  - CYLTabBarController (1.6.1)
   - CYLTableViewRowAction (1.0.0)
   - DACircularProgress (2.3.1)
   - FDStackView (1.0)
@@ -51,7 +51,7 @@ PODS:
 
 DEPENDENCIES:
   - ChatKit (from `../`)
-  - CYLTabBarController
+  - CYLTabBarController (= 1.6.1)
   - CYLTableViewRowAction (= 1.0.0)
   - FTPopOverMenu
   - MLPAutoCompleteTextField
@@ -60,13 +60,13 @@ DEPENDENCIES:
 
 EXTERNAL SOURCES:
   ChatKit:
-    :path: "../"
+    :path: ../
 
 SPEC CHECKSUMS:
-  AVOSCloud: 3dfc202ae8c8b543e2332c0f019e08972c4092c0
-  AVOSCloudIM: a8a89cbdc9387079f6da7bd4f371c523086a7635
-  ChatKit: 71586c1948476fbdf93491d8073b4389b40e2518
-  CYLTabBarController: efbdd574772be17f17965acd7ee993f5972ff02f
+  AVOSCloud: be838e80e13c3247abf24d95e325b3fd515f9d12
+  AVOSCloudIM: 7044ffb9c883fedb8d9055db12e4f28c5160795d
+  ChatKit: d62998592fc7b52e237255c772ebf6ee8ee55d84
+  CYLTabBarController: c1a3eaee3081c84cd45105c5b4c26d62b747de67
   CYLTableViewRowAction: 66bd3f7478b46894ff40b74d892fc85aed41656b
   DACircularProgress: 4dd437c0fc3da5161cb289e07ac449493d41db71
   FDStackView: 3a4bbe0ce9c35e974246a585168b9da8c32213f1
@@ -81,10 +81,10 @@ SPEC CHECKSUMS:
   pop: f667631a5108a2e60d9e8797c9b32ddaf2080bce
   RedPacketAlipay: a5de6db2e2671fc9255d6d396be869e3ba2f0489
   RedpacketLib: 6c0c08eafb8748895582d19d77f0c52da67b79b3
-  SDWebImage: '098e97e6176540799c27e804c96653ee0833d13c'
+  SDWebImage: 098e97e6176540799c27e804c96653ee0833d13c
   TWMessageBarManager: fd84e7948ba7968a2b5d9454859135761214ec56
   UITableView+FDTemplateLayoutCell: 02b508ab1cb4cea16a8c17ac83d2cd1fd72124f9
 
-PODFILE CHECKSUM: 83f5c614a3f0d0bdae52f810affe96719af3ea1c
+PODFILE CHECKSUM: a4f89d0a6fa1ebd7484560dd3bbae2f34be233aa
 
-COCOAPODS: 1.1.0.rc.2
+COCOAPODS: 1.0.0

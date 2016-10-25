@@ -9,6 +9,8 @@
 
 @class AVFileQuery;
 
+NS_ASSUME_NONNULL_BEGIN
+
 /*!
  A file of binary data stored on the LeanCloud servers. This can be a image, video, or anything else
  that an application needs to reference in a non-relational way.
@@ -30,7 +32,7 @@
  @param data The contents of the new AVFile.
  @return A AVFile.
  */
-+ (instancetype)fileWithName:(NSString *)name data:(NSData *)data;
++ (instancetype)fileWithName:(nullable NSString *)name data:(NSData *)data;
 
 
 /*!
@@ -46,8 +48,8 @@
  @param name The name of the new AVFile
  @param path The path to the file that will be uploaded to LeanCloud
  */
-+ (instancetype)fileWithName:(NSString *)name
-    contentsAtPath:(NSString *)path;
++ (instancetype)fileWithName:(nullable NSString *)name
+              contentsAtPath:(NSString *)path;
 
 /*!
  Creates a file with an AVObject. 
@@ -59,44 +61,44 @@
 /*!
 The name of the file.
  */
-@property (nonatomic, readonly, copy) NSString *name;
+@property (nonatomic, readonly, copy, nullable) NSString *name;
 
 /*!
  The id of the file.
  */
-@property (readwrite, copy) NSString * objectId;
+@property (nonatomic, copy, nullable) NSString * objectId;
 
 
 /*!
  The url of the file.
  */
-@property (readonly) NSString *url;
+@property (nonatomic, readonly, copy, nullable) NSString *url;
 
 /*!
  The Qiniu bucket of the file.
  */
-@property (nonatomic, readonly, copy) NSString *bucket;
+@property (nonatomic, readonly, copy, nullable) NSString *bucket;
 
 /** @name Storing Data with LeanCloud */
 
 /*!
  Whether the file has been uploaded for the first time.
  */
-@property (readonly) BOOL isDirty;
+@property (nonatomic, readonly, assign) BOOL isDirty;
 
 /*!
  File metadata, caller is able to store additional values here.
  */
-@property (readwrite, strong) NSMutableDictionary * metadata AV_DEPRECATED("2.6.1以后请使用metaData");
+@property (nonatomic, strong, nullable) NSMutableDictionary * metadata AV_DEPRECATED("2.6.1以后请使用metaData");
 /*!
  File metadata, caller is able to store additional values here.
  */
-@property (readwrite, strong) NSMutableDictionary * metaData;
+@property (nonatomic, strong, nullable) NSMutableDictionary * metaData;
 
 /*!
  *  The access control list  for this file.
  */
-@property (nonatomic, strong) AVACL *ACL;
+@property (nonatomic, strong, nullable) AVACL *ACL;
 
 /*!
  Saves the file.
@@ -130,7 +132,7 @@ The name of the file.
  @param progressBlock The block should have the following argument signature: (int percentDone)
  */
 - (void)saveInBackgroundWithBlock:(AVBooleanResultBlock)block
-                    progressBlock:(AVProgressBlock)progressBlock;
+                    progressBlock:(nullable AVProgressBlock)progressBlock;
 
 /*!
  Saves the file asynchronously and calls the given callback.
@@ -151,7 +153,7 @@ The name of the file.
  servers.
  @return The data. Returns nil if there was an error in fetching.
  */
-- (NSData *)getData;
+- (nullable NSData *)getData;
 
 /*!
  This method is like getData but avoids ever holding the entire AVFile's
@@ -160,7 +162,7 @@ The name of the file.
  @return A stream containing the data. Returns nil if there was an error in 
  fetching.
  */
-- (NSInputStream *)getDataStream;
+- (nullable NSInputStream *)getDataStream;
 
 /*!
  Gets the data from cache if available or fetches its contents from the LeanCloud
@@ -168,7 +170,7 @@ The name of the file.
  @param error Pointer to an NSError that will be set if necessary.
  @return The data. Returns nil if there was an error in fetching.
  */
-- (NSData *)getData:(NSError **)error;
+- (nullable NSData *)getData:(NSError **)error;
 
 /*!
  This method is like getData: but avoids ever holding the entire AVFile's
@@ -178,7 +180,7 @@ The name of the file.
  @return A stream containing the data. Returns nil if there was an error in 
  fetching.
  */
-- (NSInputStream *)getDataStream:(NSError **)error;
+- (nullable NSInputStream *)getDataStream:(NSError **)error;
 
 /*!
  Asynchronously gets the data from cache if available or fetches its contents 
@@ -203,7 +205,7 @@ The name of the file.
  @param progressBlock The block should have the following argument signature: (int percentDone)
  */
 - (void)getDataInBackgroundWithBlock:(AVDataResultBlock)resultBlock
-                       progressBlock:(AVProgressBlock)progressBlock;
+                       progressBlock:(nullable AVProgressBlock)progressBlock;
 
 /*!
  This method is like getDataInBackgroundWithBlock:progressBlock: but avoids ever
@@ -213,7 +215,7 @@ The name of the file.
  @param progressBlock The block should have the following argument signature: (int percentDone)
  */
 - (void)getDataStreamInBackgroundWithBlock:(AVDataStreamResultBlock)resultBlock
-                             progressBlock:(AVProgressBlock)progressBlock;
+                             progressBlock:(nullable AVProgressBlock)progressBlock;
 
 /*!
  Asynchronously gets the data from cache if available or fetches its contents 
@@ -249,11 +251,11 @@ The name of the file.
  @param quality The thumbnail image quality in 1 - 100.
  @param format The thumbnail image format such as 'jpg', 'gif', 'png', 'tif' etc.
  */
-- (NSString *)getThumbnailURLWithScaleToFit:(BOOL)scaleToFit
-                                      width:(int)width
-                                     height:(int)height
-                                    quality:(int)quality
-                                     format:(NSString *)format;
+- (nullable NSString *)getThumbnailURLWithScaleToFit:(BOOL)scaleToFit
+                                               width:(int)width
+                                              height:(int)height
+                                             quality:(int)quality
+                                              format:(nullable NSString *)format;
 
 /*!
  Get a thumbnail URL for image saved on Qiniu.
@@ -263,9 +265,9 @@ The name of the file.
  @param width The thumbnail width.
  @param height The thumbnail height.
  */
-- (NSString *)getThumbnailURLWithScaleToFit:(BOOL)scaleToFit
-                                      width:(int)width
-                                     height:(int)height;
+- (nullable NSString *)getThumbnailURLWithScaleToFit:(BOOL)scaleToFit
+                                               width:(int)width
+                                              height:(int)height;
 
 /*!
  Gets a thumbnail asynchronously and calls the given block with the result.
@@ -290,13 +292,13 @@ The name of the file.
  
  @param ownerId The owner objectId.
  */
--(void)setOwnerId:(NSString *)ownerId;
+-(void)setOwnerId:(nullable NSString *)ownerId;
 
 /*!
  Gets owner id from metadata.
 
  */
--(NSString *)ownerId;
+-(nullable NSString *)ownerId;
 
 
 /*!
@@ -307,12 +309,12 @@ The name of the file.
 /*!
  Gets file path extension from url, name or local file path.
  */
--(NSString *)pathExtension;
+-(nullable NSString *)pathExtension;
 
 /*!
  Gets local file path.
  */
-- (NSString *)localPath;
+- (nullable NSString *)localPath;
 
 /*!
  Remove file in background.
@@ -351,3 +353,5 @@ The name of the file.
 
 
 @end
+
+NS_ASSUME_NONNULL_END

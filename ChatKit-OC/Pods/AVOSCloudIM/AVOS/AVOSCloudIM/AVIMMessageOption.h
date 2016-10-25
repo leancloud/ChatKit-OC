@@ -15,11 +15,15 @@ typedef NS_ENUM(NSInteger, AVIMMessagePriority) {
     AVIMMessagePriorityLow     = 3,
 };
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface AVIMMessageOption : NSObject
 
-@property (nonatomic, assign) BOOL                 receipt;
-@property (nonatomic, assign) BOOL                 transient;
-@property (nonatomic, assign) AVIMMessagePriority  priority;
-@property (nonatomic, strong) NSDictionary        *pushData;
+@property (nonatomic, assign)           BOOL                 receipt;
+@property (nonatomic, assign)           BOOL                 transient;
+@property (nonatomic, assign)           AVIMMessagePriority  priority;
+@property (nonatomic, strong, nullable) NSDictionary        *pushData;
 
 @end
+
+NS_ASSUME_NONNULL_END

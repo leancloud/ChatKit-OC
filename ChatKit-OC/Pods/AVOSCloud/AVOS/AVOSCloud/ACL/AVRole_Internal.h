@@ -15,8 +15,9 @@
 @property (nonatomic, readwrite, strong) AVACL * acl;
 @property (nonatomic, readwrite, strong) NSMutableDictionary * relationData;
 
++(instancetype)role;
+
 +(NSString *)className;
 +(NSString *)endPoint;
-+(AVRole *)role;
 
 @end

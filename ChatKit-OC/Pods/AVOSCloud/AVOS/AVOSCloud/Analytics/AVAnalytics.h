@@ -37,6 +37,7 @@ typedef NS_ENUM(int, AVReportPolicy) {
 @protocol AVAnalyticsDelegate;
 @class CLLocation;
 
+NS_ASSUME_NONNULL_BEGIN
 
 /**
  *  统计功能
@@ -83,7 +84,7 @@ typedef NS_ENUM(int, AVReportPolicy) {
  @param completion 设置完成后回调.
  @return void.
  */
-+ (void)setCrashReportEnabled:(BOOL)value completion:(void (^)(void))completion AV_DEPRECATED("使用 AVOSCloudCrashReporting.framework");
++ (void)setCrashReportEnabled:(BOOL)value completion:(nullable void (^)(void))completion AV_DEPRECATED("使用 AVOSCloudCrashReporting.framework");
 
 /** 开启CrashReport收集, 并且尝试忽略异常.
  @discuss 当异常被捕获后,如果开启了CrashReport功能,异常会被自动捕获,如果开启ignore,会尝试阻止app崩溃, 如果阻止成功,则会提示(UIAlertView)用户程序可能不稳定,请用户选择继续运行还是退出.
@@ -105,7 +106,7 @@ typedef NS_ENUM(int, AVReportPolicy) {
  @param alertQuit `退出`按钮的文字
  @param alertContinue `继续`按钮的文字
  */
-+ (void)setCrashReportEnabled:(BOOL)value withIgnoreAlertTitle:(NSString*)alertTitle andMessage:(NSString*)alertMsg andQuitTitle:(NSString*)alertQuit andContinueTitle:(NSString*)alertContinue AV_DEPRECATED("使用 AVOSCloudCrashReporting.framework");
++ (void)setCrashReportEnabled:(BOOL)value withIgnoreAlertTitle:(nullable NSString*)alertTitle andMessage:(nullable NSString*)alertMsg andQuitTitle:(nullable NSString*)alertQuit andContinueTitle:(nullable NSString*)alertContinue AV_DEPRECATED("使用 AVOSCloudCrashReporting.framework");
 
 
 /** 设置是否打印sdk的log信息,默认不开启
@@ -141,20 +142,20 @@ typedef NS_ENUM(int, AVReportPolicy) {
  @param rp 发送策略.
  @param cid 渠道名称,为nil或@""时,默认会被被当作@"App Store"渠道
  */
-+ (void)startWithReportPolicy:(AVReportPolicy)rp channelId:(NSString *)cid AV_DEPRECATED("1.4.3以后不再需要，请前往在线配置进行配置");
++ (void)startWithReportPolicy:(AVReportPolicy)rp channelId:(nullable NSString *)cid AV_DEPRECATED("1.4.3以后不再需要，请前往在线配置进行配置");
 
 
 /** 跟踪 app 打开情况
  @discussion 该方法应在 "- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions" 中调用
  @param launchOptions 对应上述方法的参数launchOptions
  */
-+ (void)trackAppOpenedWithLaunchOptions:(NSDictionary *)launchOptions;
++ (void)trackAppOpenedWithLaunchOptions:(nullable NSDictionary *)launchOptions;
 
 /** 跟踪 app 被 Push 通知打开的情况
  @discussion 该方法应在 "- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo" 中调用
  @param userInfo 对应上述方法的参数userInfo
  */
-+ (void)trackAppOpenedWithRemoteNotificationPayload:(NSDictionary *)userInfo;
++ (void)trackAppOpenedWithRemoteNotificationPayload:(nullable NSDictionary *)userInfo;
 
 
 ///---------------------------------------------------------------------------------------
@@ -205,7 +206,7 @@ typedef NS_ENUM(int, AVReportPolicy) {
  @param  label 分类标签。不同的标签会分别进行统计，方便同一事件的不同标签的对比,为nil或空字符串时后台会生成和eventId同名的标签.
  @return void.
  */
-+ (void)event:(NSString *)eventId label:(NSString *)label;
++ (void)event:(NSString *)eventId label:(nullable NSString *)label;
 
 /** 自定义事件,数量统计.
  @param  eventId 自定义的事件Id.
@@ -219,13 +220,13 @@ typedef NS_ENUM(int, AVReportPolicy) {
  @param  label 分类标签。不同的标签会分别进行统计，方便同一事件的不同标签的对比,为nil或空字符串时后台会生成和eventId同名的标签.
  @param  accumulation 事件的累计发生次数，可以将相同事件合并在一起发送节省网络流量.
  */
-+ (void)event:(NSString *)eventId label:(NSString *)label acc:(NSInteger)accumulation;
++ (void)event:(NSString *)eventId label:(nullable NSString *)label acc:(NSInteger)accumulation;
 
 
  /** 自定义事件,数量统计.
  @param  eventId 自定义的事件Id.
  @param  attributes 支持字符串和数字的key-value */
-+ (void)event:(NSString *)eventId attributes:(NSDictionary *)attributes;
++ (void)event:(NSString *)eventId attributes:(nullable NSDictionary *)attributes;
 
 
 /** 自定义事件,时长统计， 记录事件开始。
@@ -243,27 +244,27 @@ typedef NS_ENUM(int, AVReportPolicy) {
  @param eventId 自定义事件的Id.
  @param  label 分类标签。不同的标签会分别进行统计，方便同一事件的不同标签的对比,为nil或空字符串时后台会生成和eventId同名的标签.
  */
-+ (void)beginEvent:(NSString *)eventId label:(NSString *)label;
++ (void)beginEvent:(NSString *)eventId label:(nullable NSString *)label;
 
 
 /** 自定义事件,时长统计， 记录事件结束。
  @param eventId 自定义事件的Id.
  @param  label 分类标签。不同的标签会分别进行统计，方便同一事件的不同标签的对比,为nil或空字符串时后台会生成和eventId同名的标签.
  */
-+ (void)endEvent:(NSString *)eventId label:(NSString *)label;
++ (void)endEvent:(NSString *)eventId label:(nullable NSString *)label;
 
 /** 自定义事件,时长统计， 记录事件开始。
  @param eventId 自定义事件的Id.
  @param keyName 自定义关键事件的标签. 关键事件标签用于区分同名事件，但不参与统计运算结果.
  @param attributes 自定义事件的属性列表.
  */
-+ (void)beginEvent:(NSString *)eventId primarykey :(NSString *)keyName attributes:(NSDictionary *)attributes;
++ (void)beginEvent:(NSString *)eventId primarykey :(nullable NSString *)keyName attributes:(nullable NSDictionary *)attributes;
 
 /** 自定义事件,时长统计， 记录事件结束。
  @param eventId 自定义事件的Id.
  @param keyName 自定义关键事件的标签. 关键事件标签用于区分同名事件，但不参与统计运算结果.
  */
-+ (void)endEvent:(NSString *)eventId primarykey:(NSString *)keyName;
++ (void)endEvent:(NSString *)eventId primarykey:(nullable NSString *)keyName;
 
 
 /** 自定义事件,时长统计.
@@ -278,14 +279,14 @@ typedef NS_ENUM(int, AVReportPolicy) {
  @param millisecond 自定义事件的持续时间.
  */
 
-+ (void)event:(NSString *)eventId label:(NSString *)label durations:(int)millisecond;
++ (void)event:(NSString *)eventId label:(nullable NSString *)label durations:(int)millisecond;
 
 /** 自定义事件,时长统计.
  @param eventId 自定义事件的Id.
  @param attributes 自定义事件的属性列表.
  @param millisecond 自定义事件的持续时间.
  */
-+ (void)event:(NSString *)eventId attributes:(NSDictionary *)attributes durations:(int)millisecond;
++ (void)event:(NSString *)eventId attributes:(nullable NSDictionary *)attributes durations:(int)millisecond;
 
 
 
@@ -311,7 +312,7 @@ typedef NS_ENUM(int, AVReportPolicy) {
  @param block 自定义的接收block，您的配置参数会通过block传给您的应用.
  @return void.
  */
-+ (void)updateOnlineConfigWithBlock:(AVDictionaryResultBlock)block;
++ (void)updateOnlineConfigWithBlock:(nullable AVDictionaryResultBlock)block;
 
 
 /** 从[NSUserDefaults standardUserDefaults]获取缓存的在线参数的数值
@@ -328,7 +329,7 @@ typedef NS_ENUM(int, AVReportPolicy) {
  @return (NSDictionary *).
  */
 
-+ (NSDictionary *)getConfigParams;
++ (nullable NSDictionary *)getConfigParams;
 
 
 ///---------------------------------------------------------------------------------------
@@ -359,5 +360,7 @@ typedef NS_ENUM(int, AVReportPolicy) {
  *
  *  @warning info的内容只支持数字和字符串
  */
-+ (void)setCustomInfo:(NSDictionary*)info;
++ (void)setCustomInfo:(nullable NSDictionary*)info;
 @end
+
+NS_ASSUME_NONNULL_END

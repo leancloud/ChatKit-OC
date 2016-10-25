@@ -42,7 +42,7 @@ static NSString * writeTag = @"write";
     return result;
 }
 
--(id)init
+-(instancetype)init
 {
     self = [super init];
     if (self) {

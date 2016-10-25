@@ -8,27 +8,29 @@
 
 #import "AVIMCommon.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface AVIMSignature : NSObject
 
 /**
  *  Signture result signed by server master key.
  */
-@property (nonatomic, strong) NSString *signature;
+@property (nonatomic, copy, nullable) NSString *signature;
 
 /**
  *  Timestamp used to construct signature.
  */
-@property (nonatomic) int64_t timestamp;
+@property (nonatomic, assign) int64_t timestamp;
 
 /**
  *  Nonce string used to construct signature
  */
-@property (nonatomic, strong) NSString *nonce;
+@property (nonatomic, copy, nullable) NSString *nonce;
 
 /**
  *  Error in the course of getting signature from server. Commonly network error. Please set it if any error when getting signature.
  */
-@property (nonatomic, strong) NSError *error;
+@property (nonatomic, strong, nullable) NSError *error;
 
 @end
 
@@ -50,7 +52,9 @@
  @return 一个 AVIMSignature 签名对象.
  */
 - (AVIMSignature *)signatureWithClientId:(NSString *)clientId
-                          conversationId:(NSString *)conversationId
+                          conversationId:(nullable NSString *)conversationId
                                   action:(NSString *)action
-                       actionOnClientIds:(NSArray *)clientIds;
+                       actionOnClientIds:(nullable NSArray *)clientIds;
 @end
+
+NS_ASSUME_NONNULL_END

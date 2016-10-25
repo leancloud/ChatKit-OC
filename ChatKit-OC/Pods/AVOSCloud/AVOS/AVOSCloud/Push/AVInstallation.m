@@ -62,8 +62,9 @@
 {
     self = [super init];
     if (self) {
-        self.className = [AVInstallation className];
+        self.className  = [AVInstallation className];
         self.deviceType = [AVInstallation deviceType];
+        self.timeZone   = [[NSTimeZone systemTimeZone] name];
         
         NSString *path = [AVPersistenceUtils currentInstallationArchivePath];
         if ([AVPersistenceUtils fileExist:path]) {
@@ -151,8 +152,6 @@
 
 -(NSMutableDictionary *)updateInstallationDictionary:(NSMutableDictionary * )data
 {
-    self.timeZone = [[NSTimeZone systemTimeZone] name];
-
     [data addEntriesFromDictionary:@{
         badgeTag: @(self.badge),
         deviceTypeTag: [AVInstallation deviceType],

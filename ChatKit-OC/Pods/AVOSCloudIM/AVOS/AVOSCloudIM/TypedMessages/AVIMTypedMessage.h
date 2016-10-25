@@ -8,6 +8,9 @@
 
 #import "AVIMMessage.h"
 
+@class AVFile;
+@class AVGeoPoint;
+
 typedef int8_t AVIMMessageMediaType;
 
 //SDK定义的消息类型，自定义类型使用大于0的值
@@ -20,6 +23,9 @@ enum : AVIMMessageMediaType {
     kAVIMMessageMediaTypeLocation = -5,
     kAVIMMessageMediaTypeFile = -6
 };
+
+NS_ASSUME_NONNULL_BEGIN
+
 @protocol AVIMTypedMessageSubclassing <NSObject>
 @required
 /*!
@@ -29,18 +35,16 @@ enum : AVIMMessageMediaType {
 + (AVIMMessageMediaType)classMediaType;
 @end
 
-@class AVFile;
-@class AVGeoPoint;
-
 /**
  *  Base class for rich media message.
  */
 @interface AVIMTypedMessage : AVIMMessage
-@property(nonatomic)AVIMMessageMediaType mediaType;           //消息类型，可自定义
-@property(nonatomic, strong)NSString *text;        // 消息文本
-@property(nonatomic, strong)NSDictionary *attributes;  // 自定义属性
-@property(nonatomic, strong, readonly)AVFile *file;  // 附件
-@property(nonatomic, strong, readonly)AVGeoPoint *location;  // 位置
+
+@property (nonatomic, assign)                     AVIMMessageMediaType  mediaType;  // 消息类型，可自定义
+@property (nonatomic,   copy, nullable)           NSString             *text;       // 消息文本
+@property (nonatomic, strong, nullable)           NSDictionary         *attributes; // 自定义属性
+@property (nonatomic, strong, readonly, nullable) AVFile               *file;       // 附件
+@property (nonatomic, strong, readonly, nullable) AVGeoPoint           *location;   // 位置
 
 /**
  * Add custom property for message.
@@ -48,7 +52,7 @@ enum : AVIMMessageMediaType {
  * @param object The property value.
  * @param key    The property name.
  */
-- (void)setObject:(id)object forKey:(NSString *)key;
+- (void)setObject:(nullable id)object forKey:(NSString *)key;
 
 /**
  *  子类调用此方法进行注册，一般可在子类的 [+(void)load] 方法里面调用
@@ -63,7 +67,7 @@ enum : AVIMMessageMediaType {
  */
 + (instancetype)messageWithText:(NSString *)text
                attachedFilePath:(NSString *)attachedFilePath
-                     attributes:(NSDictionary *)attributes;
+                     attributes:(nullable NSDictionary *)attributes;
 
 /*!
  使用 AVFile，创建消息。
@@ -73,6 +77,8 @@ enum : AVIMMessageMediaType {
  */
 + (instancetype)messageWithText:(NSString *)text
                            file:(AVFile *)file
-                     attributes:(NSDictionary *)attributes;
+                     attributes:(nullable NSDictionary *)attributes;
 
 @end
+
+NS_ASSUME_NONNULL_END

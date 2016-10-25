@@ -274,7 +274,7 @@ static NSMutableDictionary *downloadingMap = nil;
 
 - (void)getDataInBackgroundWithBlock:(AVDataResultBlock)block
 {
-    [self getDataInBackgroundWithBlock:block progressBlock:NULL];
+    [self getDataInBackgroundWithBlock:block progressBlock:nil];
 }
 
 - (void)getDataInBackgroundWithBlock:(AVDataResultBlock)resultBlock
@@ -299,7 +299,7 @@ static NSMutableDictionary *downloadingMap = nil;
 {
     [self getDataStreamInBackgroundWithBlock:^(NSInputStream *stream, NSError *error) {
         if (block) block(stream, error);
-    } progressBlock:NULL];
+    } progressBlock:nil];
 }
 
 - (void)getDataStreamInBackgroundWithBlock:(AVDataStreamResultBlock)resultBlock
@@ -763,6 +763,9 @@ typedef void (^AVFileSizeBlock)(long long fileSize);
                                     quality:(int)quality
                                      format:(NSString *)format
 {
+    if (!self.url)
+        return nil;
+
     if (width < 0) {
         [NSException raise:NSInvalidArgumentException format:@"Invalid thumbnail width."];
     }
@@ -852,7 +855,9 @@ typedef void (^AVFileSizeBlock)(long long fileSize);
 }
 
 - (void)deleteInBackground {
-    [self deleteInBackgroundWithBlock:nil];
+    [self deleteInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
+        /* Ignore result intentionally. */
+    }];
 }
 
 + (AVQuery *)query {

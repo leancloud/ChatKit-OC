@@ -11,7 +11,6 @@
 
 - (AVQuery *)query
 {
-    NSMutableDictionary * dict = [@{@"$relatedTo": @{@"object": [AVObjectUtils dictionaryFromAVObjectPointer:self.parent], @"key":self.key}} mutableCopy];
     NSString *targetClass;
     if (!self.targetClass) {
         targetClass = self.parent.className;
@@ -19,6 +18,7 @@
         targetClass = self.targetClass;
     }
     AVQuery * query = [AVQuery queryWithClassName:targetClass];
+    NSMutableDictionary * dict = [@{@"$relatedTo": @{@"object": [AVObjectUtils dictionaryFromAVObjectPointer:self.parent], @"key":self.key}} mutableCopy];
     [query setValue:[NSMutableDictionary dictionaryWithDictionary:dict] forKey:@"where"];
     if (!self.targetClass) {
         query.extraParameters = [@{@"redirectClassNameForKey":self.key} mutableCopy];

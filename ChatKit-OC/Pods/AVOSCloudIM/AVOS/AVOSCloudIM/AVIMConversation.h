@@ -27,70 +27,72 @@ enum : AVIMMessageSendOption {
     AVIMMessageSendOptionRequestReceipt = 1 << 1,
 } AVIM_DEPRECATED("Deprecated in AVOSCloudIM SDK 3.4.0. Use AVIMMessageOption instead.");
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface AVIMConversation : NSObject
 
 /**
  *  The ID of the client which the conversation belongs to.
  */
-@property (nonatomic, strong, readonly) NSString     *clientId;
+@property (nonatomic, copy, readonly, nullable) NSString       *clientId;
 
 /**
  *  The ID of the conversation.
  */
-@property (nonatomic, strong, readonly) NSString     *conversationId;
+@property (nonatomic, copy, readonly, nullable) NSString       *conversationId;
 
 /**
  *  The clientId of the conversation creator.
  */
-@property (nonatomic, strong, readonly) NSString     *creator;
+@property (nonatomic, copy, readonly, nullable) NSString       *creator;
 
 /**
  *  The creation time of the conversation.
  */
-@property (nonatomic, strong, readonly) NSDate       *createAt;
+@property (nonatomic, strong, readonly, nullable) NSDate       *createAt;
 
 /**
  *  The last updating time of the conversation. When fields like name, members changes, this time will changes.
  */
-@property (nonatomic, strong, readonly) NSDate       *updateAt;
+@property (nonatomic, strong, readonly, nullable) NSDate       *updateAt;
 
 /**
  *  The send timestamp of the last message in this conversation.
  */
-@property (nonatomic, strong, readonly) NSDate       *lastMessageAt;
+@property (nonatomic, strong, readonly, nullable) NSDate       *lastMessageAt;
 
 /**
  *  The name of this conversation. Can be changed by update:callback: .
  */
-@property (nonatomic, strong, readonly) NSString     *name;
+@property (nonatomic, copy, readonly, nullable) NSString     *name;
 
 /**
  *  The ids of the clients who join the conversation. Can be changed by addMembersWithClientIds:callback: or removeMembersWithClientIds:callback: .
  */
-@property (nonatomic, strong, readonly) NSArray      *members;
+@property (nonatomic, strong, readonly, nullable) NSArray      *members;
 
 /**
  *  The attributes of the conversation. Intend to save any extra data of the conversation.
  *  Can be set when creating the conversation or can be updated by update:callback: .
  */
-@property (nonatomic, strong, readonly) NSDictionary *attributes;
+@property (nonatomic, strong, readonly, nullable) NSDictionary *attributes;
 
 /**
  *  Indicate whether it is a transient conversation. 
  *  @see AVIMConversationOptionTransient
  */
-@property (nonatomic, assign, readonly) BOOL          transient;
+@property (nonatomic, assign, readonly) BOOL transient;
 
 /**
  *  Muting status. If muted, when you have offline messages, will not receive Apple APNS notification.
  *  Can be changed by muteWithCallback: or unmuteWithCallback:.
  */
-@property (nonatomic, assign, readonly) BOOL          muted;
+@property (nonatomic, assign, readonly) BOOL muted;
 
 /**
  *  The AVIMClient object which this conversation belongs to.
  */
-@property (nonatomic, weak, readonly)   AVIMClient   *imClient;
+@property (nonatomic, weak, readonly, nullable)   AVIMClient   *imClient;
 
 /*!
  生成一个新的 AVIMConversationUpdateBuilder 实例。用于更新对话。
@@ -197,7 +199,7 @@ enum : AVIMMessageSendOption {
  @return None.
  */
 - (void)sendMessage:(AVIMMessage *)message
-             option:(AVIMMessageOption *)option
+             option:(nullable AVIMMessageOption *)option
            callback:(AVIMBooleanResultBlock)callback;
 
 /*!
@@ -208,7 +210,7 @@ enum : AVIMMessageSendOption {
  @return None.
  */
 - (void)sendMessage:(AVIMMessage *)message
-      progressBlock:(AVIMProgressBlock)progressBlock
+      progressBlock:(nullable AVIMProgressBlock)progressBlock
            callback:(AVIMBooleanResultBlock)callback;
 
 /*!
@@ -220,8 +222,8 @@ enum : AVIMMessageSendOption {
  @return None.
  */
 - (void)sendMessage:(AVIMMessage *)message
-             option:(AVIMMessageOption *)option
-      progressBlock:(AVIMProgressBlock)progressBlock
+             option:(nullable AVIMMessageOption *)option
+      progressBlock:(nullable AVIMProgressBlock)progressBlock
            callback:(AVIMBooleanResultBlock)callback;
 
 /*!
@@ -287,7 +289,9 @@ enum : AVIMMessageSendOption {
  */
 - (void)sendMessage:(AVIMMessage *)message
             options:(AVIMMessageSendOption)options
-      progressBlock:(AVIMProgressBlock)progressBlock
+      progressBlock:(nullable AVIMProgressBlock)progressBlock
            callback:(AVIMBooleanResultBlock)callback AVIM_DEPRECATED("Deprecated in AVOSCloudIM SDK 3.4.0. Use -[AVIMConversation sendMessage:option:progressBlock:callback:] instead.");
 
 @end
+
+NS_ASSUME_NONNULL_END

@@ -8,6 +8,8 @@
 
 @class AVQuery;
 
+NS_ASSUME_NONNULL_BEGIN
+
 /*!
  Represents a Role on the LeanCloud server. AVRoles represent groupings
  of AVUsers for the purposes of granting permissions (e.g. specifying a
@@ -30,7 +32,7 @@
  
  @param name The name of the Role to create.
  */
-- (id)initWithName:(NSString *)name;
+- (instancetype)initWithName:(NSString *)name;
 
 /*!
  Constructs a new AVRole with the given name.
@@ -38,7 +40,7 @@
  @param name The name of the Role to create.
  @param acl The ACL for this role. Roles must have an ACL.
  */
-- (id)initWithName:(NSString *)name acl:(AVACL *)acl;
+- (instancetype)initWithName:(NSString *)name acl:(nullable AVACL *)acl;
 
 /*!
  Constructs a new AVRole with the given name. If no default ACL has been
@@ -46,7 +48,7 @@
  
  @param name The name of the Role to create.
  */
-+ (AVRole *)roleWithName:(NSString *)name;
++ (instancetype)roleWithName:(NSString *)name;
 
 /*!
  Constructs a new AVRole with the given name.
@@ -54,7 +56,7 @@
  @param name The name of the Role to create.
  @param acl The ACL for this role. Roles must have an ACL.
  */
-+ (AVRole *)roleWithName:(NSString *)name acl:(AVACL *)acl;
++ (instancetype)roleWithName:(NSString *)name acl:(nullable AVACL *)acl;
 
 #pragma mark -
 #pragma mark Role-specific Properties
@@ -97,3 +99,5 @@
 + (AVQuery *)query;
 
 @end
+
+NS_ASSUME_NONNULL_END

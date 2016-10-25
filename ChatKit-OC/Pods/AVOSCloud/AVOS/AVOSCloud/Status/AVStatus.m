@@ -22,9 +22,9 @@ NSString * const kAVStatusTypePrivateMessage=@"private";
 @interface AVStatus () {
     
 }
-@property(nonatomic,strong) NSString *objectId;
-@property(nonatomic,strong) NSDate *createdAt;
-@property(nonatomic,assign) NSUInteger messageId;
+@property (nonatomic,   copy) NSString *objectId;
+@property (nonatomic, strong) NSDate *createdAt;
+@property (nonatomic, assign) NSUInteger messageId;
 
 /* 用Query来设定受众群 */
 @property(nonatomic,strong) AVQuery *targetQuery;

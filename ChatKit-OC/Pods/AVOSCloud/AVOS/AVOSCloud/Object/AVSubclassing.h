@@ -10,6 +10,8 @@
 
 @class AVQuery;
 
+NS_ASSUME_NONNULL_BEGIN
+
 /*!
  If a subclass of AVObject conforms to AVSubclassing and calls registerSubclass, LeanCloud will be able to use that class as the native class for a LeanCloud object.
 
@@ -56,3 +58,5 @@
 + (void)registerSubclass;
 
 @end
+
+NS_ASSUME_NONNULL_END

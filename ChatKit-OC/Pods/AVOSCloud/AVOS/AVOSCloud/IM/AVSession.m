@@ -23,14 +23,15 @@ static dispatch_queue_t _sessionQueue = 0;
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
 
-+ (AVSession *)getSessionWithPeerId:(NSString *)peerId {
++ (instancetype)getSessionWithPeerId:(NSString *)peerId {
     return [self getSessionWithPeerId:peerId createAndOpenWhenNotExists:NO sessionDelegate:nil signatureDelegate:nil];
 }
 
-+ (AVSession *)getSessionWithPeerId:(NSString *)peerId
-         createAndOpenWhenNotExists:(BOOL)createAndOpen
-                    sessionDelegate:(id<AVSessionDelegate>)sessionDelegate
-                  signatureDelegate:(id<AVSignatureDelegate>)signatureDelegate {
++ (instancetype)getSessionWithPeerId:(NSString *)peerId
+          createAndOpenWhenNotExists:(BOOL)createAndOpen
+                     sessionDelegate:(id<AVSessionDelegate>)sessionDelegate
+                   signatureDelegate:(id<AVSignatureDelegate>)signatureDelegate
+{
     AVSession *session = [_sessionDict objectForKey:peerId];
     if (!session && createAndOpen) {
         session = [[AVSession alloc] init];

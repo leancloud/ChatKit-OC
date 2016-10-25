@@ -28,7 +28,7 @@
     return @"roles";
 }
 
-- (id)initWithName:(NSString *)name
+- (instancetype)initWithName:(NSString *)name
 {
     self = [super initWithClassName:[AVRole className]];
     if (self)
@@ -39,12 +39,12 @@
     return self;
 }
 
-+(AVRole *)role {
++(instancetype)role {
     AVRole * r = [[AVRole alloc] initWithName:@""];
     return r;
 }
 
-- (id)initWithName:(NSString *)name acl:(AVACL *)acl
+- (instancetype)initWithName:(NSString *)name acl:(AVACL *)acl
 {
     self = [self initWithName:name];
     if (self)
@@ -54,13 +54,13 @@
     return self;
 }
 
-+ (AVRole *)roleWithName:(NSString *)name
++ (instancetype)roleWithName:(NSString *)name
 {
     AVRole * role = [[AVRole alloc] initWithName:name];
     return role;
 }
 
-+ (AVRole *)roleWithName:(NSString *)name acl:(AVACL *)acl
++ (instancetype)roleWithName:(NSString *)name acl:(AVACL *)acl
 {
     AVRole * role = [[AVRole alloc] initWithName:name acl:acl];
     return role;

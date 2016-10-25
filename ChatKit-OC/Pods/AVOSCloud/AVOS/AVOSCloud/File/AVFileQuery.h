@@ -8,6 +8,8 @@
 
 #import "AVQuery.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 /**
  *  AVFile 查询类
  */
@@ -20,7 +22,7 @@
  *  @param error 通常是网络错误或者查找权限未开启
  *  @return 返回一组 AVFile 对象
  */
-- (NSArray *)findFiles:(NSError **)error;
+- (nullable NSArray *)findFiles:(NSError **)error;
 
 /**
  *  查找一组文件，异步方法
@@ -36,7 +38,7 @@
  *  @param error    通过是网络错误或查找权限未开启
  *  @return 返回 AVFile 对象
  */
-- (AVFile *)getFileWithId:(NSString *)objectId error:(NSError **)error;
+- (nullable AVFile *)getFileWithId:(NSString *)objectId error:(NSError **)error;
 
 /**
  *  根据 objectId 来查找文件，异步方法
@@ -49,3 +51,5 @@
 
 
 @end
+
+NS_ASSUME_NONNULL_END

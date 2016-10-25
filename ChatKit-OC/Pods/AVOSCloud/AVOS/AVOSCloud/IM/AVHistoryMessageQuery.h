@@ -10,9 +10,12 @@
 #import "AVHistoryMessage.h"
 #import "AVConstants.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface AVHistoryMessageQuery : NSObject
-@property(nonatomic)int64_t timestamp;
-@property(nonatomic)int limit;
+
+@property (nonatomic, assign) int64_t timestamp;
+@property (nonatomic, assign) int     limit;
 
 /**
  *  构造通用 AVHistoryMessageQuery
@@ -33,7 +36,7 @@
  *  @param conversationId 对话Id
  *  @return query 对象
  */
-+ (instancetype)queryWithConversationId:(NSString *)conversationId;
++ (instancetype)queryWithConversationId:(nullable NSString *)conversationId;
 
 /**
  *  构造指定 conversationId 的 AVHistoryMessageQuery
@@ -42,7 +45,7 @@
  *  @param limit 限制返回结果数量，0表示不指定
  *  @return query 对象
  */
-+ (instancetype)queryWithConversationId:(NSString *)conversationId timestamp:(int64_t)timestamp limit:(int)limit;
++ (instancetype)queryWithConversationId:(nullable NSString *)conversationId timestamp:(int64_t)timestamp limit:(int)limit;
 
 /**
  *  构造查询指定来源 peerId 的 AVHistoryMessageQuery
@@ -98,14 +101,14 @@
  *  开始查询
  *  @return 历史聊天记录数组，发生错误返回nil
  */
--(NSArray *)find;
+-(nullable NSArray *)find;
 
 /**
  *  开始查询
  *  @param error 发生错误通过error返回
  *  @return 历史聊天记录数组，发生错误返回nil
  */
--(NSArray *)find:(NSError **)error;
+-(nullable NSArray *)find:(NSError **)error;
 
 /**
  *  开始查询
@@ -113,3 +116,5 @@
  */
 -(void)findInBackgroundWithCallback:(AVArrayResultBlock)callback;
 @end
+
+NS_ASSUME_NONNULL_END

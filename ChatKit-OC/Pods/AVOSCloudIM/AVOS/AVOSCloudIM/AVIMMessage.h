@@ -21,37 +21,39 @@ typedef NS_ENUM(int8_t, AVIMMessageStatus) {
     AVIMMessageStatusFailed,
 };
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface AVIMMessage : NSObject <NSCopying, NSCoding>
 
 /*!
  * 表示接收和发出的消息
  */
-@property (nonatomic, readonly, assign) AVIMMessageIOType ioType;
+@property (nonatomic, assign, readonly) AVIMMessageIOType ioType;
 
 /*!
  * 表示消息状态
  */
-@property (nonatomic, readonly, assign) AVIMMessageStatus status;
+@property (nonatomic, assign, readonly) AVIMMessageStatus status;
 
 /*!
  * 消息 id
  */
-@property (nonatomic, readonly, copy) NSString *messageId;
+@property (nonatomic, copy, readonly, nullable) NSString *messageId;
 
 /*!
  * 消息发送/接收方 id
  */
-@property (nonatomic, readonly, copy) NSString *clientId;
+@property (nonatomic, copy, readonly, nullable) NSString *clientId;
 
 /*!
  * 消息所属对话的 id
  */
-@property (nonatomic, readonly, copy) NSString *conversationId;
+@property (nonatomic, copy, readonly, nullable) NSString *conversationId;
 
 /*!
  * 消息文本
  */
-@property (nonatomic, copy) NSString *content;
+@property (nonatomic, copy, nullable) NSString *content;
 
 /*!
  * 发送时间（精确到毫秒）
@@ -66,9 +68,9 @@ typedef NS_ENUM(int8_t, AVIMMessageStatus) {
 /*!
  * 是否是暂态消息
  */
-@property (nonatomic, readonly, assign) BOOL transient;
+@property (nonatomic, assign, readonly) BOOL transient;
 
-- (NSString *)payload;
+- (nullable NSString *)payload;
 
 /*!
  创建文本消息。
@@ -77,3 +79,5 @@ typedef NS_ENUM(int8_t, AVIMMessageStatus) {
 + (instancetype)messageWithContent:(NSString *)content;
 
 @end
+
+NS_ASSUME_NONNULL_END

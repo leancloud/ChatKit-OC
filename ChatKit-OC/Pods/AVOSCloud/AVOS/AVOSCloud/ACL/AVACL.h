@@ -6,6 +6,8 @@
 @class AVUser;
 @class AVRole;
 
+NS_ASSUME_NONNULL_BEGIN
+
 /*!
  A AVACL is used to control which users can access or modify a particular
  object. Each AVObject can have its own AVACL. You can grant
@@ -21,13 +23,13 @@
 /*!
  Creates an ACL with no permissions granted.
  */
-+ (AVACL *)ACL;
++ (instancetype)ACL;
 
 /*!
  Creates an ACL where only the provided user has access.
  @param user the AVUser
  */
-+ (AVACL *)ACLWithUser:(AVUser *)user;
++ (instancetype)ACLWithUser:(AVUser *)user;
 
 /** @name Controlling Public Access */
 
@@ -213,3 +215,5 @@
 + (void)setDefaultACL:(AVACL *)acl withAccessForCurrentUser:(BOOL)currentUserAccess;
 
 @end
+
+NS_ASSUME_NONNULL_END

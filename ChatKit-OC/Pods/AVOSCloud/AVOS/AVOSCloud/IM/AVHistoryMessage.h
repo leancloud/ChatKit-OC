@@ -9,6 +9,12 @@
 #import <Foundation/Foundation.h>
 #import "AVMessage.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface AVHistoryMessage : AVMessage
-@property(nonatomic, strong)NSString *conversationId;
+
+@property (nonatomic, strong) NSString *conversationId;
+
 @end
+
+NS_ASSUME_NONNULL_END

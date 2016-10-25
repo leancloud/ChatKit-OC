@@ -11,15 +11,16 @@
 #import "AVUser.h"
 #import "AVQuery.h"
 
+typedef NSString AVStatusType;
+
+@class AVStatus, AVStatusQuery;
+
+NS_ASSUME_NONNULL_BEGIN
 
 extern NSString * const kAVStatusTypeTimeline;
 extern NSString * const kAVStatusTypePrivateMessage;
 
-typedef NSString AVStatusType;
-
-@class AVStatus,AVStatusQuery;
-typedef void (^AVStatusResultBlock)(AVStatus *status, NSError *error);
-
+typedef void (^AVStatusResultBlock)(AVStatus * _Nullable status, NSError * _Nullable error);
 
 /**
  *  发送和获取状态更新和消息
@@ -29,33 +30,33 @@ typedef void (^AVStatusResultBlock)(AVStatus *status, NSError *error);
 /**
  *  此状态的ID 具有唯一性
  */
-@property(nonatomic,readonly) NSString *objectId;
+@property (nonatomic, copy, readonly, nullable) NSString *objectId;
 
 /**
  *  此状态在用户某个Type的收件箱中的ID
  *  @warning 仅用于分片查询,不具有唯一性,同一条状态在不同的inbox里的messageId也是不同的
  */
-@property(nonatomic,readonly) NSUInteger messageId;
+@property (nonatomic, assign, readonly) NSUInteger messageId;
 
 /**
  *  状态的创建时间
  */
-@property(nonatomic,readonly) NSDate *createdAt;
+@property (nonatomic, strong, readonly, nullable) NSDate *createdAt;
 
 /**
  *  状态的内容
  */
-@property(nonatomic,strong) NSDictionary *data;
+@property (nonatomic, strong, nullable) NSDictionary *data;
 
 /**
  *  状态的发出"人",可以是AVUser 也可以是任意的AVObject,也可能是nil
  */
-@property(nonatomic,strong) AVObject *source;
+@property (nonatomic, strong, nullable) AVObject *source;
 
 /**
  *  状态类型,默认是kAVStatusTypeTimeline, 可以是任意自定义字符串
  */
-@property(nonatomic,strong) AVStatusType *type;
+@property (nonatomic, copy) AVStatusType *type;
 
 
 
@@ -239,7 +240,7 @@ typedef void (^AVStatusResultBlock)(AVStatus *status, NSError *error);
  *  @param dictionary 添加的自定义属性
  *  @param callback 回调结果
  */
--(void)follow:(NSString*)userId userDictionary:(NSDictionary *)dictionary andCallback:(AVBooleanResultBlock)callback;
+-(void)follow:(NSString*)userId userDictionary:(nullable NSDictionary *)dictionary andCallback:(AVBooleanResultBlock)callback;
 
 /**
  *  通过ID来取消关注其他用户
@@ -292,15 +293,18 @@ typedef void (^AVStatusResultBlock)(AVStatus *status, NSError *error);
 /**
  *  设置查询的Inbox的所有者, 即查询这个"人"的收件箱
  */
-@property(nonatomic, strong) AVObject *owner;
+@property(nonatomic, strong, nullable) AVObject *owner;
 
 /**
  *  设置查询的Inbox的类型
  */
-@property(nonatomic, copy) AVStatusType *inboxType;
+@property(nonatomic, copy, nullable) AVStatusType *inboxType;
 
 /**
  *  查询结果是否已经到结尾
  */
 @property(nonatomic)BOOL end;
+
 @end
+
+NS_ASSUME_NONNULL_END

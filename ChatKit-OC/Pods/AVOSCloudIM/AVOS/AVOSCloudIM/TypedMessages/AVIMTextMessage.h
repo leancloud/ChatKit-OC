@@ -8,6 +8,8 @@
 
 #import "AVIMTypedMessage.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 /**
  *  Text Message.
  */
@@ -19,5 +21,8 @@
  @param attributes － 用户附加属性
  */
 + (instancetype)messageWithText:(NSString *)text
-                     attributes:(NSDictionary *)attributes;
+                     attributes:(nullable NSDictionary *)attributes;
+
 @end
+
+NS_ASSUME_NONNULL_END
