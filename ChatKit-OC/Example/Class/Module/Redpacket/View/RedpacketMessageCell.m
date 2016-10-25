@@ -15,6 +15,7 @@
 #import "RedpacketMessageModel.h"
 #import "RedpacketViewControl.h"
 #import "AVIMTypedMessageRedPacketTaken.h"
+#import "LCCKContactManager.h"
 
 static const CGFloat Redpacket_SubMessage_Font_Size = 12.0f;
 
@@ -122,7 +123,7 @@ static const CGFloat Redpacket_SubMessage_Font_Size = 12.0f;
     if ([self.rpMessage isKindOfClass:[AVIMTypedMessageRedPacket class]]) {
         AVIMTypedMessageRedPacket * message = (AVIMTypedMessageRedPacket*)self.rpMessage;
         RedpacketViewControl * redpacketControl = [RedpacketViewControl new];
-        redpacketControl.conversationController = self.delegate;
+        redpacketControl.conversationController = (UIViewController*)self.delegate;
         
         __weak typeof(self) weakSelf = self;
         // 设置红包 SDK 功能回调
@@ -131,6 +132,19 @@ static const CGFloat Redpacket_SubMessage_Font_Size = 12.0f;
             [weakSelf onRedpacketTakenMessage:redpacket];
         } andRedpacketBlock:nil];
         self.rpControl = redpacketControl;
+        NSError * error;
+        NSArray<id<LCCKUserDelegate>> *users = [[LCChatKit sharedInstance] getCachedProfilesIfExists:@[message.rpModel.redpacketSender.userId] shouldSameCount:YES error:&error];
+        if (users.count && !error) {
+            [users enumerateObjectsUsingBlock:^(id<LCCKUserDelegate>  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                if ([message.rpModel.redpacketSender.userId isEqualToString:obj.clientId]) {
+                    RedpacketUserInfo * userInfo = [RedpacketUserInfo new];
+                    userInfo.userId = obj.clientId;
+                    userInfo.userNickname = obj.name?obj.name:obj.clientId;
+                    userInfo.userAvatar = obj.avatarURL.absoluteString;
+                    message.rpModel.redpacketSender = userInfo;
+                }
+            }];
+        }
         [redpacketControl redpacketCellTouchedWithMessageModel:message.rpModel];
     }
 }
