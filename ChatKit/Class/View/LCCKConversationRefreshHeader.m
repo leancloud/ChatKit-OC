@@ -2,7 +2,7 @@
 //  MJDIYHeader.m
 //  MJRefreshExample
 //
-//  v0.7.20 Created by MJ Lee on 15/6/13.
+//  v0.8.0 Created by MJ Lee on 15/6/13.
 //  Copyright © 2015年 小码哥. All rights reserved.
 //
 

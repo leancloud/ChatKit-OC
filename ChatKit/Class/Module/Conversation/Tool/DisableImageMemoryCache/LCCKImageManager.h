@@ -2,7 +2,7 @@
 //  LCCKImageManager.h
 //  Kuber
 //
-//  v0.7.20 Created by Kuber on 16/3/30.
+//  v0.8.0 Created by Kuber on 16/3/30.
 //  Copyright © 2016年 Huaxu Technology. All rights reserved.
 //
 
