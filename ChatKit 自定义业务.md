@@ -484,6 +484,32 @@ UI自定义，需要实现 `LCCKInputViewPluginDelegate` 方法：
 
 ### 监听并筛选或处理消息
 
+可以通过接口 `-[LCChatKit setSendMessageHookBlock:]` 来实现hook掉发送消息的行为，可实现黑名单，敏感词本地过滤等业务，具体用法如何：
+
+ ```Objective-C
+ //见LCChatKitExample+Setting.m
+- (void)lcck_setupSendMessageHook {
+    [[LCChatKit sharedInstance] setSendMessageHookBlock:^(LCCKConversationViewController *conversationController, __kindof AVIMTypedMessage *message, LCCKSendMessageHookCompletionHandler completionHandler) {
+        if ([message.clientId isEqualToString:@"Jerry"]) {
+            NSInteger code = 0;
+            NSString *errorReasonText = @"不允许Jerry发送消息";
+            NSDictionary *errorInfo = @{
+                                        @"code":@(code),
+                                        NSLocalizedDescriptionKey : errorReasonText,
+                                        };
+            NSError *error = [NSError errorWithDomain:NSStringFromClass([self class])
+                                                 code:code
+                                             userInfo:errorInfo];
+            
+            completionHandler(NO, error);
+            [conversationController sendLocalFeedbackTextMessge:errorReasonText];
+        } else {
+            completionHandler(YES, nil);
+        }
+    }];
+}
+ ```
+
 可以通过接口 `-[LCChatKit setFilterMessagesBlock:]` 实现拦截新消息，包括实时接收的消息，和拉取历史记录消息。
 
 Demo中演示了，群定向消息的实现： 

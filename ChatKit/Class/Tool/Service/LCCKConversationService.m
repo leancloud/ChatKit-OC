@@ -2,7 +2,7 @@
 //  LCCKConversationService.m
 //  LeanCloudChatKit-iOS
 //
-//  v0.7.20 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/3/1.
+//  v0.8.0 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/3/1.
 //  Copyright © 2016年 LeanCloud. All rights reserved.
 //
 
@@ -41,6 +41,7 @@ NSString *const LCCKConversationServiceErrorDomain = @"LCCKConversationServiceEr
 @synthesize conversationInvalidedHandler = _conversationInvalidedHandler;
 @synthesize loadLatestMessagesHandler = _loadLatestMessagesHandler;
 @synthesize filterMessagesBlock = _filterMessagesBlock;
+@synthesize sendMessageHookBlock = _sendMessageHookBlock;
 
 /**
  *  根据 conversationId 获取对话

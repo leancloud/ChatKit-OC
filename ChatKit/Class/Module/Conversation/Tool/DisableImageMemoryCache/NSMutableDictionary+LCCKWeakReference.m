@@ -2,7 +2,7 @@
 //  NSMutableDictionary+LCCKWeakReference.m
 //  Kuber
 //
-//  v0.7.20 Created by Kuber on 16/4/29.
+//  v0.8.0 Created by Kuber on 16/4/29.
 //  Copyright © 2016年 Huaxu Technology. All rights reserved.
 //
 

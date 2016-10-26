@@ -2,7 +2,7 @@
 //  UIColor+CJ.m
 //  LinkLabelDemo
 //
-//  v0.7.20 Created by CoderJee on 15/4/14.
+//  v0.8.0 Created by CoderJee on 15/4/14.
 //  Copyright (c) 2015年 com.huazhi. All rights reserved.
 //
 

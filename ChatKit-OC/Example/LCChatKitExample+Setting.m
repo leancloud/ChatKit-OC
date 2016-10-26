@@ -2,7 +2,7 @@
 //  LCChatKitExample.m
 //  LeanCloudChatKit-iOS
 //
-//  v0.7.20 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/2/24.
+//  v0.8.0 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/2/24.
 //  Copyright © 2016年 LeanCloud. All rights reserved.
 //
 
@@ -68,6 +68,8 @@ static NSString *const LCCKAPPKEY = @"ye24iIK6ys8IvaISMC4Bs5WK";
     //[self lcck_setupAvatarImageCornerRadius];
     //筛选消息
     //[self lcck_setupFilterMessage];
+    //发送消息HOOK
+    //[self lcck_setupSendMessageHook];
     [self lcck_setupNotification];
     [self lcck_setupPreviewLocationMessage];
 }
@@ -525,6 +527,27 @@ setLoadLatestMessagesHandler:^(LCCKConversationViewController *conversationContr
          }
          completionHandler([filterMessages copy], nil);
      }];
+}
+
+- (void)lcck_setupSendMessageHook {
+    [[LCChatKit sharedInstance] setSendMessageHookBlock:^(LCCKConversationViewController *conversationController, __kindof AVIMTypedMessage *message, LCCKSendMessageHookCompletionHandler completionHandler) {
+        if ([message.clientId isEqualToString:@"Jerry"]) {
+            NSInteger code = 0;
+            NSString *errorReasonText = @"不允许Jerry发送消息";
+            NSDictionary *errorInfo = @{
+                                        @"code":@(code),
+                                        NSLocalizedDescriptionKey : errorReasonText,
+                                        };
+            NSError *error = [NSError errorWithDomain:NSStringFromClass([self class])
+                                                 code:code
+                                             userInfo:errorInfo];
+            
+            completionHandler(NO, error);
+            [conversationController sendLocalFeedbackTextMessge:errorReasonText];
+        } else {
+            completionHandler(YES, nil);
+        }
+    }];
 }
 
 /**

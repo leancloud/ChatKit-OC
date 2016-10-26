@@ -3,7 +3,7 @@
 //  LCCKChatExample
 //  LCCKChatMessageCell 是所有LCCKChatCell的父类
 //  提供了delegate,messageOwner,messageType属性
-//  v0.7.20 Created by ElonChan (微信向我报BUG:chenyilong1010) ( https://github.com/leancloud/ChatKit-OC ) on 15/11/13.
+//  v0.8.0 Created by ElonChan (微信向我报BUG:chenyilong1010) ( https://github.com/leancloud/ChatKit-OC ) on 15/11/13.
 //  Copyright © 2015年 https://LeanCloud.cn . All rights reserved.
 //
 

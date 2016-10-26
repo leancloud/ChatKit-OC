@@ -2,7 +2,7 @@
 //  LCCKConversationViewModel.m
 //  LCCKChatExample
 //
-//  v0.7.20 Created by ElonChan (微信向我报BUG:chenyilong1010) ( https://github.com/leancloud/ChatKit-OC ) on 15/11/18.
+//  v0.8.0 Created by ElonChan (微信向我报BUG:chenyilong1010) ( https://github.com/leancloud/ChatKit-OC ) on 15/11/18.
 //  Copyright © 2015年 https://LeanCloud.cn . All rights reserved.
 //
 #if __has_include(<ChatKit/LCChatKit.h>)
@@ -452,9 +452,10 @@ fromTimestamp     |    toDate   |                |  上次上拉刷新顶端，�
         message.ownerType = LCCKMessageOwnerTypeSelf;
         avimTypedMessage = [AVIMTypedMessage lcck_messageWithLCCKMessage:message];
     } else {
-        avimTypedMessage = aMessage ;
+        avimTypedMessage = aMessage;
     }
     [avimTypedMessage lcck_setObject:@([self.parentConversationViewController getConversationIfExists].lcck_type) forKey:LCCKCustomMessageConversationTypeKey];
+    [avimTypedMessage setValue:[LCCKSessionService sharedInstance].clientId forKey:@"clientId"];//for LCCKSendMessageHookBlock
     [self.avimTypedMessage addObject:avimTypedMessage];
     [self preloadMessageToTableView:aMessage callback:^{
         if (!self.currentConversationId || self.currentConversationId.length == 0) {
@@ -467,22 +468,38 @@ fromTimestamp     |    toDate   |                |  上次上拉刷新顶端，�
             NSError *error = [NSError errorWithDomain:NSStringFromClass([self class])
                                                  code:code
                                              userInfo:errorInfo];
-            
             !failed ?: failed(YES, error);
         }
-        [[LCCKConversationService sharedInstance] sendMessage:avimTypedMessage
-                                                 conversation:self.currentConversation
-                                                progressBlock:progressBlock
-                                                     callback:^(BOOL succeeded, NSError *error) {
-                                                         if (error) {
-                                                             !failed ?: failed(succeeded, error);
-                                                         } else {
-                                                             !success ?: success(succeeded, nil);
-                                                         }
-                                                         // cache file type messages even failed
-                                                         [LCCKConversationService cacheFileTypeMessages:@[avimTypedMessage] callback:nil];
-                                                     }];
         
+        void(^sendMessageCallBack)() = ^() {
+            [[LCCKConversationService sharedInstance] sendMessage:avimTypedMessage
+                                                     conversation:self.currentConversation
+                                                    progressBlock:progressBlock
+                                                         callback:^(BOOL succeeded, NSError *error) {
+                                                             if (error) {
+                                                                 !failed ?: failed(succeeded, error);
+                                                             } else {
+                                                                 !success ?: success(succeeded, nil);
+                                                             }
+                                                             // cache file type messages even failed
+                                                             [LCCKConversationService cacheFileTypeMessages:@[avimTypedMessage] callback:nil];
+                                                         }];
+            
+        };
+        
+        LCCKSendMessageHookBlock sendMessageHookBlock = [[LCCKConversationService sharedInstance] sendMessageHookBlock];
+        if (!sendMessageHookBlock) {
+            sendMessageCallBack();
+        } else {
+            LCCKSendMessageHookCompletionHandler completionHandler = ^(BOOL granted, NSError *aError) {
+                if (granted) {
+                    sendMessageCallBack();
+                } else {
+                    !failed ?: failed(YES, aError);
+                }
+            };
+            sendMessageHookBlock(self.parentConversationViewController, avimTypedMessage, completionHandler);
+        }
     }];
 }
 

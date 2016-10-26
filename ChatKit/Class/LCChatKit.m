@@ -2,7 +2,7 @@
 //  LCChatKit.m
 //  LeanCloudChatKit-iOS
 //
-//  v0.7.20 Created by ElonChan (wechat:chenyilong1010) on 16/2/22.
+//  v0.8.0 Created by ElonChan (wechat:chenyilong1010) on 16/2/22.
 //  Copyright © 2016年 LeanCloud. All rights reserved.
 //
 
@@ -292,6 +292,10 @@
 
 - (void)setFilterMessagesBlock:(LCCKFilterMessagesBlock)filterMessagesBlock {
     [self.conversationService setFilterMessagesBlock:filterMessagesBlock];
+}
+
+- (void)setSendMessageHookBlock:(LCCKSendMessageHookBlock)sendMessageHookBlock {
+    [self.conversationService setSendMessageHookBlock:sendMessageHookBlock];
 }
 
 - (void)createConversationWithMembers:(NSArray *)members type:(LCCKConversationType)type unique:(BOOL)unique callback:(AVIMConversationResultBlock)callback {
