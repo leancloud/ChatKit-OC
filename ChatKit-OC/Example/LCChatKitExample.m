@@ -48,7 +48,6 @@
     [LCCKInputViewPluginTakePhoto registerSubclass];
     [LCCKInputViewPluginPickImage registerSubclass];
     [LCCKInputViewPluginLocation registerSubclass];
-    [[RedpacketConfig sharedConfig] lcck_setting];
 }
 
 + (void)invokeThisMethodInDidRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
