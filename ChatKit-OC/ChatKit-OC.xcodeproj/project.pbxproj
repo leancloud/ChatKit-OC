@@ -41,6 +41,13 @@
 		9A53BE421D8BB19C00AAB118 /* LCChatKitExample+Setting.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A53BE3D1D8BB19C00AAB118 /* LCChatKitExample+Setting.m */; };
 		9A53BE431D8BB19C00AAB118 /* LCCKTabBarControllerConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A53BE3F1D8BB19C00AAB118 /* LCCKTabBarControllerConfig.m */; };
 		9A7E2DE91D5F1040003A7312 /* LCCKContactManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A7E2DE81D5F1040003A7312 /* LCCKContactManager.m */; };
+		9AB37B2A1DC86A60000782F2 /* ChatKit 自定义样式.md in Sources */ = {isa = PBXBuildFile; fileRef = 9AB37B251DC86A60000782F2 /* ChatKit 自定义样式.md */; };
+		9AB37B2B1DC86A60000782F2 /* ChatKit 自定义业务.md in Sources */ = {isa = PBXBuildFile; fileRef = 9AB37B261DC86A60000782F2 /* ChatKit 自定义业务.md */; };
+		9AB37B2C1DC86A60000782F2 /* ChatKit.podspec in Resources */ = {isa = PBXBuildFile; fileRef = 9AB37B271DC86A60000782F2 /* ChatKit.podspec */; };
+		9AB37B2D1DC86A60000782F2 /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = 9AB37B281DC86A60000782F2 /* README.md */; };
+		9AB37B2E1DC86A60000782F2 /* REDPACKET.md in Sources */ = {isa = PBXBuildFile; fileRef = 9AB37B291DC86A60000782F2 /* REDPACKET.md */; };
+		9AB37B311DC86A6E000782F2 /* issue_template.md in Sources */ = {isa = PBXBuildFile; fileRef = 9AB37B2F1DC86A6E000782F2 /* issue_template.md */; };
+		9AB37B321DC86A6E000782F2 /* pull_request_template.md in Sources */ = {isa = PBXBuildFile; fileRef = 9AB37B301DC86A6E000782F2 /* pull_request_template.md */; };
 		9AD665CC1D2277830040A4E3 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A0B721B1CED662D004FDACC /* SystemConfiguration.framework */; };
 		9AD665CD1D22778B0040A4E3 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A0B721D1CED6637004FDACC /* MobileCoreServices.framework */; };
 		9AD665CE1D2277920040A4E3 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A0B721F1CED6644004FDACC /* CoreTelephony.framework */; };
@@ -135,6 +142,13 @@
 		9A7E2DE71D5F1040003A7312 /* LCCKContactManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKContactManager.h; sourceTree = "<group>"; };
 		9A7E2DE81D5F1040003A7312 /* LCCKContactManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCKContactManager.m; sourceTree = "<group>"; };
 		9AAFE6571D48C863004A0309 /* zh-Hans-CN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans-CN"; path = "zh-Hans-CN.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
+		9AB37B251DC86A60000782F2 /* ChatKit 自定义样式.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = "ChatKit 自定义样式.md"; path = "../../../../../ChatKit 自定义样式.md"; sourceTree = "<group>"; };
+		9AB37B261DC86A60000782F2 /* ChatKit 自定义业务.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = "ChatKit 自定义业务.md"; path = "../../../../../ChatKit 自定义业务.md"; sourceTree = "<group>"; };
+		9AB37B271DC86A60000782F2 /* ChatKit.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = ChatKit.podspec; path = ../../../../../ChatKit.podspec; sourceTree = "<group>"; };
+		9AB37B281DC86A60000782F2 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../../../../../README.md; sourceTree = "<group>"; };
+		9AB37B291DC86A60000782F2 /* REDPACKET.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = REDPACKET.md; path = ../../../../../REDPACKET.md; sourceTree = "<group>"; };
+		9AB37B2F1DC86A6E000782F2 /* issue_template.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = issue_template.md; path = ../../../../../.github/issue_template.md; sourceTree = "<group>"; };
+		9AB37B301DC86A6E000782F2 /* pull_request_template.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = pull_request_template.md; path = ../../../../../.github/pull_request_template.md; sourceTree = "<group>"; };
 		D62193C0ECACB72DC928AD70 /* libPods-ChatKit-OC.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ChatKit-OC.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E55D34EC8F162DB5443587B0 /* Pods-ChatKit-OC.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChatKit-OC.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ChatKit-OC/Pods-ChatKit-OC.debug.xcconfig"; sourceTree = "<group>"; };
 		E7586C4E1D630681000C18B4 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
@@ -361,6 +375,13 @@
 				9A4730561CECAEC500AEB86F /* LaunchScreen.storyboard */,
 				9A4730581CECAEC500AEB86F /* Info.plist */,
 				9A4730591CECAEC500AEB86F /* main.m */,
+				9AB37B2F1DC86A6E000782F2 /* issue_template.md */,
+				9AB37B301DC86A6E000782F2 /* pull_request_template.md */,
+				9AB37B251DC86A60000782F2 /* ChatKit 自定义样式.md */,
+				9AB37B261DC86A60000782F2 /* ChatKit 自定义业务.md */,
+				9AB37B271DC86A60000782F2 /* ChatKit.podspec */,
+				9AB37B281DC86A60000782F2 /* README.md */,
+				9AB37B291DC86A60000782F2 /* REDPACKET.md */,
 			);
 			path = Other;
 			sourceTree = "<group>";
@@ -552,6 +573,7 @@
 			files = (
 				9A4730711CECAEC500AEB86F /* LaunchScreen.storyboard in Resources */,
 				9A4730701CECAEC500AEB86F /* Assets.xcassets in Resources */,
+				9AB37B2C1DC86A60000782F2 /* ChatKit.podspec in Resources */,
 				9A2669CE1D6DA89100B66545 /* LCCKVCardView.xib in Resources */,
 				9A2669CA1D6DA89100B66545 /* calling_card_bg@2x.png in Resources */,
 				9A4730681CECAEC500AEB86F /* LCCKLoginViewController.xib in Resources */,
@@ -678,17 +700,22 @@
 				9A4730671CECAEC500AEB86F /* LCCKLoginViewController.m in Sources */,
 				9A53BE421D8BB19C00AAB118 /* LCChatKitExample+Setting.m in Sources */,
 				9A53BE411D8BB19C00AAB118 /* LCChatKitExample.m in Sources */,
+				9AB37B2D1DC86A60000782F2 /* README.md in Sources */,
 				9A2669C81D6DA89100B66545 /* LCCKInputViewPluginConversationBackground.m in Sources */,
 				9A53BE371D8BB13E00AAB118 /* RedpacketTakenMessageCell.m in Sources */,
 				9A2669CC1D6DA89100B66545 /* LCCKVCardMessageCell.m in Sources */,
 				9A53BE2E1D8BB13E00AAB118 /* AppDelegate+RedPacket.m in Sources */,
 				9A2669CD1D6DA89100B66545 /* LCCKVCardView.m in Sources */,
 				9A47306A1CECAEC500AEB86F /* DEMODataSource.m in Sources */,
+				9AB37B321DC86A6E000782F2 /* pull_request_template.md in Sources */,
 				9A2669CB1D6DA89100B66545 /* LCCKInputViewPluginVCard.m in Sources */,
 				9A47306C1CECAEC500AEB86F /* LCCKMapViewController.m in Sources */,
+				9AB37B2A1DC86A60000782F2 /* ChatKit 自定义样式.md in Sources */,
+				9AB37B2B1DC86A60000782F2 /* ChatKit 自定义业务.md in Sources */,
 				9A4730621CECAEC500AEB86F /* LCCKUser.m in Sources */,
 				9A47306E1CECAEC500AEB86F /* LCCKUtil.m in Sources */,
 				9A53BE2F1D8BB13E00AAB118 /* RedpacketConfig.m in Sources */,
+				9AB37B311DC86A6E000782F2 /* issue_template.md in Sources */,
 				9A53BE2C1D8BB13E00AAB118 /* AVIMTypedMessageRedPacketTaken.m in Sources */,
 				9A53BE2B1D8BB13E00AAB118 /* AVIMTypedMessageRedPacket.m in Sources */,
 				9A53BE361D8BB13E00AAB118 /* RedpacketMessageCell.m in Sources */,
@@ -701,6 +728,7 @@
 				9A47306B1CECAEC500AEB86F /* LCCKLoginDataSource.m in Sources */,
 				9A7E2DE91D5F1040003A7312 /* LCCKContactManager.m in Sources */,
 				9A53BE351D8BB13E00AAB118 /* RedPacketInputViewPlugin.m in Sources */,
+				9AB37B2E1DC86A60000782F2 /* REDPACKET.md in Sources */,
 				9A2669C91D6DA89100B66545 /* LCCKVCardMessage.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
