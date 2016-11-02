@@ -70,9 +70,9 @@
 #pragma mark - Event Response
 
 - (void)clickPublish {
-    //如果提示群已满，可以换一个id，比如：581966d28159ccabfc3bf892
+    //如果提示群已满，可以换一个id
     //普通群人数上限是500，暂态聊天室无人数限制
-    [LCChatKitExample exampleOpenConversationViewControllerWithConversaionId:@"570da6a9daeb3a63ca5b07b0" fromNavigationController:nil];
+    [LCChatKitExample exampleOpenConversationViewControllerWithConversaionId:@"581966d28159ccabfc3bf892" fromNavigationController:nil];
 }
 
 + (CGFloat)constantOfPlusButtonCenterYOffsetForTabBarHeight:(CGFloat)tabBarHeight {
