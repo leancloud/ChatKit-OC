@@ -289,7 +289,9 @@ static NSString *const LCCKAPPKEY = @"ye24iIK6ys8IvaISMC4Bs5WK";
                                         subtitle:subTitle
                                             type:LCCKMessageNotificationTypeError];
          } else if (error.code == 4304) {
-             title = @"群已满";
+             [conversationController.navigationController popToRootViewControllerAnimated:YES];
+             title = @"群已满，普通群人数上限为500";
+             subTitle = @"暂态聊天室无人数限制";
              [LCCKUtil showNotificationWithTitle:title
                                         subtitle:subTitle
                                             type:LCCKMessageNotificationTypeError];
