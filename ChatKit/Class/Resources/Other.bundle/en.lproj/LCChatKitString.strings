@@ -46,8 +46,8 @@
 "connectFailed" = "connect failed";
 "requestForceSingleSignOnAuthorization" = "Force sign on?";
 "call" = "call";
-"unknownMessage" = "unknown message type, please update your APP";
-"unknownMessageType" = "unknown message type";
+"unknownMessage" = "Unsupported message, please update your APP";
+"unknownMessageType" = "Unsupported message type";
 "SingleWelcomeMessage" = "Hello!";
 "GroupWelcomeMessage" = "Hello!";
 "GroupWelcomeMessageWithNickName" = "Hello! I am ";

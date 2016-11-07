@@ -260,13 +260,13 @@ static BOOL AVIMClientHasInstantiated = NO;
 }
 
 - (void)sendCommand:(AVIMGenericCommand *)command {
-    if (_socketWrapper) {
-        switch (_status) {
-        case AVIMClientStatusClosing:
-        case AVIMClientStatusClosed: return;
-        default: break;
-        }
+    BOOL sendable = (
+        _socketWrapper != nil &&
+        _status != AVIMClientStatusClosing &&
+        _status != AVIMClientStatusClosed
+    );
 
+    if (sendable) {
         [_socketWrapper sendCommand:command];
     } else {
         AVIMCommandResultBlock callback = command.callback;
