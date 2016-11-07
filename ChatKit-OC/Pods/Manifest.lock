@@ -1,15 +1,15 @@
 PODS:
-  - AVOSCloud (3.6.0)
-  - AVOSCloudIM (3.6.0):
-    - AVOSCloud (= 3.6.0)
-    - AVOSCloudIM/_ARC (= 3.6.0)
-    - AVOSCloudIM/_NOARC (= 3.6.0)
-  - AVOSCloudIM/_ARC (3.6.0):
-    - AVOSCloud (= 3.6.0)
-    - AVOSCloudIM/_NOARC (= 3.6.0)
-  - AVOSCloudIM/_NOARC (3.6.0):
-    - AVOSCloud (= 3.6.0)
-  - ChatKit (0.7.21):
+  - AVOSCloud (3.6.1)
+  - AVOSCloudIM (3.6.1):
+    - AVOSCloud (= 3.6.1)
+    - AVOSCloudIM/_ARC (= 3.6.1)
+    - AVOSCloudIM/_NOARC (= 3.6.1)
+  - AVOSCloudIM/_ARC (3.6.1):
+    - AVOSCloud (= 3.6.1)
+    - AVOSCloudIM/_NOARC (= 3.6.1)
+  - AVOSCloudIM/_NOARC (3.6.1):
+    - AVOSCloud (= 3.6.1)
+  - ChatKit (0.8.0):
     - AVOSCloud (~> 3.6.0)
     - AVOSCloudIM (~> 3.6.0)
     - DACircularProgress (~> 2.3.1)
@@ -41,7 +41,7 @@ PODS:
     - SDWebImage (!= 3.7.2, ~> 3.7)
   - pop (1.0.9)
   - RedPacketAlipay (15.0.2)
-  - RedpacketLib (3.2.0):
+  - RedpacketLib (3.2.1):
     - RedPacketAlipay
   - SDWebImage (3.8.2):
     - SDWebImage/Core (= 3.8.2)
@@ -55,7 +55,7 @@ DEPENDENCIES:
   - CYLTableViewRowAction (= 1.0.0)
   - FTPopOverMenu
   - MLPAutoCompleteTextField
-  - RedpacketLib
+  - RedpacketLib (~> 3.2.1)
   - TWMessageBarManager
 
 EXTERNAL SOURCES:
@@ -63,9 +63,9 @@ EXTERNAL SOURCES:
     :path: ../
 
 SPEC CHECKSUMS:
-  AVOSCloud: be838e80e13c3247abf24d95e325b3fd515f9d12
-  AVOSCloudIM: 7044ffb9c883fedb8d9055db12e4f28c5160795d
-  ChatKit: d62998592fc7b52e237255c772ebf6ee8ee55d84
+  AVOSCloud: cc9b567da2d30f07e3da1e4db682cad9ff56a1b6
+  AVOSCloudIM: 7c30a50d1e8f6afee000a2037ea24eb6abcbc8db
+  ChatKit: 7c5fa96b01e69bcfc38b9158fdafe363ce56352b
   CYLTabBarController: c1a3eaee3081c84cd45105c5b4c26d62b747de67
   CYLTableViewRowAction: 66bd3f7478b46894ff40b74d892fc85aed41656b
   DACircularProgress: 4dd437c0fc3da5161cb289e07ac449493d41db71
@@ -80,11 +80,11 @@ SPEC CHECKSUMS:
   MWPhotoBrowser: 5836d7aa041dc05a13de380c246826578adc5ea5
   pop: f667631a5108a2e60d9e8797c9b32ddaf2080bce
   RedPacketAlipay: a5de6db2e2671fc9255d6d396be869e3ba2f0489
-  RedpacketLib: 6c0c08eafb8748895582d19d77f0c52da67b79b3
+  RedpacketLib: f5e202a1155ce5f8288244220e9726999c9e234c
   SDWebImage: 098e97e6176540799c27e804c96653ee0833d13c
   TWMessageBarManager: fd84e7948ba7968a2b5d9454859135761214ec56
   UITableView+FDTemplateLayoutCell: 02b508ab1cb4cea16a8c17ac83d2cd1fd72124f9
 
-PODFILE CHECKSUM: a4f89d0a6fa1ebd7484560dd3bbae2f34be233aa
+PODFILE CHECKSUM: 6971d949b6c2ec42d4d3a6a1e15d346abb74e09e
 
 COCOAPODS: 1.0.0

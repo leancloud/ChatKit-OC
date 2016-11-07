@@ -28,7 +28,7 @@ A LeanCloud Framework User Object that is a local representation of a user persi
  Gets the currently logged in user from disk and returns an instance of it.
  @return a AVUser that is the currently logged in user. If there is none, returns nil.
  */
-+ (instancetype)currentUser;
++ (nullable instancetype)currentUser;
 
 /*!
  * change the current login user manually.
