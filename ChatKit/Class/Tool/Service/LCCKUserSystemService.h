@@ -21,7 +21,8 @@
             //MyUser is a subclass of AVUser, conforming to the LCCKUserDelegate protocol.
             AVQuery *query = [LCCKUser query];
             NSError *error = nil;
-            LCCKUser *object = (LCCKUser *)[query getObjectWithId:userId error:&error];
+            AVUser *user = [query getObjectWithId:userId error:&error];
+            LCCKUser *object = [LCCKUser userWithClientId:user.objectId];
             if (error == nil) {
                 [userList addObject:object];
             } else {
