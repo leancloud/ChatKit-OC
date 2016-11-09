@@ -699,7 +699,7 @@ setLoadLatestMessagesHandler:^(LCCKConversationViewController *conversationContr
                                               rowActionWithStyle:UITableViewRowActionStyleDefault
                                               title:LCCKLocalizedStrings(@"Delete")
                                               handler:^(UITableViewRowAction *action, NSIndexPath *indexPath) {
-                                                  [[LCChatKit sharedInstance]                                               deleteRecentConversationWithConversationId:conversation.conversationId];
+                                                  [[LCChatKit sharedInstance] deleteRecentConversationWithConversationId:conversation.conversationId];
                                               }];
     
     UITableViewRowAction *actionItemChangeGroupAvatar = [UITableViewRowAction
@@ -709,8 +709,7 @@ setLoadLatestMessagesHandler:^(LCCKConversationViewController *conversationContr
                                                              [[self class] lcck_exampleChangeGroupAvatarURLsForConversationId:conversation.conversationId
                                                               shouldInsert:NO];
                                                          }];
-    actionItemChangeGroupAvatar.backgroundColor =
-    [UIColor colorWithRed:251 / 255.f green:186 / 255.f blue:11 / 255.f alpha:1.0];
+    actionItemChangeGroupAvatar.backgroundColor = [UIColor colorWithRed:251 / 255.f green:186 / 255.f blue:11 / 255.f alpha:1.0];
     if (conversation.lcck_type == LCCKConversationTypeSingle) {
         return @[ actionItemDelete, actionItemMore ];
     }
@@ -752,9 +751,8 @@ typedef void (^UITableViewRowActionHandler)(UITableViewRowAction *action, NSInde
      cyl_popSelectTabBarChildViewControllerAtIndex:0
      completion:^(__kindof UIViewController
                   *selectedChildTabBarController) {
-         [selectedChildTabBarController.navigationController
-          pushViewController:viewController
-          animated:YES];
+         [selectedChildTabBarController.navigationController pushViewController:viewController
+                                                                       animated:YES];
      }];
 }
 

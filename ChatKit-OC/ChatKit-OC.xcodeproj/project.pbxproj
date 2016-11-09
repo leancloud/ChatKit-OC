@@ -848,11 +848,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = Y6X8P44TM5;
 				ENABLE_BITCODE = NO;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/RedpacketStaticLib",
-					"$(PROJECT_DIR)/Example/Class/Module/Redpacket/Vendor/RedpacketStaticLib",
-				);
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = "$(SRCROOT)/Example/Class/Module/Other/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -878,8 +874,6 @@
 					"\"$PODS_CONFIGURATION_BUILD_DIR/pop\"",
 					"\"$(SRCROOT)/../../RedpacketStaticLib\"/**",
 					"\"$(SRCROOT)/../../RedpacketStaticLib/AlipayLib\"/**",
-					"$(PROJECT_DIR)/RedpacketStaticLib/lib",
-					"$(PROJECT_DIR)/Example/Class/Module/Redpacket/Vendor/RedpacketStaticLib/lib",
 				);
 				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = com.chatkit.leancloud;
@@ -901,11 +895,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = "";
 				ENABLE_BITCODE = NO;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/RedpacketStaticLib",
-					"$(PROJECT_DIR)/Example/Class/Module/Redpacket/Vendor/RedpacketStaticLib",
-				);
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = "$(SRCROOT)/Example/Class/Module/Other/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -931,8 +921,6 @@
 					"\"$PODS_CONFIGURATION_BUILD_DIR/pop\"",
 					"\"$(SRCROOT)/../../RedpacketStaticLib\"/**",
 					"\"$(SRCROOT)/../../RedpacketStaticLib/AlipayLib\"/**",
-					"$(PROJECT_DIR)/RedpacketStaticLib/lib",
-					"$(PROJECT_DIR)/Example/Class/Module/Redpacket/Vendor/RedpacketStaticLib/lib",
 				);
 				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = com.chatkit.leancloud;
