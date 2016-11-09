@@ -317,18 +317,10 @@ NSString *const LCCKUserSystemServiceErrorDomain = @"LCCKUserSystemServiceErrorD
                 ----reason: %@                              \n \
                 ------ END -------------------------------- \n\n";
                 NSString *errorReasonText = [NSString stringWithFormat:formatString,
-                                    @(__PRETTY_FUNCTION__),
-                                    @(__LINE__),
-                                    @"please make sure user's clientId is not nil in this method `setFetchProfilesBlock:`"];
-                NSInteger code = 0;
-                NSDictionary *errorInfo = @{
-                                            @"code":@(code),
-                                            NSLocalizedDescriptionKey : errorReasonText,
-                                            };
-                NSError *error = [NSError errorWithDomain:LCCKUserSystemServiceErrorDomain
-                                                     code:code
-                                                 userInfo:errorInfo];
-                LCCKLog(@"%@", error.description);
+                                             @(__PRETTY_FUNCTION__),
+                                             @(__LINE__),
+                                             @"User's clientId can not be nil, please make sure when you set `setFetchProfilesBlock:`"];
+                LCCKLog(@"%@", errorReasonText);
             }
         }
     }
