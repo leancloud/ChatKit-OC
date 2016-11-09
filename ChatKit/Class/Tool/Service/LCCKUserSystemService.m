@@ -307,7 +307,23 @@ NSString *const LCCKUserSystemServiceErrorDomain = @"LCCKUserSystemServiceErrorD
 - (void)cacheUsers:(NSArray<id<LCCKUserDelegate>> *)users {
     if (users.count > 0) {
         for (id<LCCKUserDelegate> user in users) {
-            [self setUser:user forClientId:user.clientId];
+            @try {
+                [self setUser:user forClientId:user.clientId];
+            } @catch (NSException *exception) {
+                NSString *formatString = @"\n\n\
+                ------ BEGIN NSException Log ---------------\n \
+                class name: %@                              \n \
+                ------line: %@                              \n \
+                ----reason: %@                              \n \
+                ------ END -------------------------------- \n\n";
+                NSString *reason = [NSString stringWithFormat:formatString,
+                                    @(__PRETTY_FUNCTION__),
+                                    @(__LINE__),
+                                    @"user's clientId can not be nil"];
+                @throw [NSException exceptionWithName:NSGenericException
+                                               reason:reason
+                                             userInfo:nil];
+            }
         }
     }
 }
