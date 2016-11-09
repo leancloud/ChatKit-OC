@@ -316,13 +316,19 @@ NSString *const LCCKUserSystemServiceErrorDomain = @"LCCKUserSystemServiceErrorD
                 ------line: %@                              \n \
                 ----reason: %@                              \n \
                 ------ END -------------------------------- \n\n";
-                NSString *reason = [NSString stringWithFormat:formatString,
+                NSString *errorReasonText = [NSString stringWithFormat:formatString,
                                     @(__PRETTY_FUNCTION__),
                                     @(__LINE__),
-                                    @"user's clientId can not be nil"];
-                @throw [NSException exceptionWithName:NSGenericException
-                                               reason:reason
-                                             userInfo:nil];
+                                    @"please make sure user's clientId is not nil in this method `setFetchProfilesBlock:`"];
+                NSInteger code = 0;
+                NSDictionary *errorInfo = @{
+                                            @"code":@(code),
+                                            NSLocalizedDescriptionKey : errorReasonText,
+                                            };
+                NSError *error = [NSError errorWithDomain:LCCKUserSystemServiceErrorDomain
+                                                     code:code
+                                                 userInfo:errorInfo];
+                LCCKLog(@"%@", error.description);
             }
         }
     }
