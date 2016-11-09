@@ -35,8 +35,6 @@
     return self;
 }
 
-
-
 #pragma mark -
 #pragma mark - Public Methods
 
@@ -45,8 +43,7 @@
  Create a custom UIButton without title and add it to the center of our tab bar
  *
  */
-+ (instancetype)plusButton
-{
++ (instancetype)plusButton {
 
     UIImage *buttonImage = [UIImage imageNamed:@"tabbar_compose_button"];
     UIImage *highlightImage = [UIImage imageNamed:@"tabbar_compose_button_highlighted"];
