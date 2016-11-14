@@ -689,7 +689,6 @@ SecCertificateRef LCGetCertificateFromBase64String(NSString *base64);
 }
 
 - (void)sendCommand:(AVIMGenericCommand *)genericCommand {
-    AVLoggerInfo(AVLoggerDomainIM, LCIM_OUT_COMMAND_LOG_FORMAT, [AVIMCommandFormatter commandType:genericCommand.cmd], [genericCommand avim_messageClass], [genericCommand avim_description] );
     LCIMMessage *messageCommand = [genericCommand avim_messageCommand];
     BOOL needResponse = genericCommand.needResponse;
     if (messageCommand && _webSocket.readyState == AVIM_OPEN) {
@@ -725,6 +724,7 @@ SecCertificateRef LCGetCertificateFromBase64String(NSString *base64);
             [[NSNotificationCenter defaultCenter] postNotificationName:AVIM_NOTIFICATION_WEBSOCKET_ERROR object:self userInfo:@{@"error": error}];
         }
     }
+    AVLoggerInfo(AVLoggerDomainIM, LCIM_OUT_COMMAND_LOG_FORMAT, [AVIMCommandFormatter commandType:genericCommand.cmd], [genericCommand avim_messageClass], [genericCommand avim_description] );
 }
 
 - (void)sendPing {
