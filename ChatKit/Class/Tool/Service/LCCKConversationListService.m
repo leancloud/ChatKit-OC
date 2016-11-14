@@ -51,14 +51,20 @@
             if (lastestMessages.count > 0) {
                 AVIMTypedMessage *avimTypedMessage = [lastestMessages[0] lcck_getValidTypedMessage];
                 
-                NSArray *visiableForPartClientIds = [avimTypedMessage.attributes
+                id visiableForPartClientIds = [avimTypedMessage.attributes
                                                      valueForKey:LCCKCustomMessageOnlyVisiableForPartClientIds];
+                BOOL isArray = [visiableForPartClientIds isKindOfClass:[NSArray class]];
+                BOOL isString = [visiableForPartClientIds isKindOfClass:[NSString class]];
                 if (!visiableForPartClientIds) {
                     conversation.lcck_lastMessage = avimTypedMessage;
-                } else if (visiableForPartClientIds.count > 0) {
+                } else if (isArray && ([(NSArray *)visiableForPartClientIds count] > 0)) {
                     BOOL visiableForCurrentClientId =
                     [visiableForPartClientIds containsObject:[LCChatKit sharedInstance].clientId];
                     if (visiableForCurrentClientId) {
+                        conversation.lcck_lastMessage = avimTypedMessage;
+                    }
+                } else if (isString && ([(NSString *)visiableForPartClientIds length] > 0)) {
+                    if ([visiableForPartClientIds isEqualToString:[LCChatKit sharedInstance].clientId]) {
                         conversation.lcck_lastMessage = avimTypedMessage;
                     }
                 }
