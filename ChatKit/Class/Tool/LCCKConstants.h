@@ -221,6 +221,7 @@ static NSString *const LCCKCustomMessageTypeTitleKey = @"typeTitle";
 static NSString *const LCCKCustomMessageSummaryKey = @"summary";
 
 static NSString *const LCCKCustomMessageIsCustomKey = @"isCustom";
+
 static NSString *const LCCKCustomMessageOnlyVisiableForPartClientIds = @"OnlyVisiableForPartClientIds";
 
 /*!

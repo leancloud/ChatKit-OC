@@ -576,8 +576,10 @@ static BOOL AVIMClientHasInstantiated = NO;
     [[NSNotificationCenter defaultCenter] removeObserver:self name:AVIM_NOTIFICATION_WEBSOCKET_ERROR object:_socketWrapper];
 }
 
-- (void)processClientStatusAfterWebSocketOffline {
-    [self removeWebSocketNotification];
+- (void)processClientStatusAfterWebSocketOfflineWithError:(NSError *)error {
+    if (!error) {
+        [self removeWebSocketNotification];
+    }
     [[AVInstallation currentInstallation] removeObject:_clientId forKey:@"channels"];
     if ([[AVInstallation currentInstallation] deviceToken]) {
         [[AVInstallation currentInstallation] saveInBackground];
@@ -595,9 +597,7 @@ static BOOL AVIMClientHasInstantiated = NO;
         AVIMSessionCommand *sessionCommand = [[AVIMSessionCommand alloc] init];
         [genericCommand avim_addRequiredKeyWithCommand:sessionCommand];
         [genericCommand setCallback:^(AVIMGenericCommand *outCommand, AVIMGenericCommand *inCommand, NSError *error) {
-            if (!error) {
-                [self processClientStatusAfterWebSocketOffline];
-            }
+            [self processClientStatusAfterWebSocketOfflineWithError:error];
             [AVIMBlockHelper callBooleanResultBlock:callback error:error];
         }];
         [self sendCommand:genericCommand];
@@ -958,7 +958,7 @@ static BOOL AVIMClientHasInstantiated = NO;
             [self changeStatus:AVIMClientStatusClosed];
             if ([self.delegate respondsToSelector:@selector(client:didOfflineWithError:)]) {
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    [self processClientStatusAfterWebSocketOffline];
+                    [self processClientStatusAfterWebSocketOfflineWithError:nil];
                     [self.delegate client:self didOfflineWithError:[genericCommand avim_errorObject]];
                 });
             }

@@ -34,8 +34,7 @@
         [members enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
             [memberString appendFormat:@"%@,",obj];
         }];
-        [self lcck_setObject:[memberString substringToIndex:memberString.length -1] forKey:LCCKCustomMessageOnlyVisiableForPartClientIds];
-        
+        [self lcck_setObject:@[[memberString substringToIndex:memberString.length -1]] forKey:LCCKCustomMessageOnlyVisiableForPartClientIds];
     }
     return self;
 }
