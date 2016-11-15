@@ -60,7 +60,7 @@
     self.firstViewController = firstViewController;
     NSArray *users = [[LCChatKit sharedInstance] getCachedProfilesIfExists:self.allPersonIds shouldSameCount:YES error:nil];
     NSString *currentClientID = [[LCChatKit sharedInstance] clientId];
-    LCCKContactListViewController *secondViewController = [[LCCKContactListViewController alloc] initWithContacts:[NSSet setWithArray:users] userIds:[NSSet setWithArray:self.allPersonIds] excludedUserIds:[NSSet setWithArray:@[currentClientID]] mode:LCCKContactListModeNormal];
+    LCCKContactListViewController *secondViewController = [[LCCKContactListViewController alloc] initWithContacts:[NSSet setWithArray:users]  userIds:[NSSet setWithArray:self.allPersonIds] excludedUserIds:[NSSet setWithArray:@[currentClientID]] mode:LCCKContactListModeNormal];
     [secondViewController setSelectedContactCallback:^(UIViewController *viewController, NSString *peerId) {
         [LCChatKitExample exampleOpenConversationViewControllerWithPeerId:peerId fromNavigationController:self.tabBarController.navigationController];
     }];

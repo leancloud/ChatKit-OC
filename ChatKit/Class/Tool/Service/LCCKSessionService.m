@@ -90,7 +90,7 @@ NSString *const LCCKSessionServiceErrorDomain = @"LCCKSessionServiceErrorDomain"
     [_client closeWithCallback:^(BOOL succeeded, NSError *error) {
         !callback ?: callback(succeeded, error);
         if (succeeded) {
-            [self closeService];
+            [self resetService];
         }
     }];
 }
@@ -105,7 +105,7 @@ NSString *const LCCKSessionServiceErrorDomain = @"LCCKSessionServiceErrorDomain"
     [LCCKUserSystemService sharedInstance];
 }
 
-- (void)closeService {
+- (void)resetService {
     [LCCKSingleton destroyAllInstance];
 }
 
@@ -149,6 +149,7 @@ NSString *const LCCKSessionServiceErrorDomain = @"LCCKSessionServiceErrorDomain"
 
 - (void)handleSingleSignOnError:(NSError *)aError callback:(LCCKBooleanResultBlock)aCallback {
     if (aError.code == 4111) {
+        [self resetService];
         [self requestForceSingleSignOnAuthorizationWithCallback:^(BOOL granted, NSError *theError) {
             [self reconnectForViewController:nil error:aError granted:granted callback:aCallback];
         }];
