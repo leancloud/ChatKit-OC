@@ -3,7 +3,7 @@
 <p align="center">
 ![enter image description here](https://img.shields.io/badge/pod-v0.8.1-brightgreen.svg)  ![enter image description here](https://img.shields.io/badge/platform-iOS%207.0%2B-ff69b5618733984.svg) 
 <a href="https://github.com/leancloud/ChatKit-OC/blob/master/LICENSE"><img src="https://img.shields.io/badge/license-MIT-green.svg?style=flat"></a>[ CocoaPods-Doc](http://cocoapods.org/pods/ChatKit) 
-[![git-brag-stats](https://labs.turbo.run/git-brag?user=turbo&repo=js&maxn=7)](https://github.com/turbo/git-brag)
+[![git-brag-stats](https://labs.turbo.run/git-brag?user=leancloud&repo=ChatKit-OC&maxn=7)](https://github.com/turbo/git-brag)
 
 </a>
 
