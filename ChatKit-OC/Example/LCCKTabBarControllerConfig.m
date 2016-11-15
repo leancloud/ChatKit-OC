@@ -2,7 +2,7 @@
 //  LCChatKitExample.m
 //  LeanCloudChatKit-iOS
 //
-//  v0.8.1 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/2/24.
+//  v0.8.2 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/2/24.
 //  Copyright © 2016年 LeanCloud. All rights reserved.
 //
 
@@ -60,7 +60,7 @@
     self.firstViewController = firstViewController;
     NSArray *users = [[LCChatKit sharedInstance] getCachedProfilesIfExists:self.allPersonIds shouldSameCount:YES error:nil];
     NSString *currentClientID = [[LCChatKit sharedInstance] clientId];
-    LCCKContactListViewController *secondViewController = [[LCCKContactListViewController alloc] initWithContacts:[NSSet setWithArray:users] userIds:[NSSet setWithArray:self.allPersonIds] excludedUserIds:[NSSet setWithArray:@[currentClientID]] mode:LCCKContactListModeNormal];
+    LCCKContactListViewController *secondViewController = [[LCCKContactListViewController alloc] initWithContacts:[NSSet setWithArray:users]  userIds:[NSSet setWithArray:self.allPersonIds] excludedUserIds:[NSSet setWithArray:@[currentClientID]] mode:LCCKContactListModeNormal];
     [secondViewController setSelectedContactCallback:^(UIViewController *viewController, NSString *peerId) {
         [LCChatKitExample exampleOpenConversationViewControllerWithPeerId:peerId fromNavigationController:self.tabBarController.navigationController];
     }];

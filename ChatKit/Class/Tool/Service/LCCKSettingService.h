@@ -2,7 +2,7 @@
 //  LCCKSettingService.h
 //  LeanCloudChatKit-iOS
 //
-//  v0.8.1 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/2/23.
+//  v0.8.2 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/2/23.
 //  Copyright © 2016年 LeanCloud. All rights reserved.
 //  Service for common chat setting.
 
