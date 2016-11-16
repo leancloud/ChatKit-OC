@@ -316,13 +316,9 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
     
     //FIXME:issue #178
     //在iOS10输入换行的时候，textView的内容向上偏移，再下次输入后恢复正常，原因是高度变化后，textView更新约束，重新设置了contentOffset；我是在设置contentOffset做了0.01秒的延迟，发现能解决这个问题
-    if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"10.0")) {
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.01 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            setContentOffBlock();
-        });
-    } else {
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.01 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         setContentOffBlock();
-    }
+    });
 }
 
 #pragma mark - MP3RecordedDelegate
