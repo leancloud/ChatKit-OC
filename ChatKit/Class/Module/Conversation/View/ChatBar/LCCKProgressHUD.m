@@ -52,7 +52,7 @@
     [self timer];
     dispatch_async(dispatch_get_main_queue(), ^{
         if(!self.superview)
-            [self.overlayWindow addSubview:self];
+            [[UIApplication sharedApplication].keyWindow addSubview:self];
         [UIView animateWithDuration:.5 animations:^{
                 self.alpha = 1;
         } completion:nil];
