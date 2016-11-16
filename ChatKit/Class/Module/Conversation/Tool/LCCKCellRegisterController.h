@@ -2,7 +2,7 @@
 //  UITableView+LCCKCellRegister.h
 //  LCCKChatBarExample
 //
-//  v0.8.1 Created by ElonChan (微信向我报BUG:chenyilong1010) ( https://github.com/leancloud/ChatKit-OC ) on 15/11/23.
+//  v0.8.2 Created by ElonChan (微信向我报BUG:chenyilong1010) ( https://github.com/leancloud/ChatKit-OC ) on 15/11/23.
 //  Copyright © 2015年 https://LeanCloud.cn . All rights reserved.
 //
 

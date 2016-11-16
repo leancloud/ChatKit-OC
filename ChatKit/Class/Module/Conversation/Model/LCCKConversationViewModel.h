@@ -2,7 +2,7 @@
 //  LCCKConversationViewModel.h
 //  LCCKChatExample
 //
-//  v0.8.1 Created by ElonChan (wechat:chenyilong1010) ( https://github.com/leancloud/ChatKit-OC ) on 15/11/18.
+//  v0.8.2 Created by ElonChan (wechat:chenyilong1010) ( https://github.com/leancloud/ChatKit-OC ) on 15/11/18.
 //  Copyright © 2015年 https://LeanCloud.cn . All rights reserved.
 //
 

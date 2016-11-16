@@ -2,7 +2,7 @@
 //  LCCKSessionService.m
 //  LeanCloudChatKit-iOS
 //
-//  v0.8.1 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/3/1.
+//  v0.8.2 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/3/1.
 //  Copyright © 2016年 LeanCloud. All rights reserved.
 //
 
@@ -90,7 +90,7 @@ NSString *const LCCKSessionServiceErrorDomain = @"LCCKSessionServiceErrorDomain"
     [_client closeWithCallback:^(BOOL succeeded, NSError *error) {
         !callback ?: callback(succeeded, error);
         if (succeeded) {
-            [self closeService];
+            [self resetService];
         }
     }];
 }
@@ -105,7 +105,7 @@ NSString *const LCCKSessionServiceErrorDomain = @"LCCKSessionServiceErrorDomain"
     [LCCKUserSystemService sharedInstance];
 }
 
-- (void)closeService {
+- (void)resetService {
     [LCCKSingleton destroyAllInstance];
 }
 
@@ -149,6 +149,7 @@ NSString *const LCCKSessionServiceErrorDomain = @"LCCKSessionServiceErrorDomain"
 
 - (void)handleSingleSignOnError:(NSError *)aError callback:(LCCKBooleanResultBlock)aCallback {
     if (aError.code == 4111) {
+        [self resetService];
         [self requestForceSingleSignOnAuthorizationWithCallback:^(BOOL granted, NSError *theError) {
             [self reconnectForViewController:nil error:aError granted:granted callback:aCallback];
         }];
