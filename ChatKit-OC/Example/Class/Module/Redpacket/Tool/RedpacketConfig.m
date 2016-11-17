@@ -20,7 +20,7 @@
 //	*此为演示地址* App需要修改为自己AppServer上的地址, 数据格式参考此地址给出的格式。
 static NSString *requestUrl = @"https://rpv2.yunzhanghu.com/api/sign?duid=";
 
-@interface RedpacketConfig ()
+@interface RedpacketConfig ()<YZHRedpacketBridgeDelegate>
 
 @end
 
@@ -32,6 +32,7 @@ static NSString *requestUrl = @"https://rpv2.yunzhanghu.com/api/sign?duid=";
     dispatch_once(&onceToken, ^{
         config = [[RedpacketConfig alloc] init];
         [[YZHRedpacketBridge sharedBridge] setDataSource:config];
+        [[YZHRedpacketBridge sharedBridge] setDelegate:config];
     });
     return config;
 }
@@ -124,4 +125,8 @@ static NSString *requestUrl = @"https://rpv2.yunzhanghu.com/api/sign?duid=";
     });
 }
 
+//红包token过期请求
+- (void)redpacketError:(NSString *)error withErrorCode:(NSInteger)code {
+    [self config];
+}
 @end
