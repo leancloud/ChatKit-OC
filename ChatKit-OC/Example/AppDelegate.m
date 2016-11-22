@@ -186,7 +186,7 @@
 
 /**
  * Required for iOS 10+
- * 在后台和启动之前收到推送内容, 执行的方法
+ * 在后台和启动之前收到推送内容, 点击推送后执行的方法
  */
 - (void)userNotificationCenter:(UNUserNotificationCenter *)center
 didReceiveNotificationResponse:(UNNotificationResponse *)response
@@ -196,8 +196,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
         //TODO:处理远程推送内容
         NSLog(@"%@", userInfo);
     }
-    // 需要执行这个方法，选择是否提醒用户，有 Badge、Sound、Alert 三种类型可以选择设置
-    completionHandler(UNNotificationPresentationOptionBadge + UNNotificationPresentationOptionSound + UNNotificationPresentationOptionAlert);
+    completionHandler();
 }
 
 #endif
