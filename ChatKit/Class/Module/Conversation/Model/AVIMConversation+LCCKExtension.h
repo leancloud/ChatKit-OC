@@ -23,7 +23,7 @@
 @property (nonatomic, assign) NSInteger lcck_unreadCount;
 
 /*!
- * 如果未读消息数未超出100，显示数字，否则消息省略号
+ * 如果未读消息数未超出100，显示数字，否则显示省略号
  */
 - (NSString *)lcck_badgeText;
 
