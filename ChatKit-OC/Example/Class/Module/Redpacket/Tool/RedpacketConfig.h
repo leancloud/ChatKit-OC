@@ -13,10 +13,6 @@
 
 + (instancetype)sharedConfig;
 /**
- *  注册红包配置项
- */
-- (void)config;
-/**
  *  获取当前红包用户
  */
 - (RedpacketUserInfo *)redpacketUserInfo;

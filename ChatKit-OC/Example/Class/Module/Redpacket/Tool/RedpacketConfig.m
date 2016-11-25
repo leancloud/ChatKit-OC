@@ -33,50 +33,10 @@ static NSString *requestUrl = @"https://rpv2.yunzhanghu.com/api/sign?duid=";
         config = [[RedpacketConfig alloc] init];
         [[YZHRedpacketBridge sharedBridge] setDataSource:config];
         [[YZHRedpacketBridge sharedBridge] setDelegate:config];
+        [[YZHRedpacketBridge sharedBridge] setRedacketURLScheme:@"redpacket.chatkit"];
+        [AppDelegate swizzleRedPacketMethod];
     });
     return config;
-}
-
-+ (void)config {
-    [[self sharedConfig] config];
-}
-
-- (void)configWithSignDict:(NSDictionary *)dict {
-    NSString *partner = [dict valueForKey:@"partner"];
-    NSString *appUserId = [dict valueForKey:@"user_id"];
-    unsigned long timeStamp = [[dict valueForKey:@"timestamp"] unsignedLongValue];
-    NSString *sign = [dict valueForKey:@"sign"];
-    
-    
-    [[YZHRedpacketBridge sharedBridge] configWithSign:sign
-                                              partner:partner
-                                            appUserId:appUserId
-                                            timestamp:[NSString stringWithFormat:@"%@",@(timeStamp)]];
-}
-
-- (void)config {
-    [AppDelegate swizzleRedPacketMethod];
-    [[YZHRedpacketBridge sharedBridge] setRedacketURLScheme:@"redpacket.chatkit"];
-    
-    NSString *userId = self.redpacketUserInfo.userId;
-    if(userId && [[YZHRedpacketBridge sharedBridge] isNeedUpdateSignWithUserId:userId]) {
-
-        // 获取应用自己的签名字段。实际应用中需要开发者自行提供相应在的签名计算服务
-        
-        NSString *urlStr = [NSString stringWithFormat:@"%@%@",requestUrl, userId];
-        NSURL *url = [NSURL URLWithString:urlStr];
-        NSURLRequest *request = [NSURLRequest requestWithURL:url];
-        
-        [[[NSURLSession sharedSession]dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
-            if (!error) {
-                NSError * jsonError;
-                NSDictionary * jsonObject = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableLeaves error:&jsonError];
-                if (!jsonError && [jsonObject isKindOfClass:[NSDictionary class]]) {
-                    [self configWithSignDict:jsonObject];
-                }
-            }
-        }] resume];
-    }
 }
 
 - (RedpacketUserInfo *)redpacketUserInfo {
@@ -98,7 +58,7 @@ static NSString *requestUrl = @"https://rpv2.yunzhanghu.com/api/sign?duid=";
 }
 
 - (void)lcck_setting {
-    [self config];
+    
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         LCCKFilterMessagesBlock filterMessagesBlock = [LCCKConversationService sharedInstance].filterMessagesBlock;
@@ -125,8 +85,33 @@ static NSString *requestUrl = @"https://rpv2.yunzhanghu.com/api/sign?duid=";
     });
 }
 
-//红包token过期请求
-- (void)redpacketError:(NSString *)error withErrorCode:(NSInteger)code {
-    [self config];
+//红包token任何注册问题都会走此接口
+- (void)redpacketFetchRegisitParam:(FetchRegisitParamBlock)fetchBlock withError:(NSError *)error {
+    NSString *userId = self.redpacketUserInfo.userId;
+    if(userId) {
+        // 获取应用自己的签名字段。实际应用中需要开发者自行提供相应在的签名计算服务
+        NSString *urlStr = [NSString stringWithFormat:@"%@%@",requestUrl, userId];
+        NSURL *url = [NSURL URLWithString:urlStr];
+        NSURLRequest *request = [NSURLRequest requestWithURL:url];
+        
+        [[[NSURLSession sharedSession]dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+            if (!error) {
+                NSError * jsonError;
+                NSDictionary * jsonObject = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableLeaves error:&jsonError];
+                
+                if (!jsonError && [jsonObject isKindOfClass:[NSDictionary class]]) {
+                    NSString *partner = [jsonObject valueForKey:@"partner"];
+                    NSString *appUserId = [jsonObject valueForKey:@"user_id"];
+                    NSString *timeStamp = [jsonObject valueForKey:@"timestamp"];
+                    NSString *sign = [jsonObject valueForKey:@"sign"];
+                    RedpacketRegisitModel * regisitModel = [RedpacketRegisitModel signModelWithAppUserId:appUserId signString:sign partner:partner andTimeStamp:timeStamp];
+                    fetchBlock(regisitModel);
+                }
+            }
+        }] resume];
+    }
 }
+
+
+
 @end

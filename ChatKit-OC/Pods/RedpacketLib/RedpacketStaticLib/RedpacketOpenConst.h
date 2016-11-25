@@ -13,9 +13,20 @@
 #pragma mark - RedpacketNotifaction
 
 /**
+ *  取消支付的通知
+ */ 
+UIKIT_EXTERN NSString *const RedpacketCancelPayNotifaction;
+
+/**
+ *  微信支付完成通知
+ */
+UIKIT_EXTERN NSString *const RedpacketWechatPayNotifaction;
+
+/**
  *  支付宝支付完成通知
  */
 UIKIT_EXTERN NSString *const RedpacketAlipayNotifaction;
+
 
 #pragma mark - RedpacketView
 

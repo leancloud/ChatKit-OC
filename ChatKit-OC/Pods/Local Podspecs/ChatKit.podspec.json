@@ -1,6 +1,6 @@
 {
   "name": "ChatKit",
-  "version": "0.8.0",
+  "version": "0.8.3",
   "summary": "An IM App Framework, support sending text, pictures, audio, video, location messaging, managing address book, more interesting features.",
   "homepage": "https://github.com/LeanCloud/ChatKit-OC",
   "license": {
@@ -34,7 +34,7 @@
   ],
   "source": {
     "git": "https://github.com/LeanCloud/ChatKit-OC.git",
-    "tag": "0.8.0"
+    "tag": "0.8.3"
   },
   "source_files": [
     "ChatKit",
