@@ -18,5 +18,5 @@ pod 'TWMessageBarManager'
 pod 'MLPAutoCompleteTextField'
 #pod 'MLeaksFinder'
 pod 'FTPopOverMenu'
-pod "RedpacketLib", "~> 3.2.1"
+pod "RedpacketLib"
 end

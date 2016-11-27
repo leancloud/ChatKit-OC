@@ -10,34 +10,33 @@
 #define YZHRedpacketBridgeProtocol_h
 
 
+@class RedpacketRegisitModel;
+
+//  初始化参数需要开发者回调， 如果初始化失败请传入nil
+typedef void (^FetchRegisitParamBlock)(RedpacketRegisitModel *model);
+
 @class RedpacketUserInfo;
 
 @protocol YZHRedpacketBridgeDataSource <NSObject>
 
-/**
- *  主动获取App用户的用户信息
- *
- *  @return 用户信息Info
- */
+/** 主动获取App用户的用户信息 */
 - (RedpacketUserInfo *)redpacketUserInfo;
 
 @end
 
 
 @protocol YZHRedpacketBridgeDelegate <NSObject>
+
+@optional
+
+- (void)redpacketError:(NSString *)error withErrorCode:(NSInteger)code __deprecated_msg("方法已经停止使用，请使用redpacketFetchRegisitParam: withError:");
+
 @required
-/**
- *  SDK错误处理代理
- *
- *  @param error 错误内容
- *  @param code  错误码
- *  @discussion
-    1.通过ImToken获取红包Token, 红包Token过期后，请求红包Token时，ImToken过期触发回调，刷新ImToken后，重新注册红包Token。
-    2.通过Sign获取红包Token， 红包Token过期后，直接触发。
-    错误码： 20304  环信IMToken验证错误
-    错误码： 1001 Token相关错误
+
+/** 使用红包服务时，如果红包Token不存在或者过期，则回调此方法，需要在RedpacketRegisitModel生成后，通过fetchBlock回传给红包SDK
+  * 如果错误error不为空， 1. 如果是环信IM，则刷新环信ImToken 2.如果是签名方式， 则刷新签名.
  */
-- (void)redpacketError:(NSString *)error withErrorCode:(NSInteger)code;
+- (void)redpacketFetchRegisitParam:(FetchRegisitParamBlock)fetchBlock withError:(NSError *)error;
 
 @end
 
