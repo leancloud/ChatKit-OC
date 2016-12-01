@@ -2,7 +2,7 @@
 //  LCCKInputViewPluginVCard.m
 //  ChatKit-OC
 //
-//  v0.8.2 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/8/12.
+//  v0.8.3 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/8/12.
 //  Copyright © 2016年 LeanCloud. All rights reserved.
 //
 
