@@ -88,12 +88,30 @@
 
  ```
 
+注意：这个方法 `[[LCChatKit sharedInstance] setFetchProfilesBlock:^(NSArray<NSString *> *userIds, LCCKFetchProfilesCompletionHandler completionHandler) {
+... }` ，其中参数 `userIds` 指的是 `ClientId` 的集合。
+
+
+另外，
+
+ ```Objective-C
+[LCCKUser userWithUserId:user[LCCKProfileKeyPeerId]
+          name:user[LCCKProfileKeyName]
+          avatarURL:avatarURL
+          clientId:clientId];
+ ```
+
+这个方法里有两个ID，其中 `clientId` 是 `ChatKit` 里的 `id`，`userId` 是 APP 里用户系统里的 `id`。
+
+你可以这样理解 `clientId` 与 `userId` 的作用：
+
+ > `clientId` 是用来建立对话的，`userid` 是获取对应用户头像和名字的。这两个ID可以一样，也可以不一样。
+
  对这个方法有疑惑，可以到这个 [issue](https://github.com/leancloud/ChatKit-OC/issues/17) 里讨论。
  
 注意: **设置头像和昵称的这种方式是被动的，即 ChatKit 需要显示某个Person的头像和昵称时，才会回调这个 block 来获取。而不是您主动地将哪个用户的 Profile 设置到 ChatKit 中。请务必理解这一点。**
 
 ###  ClientId 与 UserId
-
 
 这里最重要的一个概念是 ClientId ，具体含义的请参考  [《实时通信服务总览-核心概念》](https://leancloud.cn/docs/realtime_v2.html#核心概念) 。
 
