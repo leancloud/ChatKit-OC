@@ -756,7 +756,7 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
 
 - (void)chatBarFrameDidChange:(LCCKChatBar *)chatBar shouldScrollToBottom:(BOOL)shouldScrollToBottom {
     [UIView animateWithDuration:LCCKAnimateDuration animations:^{
-        [self.tableView layoutIfNeeded];
+        [self.tableView.superview layoutIfNeeded];
         self.allowScrollToBottom = shouldScrollToBottom;
         [self scrollToBottomAnimated:NO];
     } completion:nil];
