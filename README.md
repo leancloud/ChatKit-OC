@@ -1,7 +1,7 @@
 # ChatKit 快速入门 · iOS
 
 <p align="center">
-![enter image description here](https://img.shields.io/badge/pod-v0.8.2-brightgreen.svg)  ![enter image description here](https://img.shields.io/badge/platform-iOS%207.0%2B-ff69b5618733984.svg) 
+![enter image description here](https://img.shields.io/badge/pod-v0.8.3-brightgreen.svg)  ![enter image description here](https://img.shields.io/badge/platform-iOS%207.0%2B-ff69b5618733984.svg) 
 <a href="https://github.com/leancloud/ChatKit-OC/blob/master/LICENSE"><img src="https://img.shields.io/badge/license-MIT-green.svg?style=flat"></a>[ CocoaPods-Doc](http://cocoapods.org/pods/ChatKit) 
 [![git-brag-stats](https://labs.turbo.run/git-brag?user=leancloud&repo=ChatKit-OC&maxn=7)](https://github.com/turbo/git-brag)
 
@@ -193,12 +193,12 @@ ChatKit 支持以下两种方式导入到您的项目中：
     gem install cocoapods
  ```
 
-  打开 Podfile，在您项目的 target 下加入以下内容。（在此以 v0.8.2 版本为例）
+  打开 Podfile，在您项目的 target 下加入以下内容。（在此以 v0.8.3 版本为例）
 
   在文件 `Podfile` 中加入以下内容：
 
  ```shell
-    pod 'ChatKit', '0.8.2'
+    pod 'ChatKit', '0.8.3'
  ```
 
   然后在终端中运行以下命令：
@@ -231,12 +231,12 @@ ChatKit 支持以下两种方式导入到您的项目中：
 
 CocoaPods 中，有几种设置 SDK 版本的方法。如：
 
-`>= 0.8.2` 会根据您本地的 CocoaPods 源列表，导入不低于 0.8.2 版本的 SDK。
-`~> 0.8.2` 会根据您本地的 CocoaPods 源列表，介于 0.7.X~0.8.2 之前版本的 SDK。
-我们建议您锁定版本，便于团队开发。如，指定 0.8.2 版本。
+`>= 0.8.3` 会根据您本地的 CocoaPods 源列表，导入不低于 0.8.3 版本的 SDK。
+`~> 0.8.3` 会根据您本地的 CocoaPods 源列表，介于 0.7.X~0.8.3 之前版本的 SDK。
+我们建议您锁定版本，便于团队开发。如，指定 0.8.3 版本。
 
  ```shell
-pod 'ChatKit', '0.8.2'
+pod 'ChatKit', '0.8.3'
  ```
 
  - 升级本地 CocoaPods 源
