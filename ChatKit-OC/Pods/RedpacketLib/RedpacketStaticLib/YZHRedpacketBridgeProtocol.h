@@ -19,7 +19,7 @@ typedef void (^FetchRegisitParamBlock)(RedpacketRegisitModel *model);
 
 @protocol YZHRedpacketBridgeDataSource <NSObject>
 
-/** 主动获取App用户的用户信息 */
+/** 主动获取当前登录的用户信息 */
 - (RedpacketUserInfo *)redpacketUserInfo;
 
 @end
