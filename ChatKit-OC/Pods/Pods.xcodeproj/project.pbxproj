@@ -1234,7 +1234,6 @@
 		0889C1815C07D178F769980B3D1CBDA8 /* AVIMClientOpenOption.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = AVIMClientOpenOption.m; path = AVOS/AVOSCloudIM/AVIMClientOpenOption.m; sourceTree = "<group>"; };
 		08E44F4B6B36D0AB3B11FBCA1B334219 /* MWPhotoBrowser-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "MWPhotoBrowser-prefix.pch"; sourceTree = "<group>"; };
 		0934C8BEA3B534630D102CB4D934411D /* LCCKSignatureService.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = LCCKSignatureService.h; sourceTree = "<group>"; };
-		09783DF97485A8376E1AF31D6D058E21 /* YZHRedpacketBridgeProtocol.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = YZHRedpacketBridgeProtocol.h; path = RedpacketStaticLib/YZHRedpacketBridgeProtocol.h; sourceTree = "<group>"; };
 		09A47DB622C1EDFBE54CED38A2168BD3 /* AVPersistenceUtils.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = AVPersistenceUtils.m; path = AVOS/AVOSCloud/Cache/AVPersistenceUtils.m; sourceTree = "<group>"; };
 		09B7CFE829434BCCE1F14C6EF7516DB0 /* LCIMMessage.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = LCIMMessage.m; path = AVOS/AVOSCloudIM/Protobuf/LCIMMessage.m; sourceTree = "<group>"; };
 		0A5E0BD134C8B4A7ECEFA7436D167B49 /* SDImageCache.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SDImageCache.h; path = SDWebImage/SDImageCache.h; sourceTree = "<group>"; };
@@ -1466,7 +1465,6 @@
 		462D4491EE9FB682A57307FD35E07D03 /* LCCKInputViewPluginLocation.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = LCCKInputViewPluginLocation.m; sourceTree = "<group>"; };
 		463234320440BC12D5D54E10B2A6C5AA /* LCIMProtocolBuffers_RuntimeSupport.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = LCIMProtocolBuffers_RuntimeSupport.h; path = AVOS/AVOSCloudIM/Protobuf/LCIMProtocolBuffers_RuntimeSupport.h; sourceTree = "<group>"; };
 		4656DB5B4573E8A3F8907716A24A7F96 /* Pods-ChatKit-OC.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-ChatKit-OC.release.xcconfig"; sourceTree = "<group>"; };
-		4680A234FD91576E1CBB46478C479311 /* RedpacketLib.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RedpacketLib.h; path = RedpacketStaticLib/RedpacketLib.h; sourceTree = "<group>"; };
 		46848BFA30FB316579C6F120759D28DA /* LCCKBaseViewController.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = LCCKBaseViewController.m; sourceTree = "<group>"; };
 		46D9BF2525AE093E8A9E30062B48D11F /* LCCKDeallocExecutor.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = LCCKDeallocExecutor.m; sourceTree = "<group>"; };
 		46E861A092ADD2F9C2D288B10A61E9B9 /* NSString+Levenshtein.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "NSString+Levenshtein.m"; path = "MLPAutoCompleteTextField/NSString+Levenshtein.m"; sourceTree = "<group>"; };
@@ -1544,12 +1542,12 @@
 		590203BA898895AF97E6B4A2671E1703 /* MBProgressHUD.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = MBProgressHUD.h; sourceTree = "<group>"; };
 		5926864287C72E5186AE92B93F9770D0 /* AVGroup.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = AVGroup.h; path = AVOS/AVOSCloud/IM/AVGroup.h; sourceTree = "<group>"; };
 		59D5F393BA6479165A4B21E3B8C17439 /* UIColor+LCCKExtension.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "UIColor+LCCKExtension.h"; sourceTree = "<group>"; };
+		59E5410B9DEF7AEF864220286C138B4B /* libRedpacketLib.a */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = archive.ar; name = libRedpacketLib.a; path = RedpacketStaticLib/lib/libRedpacketLib.a; sourceTree = "<group>"; };
 		5A10DABCE2EF9FE51443004B653BA9AC /* AVSearchSortBuilder.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = AVSearchSortBuilder.m; path = AVOS/AVOSCloud/Search/AVSearchSortBuilder.m; sourceTree = "<group>"; };
 		5A6934D7AC28F50C89ABEA27A2D0E627 /* LCCKChatMoreView.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = LCCKChatMoreView.h; sourceTree = "<group>"; };
 		5A886CBA41401DCBA0D66089B46252A3 /* AVIMKeyedConversation.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = AVIMKeyedConversation.m; path = AVOS/AVOSCloudIM/AVIMKeyedConversation.m; sourceTree = "<group>"; };
 		5B16104ABA6BD658C067E6F32FA9A197 /* libMJRefresh.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; name = libMJRefresh.a; path = libMJRefresh.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		5C28725E3B12438302357C1FC3958457 /* LCCKContactCell.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = LCCKContactCell.h; sourceTree = "<group>"; };
-		5C2E90FC4A89AD4B4E75433E180F898B /* RedpacketViewControl.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RedpacketViewControl.h; path = RedpacketStaticLib/RedpacketViewControl.h; sourceTree = "<group>"; };
 		5CEAD4471A07FF7880F34B7E0BFF4077 /* AVRelation.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = AVRelation.h; path = AVOS/AVOSCloud/Object/AVRelation.h; sourceTree = "<group>"; };
 		5D768A6DCA6581268DCD2C8EF4F04970 /* LCCKCellRegisterController.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = LCCKCellRegisterController.m; sourceTree = "<group>"; };
 		5D7BDBE34F97FB7954FB5D886D5E4C45 /* AVSRWebSocket.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = AVSRWebSocket.m; path = AVOS/AVOSCloud/ThirdParty/SocketRocket/AVSRWebSocket.m; sourceTree = "<group>"; };
@@ -1568,7 +1566,6 @@
 		6094627CE249D98F3C50726BE37F6279 /* POPDecayAnimation.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = POPDecayAnimation.h; path = pop/POPDecayAnimation.h; sourceTree = "<group>"; };
 		609DB94B1564328EC291D109EC021840 /* AVObjectUtils.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = AVObjectUtils.h; path = AVOS/AVOSCloud/Object/AVObjectUtils.h; sourceTree = "<group>"; };
 		621AC397E948945CF0CC24DC6CCD40FE /* AVFile_Internal.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = AVFile_Internal.h; path = AVOS/AVOSCloud/File/AVFile_Internal.h; sourceTree = "<group>"; };
-		622BE7AA944F7AB839C6FA0FCE356F4F /* RedPacket.bundle */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "wrapper.plug-in"; name = RedPacket.bundle; path = RedpacketStaticLib/resources/RedPacket.bundle; sourceTree = "<group>"; };
 		62737E65B3F7D4662702494E35E6C01F /* PlayButtonOverlayLarge.png */ = {isa = PBXFileReference; includeInIndex = 1; name = PlayButtonOverlayLarge.png; path = Pod/Assets/PlayButtonOverlayLarge.png; sourceTree = "<group>"; };
 		62AD91DEC5CF73D5F6E0CB2D1EC55165 /* LCURLConnection.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = LCURLConnection.m; path = AVOS/AVOSCloud/Utils/LCURLConnection.m; sourceTree = "<group>"; };
 		62F791315B55530E8FEE89E073B1E346 /* POPVector.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = POPVector.h; path = pop/POPVector.h; sourceTree = "<group>"; };
@@ -1607,7 +1604,6 @@
 		6CC4B5C5C1772FAA9811C874A203AB6A /* FDStackView.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = FDStackView.xcconfig; sourceTree = "<group>"; };
 		6DC1EC91FAD21A1624C36582D297963F /* AVIMLocationMessage.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = AVIMLocationMessage.m; path = AVOS/AVOSCloudIM/TypedMessages/AVIMLocationMessage.m; sourceTree = "<group>"; };
 		6DE0AFC272CEC1F956563337FAD6B0A2 /* LCCKInputViewPluginTakePhoto.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = LCCKInputViewPluginTakePhoto.m; sourceTree = "<group>"; };
-		6E5B17F3CB86D3026646B1F7A11BEE20 /* libRedpacketLib.a */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = archive.ar; name = libRedpacketLib.a; path = RedpacketStaticLib/lib/libRedpacketLib.a; sourceTree = "<group>"; };
 		6EF65FABBF4FBBF9D290DE631D758431 /* AVWebSocketWrapper.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = AVWebSocketWrapper.m; path = AVOS/AVOSCloud/IM/AVWebSocketWrapper.m; sourceTree = "<group>"; };
 		6FA766899875E4C5CBA644F62E3A4298 /* LCCKUIService.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = LCCKUIService.h; sourceTree = "<group>"; };
 		6FCFDD19B524F94FD8690C7F21B5FCF0 /* MASUtilities.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = MASUtilities.h; path = Masonry/MASUtilities.h; sourceTree = "<group>"; };
@@ -1617,7 +1613,6 @@
 		70DC3FEF5D0DA17CAE626659CCB68416 /* AVMPMessagePackReader.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = AVMPMessagePackReader.h; path = AVOS/AVOSCloudIM/AVMPMessagePack/AVMPMessagePackReader.h; sourceTree = "<group>"; };
 		71199879308DE21C66ED0287F7798C78 /* AVIMTypedMessageObject.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = AVIMTypedMessageObject.h; path = AVOS/AVOSCloudIM/InternalObjects/AVIMTypedMessageObject.h; sourceTree = "<group>"; };
 		712ED63AF8C95E963905E2E0D1D2F345 /* SDWebImageDownloader.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SDWebImageDownloader.m; path = SDWebImage/SDWebImageDownloader.m; sourceTree = "<group>"; };
-		712F7E447C6BD7059F33AE6377D8518E /* RedpacketErrorCode.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RedpacketErrorCode.h; path = RedpacketStaticLib/RedpacketErrorCode.h; sourceTree = "<group>"; };
 		717C2504236AB4C13B8BF2891B5A909C /* AVRoomCommand.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = AVRoomCommand.m; path = AVOS/AVOSCloud/IM/Commands/AVRoomCommand.m; sourceTree = "<group>"; };
 		718C4EED8530E634F59C4A867FE80BE0 /* Emoji.bundle */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "wrapper.plug-in"; path = Emoji.bundle; sourceTree = "<group>"; };
 		719D9AFEB5B6E881AA9991E399944FD9 /* POPAnimationExtras.mm */ = {isa = PBXFileReference; includeInIndex = 1; name = POPAnimationExtras.mm; path = pop/POPAnimationExtras.mm; sourceTree = "<group>"; };
@@ -1763,6 +1758,7 @@
 		92DF3028A7D7E0532883887C632939F8 /* LCCKContact.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = LCCKContact.m; sourceTree = "<group>"; };
 		92E862AF548439D5D9FE50C7BCA82CFC /* MWTapDetectingImageView.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = MWTapDetectingImageView.h; path = Pod/Classes/MWTapDetectingImageView.h; sourceTree = "<group>"; };
 		93A4A3777CF96A4AAC1D13BA6DCCEA73 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; lastKnownFileType = text; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		93AFA482E4116D17EBA7B23E96E7775C /* YZHRedpacketBridgeProtocol.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = YZHRedpacketBridgeProtocol.h; path = RedpacketStaticLib/YZHRedpacketBridgeProtocol.h; sourceTree = "<group>"; };
 		93DAC62E116CAD4F87EAE8A84F251C9A /* AVSession.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = AVSession.m; path = AVOS/AVOSCloud/IM/AVSession.m; sourceTree = "<group>"; };
 		94047F40B1EDDF3AB42B23D6E0680F8D /* UITableView+FDTemplateLayoutCell.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "UITableView+FDTemplateLayoutCell.h"; path = "Classes/UITableView+FDTemplateLayoutCell.h"; sourceTree = "<group>"; };
 		945D75DA77059A45B41B3C3D662F6467 /* LCIMBootstrap.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = LCIMBootstrap.h; path = AVOS/AVOSCloudIM/Protobuf/LCIMBootstrap.h; sourceTree = "<group>"; };
@@ -1796,6 +1792,7 @@
 		9CCF366AA2D977758F5824A62E6A8250 /* LCCKSwipeView.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = LCCKSwipeView.m; sourceTree = "<group>"; };
 		9DA5D3DAC4EFE30BFD22D6A42156E4FD /* AVErrorUtils.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = AVErrorUtils.m; path = AVOS/AVOSCloud/Utils/AVErrorUtils.m; sourceTree = "<group>"; };
 		9DFDF9A98A1129B8F3A8CD3D15F9E7B3 /* MASConstraint.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = MASConstraint.h; path = Masonry/MASConstraint.h; sourceTree = "<group>"; };
+		9E007E0D34E6B25EDD8D201918599571 /* RedpacketOpenConst.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RedpacketOpenConst.h; path = RedpacketStaticLib/RedpacketOpenConst.h; sourceTree = "<group>"; };
 		9E0E725DE66EC4E27BC1BBD31BC25A74 /* AVSRWebSocket.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = AVSRWebSocket.h; path = AVOS/AVOSCloud/ThirdParty/SocketRocket/AVSRWebSocket.h; sourceTree = "<group>"; };
 		9EA44AB9590AC3C9A38A2CA11061C03B /* avmp.c */ = {isa = PBXFileReference; includeInIndex = 1; name = avmp.c; path = AVOS/AVOSCloudIM/AVMPMessagePack/avmp.c; sourceTree = "<group>"; };
 		9EE110615D6B9B8C655941C7428F6378 /* ImageSelectedOn.png */ = {isa = PBXFileReference; includeInIndex = 1; name = ImageSelectedOn.png; path = Pod/Assets/ImageSelectedOn.png; sourceTree = "<group>"; };
@@ -1825,6 +1822,7 @@
 		A56C44679B68813B54C6F2BA55793C83 /* LCCKImageManager.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = LCCKImageManager.m; sourceTree = "<group>"; };
 		A59DF328513D640D808BF8D7C8441F1F /* UIViewController+CYLTabBarControllerExtention.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "UIViewController+CYLTabBarControllerExtention.h"; path = "CYLTabBarController/UIViewController+CYLTabBarControllerExtention.h"; sourceTree = "<group>"; };
 		A65D3B6BBB0A8B6F23CC3FB4CB4314A7 /* AVSignature.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = AVSignature.m; path = AVOS/AVOSCloud/IM/AVSignature.m; sourceTree = "<group>"; };
+		A684E09708581B79CFBFD8D4F99EA9B3 /* YZHRedpacketBridge.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = YZHRedpacketBridge.h; path = RedpacketStaticLib/YZHRedpacketBridge.h; sourceTree = "<group>"; };
 		A72E8A81742AECD4F873623147D03A66 /* SDImageCache.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SDImageCache.m; path = SDWebImage/SDImageCache.m; sourceTree = "<group>"; };
 		A75EEA21539977672559C165DA20238D /* FTPopOverMenu.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = FTPopOverMenu.m; path = FTPopOverMenu/FTPopOverMenu.m; sourceTree = "<group>"; };
 		A79D1222082F81DBB85B9A115B19DAF4 /* POPAnimationPrivate.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = POPAnimationPrivate.h; path = pop/POPAnimationPrivate.h; sourceTree = "<group>"; };
@@ -1879,7 +1877,6 @@
 		B025687530936C86F6BCADD06A66843E /* LCNetworkReachabilityManager.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = LCNetworkReachabilityManager.h; path = AVOS/AVOSCloud/ThirdParty/LCNetworking/LCNetworkReachabilityManager.h; sourceTree = "<group>"; };
 		B1390D7B67E329D7349D1E069225168E /* AVNetworkActivityIndicatorManager.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = AVNetworkActivityIndicatorManager.m; path = AVOS/AVOSCloud/ThirdParty/AFNetworking/AVNetworkActivityIndicatorManager.m; sourceTree = "<group>"; };
 		B165EBCE4DC9184247B5B2D992DFF755 /* LCObserver.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = LCObserver.h; path = AVOS/AVOSCloud/ThirdParty/COSObserver/LCObserver.h; sourceTree = "<group>"; };
-		B21E3FEABBA8A1DAC59836A53F4CA070 /* RedpacketMessageModel.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RedpacketMessageModel.h; path = RedpacketStaticLib/RedpacketMessageModel.h; sourceTree = "<group>"; };
 		B236D40BEABF144109B0DF1AA038D382 /* LCIMExtensionRegistry.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = LCIMExtensionRegistry.h; path = AVOS/AVOSCloudIM/Protobuf/LCIMExtensionRegistry.h; sourceTree = "<group>"; };
 		B2997C6CD2B012EF3920CD95E353F8DF /* libMWPhotoBrowser.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; name = libMWPhotoBrowser.a; path = libMWPhotoBrowser.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		B2EBF54C8A168085E329B19D7CA2FB06 /* TransformationMatrix.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = TransformationMatrix.h; path = pop/WebCore/TransformationMatrix.h; sourceTree = "<group>"; };
@@ -1889,10 +1886,12 @@
 		B5799670126B48E14ABC4C137659FA70 /* AVPush.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = AVPush.h; path = AVOS/AVOSCloud/Push/AVPush.h; sourceTree = "<group>"; };
 		B5C678BB3326842FA9DF35632C403581 /* LCCKConversationService.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = LCCKConversationService.m; sourceTree = "<group>"; };
 		B6108CAF2EF5C732155AF415BA84C960 /* ImageSelectedSmallOff@3x.png */ = {isa = PBXFileReference; includeInIndex = 1; name = "ImageSelectedSmallOff@3x.png"; path = "Pod/Assets/ImageSelectedSmallOff@3x.png"; sourceTree = "<group>"; };
+		B65868E0086AEC0E7278B061EF43A43E /* RedpacketErrorCode.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RedpacketErrorCode.h; path = RedpacketStaticLib/RedpacketErrorCode.h; sourceTree = "<group>"; };
 		B67F0A03C502B576E992E6046F929F52 /* LCIMUnknownFieldSet_PackagePrivate.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = LCIMUnknownFieldSet_PackagePrivate.h; path = AVOS/AVOSCloudIM/Protobuf/LCIMUnknownFieldSet_PackagePrivate.h; sourceTree = "<group>"; };
 		B69B32FAF10BB04194E4F7F9A1C70C36 /* MLPAutoCompleteTextFieldDataSource.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = MLPAutoCompleteTextFieldDataSource.h; path = MLPAutoCompleteTextField/MLPAutoCompleteTextFieldDataSource.h; sourceTree = "<group>"; };
 		B6B249C12EBE200594478B74FD8F4326 /* LCIMExtensionInternals.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = LCIMExtensionInternals.h; path = AVOS/AVOSCloudIM/Protobuf/LCIMExtensionInternals.h; sourceTree = "<group>"; };
 		B6DE053F45FFF9B202524C719BDA19CF /* AVUtils.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = AVUtils.h; path = AVOS/AVOSCloud/Utils/AVUtils.h; sourceTree = "<group>"; };
+		B714C2F450F8CB3516FDF8DC02347916 /* RedpacketViewControl.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RedpacketViewControl.h; path = RedpacketStaticLib/RedpacketViewControl.h; sourceTree = "<group>"; };
 		B71EEF70E2B3D02EDD0C0840667959A8 /* AVCommandDictionary.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = AVCommandDictionary.m; path = AVOS/AVOSCloud/IM/AVCommandDictionary.m; sourceTree = "<group>"; };
 		B74F26626FFD68E60A7DF104C4280413 /* AVGroup_Internal.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = AVGroup_Internal.h; path = AVOS/AVOSCloud/IM/AVGroup_Internal.h; sourceTree = "<group>"; };
 		B7D1E15A947B134844061F86AD4C5367 /* LCRouter_internal.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = LCRouter_internal.h; path = AVOS/AVOSCloud/Router/LCRouter_internal.h; sourceTree = "<group>"; };
@@ -1915,6 +1914,7 @@
 		BB7F94DE9B059F34BD581A9327581F8D /* TWMessageBarManager.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = TWMessageBarManager.xcconfig; sourceTree = "<group>"; };
 		BC72AFCF181CFFF34DFC33E745EA98B2 /* LCCKChat.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = LCCKChat.h; sourceTree = "<group>"; };
 		BC89DCF8BEF6BEA2E1B4268489CD249B /* AVJSONRequestOperation.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = AVJSONRequestOperation.m; path = AVOS/AVOSCloud/ThirdParty/AFNetworking/AVJSONRequestOperation.m; sourceTree = "<group>"; };
+		BCE978C72AA1155C4DABB1E09239B0B1 /* RedpacketLib.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RedpacketLib.h; path = RedpacketStaticLib/RedpacketLib.h; sourceTree = "<group>"; };
 		BCED3BF45FEAB01151BBF2AEA49A3C7F /* AVIMTypedMessageObject.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = AVIMTypedMessageObject.m; path = AVOS/AVOSCloudIM/InternalObjects/AVIMTypedMessageObject.m; sourceTree = "<group>"; };
 		BD037BCE4E0A0499B3290BA4B76606E2 /* POPDecayAnimationInternal.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = POPDecayAnimationInternal.h; path = pop/POPDecayAnimationInternal.h; sourceTree = "<group>"; };
 		BDBBF94B7E31BB98B4724E9D28EFA47E /* LCCKWebViewProgress.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = LCCKWebViewProgress.m; sourceTree = "<group>"; };
@@ -1984,7 +1984,6 @@
 		CEF88395A07DA263841D9E567F5A9F4C /* SDWebImageDownloaderOperation.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SDWebImageDownloaderOperation.h; path = SDWebImage/SDWebImageDownloaderOperation.h; sourceTree = "<group>"; };
 		CFC0DA59E3F3DEA941F7E106B662D33D /* MLPAutoCompleteTextField.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = MLPAutoCompleteTextField.h; path = MLPAutoCompleteTextField/MLPAutoCompleteTextField.h; sourceTree = "<group>"; };
 		D056AE13175E17AEE50ABA9A87D5CDF4 /* MWPhotoBrowser.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = MWPhotoBrowser.m; path = Pod/Classes/MWPhotoBrowser.m; sourceTree = "<group>"; };
-		D088047C00DE870AD56F569E567247DC /* YZHRedpacketBridge.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = YZHRedpacketBridge.h; path = RedpacketStaticLib/YZHRedpacketBridge.h; sourceTree = "<group>"; };
 		D091D691A7265B260A41A01AC1C16755 /* LCURLResponseSerialization.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = LCURLResponseSerialization.h; path = AVOS/AVOSCloud/ThirdParty/LCNetworking/LCURLResponseSerialization.h; sourceTree = "<group>"; };
 		D1373836A34E86FEEA67AD4B4F6D3B99 /* AVIMGeneralObject.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = AVIMGeneralObject.h; path = AVOS/AVOSCloudIM/InternalObjects/AVIMGeneralObject.h; sourceTree = "<group>"; };
 		D174ED73D4FB10468E9D5F87E3A5CBBD /* AVObject+Subclass.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "AVObject+Subclass.h"; path = "AVOS/AVOSCloud/Object/AVObject+Subclass.h"; sourceTree = "<group>"; };
@@ -2053,7 +2052,6 @@
 		E19F3B2F9994D499AD8F4D7EF1208400 /* DACircularProgress-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "DACircularProgress-dummy.m"; sourceTree = "<group>"; };
 		E1AB172F1321D7294D22A95BDC6D3D9B /* NSAttributedString+MLLabel.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "NSAttributedString+MLLabel.m"; path = "Classes/Category/NSAttributedString+MLLabel.m"; sourceTree = "<group>"; };
 		E1BB78EA34F796ADF5B79CC05A8B7A5D /* SDWebImagePrefetcher.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SDWebImagePrefetcher.h; path = SDWebImage/SDWebImagePrefetcher.h; sourceTree = "<group>"; };
-		E1FE4ADCEDB26556FD2FB85AB2136CBC /* RedPacketResource.bundle */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "wrapper.plug-in"; name = RedPacketResource.bundle; path = RedpacketStaticLib/resources/RedPacketResource.bundle; sourceTree = "<group>"; };
 		E2970AFC329145D8F382D0B5F9397F6F /* Masonry.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = Masonry.h; path = Masonry/Masonry.h; sourceTree = "<group>"; };
 		E2976D97D77C7B519842D52C08FB6F34 /* PlayButtonOverlayLarge@2x.png */ = {isa = PBXFileReference; includeInIndex = 1; name = "PlayButtonOverlayLarge@2x.png"; path = "Pod/Assets/PlayButtonOverlayLarge@2x.png"; sourceTree = "<group>"; };
 		E29E662D1D34F4B008EFC7F7AD868579 /* LCCKConversationViewModel.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = LCCKConversationViewModel.h; sourceTree = "<group>"; };
@@ -2070,7 +2068,6 @@
 		E669027CB22B56986E4F5567A80FB32F /* AVCloudQueryResult_Internal.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = AVCloudQueryResult_Internal.h; path = AVOS/AVOSCloud/Query/AVCloudQueryResult_Internal.h; sourceTree = "<group>"; };
 		E6A1167B9FD375628695163C7F3315D9 /* TWMessageBarManager.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = TWMessageBarManager.m; path = Classes/TWMessageBarManager.m; sourceTree = "<group>"; };
 		E6D0E408F551A19D5420C1BD56459CFE /* LCCKChatTextMessageCell.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = LCCKChatTextMessageCell.m; sourceTree = "<group>"; };
-		E6DB95EC8EC52F265708A8A56290CB93 /* RedpacketOpenConst.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RedpacketOpenConst.h; path = RedpacketStaticLib/RedpacketOpenConst.h; sourceTree = "<group>"; };
 		E6DB9D7481B0BC0488B8690CAF91DE1C /* LCDatabaseQueue.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = LCDatabaseQueue.m; path = AVOS/AVOSCloud/ThirdParty/LCDB/LCDatabaseQueue.m; sourceTree = "<group>"; };
 		E6F8D7AC7D193D0073358E3299A85843 /* SDWebImageDecoder.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SDWebImageDecoder.h; path = SDWebImage/SDWebImageDecoder.h; sourceTree = "<group>"; };
 		E78F871B8337C0495F11917A89B2D98A /* LCRouter.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = LCRouter.m; path = AVOS/AVOSCloud/Router/LCRouter.m; sourceTree = "<group>"; };
@@ -2095,6 +2092,7 @@
 		EC508331D3C32C64095DA5A3117FC4BB /* pop-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "pop-dummy.m"; sourceTree = "<group>"; };
 		EC54E7572459757F0415DB8F1FEFDC5B /* LCIMCacheStore.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = LCIMCacheStore.m; path = AVOS/AVOSCloudIM/MessageCache/CacheStore/LCIMCacheStore.m; sourceTree = "<group>"; };
 		EC693773730104991E446B867240C160 /* MJRefreshBackFooter.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = MJRefreshBackFooter.m; path = MJRefresh/Base/MJRefreshBackFooter.m; sourceTree = "<group>"; };
+		ECCDE8D9B04CAFEE3B7F8BAF7C8D9C10 /* RedpacketMessageModel.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RedpacketMessageModel.h; path = RedpacketStaticLib/RedpacketMessageModel.h; sourceTree = "<group>"; };
 		ED029B5B160FB1EF275CF417FD52CCEE /* LCCKMessageSendStateView.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = LCCKMessageSendStateView.m; sourceTree = "<group>"; };
 		ED05FA4338C051D624542A3693A23BD0 /* FMDatabaseAdditions.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = FMDatabaseAdditions.h; path = src/fmdb/FMDatabaseAdditions.h; sourceTree = "<group>"; };
 		ED23445A314BD8AAE954A7DF438B93A6 /* ImageSelectedSmallOff@2x.png */ = {isa = PBXFileReference; includeInIndex = 1; name = "ImageSelectedSmallOff@2x.png"; path = "Pod/Assets/ImageSelectedSmallOff@2x.png"; sourceTree = "<group>"; };
@@ -2179,6 +2177,7 @@
 		FED071FF1C15A78C59E1608C44E0F2D1 /* FDStackViewDistributionLayoutArrangement.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = FDStackViewDistributionLayoutArrangement.m; path = FDStackView/FDStackViewDistributionLayoutArrangement.m; sourceTree = "<group>"; };
 		FED22BA43FA3AF04118A6E93F3019BFC /* LCCKDeallocBlockExecutor.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = LCCKDeallocBlockExecutor.h; sourceTree = "<group>"; };
 		FEF3DE66132A00E16AE7F5D000318DCC /* AVRole.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = AVRole.m; path = AVOS/AVOSCloud/ACL/AVRole.m; sourceTree = "<group>"; };
+		FEF7C636408632375E751212DE457F93 /* RedPacketResource.bundle */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "wrapper.plug-in"; name = RedPacketResource.bundle; path = RedpacketStaticLib/resources/RedPacketResource.bundle; sourceTree = "<group>"; };
 		FF0F20113C4EDE89ACD6B8519A69DA23 /* SDWebImageDownloaderOperation.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SDWebImageDownloaderOperation.m; path = SDWebImage/SDWebImageDownloaderOperation.m; sourceTree = "<group>"; };
 		FFC3385C0380831F06317DB07F9B8548 /* SDWebImage-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "SDWebImage-dummy.m"; sourceTree = "<group>"; };
 		FFEFB2EAE08E4FCB519126E013495E03 /* AVFriendQuery.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = AVFriendQuery.m; path = AVOS/AVOSCloud/Query/AVFriendQuery.m; sourceTree = "<group>"; };
@@ -2836,23 +2835,6 @@
 			path = Headers;
 			sourceTree = "<group>";
 		};
-		39477558C6D857602B06702A88A28B6C /* RedpacketLib */ = {
-			isa = PBXGroup;
-			children = (
-				712F7E447C6BD7059F33AE6377D8518E /* RedpacketErrorCode.h */,
-				4680A234FD91576E1CBB46478C479311 /* RedpacketLib.h */,
-				B21E3FEABBA8A1DAC59836A53F4CA070 /* RedpacketMessageModel.h */,
-				E6DB95EC8EC52F265708A8A56290CB93 /* RedpacketOpenConst.h */,
-				5C2E90FC4A89AD4B4E75433E180F898B /* RedpacketViewControl.h */,
-				D088047C00DE870AD56F569E567247DC /* YZHRedpacketBridge.h */,
-				09783DF97485A8376E1AF31D6D058E21 /* YZHRedpacketBridgeProtocol.h */,
-				5F097FECB0B5C6B212BA8C1D02086803 /* Frameworks */,
-				7284C71C87D99264775E2D048CDFB9BF /* Resources */,
-			);
-			name = RedpacketLib;
-			path = RedpacketLib;
-			sourceTree = "<group>";
-		};
 		3ABE335ADDFDEFE745E6F057B6A908EE /* Support Files */ = {
 			isa = PBXGroup;
 			children = (
@@ -3027,14 +3009,6 @@
 			path = Controller;
 			sourceTree = "<group>";
 		};
-		5F097FECB0B5C6B212BA8C1D02086803 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				6E5B17F3CB86D3026646B1F7A11BEE20 /* libRedpacketLib.a */,
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
 		5F141D64E1CBBC0A97EF37113316A1E6 /* Support Files */ = {
 			isa = PBXGroup;
 			children = (
@@ -3092,6 +3066,23 @@
 			path = DateTools;
 			sourceTree = "<group>";
 		};
+		6C1723731D743BB7F35B9072C760C5C4 /* RedpacketLib */ = {
+			isa = PBXGroup;
+			children = (
+				B65868E0086AEC0E7278B061EF43A43E /* RedpacketErrorCode.h */,
+				BCE978C72AA1155C4DABB1E09239B0B1 /* RedpacketLib.h */,
+				ECCDE8D9B04CAFEE3B7F8BAF7C8D9C10 /* RedpacketMessageModel.h */,
+				9E007E0D34E6B25EDD8D201918599571 /* RedpacketOpenConst.h */,
+				B714C2F450F8CB3516FDF8DC02347916 /* RedpacketViewControl.h */,
+				A684E09708581B79CFBFD8D4F99EA9B3 /* YZHRedpacketBridge.h */,
+				93AFA482E4116D17EBA7B23E96E7775C /* YZHRedpacketBridgeProtocol.h */,
+				E465D753D23327346D592617249767DC /* Frameworks */,
+				D8AEFDEEDCBECAF51784F2C13783F482 /* Resources */,
+			);
+			name = RedpacketLib;
+			path = RedpacketLib;
+			sourceTree = "<group>";
+		};
 		6FBC2E87C2BD6471BF56A8B56D2CD941 /* Module */ = {
 			isa = PBXGroup;
 			children = (
@@ -3136,15 +3127,6 @@
 			);
 			name = Masonry;
 			path = Masonry;
-			sourceTree = "<group>";
-		};
-		7284C71C87D99264775E2D048CDFB9BF /* Resources */ = {
-			isa = PBXGroup;
-			children = (
-				622BE7AA944F7AB839C6FA0FCE356F4F /* RedPacket.bundle */,
-				E1FE4ADCEDB26556FD2FB85AB2136CBC /* RedPacketResource.bundle */,
-			);
-			name = Resources;
 			sourceTree = "<group>";
 		};
 		72A0895435E5CD9302792A1707819310 /* Model */ = {
@@ -3990,6 +3972,14 @@
 			path = AVOSCloud;
 			sourceTree = "<group>";
 		};
+		D8AEFDEEDCBECAF51784F2C13783F482 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				FEF7C636408632375E751212DE457F93 /* RedPacketResource.bundle */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
 		D9A372F04D1125AA90FEE9CDCEF99289 /* lame.framework */ = {
 			isa = PBXGroup;
 			children = (
@@ -4086,6 +4076,14 @@
 			);
 			name = Controller;
 			path = Controller;
+			sourceTree = "<group>";
+		};
+		E465D753D23327346D592617249767DC /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				59E5410B9DEF7AEF864220286C138B4B /* libRedpacketLib.a */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		E7DA7293ECB2EC510FC55CCFD058193A /* LCCKWebViewController */ = {
@@ -4196,7 +4194,7 @@
 				E2B5BDB4182C65C00E5CBF75039861DA /* MWPhotoBrowser */,
 				734AE9F5E98AEA680243E45BED5E9839 /* pop */,
 				8F53B50060E8FEC81F5B571CB9765BE8 /* RedPacketAlipay */,
-				39477558C6D857602B06702A88A28B6C /* RedpacketLib */,
+				6C1723731D743BB7F35B9072C760C5C4 /* RedpacketLib */,
 				15617AE7A0B56BAEDD0975FE88CA7D36 /* SDWebImage */,
 				D5682112C46C2D13FABFC77A7D04FC48 /* TWMessageBarManager */,
 				AE25003048081D3DF55398B721E38C73 /* UITableView+FDTemplateLayoutCell */,

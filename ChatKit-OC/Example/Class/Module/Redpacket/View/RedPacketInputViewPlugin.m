@@ -105,7 +105,6 @@
 }
 
 - (void)getGroupMemberListCompletionHandle:(void (^)(NSArray<RedpacketUserInfo *> *))completionHandle {
-    __weak typeof(self) weakSlef = self;
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         AVIMConversation *conversation = [self.conversationViewController getConversationIfExists];
         NSArray *allPersonIds;

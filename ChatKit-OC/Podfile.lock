@@ -41,7 +41,7 @@ PODS:
     - SDWebImage (!= 3.7.2, ~> 3.7)
   - pop (1.0.9)
   - RedPacketAlipay (15.0.2)
-  - RedpacketLib (3.3.1):
+  - RedpacketLib (3.3.2):
     - RedPacketAlipay
   - SDWebImage (3.8.2):
     - SDWebImage/Core (= 3.8.2)
@@ -80,7 +80,7 @@ SPEC CHECKSUMS:
   MWPhotoBrowser: 5836d7aa041dc05a13de380c246826578adc5ea5
   pop: f667631a5108a2e60d9e8797c9b32ddaf2080bce
   RedPacketAlipay: a5de6db2e2671fc9255d6d396be869e3ba2f0489
-  RedpacketLib: '0951e017b35fffd70817baec8cd40c8b46eca026'
+  RedpacketLib: 53d0542249e2196f6756d597c13b29e281e2c771
   SDWebImage: '098e97e6176540799c27e804c96653ee0833d13c'
   TWMessageBarManager: fd84e7948ba7968a2b5d9454859135761214ec56
   UITableView+FDTemplateLayoutCell: 02b508ab1cb4cea16a8c17ac83d2cd1fd72124f9
