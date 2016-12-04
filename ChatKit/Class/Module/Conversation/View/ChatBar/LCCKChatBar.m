@@ -352,8 +352,6 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
     [LCCKProgressHUD changeSubTitle:@"正在转换..."];
 }
 
-
-
 #pragma mark - LCCKChatFaceViewDelegate
 
 - (void)faceViewSendFace:(NSString *)faceName {

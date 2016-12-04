@@ -222,7 +222,7 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
         self.user = user;
     }];
     [self.chatViewModel setDefaultBackgroundImage];
-    self.navigationItem.title = @"聊天";
+    self.navigationItem.title = LCCKLocalizedStrings(@"Chat");//@"聊天";
     !self.viewDidLoadBlock ?: self.viewDidLoadBlock(self);
 }
 

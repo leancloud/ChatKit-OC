@@ -60,7 +60,6 @@ NSString *const LCCKSessionServiceErrorDomain = @"LCCKSessionServiceErrorDomain"
                                               firstLaunch:^BOOL(){
                                                    return [[LCChatKit sharedInstance] removeAllCachedRecentConversations];
                                               }];
-    //    [[CDFailedMessageStore store] setupStoreWithDatabasePath:dbPath];
     NSString *tag;
     if (!self.disableSingleSignOn) {
         tag = clientId;
