@@ -94,7 +94,8 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     id message = self.dataArray[indexPath.row];
     NSString *identifier = [LCCKCellIdentifierFactory cellIdentifierForMessageConfiguration:message conversationType:[self.parentConversationViewController getConversationIfExists].lcck_type];
-    return [tableView fd_heightForCellWithIdentifier:identifier cacheByKey:message configuration:^(LCCKChatMessageCell *cell) {
+    NSString *cacheKey = [LCCKCellIdentifierFactory cacheKeyForMessage:message];
+    return [tableView fd_heightForCellWithIdentifier:identifier cacheByKey:cacheKey configuration:^(LCCKChatMessageCell *cell) {
         [cell configureCellWithData:message];
     }];
 }

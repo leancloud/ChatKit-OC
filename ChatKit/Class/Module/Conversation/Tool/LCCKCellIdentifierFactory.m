@@ -90,4 +90,13 @@
     return cellIdentifier;
 }
 
++ (NSString *)cacheKeyForMessage:(id)message {
+    if (![message lcck_isCustomMessage]) {
+        LCCKMessage *message_ = (LCCKMessage *)message;
+        return message_.messageId ?: message_.systemText;
+    }
+    AVIMTypedMessage *message_ = (AVIMTypedMessage *)message;
+    return message_.messageId;
+}
+
 @end

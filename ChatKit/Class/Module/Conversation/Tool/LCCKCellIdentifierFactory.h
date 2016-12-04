@@ -17,4 +17,7 @@
  */
 
 + (NSString *)cellIdentifierForMessageConfiguration:(id)message conversationType:(LCCKConversationType)conversationType;
+
++ (NSString *)cacheKeyForMessage:(id)message;
+
 @end
