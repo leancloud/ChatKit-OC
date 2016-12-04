@@ -2,7 +2,7 @@
 //  LCCKSessionService.m
 //  LeanCloudChatKit-iOS
 //
-//  v0.8.3 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/3/1.
+//  v0.8.5 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/3/1.
 //  Copyright © 2016年 LeanCloud. All rights reserved.
 //
 
@@ -60,7 +60,6 @@ NSString *const LCCKSessionServiceErrorDomain = @"LCCKSessionServiceErrorDomain"
                                               firstLaunch:^BOOL(){
                                                    return [[LCChatKit sharedInstance] removeAllCachedRecentConversations];
                                               }];
-    //    [[CDFailedMessageStore store] setupStoreWithDatabasePath:dbPath];
     NSString *tag;
     if (!self.disableSingleSignOn) {
         tag = clientId;

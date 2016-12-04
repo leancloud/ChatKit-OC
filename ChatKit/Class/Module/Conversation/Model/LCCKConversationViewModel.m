@@ -2,7 +2,7 @@
 //  LCCKConversationViewModel.m
 //  LCCKChatExample
 //
-//  v0.8.3 Created by ElonChan (微信向我报BUG:chenyilong1010) ( https://github.com/leancloud/ChatKit-OC ) on 15/11/18.
+//  v0.8.5 Created by ElonChan (微信向我报BUG:chenyilong1010) ( https://github.com/leancloud/ChatKit-OC ) on 15/11/18.
 //  Copyright © 2015年 https://LeanCloud.cn . All rights reserved.
 //
 #if __has_include(<ChatKit/LCChatKit.h>)
@@ -94,7 +94,8 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     id message = self.dataArray[indexPath.row];
     NSString *identifier = [LCCKCellIdentifierFactory cellIdentifierForMessageConfiguration:message conversationType:[self.parentConversationViewController getConversationIfExists].lcck_type];
-    return [tableView fd_heightForCellWithIdentifier:identifier cacheByIndexPath:indexPath configuration:^(LCCKChatMessageCell *cell) {
+    NSString *cacheKey = [LCCKCellIdentifierFactory cacheKeyForMessage:message];
+    return [tableView fd_heightForCellWithIdentifier:identifier cacheByKey:cacheKey configuration:^(LCCKChatMessageCell *cell) {
         [cell configureCellWithData:message];
     }];
 }

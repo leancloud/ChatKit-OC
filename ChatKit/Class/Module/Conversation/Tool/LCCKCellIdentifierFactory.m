@@ -2,7 +2,7 @@
 //  UITableViewCell+LCCKCellIdentifier.m
 //  LCCKChatBarExample
 //
-//  v0.8.3 Created by ElonChan (微信向我报BUG:chenyilong1010) ( https://github.com/leancloud/ChatKit-OC ) on 15/11/23.
+//  v0.8.5 Created by ElonChan (微信向我报BUG:chenyilong1010) ( https://github.com/leancloud/ChatKit-OC ) on 15/11/23.
 //  Copyright © 2015年 https://LeanCloud.cn . All rights reserved.
 //
 
@@ -88,6 +88,15 @@
     
     NSString *cellIdentifier = [NSString stringWithFormat:@"%@_%@_%@", typeKey, ownerKey, groupKey];
     return cellIdentifier;
+}
+
++ (NSString *)cacheKeyForMessage:(id)message {
+    if (![message lcck_isCustomMessage]) {
+        LCCKMessage *message_ = (LCCKMessage *)message;
+        return message_.messageId ?: message_.systemText;
+    }
+    AVIMTypedMessage *message_ = (AVIMTypedMessage *)message;
+    return message_.messageId;
 }
 
 @end

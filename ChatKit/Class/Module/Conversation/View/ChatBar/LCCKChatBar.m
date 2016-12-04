@@ -2,7 +2,7 @@
 //  LCCKChatBar.m
 //  LCCKChatBarExample
 //
-//  v0.8.3 Created by ElonChan (微信向我报BUG:chenyilong1010) ( https://github.com/leancloud/ChatKit-OC ) on 15/8/17.
+//  v0.8.5 Created by ElonChan (微信向我报BUG:chenyilong1010) ( https://github.com/leancloud/ChatKit-OC ) on 15/8/17.
 //  Copyright (c) 2015年 https://LeanCloud.cn . All rights reserved.
 //
 
@@ -351,8 +351,6 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
 - (void)beginConvert {
     [LCCKProgressHUD changeSubTitle:@"正在转换..."];
 }
-
-
 
 #pragma mark - LCCKChatFaceViewDelegate
 
