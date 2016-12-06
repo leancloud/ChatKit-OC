@@ -52,7 +52,7 @@ static NSString *requestUrl = @"https://rpv2.yunzhanghu.com/api/sign?duid=";
     }
     RedpacketUserInfo *user = [[RedpacketUserInfo alloc] init];
     user.userId = clientId;
-    user.userNickname = userName;
+    user.userNickname = userName.length?userName:clientId;
     user.userAvatar = avatarURL;
     return user;
 }
