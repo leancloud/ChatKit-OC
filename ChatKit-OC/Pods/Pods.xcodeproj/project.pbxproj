@@ -1563,7 +1563,9 @@
 		6094627CE249D98F3C50726BE37F6279 /* POPDecayAnimation.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = POPDecayAnimation.h; path = pop/POPDecayAnimation.h; sourceTree = "<group>"; };
 		609DB94B1564328EC291D109EC021840 /* AVObjectUtils.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = AVObjectUtils.h; path = AVOS/AVOSCloud/Object/AVObjectUtils.h; sourceTree = "<group>"; };
 		621AC397E948945CF0CC24DC6CCD40FE /* AVFile_Internal.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = AVFile_Internal.h; path = AVOS/AVOSCloud/File/AVFile_Internal.h; sourceTree = "<group>"; };
-		62737E65B3F7D4662702494E35E6C01F /* PlayButtonOverlayLarge.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = PlayButtonOverlayLarge.png; path = Pod/Assets/PlayButtonOverlayLarge.png; sourceTree = "<group>"; };
+
+		62737E65B3F7D4662702494E35E6C01F /* PlayButtonOverlayLarge.png */ = {isa = PBXFileReference; includeInIndex = 1; name = PlayButtonOverlayLarge.png; path = Pod/Assets/PlayButtonOverlayLarge.png; sourceTree = "<group>"; };
+
 		62AD91DEC5CF73D5F6E0CB2D1EC55165 /* LCURLConnection.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = LCURLConnection.m; path = AVOS/AVOSCloud/Utils/LCURLConnection.m; sourceTree = "<group>"; };
 		62F791315B55530E8FEE89E073B1E346 /* POPVector.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = POPVector.h; path = pop/POPVector.h; sourceTree = "<group>"; };
 		630E822DFE00F53AC191FBA6A47B286C /* MWCaptionView.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = MWCaptionView.m; path = Pod/Classes/MWCaptionView.m; sourceTree = "<group>"; };
@@ -1751,7 +1753,9 @@
 		920ED40FAC2F80A67CC285D900201168 /* POPLayerExtras.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; name = POPLayerExtras.mm; path = pop/POPLayerExtras.mm; sourceTree = "<group>"; };
 		92DF3028A7D7E0532883887C632939F8 /* LCCKContact.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = LCCKContact.m; sourceTree = "<group>"; };
 		92E862AF548439D5D9FE50C7BCA82CFC /* MWTapDetectingImageView.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = MWTapDetectingImageView.h; path = Pod/Classes/MWTapDetectingImageView.h; sourceTree = "<group>"; };
-		93A4A3777CF96A4AAC1D13BA6DCCEA73 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+
+		93A4A3777CF96A4AAC1D13BA6DCCEA73 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; lastKnownFileType = text; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+
 		93AFA482E4116D17EBA7B23E96E7775C /* YZHRedpacketBridgeProtocol.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = YZHRedpacketBridgeProtocol.h; path = RedpacketStaticLib/YZHRedpacketBridgeProtocol.h; sourceTree = "<group>"; };
 		93DAC62E116CAD4F87EAE8A84F251C9A /* AVSession.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = AVSession.m; path = AVOS/AVOSCloud/IM/AVSession.m; sourceTree = "<group>"; };
 		94047F40B1EDDF3AB42B23D6E0680F8D /* UITableView+FDTemplateLayoutCell.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "UITableView+FDTemplateLayoutCell.h"; path = "Classes/UITableView+FDTemplateLayoutCell.h"; sourceTree = "<group>"; };
@@ -1881,7 +1885,9 @@
 		B53A668302A3F1357C2DC359F8208CBC /* UIColor+LCCKExtension.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "UIColor+LCCKExtension.m"; sourceTree = "<group>"; };
 		B5799670126B48E14ABC4C137659FA70 /* AVPush.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = AVPush.h; path = AVOS/AVOSCloud/Push/AVPush.h; sourceTree = "<group>"; };
 		B5C678BB3326842FA9DF35632C403581 /* LCCKConversationService.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = LCCKConversationService.m; sourceTree = "<group>"; };
-		B6108CAF2EF5C732155AF415BA84C960 /* ImageSelectedSmallOff@3x.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = "ImageSelectedSmallOff@3x.png"; path = "Pod/Assets/ImageSelectedSmallOff@3x.png"; sourceTree = "<group>"; };
+
+		B6108CAF2EF5C732155AF415BA84C960 /* ImageSelectedSmallOff@3x.png */ = {isa = PBXFileReference; includeInIndex = 1; name = "ImageSelectedSmallOff@3x.png"; path = "Pod/Assets/ImageSelectedSmallOff@3x.png"; sourceTree = "<group>"; };
+
 		B65868E0086AEC0E7278B061EF43A43E /* RedpacketErrorCode.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RedpacketErrorCode.h; path = RedpacketStaticLib/RedpacketErrorCode.h; sourceTree = "<group>"; };
 		B67F0A03C502B576E992E6046F929F52 /* LCIMUnknownFieldSet_PackagePrivate.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = LCIMUnknownFieldSet_PackagePrivate.h; path = AVOS/AVOSCloudIM/Protobuf/LCIMUnknownFieldSet_PackagePrivate.h; sourceTree = "<group>"; };
 		B69B32FAF10BB04194E4F7F9A1C70C36 /* MLPAutoCompleteTextFieldDataSource.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = MLPAutoCompleteTextFieldDataSource.h; path = MLPAutoCompleteTextField/MLPAutoCompleteTextFieldDataSource.h; sourceTree = "<group>"; };
@@ -3053,6 +3059,8 @@
 				E465D753D23327346D592617249767DC /* Frameworks */,
 				D8AEFDEEDCBECAF51784F2C13783F482 /* Resources */,
 			);
+
+			name = RedpacketLib;
 			path = RedpacketLib;
 			sourceTree = "<group>";
 		};
@@ -4008,31 +4016,7 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		E7A18FBA5236D18C4603AD80C990A6B4 /* iOS */ = {
-			isa = PBXGroup;
-			children = (
-				DE64B5B038CC77BDCC449965523FA25B /* AssetsLibrary.framework */,
-				D3AB6BC744EC4EF07F3B851197407219 /* AudioToolbox.framework */,
-				079E64EFDB96C5F58A702FAE28132718 /* AVFoundation.framework */,
-				9590A9F0BA416D92DF025DA432B0E61F /* CFNetwork.framework */,
-				D8B92F50E070086723581B13AEE4D809 /* CoreGraphics.framework */,
-				455BC5A8A5996DEC4131801123621932 /* CoreLocation.framework */,
-				E7E570F605823B1F2444BF7FF14405FD /* CoreMedia.framework */,
-				588F9360AB4D91E05923C40E9767CAC4 /* CoreTelephony.framework */,
-				D3BECA8BD0619E3718D2F4E0AF54FC2D /* CoreText.framework */,
-				FFBC8959B5054F66ED1E166F2016E4C6 /* Foundation.framework */,
-				E3C6CF9AFC077982DC5EDE10A003943F /* ImageIO.framework */,
-				9D95508116994F502A78CB68396C9FF7 /* MapKit.framework */,
-				9BA57C25E78D0A3AEBDBF1ECEC17C646 /* MediaPlayer.framework */,
-				B47EBFF0C3A9B4B50195A8841AECDAB8 /* MobileCoreServices.framework */,
-				7F8E3BE975436F5108110D4CC4D4A597 /* QuartzCore.framework */,
-				2A915488D2E02C1C7C24C54C5D119C09 /* Security.framework */,
-				DDF79370AB5E79A70B37756026BE1CE1 /* SystemConfiguration.framework */,
-				6F0A8580995AEDA19407FD92E7EAEF06 /* UIKit.framework */,
-			);
-			name = iOS;
-			sourceTree = "<group>";
-		};
+
 		E7DA7293ECB2EC510FC55CCFD058193A /* LCCKWebViewController */ = {
 			isa = PBXGroup;
 			children = (

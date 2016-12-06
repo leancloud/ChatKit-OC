@@ -139,7 +139,7 @@ static const CGFloat Redpacket_SubMessage_Font_Size = 12.0f;
                 if ([message.rpModel.redpacketSender.userId isEqualToString:obj.clientId]) {
                     RedpacketUserInfo * userInfo = [RedpacketUserInfo new];
                     userInfo.userId = obj.clientId;
-                    userInfo.userNickname = obj.name?obj.name:obj.clientId;
+                    userInfo.userNickname = obj.name.length?obj.name:obj.clientId;
                     userInfo.userAvatar = obj.avatarURL.absoluteString;
                     message.rpModel.redpacketSender = userInfo;
                 }
