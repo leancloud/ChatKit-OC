@@ -54,7 +54,7 @@ static CGFloat const LCCKScrollViewInsetTop = 20.f;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     // KVO注册监听
     [self addObserver:self forKeyPath:@"loadingMoreMessage" options:NSKeyValueObservingOptionNew context:LCCKBaseConversationViewControllerRefreshContext];
-    __unsafe_unretained typeof(self) weakSelf = self;
+    __unsafe_unretained __typeof(self) weakSelf = self;
     [self lcck_executeAtDealloc:^{
         [weakSelf removeObserver:weakSelf forKeyPath:@"loadingMoreMessage"];
     }];

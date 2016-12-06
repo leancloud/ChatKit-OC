@@ -65,7 +65,7 @@
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveMessage:) name:LCCKNotificationMessageReceived object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(conversationInvalided:) name:LCCKNotificationCurrentConversationInvalided object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(backgroundImageChanged:) name:LCCKNotificationConversationViewControllerBackgroundImageDidChanged object:nil];
-        __unsafe_unretained typeof(self) weakSelf = self;
+        __unsafe_unretained __typeof(self) weakSelf = self;
         [self lcck_executeAtDealloc:^{
             weakSelf.delegate = nil;
             [[NSNotificationCenter defaultCenter] removeObserver:weakSelf];

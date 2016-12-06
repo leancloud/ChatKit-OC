@@ -28,7 +28,7 @@ static void * const LCCKTextFullScreenViewContentSizeContext = (void*)&LCCKTextF
     if (!_displayTextView) {
         UITextView *displayTextView = [[UITextView alloc] initWithFrame:self.view.frame];
         [displayTextView addObserver:self forKeyPath:@"contentSize" options:(NSKeyValueObservingOptionNew) context:LCCKTextFullScreenViewContentSizeContext];
-        __unsafe_unretained typeof(self) weakSelf = self;
+        __unsafe_unretained __typeof(self) weakSelf = self;
         [self lcck_executeAtDealloc:^{
             [displayTextView removeObserver:weakSelf forKeyPath:@"contentSize"];
         }];

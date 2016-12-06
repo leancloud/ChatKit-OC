@@ -13,19 +13,19 @@
 
 @interface LCCKBaseViewController ()
 
-@property (nonatomic, copy, readwrite) LCCKViewDidLoadBlock viewDidLoadBlock;
-@property (nonatomic, copy, readwrite) LCCKViewWillAppearBlock viewWillAppearBlock;
-@property (nonatomic, copy, readwrite) LCCKViewDidAppearBlock viewDidAppearBlock;
-@property (nonatomic, copy, readwrite) LCCKViewWillDisappearBlock viewWillDisappearBlock;
-@property (nonatomic, copy, readwrite) LCCKViewDidDisappearBlock viewDidDisappearBlock;
-@property (nonatomic, copy, readwrite) LCCKViewDidDismissBlock viewDidDismissBlock;
-@property (nonatomic, copy, readwrite) LCCKViewControllerWillDeallocBlock viewControllerWillDeallocBlock;
-@property (nonatomic, copy, readwrite) LCCKViewDidReceiveMemoryWarningBlock didReceiveMemoryWarningBlock;
 @property (nonatomic, copy) LCCKBarButtonItemActionBlock barButtonItemAction;
 
 @end
 
 @implementation LCCKBaseViewController
+@synthesize viewDidLoadBlock = _viewDidLoadBlock;
+@synthesize viewWillAppearBlock = _viewWillAppearBlock;
+@synthesize viewDidAppearBlock = _viewDidAppearBlock;
+@synthesize viewWillDisappearBlock = _viewWillDisappearBlock;
+@synthesize viewDidDisappearBlock = _viewDidDisappearBlock;
+@synthesize viewDidDismissBlock = _viewDidDismissBlock;
+@synthesize viewControllerWillDeallocBlock = _viewControllerWillDeallocBlock;
+@synthesize didReceiveMemoryWarningBlock = _didReceiveMemoryWarningBlock;
 
 #pragma mark -
 #pragma mark - UIViewController Life Event Block
