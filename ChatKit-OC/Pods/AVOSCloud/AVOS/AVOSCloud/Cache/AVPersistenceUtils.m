@@ -143,18 +143,15 @@
 
 #pragma mark -  Private Documents Concrete Path
 
-+ (NSString *)currentUserArchivePath
-{
++ (NSString *)currentUserArchivePath {
     NSString * path = [[AVPersistenceUtils privateDocumentsDirectory] stringByAppendingString:@"/currentUser"];
     return path;
 }
 
-+ (NSString *)currentUserClassArchivePath
-{
++ (NSString *)currentUserClassArchivePath {
     NSString *path = [[AVPersistenceUtils privateDocumentsDirectory] stringByAppendingString:@"/currentUserClass"];
     return path;
 }
-
 
 + (NSString *)currentInstallationArchivePath {
     NSString *path = [[AVPersistenceUtils privateDocumentsDirectory] stringByAppendingString:@"/currentInstallation"];

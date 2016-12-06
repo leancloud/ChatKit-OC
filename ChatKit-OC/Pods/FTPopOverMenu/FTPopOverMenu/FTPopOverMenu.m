@@ -8,6 +8,14 @@
 
 #import "FTPopOverMenu.h"
 
+// changeable
+#define FTDefaultMargin             4.0
+#define FTDefaultMenuArrowWidth     8.0
+#define FTDefaultMenuArrowHeight    10.0
+#define FTDefaultMenuTextMargin     6.0
+#define FTDefaultMenuCornerRadius   4.0
+#define FTDefaultAnimationDuration  0.2
+// unchangeable, change them at your own risk
 #define KSCREEN_WIDTH               [[UIScreen mainScreen] bounds].size.width
 #define KSCREEN_HEIGHT              [[UIScreen mainScreen] bounds].size.height
 #define FTDefaultBackgroundColor    [UIColor clearColor]
@@ -17,15 +25,9 @@
 #define FTDefaultMenuWidth          120.0
 #define FTDefaultMenuIconSize       24.0
 #define FTDefaultMenuRowHeight      40.0
-#define FTDefaultMenuCornerRadius   4.0
-#define FTDefaultMargin             4.0
-#define FTDefaultMenuTextMargin     6.0
 #define FTDefaultMenuBorderWidth    0.8
-#define FTDefaultAnimationDuration  0.3
-#define FTDefaultMenuArrowHeight    10.0
-#define FTDefaultMenuArrowWidth     8.0
 
-#define FTPopOverMenuTableViewCellIndentifier @"FTPopOverMenuTableViewCellIndentifier"
+static NSString * const FTPopOverMenuTableViewCellIndentifier = @"FTPopOverMenuTableViewCellIndentifier";
 
 /**
  *  FTPopOverMenuArrowDirection
@@ -166,7 +168,6 @@ typedef NS_ENUM(NSUInteger, FTPopOverMenuArrowDirection) {
         _menuTableView.backgroundColor = FTDefaultBackgroundColor;
         _menuTableView.separatorColor = [UIColor grayColor];
         _menuTableView.layer.cornerRadius = FTDefaultMenuCornerRadius;
-        _menuTableView.separatorInset = UIEdgeInsetsMake(0, FTDefaultMenuTextMargin, 0, FTDefaultMenuTextMargin);
         _menuTableView.scrollEnabled = NO;
         _menuTableView.clipsToBounds = YES;
         _menuTableView.delegate = self;
@@ -178,13 +179,15 @@ typedef NS_ENUM(NSUInteger, FTPopOverMenuArrowDirection) {
 
 
 
--(void)showWithAnglePoint:(CGPoint)anglePoint
-            withNameArray:(NSArray<NSString*> *)nameArray
-           imageNameArray:(NSArray<NSString*> *)imageNameArray
-         shouldAutoScroll:(BOOL)shouldAutoScroll
-           arrowDirection:(FTPopOverMenuArrowDirection)arrowDirection
-                doneBlock:(FTPopOverMenuDoneBlock)doneBlock
+-(void)showWithFrame:(CGRect )frame
+          anglePoint:(CGPoint)anglePoint
+       withNameArray:(NSArray<NSString*> *)nameArray
+      imageNameArray:(NSArray<NSString*> *)imageNameArray
+    shouldAutoScroll:(BOOL)shouldAutoScroll
+      arrowDirection:(FTPopOverMenuArrowDirection)arrowDirection
+           doneBlock:(FTPopOverMenuDoneBlock)doneBlock
 {
+    self.frame = frame;
     _menuStringArray = nameArray;
     _menuIconNameArray = imageNameArray;
     _arrowDirection = arrowDirection;
@@ -206,7 +209,7 @@ typedef NS_ENUM(NSUInteger, FTPopOverMenuArrowDirection) {
     if (_backgroundLayer) {
         [_backgroundLayer removeFromSuperlayer];
     }
-    
+
     UIBezierPath *path = [UIBezierPath bezierPath];
 
     switch (_arrowDirection) {
@@ -284,7 +287,11 @@ typedef NS_ENUM(NSUInteger, FTPopOverMenuArrowDirection) {
                                                           reuseIdentifier:FTPopOverMenuTableViewCellIndentifier
                                                                  menuName:[NSString stringWithFormat:@"%@", _menuStringArray[indexPath.row]]
                                                             iconImageName:imageName];
-    
+    if (indexPath.row == _menuStringArray.count-1) {
+        menuCell.separatorInset = UIEdgeInsetsMake(0, self.bounds.size.width, 0, 0);
+    }else{
+        menuCell.separatorInset = UIEdgeInsetsMake(0, FTDefaultMenuTextMargin, 0, FTDefaultMenuTextMargin);
+    }
     return menuCell;
 }
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -444,7 +451,6 @@ typedef NS_ENUM(NSUInteger, FTPopOverMenuArrowDirection) {
 }
 
 
-
 - (void) showForSender:(UIView *)sender
            senderFrame:(CGRect )senderFrame
               withMenu:(NSArray<NSString*> *)menuArray
@@ -475,7 +481,7 @@ typedef NS_ENUM(NSUInteger, FTPopOverMenuArrowDirection) {
     
     if (self.sender) {
         senderRect = [self.sender.superview convertRect:self.sender.frame toView:self.backgroundView];
-        // if run into touch problems on nav bar
+// if run into touch problems on nav bar, use the fowllowing line.
 //        senderRect.origin.y = MAX(64-senderRect.origin.y, senderRect.origin.y);
     }else{
         senderRect = self.senderFrame;
@@ -494,7 +500,6 @@ typedef NS_ENUM(NSUInteger, FTPopOverMenuArrowDirection) {
     if (senderRect.origin.y + senderRect.size.height/2  < KSCREEN_HEIGHT/2) {
         arrowDirection = FTPopOverMenuArrowDirectionUp;
         menuArrowPoint.y = 0;
-
     }else{
         arrowDirection = FTPopOverMenuArrowDirectionDown;
         menuArrowPoint.y = menuHeight;
@@ -529,22 +534,54 @@ typedef NS_ENUM(NSUInteger, FTPopOverMenuArrowDirection) {
             shouldAutoScroll = YES;
         }
     }
-
-
-    _popMenuView.frame = menuRect;
+    
+    CGPoint anchorPoint = CGPointMake(menuArrowPoint.x/menuRect.size.width, 0);
+    if (arrowDirection == FTPopOverMenuArrowDirectionDown) {
+        anchorPoint = CGPointMake(menuArrowPoint.x/menuRect.size.width, 1);
+    }
+    
+    
+    
+    _popMenuView.transform = CGAffineTransformMakeScale(1, 1);
  
-    [_popMenuView showWithAnglePoint:menuArrowPoint
-                       withNameArray:self.menuArray
-                      imageNameArray:self.menuImageArray
-                    shouldAutoScroll:shouldAutoScroll
-                      arrowDirection:arrowDirection
-                           doneBlock:^(NSInteger selectedIndex) {
-                               [self doneActionWithSelectedIndex:selectedIndex];
-                           }];
+    [_popMenuView showWithFrame:menuRect
+                     anglePoint:menuArrowPoint
+                  withNameArray:self.menuArray
+                 imageNameArray:self.menuImageArray
+               shouldAutoScroll:shouldAutoScroll
+                 arrowDirection:arrowDirection
+                      doneBlock:^(NSInteger selectedIndex) {
+                          [self doneActionWithSelectedIndex:selectedIndex];
+                      }];
+    
+    [self setAnchorPoint:anchorPoint forView:_popMenuView];
+    
+    _popMenuView.transform = CGAffineTransformMakeScale(0.1, 0.1);
     
     [self show];
 }
 
+-(void)setAnchorPoint:(CGPoint)anchorPoint forView:(UIView *)view
+{
+    CGPoint newPoint = CGPointMake(view.bounds.size.width * anchorPoint.x,
+                                   view.bounds.size.height * anchorPoint.y);
+    CGPoint oldPoint = CGPointMake(view.bounds.size.width * view.layer.anchorPoint.x,
+                                   view.bounds.size.height * view.layer.anchorPoint.y);
+    
+    newPoint = CGPointApplyAffineTransform(newPoint, view.transform);
+    oldPoint = CGPointApplyAffineTransform(oldPoint, view.transform);
+    
+    CGPoint position = view.layer.position;
+    
+    position.x -= oldPoint.x;
+    position.x += newPoint.x;
+    
+    position.y -= oldPoint.y;
+    position.y += newPoint.y;
+    
+    view.layer.position = position;
+    view.layer.anchorPoint = anchorPoint;
+}
 
 #pragma mark - UIGestureRecognizerDelegate
 -(BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch
@@ -574,6 +611,7 @@ typedef NS_ENUM(NSUInteger, FTPopOverMenuArrowDirection) {
     [UIView animateWithDuration:FTDefaultAnimationDuration
                      animations:^{
                          _popMenuView.alpha = 1;
+                         _popMenuView.transform = CGAffineTransformMakeScale(1, 1);
                      }];
 }
 
@@ -592,11 +630,11 @@ typedef NS_ENUM(NSUInteger, FTPopOverMenuArrowDirection) {
     [UIView animateWithDuration:FTDefaultAnimationDuration
                      animations:^{
                          _popMenuView.alpha = 0;
+                         _popMenuView.transform = CGAffineTransformMakeScale(0.1, 0.1);
                      }completion:^(BOOL finished) {
                          if (finished) {
                              [self.popMenuView removeFromSuperview];
                              [self.backgroundView removeFromSuperview];
-                             
                              if (selectedIndex < 0) {
                                  if (self.dismissBlock) {
                                      self.dismissBlock();

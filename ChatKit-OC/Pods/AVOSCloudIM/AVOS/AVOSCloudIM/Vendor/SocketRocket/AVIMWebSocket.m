@@ -1492,6 +1492,9 @@ SecKeyRef LCGetPublicKeyFromCertificate(SecCertificateRef cert);
         if (result)
             break;
     }
+
+    if (policy)
+        CFRelease(policy);
     
     return result;
 }

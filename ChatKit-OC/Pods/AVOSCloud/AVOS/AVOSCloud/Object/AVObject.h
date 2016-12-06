@@ -15,7 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
  main class that is used to interact with objects in your app.
 */
 
-@interface AVObject : NSObject
+@interface AVObject : NSObject <NSCoding>
 
 #pragma mark Constructors
 

@@ -1,17 +1,17 @@
 PODS:
-  - AVOSCloud (3.6.1)
-  - AVOSCloudIM (3.6.1):
-    - AVOSCloud (= 3.6.1)
-    - AVOSCloudIM/_ARC (= 3.6.1)
-    - AVOSCloudIM/_NOARC (= 3.6.1)
-  - AVOSCloudIM/_ARC (3.6.1):
-    - AVOSCloud (= 3.6.1)
-    - AVOSCloudIM/_NOARC (= 3.6.1)
-  - AVOSCloudIM/_NOARC (3.6.1):
-    - AVOSCloud (= 3.6.1)
-  - ChatKit (0.8.3):
-    - AVOSCloud (~> 3.6.0)
-    - AVOSCloudIM (~> 3.6.0)
+  - AVOSCloud (3.8.0)
+  - AVOSCloudIM (3.8.0):
+    - AVOSCloud (= 3.8.0)
+    - AVOSCloudIM/_ARC (= 3.8.0)
+    - AVOSCloudIM/_NOARC (= 3.8.0)
+  - AVOSCloudIM/_ARC (3.8.0):
+    - AVOSCloud (= 3.8.0)
+    - AVOSCloudIM/_NOARC (= 3.8.0)
+  - AVOSCloudIM/_NOARC (3.8.0):
+    - AVOSCloud (= 3.8.0)
+  - ChatKit (0.8.6):
+    - AVOSCloud (~> 3.8.0)
+    - AVOSCloudIM (~> 3.8.0)
     - DACircularProgress (~> 2.3.1)
     - FDStackView (~> 1.0)
     - FMDB (~> 2.6.2)
@@ -29,7 +29,7 @@ PODS:
   - FMDB (2.6.2):
     - FMDB/standard (= 2.6.2)
   - FMDB/standard (2.6.2)
-  - FTPopOverMenu (1.2.2)
+  - FTPopOverMenu (1.2.5)
   - Masonry (1.0.2)
   - MBProgressHUD (0.9.2)
   - MJRefresh (3.1.12)
@@ -41,7 +41,7 @@ PODS:
     - SDWebImage (!= 3.7.2, ~> 3.7)
   - pop (1.0.9)
   - RedPacketAlipay (15.0.2)
-  - RedpacketLib (3.3.1):
+  - RedpacketLib (3.3.2):
     - RedPacketAlipay
   - SDWebImage (3.8.2):
     - SDWebImage/Core (= 3.8.2)
@@ -60,18 +60,18 @@ DEPENDENCIES:
 
 EXTERNAL SOURCES:
   ChatKit:
-    :path: "../"
+    :path: ../
 
 SPEC CHECKSUMS:
-  AVOSCloud: cc9b567da2d30f07e3da1e4db682cad9ff56a1b6
-  AVOSCloudIM: 7c30a50d1e8f6afee000a2037ea24eb6abcbc8db
-  ChatKit: 87c458635a0cbf55fb024b63b349c920773cd92f
+  AVOSCloud: ae9804496f51de99c4143fea7f842d6f46a32b4c
+  AVOSCloudIM: bea73c50c58c7c5e466e0c7134b4b7d2f02c338a
+  ChatKit: 1792f3e14ac4719cf833302c88c133d628b3a908
   CYLTabBarController: c1a3eaee3081c84cd45105c5b4c26d62b747de67
   CYLTableViewRowAction: 66bd3f7478b46894ff40b74d892fc85aed41656b
   DACircularProgress: 4dd437c0fc3da5161cb289e07ac449493d41db71
   FDStackView: 3a4bbe0ce9c35e974246a585168b9da8c32213f1
   FMDB: 854a0341b4726e53276f2a8996f06f1b80f9259a
-  FTPopOverMenu: 6a535b7664b20d52d5a299d1f34414414e996caf
+  FTPopOverMenu: 4da913001eef1496a4bf47fc814aaf5d5d36d19d
   Masonry: 7c429b56da9d4ee0bbb3ed77a5ea710d6a5df39e
   MBProgressHUD: 1569cf7ace17a8bac47aabfbb8580a49690386d1
   MJRefresh: b96cdb21c4aa75a7b07654311ab2f315c497e806
@@ -80,11 +80,11 @@ SPEC CHECKSUMS:
   MWPhotoBrowser: 5836d7aa041dc05a13de380c246826578adc5ea5
   pop: f667631a5108a2e60d9e8797c9b32ddaf2080bce
   RedPacketAlipay: a5de6db2e2671fc9255d6d396be869e3ba2f0489
-  RedpacketLib: '0951e017b35fffd70817baec8cd40c8b46eca026'
-  SDWebImage: '098e97e6176540799c27e804c96653ee0833d13c'
+  RedpacketLib: 53d0542249e2196f6756d597c13b29e281e2c771
+  SDWebImage: 098e97e6176540799c27e804c96653ee0833d13c
   TWMessageBarManager: fd84e7948ba7968a2b5d9454859135761214ec56
   UITableView+FDTemplateLayoutCell: 02b508ab1cb4cea16a8c17ac83d2cd1fd72124f9
 
 PODFILE CHECKSUM: 7049febc3cb25945bd3dfea85aca846773a550f0
 
-COCOAPODS: 1.1.1
+COCOAPODS: 1.0.0

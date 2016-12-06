@@ -86,6 +86,10 @@
     [self.cacheStore allExpiredConversations];
 }
 
+- (void)updateConversationForLastMessageAt:(NSDate *)lastMessageAt conversationId:(NSString *)conversationId {
+    [self.cacheStore updateConversationForLastMessageAt:lastMessageAt conversationId:conversationId];
+}
+
 #pragma mark - Lazy loading
 
 - (LCIMConversationCacheStore *)cacheStore {

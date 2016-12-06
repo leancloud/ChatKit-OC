@@ -172,6 +172,7 @@ SecKeyRef LCGetPublicKeyFromCertificate(SecCertificateRef cert) {
     result = SecTrustCopyPublicKey(trust);
 
 _out:
+    if (policy) CFRelease(policy);
     if (certArr) CFRelease(certArr);
     if (trust) CFRelease(trust);
 
@@ -512,6 +513,28 @@ if (block) { \
                           result:(AVCloudQueryResult *)result
                            error:error {
     safeBlock(result);
+}
+
++ (dispatch_queue_t)asynchronousTaskQueue {
+    static dispatch_queue_t queue;
+    static dispatch_once_t onceToken;
+
+    if (queue)
+        return queue;
+
+    dispatch_once(&onceToken, ^{
+        queue = dispatch_queue_create("avos.common.dispatchQueue", DISPATCH_QUEUE_CONCURRENT);
+    });
+
+    return queue;
+}
+
++ (void)asynchronize:(void (^)())task {
+    NSAssert(task != nil, @"Task cannot be nil.");
+
+    dispatch_async([self asynchronousTaskQueue], ^{
+        task();
+    });
 }
 
 #pragma mark - String Util

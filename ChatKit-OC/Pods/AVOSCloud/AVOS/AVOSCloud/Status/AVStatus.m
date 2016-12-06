@@ -14,7 +14,7 @@
 #import "AVQuery_Internal.h"
 #import "SDMacros.h"
 #import "AVUtils.h"
-
+#import "AVUser_Internal.h"
 
 NSString * const kAVStatusTypeTimeline=@"default";
 NSString * const kAVStatusTypePrivateMessage=@"private";
@@ -166,7 +166,7 @@ NSString * const kAVStatusTypePrivateMessage=@"private";
 }
 
 +(NSError*)permissionCheck{
-    if (![AVUser currentUser].isAuthenticated) {
+    if (![[AVUser currentUser] isAuthDataExistInMemory]) {
         NSError *error= [AVErrorUtils errorWithCode:kAVErrorUserCannotBeAlteredWithoutSession];
         return error;
     }

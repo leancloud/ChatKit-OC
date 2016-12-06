@@ -45,6 +45,11 @@
 - (void)deleteConversationAndItsMessagesForId:(NSString *)conversationId;
 
 /*!
+ * update conversation lastMessageAt.
+ */
+- (void)updateConversationForLastMessageAt:(NSDate *)lastMessageAt conversationId:(NSString *)conversationId;
+
+/*!
  * Get conversation from cache by id.
  * @param conversationId Conversation id.
  * @param A conversation or nil if conversation not found or expired.

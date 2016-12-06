@@ -38,4 +38,9 @@
  */
 - (void)processEnd:(BOOL)end;
 
+/**
+ * Get JSON-compatible dictionary of where constraints.
+ */
+- (NSDictionary *)whereJSONDictionary;
+
 @end

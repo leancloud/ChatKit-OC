@@ -576,10 +576,8 @@ static BOOL AVIMClientHasInstantiated = NO;
     [[NSNotificationCenter defaultCenter] removeObserver:self name:AVIM_NOTIFICATION_WEBSOCKET_ERROR object:_socketWrapper];
 }
 
-- (void)processClientStatusAfterWebSocketOfflineWithError:(NSError *)error {
-    if (!error) {
-        [self removeWebSocketNotification];
-    }
+- (void)processClientStatusAfterWebSocketOffline {
+    [self removeWebSocketNotification];
     [[AVInstallation currentInstallation] removeObject:_clientId forKey:@"channels"];
     if ([[AVInstallation currentInstallation] deviceToken]) {
         [[AVInstallation currentInstallation] saveInBackground];
@@ -597,7 +595,9 @@ static BOOL AVIMClientHasInstantiated = NO;
         AVIMSessionCommand *sessionCommand = [[AVIMSessionCommand alloc] init];
         [genericCommand avim_addRequiredKeyWithCommand:sessionCommand];
         [genericCommand setCallback:^(AVIMGenericCommand *outCommand, AVIMGenericCommand *inCommand, NSError *error) {
-            [self processClientStatusAfterWebSocketOfflineWithError:error];
+            if (!error) {
+                [self processClientStatusAfterWebSocketOffline];
+            }
             [AVIMBlockHelper callBooleanResultBlock:callback error:error];
         }];
         [self sendCommand:genericCommand];
@@ -662,7 +662,7 @@ static BOOL AVIMClientHasInstantiated = NO;
                 AVIMConversation *conversation = [self conversationWithId:conversationInCommand.cid];
                 NSDictionary *dict = [self parseJsonFromMessage:conversationOutCommand.attr];
                 conversation.name = [dict objectForKey:KEY_NAME];
-                conversation.attributes = [dict objectForKey:KEY_ATTR];
+                conversation.attributes = [AVIMConversation filterCustomAttributesFromDictionary:dict];
                 conversation.creator = self.clientId;
                 conversation.createAt = [AVObjectUtils dateFromString:[conversationInCommand cdate]];
                 conversation.transient = conversationOutCommand.transient;
@@ -958,7 +958,7 @@ static BOOL AVIMClientHasInstantiated = NO;
             [self changeStatus:AVIMClientStatusClosed];
             if ([self.delegate respondsToSelector:@selector(client:didOfflineWithError:)]) {
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    [self processClientStatusAfterWebSocketOfflineWithError:nil];
+                    [self processClientStatusAfterWebSocketOffline];
                     [self.delegate client:self didOfflineWithError:[genericCommand avim_errorObject]];
                 });
             }

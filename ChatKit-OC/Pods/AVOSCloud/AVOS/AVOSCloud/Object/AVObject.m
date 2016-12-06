@@ -195,18 +195,11 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
     static NSArray *_invalidKeys;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        _invalidKeys = @[@"code",
-                         @"uuid",
-                         @"className",
-                         @"keyValues",
-                         @"fetchWhenSave",
-                         @"running",
-                         @"acl",
-                         @"ACL",
-                         @"pendingKeys",
-                         @"createdAt",
-                         @"updatedAt",
-                         @"objectId"];
+        _invalidKeys = @[
+            @"objectId",
+            @"createdAt",
+            @"updatedAt"
+        ];
     });
     return _invalidKeys;
 }
@@ -235,6 +228,34 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
         self.className = newClassName;
     }
     return self;
+}
+
+- (instancetype)initWithCoder:(NSCoder *)aDecoder {
+    self = [super init];
+
+    if (self) {
+        _ACL = [aDecoder decodeObjectForKey:@"ACL"];
+        _objectId = [aDecoder decodeObjectForKey:@"objectId"];
+        _createdAt = [aDecoder decodeObjectForKey:@"createdAt"];
+        _updatedAt = [aDecoder decodeObjectForKey:@"updatedAt"];
+        _className = [aDecoder decodeObjectForKey:@"className"];
+        _localData = [[aDecoder decodeObjectForKey:@"localData"] mutableCopy] ?: [NSMutableDictionary dictionary];
+        _estimatedData = [[aDecoder decodeObjectForKey:@"estimatedData"] mutableCopy] ?: [NSMutableDictionary dictionary];
+        _relationData = [[aDecoder decodeObjectForKey:@"relationData"] mutableCopy] ?: [NSMutableDictionary dictionary];
+    }
+
+    return self;
+}
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+    [aCoder encodeObject:_ACL forKey:@"ACL"];
+    [aCoder encodeObject:_objectId forKey:@"objectId"];
+    [aCoder encodeObject:_createdAt forKey:@"createdAt"];
+    [aCoder encodeObject:_updatedAt forKey:@"updatedAt"];
+    [aCoder encodeObject:_className forKey:@"className"];
+    [aCoder encodeObject:_localData forKey:@"localData"];
+    [aCoder encodeObject:_estimatedData forKey:@"estimatedData"];
+    [aCoder encodeObject:_relationData forKey:@"relationData"];
 }
 
 -(NSArray *)allArray
@@ -335,12 +356,14 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
 
 - (void)setObject:(id)object forKey:(NSString *)key
 {
-    if ([[[self class] invalidKeys] containsObject:key]) {
-        NSError *error = [NSError errorWithDomain:kAVErrorDomain code:0 userInfo:@{@"text":[NSString stringWithFormat:@"Don't use an internal key name:%@", key]}];
-        AVLoggerE(@"fail to set object for key, error: %@", error);
-        NSException *exception = [NSException exceptionWithName:kAVErrorDomain reason:[NSString stringWithFormat:@"Invalid key name:%@", key] userInfo:nil];
-        [exception raise];
+    if ([key isEqualToString:@"ACL"]) {
+        [self setACL:object];
         return;
+    }
+
+    if ([[AVObject invalidKeys] containsObject:key]) {
+        NSException *exception = [NSException exceptionWithName:kAVErrorDomain reason:[NSString stringWithFormat:@"The key '%@' is reserved.", key] userInfo:nil];
+        [exception raise];
     }
     
     if (self.inSetter) {
@@ -623,6 +646,11 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
 }
 
 -(void)setACL:(AVACL *)ACL {
+    if (ACL && ![ACL isKindOfClass:[AVACL class]]) {
+        NSException *exception = [NSException exceptionWithName:kAVErrorDomain reason:[NSString stringWithFormat:@"An instance of AVACL is required for property 'ACL'."] userInfo:nil];
+        [exception raise];
+    }
+
     _ACL = ACL;
     [self addSetRequest:ACLTag object:ACL.permissionsById];
 }
@@ -1697,7 +1725,7 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
     }
     [self.requestManager clear];
     NSString *path = [self myObjectPath];
-    [[AVPaasClient sharedInstance] deleteObject:path withParameters:nil block:^(id object, NSError *error) {
+    [[AVPaasClient sharedInstance] deleteObject:path withParameters:nil eventually:eventually block:^(id object, NSError *error) {
         if (!error) {
             [self postDelete];
         }
