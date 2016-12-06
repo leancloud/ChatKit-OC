@@ -19,10 +19,8 @@
     if (self.fetchWhenSave)
         result[@"fetchWhenSave"] = @(YES);
 
-    NSDictionary *where = [self.query.where copy];
-
-    if (where)
-        result[@"where"] = where;
+    if (self.query)
+        result[@"where"] = [self.query whereJSONDictionary];
 
     return result;
 }

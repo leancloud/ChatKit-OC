@@ -9,7 +9,6 @@
 #import <Foundation/Foundation.h>
 
 typedef NS_ENUM(NSInteger, AVIMMessagePriority) {
-    AVIMMessagePriorityDefault = 0,
     AVIMMessagePriorityHigh    = 1,
     AVIMMessagePriorityNormal  = 2,
     AVIMMessagePriorityLow     = 3,

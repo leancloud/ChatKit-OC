@@ -19,7 +19,8 @@
 static NSTimeInterval LCNetworkStatisticsCheckInterval  = 60; // A minute
 static NSTimeInterval LCNetworkStatisticsUploadInterval = 24 * 60 * 60; // A day
 
-static NSString *LCNetworkStatisticsInfoKey       = @"LCNetworkStatisticsInfoKey";
+//After v3.7.0, SDK use millisecond instead of second as time unit in networking performance.
+static NSString *LCNetworkStatisticsInfoKey       = @"LCNetworkStatisticsInfoKey" @"-" @"v1.0";
 static NSString *LCNetworkStatisticsLastUpdateKey = @"LCNetworkStatisticsLastUpdateKey";
 static NSInteger LCNetworkStatisticsMaxCount      = 10;
 static NSInteger LCNetworkStatisticsCacheSize     = 20;

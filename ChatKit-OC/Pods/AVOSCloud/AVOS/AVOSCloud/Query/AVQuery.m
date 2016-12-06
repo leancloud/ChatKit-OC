@@ -234,14 +234,20 @@ NSString *LCStringFromDistanceUnit(AVQueryDistanceUnit unit) {
     [self addWhereItem:dict forKey:key];
 }
 
+- (id)valueForEqualityTesting:(id)object {
+    if (!object) {
+        return [NSNull null];
+    } else if ([object isKindOfClass:[AVObject class]]) {
+        return [AVObjectUtils dictionaryFromAVObjectPointer:(AVObject *)object];
+    } else {
+        return object;
+    }
+}
+
 - (void)whereKey:(NSString *)key equalTo:(id)object
 {
-    if ([object isKindOfClass:[AVObject class]]) {
-        [self addWhereItem:@{@"$eq":[AVObjectUtils dictionaryFromAVObjectPointer:(AVObject *)object]}
-                    forKey:key];
-    } else {
-        [self addWhereItem:@{@"$eq":object} forKey:key];
-    }
+    NSDictionary * dict = @{@"$eq": [self valueForEqualityTesting:object]};
+    [self addWhereItem:dict forKey:key];
 }
 
 - (void)whereKey:(NSString *)key sizeEqualTo:(NSUInteger)count
@@ -276,7 +282,7 @@ NSString *LCStringFromDistanceUnit(AVQueryDistanceUnit unit) {
 
 - (void)whereKey:(NSString *)key notEqualTo:(id)object
 {
-    NSDictionary * dict = @{@"$ne": object};
+    NSDictionary * dict = @{@"$ne": [self valueForEqualityTesting:object]};
     [self addWhereItem:dict forKey:key];
 }
 
@@ -1089,6 +1095,12 @@ NSString *LCStringFromDistanceUnit(AVQueryDistanceUnit unit) {
     NSDictionary *dic = [AVObjectUtils dictionaryFromDictionary:self.where];
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dic options:0 error:NULL];
     return [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+}
+
+- (NSDictionary *)whereJSONDictionary {
+    NSData *data = [[self whereString] dataUsingEncoding:NSUTF8StringEncoding];
+    NSDictionary *dictionary = [NSJSONSerialization JSONObjectWithData:data options:0 error:NULL];
+    return dictionary;
 }
 
 #pragma mark - Util methods

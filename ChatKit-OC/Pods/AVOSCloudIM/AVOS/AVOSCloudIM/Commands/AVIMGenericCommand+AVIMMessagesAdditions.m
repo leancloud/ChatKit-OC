@@ -90,7 +90,7 @@ static uint16_t _searial_id = 0;
             self.readMessage = (AVIMReadCommand *)command;
             break;
             
-        case AVIMCommandType_Presence:
+        case AVIMCommandType_Presence :
             self.presenceMessage = (AVIMPresenceCommand *)command;
             break;
             

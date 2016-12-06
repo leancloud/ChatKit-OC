@@ -376,13 +376,14 @@ NSString *const kAVIMKeyConversationId = @"objectId";
     });
 }
 
-- (id)JSONValue:(NSString *)string
-{
+- (id)JSONValue:(NSString *)string {
     NSData *data = [string dataUsingEncoding:NSUTF8StringEncoding];
     NSError *error = nil;
     id result = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
     return result;
 }
+
+
 
 - (NSArray *)conversationsWithResults:(AVIMJsonObjectMessage *)messages {
     NSArray *results = [self JSONValue:messages.data_p];
@@ -399,7 +400,7 @@ NSString *const kAVIMKeyConversationId = @"objectId";
         conversation.imClient = self.client;
         conversation.conversationId = [dict objectForKey:@"objectId"];
         conversation.name = [dict objectForKey:KEY_NAME];
-        conversation.attributes = [dict objectForKey:KEY_ATTR];
+        conversation.attributes = [AVIMConversation filterCustomAttributesFromDictionary:dict];
         conversation.creator = [dict objectForKey:@"c"];
         if (createdAt) conversation.createAt = [AVObjectUtils dateFromString:createdAt];
         if (updatedAt) conversation.updateAt = [AVObjectUtils dateFromString:updatedAt];

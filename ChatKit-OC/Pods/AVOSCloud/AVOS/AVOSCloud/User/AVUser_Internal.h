@@ -19,6 +19,8 @@
 @property (nonatomic, readwrite) BOOL isNew;
 @property (nonatomic, readwrite) BOOL mobilePhoneVerified;
 
+- (BOOL)isAuthDataExistInMemory;
+
 + (AVUser *)userOrSubclassUser;
 
 +(NSString *)userTag;

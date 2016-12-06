@@ -567,7 +567,7 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
         @strongify(self);
 
         NSInteger statusCode = response.statusCode;
-        NSTimeInterval costTime = -[operationEnqueueDate timeIntervalSinceNow];
+        NSTimeInterval costTime = -([operationEnqueueDate timeIntervalSinceNow] * 1000);
 
         if (block) {
             NSError *error = [AVErrorUtils errorFromJSON:responseObject];
@@ -589,7 +589,7 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
         }
 
         // Doing network statistics
-        if ([self shouldStatisticsUrl:URLString]) {
+        if ([self shouldStatisticsForUrl:URLString statusCode:statusCode]) {
             LCNetworkStatistics *statistician = [LCNetworkStatistics sharedInstance];
 
             if ((NSInteger)(statusCode / 100) == 2) {
@@ -605,12 +605,12 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
         @strongify(self);
 
         NSInteger statusCode = response.statusCode;
-        NSTimeInterval costTime = -[operationEnqueueDate timeIntervalSinceNow];
+        NSTimeInterval costTime = -([operationEnqueueDate timeIntervalSinceNow] * 1000);
 
         AVLoggerDebug(AVLoggerDomainNetwork, LC_REST_RESPONSE_LOG_FORMAT, path, costTime, error);
 
         // Doing network statistics
-        if ([self shouldStatisticsUrl:URLString]) {
+        if ([self shouldStatisticsForUrl:URLString statusCode:statusCode]) {
             LCNetworkStatistics *statistician = [LCNetworkStatistics sharedInstance];
 
             if (error.code == NSURLErrorTimedOut) {
@@ -676,7 +676,17 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
     [dataTask resume];
 }
 
-- (BOOL)shouldStatisticsUrl:(NSString *)url {
+- (BOOL)validateStatusCode:(NSInteger)statusCode {
+    if (statusCode >= 100 && statusCode < 600) {
+        return YES;
+    }
+    return NO;
+}
+
+- (BOOL)shouldStatisticsForUrl:(NSString *)url statusCode:(NSInteger)statusCode {
+    if (![self validateStatusCode:statusCode]) {
+        return NO;
+    }
     NSArray *exclusiveApis = @[
         @"appHosts",
         @"stats/collect",

@@ -56,4 +56,9 @@
  */
 - (void)cleanAllExpiredConversations;
 
+/*!
+ * update conversation lastMessageAt.
+ */
+- (void)updateConversationForLastMessageAt:(NSDate *)lastMessageAt conversationId:(NSString *)conversationId;
+
 @end

@@ -15,7 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
  A file of binary data stored on the LeanCloud servers. This can be a image, video, or anything else
  that an application needs to reference in a non-relational way.
  */
-@interface AVFile : NSObject
+@interface AVFile : NSObject <NSCoding>
 
 /** @name Creating a AVFile */
 

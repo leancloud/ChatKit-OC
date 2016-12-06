@@ -47,6 +47,25 @@ static NSMutableDictionary *downloadingMap = nil;
     return self;
 }
 
+- (instancetype)initWithCoder:(NSCoder *)aDecoder {
+    self = [super init];
+
+    if (self) {
+        NSDictionary *dictionary = [aDecoder decodeObjectForKey:@"dictionary"];
+
+        if (dictionary) {
+            [self updatePropertiesForDictionary:dictionary];
+        }
+    }
+
+    return self;
+}
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+    NSDictionary *dictionary = [self dictionary];
+    [aCoder encodeObject:dictionary forKey:@"dictionary"];
+}
+
 #pragma mark - Public Methods
 + (instancetype)fileWithData:(NSData *)data
 {
@@ -670,29 +689,32 @@ typedef void (^AVFileSizeBlock)(long long fileSize);
 {
     AVFile * file = [[AVFile alloc] init];
 
-    [AVUtils copyPropertiesFromDictionary:dict toNSObject:file];
-
-    if (!file.objectId) {
-        if (dict[@"id"]) {
-            file.objectId = dict[@"id"];
-        } else if (dict[@"objId"]) {
-            file.objectId = dict[@"objId"];
-        }
-    }
-
-    if ([dict objectForKey:@"metaData"]) {
-        file.metaData = [dict objectForKey:@"metaData"];
-    } else if ([dict objectForKey:@"metadata"]) {
-        file.metaData = [dict objectForKey:@"metadata"];
-    }
-    
-    if ([dict objectForKey:ACLTag]) {
-        file.ACL = [AVObjectUtils aclFromDictionary:[dict objectForKey:ACLTag]];
-    }
-
+    [file updatePropertiesForDictionary:dict];
     file.isDirty = NO;
 
     return file;
+}
+
+- (void)updatePropertiesForDictionary:(NSDictionary *)dictionary {
+    [AVUtils copyPropertiesFromDictionary:dictionary toNSObject:self];
+
+    if (!self.objectId) {
+        if (dictionary[@"id"]) {
+            self.objectId = dictionary[@"id"];
+        } else if (dictionary[@"objId"]) {
+            self.objectId = dictionary[@"objId"];
+        }
+    }
+
+    if ([dictionary objectForKey:@"metaData"]) {
+        self.metaData = [dictionary objectForKey:@"metaData"];
+    } else if ([dictionary objectForKey:@"metadata"]) {
+        self.metaData = [dictionary objectForKey:@"metadata"];
+    }
+
+    if ([dictionary objectForKey:ACLTag]) {
+        self.ACL = [AVObjectUtils aclFromDictionary:[dictionary objectForKey:ACLTag]];
+    }
 }
 
 - (NSDictionary *)dictionary {

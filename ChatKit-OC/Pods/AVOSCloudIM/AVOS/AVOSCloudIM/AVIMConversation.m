@@ -46,6 +46,12 @@
     timestamp_;  \
 })
 
+@interface AVIMConversation()
+
+@property (nonatomic, strong) NSMutableDictionary *mutableAttributes;
+
+@end
+
 @implementation AVIMConversation
 
 - (instancetype)initWithConversationId:(NSString *)conversationId {
@@ -53,6 +59,14 @@
         self.conversationId = conversationId;
     }
     return self;
+}
+
+- (NSMutableDictionary *)mutableAttributes {
+    if (_mutableAttributes == nil) {
+        _mutableAttributes = [[NSMutableDictionary alloc] init];
+        [_mutableAttributes addEntriesFromDictionary:self.attributes];
+    }
+    return _mutableAttributes;
 }
 
 - (NSString *)clientId {
@@ -69,6 +83,14 @@
 
 - (void)setMembers:(NSArray *)members {
     _members = members;
+}
+
+- (void)setObject:(nullable id)object forKey:(NSString *)key {
+    [self.mutableAttributes setObject:object forKey:key];
+}
+
+- (nullable id)objectForKey:(NSString *)key {
+    return [self.mutableAttributes objectForKey:key];
 }
 
 - (AVIMConversationUpdateBuilder *)newUpdateBuilder {
@@ -235,45 +257,66 @@
     });
 }
 
-- (void)update:(NSDictionary *)updateDict callback:(AVIMBooleanResultBlock)callback {
+- (AVIMGenericCommand *)generateGenericCommandWithAttributes:(NSDictionary *)attributes {
+    AVIMGenericCommand *genericCommand = [[AVIMGenericCommand alloc] init];
+    genericCommand.needResponse = YES;
+    genericCommand.cmd = AVIMCommandType_Conv;
+    genericCommand.peerId = self.imClient.clientId;
+    
+    AVIMConvCommand *convCommand = [[AVIMConvCommand alloc] init];
+    convCommand.cid = self.conversationId;
+    genericCommand.op = AVIMOpType_Update;
+    convCommand.attr = [AVIMCommandFormatter JSONObjectWithDictionary:attributes];
+    [genericCommand avim_addRequiredKeyWithCommand:convCommand];
+    return genericCommand;
+}
+
+- (void)updateAttributesWithUpdateBuilderDataSource:(NSDictionary *)dataSource customAttributes:(NSDictionary *)customAttributes {
+    NSString *name = [dataSource objectForKey:KEY_NAME];
+    if (name) {
+        self.name = name;
+    }
+    
+    if (customAttributes) {
+        NSMutableDictionary *attributes = [self.attributes mutableCopy];
+        if (!attributes) {
+            attributes = [[NSMutableDictionary alloc] init];
+        }
+        [attributes addEntriesFromDictionary:customAttributes];
+        self.attributes = [attributes copy];
+    }
+    
+    [self removeCachedConversation];
+}
+
+- (void)updateWithCallback:(AVIMBooleanResultBlock)callback {
     dispatch_async([AVIMClient imClientQueue], ^{
-        NSDictionary *attr = updateDict;
-        AVIMGenericCommand *genericCommand = [[AVIMGenericCommand alloc] init];
-        genericCommand.needResponse = YES;
-        genericCommand.cmd = AVIMCommandType_Conv;
-        genericCommand.peerId = self.imClient.clientId;
-        
-        AVIMConvCommand *convCommand = [[AVIMConvCommand alloc] init];
-        convCommand.cid = self.conversationId;
-        genericCommand.op = AVIMOpType_Update;
-        convCommand.attr = [AVIMCommandFormatter JSONObjectWithDictionary:[attr copy]];
-        [genericCommand avim_addRequiredKeyWithCommand:convCommand];
+        NSDictionary *updateBuilderDataSource = [self.mutableAttributes copy];
+        AVIMGenericCommand *genericCommand = [self generateGenericCommandWithAttributes:updateBuilderDataSource];
         [genericCommand setCallback:^(AVIMGenericCommand *outCommand, AVIMGenericCommand *inCommand, NSError *error) {
             if (!error) {
-                AVIMConvCommand *conversationOutcCommand = outCommand.convMessage;
-                
-                NSData *data = [AVIMCommandFormatter dataWithJSONObject:conversationOutcCommand.attr];
-                NSDictionary *attr = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];                
-                NSString *name = [attr objectForKey:KEY_NAME];
-                NSDictionary *attrs = [attr objectForKey:KEY_ATTR];
-                if (name) {
-                    self.name = name;
-                }
-                if (attrs) {
-                    NSMutableDictionary *attributes = [self.attributes mutableCopy];
-                    if (!attributes) {
-                        attributes = [[NSMutableDictionary alloc] init];
-                    }
-                    [attributes addEntriesFromDictionary:attrs];
-                    self.attributes = attributes;
-                }
-                [self removeCachedConversation];
+                [self updateAttributesWithUpdateBuilderDataSource:updateBuilderDataSource customAttributes:updateBuilderDataSource];
+            }
+            self.mutableAttributes = nil;
+            [AVIMBlockHelper callBooleanResultBlock:callback error:error];
+        }];
+        [_imClient sendCommand:genericCommand];
+    });
+}
+
+- (void)update:(NSDictionary *)updateDict callback:(AVIMBooleanResultBlock)callback {
+    dispatch_async([AVIMClient imClientQueue], ^{
+        NSDictionary *updateBuilderDataSource = updateDict;
+        AVIMGenericCommand *genericCommand = [self generateGenericCommandWithAttributes:updateBuilderDataSource];
+        [genericCommand setCallback:^(AVIMGenericCommand *outCommand, AVIMGenericCommand *inCommand, NSError *error) {
+            if (!error) {
+                NSDictionary *customAttributes = [updateBuilderDataSource objectForKey:KEY_ATTR];
+                [self updateAttributesWithUpdateBuilderDataSource:updateBuilderDataSource customAttributes:customAttributes];
             }
             [AVIMBlockHelper callBooleanResultBlock:callback error:error];
         }];
         [_imClient sendCommand:genericCommand];
     });
-    
 }
 
 - (void)muteWithCallback:(AVIMBooleanResultBlock)callback {
@@ -600,8 +643,11 @@
                 if (!directCommand.transient && self.imClient.messageQueryCacheEnabled) {
                     [[self messageCacheStore] insertMessage:message withBreakpoint:NO];
                 }
-                if (!transient && directOutCommand.r) {
-                    [_imClient addMessage:message];
+                if (!transient) {
+                    if (directOutCommand.r) {
+                        [_imClient addMessage:message];
+                    }
+                    [self updateConversationAfterSendMessage:message];
                 }
             }
             [AVIMBlockHelper callBooleanResultBlock:callback error:error];
@@ -609,6 +655,40 @@
         
         [_imClient sendCommand:genericCommand];
     });
+}
+
+- (void)updateConversationAfterSendMessage:(AVIMMessage *)message {
+    NSDate *messageSentAt = [NSDate dateWithTimeIntervalSince1970:(message.sendTimestamp / 1000.0)];
+    self.lastMessageAt = messageSentAt;
+    [self.conversationCache updateConversationForLastMessageAt:messageSentAt conversationId:self.conversationId];
+}
+
++ (NSDictionary *)filterCustomAttributesFromDictionary:(NSDictionary *)dictionary {
+    NSMutableDictionary *mutableDictionary = [dictionary mutableCopy];
+    NSArray *defaultAttributes = @[
+                                   @"createdAt",
+                                   @"updatedAt",
+                                   @"objectId",
+                                   @"lm",
+                                   KEY_NAME,
+                                   @"c",
+                                   @"m",
+                                   @"muted",
+                                   @"tr"
+                                   ];
+    [mutableDictionary removeObjectsForKeys:defaultAttributes];
+    NSDictionary *customAttributes = [mutableDictionary copy];
+    
+    //v3.7.0之前的旧版产生的数据中会有attr字段
+    NSDictionary *attr = [customAttributes objectForKey:KEY_ATTR];
+    if (!attr) {
+        return customAttributes;
+    }
+    //新版本中也可能产生同时含有attr字段，以及和attr字段同级的其他自定义属性
+    //同时含有attr和同一个层级的自定义属性，如果包含同一个自定义名称，则以新形式的自定义属性为准。
+    NSMutableDictionary *campatibleCustomAttributes = [attr mutableCopy];
+    [campatibleCustomAttributes addEntriesFromDictionary:dictionary];
+    return [campatibleCustomAttributes copy];
 }
 
 #pragma mark -
