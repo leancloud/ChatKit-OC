@@ -83,27 +83,9 @@ NSString *const LCCKConversationServiceErrorDomain = @"LCCKConversationServiceEr
                                      callback:(LCCKArrayResultBlock)callback {
     AVIMConversationQuery *query = [[LCCKSessionService sharedInstance].client conversationQuery];
     [query whereKey:@"objectId" containedIn:[conversationIds allObjects]];
-    query.cachePolicy = kAVCachePolicyNetworkOnly;
-    query.limit = 1000;  // default limit:10
+    query.limit = conversationIds.count;
     [query findConversationsWithCallback: ^(NSArray *objects, NSError *error) {
-        if (error) {
-            !callback ?: callback(nil, error);
-        } else {
-            if (objects.count == 0) {
-                NSString *errorReasonText = [NSString stringWithFormat:@"conversations in %@  are not exists", conversationIds];
-                NSInteger code = 0;
-                NSDictionary *errorInfo = @{
-                                            @"code":@(code),
-                                            NSLocalizedDescriptionKey : errorReasonText,
-                                            };
-                NSError *error = [NSError errorWithDomain:LCCKConversationServiceErrorDomain
-                                                     code:code
-                                                 userInfo:errorInfo];
-                !callback ?: callback(nil, error);
-            } else {
-                !callback ?: callback(objects, error);
-            }
-        }
+        !callback ?: callback(objects, error);
     }];
 }
 
