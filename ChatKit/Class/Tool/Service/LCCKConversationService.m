@@ -81,11 +81,20 @@ NSString *const LCCKConversationServiceErrorDomain = @"LCCKConversationServiceEr
 
 - (void)fetchConversationsWithConversationIds:(NSSet *)conversationIds
                                      callback:(LCCKArrayResultBlock)callback {
-    AVIMConversationQuery *query = [[LCCKSessionService sharedInstance].client conversationQuery];
-    [query whereKey:@"objectId" containedIn:[conversationIds allObjects]];
-    query.cachePolicy = kAVCachePolicyNetworkElseCache;
-    query.limit = 1000;  // default limit:10
-    [query findConversationsWithCallback: ^(NSArray *objects, NSError *error) {
+    AVIMClient *client = [LCCKSessionService sharedInstance].client;
+    AVIMConversationQuery *queryForNormalConversation = [client conversationQuery];
+    [queryForNormalConversation whereKey:@"objectId" containedIn:[conversationIds allObjects]];
+    
+    AVIMConversationQuery *queryForSystemConversation = [client conversationQuery];
+    [queryForSystemConversation whereKey:@"sys" equalTo:@(YES)];
+
+    AVIMConversationQuery *queryForTransientConversation = [client conversationQuery];
+    [queryForSystemConversation whereKey:@"tr" equalTo:@(YES)];
+
+    AVIMConversationQuery *queryForAll = [AVIMConversationQuery orQueryWithSubqueries:@[ queryForNormalConversation, queryForSystemConversation, queryForTransientConversation ]];
+    queryForAll.limit = conversationIds.count;
+    
+    [queryForAll findConversationsWithCallback: ^(NSArray *objects, NSError *error) {
         if (error) {
             !callback ?: callback(nil, error);
         } else {
