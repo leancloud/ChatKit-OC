@@ -2,13 +2,15 @@
 //  UIViewController+CYLTabBarControllerExtention.h
 //  CYLTabBarController
 //
-//  Created by 微博@iOS程序犭袁 ( http://weibo.com/luohanchenyilong/ ) on 16/2/26.
+//  v1.7.0 Created by 微博@iOS程序犭袁 ( http://weibo.com/luohanchenyilong/ ) on 16/2/26.
 //  Copyright © 2016年 https://github.com/ChenYilong .All rights reserved.
 //
 
-@import UIKit;
+#import <UIKit/UIKit.h>
 
 typedef void (^CYLPopSelectTabBarChildViewControllerCompletion)(__kindof UIViewController *selectedTabBarChildViewController);
+typedef void (^CYLPushOrPopCompletionHandler)(BOOL shouldPop, BOOL animated);
+typedef void (^CYLPushOrPopCallback)(NSArray<__kindof UIViewController *> *viewControllers, CYLPushOrPopCompletionHandler completionHandler);
 
 @interface UIViewController (CYLTabBarControllerExtention)
 
@@ -43,5 +45,7 @@ typedef void (^CYLPopSelectTabBarChildViewControllerCompletion)(__kindof UIViewC
  */
 - (void)cyl_popSelectTabBarChildViewControllerForClassType:(Class)classType
                                                 completion:(CYLPopSelectTabBarChildViewControllerCompletion)completion;
+
+- (void)cyl_pushOrPopToViewController:(UIViewController *)viewController callback:(CYLPushOrPopCallback)callback;
 
 @end

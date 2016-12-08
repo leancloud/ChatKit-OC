@@ -583,7 +583,7 @@ setLoadLatestMessagesHandler:^(LCCKConversationViewController *conversationContr
     else if ([parentController isKindOfClass:[LCCKConversationViewController class]]) {
         LCCKConversationViewController *conversationViewController_ =
         [[LCCKConversationViewController alloc] initWithPeerId:user.clientId ?: userId];
-        [[self class] lcck_pushToViewController:conversationViewController_];
+        [[self class] lcck_pushToViewController:conversationViewController_ fromViewController:parentController];
         return;
     }
     [LCCKUtil showNotificationWithTitle:title
@@ -735,16 +735,24 @@ typedef void (^UITableViewRowActionHandler)(UITableViewRowAction *action, NSInde
 }
 
 #pragma mark 页面跳转
-+ (void)lcck_pushToViewController:(UIViewController *)viewController {
-    UITabBarController *tabBarController = [self cyl_tabBarController];
-    UINavigationController *navigationController = tabBarController.selectedViewController;
-    [navigationController
+
++ (void)lcck_pushToViewController:(UIViewController *)toViewController fromViewController:(UIViewController *)fromViewController {
+    if (!fromViewController) {
+        UITabBarController *tabBarController = [self cyl_tabBarController];
+        UINavigationController *navigationController = tabBarController.selectedViewController;
+        fromViewController = navigationController;
+    }
+    [fromViewController
      cyl_popSelectTabBarChildViewControllerAtIndex:0
      completion:^(__kindof UIViewController
                   *selectedChildTabBarController) {
-         [selectedChildTabBarController.navigationController pushViewController:viewController
+         [selectedChildTabBarController.navigationController pushViewController:toViewController
                                                                        animated:YES];
      }];
+}
+
++ (void)lcck_pushToViewController:(UIViewController *)viewController {
+    [self lcck_pushToViewController:viewController fromViewController:nil];
 }
 
 + (void)lcck_tryPresentViewControllerViewController:(UIViewController *)viewController {
