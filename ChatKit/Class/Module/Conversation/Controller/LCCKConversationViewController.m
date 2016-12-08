@@ -103,11 +103,6 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
     return nil;
 }
 
-/**
- *  lazy load conversation
- *
- *  @return AVIMConversation
- */
 - (AVIMConversation *)conversation {
     if (_conversation) { return _conversation; }
     do {
@@ -172,7 +167,6 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
     self.loadingMoreMessage = NO;
     self.disableTextShowInFullScreen = NO;
     BOOL clientStatusOpened = [LCCKSessionService sharedInstance].client.status == AVIMClientStatusOpened;
-    //    NSAssert(clientStatusOpened, @"client not opened");
     if (!clientStatusOpened) {
         [self refreshConversation:nil isJoined:NO];
         [[LCCKSessionService sharedInstance] reconnectForViewController:self callback:^(BOOL succeeded, NSError *error) {
@@ -193,12 +187,6 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
 }
 #endif
 
-
-/**
- *  lazy load chatViewModel
- *
- *  @return LCCKConversationViewModel
- */
 - (LCCKConversationViewModel *)chatViewModel {
     if (_chatViewModel == nil) {
         LCCKConversationViewModel *chatViewModel = [[LCCKConversationViewModel alloc] initWithParentViewController:self];
@@ -551,6 +539,7 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
     if (isJoined && !error) {
         conversation = aConversation;
     }
+    //peer初始化成功时也会对conversation赋值
     _conversation = conversation;
     [self saveCurrentConversationInfoIfExists];
     [self callbackCurrentConversationEvenNotExists:conversation callback:^(BOOL succeeded, NSError *error) {
@@ -572,14 +561,19 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
         }
         self.conversationId = conversation.conversationId;
         [self.chatViewModel resetBackgroundImage];
+        NSArray *members = conversation.members;
         //系统对话
-        if (conversation.members.count == 0) {
+        if (members.count == 0) {
             self.navigationItem.title = conversation.lcck_title;
             [self fetchConversationHandler:conversation];
             !callback ?: callback(YES, nil);
             return;
         }
-        [[LCChatKit sharedInstance] getProfilesInBackgroundForUserIds:conversation.members callback:^(NSArray<id<LCCKUserDelegate>> *users, NSError *error) {
+        //_conversation初始化成功时也会对_peerId赋值
+        if (_peerId) {
+            _peerId = conversation.lcck_peerId;
+        }
+        [[LCChatKit sharedInstance] getProfilesInBackgroundForUserIds:members callback:^(NSArray<id<LCCKUserDelegate>> *users, NSError *error) {
             if (!self.disableTitleAutoConfig && (users.count > 0)) {
                 [self setupNavigationItemTitleWithConversation:conversation];
             }
