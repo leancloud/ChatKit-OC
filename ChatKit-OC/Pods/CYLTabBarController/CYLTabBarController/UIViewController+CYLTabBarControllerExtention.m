@@ -45,23 +45,41 @@
         !completion ?: completion(selectedTabBarChildViewController);
     });
 }
+- (void)cyl_pushOrPopToViewController:(UIViewController *)viewController animated:(BOOL)animated callback:(CYLPushOrPopCallback)callback {
+    [self cyl_pushOrPopToViewController:viewController shouldPopSelectTabBarChildViewController:NO index:0 animated:animated callback:callback];
+}
 
-- (void)cyl_pushOrPopToViewController:(UIViewController *)viewController callback:(CYLPushOrPopCallback)callback {
+- (void)cyl_pushOrPopToViewController:(UIViewController *)viewController shouldPopSelectTabBarChildViewController:(BOOL)shouldPopSelectTabBarChildViewController index:(NSUInteger)index animated:(BOOL)animated callback:(CYLPushOrPopCallback)callback {
     if (!callback) {
-        [self.navigationController pushViewController:viewController animated:YES];
+        [self.navigationController pushViewController:viewController animated:animated];
         return;
     }
     
-    CYLPushOrPopCompletionHandler completionHandler = ^(BOOL shouldPop, BOOL animated) {
+    void (^popSelectTabBarChildViewControllerCallback)(BOOL shouldPopSelectTabBarChildViewController, NSUInteger index) = ^(BOOL shouldPopSelectTabBarChildViewController, NSUInteger index) {
+        if (shouldPopSelectTabBarChildViewController) {
+            [self cyl_popSelectTabBarChildViewControllerAtIndex:index completion:^(__kindof UIViewController *selectedTabBarChildViewController) {
+                [selectedTabBarChildViewController.navigationController pushViewController:viewController animated:animated];
+            }];
+        } else {
+            [self.navigationController pushViewController:viewController animated:animated];
+        }
+    };
+    
+    CYLPushOrPopCompletionHandler completionHandler = ^(BOOL shouldPop, __kindof UIViewController *viewControllerPopTo) {
         dispatch_async(dispatch_get_main_queue(),^{
             if (shouldPop) {
-                [self.navigationController popToViewController:viewController animated:animated];
+                [self.navigationController popToViewController:viewControllerPopTo animated:animated];
                 return;
             }
-            [self.navigationController pushViewController:viewController animated:animated];
+            popSelectTabBarChildViewControllerCallback(shouldPopSelectTabBarChildViewController, index);
         });
     };
-    callback([self cyl_getOtherSameClassTypeViewControllersInCurrentNavigationControllerStack], completionHandler);
+    NSArray<__kindof UIViewController *> *otherSameClassTypeViewControllersInCurrentNavigationControllerStack = [self cyl_getOtherSameClassTypeViewControllersInCurrentNavigationControllerStack:viewController];
+    if (!otherSameClassTypeViewControllersInCurrentNavigationControllerStack || otherSameClassTypeViewControllersInCurrentNavigationControllerStack.count == 0) {
+        popSelectTabBarChildViewControllerCallback(shouldPopSelectTabBarChildViewController, index);
+        return;
+    }
+    callback(otherSameClassTypeViewControllersInCurrentNavigationControllerStack, completionHandler);
 }
 
 #pragma mark -
@@ -75,20 +93,20 @@
     return self;
 }
 
-- (NSArray<__kindof UIViewController *> *)cyl_getOtherSameClassTypeViewControllersInCurrentNavigationControllerStack {
-    NSArray *currentNavigationControllerStack = [[UIApplication sharedApplication].keyWindow.rootViewController.navigationController viewControllers];
+- (NSArray<__kindof UIViewController *> *)cyl_getOtherSameClassTypeViewControllersInCurrentNavigationControllerStack:(UIViewController *)viewController {
+    NSArray *currentNavigationControllerStack = [self.navigationController viewControllers];
     if (currentNavigationControllerStack.count < 2) {
         return nil;
     }
     NSMutableArray *mutableArray = [currentNavigationControllerStack mutableCopy];
-    [mutableArray removeObject:self.navigationController];
+    [mutableArray removeObject:self];
     currentNavigationControllerStack = [mutableArray copy];
     
     __block NSMutableArray *mutableOtherViewControllersInNavigationControllerStack = [NSMutableArray arrayWithCapacity:currentNavigationControllerStack.count];
     
     [currentNavigationControllerStack enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         UIViewController *otherViewController = [obj cyl_getViewControllerInsteadIOfNavigationController];
-        if ([otherViewController isKindOfClass:[self class]]) {
+        if ([otherViewController isKindOfClass:[viewController class]]) {
             [mutableOtherViewControllersInNavigationControllerStack addObject:otherViewController];
         }
     }];

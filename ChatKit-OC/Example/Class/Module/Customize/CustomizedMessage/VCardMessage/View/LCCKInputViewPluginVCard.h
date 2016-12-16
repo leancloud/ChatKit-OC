@@ -12,9 +12,6 @@
 #import "LCChatKit.h"
 #endif
 
-@import UIKit;
-@import Foundation;
-
 static LCCKInputViewPluginType const LCCKInputViewPluginTypeVCard = 1;
 
 @interface LCCKInputViewPluginVCard : LCCKInputViewPlugin<LCCKInputViewPluginSubclassing>

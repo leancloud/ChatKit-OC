@@ -8,7 +8,12 @@
 
 #import "LCCKMessageSendStateView.h"
 #import "UIImage+LCCKExtension.h"
-#import "LCCKDeallocBlockExecutor.h"
+
+#if __has_include(<CYLDeallocBlockExecutor/CYLDeallocBlockExecutor.h>)
+#import <CYLDeallocBlockExecutor/CYLDeallocBlockExecutor.h>
+#else
+#import "CYLDeallocBlockExecutor.h"
+#endif
 
 static void * const LCCKSendImageViewShouldShowIndicatorViewContext = (void*)&LCCKSendImageViewShouldShowIndicatorViewContext;
 
@@ -29,7 +34,7 @@ static void * const LCCKSendImageViewShouldShowIndicatorViewContext = (void*)&LC
         // KVO注册监听
         [self addObserver:self forKeyPath:@"showIndicatorView" options:NSKeyValueObservingOptionNew context:LCCKSendImageViewShouldShowIndicatorViewContext];
         __unsafe_unretained __typeof(self) weakSelf = self;
-        [self lcck_executeAtDealloc:^{
+        [self cyl_executeAtDealloc:^{
             [weakSelf removeObserver:weakSelf forKeyPath:@"showIndicatorView"];
         }];
         [self addTarget:self action:@selector(failImageViewTap:) forControlEvents:UIControlEventTouchUpInside];

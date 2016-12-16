@@ -17,8 +17,6 @@
 //=========== then use like this ===========================
 //  if(isFirstTimeOpening) {} else {}
 
-@import Foundation;
-@import UIKit;
 typedef BOOL (^LCCKFirstLaunchBlock)(void);
 
 @interface NSObject (LCCKIsFirstLaunch)

@@ -54,7 +54,7 @@
     LCCKConversationListViewController *firstViewController = [[LCCKConversationListViewController alloc] init];
     UINavigationController *firstNavigationController = [[LCCKBaseNavigationController alloc]
                                                          initWithRootViewController:firstViewController];
-    [firstViewController configureBarButtonItemStyle:LCCKBarButtonItemStyleAdd action:^(UIBarButtonItem *sender, UIEvent *event) {
+    [firstViewController configureBarButtonItemStyle:LCCKBarButtonItemStyleAdd action:^(__kindof LCCKBaseViewController *viewController, UIBarButtonItem *sender, UIEvent *event) {
         [self showPopOverMenu:sender event:event];
     }];
     self.firstViewController = firstViewController;

@@ -1,6 +1,6 @@
 {
   "name": "ChatKit",
-  "version": "0.8.6",
+  "version": "0.8.8",
   "summary": "An IM App Framework, support sending text, pictures, audio, video, location messaging, managing address book, more interesting features.",
   "homepage": "https://github.com/LeanCloud/ChatKit-OC",
   "license": {
@@ -34,7 +34,7 @@
   ],
   "source": {
     "git": "https://github.com/LeanCloud/ChatKit-OC.git",
-    "tag": "0.8.6"
+    "tag": "0.8.8"
   },
   "source_files": [
     "ChatKit",
@@ -82,6 +82,9 @@
     ],
     "MWPhotoBrowser": [
       "~> 2.1.2"
+    ],
+    "CYLDeallocBlockExecutor": [
+
     ]
   }
 }

@@ -6,8 +6,6 @@
 //  Copyright © 2016年 LeanCloud. All rights reserved.
 //
 
-@import Foundation;
-@import UIKit;
 #import "LCCKServiceDefinition.h"
 
 /*!

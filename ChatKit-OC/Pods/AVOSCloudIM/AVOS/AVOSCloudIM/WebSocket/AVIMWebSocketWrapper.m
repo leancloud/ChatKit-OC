@@ -680,6 +680,7 @@ SecCertificateRef LCGetCertificateFromBase64String(NSString *base64);
 }
 
 - (BOOL)checkSizeForData:(id)data {
+   NSUInteger length = [(NSString *)data length];
     if ([data isKindOfClass:[NSString class]] && [(NSString *)data length] > 5000) {
         return NO;
     } else if ([data isKindOfClass:[NSData class]] && [(NSData *)data length] > 5000) {

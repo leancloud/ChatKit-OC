@@ -49,6 +49,9 @@ FOUNDATION_EXTERN NSString *const LCCKUserSystemServiceErrorDomain;
 
 @interface LCCKUserSystemService : LCCKSingleton <LCCKUserSystemService>
 
+/*!
+ * syc fetch, only fetch from network.
+ */
 - (NSArray<id<LCCKUserDelegate>> *)getProfilesForUserIds:(NSArray<NSString *> *)userIds error:(NSError * __autoreleasing *)theError;
 
 - (void)getProfilesInBackgroundForUserIds:(NSArray<NSString *> *)userIds callback:(LCCKUserResultsCallBack)callback;

@@ -8,7 +8,12 @@
 
 #import "UIImageView+LCCKExtension.h"
 #import <objc/runtime.h>
-#import "LCCKDeallocBlockExecutor.h"
+
+#if __has_include(<CYLDeallocBlockExecutor/CYLDeallocBlockExecutor.h>)
+#import <CYLDeallocBlockExecutor/CYLDeallocBlockExecutor.h>
+#else
+#import "CYLDeallocBlockExecutor.h"
+#endif
 
 #pragma mark -
 #pragma mark - Private Methods
@@ -48,13 +53,13 @@
 
 @implementation LCCKImageObserver
 
-- (instancetype)initWithImageView:(UIImageView *)imageView{
+- (instancetype)initWithImageView:(UIImageView *)imageView {
     if (self = [super init]) {
         self.originImageView = imageView;
         [imageView addObserver:self forKeyPath:@"image" options:NSKeyValueObservingOptionNew context:nil];
         [imageView addObserver:self forKeyPath:@"contentMode" options:NSKeyValueObservingOptionNew context:nil];
         __unsafe_unretained __typeof(self) weakSelf = self;
-        [self lcck_executeAtDealloc:^{
+        [self cyl_executeAtDealloc:^{
             [weakSelf.originImageView removeObserver:weakSelf forKeyPath:@"image"];
             [weakSelf.originImageView removeObserver:weakSelf forKeyPath:@"contentMode"];
         }];

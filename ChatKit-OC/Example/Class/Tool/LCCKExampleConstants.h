@@ -107,4 +107,15 @@ static NSString *const LCCK_KEY_USERNAME = @"LCCK_KEY_USERNAME";
 static NSString *const LCCK_KEY_USERID = @"LCCK_KEY_USERID";
 
 
+#pragma mark - Other
+///=============================================================================
+/// @name Other
+///=============================================================================
+
+#define     LCCK_DEFAULT_AVATAR_PATH    @"lcck_conversation_placeholder_avatar"
+#define     LCCKURL(urlString)    [NSURL URLWithString:urlString]
+#define     LCCKNoNilString(str)  (str.length > 0 ? str : @"")
+#define     LCCKTimeStamp(date)   ([NSString stringWithFormat:@"%lf", [date timeIntervalSince1970]])
+#define     LCCKColor(r, g, b, a) [UIColor colorWithRed:(r)/255.0f green:(g)/255.0f blue:(b)/255.0f alpha:a]
+
 #endif /* LCCKExampleConstants_h */

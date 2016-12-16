@@ -30,4 +30,6 @@ typedef void (^LCCKShouldDisplayTimestampCallBack)(BOOL shouldDisplayTimestamp, 
 
 - (NSDictionary *)lcck_JSONValue;
 
+- (BOOL)lcck_isCreatorForCurrentGroupConversaton;
+
 @end

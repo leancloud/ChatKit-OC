@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 
 typedef void (^CYLPopSelectTabBarChildViewControllerCompletion)(__kindof UIViewController *selectedTabBarChildViewController);
-typedef void (^CYLPushOrPopCompletionHandler)(BOOL shouldPop, BOOL animated);
+typedef void (^CYLPushOrPopCompletionHandler)(BOOL shouldPop, __kindof UIViewController *viewControllerPopTo);
 typedef void (^CYLPushOrPopCallback)(NSArray<__kindof UIViewController *> *viewControllers, CYLPushOrPopCompletionHandler completionHandler);
 
 @interface UIViewController (CYLTabBarControllerExtention)
@@ -46,6 +46,7 @@ typedef void (^CYLPushOrPopCallback)(NSArray<__kindof UIViewController *> *viewC
 - (void)cyl_popSelectTabBarChildViewControllerForClassType:(Class)classType
                                                 completion:(CYLPopSelectTabBarChildViewControllerCompletion)completion;
 
-- (void)cyl_pushOrPopToViewController:(UIViewController *)viewController callback:(CYLPushOrPopCallback)callback;
+- (void)cyl_pushOrPopToViewController:(UIViewController *)viewController animated:(BOOL)animated callback:(CYLPushOrPopCallback)callback;
+- (void)cyl_pushOrPopToViewController:(UIViewController *)viewController shouldPopSelectTabBarChildViewController:(BOOL)shouldPopSelectTabBarChildViewController index:(NSUInteger)index animated:(BOOL)animated callback:(CYLPushOrPopCallback)callback;
 
 @end

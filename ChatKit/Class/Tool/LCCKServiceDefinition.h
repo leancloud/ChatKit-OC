@@ -17,7 +17,6 @@
 @class LCCKConversationViewController;
 @class LCCKConversationListViewController;
 @class LCCKMessage;
-@import CoreLocation;
 
 #pragma mark - LCCKSessionService
 ///=============================================================================

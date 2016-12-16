@@ -35,6 +35,14 @@
 #import "LCCKAlertController.h"
 #import "LCCKPhotoBrowser.h"
 
+
+#if __has_include(<CYLDeallocBlockExecutor/CYLDeallocBlockExecutor.h>)
+#import <CYLDeallocBlockExecutor/CYLDeallocBlockExecutor.h>
+#else
+#import "CYLDeallocBlockExecutor.h"
+#endif
+
+
 #ifdef CYLDebugging
 #import <MLeaksFinder/MLeaksFinder.h>
 #endif
@@ -198,6 +206,10 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    __unsafe_unretained __typeof(self) weakSelf = self;
+    [self cyl_executeAtDealloc:^{
+        !weakSelf.viewControllerWillDeallocBlock ?: weakSelf.viewControllerWillDeallocBlock(weakSelf);
+    }];
     self.navigationController.interactivePopGestureRecognizer.delaysTouchesBegan = NO;
     self.tableView.delegate = self.chatViewModel;
     self.tableView.dataSource = self.chatViewModel;
@@ -253,11 +265,6 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
         [[LCCKConversationService sharedInstance] updateConversationAsRead];
     }
     !self.viewDidDisappearBlock ?: self.viewDidDisappearBlock(self, animated);
-}
-
-- (void)dealloc {
-    _chatViewModel.delegate = nil;
-    !self.viewControllerWillDeallocBlock ?: self.viewControllerWillDeallocBlock(self);
 }
 
 - (void)didReceiveMemoryWarning {
@@ -419,7 +426,7 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
     }
     
     if (_conversation) {
-        [LCCKConversationService sharedInstance].currentConversation = self.conversation;
+        [LCCKConversationService sharedInstance].currentConversation = _conversation;
     }
 }
 
@@ -542,6 +549,8 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
     //peer初始化成功时也会对conversation赋值
     _conversation = conversation;
     [self saveCurrentConversationInfoIfExists];
+//    if (_conversation) {
+//    }
     [self callbackCurrentConversationEvenNotExists:conversation callback:^(BOOL succeeded, NSError *error) {
         if (succeeded) {
             [self handleLoadHistoryMessagesHandlerIfIsJoined:isJoined];
@@ -570,7 +579,7 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
             return;
         }
         //_conversation初始化成功时也会对_peerId赋值
-        if (_peerId) {
+        if (!_peerId && members.count == 2) {
             _peerId = conversation.lcck_peerId;
         }
         [[LCChatKit sharedInstance] getProfilesInBackgroundForUserIds:members callback:^(NSArray<id<LCCKUserDelegate>> *users, NSError *error) {

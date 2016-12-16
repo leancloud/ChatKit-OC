@@ -27,23 +27,23 @@
 #import "MessagesProtoOrig.pbobjc.h"
 
 #define LCIM_VALID_LIMIT(limit) ({      \
-    int32_t limit_ = (int32_t)(limit);  \
-    if (limit_ <= 0)   limit = 20;      \
-                                        \
-    BOOL useUnread = [[AVIMClient userOptions][AVIMUserOptionUseUnread] boolValue];  \
-    int32_t max = useUnread ? 100 : 1000;  \
-                                        \
-    if (limit_ > max) limit = max;      \
-    limit_;                             \
+int32_t limit_ = (int32_t)(limit);  \
+if (limit_ <= 0)   limit = 20;      \
+\
+BOOL useUnread = [[AVIMClient userOptions][AVIMUserOptionUseUnread] boolValue];  \
+int32_t max = useUnread ? 100 : 1000;  \
+\
+if (limit_ > max) limit = max;      \
+limit_;                             \
 })
 
 #define LCIM_DISTANT_FUTURE_TIMESTAMP \
-    ([[NSDate distantFuture] timeIntervalSince1970] * 1000)
+([[NSDate distantFuture] timeIntervalSince1970] * 1000)
 
 #define LCIM_VALID_TIMESTAMP(timestamp) ({      \
-    int64_t timestamp_ = (int64_t)(timestamp);  \
-    if (timestamp_ <= 0) timestamp_ = LCIM_DISTANT_FUTURE_TIMESTAMP;  \
-    timestamp_;  \
+int64_t timestamp_ = (int64_t)(timestamp);  \
+if (timestamp_ <= 0) timestamp_ = LCIM_DISTANT_FUTURE_TIMESTAMP;  \
+timestamp_;  \
 })
 
 @interface AVIMConversation()
@@ -181,7 +181,7 @@
             }
         }];
         
-
+        
         [_imClient sendCommand:genericCommand];
     });
 }
@@ -222,7 +222,7 @@
                 if ([clientIds containsObject:myClientId]) {
                     [self removeCachedMessages];
                 }
-
+                
                 [AVIMBlockHelper callBooleanResultBlock:callback error:nil];
             } else {
                 [AVIMBlockHelper callBooleanResultBlock:callback error:error];
@@ -292,7 +292,8 @@
 - (void)updateWithCallback:(AVIMBooleanResultBlock)callback {
     dispatch_async([AVIMClient imClientQueue], ^{
         NSDictionary *updateBuilderDataSource = [self.mutableAttributes copy];
-        AVIMGenericCommand *genericCommand = [self generateGenericCommandWithAttributes:updateBuilderDataSource];
+        NSDictionary *customAttributes = [[self class] filterCustomAttributesFromDictionary:updateBuilderDataSource];
+        AVIMGenericCommand *genericCommand = [self generateGenericCommandWithAttributes:customAttributes];
         [genericCommand setCallback:^(AVIMGenericCommand *outCommand, AVIMGenericCommand *inCommand, NSError *error) {
             if (!error) {
                 [self updateAttributesWithUpdateBuilderDataSource:updateBuilderDataSource customAttributes:updateBuilderDataSource];
@@ -421,13 +422,13 @@
            callback:(AVIMBooleanResultBlock)callback
 {
     AVIMMessageOption *option = [[AVIMMessageOption alloc] init];
-
+    
     if (options & AVIMMessageSendOptionTransient)
         option.transient = YES;
-
+    
     if (options & AVIMMessageSendOptionRequestReceipt)
         option.receipt = YES;
-
+    
     [self sendMessage:message option:option progressBlock:progressBlock callback:callback];
 }
 
@@ -582,18 +583,18 @@
     dispatch_async([AVIMClient imClientQueue], ^{
         bool transient = option.transient;
         bool requestReceipt = option.receipt;
-
+        
         if ([message isKindOfClass:[AVIMTypedMessage class]]) {
             AVIMTypedMessage *typedMessage = (AVIMTypedMessage *)message;
             if (!typedMessage.messageObject._lctext && !typedMessage.messageObject._lcloc && !typedMessage.messageObject._lcfile && !typedMessage.messageObject._lcattrs) {
                 [NSException raise:NSInternalInconsistencyException format:@"AVIMTypedMessage should have one of text, file, location or attributes not be nil."];
             }
         }
-
+        
         AVIMGenericCommand *genericCommand = [[AVIMGenericCommand alloc] init];
         genericCommand.needResponse = YES;
         genericCommand.cmd = AVIMCommandType_Direct;
-
+        
         if (option.priority > 0) {
             if (self.transient) {
                 genericCommand.priority = option.priority;
@@ -601,11 +602,11 @@
                 AVLoggerInfo(AVLoggerDomainIM, @"Message priority has no effect in non-transient conversation.");
             }
         }
-
+        
         AVIMDirectCommand *directCommand = [[AVIMDirectCommand alloc] init];
         [genericCommand avim_addRequiredKeyWithCommand:directCommand];
         [genericCommand avim_addRequiredKeyForDirectMessageWithMessage:message transient:NO];
-
+        
         if (transient) {
             directCommand.transient = YES;
             genericCommand.needResponse = NO;
@@ -619,7 +620,7 @@
             } else {
                 NSError *error = nil;
                 NSData  *data  = [NSJSONSerialization dataWithJSONObject:option.pushData options:0 error:&error];
-
+                
                 if (error) {
                     AVLoggerInfo(AVLoggerDomainIM, @"Push data cannot be serialize to JSON string. Error: %@.", error.localizedDescription);
                 } else {
@@ -627,7 +628,7 @@
                 }
             }
         }
-
+        
         [genericCommand setCallback:^(AVIMGenericCommand *outCommand, AVIMGenericCommand *inCommand, NSError *error) {
             AVIMDirectCommand *directOutCommand = outCommand.directMessage;
             AVIMMessage *message = outCommand.directMessage.message;
@@ -687,7 +688,7 @@
     //新版本中也可能产生同时含有attr字段，以及和attr字段同级的其他自定义属性
     //同时含有attr和同一个层级的自定义属性，如果包含同一个自定义名称，则以新形式的自定义属性为准。
     NSMutableDictionary *campatibleCustomAttributes = [attr mutableCopy];
-    [campatibleCustomAttributes addEntriesFromDictionary:dictionary];
+    [campatibleCustomAttributes addEntriesFromDictionary:customAttributes];
     return [campatibleCustomAttributes copy];
 }
 
@@ -709,20 +710,20 @@
 
 - (LCIMMessageCache *)messageCache {
     NSString *clientId = self.clientId;
-
+    
     return clientId ? [LCIMMessageCache cacheWithClientId:clientId] : nil;
 }
 
 - (LCIMMessageCacheStore *)messageCacheStore {
     NSString *clientId = self.clientId;
     NSString *conversationId = self.conversationId;
-
+    
     return clientId && conversationId ? [[LCIMMessageCacheStore alloc] initWithClientId:clientId conversationId:conversationId] : nil;
 }
 
 - (LCIMConversationCache *)conversationCache {
     NSString *clientId = self.clientId;
-
+    
     return clientId ? [[LCIMConversationCache alloc] initWithClientId:clientId] : nil;
 }
 
