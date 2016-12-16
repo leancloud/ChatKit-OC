@@ -20,6 +20,8 @@
 #import "LCChatKitExample+Setting.h"
 //#import "MWPhotoBrowser.h"
 #import "NSObject+LCCKHUD.h"
+#import "LCCKGroupConversationDetailViewController.h"
+#import "LCCKSingleConversationDetailViewController.h"
 
 #warning TODO: CHANGE TO YOUR OWN AppId and AppKey
 static NSString *const LCCKAPPID = @"dYRQ8YfHRiILshUnfFJu2eQM-gzGzoHsz";
@@ -138,9 +140,9 @@ static NSString *const LCCKAPPKEY = @"ye24iIK6ys8IvaISMC4Bs5WK";
                  [users addObject:user_];
              }
          }];
-         // 模拟网络延时，3秒
-         //         sleep(3);
-         
+//          模拟网络延时，3秒
+                  sleep(3);
+        
 #warning 重要：completionHandler 这个 Bock 必须执行，需要在你**获取到用户信息结束**后，将信息传给该Block！
          !completionHandler ?: completionHandler([users copy], nil);
      }];
@@ -236,27 +238,34 @@ static NSString *const LCCKAPPKEY = @"ye24iIK6ys8IvaISMC4Bs5WK";
         //判断会话的成员是否超过两个(即是否为群聊)
         if (conversation.members.count > 2) { //设置点击rightButton为群聊Style,和对应事件
             [aConversationController configureBarButtonItemStyle:LCCKBarButtonItemStyleGroupProfile
-                                                          action:^(UIBarButtonItem *sender, UIEvent *event) {
-                                                              NSString *title = @"打开群聊详情";
-                                                              NSString *subTitle = [NSString stringWithFormat:@"群聊id：%@", conversation.conversationId];
-                                                              [LCCKUtil showNotificationWithTitle:title
-                                                                                         subtitle:subTitle
-                                                                                             type:LCCKMessageNotificationTypeMessage];
+                                                          action:^(__kindof LCCKBaseViewController *viewController, UIBarButtonItem *sender, UIEvent *event) {
+//                                                              NSString *title = @"打开群聊详情";
+//                                                              NSString *subTitle = [NSString stringWithFormat:@"群聊id：%@", conversation.conversationId];
+//                                                              [LCCKUtil showNotificationWithTitle:title
+//                                                                                         subtitle:subTitle
+//                                                                                             type:LCCKMessageNotificationTypeMessage];
+                                                              
+                                                              LCCKGroupConversationDetailViewController *groupConversationDetailViewController = [LCCKGroupConversationDetailViewController new];
+                                                              groupConversationDetailViewController.conversation = conversation;
+                                                              [viewController.navigationController pushViewController:groupConversationDetailViewController animated:YES];
                                                           }];
         } else if (conversation.members.count == 2) { //设置点击rightButton为单聊的Style,和对应事件
             [aConversationController
              configureBarButtonItemStyle:LCCKBarButtonItemStyleSingleProfile
-             action:^(UIBarButtonItem *sender, UIEvent *event) {
-                 NSString *title = @"打开用户详情";
+             action:^(__kindof LCCKBaseViewController *viewController, UIBarButtonItem *sender, UIEvent *event) {
+                 
+             
+//                 NSString *title = @"打开用户详情";
                  NSArray *members = conversation.members;
                  NSPredicate *predicate = [NSPredicate predicateWithFormat:@"NOT (SELF IN %@)", @[
                                                                                                   [LCChatKit sharedInstance].clientId
                                                                                                   ]];
                  NSString *peerId = [members filteredArrayUsingPredicate:predicate][0];
-                 NSString *subTitle = [NSString stringWithFormat:@"用户id：%@", peerId];
-                 [LCCKUtil showNotificationWithTitle:title
-                                            subtitle:subTitle
-                                                type:LCCKMessageNotificationTypeMessage];
+                 [[LCChatKit sharedInstance] getProfileInBackgroundForUserId:peerId callback:^(id<LCCKUserDelegate> user, NSError *error) {
+                     LCCKSingleConversationDetailViewController *singleConversationDetailViewController = [LCCKSingleConversationDetailViewController new];
+                     singleConversationDetailViewController.conversation = conversation;
+                     [viewController.navigationController pushViewController:singleConversationDetailViewController animated:YES];
+                 }];
              }];
         }
         //系统对话，或暂态聊天室，成员为0，单独处理。参考：系统对话文档
@@ -564,6 +573,7 @@ setLoadLatestMessagesHandler:^(LCCKConversationViewController *conversationContr
 }
 
 #pragma mark - private
+
 - (void)lcck_exampleShowNotificationWithTitle:(NSString *)title
                                      subtitle:(NSString *)subtitle
                                          type:(LCCKMessageNotificationType)type {
@@ -583,7 +593,7 @@ setLoadLatestMessagesHandler:^(LCCKConversationViewController *conversationContr
     else if ([parentController isKindOfClass:[LCCKConversationViewController class]]) {
         LCCKConversationViewController *conversationViewController_ =
         [[LCCKConversationViewController alloc] initWithPeerId:user.clientId ?: userId];
-        [[self class] lcck_pushToViewController:conversationViewController_];
+        [[self class] lcck_pushToViewController:conversationViewController_ fromViewController:parentController];
         return;
     }
     [LCCKUtil showNotificationWithTitle:title
@@ -640,7 +650,7 @@ setLoadLatestMessagesHandler:^(LCCKConversationViewController *conversationContr
               if (succeeded) {
                   [self lcck_showSuccess:@"设置群头像成功"];
                   if (shouldInsert) {
-                      [[LCChatKit sharedInstance]                   insertRecentConversation:conversation];
+                      [[LCChatKit sharedInstance] insertRecentConversation:conversation];
                   }
                   [[NSNotificationCenter defaultCenter]
                    postNotificationName:
@@ -735,16 +745,24 @@ typedef void (^UITableViewRowActionHandler)(UITableViewRowAction *action, NSInde
 }
 
 #pragma mark 页面跳转
-+ (void)lcck_pushToViewController:(UIViewController *)viewController {
-    UITabBarController *tabBarController = [self cyl_tabBarController];
-    UINavigationController *navigationController = tabBarController.selectedViewController;
-    [navigationController
+
++ (void)lcck_pushToViewController:(UIViewController *)toViewController fromViewController:(UIViewController *)fromViewController {
+    if (!fromViewController) {
+        UITabBarController *tabBarController = [self cyl_tabBarController];
+        UINavigationController *navigationController = tabBarController.selectedViewController;
+        fromViewController = navigationController;
+    }
+    [fromViewController
      cyl_popSelectTabBarChildViewControllerAtIndex:0
      completion:^(__kindof UIViewController
                   *selectedChildTabBarController) {
-         [selectedChildTabBarController.navigationController pushViewController:viewController
+         [selectedChildTabBarController.navigationController pushViewController:toViewController
                                                                        animated:YES];
      }];
+}
+
++ (void)lcck_pushToViewController:(UIViewController *)viewController {
+    [self lcck_pushToViewController:viewController fromViewController:nil];
 }
 
 + (void)lcck_tryPresentViewControllerViewController:(UIViewController *)viewController {

@@ -10,7 +10,12 @@
 #import "LCCKContactCell.h"
 #import "LCCKAlertController.h"
 #import "LCCKUIService.h"
-#import "LCCKDeallocBlockExecutor.h"
+
+#if __has_include(<CYLDeallocBlockExecutor/CYLDeallocBlockExecutor.h>)
+#import <CYLDeallocBlockExecutor/CYLDeallocBlockExecutor.h>
+#else
+#import "CYLDeallocBlockExecutor.h"
+#endif
 
 NSString *const LCCKContactListViewControllerContactsDidChanged = @"LCCKContactListViewControllerContactsDidChanged";
 static NSString *const LCCKContactListViewControllerIdentifier = @"LCCKContactListViewControllerIdentifier";
@@ -100,7 +105,7 @@ static NSString *const LCCKContactListViewControllerIdentifier = @"LCCKContactLi
     //TODO:
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(dataSourceUpdated:) name:LCCKNotificationContactListDataSourceUpdated object:nil];
     __unsafe_unretained __typeof(self) weakSelf = self;
-    [self lcck_executeAtDealloc:^{
+    [self cyl_executeAtDealloc:^{
         [[NSNotificationCenter defaultCenter] removeObserver:weakSelf];
     }];
     return self;

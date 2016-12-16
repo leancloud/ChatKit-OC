@@ -6,8 +6,6 @@
 //  Copyright © 2016年 LeanCloud. All rights reserved.
 //  User Model Delegate.
 
-@import UIKit;
-
 @protocol LCCKUserDelegate <NSObject, NSCopying, NSCoding>
 
 @required

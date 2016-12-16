@@ -6,8 +6,6 @@
 //  Copyright (c) 2015年 https://LeanCloud.cn . All rights reserved.
 //
 
-@import UIKit;
-
 static CGFloat const kChatBarBottomOffset = 8.f;
 static CGFloat const kChatBarTextViewBottomOffset = 6;
 static CGFloat const kLCCKChatBarTextViewFrameMinHeight = 37.f; //kLCCKChatBarMinHeight - 2*kChatBarTextViewBottomOffset;

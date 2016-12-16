@@ -1,4 +1,4 @@
-//
+ //
 //  LCCKConversationViewModel.m
 //  LCCKChatExample
 //
@@ -39,7 +39,12 @@
 #import "NSMutableArray+LCCKMessageExtention.h"
 #import "LCCKAlertController.h"
 #import "NSObject+LCCKExtension.h"
-#import "LCCKDeallocBlockExecutor.h"
+
+#if __has_include(<CYLDeallocBlockExecutor/CYLDeallocBlockExecutor.h>)
+#import <CYLDeallocBlockExecutor/CYLDeallocBlockExecutor.h>
+#else
+#import "CYLDeallocBlockExecutor.h"
+#endif
 
 @interface LCCKConversationViewModel ()
 
@@ -66,8 +71,7 @@
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(conversationInvalided:) name:LCCKNotificationCurrentConversationInvalided object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(backgroundImageChanged:) name:LCCKNotificationConversationViewControllerBackgroundImageDidChanged object:nil];
         __unsafe_unretained __typeof(self) weakSelf = self;
-        [self lcck_executeAtDealloc:^{
-            weakSelf.delegate = nil;
+        [self cyl_executeAtDealloc:^{
             [[NSNotificationCenter defaultCenter] removeObserver:weakSelf];
         }];
     }

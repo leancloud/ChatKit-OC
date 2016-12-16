@@ -6,7 +6,6 @@
 //  Copyright © 2016年 LeanCloud. All rights reserved.
 //
 
-@import UIKit;
 @class LCCKBaseViewController;
 @protocol LCCKViewControllerEventProtocol <NSObject>
 
@@ -45,7 +44,7 @@ typedef void(^LCCKViewDidReceiveMemoryWarningBlock)(__kindof LCCKBaseViewControl
 
 @end
 
-typedef void(^LCCKBarButtonItemActionBlock)(UIBarButtonItem *sender, UIEvent *event);
+typedef void(^LCCKBarButtonItemActionBlock)(__kindof LCCKBaseViewController *viewController, UIBarButtonItem *sender, UIEvent *event);
 
 typedef NS_ENUM(NSInteger, LCCKBarButtonItemStyle) {
     LCCKBarButtonItemStyleSetting = 0,

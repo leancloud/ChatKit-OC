@@ -30,7 +30,12 @@
 #else
     #import "UIImageView+WebCache.h"
 #endif
-#import "LCCKDeallocBlockExecutor.h"
+
+#if __has_include(<CYLDeallocBlockExecutor/CYLDeallocBlockExecutor.h>)
+#import <CYLDeallocBlockExecutor/CYLDeallocBlockExecutor.h>
+#else
+#import "CYLDeallocBlockExecutor.h"
+#endif
 
 
 
@@ -56,7 +61,7 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refresh) name:LCCKNotificationUnreadsUpdated object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refresh) name:LCCKNotificationConversationListDataSourceUpdated object:nil];
     __unsafe_unretained __typeof(self) weakSelf = self;
-    [self lcck_executeAtDealloc:^{
+    [self cyl_executeAtDealloc:^{
         [[NSNotificationCenter defaultCenter] removeObserver:weakSelf];
     }];
     _conversationListViewController = conversationListViewController;
@@ -102,7 +107,7 @@
         NSURL *conversationGroupAvatarURL = [NSURL URLWithString:conversationGroupAvatarURLKey];
         [cell.avatarImageView sd_setImageWithURL:conversationGroupAvatarURL placeholderImage:[self imageInBundleForImageName:@"Placeholder_Group" ]];
     }
-    
+    cell.remindMuteImageView.hidden = !conversation.muted;
     cell.nameLabel.text = conversation.lcck_displayName;
     if (conversation.lcck_lastMessage) {
         cell.messageTextLabel.attributedText = [LCCKLastMessageTypeManager attributedStringWithMessage:conversation.lcck_lastMessage conversation:conversation userName:displayName];
@@ -114,9 +119,6 @@
         } else {
             cell.badgeView.badgeText = conversation.lcck_badgeText;
         }
-    }
-    if (conversation.muted == YES) {
-        cell.remindMuteImageView.hidden = NO;
     }
     LCCKConfigureCellBlock configureCellBlock = [[LCCKConversationListService sharedInstance] configureCellBlock];
     if (configureCellBlock) {

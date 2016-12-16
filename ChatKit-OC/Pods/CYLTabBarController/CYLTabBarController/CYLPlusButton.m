@@ -2,7 +2,7 @@
 //  CYLPlusButton.m
 //  CYLTabBarController
 //
-//  Created by 微博@iOS程序犭袁 ( http://weibo.com/luohanchenyilong/ ) on 10/20/15.
+//  v1.7.0 Created by 微博@iOS程序犭袁 ( http://weibo.com/luohanchenyilong/ ) on 10/20/15.
 //  Copyright © 2015 https://github.com/ChenYilong . All rights reserved.
 //
 
@@ -45,6 +45,13 @@ UIViewController *CYLPlusChildViewController = nil;
 #pragma clang diagnostic pop
 
 - (void)plusChildViewControllerButtonClicked:(UIButton<CYLPlusButtonSubclassing> *)sender {
+    BOOL notNeedConfigureSelectionStatus = [[self class] respondsToSelector:@selector(shouldSelectPlusChildViewController)] && ![[self class] shouldSelectPlusChildViewController];
+    if (notNeedConfigureSelectionStatus) {
+        return;
+    }
+    if (sender.selected) {
+        return;
+    }
     sender.selected = YES;
     [self cyl_tabBarController].selectedIndex = CYLPlusButtonIndex;
 }

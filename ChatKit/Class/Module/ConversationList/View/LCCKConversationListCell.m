@@ -70,12 +70,12 @@ CGFloat const LCCKConversationListCellDefaultHeight = 61; //LCCKImageSize + LCCK
     self.selectedBackgroundView = selectionColor;
     LCCKNameLabelHeight = LCCKImageSize * LCCKNameLabelHeightProportion;
     LCCKMessageLabelHeight = LCCKImageSize - LCCKNameLabelHeight;
-    [self addSubview:self.avatarImageView];
-    [self addSubview:self.timestampLabel];
-    [self.contentView addSubview:self.litteBadgeView];
+    [self.contentView addSubview:self.avatarImageView];
+    [self.contentView addSubview:self.timestampLabel];
     [self.contentView addSubview:self.nameLabel];
     [self.contentView addSubview:self.messageTextLabel];
     [self.contentView addSubview:self.remindMuteImageView];
+    [self.contentView addSubview:self.litteBadgeView];
 }
 
 - (UIImageView *)avatarImageView {
@@ -94,7 +94,7 @@ CGFloat const LCCKConversationListCellDefaultHeight = 61; //LCCKImageSize + LCCK
 - (UIView *)litteBadgeView {
     if (_litteBadgeView == nil) {
         UIView *litteBadgeView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, LCCKLittleBadgeSize, LCCKLittleBadgeSize)];
-//        litteBadgeView.layer.masksToBounds = YES;
+        litteBadgeView.backgroundColor = [UIColor redColor];
         litteBadgeView.layer.cornerRadius = LCCKLittleBadgeSize / 2;
         litteBadgeView.center = CGPointMake(CGRectGetMaxX(_avatarImageView.frame), CGRectGetMinY(_avatarImageView.frame));
         litteBadgeView.hidden = YES;

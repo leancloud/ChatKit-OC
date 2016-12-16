@@ -35,6 +35,14 @@
 #import "LCCKAlertController.h"
 #import "LCCKPhotoBrowser.h"
 
+
+#if __has_include(<CYLDeallocBlockExecutor/CYLDeallocBlockExecutor.h>)
+#import <CYLDeallocBlockExecutor/CYLDeallocBlockExecutor.h>
+#else
+#import "CYLDeallocBlockExecutor.h"
+#endif
+
+
 #ifdef CYLDebugging
 #import <MLeaksFinder/MLeaksFinder.h>
 #endif
@@ -103,11 +111,6 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
     return nil;
 }
 
-/**
- *  lazy load conversation
- *
- *  @return AVIMConversation
- */
 - (AVIMConversation *)conversation {
     if (_conversation) { return _conversation; }
     do {
@@ -172,7 +175,6 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
     self.loadingMoreMessage = NO;
     self.disableTextShowInFullScreen = NO;
     BOOL clientStatusOpened = [LCCKSessionService sharedInstance].client.status == AVIMClientStatusOpened;
-    //    NSAssert(clientStatusOpened, @"client not opened");
     if (!clientStatusOpened) {
         [self refreshConversation:nil isJoined:NO];
         [[LCCKSessionService sharedInstance] reconnectForViewController:self callback:^(BOOL succeeded, NSError *error) {
@@ -193,12 +195,6 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
 }
 #endif
 
-
-/**
- *  lazy load chatViewModel
- *
- *  @return LCCKConversationViewModel
- */
 - (LCCKConversationViewModel *)chatViewModel {
     if (_chatViewModel == nil) {
         LCCKConversationViewModel *chatViewModel = [[LCCKConversationViewModel alloc] initWithParentViewController:self];
@@ -210,6 +206,10 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    __unsafe_unretained __typeof(self) weakSelf = self;
+    [self cyl_executeAtDealloc:^{
+        !weakSelf.viewControllerWillDeallocBlock ?: weakSelf.viewControllerWillDeallocBlock(weakSelf);
+    }];
     self.navigationController.interactivePopGestureRecognizer.delaysTouchesBegan = NO;
     self.tableView.delegate = self.chatViewModel;
     self.tableView.dataSource = self.chatViewModel;
@@ -265,11 +265,6 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
         [[LCCKConversationService sharedInstance] updateConversationAsRead];
     }
     !self.viewDidDisappearBlock ?: self.viewDidDisappearBlock(self, animated);
-}
-
-- (void)dealloc {
-    _chatViewModel.delegate = nil;
-    !self.viewControllerWillDeallocBlock ?: self.viewControllerWillDeallocBlock(self);
 }
 
 - (void)didReceiveMemoryWarning {
@@ -431,7 +426,7 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
     }
     
     if (_conversation) {
-        [LCCKConversationService sharedInstance].currentConversation = self.conversation;
+        [LCCKConversationService sharedInstance].currentConversation = _conversation;
     }
 }
 
@@ -551,8 +546,11 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
     if (isJoined && !error) {
         conversation = aConversation;
     }
+    //peer初始化成功时也会对conversation赋值
     _conversation = conversation;
     [self saveCurrentConversationInfoIfExists];
+//    if (_conversation) {
+//    }
     [self callbackCurrentConversationEvenNotExists:conversation callback:^(BOOL succeeded, NSError *error) {
         if (succeeded) {
             [self handleLoadHistoryMessagesHandlerIfIsJoined:isJoined];
@@ -572,14 +570,19 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
         }
         self.conversationId = conversation.conversationId;
         [self.chatViewModel resetBackgroundImage];
+        NSArray *members = conversation.members;
         //系统对话
-        if (conversation.members.count == 0) {
+        if (members.count == 0) {
             self.navigationItem.title = conversation.lcck_title;
             [self fetchConversationHandler:conversation];
             !callback ?: callback(YES, nil);
             return;
         }
-        [[LCChatKit sharedInstance] getProfilesInBackgroundForUserIds:conversation.members callback:^(NSArray<id<LCCKUserDelegate>> *users, NSError *error) {
+        //_conversation初始化成功时也会对_peerId赋值
+        if (!_peerId && members.count == 2) {
+            _peerId = conversation.lcck_peerId;
+        }
+        [[LCChatKit sharedInstance] getProfilesInBackgroundForUserIds:members callback:^(NSArray<id<LCCKUserDelegate>> *users, NSError *error) {
             if (!self.disableTitleAutoConfig && (users.count > 0)) {
                 [self setupNavigationItemTitleWithConversation:conversation];
             }

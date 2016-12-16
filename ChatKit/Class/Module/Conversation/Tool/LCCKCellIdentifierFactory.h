@@ -6,8 +6,6 @@
 //  Copyright © 2015年 https://LeanCloud.cn . All rights reserved.
 //
 
-@import UIKit;
-@import Foundation;
 #import "LCCKChatMessageCell.h"
 
 @interface LCCKCellIdentifierFactory : NSObject

@@ -6,8 +6,6 @@
 //
 //
 
-@import Foundation;
-@import UIKit;
 @class LCCKChatBar;
 @class LCCKConversationViewController;
 

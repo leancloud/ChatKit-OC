@@ -9,9 +9,10 @@ PODS:
     - AVOSCloudIM/_NOARC (= 3.8.0)
   - AVOSCloudIM/_NOARC (3.8.0):
     - AVOSCloud (= 3.8.0)
-  - ChatKit (0.8.6):
+  - ChatKit (0.8.8):
     - AVOSCloud (~> 3.8.0)
     - AVOSCloudIM (~> 3.8.0)
+    - CYLDeallocBlockExecutor
     - DACircularProgress (~> 2.3.1)
     - FDStackView (~> 1.0)
     - FMDB (~> 2.6.2)
@@ -22,7 +23,8 @@ PODS:
     - pop (~> 1.0.9)
     - SDWebImage (~> 3.8.0)
     - UITableView+FDTemplateLayoutCell (~> 1.5.beta)
-  - CYLTabBarController (1.6.1)
+  - CYLDeallocBlockExecutor (1.0.0)
+  - CYLTabBarController (1.7.0)
   - CYLTableViewRowAction (1.0.0)
   - DACircularProgress (2.3.1)
   - FDStackView (1.0)
@@ -30,6 +32,7 @@ PODS:
     - FMDB/standard (= 2.6.2)
   - FMDB/standard (2.6.2)
   - FTPopOverMenu (1.2.5)
+  - FXForms (1.2.14)
   - Masonry (1.0.2)
   - MBProgressHUD (0.9.2)
   - MJRefresh (3.1.12)
@@ -51,9 +54,10 @@ PODS:
 
 DEPENDENCIES:
   - ChatKit (from `../`)
-  - CYLTabBarController (= 1.6.1)
+  - CYLTabBarController (~> 1.7.0)
   - CYLTableViewRowAction (= 1.0.0)
   - FTPopOverMenu
+  - FXForms (~> 1.2.14)
   - MLPAutoCompleteTextField
   - RedpacketLib
   - TWMessageBarManager
@@ -65,13 +69,15 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   AVOSCloud: ae9804496f51de99c4143fea7f842d6f46a32b4c
   AVOSCloudIM: bea73c50c58c7c5e466e0c7134b4b7d2f02c338a
-  ChatKit: 1792f3e14ac4719cf833302c88c133d628b3a908
-  CYLTabBarController: c1a3eaee3081c84cd45105c5b4c26d62b747de67
+  ChatKit: b85a85a44d64d834a9f71e592c5bd9a633663070
+  CYLDeallocBlockExecutor: 13dc997661100052ed24bb918fcc65e8535af59d
+  CYLTabBarController: 925ec82de4ae6f89b6277c8d406853d2d29b5562
   CYLTableViewRowAction: 66bd3f7478b46894ff40b74d892fc85aed41656b
   DACircularProgress: 4dd437c0fc3da5161cb289e07ac449493d41db71
   FDStackView: 3a4bbe0ce9c35e974246a585168b9da8c32213f1
   FMDB: 854a0341b4726e53276f2a8996f06f1b80f9259a
   FTPopOverMenu: 4da913001eef1496a4bf47fc814aaf5d5d36d19d
+  FXForms: 724500c0c3f3eb3ba1004b3b83abcee55d3daf18
   Masonry: 7c429b56da9d4ee0bbb3ed77a5ea710d6a5df39e
   MBProgressHUD: 1569cf7ace17a8bac47aabfbb8580a49690386d1
   MJRefresh: b96cdb21c4aa75a7b07654311ab2f315c497e806
@@ -85,6 +91,6 @@ SPEC CHECKSUMS:
   TWMessageBarManager: fd84e7948ba7968a2b5d9454859135761214ec56
   UITableView+FDTemplateLayoutCell: 02b508ab1cb4cea16a8c17ac83d2cd1fd72124f9
 
-PODFILE CHECKSUM: 7049febc3cb25945bd3dfea85aca846773a550f0
+PODFILE CHECKSUM: 63b8b33440fd442d71f252f0eaf1778682742e85
 
 COCOAPODS: 1.0.0

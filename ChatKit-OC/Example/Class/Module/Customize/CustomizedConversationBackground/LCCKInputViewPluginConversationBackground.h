@@ -12,9 +12,6 @@
 #import "LCChatKit.h"
 #endif
 
-@import UIKit;
-@import Foundation;
-
 static LCCKInputViewPluginType const LCCKInputViewPluginTypeConversationBackground = 2;
 
 @interface LCCKInputViewPluginConversationBackground : LCCKInputViewPlugin<LCCKInputViewPluginSubclassing>

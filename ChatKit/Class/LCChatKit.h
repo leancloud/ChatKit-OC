@@ -6,7 +6,6 @@
 //  Copyright © 2016年 LeanCloud. All rights reserved.
 //  Core class of LeanCloudChatKit
 
-@import Foundation;
 #import "ChatKitHeaders.h"
 
 /*

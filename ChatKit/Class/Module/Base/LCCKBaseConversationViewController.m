@@ -10,7 +10,12 @@
 #import "LCCKCellRegisterController.h"
 #import "LCCKChatBar.h"
 #import "LCCKConversationRefreshHeader.h"
-#import "LCCKDeallocBlockExecutor.h"
+
+#if __has_include(<CYLDeallocBlockExecutor/CYLDeallocBlockExecutor.h>)
+#import <CYLDeallocBlockExecutor/CYLDeallocBlockExecutor.h>
+#else
+#import "CYLDeallocBlockExecutor.h"
+#endif
 
 #if __has_include(<Masonry/Masonry.h>)
 #import <Masonry/Masonry.h>
@@ -32,9 +37,6 @@ static CGFloat const LCCKScrollViewInsetTop = 20.f;
 
 @implementation LCCKBaseConversationViewController
 
-- (void)dealloc {
-    _chatBar.delegate = nil;
-}
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self initilzer];
@@ -55,7 +57,7 @@ static CGFloat const LCCKScrollViewInsetTop = 20.f;
     // KVO注册监听
     [self addObserver:self forKeyPath:@"loadingMoreMessage" options:NSKeyValueObservingOptionNew context:LCCKBaseConversationViewControllerRefreshContext];
     __unsafe_unretained __typeof(self) weakSelf = self;
-    [self lcck_executeAtDealloc:^{
+    [self cyl_executeAtDealloc:^{
         [weakSelf removeObserver:weakSelf forKeyPath:@"loadingMoreMessage"];
     }];
     [LCCKCellRegisterController registerChatMessageCellClassForTableView:self.tableView];
@@ -88,7 +90,6 @@ static CGFloat const LCCKScrollViewInsetTop = 20.f;
 
 - (void)setShouldLoadMoreMessagesScrollToTop:(BOOL)shouldLoadMoreMessagesScrollToTop {
     _shouldLoadMoreMessagesScrollToTop = shouldLoadMoreMessagesScrollToTop;
-    
 }
 
 // KVO监听执行
@@ -148,14 +149,5 @@ static CGFloat const LCCKScrollViewInsetTop = 20.f;
     }
     return _chatBar;
 }
-
-#pragma mark - Previte Method
-
-//- (void)setIsUserScrolling:(BOOL)isUserScrolling {
-//    _isUserScrolling = isUserScrolling;
-//    if (isUserScrolling) {
-////        _allowScrollToBottom = NO;
-//    }
-//}
 
 @end

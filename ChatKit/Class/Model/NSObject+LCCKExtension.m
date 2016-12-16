@@ -103,4 +103,13 @@
     return result;
 }
 
+- (BOOL)lcck_isCreatorForCurrentGroupConversaton {
+    BOOL isCreator = [[LCCKConversationService sharedInstance].currentConversation.creator isEqualToString:[LCChatKit sharedInstance].clientId];
+    BOOL isGroupConversation = [LCCKConversationService sharedInstance].currentConversation.members.count > 2;
+    if (isCreator && isGroupConversation) {
+        return YES;
+    }
+    return NO;
+}
+
 @end

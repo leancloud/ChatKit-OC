@@ -65,7 +65,7 @@
 
 - (void)clickedBarButtonItemAction:(UIBarButtonItem *)sender event:(UIEvent *)event {
     if (self.barButtonItemAction) {
-        self.barButtonItemAction(sender, event);
+        self.barButtonItemAction(self, sender, event);
     }
 }
 

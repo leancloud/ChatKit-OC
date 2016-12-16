@@ -2,12 +2,9 @@
 //  CYLTabBarController.h
 //  CYLTabBarController
 //
-//  Created by 微博@iOS程序犭袁 ( http://weibo.com/luohanchenyilong/ ) on 10/20/15.
+//  v1.7.0 Created by 微博@iOS程序犭袁 ( http://weibo.com/luohanchenyilong/ ) on 10/20/15.
 //  Copyright © 2015 https://github.com/ChenYilong . All rights reserved.
 //
-
-@import Foundation;
-@import UIKit;
 
 #import "CYLPlusButton.h"
 #import "UIViewController+CYLTabBarControllerExtention.h"
@@ -52,6 +49,8 @@ FOUNDATION_EXTERN CGFloat CYLTabBarItemWidth;
 - (instancetype)initWithViewControllers:(NSArray<UIViewController *> *)viewControllers tabBarItemsAttributes:(NSArray<NSDictionary *> *)tabBarItemsAttributes;
 
 + (instancetype)tabBarControllerWithViewControllers:(NSArray<UIViewController *> *)viewControllers tabBarItemsAttributes:(NSArray<NSDictionary *> *)tabBarItemsAttributes;
+
+- (void)updateSelectionStatusIfNeededForTabBarController:(UITabBarController *)tabBarController shouldSelectViewController:(UIViewController *)viewController;
 
 /*!
  * Judge if there is plus button.
