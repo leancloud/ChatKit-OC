@@ -46,7 +46,14 @@ typedef void (^CYLPushOrPopCallback)(NSArray<__kindof UIViewController *> *viewC
 - (void)cyl_popSelectTabBarChildViewControllerForClassType:(Class)classType
                                                 completion:(CYLPopSelectTabBarChildViewControllerCompletion)completion;
 
-- (void)cyl_pushOrPopToViewController:(UIViewController *)viewController animated:(BOOL)animated callback:(CYLPushOrPopCallback)callback;
-- (void)cyl_pushOrPopToViewController:(UIViewController *)viewController shouldPopSelectTabBarChildViewController:(BOOL)shouldPopSelectTabBarChildViewController index:(NSUInteger)index animated:(BOOL)animated callback:(CYLPushOrPopCallback)callback;
+- (void)cyl_pushOrPopToViewController:(UIViewController *)viewController
+                             animated:(BOOL)animated
+                             callback:(CYLPushOrPopCallback)callback;
+
+- (void)cyl_pushOrPopToViewController:(UIViewController *)viewController
+shouldPopSelectTabBarChildViewController:(BOOL)shouldPopSelectTabBarChildViewController
+                                index:(NSUInteger)index
+                             animated:(BOOL)animated
+                             callback:(CYLPushOrPopCallback)callback;
 
 @end

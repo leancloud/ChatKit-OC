@@ -27,7 +27,7 @@
 全局	| 顶部导航栏	| 背景色、文字颜色等样式	| 系统API
 全局	| 顶部导航栏	| 导航按钮	| 既可以使用 `-[LCCKBaseViewController configureBarButtonItemStyle:action:]`，</p>又可以在各个Controller的 `setViewDidLoadBlock:` 中调用系统API
 全局	| TableView	| 分割线、背景色、Cell文字颜色、Cell背景色等 | 【plist】</p>TableView-XXX </p>	ChatKit-Theme.plist中 </p>**【plist】是指资源包 MessageBubble.bundle 中的 MessageBubble-Customize.plist </p>或者是 Other.bundle 中的 ChatKit-Theme.plist 文件，下同** 
-全局 | 核心流程</p>（聊天、对话列表话及相关页面） | 支持国际化 | 自定义 Other.bundle 为 CustomizedChatKitOther.bundle，并修改或增加其中的本地化文件
+全局 | 核心流程</p>（聊天、对话列表话及相关页面） | 支持国际化 | 自定义 Other.bundle 为 CustomizedChatKit.Other.bundle，并修改或增加其中的本地化文件
 全局	| 头像样式	| 头像圆角	|  `-[LCChatKit setAvatarImageViewCornerRadiusBlock:]`
 全局	| 事件处理 |	预览图片 |	`-[LCChatKit setPreviewImageMessageBlock:]`
 全局	| 事件处理 |	点击头像	| `-[LCChatKit setOpenProfileBlock:]`
@@ -77,23 +77,23 @@
 
  1. 将 ChatKit 中的 MessageBubble.bundle 拷贝一份到你的本机，比如桌面。
  2. 在桌面中操作该 Bundle，替换其中你要自定义的资源
- 3. 将修改后的 Bundle 改名为 CustomizedChatKitMessageBubble.bundle（注意：**要确保文件命名和数量都保持不变**）
- 4. 将 CustomizedChatKitMessageBubble.bundle 拖拽到你的工程中（注意：**是拷贝到你自己的项目中，也即 MainBundle 中，并非 ChatKit 中**）
+ 3. 将修改后的 Bundle 改名为 CustomizedChatKit.MessageBubble.bundle（注意：**要确保文件命名和数量都保持不变**）
+ 4. 将 CustomizedChatKit.MessageBubble.bundle 拖拽到你的工程中（注意：**是拷贝到你自己的项目中，也即 MainBundle 中，并非 ChatKit 中**）
 
 #### 自定义 Bundle 命名规则
 
-ChatKit 提供了默认的 Bundle 文件，如果想自定义对应的 Bundle ，需要在相应的资源 Bunble 前加前缀 CustomizedChatKit，然后拖拽到自己的项目中，详细的对应关系如下：
+ChatKit 提供了默认的 Bundle 文件，如果想自定义对应的 Bundle ，需要在相应的资源 Bunble 前加前缀 `CustomizedChatKit.`，然后拖拽到自己的项目中，详细的对应关系如下：
 
 
 项目 | 默认名称 | 自定义名称 | 资源类型
 -------------|-------------|-------------|-------------
-聊天气泡 |MessageBubble.bundle        |CustomizedChatKitMessageBubble.bundle       |  图片
-聊天输入框键盘相关 |ChatKeyboard.bundle         |CustomizedChatKitChatKeyboard.bundle        | 图片
-表情 |Emoji.bundle                |CustomizedChatKitEmoji.bundle               | 图片、plist描述文件
-默认占位图片 |Placeholder.bundle          |CustomizedChatKitPlaceholder.bundle         | 图片
-声音相关 |VoiceMessageSource.bundle   |CustomizedChatKitVoiceMessageSource.bundle  | 声音
-NavigationBar 左右侧icon |BarButtonIcon.bundle        |CustomizedChatKitBarButtonIcon.bundle       | 图片
-其他 |Other.bundle               |CustomizedChatKitOther.bundle              | 任意类型
+聊天气泡 |MessageBubble.bundle        |CustomizedChatKit.MessageBubble.bundle       |  图片
+聊天输入框键盘相关 |ChatKeyboard.bundle         |CustomizedChatKit.ChatKeyboard.bundle        | 图片
+表情 |Emoji.bundle                |CustomizedChatKit.Emoji.bundle               | 图片、plist描述文件
+默认占位图片 |Placeholder.bundle          |CustomizedChatKit.Placeholder.bundle         | 图片
+声音相关 |VoiceMessageSource.bundle   |CustomizedChatKit.VoiceMessageSource.bundle  | 声音
+NavigationBar 左右侧icon |BarButtonIcon.bundle        |CustomizedChatKit.BarButtonIcon.bundle       | 图片
+其他 |Other.bundle               |CustomizedChatKit.Other.bundle              | 任意类型
 
 
 ## UI属性配置
