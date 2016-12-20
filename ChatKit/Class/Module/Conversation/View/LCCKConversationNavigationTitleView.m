@@ -24,6 +24,7 @@ static CGFloat const kLCCKTitleFontSize = 17.f;
 
 static void * const LCCKConversationViewControllerMutedContext = (void*)&LCCKConversationViewControllerMutedContext;
 static void * const LCCKConversationViewControllerNameContext = (void*)&LCCKConversationViewControllerNameContext;
+static void * const LCCKConversationViewControllerMembersCountContext = (void*)&LCCKConversationViewControllerMembersCountContext;
 
 @interface LCCKConversationNavigationTitleView ()
 
@@ -35,7 +36,6 @@ static void * const LCCKConversationViewControllerNameContext = (void*)&LCCKConv
 @property (nonatomic, copy) NSString *conversationName;
 @property (nonatomic, strong) AVIMConversation *conversation;
 @end
-
 
 @implementation LCCKConversationNavigationTitleView
 
@@ -69,6 +69,8 @@ static void * const LCCKConversationViewControllerNameContext = (void*)&LCCKConv
         self.remindMuteImageView.hidden = !muted;
         [self.containerView layoutIfNeeded];
     } else if(context == LCCKConversationViewControllerNameContext) {
+        [self resetConversationNameWithMembersCountChanged:NO];
+    } else if (context == LCCKConversationViewControllerMembersCountContext) {
         [self resetConversationName];
     }
 }
@@ -77,32 +79,19 @@ static void * const LCCKConversationViewControllerNameContext = (void*)&LCCKConv
     [self addSubview:self.containerView];
     [conversation addObserver:self forKeyPath:@"muted" options:NSKeyValueObservingOptionNew context:LCCKConversationViewControllerMutedContext];
     [conversation addObserver:self forKeyPath:@"name" options:NSKeyValueObservingOptionNew context:LCCKConversationViewControllerNameContext];
+    [conversation addObserver:self forKeyPath:@"members.@count" options:NSKeyValueObservingOptionNew context:LCCKConversationViewControllerMembersCountContext];
 
     __unsafe_unretained __typeof(self) weakSelf = self;
     [self cyl_executeAtDealloc:^{
         [conversation removeObserver:weakSelf forKeyPath:@"muted"];
         [conversation removeObserver:weakSelf forKeyPath:@"name"];
+        [conversation removeObserver:weakSelf forKeyPath:@"members.@count"];
     }];
     
     [self.containerView layoutIfNeeded];//fix member count view won't display when conversationNameView is too long
     return self;
 }
 
-- (void)resetConversationName {
-    NSString *conversationName;
-    if ([self.conversation.lcck_displayName lcck_containsString:@","]) {
-        self.membersCountView.hidden = NO;
-        conversationName = self.conversation.lcck_displayName;
-    } else {
-        self.membersCountView.hidden = YES;
-        conversationName = self.conversation.lcck_title;
-    }
-    if (conversationName.length == 0 || !conversationName) {
-        conversationName = LCCKLocalizedStrings(@"Chat");
-    }
-    self.conversationNameView.text = conversationName;
-
-}
 - (instancetype)initWithConversation:(AVIMConversation *)conversation navigationController:(UINavigationController *)navigationController {
     if (self = [super init]) {
         _conversation = conversation;
@@ -114,8 +103,6 @@ static void * const LCCKConversationViewControllerNameContext = (void*)&LCCKConv
 }
 
 - (void)setupWithNavigationController:(UINavigationController *)navigationController {
-    NSUInteger membersCount = self.conversation.members.count;
-    self.membersCountView.text = [NSString stringWithFormat:@"(%@)", @(membersCount)];
     self.navigationController = navigationController;
     [self sharedInitWithConversation:self.conversation];
 }
@@ -158,6 +145,32 @@ static void * const LCCKConversationViewControllerNameContext = (void*)&LCCKConv
         _membersCountView = membersCountView;
     }
     return _membersCountView;
+}
+
+#pragma mark -
+#pragma mark - Private Methods
+
+- (void)resetConversationName {
+    [self resetConversationNameWithMembersCountChanged:YES];
+}
+
+- (void)resetConversationNameWithMembersCountChanged:(BOOL)membersCountChanged {
+    NSString *conversationName;
+    if ([self.conversation.lcck_displayName lcck_containsString:@","]) {
+        self.membersCountView.hidden = NO;
+        conversationName = self.conversation.lcck_displayName;
+    } else {
+        self.membersCountView.hidden = YES;
+        conversationName = self.conversation.lcck_title;
+    }
+    if (conversationName.length == 0 || !conversationName) {
+        conversationName = LCCKLocalizedStrings(@"Chat");
+    }
+    self.conversationNameView.text = conversationName;
+    if (membersCountChanged) {
+        NSUInteger membersCount = self.conversation.members.count;
+        self.membersCountView.text = [NSString stringWithFormat:@"(%@)", @(membersCount)];
+    }
 }
 
 @end
