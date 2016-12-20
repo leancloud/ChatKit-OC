@@ -40,6 +40,7 @@
 
 + (void)invokeThisMethodInDidFinishLaunching {
     // 如果APP是在国外使用，开启北美节点
+    // 必须在 APPID 初始化之前调用，否则走的是中国节点。
     // [AVOSCloud setServiceRegion:AVServiceRegionUS];
     // 启用未读消息
     [AVIMClient setUserOptions:@{ AVIMUserOptionUseUnread : @(YES) }];

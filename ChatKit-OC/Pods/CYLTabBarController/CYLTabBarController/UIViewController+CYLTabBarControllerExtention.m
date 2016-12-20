@@ -45,6 +45,7 @@
         !completion ?: completion(selectedTabBarChildViewController);
     });
 }
+
 - (void)cyl_pushOrPopToViewController:(UIViewController *)viewController animated:(BOOL)animated callback:(CYLPushOrPopCallback)callback {
     [self cyl_pushOrPopToViewController:viewController shouldPopSelectTabBarChildViewController:NO index:0 animated:animated callback:callback];
 }
@@ -105,7 +106,7 @@
     __block NSMutableArray *mutableOtherViewControllersInNavigationControllerStack = [NSMutableArray arrayWithCapacity:currentNavigationControllerStack.count];
     
     [currentNavigationControllerStack enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        UIViewController *otherViewController = [obj cyl_getViewControllerInsteadIOfNavigationController];
+        UIViewController *otherViewController = obj;
         if ([otherViewController isKindOfClass:[viewController class]]) {
             [mutableOtherViewControllersInNavigationControllerStack addObject:otherViewController];
         }
