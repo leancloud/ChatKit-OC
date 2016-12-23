@@ -9,7 +9,7 @@ PODS:
     - AVOSCloudIM/_NOARC (= 3.8.0)
   - AVOSCloudIM/_NOARC (3.8.0):
     - AVOSCloud (= 3.8.0)
-  - ChatKit (0.8.8):
+  - ChatKit (0.8.9):
     - AVOSCloud (~> 3.8.0)
     - AVOSCloudIM (~> 3.8.0)
     - CYLDeallocBlockExecutor
@@ -44,7 +44,7 @@ PODS:
     - SDWebImage (!= 3.7.2, ~> 3.7)
   - pop (1.0.9)
   - RedPacketAlipay (15.0.2)
-  - RedpacketLib (3.3.2):
+  - RedpacketLib (3.4.0):
     - RedPacketAlipay
   - SDWebImage (3.8.2):
     - SDWebImage/Core (= 3.8.2)
@@ -59,17 +59,17 @@ DEPENDENCIES:
   - FTPopOverMenu
   - FXForms (~> 1.2.14)
   - MLPAutoCompleteTextField
-  - RedpacketLib
+  - RedpacketLib (~> 3.4.0)
   - TWMessageBarManager
 
 EXTERNAL SOURCES:
   ChatKit:
-    :path: ../
+    :path: "../"
 
 SPEC CHECKSUMS:
   AVOSCloud: ae9804496f51de99c4143fea7f842d6f46a32b4c
   AVOSCloudIM: bea73c50c58c7c5e466e0c7134b4b7d2f02c338a
-  ChatKit: b85a85a44d64d834a9f71e592c5bd9a633663070
+  ChatKit: 4feffbe9ace3d759801d22b8931fe02c28e98836
   CYLDeallocBlockExecutor: 13dc997661100052ed24bb918fcc65e8535af59d
   CYLTabBarController: 925ec82de4ae6f89b6277c8d406853d2d29b5562
   CYLTableViewRowAction: 66bd3f7478b46894ff40b74d892fc85aed41656b
@@ -86,11 +86,11 @@ SPEC CHECKSUMS:
   MWPhotoBrowser: 5836d7aa041dc05a13de380c246826578adc5ea5
   pop: f667631a5108a2e60d9e8797c9b32ddaf2080bce
   RedPacketAlipay: a5de6db2e2671fc9255d6d396be869e3ba2f0489
-  RedpacketLib: 53d0542249e2196f6756d597c13b29e281e2c771
-  SDWebImage: 098e97e6176540799c27e804c96653ee0833d13c
+  RedpacketLib: ac4c0e8892bf4559dd55b32d7256e216724dd4a8
+  SDWebImage: '098e97e6176540799c27e804c96653ee0833d13c'
   TWMessageBarManager: fd84e7948ba7968a2b5d9454859135761214ec56
   UITableView+FDTemplateLayoutCell: 02b508ab1cb4cea16a8c17ac83d2cd1fd72124f9
 
-PODFILE CHECKSUM: 63b8b33440fd442d71f252f0eaf1778682742e85
+PODFILE CHECKSUM: c34d62d4594c197f40ca570e912f96b58299abd1
 
-COCOAPODS: 1.0.0
+COCOAPODS: 1.1.1

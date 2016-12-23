@@ -55,9 +55,7 @@
 }
 
 - (void)pluginDidClicked {
-    self.redpacketControl = [[RedpacketViewControl alloc] init];
-    self.redpacketControl.conversationController = self.conversationViewController;
-    [self.redpacketControl presentChangeMoneyViewController];
+    [RedpacketViewControl presentChangePocketViewControllerFromeController:self.conversationViewController];
 }
 
 #pragma mark -

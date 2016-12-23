@@ -121,31 +121,11 @@ static const CGFloat Redpacket_SubMessage_Font_Size = 12.0f;
 
 - (void)redpacketClicked {
     if ([self.rpMessage isKindOfClass:[AVIMTypedMessageRedPacket class]]) {
-        AVIMTypedMessageRedPacket * message = (AVIMTypedMessageRedPacket*)self.rpMessage;
-        RedpacketViewControl * redpacketControl = [RedpacketViewControl new];
-        redpacketControl.conversationController = (UIViewController*)self.delegate;
-        
         __weak typeof(self) weakSelf = self;
-        // 设置红包 SDK 功能回调
-        [redpacketControl setRedpacketGrabBlock:^(RedpacketMessageModel *redpacket) {
-            // 用户发出的红包收到被抢的通知
-            [weakSelf onRedpacketTakenMessage:redpacket];
-        } andRedpacketBlock:nil];
-        self.rpControl = redpacketControl;
-        NSError * error;
-        NSArray<id<LCCKUserDelegate>> *users = [[LCChatKit sharedInstance] getCachedProfilesIfExists:@[message.rpModel.redpacketSender.userId] shouldSameCount:YES error:&error];
-        if (users.count && !error) {
-            [users enumerateObjectsUsingBlock:^(id<LCCKUserDelegate>  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-                if ([message.rpModel.redpacketSender.userId isEqualToString:obj.clientId]) {
-                    RedpacketUserInfo * userInfo = [RedpacketUserInfo new];
-                    userInfo.userId = obj.clientId;
-                    userInfo.userNickname = obj.name.length?obj.name:obj.clientId;
-                    userInfo.userAvatar = obj.avatarURL.absoluteString;
-                    message.rpModel.redpacketSender = userInfo;
-                }
-            }];
-        }
-        [redpacketControl redpacketCellTouchedWithMessageModel:message.rpModel];
+        AVIMTypedMessageRedPacket * message = (AVIMTypedMessageRedPacket*)self.rpMessage;
+        [RedpacketViewControl redpacketTouchedWithMessageModel:message.rpModel fromViewController:(UIViewController*)self.delegate redpacketGrabBlock:^(RedpacketMessageModel *messageModel) {
+            [weakSelf onRedpacketTakenMessage:messageModel];
+        } advertisementAction:nil];
     }
 }
 
