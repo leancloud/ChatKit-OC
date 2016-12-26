@@ -12,13 +12,13 @@ pod 'ChatKit', :path => '../'
 #======================== Demo Dependency ================
 #=========================================================
 
-pod "CYLTabBarController", "~> 1.7.0"
+pod "CYLTabBarController", "~> 1.8.0"
 pod "CYLTableViewRowAction", "1.0.0"
 pod 'TWMessageBarManager'
 pod 'MLPAutoCompleteTextField'
 #pod 'MLeaksFinder'
 pod 'FTPopOverMenu'
-pod "RedpacketLib"
+pod "RedpacketLib" ,"~> 3.4.0"
 pod "FXForms", "~> 1.2.14"
 
 end

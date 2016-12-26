@@ -2,7 +2,7 @@
 
 
 <p align="center">
-![enter image description here](https://img.shields.io/badge/pod-v1.7.0-brightgreen.svg)
+![enter image description here](https://img.shields.io/badge/pod-v1.8.0-brightgreen.svg)
 ![enter image description here](https://img.shields.io/badge/Swift-compatible-orange.svg)   ![enter image description here](https://img.shields.io/badge/platform-iOS%207.0%2B-ff69b5152950834.svg) 
 <a href="https://github.com/ChenYilong/CYLTabBarController/blob/master/LICENSE"><img src="https://img.shields.io/badge/license-MIT-green.svg?style=flat"></a>
 [![Codewake](https://www.codewake.com/badges/ask_question.svg)](https://www.codewake.com/p/cyltabbarcontroller)
@@ -160,7 +160,7 @@
   在文件 `Podfile` 中加入以下内容：
 
  ```
-    pod 'CYLTabBarController', '1.6.7'
+    pod 'CYLTabBarController', '1.8.0'
  ```
 
   然后在终端中运行以下命令：
@@ -186,13 +186,14 @@
 
 CocoaPods 中，有几种设置 CYLTabBarController 版本的方法。如：
 
-`>= 1.6.X` 会根据您本地的 CocoaPods 源列表，导入不低于 `1.6.X` 版本的 CYLTabBarController。
+`>= 1.8.X` 会根据您本地的 CocoaPods 源列表，导入不低于 `1.8.X` 版本的 CYLTabBarController。
 
-`~> 1.6.X` 会根据您本地的 CocoaPods 源列表，介于 1.6.X~1.7.0 之前版本的 CYLTabBarController。
+`~> 1.8.X` 会根据您本地的 CocoaPods 源列表，介于 1.8.X~1.9.0 之前版本的 CYLTabBarController。
 我们建议您锁定版本，便于团队开发。如，指定 1.6.7 版本。
 
- ```
-pod 'CYLTabBarController', '1.6.7'
+ 
+```
+pod 'CYLTabBarController', '1.8.0'
  ```
 
  - 升级本地 CocoaPods 源
@@ -308,6 +309,7 @@ pod update
 + (NSUInteger)indexOfPlusButtonInTabBar;
 + (CGFloat)multiplierOfTabBarHeight:(CGFloat)tabBarHeight;
 + (UIViewController *)plusChildViewController;
++ (BOOL)shouldSelectPlusChildViewController;
  ```
 
 作用分别是：
@@ -520,9 +522,32 @@ Airbnb-app效果：
 
 注意：必须同时实现 `+indexOfPlusButtonInTabBar` 来指定 PlusButton 的位置。
 
-遵循两个协议：
+遵循几个协议：
 
 ![enter image description here](http://i64.tinypic.com/14jw5zt.jpg)
+
+
+另外你可以通过下面这个方法获取到 `PlusButton` 的点击事件：
+
+```Objective-C
++ (BOOL)shouldSelectPlusChildViewController;
+```
+
+用法如下：
+
+
+```Objective-C
++ (BOOL)shouldSelectPlusChildViewController {
+    BOOL isSelected = CYLExternPlusButton.selected;
+    if (isSelected) {
+        NSLog(@"🔴类名与方法名：%@（在第%@行），描述：%@", @(__PRETTY_FUNCTION__), @(__LINE__), @"PlusButton is selected");
+    } else {
+        NSLog(@"🔴类名与方法名：%@（在第%@行），描述：%@", @(__PRETTY_FUNCTION__), @(__LINE__), @"PlusButton is not selected");
+    }
+    return YES;
+}
+
+```
 
 ## 让TabBarItem仅显示图标，并使图标垂直居中 
 

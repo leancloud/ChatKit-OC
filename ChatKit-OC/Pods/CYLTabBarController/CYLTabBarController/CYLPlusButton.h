@@ -2,7 +2,7 @@
 //  CYLPlusButton.h
 //  CYLTabBarController
 //
-//  v1.7.0 Created by 微博@iOS程序犭袁 ( http://weibo.com/luohanchenyilong/ ) on 10/20/15.
+//  v1.8.0 Created by 微博@iOS程序犭袁 ( http://weibo.com/luohanchenyilong/ ) on 10/20/15.
 //  Copyright © 2015 https://github.com/ChenYilong . All rights reserved.
 //
 
@@ -54,6 +54,13 @@
  */
 + (UIViewController *)plusChildViewController;
 
+/*!
+ * 
+ Asks the delegate whether the specified view controller should be made active.
+ Return YES if the view controller’s tab should be selected or NO if the current tab should remain active.
+ Returns YES true if the view controller’s tab should be selected or
+         NO  false if the current tab should remain active.
+ */
 + (BOOL)shouldSelectPlusChildViewController;
 
 #pragma mark - Deprecated API

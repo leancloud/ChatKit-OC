@@ -16,6 +16,7 @@
 #import "AVPaasClient.h"
 #import "AVOSCloud_Internal.h"
 #import "LCRouter.h"
+#import "LCKeyValueStore.h"
 #import "SDMacros.h"
 #import <arpa/inet.h>
 
@@ -39,6 +40,7 @@
     @"\n"
 
 static NSTimeInterval AVIMWebSocketDefaultTimeoutInterval = 15.0;
+static NSString *const LCPushRouterCacheKey = @"LCPushRouterCacheKey";
 
 typedef enum : NSUInteger {
     //mutually exclusive
@@ -82,7 +84,6 @@ NSString *const AVIMProtocolPROTOBUF2 = @"lc.protobuf.2";
 
     int _observerCount;
     int32_t _ttl;
-    NSTimeInterval _lastFetchedTimestamp;
     NSTimeInterval _lastPingTimestamp;
     NSTimeInterval _lastPongTimestamp;
     NSTimeInterval _reconnectInterval;
@@ -97,7 +98,6 @@ NSString *const AVIMProtocolPROTOBUF2 = @"lc.protobuf.2";
 @property (nonatomic, assign) BOOL isOpening;
 @property (nonatomic, assign) BOOL useSecondary;
 @property (nonatomic, assign) BOOL needRetry;
-@property (nonatomic, strong) NSData *routerData;
 @property (nonatomic, strong) LCNetworkReachabilityManager *reachabilityMonitor;
 @property (nonatomic, strong) NSTimer *reconnectTimer;
 @property (nonatomic, strong) AVIMWebSocket *webSocket;
@@ -143,7 +143,6 @@ NSString *const AVIMProtocolPROTOBUF2 = @"lc.protobuf.2";
         _serialIdArray = [[NSMutableArray alloc] init];
         _messageIdArray = [[NSMutableArray alloc] init];
         _ttl = -1;
-        _lastFetchedTimestamp = -1;
         _observerCount = 0;
         _timeout = AVIMWebSocketDefaultTimeoutInterval;
         
@@ -412,10 +411,10 @@ NSString *const AVIMProtocolPROTOBUF2 = @"lc.protobuf.2";
                 [[NSNotificationCenter defaultCenter] postNotificationName:AVIM_NOTIFICATION_WEBSOCKET_RECONNECT object:self userInfo:nil];
             }
 
-            NSData *cachedRouterData = [self cachedRouterData];
+            NSDictionary *cachedRouterInformation = [self cachedRouterInformation];
 
-            if (cachedRouterData) {
-                [self handleRouterData:cachedRouterData fromCache:YES];
+            if (cachedRouterInformation) {
+                [self openConnectionForRouterInformation:cachedRouterInformation];
                 return;
             }
 
@@ -449,11 +448,10 @@ NSString *const AVIMProtocolPROTOBUF2 = @"lc.protobuf.2";
 
                 if (object && !error) { /* Everything is OK. */
                     self.useSecondary = NO;
-                    NSError *JSONError = nil;
-                    self.routerData = [NSJSONSerialization dataWithJSONObject:object options:0 error:&JSONError];
-                    if (!JSONError) {
-                        [self handleRouterData:self.routerData fromCache:NO];
-                    }
+                    [self openConnectionForRouterInformation:object];
+                    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                        [self cacheRouterInformationIfPossible:object];
+                    });
                 } else if (code == 404) { /* 404, stop reconnection. */
                     self.isOpening = NO;
                     NSError *httpError = [AVIMErrorUtil errorWithCode:code reason:[NSHTTPURLResponse localizedStringForStatusCode:code]];
@@ -484,71 +482,129 @@ NSString *const AVIMProtocolPROTOBUF2 = @"lc.protobuf.2";
     });
 }
 
-- (NSData *)cachedRouterData {
-    if (_ttl > 0 && [[NSDate date] timeIntervalSince1970] - _lastFetchedTimestamp <= _ttl) {
-        return _routerData;
-    }
+/**
+ Open connection for router information.
 
-    return nil;
+ It will choose a RTM server from router infomation firstly,
+ then, create connection to that server.
+
+ If RTM server not found, it will retry from scratch.
+ */
+- (void)openConnectionForRouterInformation:(NSDictionary *)routerInformation {
+    NSString *server = [self chooseServerFromRouterInformation:routerInformation];
+
+    if (server) {
+        [self internalOpenWebSocketConnection:server];
+    } else {
+        AVLoggerError(AVLoggerDomainIM, @"RTM server not found, try reconnection...");
+        [self reconnect];
+    }
 }
 
+/**
+ Choose a RTM server from router information.
+ Router information may contain both primary server and secondary server.
 
-- (void)handleRouterData:(NSData *)data fromCache:(BOOL)fromCache {
-    NSError *error = nil;
-    NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];
-    if (!error) {
-        if (!fromCache) {
-            _lastFetchedTimestamp = [[NSDate date] timeIntervalSince1970];
-        }
-        _ttl = [[dict objectForKey:@"ttl"] intValue];
-        NSString *serverKey = @"server";
-        if (_useSecondary) {
-            serverKey = @"secondary";
-        }
+ If `_useSecondary` is true, it will choose secondary server preferentially.
+ Otherwise, it will choose primary server preferentially.
+ */
+- (NSString *)chooseServerFromRouterInformation:(NSDictionary *)routerInformation {
+    NSString *server = nil;
 
-        /* Cache push router host if needed. */
-        NSString *groupUrl = dict[@"groupUrl"];
-        NSTimeInterval lastModified = [[NSDate date] timeIntervalSince1970];
-        NSTimeInterval TTL = [dict[@"ttl"] doubleValue];
+    NSString *primary   = routerInformation[@"server"];
+    NSString *secondary = routerInformation[@"secondary"];
 
-        if (groupUrl && TTL) {
-            /**
-             美国节点返回值：
-             response: {
-                groupId = g0;
-                groupUrl = "http://router-g0-push.leancloud.cn";
-                secondary = "wss://cn-n1-cell3.leancloud.cn:6799/";
-                server = "wss://rtm57.leancloud.cn:6799/";
-                ttl = 3600;
-             }
-             
-             中国节点返回值：
-             response: {
-                groupId = g0;
-                secondary = "wss://rtm55.leancloud.cn:6799/";
-                server = "wss://rtm55.leancloud.cn:6799/";
-                ttl = 3600;
-             }
-             */
-            [[LCRouter sharedInstance] cachePushRouterHostWithHost:[[NSURL URLWithString:groupUrl] host] lastModified:lastModified TTL:TTL];
-        }
+    if (_useSecondary)
+        server = secondary ?: primary;
+    else
+        server = primary ?: secondary;
 
-        /* open socket connection. */
-        NSString *webSocketServer = [dict objectForKey:serverKey];
-        if (webSocketServer) {
-            [self internalOpenWebSocketConnection:webSocketServer];
-        } else {
-            [self reconnect];
-        }
-    } else {
-        _isOpening = NO;
-        if (self.openCallback) {
-            [AVIMBlockHelper callBooleanResultBlock:self.openCallback error:error];
-            self.openCallback = nil;
-        } else {
-            [self reconnect];
-        }
+    return server;
+}
+
+/**
+ Cache router infomation if possible. It will cache two things:
+     1. Push router
+     2. Response of push router
+
+ Currently, SDK will not cache the router information if `ttl` is not given by server.
+ */
+- (void)cacheRouterInformationIfPossible:(NSDictionary *)routerInformation {
+    NSTimeInterval TTL = [routerInformation[@"ttl"] doubleValue];
+
+    if (TTL <= 0)
+        return;
+
+    [self cachePushRouter:routerInformation TTL:TTL];
+    [self cacheRouterInformation:routerInformation TTL:TTL];
+}
+
+- (void)cachePushRouter:(NSDictionary *)routerInformation TTL:(NSTimeInterval)TTL {
+    NSString *routerUrl = routerInformation[@"groupUrl"];
+    NSString *routerHost = [[NSURL URLWithString:routerUrl] host];
+
+    if (!routerHost) {
+        AVLoggerInfo(AVLoggerDomainIM, @"Push router not found, nothing to cache.");
+        return;
     }
+
+    NSTimeInterval lastModified = [[NSDate date] timeIntervalSince1970];
+
+    [[LCRouter sharedInstance] cachePushRouterHostWithHost:routerHost lastModified:lastModified TTL:TTL];
+}
+
+- (void)cacheRouterInformation:(NSDictionary *)routerInformation TTL:(NSTimeInterval)TTL {
+    NSDictionary *cacheItem = @{
+        @"ttl": @(TTL),
+        @"lastModified": @([[NSDate date] timeIntervalSince1970]),
+        @"router": routerInformation
+    };
+
+    NSError *error = nil;
+    NSData *data = [NSJSONSerialization dataWithJSONObject:cacheItem options:0 error:&error];
+
+    if (error || !data) {
+        AVLoggerError(AVLoggerDomainIM, @"Cannot serialize push router information, error: %@", error);
+        return;
+    }
+
+    [[LCKeyValueStore sharedInstance] setData:data forKey:LCPushRouterCacheKey];
+}
+
+- (NSDictionary *)cachedRouterInformation {
+    NSData *data = [[LCKeyValueStore sharedInstance] dataForKey:LCPushRouterCacheKey];
+
+    if (!data)
+        return nil;
+
+    /* If connect has failed  3 times (2^3) continuously, we assume that the router information is expired. */
+    if (_reconnectInterval >= 8) {
+        [self clearRouterInformationCache];
+        return nil;
+    }
+
+    NSError *error = nil;
+    NSDictionary *cacheItem = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];
+
+    if (error || !cacheItem) {
+        [self clearRouterInformationCache];
+        return nil;
+    }
+
+    NSTimeInterval TTL = [cacheItem[@"ttl"] doubleValue];
+    NSTimeInterval lastModified = [cacheItem[@"lastModified"] doubleValue];
+    NSTimeInterval now = [[NSDate date] timeIntervalSince1970];
+
+    if (now < lastModified || now >= lastModified + TTL) {
+        [self clearRouterInformationCache];
+        return nil;
+    }
+
+    return cacheItem[@"router"];
+}
+
+- (void)clearRouterInformationCache {
+    [[LCKeyValueStore sharedInstance] deleteKey:LCPushRouterCacheKey];
 }
 
 SecCertificateRef LCGetCertificateFromBase64String(NSString *base64);
@@ -680,7 +736,6 @@ SecCertificateRef LCGetCertificateFromBase64String(NSString *base64);
 }
 
 - (BOOL)checkSizeForData:(id)data {
-   NSUInteger length = [(NSString *)data length];
     if ([data isKindOfClass:[NSString class]] && [(NSString *)data length] > 5000) {
         return NO;
     } else if ([data isKindOfClass:[NSData class]] && [(NSData *)data length] > 5000) {
@@ -845,13 +900,8 @@ SecCertificateRef LCGetCertificateFromBase64String(NSString *base64);
 - (void)forwardError:(NSError *)error forWebSocket:(AVIMWebSocket *)webSocket {
     AVLoggerError(AVLoggerDomainIM, @"Websocket open failed with error:%@.", error);
 
-    if (_useSecondary) {
-        _routerData = nil;
-    } else {
-        _useSecondary = YES;
-    }
-
     _isOpening = NO;
+    _useSecondary = YES;
 
     for (NSNumber *num in _serialIdArray) {
         AVIMGenericCommand *outCommand = [self dequeueCommandWithId:num];

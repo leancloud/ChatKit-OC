@@ -494,7 +494,7 @@ UI自定义，需要实现 `LCCKInputViewPluginDelegate` 方法：
 
 ## 国际化与本地化
 
- ChatKit 目前已在核心流程（聊天、对话列表话及相关页面）中支持国际化，开发者可以通过非常少的工作量来支持本地化，只需要自定义 Other.bundle 为 CustomizedChatKitOther.bundle，并修改或增加其中的本地化文件即可。
+ ChatKit 目前已在核心流程（聊天、对话列表话及相关页面）中支持国际化，开发者可以通过非常少的工作量来支持本地化，只需要自定义 Other.bundle 为 CustomizedChatKit.Other.bundle，并修改或增加其中的本地化文件即可。
 
 这个文件在每次 ChatKit 版本发布时是增量更新的，新增的内容置于文件的末尾并有时间注释，保证开发者可以迅速定位新增键值对。
 

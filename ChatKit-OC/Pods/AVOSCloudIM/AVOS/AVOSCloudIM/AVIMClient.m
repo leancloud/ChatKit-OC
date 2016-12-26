@@ -152,15 +152,6 @@ static BOOL AVIMClientHasInstantiated = NO;
     @weakify(self);
 
     [selfObserver
-     addTarget:self
-     forKeyPath:NSStringFromSelector(@selector(onceOpened))
-     options:0
-     block:^(id object, id target, NSDictionary *change) {
-         @strongify(self);
-         [self registerPushChannelInBackground];
-     }];
-
-    [selfObserver
      addTarget:[AVInstallation currentInstallation]
      forKeyPath:NSStringFromSelector(@selector(deviceToken))
      options:0
@@ -420,19 +411,27 @@ static BOOL AVIMClientHasInstantiated = NO;
 }
 
 - (void)registerPushChannelInBackground {
+    dispatch_async(imClientQueue, ^{
+        [self registerPushChannel];
+    });
+}
+
+- (void)registerPushChannel {
     AVInstallation *currentInstallation = [AVInstallation currentInstallation];
     NSString *deviceToken = currentInstallation.deviceToken;
 
     if (deviceToken && self.onceOpened && (self.status == AVIMClientStatusOpened) && self.clientId) {
-        /* Add client id to installation channels. */
-        [currentInstallation addUniqueObject:self.clientId forKey:@"channels"];
-        [currentInstallation saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-            if (error)
-                AVLoggerError(AVLoggerDomainIM, @"Register push channel failed: %@", error);
-        }];
-
         /* Report current device token to cloud. */
         [self reportDeviceToken:deviceToken];
+
+        /* Add client id to installation channels. */
+        NSError *error = nil;
+        [currentInstallation addUniqueObject:self.clientId forKey:@"channels"];
+        [currentInstallation save:&error];
+
+        if (error) {
+            AVLoggerError(AVLoggerDomainIM, @"Register push channel failed: %@", error);
+        }
     }
 }
 
@@ -532,8 +531,9 @@ static BOOL AVIMClientHasInstantiated = NO;
                 if (!error) {
                     self.onceOpened = YES;
 
-                    /* NOTE: this will trigger an action that puts client id into channels of current installation. */
                     [self changeStatus:AVIMClientStatusOpened];
+
+                    [self registerPushChannel];
 
                     [AVIMBlockHelper callBooleanResultBlock:callback error:nil];
 

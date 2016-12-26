@@ -1,6 +1,6 @@
 {
   "name": "ChatKit",
-  "version": "0.8.8",
+  "version": "0.8.10",
   "summary": "An IM App Framework, support sending text, pictures, audio, video, location messaging, managing address book, more interesting features.",
   "homepage": "https://github.com/LeanCloud/ChatKit-OC",
   "license": {
@@ -34,7 +34,7 @@
   ],
   "source": {
     "git": "https://github.com/LeanCloud/ChatKit-OC.git",
-    "tag": "0.8.8"
+    "tag": "0.8.10"
   },
   "source_files": [
     "ChatKit",
@@ -48,10 +48,10 @@
   "requires_arc": true,
   "dependencies": {
     "AVOSCloud": [
-      "~> 3.8.0"
+      "~> 3.8.2"
     ],
     "AVOSCloudIM": [
-      "~> 3.8.0"
+      "~> 3.8.2"
     ],
     "MJRefresh": [
       "~> 3.1.9"
@@ -84,7 +84,7 @@
       "~> 2.1.2"
     ],
     "CYLDeallocBlockExecutor": [
-
+      "~> 1.1.2"
     ]
   }
 }

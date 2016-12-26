@@ -2,7 +2,7 @@
 //  UIViewController+CYLTabBarControllerExtention.m
 //  CYLTabBarController
 //
-//  v1.7.0 Created by 微博@iOS程序犭袁 ( http://weibo.com/luohanchenyilong/ ) on 16/2/26.
+//  v1.8.0 Created by 微博@iOS程序犭袁 ( http://weibo.com/luohanchenyilong/ ) on 16/2/26.
 //  Copyright © 2016年 https://github.com/ChenYilong .All rights reserved.
 //
 
@@ -46,11 +46,9 @@
     });
 }
 
-- (void)cyl_pushOrPopToViewController:(UIViewController *)viewController animated:(BOOL)animated callback:(CYLPushOrPopCallback)callback {
-    [self cyl_pushOrPopToViewController:viewController shouldPopSelectTabBarChildViewController:NO index:0 animated:animated callback:callback];
-}
-
-- (void)cyl_pushOrPopToViewController:(UIViewController *)viewController shouldPopSelectTabBarChildViewController:(BOOL)shouldPopSelectTabBarChildViewController index:(NSUInteger)index animated:(BOOL)animated callback:(CYLPushOrPopCallback)callback {
+- (void)cyl_pushOrPopToViewController:(UIViewController *)viewController
+                             animated:(BOOL)animated
+                             callback:(CYLPushOrPopCallback)callback {
     if (!callback) {
         [self.navigationController pushViewController:viewController animated:animated];
         return;
@@ -65,8 +63,16 @@
             [self.navigationController pushViewController:viewController animated:animated];
         }
     };
+    NSArray<__kindof UIViewController *> *otherSameClassTypeViewControllersInCurrentNavigationControllerStack = [self cyl_getOtherSameClassTypeViewControllersInCurrentNavigationControllerStack:viewController];
     
-    CYLPushOrPopCompletionHandler completionHandler = ^(BOOL shouldPop, __kindof UIViewController *viewControllerPopTo) {
+    CYLPushOrPopCompletionHandler completionHandler = ^(BOOL shouldPop,
+                                                        __kindof UIViewController *viewControllerPopTo,
+                                                        BOOL shouldPopSelectTabBarChildViewController,
+                                                        NSUInteger index
+                                                        ) {
+        if (!otherSameClassTypeViewControllersInCurrentNavigationControllerStack || otherSameClassTypeViewControllersInCurrentNavigationControllerStack.count == 0) {
+            shouldPop = NO;
+        }
         dispatch_async(dispatch_get_main_queue(),^{
             if (shouldPop) {
                 [self.navigationController popToViewController:viewControllerPopTo animated:animated];
@@ -75,11 +81,6 @@
             popSelectTabBarChildViewControllerCallback(shouldPopSelectTabBarChildViewController, index);
         });
     };
-    NSArray<__kindof UIViewController *> *otherSameClassTypeViewControllersInCurrentNavigationControllerStack = [self cyl_getOtherSameClassTypeViewControllersInCurrentNavigationControllerStack:viewController];
-    if (!otherSameClassTypeViewControllersInCurrentNavigationControllerStack || otherSameClassTypeViewControllersInCurrentNavigationControllerStack.count == 0) {
-        popSelectTabBarChildViewControllerCallback(shouldPopSelectTabBarChildViewController, index);
-        return;
-    }
     callback(otherSameClassTypeViewControllersInCurrentNavigationControllerStack, completionHandler);
 }
 
