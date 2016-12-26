@@ -11,7 +11,7 @@
 #import "RedpacketOpenConst.h"
 #import <AlipaySDK/AlipaySDK.h>
 
-BOOL ClassMethodSwizzle(Class aClass, SEL originalSelector, SEL swizzleSelector) {
+BOOL RP_ClassMethodSwizzle(Class aClass, SEL originalSelector, SEL swizzleSelector) {
     
     Method originalMethod = class_getInstanceMethod(aClass, originalSelector);
     Method swizzleMethod = class_getInstanceMethod(aClass, swizzleSelector);
@@ -37,9 +37,9 @@ BOOL ClassMethodSwizzle(Class aClass, SEL originalSelector, SEL swizzleSelector)
 + (void)swizzleRedPacketMethod {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        ClassMethodSwizzle([self class], @selector(application:openURL:sourceApplication:annotation:), @selector(rp_application:openURL:sourceApplication:annotation:));
-        ClassMethodSwizzle([self class], @selector(application:openURL:options:), @selector(rp_application:openURL:options:));
-        ClassMethodSwizzle([self class], @selector(applicationDidBecomeActive:), @selector(rp_applicationDidBecomeActive:));
+        RP_ClassMethodSwizzle([self class], @selector(application:openURL:sourceApplication:annotation:), @selector(rp_application:openURL:sourceApplication:annotation:));
+        RP_ClassMethodSwizzle([self class], @selector(application:openURL:options:), @selector(rp_application:openURL:options:));
+        RP_ClassMethodSwizzle([self class], @selector(applicationDidBecomeActive:), @selector(rp_applicationDidBecomeActive:));
     });
 }
 
