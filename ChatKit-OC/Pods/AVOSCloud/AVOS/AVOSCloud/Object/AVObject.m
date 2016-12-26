@@ -231,7 +231,7 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
 }
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
-    self = [super init];
+    self = [self init];
 
     if (self) {
         _ACL = [aDecoder decodeObjectForKey:@"ACL"];

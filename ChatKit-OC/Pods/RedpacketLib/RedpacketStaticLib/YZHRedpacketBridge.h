@@ -46,7 +46,7 @@
 @end
 
 
-/** 已经不再使用的API，请注意修改(可以将以下内容直接删除) */
+/** 已经不再使用的API，请注意修改 */
 @interface YZHRedpacketBridge (Deprecated)
 
 /** 是否需要更新签名 */

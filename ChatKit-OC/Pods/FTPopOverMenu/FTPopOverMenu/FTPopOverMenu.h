@@ -24,6 +24,8 @@ typedef void (^FTPopOverMenuDismissBlock)();
  */
 @interface FTPopOverMenuConfiguration : NSObject
 
+@property (nonatomic, assign)CGFloat menuTextMargin;// Default is 6.
+@property (nonatomic, assign)CGFloat menuIconMargin;// Default is 6.
 @property (nonatomic, assign)CGFloat menuRowHeight;
 @property (nonatomic, assign)CGFloat menuWidth;
 @property (nonatomic, strong)UIColor *textColor;
@@ -33,6 +35,7 @@ typedef void (^FTPopOverMenuDismissBlock)();
 @property (nonatomic, strong)UIFont *textFont;
 @property (nonatomic, assign)NSTextAlignment textAlignment;
 @property (nonatomic, assign)BOOL ignoreImageOriginalColor;// Default is 'NO', if sets to 'YES', images color will be same as textColor.
+@property (nonatomic, assign)NSTimeInterval animationDuration;
 /**
  *  defaultConfiguration
  *
@@ -92,8 +95,20 @@ typedef void (^FTPopOverMenuDismissBlock)();
 + (void) showForSender:(UIView *)sender
               withMenu:(NSArray<NSString*> *)menuArray
              doneBlock:(FTPopOverMenuDoneBlock)doneBlock
-          dismissBlock:(FTPopOverMenuDismissBlock)dismissBlock;
+          dismissBlock:(FTPopOverMenuDismissBlock)dismissBlock __deprecated_msg("Function deprecated. Still working. Use replacemet please.");
 
+/**
+ show method with sender without images
+
+ @param sender sender
+ @param menuArray menuArray
+ @param doneBlock doneBlock
+ @param dismissBlock dismissBlock
+ */
++ (void) showForSender:(UIView *)sender
+         withMenuArray:(NSArray<NSString*> *)menuArray
+             doneBlock:(FTPopOverMenuDoneBlock)doneBlock
+          dismissBlock:(FTPopOverMenuDismissBlock)dismissBlock;
 /**
  *  show method with sender with imageNameArray
  *
@@ -106,6 +121,21 @@ typedef void (^FTPopOverMenuDismissBlock)();
 + (void) showForSender:(UIView *)sender
               withMenu:(NSArray<NSString*> *)menuArray
         imageNameArray:(NSArray<NSString*> *)imageNameArray
+             doneBlock:(FTPopOverMenuDoneBlock)doneBlock
+          dismissBlock:(FTPopOverMenuDismissBlock)dismissBlock __deprecated_msg("Function deprecated. Still working. Use replacemet please.");
+
+/**
+ show method with sender and image resouce Array
+ 
+ @param sender sender
+ @param menuArray menuArray
+ @param imageArray imageArray
+ @param doneBlock doneBlock
+ @param dismissBlock dismissBlock
+ */
++ (void) showForSender:(UIView *)sender
+         withMenuArray:(NSArray<NSString*> *)menuArray
+            imageArray:(NSArray *)imageArray
              doneBlock:(FTPopOverMenuDoneBlock)doneBlock
           dismissBlock:(FTPopOverMenuDismissBlock)dismissBlock;
 
@@ -120,10 +150,23 @@ typedef void (^FTPopOverMenuDismissBlock)();
 + (void) showFromEvent:(UIEvent *)event
               withMenu:(NSArray<NSString*> *)menuArray
              doneBlock:(FTPopOverMenuDoneBlock)doneBlock
-          dismissBlock:(FTPopOverMenuDismissBlock)dismissBlock;
+          dismissBlock:(FTPopOverMenuDismissBlock)dismissBlock __deprecated_msg("Function deprecated. Still working. Use replacemet please.");
+
 
 /**
- *  show method for barbuttonitems with event with imageNameArray
+ show method for barbuttonitems with event without images
+
+ @param event event
+ @param menuArray menuArray
+ @param doneBlock doneBlock
+ @param dismissBlock dismissBlock
+ */
++ (void) showFromEvent:(UIEvent *)event
+         withMenuArray:(NSArray<NSString*> *)menuArray
+             doneBlock:(FTPopOverMenuDoneBlock)doneBlock
+          dismissBlock:(FTPopOverMenuDismissBlock)dismissBlock;
+/**
+ *  show method for barbuttonitems with event and image resouce Array
  *
  *  @param event          UIEvent
  *  @param menuArray      menuArray
@@ -134,6 +177,22 @@ typedef void (^FTPopOverMenuDismissBlock)();
 + (void) showFromEvent:(UIEvent *)event
               withMenu:(NSArray<NSString*> *)menuArray
         imageNameArray:(NSArray<NSString*> *)imageNameArray
+             doneBlock:(FTPopOverMenuDoneBlock)doneBlock
+          dismissBlock:(FTPopOverMenuDismissBlock)dismissBlock __deprecated_msg("Function deprecated. Still working. Use replacemet please.");
+
+
+/**
+ show method for barbuttonitems with event and imageArray
+
+ @param event event
+ @param menuArray menuArray
+ @param imageArray imageArray
+ @param doneBlock doneBlock
+ @param dismissBlock dismissBlock
+ */
++ (void) showFromEvent:(UIEvent *)event
+         withMenuArray:(NSArray<NSString*> *)menuArray
+            imageArray:(NSArray *)imageArray
              doneBlock:(FTPopOverMenuDoneBlock)doneBlock
           dismissBlock:(FTPopOverMenuDismissBlock)dismissBlock;
 
@@ -148,6 +207,20 @@ typedef void (^FTPopOverMenuDismissBlock)();
 + (void) showFromSenderFrame:(CGRect )senderFrame
                     withMenu:(NSArray<NSString*> *)menuArray
                    doneBlock:(FTPopOverMenuDoneBlock)doneBlock
+                dismissBlock:(FTPopOverMenuDismissBlock)dismissBlock __deprecated_msg("Function deprecated. Still working. Use replacemet please.");
+
+
+/**
+ show method with SenderFrame without images
+
+ @param senderFrame senderFrame
+ @param menuArray menuArray
+ @param doneBlock doneBlock
+ @param dismissBlock dismissBlock
+ */
++ (void) showFromSenderFrame:(CGRect )senderFrame
+               withMenuArray:(NSArray<NSString*> *)menuArray
+                   doneBlock:(FTPopOverMenuDoneBlock)doneBlock
                 dismissBlock:(FTPopOverMenuDismissBlock)dismissBlock;
 /**
  *  show method with SenderFrame with imageNameArray
@@ -157,13 +230,30 @@ typedef void (^FTPopOverMenuDismissBlock)();
  *  @param imageNameArray imageNameArray
  *  @param doneBlock      doneBlock
  *  @param dismissBlock   dismissBlock
-
+ 
  */
 + (void) showFromSenderFrame:(CGRect )senderFrame
                     withMenu:(NSArray<NSString*> *)menuArray
               imageNameArray:(NSArray<NSString*> *)imageNameArray
                    doneBlock:(FTPopOverMenuDoneBlock)doneBlock
+                dismissBlock:(FTPopOverMenuDismissBlock)dismissBlock __deprecated_msg("Function deprecated. Still working. Use replacemet please.");
+
+
+/**
+ show method with SenderFrame and image resouce Array
+
+ @param senderFrame senderFrame
+ @param menuArray menuArray
+ @param imageArray imageArray
+ @param doneBlock doneBlock
+ @param dismissBlock dismissBlock
+ */
++ (void) showFromSenderFrame:(CGRect )senderFrame
+               withMenuArray:(NSArray<NSString*> *)menuArray
+                  imageArray:(NSArray *)imageArray
+                   doneBlock:(FTPopOverMenuDoneBlock)doneBlock
                 dismissBlock:(FTPopOverMenuDismissBlock)dismissBlock;
+
 /**
  *  dismiss method
  */

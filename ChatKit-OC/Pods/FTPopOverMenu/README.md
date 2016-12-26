@@ -18,13 +18,19 @@
 
 ## About Swift Version
 
-FTPopOverMenu_Swift is now finished. [Take a look at it now](https://github.com/liufengting/FTPopOverMenu_Swift). The swift version has same APIs with this OC version.
+FTPopOverMenu_Swift is now published. [Take a look at it now](https://github.com/liufengting/FTPopOverMenu_Swift). The swift version has same APIs with this OC version.
 
 # ScreenShots
 
-<img src="/ScreenShots/Demo.gif" width="250"/>
+![screenshots](https://raw.githubusercontent.com/liufengting/FTResourceRepo/master/Resource/FTPopOverMenu/screenshots.gif)
 
 # Installation
+
+⚠️ Big jump from 1.2.6 to 1.3.0 (See [CHANGELOG](https://github.com/liufengting/FTPopOverMenu/blob/master/CHANGELOG.md) for more info)
+
+* supports more image resource, such as local UIImage, bundle image name, remote image url. 
+* also cache remote image into disk.
+* just changed almost all of the APIs, and still kept the old APIs working.
 
 ## Manually
 

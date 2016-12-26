@@ -239,12 +239,6 @@ static NSString *const LCCKAPPKEY = @"ye24iIK6ys8IvaISMC4Bs5WK";
         if (conversation.members.count > 2) { //设置点击rightButton为群聊Style,和对应事件
             [aConversationController configureBarButtonItemStyle:LCCKBarButtonItemStyleGroupProfile
                                                           action:^(__kindof LCCKBaseViewController *viewController, UIBarButtonItem *sender, UIEvent *event) {
-//                                                              NSString *title = @"打开群聊详情";
-//                                                              NSString *subTitle = [NSString stringWithFormat:@"群聊id：%@", conversation.conversationId];
-//                                                              [LCCKUtil showNotificationWithTitle:title
-//                                                                                         subtitle:subTitle
-//                                                                                             type:LCCKMessageNotificationTypeMessage];
-                                                              
                                                               LCCKGroupConversationDetailViewController *groupConversationDetailViewController = [LCCKGroupConversationDetailViewController new];
                                                               groupConversationDetailViewController.conversation = conversation;
                                                               [viewController.navigationController pushViewController:groupConversationDetailViewController animated:YES];
@@ -726,7 +720,7 @@ typedef void (^UITableViewRowActionHandler)(UITableViewRowAction *action, NSInde
                             controller:(LCCKConversationListViewController *)controller {
     NSString *conversationId = conversation.conversationId;
     if (conversation.lcck_unreadCount > 0) {
-        if (*title == nil) {
+        if (title) {
             *title = @"标记为已读";
         }
         *handler = ^(UITableViewRowAction *action, NSIndexPath *indexPath) {
@@ -734,7 +728,7 @@ typedef void (^UITableViewRowActionHandler)(UITableViewRowAction *action, NSInde
             [[LCChatKit sharedInstance] updateUnreadCountToZeroWithConversationId:conversationId];
         };
     } else {
-        if (*title == nil) {
+        if (title) {
             *title = @"标记为未读";
         }
         *handler = ^(UITableViewRowAction *action, NSIndexPath *indexPath) {
