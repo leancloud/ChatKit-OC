@@ -44,7 +44,7 @@ PODS:
     - SDWebImage (!= 3.7.2, ~> 3.7)
   - pop (1.0.9)
   - RedPacketAlipay (15.0.2)
-  - RedpacketLib (3.3.3):
+  - RedpacketLib (3.4.0):
     - RedPacketAlipay
   - SDWebImage (3.8.2):
     - SDWebImage/Core (= 3.8.2)
@@ -59,7 +59,7 @@ DEPENDENCIES:
   - FTPopOverMenu
   - FXForms (~> 1.2.14)
   - MLPAutoCompleteTextField
-  - RedpacketLib (~> 3.3.2)
+  - RedpacketLib (~> 3.4.0)
   - TWMessageBarManager
 
 EXTERNAL SOURCES:
@@ -86,11 +86,11 @@ SPEC CHECKSUMS:
   MWPhotoBrowser: 5836d7aa041dc05a13de380c246826578adc5ea5
   pop: f667631a5108a2e60d9e8797c9b32ddaf2080bce
   RedPacketAlipay: a5de6db2e2671fc9255d6d396be869e3ba2f0489
-  RedpacketLib: 83ab1c466d0ca1373046d80599f749a4e3f188a6
+  RedpacketLib: ac4c0e8892bf4559dd55b32d7256e216724dd4a8
   SDWebImage: 098e97e6176540799c27e804c96653ee0833d13c
   TWMessageBarManager: fd84e7948ba7968a2b5d9454859135761214ec56
   UITableView+FDTemplateLayoutCell: 02b508ab1cb4cea16a8c17ac83d2cd1fd72124f9
 
-PODFILE CHECKSUM: af6f2ede34773f2edad96f4728dd76f5a8d4e50a
+PODFILE CHECKSUM: d1efe8d2d1ca285e64cc555a56dc43f9d9c39cdf
 
 COCOAPODS: 1.1.1
