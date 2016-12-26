@@ -745,10 +745,10 @@ fromTimestamp     |    toDate   |                |  上次上拉刷新顶端，�
             idx++;
         }
     }
-    if (*allVisibleImages == nil) {
+    if (allVisibleImages) {
         *allVisibleImages = [allVisibleImages_ copy];
     }
-    if (*allVisibleThumbs == nil) {
+    if (allVisibleThumbs) {
         *allVisibleThumbs = [allVisibleThumbs_ copy];
     }
 }

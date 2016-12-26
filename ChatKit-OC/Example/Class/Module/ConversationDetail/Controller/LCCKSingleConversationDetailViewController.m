@@ -144,7 +144,7 @@
 - (void)userGroupCellDidSelectUser:(LCCKUser *)user {
     NSString *peerId = user.clientId;
     LCCKConversationViewController *conversationViewController = [[LCCKConversationViewController alloc] initWithPeerId:peerId];
-    [self cyl_pushOrPopToViewController:conversationViewController shouldPopSelectTabBarChildViewController:YES index:0 animated:YES callback:^(NSArray<__kindof LCCKConversationViewController *> *viewControllers, CYLPushOrPopCompletionHandler completionHandler) {
+    [self cyl_pushOrPopToViewController:conversationViewController animated:YES callback:^(NSArray<__kindof LCCKConversationViewController *> *viewControllers, CYLPushOrPopCompletionHandler completionHandler) {
         __block LCCKConversationViewController *viewControllerPopTo = nil;
         __block BOOL shouldPop = NO;
         [viewControllers enumerateObjectsUsingBlock:^(__kindof LCCKConversationViewController * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
@@ -155,7 +155,7 @@
                 return;
             }
         }];
-        completionHandler(shouldPop, viewControllerPopTo);
+        completionHandler(shouldPop, viewControllerPopTo, YES, 0);
     }];
 }
 

@@ -126,8 +126,6 @@ SecCertificateRef LCGetCertificateFromBase64String(NSString *base64);
 + (BOOL)networkIsWifiOrBetter;
 #endif
 
-+ (NSString *)getIpAddres:(NSString *)hostname;
-
 #pragma mark - Something about log
 
 // the level is only for NSLogger
