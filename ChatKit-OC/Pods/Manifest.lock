@@ -59,7 +59,7 @@ DEPENDENCIES:
   - FTPopOverMenu
   - FXForms (~> 1.2.14)
   - MLPAutoCompleteTextField
-  - RedpacketLib
+  - RedpacketLib (~> 3.4.0)
   - TWMessageBarManager
 
 EXTERNAL SOURCES:
