@@ -59,18 +59,24 @@
              rptype = RPRedpacketControllerTypeGroup;
          } else {
              rptype = RPRedpacketControllerTypeSingle;
-             [conversation.members enumerateObjectsUsingBlock:^(NSString *  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-                 if (![[RedpacketConfig sharedConfig].redpacketUserInfo.userId isEqualToString:obj]) {
-                     userInfo.userId = obj;
-                 }
-             }];
+             NSError * error;
+             NSArray<id<LCCKUserDelegate>> *users = [[LCChatKit sharedInstance] getCachedProfilesIfExists:conversation.members shouldSameCount:YES error:&error];
+             if (users.count && !error) {
+                 [users enumerateObjectsUsingBlock:^(id<LCCKUserDelegate>  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                     if (![[RedpacketConfig sharedConfig].redpacketUserInfo.userId isEqualToString:obj.userId]) {
+                         userInfo.userId = obj.userId;
+                         userInfo.userNickname = obj.name.length?obj.name:obj.userId;
+                         userInfo.userAvatar = obj.avatarURL.absoluteString;
+                     }
+                 }];
+             }
          }
      }
     
-    __weak typeof(self) weakSelf = self;
+    
     [RedpacketViewControl presentRedpacketViewController:rptype fromeController:self.conversationViewController groupMemberCount:conversation.members.count withRedpacketReceiver:userInfo andSuccessBlock:^(RedpacketMessageModel *model) {
         model.redpacket.redpacketOrgName = @"LeacCloud红包";
-        [weakSelf sendRedpacketMessage:model];
+        [self sendRedpacketMessage:model];
     } withFetchGroupMemberListBlock:^(RedpacketMemberListFetchBlock completionHandle) {
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
             AVIMConversation *conversation = [self.conversationViewController getConversationIfExists];
