@@ -64,6 +64,7 @@ FOUNDATION_EXTERN NSString *const LCCKConversationServiceErrorDomain;
       progressBlock:(AVProgressBlock)progressBlock
            callback:(LCCKBooleanResultBlock)block;
 
+//FIXME:AVIMMessageSendOption-->AVIMMessageOption
 - (void)sendMessage:(AVIMTypedMessage*)message
        conversation:(AVIMConversation *)conversation
             options:(AVIMMessageSendOption)options

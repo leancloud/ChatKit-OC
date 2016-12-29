@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 
 FOUNDATION_EXTERN NSString *const LCCKURLRegex;
 FOUNDATION_EXTERN NSString *const LCCKPhoneRegex;

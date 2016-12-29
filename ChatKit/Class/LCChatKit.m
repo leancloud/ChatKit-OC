@@ -43,6 +43,7 @@
 @synthesize loadLatestMessagesHandler = _loadLatestMessagesHandler;
 @synthesize disableSingleSignOn = _disableSingleSignOn;
 @synthesize filterMessagesBlock = _filterMessagesBlock;
+@synthesize sendMessageHookBlock = _sendMessageHookBlock;
 
 #pragma mark -
 

@@ -8,7 +8,11 @@
 
 #import <Foundation/Foundation.h>
 #import "LCCKPhotoProtocol.h"
+#if __has_include(<SDWebImage/SDWebImageManager.h>)
 #import <SDWebImage/SDWebImageManager.h>
+#else
+#import "SDWebImageManager.h"
+#endif
 
 // This class models a photo/image and it's caption
 // If you want to handle photos, caching, decompression

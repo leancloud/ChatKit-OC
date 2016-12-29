@@ -10,10 +10,12 @@
 #import "LCCKPhotoProtocol.h"
 #import "LCCKTapDetectingImageView.h"
 #import "LCCKTapDetectingView.h"
-
+#if __has_include(<DACircularProgress/DACircularProgressView.h>)
 #import <DACircularProgress/DACircularProgressView.h>
+#else
+#import "DACircularProgressView.h"
+#endif
 
-//@class LCCKPhotoBrowser, LCCKPhoto, LCCKCaptionView;
 @class LCCKPhoto, LCCKCaptionView;
 
 @protocol LCCKZoomingScrollViewDelegate;

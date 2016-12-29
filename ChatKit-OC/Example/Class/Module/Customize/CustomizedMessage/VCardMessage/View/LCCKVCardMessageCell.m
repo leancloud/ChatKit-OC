@@ -6,14 +6,14 @@
 //  Copyright © 2016年 LeanCloud. All rights reserved.
 //
 
+#if __has_include(<ChatKit/LCChatKit.h>)
+#import <ChatKit/LCChatKit.h>
+#else
+#import "LCChatKit.h"
+#endif
+
 #import "LCCKVCardMessageCell.h"
 #import "LCCKVCardMessage.h"
-
-#if __has_include(<SDWebImage/UIImageView+WebCache.h>)
-#import <SDWebImage/UIImageView+WebCache.h>
-#else
-#import "UIImageView+WebCache.h"
-#endif
 #import "LCCKVCardView.h"
 
 @interface LCCKVCardMessageCell ()

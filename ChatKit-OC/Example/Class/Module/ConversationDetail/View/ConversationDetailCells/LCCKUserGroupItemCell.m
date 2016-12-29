@@ -7,7 +7,12 @@
 //  Core class of LeanCloudChatKit
 
 #import "LCCKUserGroupItemCell.h"
-#import <UIButton+WebCache.h>
+//#import <UIButton+WebCache.h>
+#if __has_include(<ChatKit/LCChatKit.h>)
+#import <ChatKit/LCChatKit.h>
+#else
+#import "LCChatKit.h"
+#endif
 #import "LCCKUser.h"
 #import "LCCKExampleConstants.h"
 

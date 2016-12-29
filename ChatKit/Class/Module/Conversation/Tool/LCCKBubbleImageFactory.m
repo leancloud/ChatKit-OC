@@ -26,7 +26,7 @@
         default:
             break;
     }
-    UIEdgeInsets bubbleImageCapInsets;
+    UIEdgeInsets bubbleImageCapInsets = UIEdgeInsetsZero;
     switch (owner) {
         case LCCKMessageOwnerTypeSelf: {
             // 发送

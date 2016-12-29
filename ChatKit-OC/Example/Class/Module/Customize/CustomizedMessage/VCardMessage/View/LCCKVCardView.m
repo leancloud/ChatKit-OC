@@ -7,12 +7,6 @@
 //
 
 #import "LCCKVCardView.h"
-#if __has_include(<SDWebImage/UIImageView+WebCache.h>)
-#import <SDWebImage/UIImageView+WebCache.h>
-#else
-#import "UIImageView+WebCache.h"
-#endif
-
 #if __has_include(<ChatKit/LCChatKit.h>)
 #import <ChatKit/LCChatKit.h>
 #else

@@ -8,8 +8,12 @@
 
 
 #import "LCCKUIUtility.h"
-#import <UIImageView+WebCache.h>
-//#import "LCCKGroup.h"
+//#import <UIImageView+WebCache.h>
+#if __has_include(<ChatKit/LCChatKit.h>)
+#import <ChatKit/LCChatKit.h>
+#else
+#import "LCChatKit.h"
+#endif
 #import "NSFileManager+LCCKExtension.h"
 
 static UILabel *hLabel = nil;

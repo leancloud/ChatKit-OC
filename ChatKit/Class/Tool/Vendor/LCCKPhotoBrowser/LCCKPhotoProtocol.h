@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 #import "LCCKPBConstants.h"
 
 // Name of notification used when a photo has completed loading process

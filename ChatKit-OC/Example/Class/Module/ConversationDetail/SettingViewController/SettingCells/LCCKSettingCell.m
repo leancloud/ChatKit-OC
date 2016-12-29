@@ -7,8 +7,14 @@
 //  Core class of LeanCloudChatKit
 
 #import "LCCKSettingCell.h"
-#import <Masonry/Masonry.h>
-#import <UIImageView+WebCache.h>
+//#import <Masonry/Masonry.h>
+//#import <UIImageView+WebCache.h>
+#if __has_include(<ChatKit/LCChatKit.h>)
+#import <ChatKit/LCChatKit.h>
+#else
+#import "LCChatKit.h"
+#endif
+
 #import "LCCKExampleConstants.h"
 
 @interface LCCKSettingCell ()

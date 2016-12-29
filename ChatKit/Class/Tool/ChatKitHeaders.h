@@ -18,6 +18,7 @@
     #import "AVOSCloudIM.h"
 #endif
 
+
 #if __has_include(<ChatKit/LCChatKit.h>)
 
     #import <ChatKit/LCCKSessionService.h>
@@ -51,7 +52,9 @@
     #import <ChatKit/LCCKInputViewPluginLocation.h>
     #import <ChatKit/LCCKAlertController.h>
     #import <ChatKit/NSFileManager+LCCKExtension.h>
-    #import <NSObject+LCCKExtension.h>
+    #import <ChatKit/NSObject+LCCKExtension.h>
+    #import <ChatKit/LCCKChatMessageCell.h>
+    #import <ChatKit/LCCKConstants.h>
 
 #else
 
@@ -87,7 +90,32 @@
     #import "LCCKAlertController.h"
     #import "NSFileManager+LCCKExtension.h"
     #import "NSObject+LCCKExtension.h"
+    #import "LCCKChatMessageCell.h"
+    #import "LCCKConstants.h"
+
 #endif
 
+#if __has_include(<SDWebImage/UIImageView+WebCache.h>)
+#import <SDWebImage/UIImageView+WebCache.h>
+#import <SDWebImage/UIButton+WebCache.h>
+
+#else
+#import "UIImageView+WebCache.h"
+#import "UIButton+WebCache.h"
+#endif
+
+#if __has_include(<Masonry/Masonry.h>)
+#import <Masonry/Masonry.h>
+#else
+#import "Masonry.h"
+#endif
+
+
+#if __has_include(<MBProgressHUD/MBProgressHUD.h>)
+#import <MBProgressHUD/MBProgressHUD.h>
+
+#else
+#import "MBProgressHUD.h"
+#endif
 
 

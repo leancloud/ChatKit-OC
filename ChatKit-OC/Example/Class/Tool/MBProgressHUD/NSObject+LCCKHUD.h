@@ -6,7 +6,12 @@
 //  Copyright © 2016年 微博@iOS程序犭袁. All rights reserved.
 //
 
-#import <MBProgressHUD/MBProgressHUD.h>
+
+#if __has_include(<ChatKit/LCChatKit.h>)
+#import <ChatKit/LCChatKit.h>
+#else
+#import "LCChatKit.h"
+#endif
 
 @interface NSObject (LCCKHUD)
 

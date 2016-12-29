@@ -7,9 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
-#import <AVOSCloudIM/AVIMTypedMessage.h>
-#import "AVIMTypedMessage+LCCKExtension.h"
-#import "LCCKConstants.h"
+#if __has_include(<ChatKit/LCChatKit.h>)
+#import <ChatKit/LCChatKit.h>
+#else
+#import "LCChatKit.h"
+#endif
 #import "RedpacketMessageModel.h"
 
 @interface AVIMTypedMessageRedPacket : AVIMTypedMessage<AVIMTypedMessageSubclassing>

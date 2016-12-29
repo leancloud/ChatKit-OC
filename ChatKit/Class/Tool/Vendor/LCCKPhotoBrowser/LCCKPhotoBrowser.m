@@ -9,8 +9,11 @@
 #import <QuartzCore/QuartzCore.h>
 #import "LCCKPhotoBrowser.h"
 #import "LCCKZoomingScrollView.h"
-
-#import "pop/POP.h"
+#if __has_include(<pop/POP.h>)
+#import <pop/POP.h>
+#else
+#import "POP.h"
+#endif
 
 #ifndef LCCKPhotoBrowserLocalizedStrings
 #define LCCKPhotoBrowserLocalizedStrings(key) \

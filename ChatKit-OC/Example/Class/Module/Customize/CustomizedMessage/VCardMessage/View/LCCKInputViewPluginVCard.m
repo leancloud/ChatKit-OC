@@ -8,9 +8,12 @@
 
 #import "LCCKInputViewPluginVCard.h"
 #import "LCCKVCardMessage.h"
-#import "LCCKContactListViewController.h"
 #import "LCCKContactManager.h"
-
+#if __has_include(<ChatKit/LCChatKit.h>)
+#import <ChatKit/LCChatKit.h>
+#else
+#import "LCChatKit.h"
+#endif
 @implementation LCCKInputViewPluginVCard
 @synthesize inputViewRef = _inputViewRef;
 @synthesize sendCustomMessageHandler = _sendCustomMessageHandler;
