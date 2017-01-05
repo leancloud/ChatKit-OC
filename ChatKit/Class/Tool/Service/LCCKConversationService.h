@@ -48,7 +48,7 @@ FOUNDATION_EXTERN NSString *const LCCKConversationServiceErrorDomain;
  *  @param conversationId   对话的 id
  *  @param callback
  */
-- (void)fecthConversationWithConversationId:(NSString *)conversationId callback:(LCCKConversationResultBlock)callback;
+- (void)fetchConversationWithConversationId:(NSString *)conversationId callback:(LCCKConversationResultBlock)callback;
 - (void)fetchConversationsWithConversationIds:(NSSet *)conversationIds callback:(LCCKArrayResultBlock)callback;
 
 /*!
@@ -57,7 +57,7 @@ FOUNDATION_EXTERN NSString *const LCCKConversationServiceErrorDomain;
  *  @param peerId   对方的 id
  *  @param callback
  */
-- (void)fecthConversationWithPeerId:(NSString *)peerId callback:(LCCKConversationResultBlock)callback;
+- (void)fetchConversationWithPeerId:(NSString *)peerId callback:(LCCKConversationResultBlock)callback;
 
 - (void)sendMessage:(AVIMTypedMessage*)message
        conversation:(AVIMConversation *)conversation
@@ -78,7 +78,7 @@ FOUNDATION_EXTERN NSString *const LCCKConversationServiceErrorDomain;
  *  @param  conversation 对话，可以是单聊，也可是群聊
  */
 - (void)removeCacheForConversationId:(NSString *)conversationID;
-- (void)updateConversationAsRead;
+- (void)updateConversationAsReadWithLastMessage:(__kindof AVIMMessage *)lastMessage;
 
 #pragma mark - 最近对话的本地缓存，最近对话将保存在本地数据库中
 ///=============================================================================
@@ -92,7 +92,8 @@ FOUNDATION_EXTERN NSString *const LCCKConversationServiceErrorDomain;
 - (void)setupDatabaseWithUserId:(NSString *)userId;
 
 - (void)insertRecentConversation:(AVIMConversation *)conversation shouldRefreshWhenFinished:(BOOL)shouldRefreshWhenFinished;
-
+- (void)insertRecentConversations:(NSArray<AVIMConversation *> *)conversations;
+- (void)insertRecentConversations:(NSArray<AVIMConversation *> *)conversations shouldRefreshWhenFinished:(BOOL)shouldRefreshWhenFinished;
 - (void)increaseUnreadCount:(NSUInteger)increaseUnreadCount withConversationId:(NSString *)conversationId shouldRefreshWhenFinished:(BOOL)shouldRefreshWhenFinished;
 /**
  *  更新 mentioned 值，当接收到消息发现 @了我的时候，设为 YES，进入聊天页面，设为 NO
@@ -185,5 +186,13 @@ FOUNDATION_EXTERN NSString *const LCCKConversationServiceErrorDomain;
 - (NSArray<LCCKMessage *> *)failedMessagesByMessageIds:(NSArray *)messageIds;
 
 + (void)cacheFileTypeMessages:(NSArray<AVIMTypedMessage *> *)messages callback:(AVBooleanResultBlock)callback;
+
+@end
+
+@interface LCCKConversationService (LCCKDeprecated)
+
+- (void)fecthConversationWithConversationId:(NSString *)conversationId callback:(LCCKConversationResultBlock)callback LCCK_DEPRECATED("deprecated after v0.8.11, use `-fetchConversationWithConversationId:callback:` instead");
+
+- (void)fecthConversationWithPeerId:(NSString *)peerId callback:(LCCKConversationResultBlock)callback LCCK_DEPRECATED("deprecated after v0.8.11, use `-fetchConversationWithPeerId:callback:` instead");
 
 @end

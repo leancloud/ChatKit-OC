@@ -11,5 +11,6 @@
 @interface AVIMMessage (LCCKExtension)
 
 - (AVIMTypedMessage *)lcck_getValidTypedMessage;
+- (BOOL)lcck_isValidMessage;
 
 @end

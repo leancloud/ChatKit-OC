@@ -43,5 +43,6 @@ typedef UITableViewCell* (^LCCKCellForRowBlock)(UITableView *tableView, NSIndexP
 typedef void (^LCCKConfigureCellBlock) (UITableViewCell *cell, UITableView *tableView, NSIndexPath *indexPath, AVIMConversation *conversation);
 @property (nonatomic, copy, readonly) LCCKConfigureCellBlock configureCellBlock;
 -(void)setConfigureCellBlock:(LCCKConfigureCellBlock)configureCellBlock;
+- (void)fetchRelationConversationsFromServer:(AVIMArrayResultBlock)block;
 
 @end

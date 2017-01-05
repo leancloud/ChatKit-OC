@@ -236,18 +236,19 @@
 
 - (void)profileNameDidChanged:(NSString *)name {
     [[self class] lcck_showHUD];
-    [self.conversation setObject:name forKey:@"name"];
-    [self.conversation updateWithCallback:^(BOOL succeeded, NSError * _Nullable error) {
-        [[self class] lcck_hideHUD];
-        if (succeeded) {
-            [[self class] lcck_showSuccess:@"修改成功"];
-            self.data = nil;
-            [self.tableView reloadData];
-            [[LCCKConversationService sharedInstance] removeCacheForConversationId:self.conversation.conversationId];
-        } else {
-            [[self class] lcck_showError:@"修改失败"];
-        }
-    }];
+    //FIXME:
+//    [self.conversation setObject:name forKey:@"name"];
+//    [self.conversation updateWithCallback:^(BOOL succeeded, NSError * _Nullable error) {
+//        [[self class] lcck_hideHUD];
+//        if (succeeded) {
+//            [[self class] lcck_showSuccess:@"修改成功"];
+//            self.data = nil;
+//            [self.tableView reloadData];
+//            [[LCCKConversationService sharedInstance] removeCacheForConversationId:self.conversation.conversationId];
+//        } else {
+//            [[self class] lcck_showError:@"修改失败"];
+//        }
+//    }];
     
 }
 
