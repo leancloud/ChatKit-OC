@@ -58,8 +58,8 @@ typedef enum{
 
     RedpacketHBExpried         = 3011,  /*红包已过期*/
     RedpacketHBReceiverError,           /*此红包不属于您*/
-    RedpacketHBCompleted,               /*此红包已经被领取*/
-    RedpacketHBGetReceivedBefore,       /*此红包自己已领取过*/
+    RedpacketHBCompleted,               /*出现拆红包界面，拆而未抢到*/
+    RedpacketHBGetReceivedBefore,       /*此红包自己已领取过，多设备登录遇到的问题*/
 
     RedpacketHBQuotaNoPayPWD   = 3021,  /*无密码支付剩余额度提示*/
     RedpacketHBQuotaDay ,                /*当日发红包限额提示*/

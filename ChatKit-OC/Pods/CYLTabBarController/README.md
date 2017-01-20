@@ -2,7 +2,7 @@
 
 
 <p align="center">
-![enter image description here](https://img.shields.io/badge/pod-v1.8.0-brightgreen.svg)
+![enter image description here](https://img.shields.io/badge/pod-v1.9.0-brightgreen.svg)
 ![enter image description here](https://img.shields.io/badge/Swift-compatible-orange.svg)   ![enter image description here](https://img.shields.io/badge/platform-iOS%207.0%2B-ff69b5152950834.svg) 
 <a href="https://github.com/ChenYilong/CYLTabBarController/blob/master/LICENSE"><img src="https://img.shields.io/badge/license-MIT-green.svg?style=flat"></a>
 [![Codewake](https://www.codewake.com/badges/ask_question.svg)](https://www.codewake.com/p/cyltabbarcontroller)
@@ -160,7 +160,7 @@
   在文件 `Podfile` 中加入以下内容：
 
  ```
-    pod 'CYLTabBarController', '1.8.0'
+    pod 'CYLTabBarController', '1.9.0'
  ```
 
   然后在终端中运行以下命令：
@@ -186,14 +186,14 @@
 
 CocoaPods 中，有几种设置 CYLTabBarController 版本的方法。如：
 
-`>= 1.8.X` 会根据您本地的 CocoaPods 源列表，导入不低于 `1.8.X` 版本的 CYLTabBarController。
+`>= 1.9.X` 会根据您本地的 CocoaPods 源列表，导入不低于 `1.9.X` 版本的 CYLTabBarController。
 
-`~> 1.8.X` 会根据您本地的 CocoaPods 源列表，介于 1.8.X~1.9.0 之前版本的 CYLTabBarController。
-我们建议您锁定版本，便于团队开发。如，指定 1.6.7 版本。
+`~> 1.9.X` 会根据您本地的 CocoaPods 源列表，介于 1.9.X~1.10.0 之前版本的 CYLTabBarController。
+我们建议您锁定版本，便于团队开发。如，指定 1.9.0 版本。
 
  
 ```
-pod 'CYLTabBarController', '1.8.0'
+pod 'CYLTabBarController', '1.9.0'
  ```
 
  - 升级本地 CocoaPods 源
@@ -708,6 +708,31 @@ A: 有两种情况会造成这个问题：
  2. `plusButton` 添加了自定义点击事件或者自定义手势，因为这样会造成点击事件冲突或手势冲突，当需要 `pushViewController` 的时候，这个库会自动的添加点击事件，你这里重新加了点击事件所以冲突了；
 
  在你项目的基础，把 `plusButton` 的点击事件取消掉,也就是 `addTarget` 这一行注释掉，手势事件也同理，应该就ok了
+
+A: `PlusButton` 与其他的 `TabBarItem` 距离没有平均分布 
+
+(对应于 [issue#36](https://github.com/ChenYilong/CYLTabBarController/issues/36#issuecomment-269165471) )
+
+把这 Demo 里的这一行代码改下：
+
+ ```Objective-C
+[button sizeToFit];
+ ```
+
+改成：
+
+ ```Objective-C
+button.frame = CGRectMake(0.0, 0.0, w, h);
+ ```
+
+那么如果单是放一个照相机的图片，一般是多大的尺寸？
+
+这个要看设计图，通常情况下，你可以写死与其他TabBarItem一样大小：
+
+
+ ```Objective-C
+ [UIScreen mainScreen].bounds.size.width / [CYLTabBarController allItemsInTabBarCount]
+ ```
 
 （更多iOS开发干货，欢迎关注  [微博@iOS程序犭袁](http://weibo.com/luohanchenyilong/) ）
 
