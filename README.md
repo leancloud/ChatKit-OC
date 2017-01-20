@@ -527,4 +527,9 @@ Demo 中也是通过这个方式来兼容iOS7的。
 
 ![](http://ww2.sinaimg.cn/large/7853084cjw1f7y0ltdaprj20r20fiacf.jpg)
 
+如果想获取推送的消息内容可以参考  [《 iOS 消息推送 点击app图标 app icon如何获取推送信息 leanCloud 点击app图标 获得推送消息》]( http://blog.csdn.net/zain_/article/details/50440096
+ ) 
+
 在使用中有任何问题都可以到[我们的官方论坛](https://forum.leancloud.cn/c/jing-xuan-faq)提问题，会有专业工程师回复，平均响应时间在24小时内。
+
+
