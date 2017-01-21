@@ -70,7 +70,6 @@
             CGFloat offsetLeftRight = 8;//8
             make.edges.equalTo(_systemmessageContentView).with.insets(UIEdgeInsetsMake(offsetTopBottom, offsetLeftRight, offsetTopBottom, offsetLeftRight));
         }];
-        systemMessageLabel.attributedText = [[NSAttributedString alloc] initWithString:@"2016-8-14" attributes:self.systemMessageStyle];
     }
     return _systemmessageContentView;
 }
@@ -86,7 +85,7 @@
         _systemMessageStyle = @{
                  NSFontAttributeName: font,
                  NSParagraphStyleAttributeName: style,
-                 NSForegroundColorAttributeName: [UIColor whiteColor]
+                 NSForegroundColorAttributeName: self.conversationViewTimeLineTextColor
                  };
     }
     return _systemMessageStyle;
