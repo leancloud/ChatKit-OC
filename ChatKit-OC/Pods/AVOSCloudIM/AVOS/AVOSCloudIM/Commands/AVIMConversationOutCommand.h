@@ -9,6 +9,7 @@
 #import "AVIMSignature.h"
 #import "AVIMDynamicObject.h"
 #import "AVIMCommandCommon.h"
+#import "AVIMConversationQuery.h"
 
 @interface AVIMConversationOutCommand : AVIMDynamicObject
 
@@ -34,5 +35,6 @@
 @property (nonatomic, assign) uint32_t       skip;
 @property (nonatomic, assign) uint32_t       limit;
 @property (nonatomic, assign) BOOL           unique;
+@property (nonatomic, assign) AVIMConversationQueryOption option;
 
 @end

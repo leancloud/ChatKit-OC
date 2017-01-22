@@ -36,7 +36,7 @@
   // about thread safety and initialization of registry.
   static LCIMExtensionRegistry* registry = nil;
   if (!registry) {
-    GPBDebugCheckRuntimeVersion();
+    LCIMDebugCheckRuntimeVersion();
     registry = [[LCIMExtensionRegistry alloc] init];
     [registry addExtensions:[LCIMSourceContextRoot extensionRegistry]];
     [registry addExtensions:[LCIMTypeRoot extensionRegistry]];
@@ -53,7 +53,7 @@ static LCIMFileDescriptor *GPBApiRoot_FileDescriptor(void) {
   // about thread safety of the singleton.
   static LCIMFileDescriptor *descriptor = NULL;
   if (!descriptor) {
-    GPBDebugCheckRuntimeVersion();
+    LCIMDebugCheckRuntimeVersion();
     descriptor = [[LCIMFileDescriptor alloc] initWithPackage:@"google.protobuf"
                                                      syntax:GPBFileSyntaxProto3];
   }
@@ -75,12 +75,12 @@ static LCIMFileDescriptor *GPBApiRoot_FileDescriptor(void) {
 typedef struct LCIMApi__storage_ {
   uint32_t _has_storage_[1];
   GPBSyntax syntax;
-  NSString *name;
-  NSMutableArray *methodsArray;
-  NSMutableArray *optionsArray;
-  NSString *version;
-  LCIMSourceContext *sourceContext;
-  NSMutableArray *mixinsArray;
+  __unsafe_unretained NSString *name;
+  __unsafe_unretained NSMutableArray *methodsArray;
+  __unsafe_unretained NSMutableArray *optionsArray;
+  __unsafe_unretained NSString *version;
+  __unsafe_unretained LCIMSourceContext *sourceContext;
+  __unsafe_unretained NSMutableArray *mixinsArray;
 } LCIMApi__storage_;
 
 // This method is threadsafe because it is initially called
@@ -95,7 +95,7 @@ typedef struct LCIMApi__storage_ {
         .number = GPBApi_FieldNumber_Name,
         .hasIndex = 0,
         .offset = (uint32_t)offsetof(LCIMApi__storage_, name),
-        .flags = GPBFieldOptional,
+        .flags = LCIMFieldOptional,
         .dataType = GPBDataTypeString,
       },
       {
@@ -104,7 +104,7 @@ typedef struct LCIMApi__storage_ {
         .number = GPBApi_FieldNumber_MethodsArray,
         .hasIndex = GPBNoHasBit,
         .offset = (uint32_t)offsetof(LCIMApi__storage_, methodsArray),
-        .flags = GPBFieldRepeated,
+        .flags = LCIMFieldRepeated,
         .dataType = GPBDataTypeMessage,
       },
       {
@@ -113,7 +113,7 @@ typedef struct LCIMApi__storage_ {
         .number = GPBApi_FieldNumber_OptionsArray,
         .hasIndex = GPBNoHasBit,
         .offset = (uint32_t)offsetof(LCIMApi__storage_, optionsArray),
-        .flags = GPBFieldRepeated,
+        .flags = LCIMFieldRepeated,
         .dataType = GPBDataTypeMessage,
       },
       {
@@ -122,7 +122,7 @@ typedef struct LCIMApi__storage_ {
         .number = GPBApi_FieldNumber_Version,
         .hasIndex = 1,
         .offset = (uint32_t)offsetof(LCIMApi__storage_, version),
-        .flags = GPBFieldOptional,
+        .flags = LCIMFieldOptional,
         .dataType = GPBDataTypeString,
       },
       {
@@ -131,7 +131,7 @@ typedef struct LCIMApi__storage_ {
         .number = GPBApi_FieldNumber_SourceContext,
         .hasIndex = 2,
         .offset = (uint32_t)offsetof(LCIMApi__storage_, sourceContext),
-        .flags = GPBFieldOptional,
+        .flags = LCIMFieldOptional,
         .dataType = GPBDataTypeMessage,
       },
       {
@@ -140,16 +140,16 @@ typedef struct LCIMApi__storage_ {
         .number = GPBApi_FieldNumber_MixinsArray,
         .hasIndex = GPBNoHasBit,
         .offset = (uint32_t)offsetof(LCIMApi__storage_, mixinsArray),
-        .flags = GPBFieldRepeated,
+        .flags = LCIMFieldRepeated,
         .dataType = GPBDataTypeMessage,
       },
       {
         .name = "syntax",
-        .dataTypeSpecific.enumDescFunc = GPBSyntax_EnumDescriptor,
+        .dataTypeSpecific.enumDescFunc = LCIMSyntax_EnumDescriptor,
         .number = GPBApi_FieldNumber_Syntax,
         .hasIndex = 3,
         .offset = (uint32_t)offsetof(LCIMApi__storage_, syntax),
-        .flags = GPBFieldOptional | GPBFieldHasEnumDescriptor,
+        .flags = LCIMFieldOptional | LCIMFieldHasEnumDescriptor,
         .dataType = GPBDataTypeEnum,
       },
     };
@@ -172,13 +172,13 @@ typedef struct LCIMApi__storage_ {
 int32_t GPBApi_Syntax_RawValue(LCIMApi *message) {
   LCIMDescriptor *descriptor = [LCIMApi descriptor];
   LCIMFieldDescriptor *field = [descriptor fieldWithNumber:GPBApi_FieldNumber_Syntax];
-  return GPBGetMessageInt32Field(message, field);
+  return LCIMGetMessageInt32Field(message, field);
 }
 
 void SetGPBApi_Syntax_RawValue(LCIMApi *message, int32_t value) {
   LCIMDescriptor *descriptor = [LCIMApi descriptor];
   LCIMFieldDescriptor *field = [descriptor fieldWithNumber:GPBApi_FieldNumber_Syntax];
-  GPBSetInt32IvarWithFieldInternal(message, field, value, descriptor.file.syntax);
+  LCIMSetInt32IvarWithFieldInternal(message, field, value, descriptor.file.syntax);
 }
 
 #pragma mark - GPBMethod
@@ -196,10 +196,10 @@ void SetGPBApi_Syntax_RawValue(LCIMApi *message, int32_t value) {
 typedef struct LCIMMethod__storage_ {
   uint32_t _has_storage_[1];
   GPBSyntax syntax;
-  NSString *name;
-  NSString *requestTypeURL;
-  NSString *responseTypeURL;
-  NSMutableArray *optionsArray;
+  __unsafe_unretained NSString *name;
+  __unsafe_unretained NSString *requestTypeURL;
+  __unsafe_unretained NSString *responseTypeURL;
+  __unsafe_unretained NSMutableArray *optionsArray;
 } LCIMMethod__storage_;
 
 // This method is threadsafe because it is initially called
@@ -214,7 +214,7 @@ typedef struct LCIMMethod__storage_ {
         .number = GPBMethod_FieldNumber_Name,
         .hasIndex = 0,
         .offset = (uint32_t)offsetof(LCIMMethod__storage_, name),
-        .flags = GPBFieldOptional,
+        .flags = LCIMFieldOptional,
         .dataType = GPBDataTypeString,
       },
       {
@@ -223,7 +223,7 @@ typedef struct LCIMMethod__storage_ {
         .number = GPBMethod_FieldNumber_RequestTypeURL,
         .hasIndex = 1,
         .offset = (uint32_t)offsetof(LCIMMethod__storage_, requestTypeURL),
-        .flags = GPBFieldOptional | GPBFieldTextFormatNameCustom,
+        .flags = LCIMFieldOptional | LCIMFieldTextFormatNameCustom,
         .dataType = GPBDataTypeString,
       },
       {
@@ -232,7 +232,7 @@ typedef struct LCIMMethod__storage_ {
         .number = GPBMethod_FieldNumber_RequestStreaming,
         .hasIndex = 2,
         .offset = 3,  // Stored in _has_storage_ to save space.
-        .flags = GPBFieldOptional,
+        .flags = LCIMFieldOptional,
         .dataType = GPBDataTypeBool,
       },
       {
@@ -241,7 +241,7 @@ typedef struct LCIMMethod__storage_ {
         .number = GPBMethod_FieldNumber_ResponseTypeURL,
         .hasIndex = 4,
         .offset = (uint32_t)offsetof(LCIMMethod__storage_, responseTypeURL),
-        .flags = GPBFieldOptional | GPBFieldTextFormatNameCustom,
+        .flags = LCIMFieldOptional | LCIMFieldTextFormatNameCustom,
         .dataType = GPBDataTypeString,
       },
       {
@@ -250,7 +250,7 @@ typedef struct LCIMMethod__storage_ {
         .number = GPBMethod_FieldNumber_ResponseStreaming,
         .hasIndex = 5,
         .offset = 6,  // Stored in _has_storage_ to save space.
-        .flags = GPBFieldOptional,
+        .flags = LCIMFieldOptional,
         .dataType = GPBDataTypeBool,
       },
       {
@@ -259,16 +259,16 @@ typedef struct LCIMMethod__storage_ {
         .number = GPBMethod_FieldNumber_OptionsArray,
         .hasIndex = GPBNoHasBit,
         .offset = (uint32_t)offsetof(LCIMMethod__storage_, optionsArray),
-        .flags = GPBFieldRepeated,
+        .flags = LCIMFieldRepeated,
         .dataType = GPBDataTypeMessage,
       },
       {
         .name = "syntax",
-        .dataTypeSpecific.enumDescFunc = GPBSyntax_EnumDescriptor,
+        .dataTypeSpecific.enumDescFunc = LCIMSyntax_EnumDescriptor,
         .number = GPBMethod_FieldNumber_Syntax,
         .hasIndex = 7,
         .offset = (uint32_t)offsetof(LCIMMethod__storage_, syntax),
-        .flags = GPBFieldOptional | GPBFieldHasEnumDescriptor,
+        .flags = LCIMFieldOptional | LCIMFieldHasEnumDescriptor,
         .dataType = GPBDataTypeEnum,
       },
     };
@@ -296,13 +296,13 @@ typedef struct LCIMMethod__storage_ {
 int32_t GPBMethod_Syntax_RawValue(LCIMMethod *message) {
   LCIMDescriptor *descriptor = [LCIMMethod descriptor];
   LCIMFieldDescriptor *field = [descriptor fieldWithNumber:GPBMethod_FieldNumber_Syntax];
-  return GPBGetMessageInt32Field(message, field);
+  return LCIMGetMessageInt32Field(message, field);
 }
 
 void SetGPBMethod_Syntax_RawValue(LCIMMethod *message, int32_t value) {
   LCIMDescriptor *descriptor = [LCIMMethod descriptor];
   LCIMFieldDescriptor *field = [descriptor fieldWithNumber:GPBMethod_FieldNumber_Syntax];
-  GPBSetInt32IvarWithFieldInternal(message, field, value, descriptor.file.syntax);
+  LCIMSetInt32IvarWithFieldInternal(message, field, value, descriptor.file.syntax);
 }
 
 #pragma mark - LCIMMixin
@@ -314,8 +314,8 @@ void SetGPBMethod_Syntax_RawValue(LCIMMethod *message, int32_t value) {
 
 typedef struct LCIMMixin__storage_ {
   uint32_t _has_storage_[1];
-  NSString *name;
-  NSString *root;
+  __unsafe_unretained NSString *name;
+  __unsafe_unretained NSString *root;
 } LCIMMixin__storage_;
 
 // This method is threadsafe because it is initially called
@@ -330,7 +330,7 @@ typedef struct LCIMMixin__storage_ {
         .number = GPBMixin_FieldNumber_Name,
         .hasIndex = 0,
         .offset = (uint32_t)offsetof(LCIMMixin__storage_, name),
-        .flags = GPBFieldOptional,
+        .flags = LCIMFieldOptional,
         .dataType = GPBDataTypeString,
       },
       {
@@ -339,7 +339,7 @@ typedef struct LCIMMixin__storage_ {
         .number = GPBMixin_FieldNumber_Root,
         .hasIndex = 1,
         .offset = (uint32_t)offsetof(LCIMMixin__storage_, root),
-        .flags = GPBFieldOptional,
+        .flags = LCIMFieldOptional,
         .dataType = GPBDataTypeString,
       },
     };

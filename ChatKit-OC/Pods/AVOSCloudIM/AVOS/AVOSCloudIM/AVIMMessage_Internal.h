@@ -40,6 +40,8 @@
  */
 - (NSString *)payload;
 
++ (instancetype)parseMessageWithConversationId:(NSString *)conversationId result:(NSDictionary *)result;
+
 //======================================================================
 //====== override readonly property to readwrite for internal use ======
 //======================================================================

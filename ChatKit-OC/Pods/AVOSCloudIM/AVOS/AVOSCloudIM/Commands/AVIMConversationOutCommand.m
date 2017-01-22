@@ -19,7 +19,7 @@
 
 @implementation AVIMConversationOutCommand
 
-@dynamic i, cmd, code, appCode, reason, peerId, needResponse, callback, op, cid, m, transient, muted, s, t, n, signature, attr, where, sort, skip, limit, unique;
+@dynamic i, cmd, code, appCode, reason, peerId, needResponse, callback, op, cid, m, transient, muted, s, t, n, signature, attr, where, sort, skip, limit, unique, option;
 
 - (void)setSignature:(AVIMSignature *)signature {
     _signature = signature;

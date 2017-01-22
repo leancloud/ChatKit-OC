@@ -45,6 +45,8 @@ static id NewSingleValueFromInputStream(LCIMExtensionDescriptor *extension,
     __attribute__((ns_returns_retained));
 
 GPB_INLINE size_t DataTypeSize(GPBDataType dataType) {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wswitch-enum"
   switch (dataType) {
     case GPBDataTypeBool:
       return 1;
@@ -59,6 +61,7 @@ GPB_INLINE size_t DataTypeSize(GPBDataType dataType) {
     default:
       return 0;
   }
+#pragma clang diagnostic pop
 }
 
 static size_t ComputePBSerializedSizeNoTagOfObject(GPBDataType dataType, id object) {
@@ -239,7 +242,7 @@ static void WriteArrayIncludingTagsToCodedOutputStream(
     LCIMCodedOutputStream *output) {
   if (LCIMExtensionIsPacked(description)) {
     [output writeTag:description->fieldNumber
-              format:GPBWireFormatLengthDelimited];
+              format:LCIMWireFormatLengthDelimited];
     size_t dataSize = 0;
     size_t typeSize = DataTypeSize(description->dataType);
     if (typeSize != 0) {
@@ -261,13 +264,19 @@ static void WriteArrayIncludingTagsToCodedOutputStream(
   }
 }
 
+// Direct access is use for speed, to avoid even internally declaring things
+// read/write, etc. The warning is enabled in the project to ensure code calling
+// protos can turn on -Wdirect-ivar-access without issues.
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdirect-ivar-access"
+
 void LCIMExtensionMergeFromInputStream(LCIMExtensionDescriptor *extension,
                                       BOOL isPackedOnStream,
                                       LCIMCodedInputStream *input,
                                       LCIMExtensionRegistry *extensionRegistry,
                                       LCIMMessage *message) {
   GPBExtensionDescription *description = extension->description_;
-  GPBCodedInputStreamState *state = &input->state_;
+  LCIMCodedInputStreamState *state = &input->state_;
   if (isPackedOnStream) {
     NSCAssert(LCIMExtensionIsRepeated(description),
               @"How was it packed if it isn't repeated?");
@@ -328,7 +337,7 @@ static id NewSingleValueFromInputStream(LCIMExtensionDescriptor *extension,
                                         LCIMExtensionRegistry *extensionRegistry,
                                         LCIMMessage *existingValue) {
   GPBExtensionDescription *description = extension->description_;
-  GPBCodedInputStreamState *state = &input->state_;
+  LCIMCodedInputStreamState *state = &input->state_;
   switch (description->dataType) {
     case GPBDataTypeBool:     return [[NSNumber alloc] initWithBool:LCIMCodedInputStreamReadBool(state)];
     case GPBDataTypeFixed32:  return [[NSNumber alloc] initWithUnsignedInt:LCIMCodedInputStreamReadFixed32(state)];
@@ -378,3 +387,5 @@ static id NewSingleValueFromInputStream(LCIMExtensionDescriptor *extension,
 
   return nil;
 }
+
+#pragma clang diagnostic pop

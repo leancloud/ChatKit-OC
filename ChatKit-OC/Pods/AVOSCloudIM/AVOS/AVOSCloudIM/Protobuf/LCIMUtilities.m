@@ -39,6 +39,12 @@
 #import "LCIMUnknownField.h"
 #import "LCIMUnknownFieldSet.h"
 
+// Direct access is use for speed, to avoid even internally declaring things
+// read/write, etc. The warning is enabled in the project to ensure code calling
+// protos can turn on -Wdirect-ivar-access without issues.
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdirect-ivar-access"
+
 static void AppendTextFormatForMessage(LCIMMessage *message,
                                        NSMutableString *toStr,
                                        NSString *lineIndent);
@@ -52,8 +58,50 @@ NSData *LCIMEmptyNSData(void) {
   return defaultNSData;
 }
 
+// -- About Version Checks --
+// There's actually 3 places these checks all come into play:
+// 1. When the generated source is compile into .o files, the header check
+//    happens. This is checking the protoc used matches the library being used
+//    when making the .o.
+// 2. Every place a generated proto header is included in a developer's code,
+//    the header check comes into play again. But this time it is checking that
+//    the current library headers being used still support/match the ones for
+//    the generated code.
+// 3. At runtime the final check here (GPBCheckRuntimeVersionsInternal), is
+//    called from the generated code passing in values captured when the
+//    generated code's .o was made. This checks that at runtime the generated
+//    code and runtime library match.
+
+void LCIMCheckRuntimeVersionSupport(int32_t objcRuntimeVersion) {
+  // NOTE: This is passing the value captured in the compiled code to check
+  // against the values captured when the runtime support was compiled. This
+  // ensures the library code isn't in a different framework/library that
+  // was generated with a non matching version.
+  if (GOOGLE_PROTOBUF_OBJC_VERSION < objcRuntimeVersion) {
+    // Library is too old for headers.
+    [NSException raise:NSInternalInconsistencyException
+                format:@"Linked to ProtocolBuffer runtime version %d,"
+                       @" but code compiled needing atleast %d!",
+                       GOOGLE_PROTOBUF_OBJC_VERSION, objcRuntimeVersion];
+  }
+  if (objcRuntimeVersion < GOOGLE_PROTOBUF_OBJC_MIN_SUPPORTED_VERSION) {
+    // Headers are too old for library.
+    [NSException raise:NSInternalInconsistencyException
+                format:@"Proto generation source compiled against runtime"
+                       @" version %d, but this version of the runtime only"
+                       @" supports back to %d!",
+                       objcRuntimeVersion,
+                       GOOGLE_PROTOBUF_OBJC_MIN_SUPPORTED_VERSION];
+  }
+}
+
+// This api is no longer used for version checks. 30001 is the last version
+// using this old versioning model. When that support is removed, this function
+// can be removed (along with the declaration in LCIMUtilities_PackagePrivate.h).
 void LCIMCheckRuntimeVersionInternal(int32_t version) {
-  if (version != GOOGLE_PROTOBUF_OBJC_GEN_VERSION) {
+  LCIMInternalCompileAssert(GOOGLE_PROTOBUF_OBJC_MIN_SUPPORTED_VERSION == 30001,
+                           time_to_remove_this_old_version_shim);
+  if (version != GOOGLE_PROTOBUF_OBJC_MIN_SUPPORTED_VERSION) {
     [NSException raise:NSInternalInconsistencyException
                 format:@"Linked to ProtocolBuffer runtime version %d,"
                        @" but code compiled with version %d!",
@@ -173,7 +221,7 @@ void LCIMMaybeClearOneof(LCIMMessage *self, LCIMOneofDescriptor *oneof,
 #pragma mark - IVar accessors
 
 //%PDDM-DEFINE IVAR_POD_ACCESSORS_DEFN(NAME, TYPE)
-//%TYPE GPBGetMessage##NAME##Field(LCIMMessage *self,
+//%TYPE LCIMGetMessage##NAME##Field(LCIMMessage *self,
 //% TYPE$S            NAME$S       LCIMFieldDescriptor *field) {
 //%  if (LCIMGetHasIvarField(self, field)) {
 //%    uint8_t *storage = (uint8_t *)self->messageStorage_;
@@ -185,7 +233,7 @@ void LCIMMaybeClearOneof(LCIMMessage *self, LCIMOneofDescriptor *oneof,
 //%}
 //%
 //%// Only exists for public api, no core code should use this.
-//%void GPBSetMessage##NAME##Field(LCIMMessage *self,
+//%void LCIMSetMessage##NAME##Field(LCIMMessage *self,
 //%                   NAME$S     LCIMFieldDescriptor *field,
 //%                   NAME$S     TYPE value) {
 //%  if (self == nil || field == nil) return;
@@ -197,7 +245,7 @@ void LCIMMaybeClearOneof(LCIMMessage *self, LCIMOneofDescriptor *oneof,
 //%            NAME$S                     LCIMFieldDescriptor *field,
 //%            NAME$S                     TYPE value,
 //%            NAME$S                     GPBFileSyntax syntax) {
-//%  GPBOneofDescriptor *oneof = field->containingOneof_;
+//%  LCIMOneofDescriptor *oneof = field->containingOneof_;
 //%  if (oneof) {
 //%    GPBMessageFieldDescription *fieldDesc = field->description_;
 //%    LCIMMaybeClearOneof(self, oneof, fieldDesc->hasIndex, fieldDesc->number);
@@ -212,22 +260,23 @@ void LCIMMaybeClearOneof(LCIMMessage *self, LCIMOneofDescriptor *oneof,
 //%  TYPE *typePtr = (TYPE *)&storage[field->description_->offset];
 //%  *typePtr = value;
 //%  // proto2: any value counts as having been set; proto3, it
-//%  // has to be a non zero value.
-//%  BOOL hasValue =
-//%    (syntax == GPBFileSyntaxProto2) || (value != (TYPE)0);
+//%  // has to be a non zero value or be in a oneof.
+//%  BOOL hasValue = ((syntax == GPBFileSyntaxProto2)
+//%                   || (value != (TYPE)0)
+//%                   || (field->containingOneof_ != NULL));
 //%  LCIMSetHasIvarField(self, field, hasValue);
 //%  LCIMBecomeVisibleToAutocreator(self);
 //%}
 //%
 //%PDDM-DEFINE IVAR_ALIAS_DEFN_OBJECT(NAME, TYPE)
 //%// Only exists for public api, no core code should use this.
-//%TYPE *GPBGetMessage##NAME##Field(LCIMMessage *self,
+//%TYPE *LCIMGetMessage##NAME##Field(LCIMMessage *self,
 //% TYPE$S             NAME$S       LCIMFieldDescriptor *field) {
 //%  return (TYPE *)LCIMGetObjectIvarWithField(self, field);
 //%}
 //%
 //%// Only exists for public api, no core code should use this.
-//%void GPBSetMessage##NAME##Field(LCIMMessage *self,
+//%void LCIMSetMessage##NAME##Field(LCIMMessage *self,
 //%                   NAME$S     LCIMFieldDescriptor *field,
 //%                   NAME$S     TYPE *value) {
 //%  GPBSetObjectIvarWithField(self, field, (id)value);
@@ -331,8 +380,19 @@ void LCIMSetRetainedObjectIvarWithFieldInternal(LCIMMessage *self,
     // zero, they are being cleared.
     if ((syntax == GPBFileSyntaxProto3) && !fieldIsMessage &&
         ([value length] == 0)) {
-      setHasValue = NO;
-      value = nil;
+      // Except, if the field was in a oneof, then it still gets recorded as
+      // having been set so the state of the oneof can be serialized back out.
+      if (!oneof) {
+        setHasValue = NO;
+      }
+      if (setHasValue) {
+        NSCAssert(value != nil, @"Should never be setting has for nil");
+      } else {
+        // The value passed in was retained, it must be released since we
+        // aren't saving anything in the field.
+        [value release];
+        value = nil;
+      }
     }
     LCIMSetHasIvarField(self, field, setHasValue);
   }
@@ -345,7 +405,7 @@ void LCIMSetRetainedObjectIvarWithFieldInternal(LCIMMessage *self,
 
   if (oldValue) {
     if (isMapOrArray) {
-      if (field.fieldType == GPBFieldTypeRepeated) {
+      if (field.fieldType == LCIMFieldTypeRepeated) {
         // If the old array was autocreated by us, then clear it.
         if (LCIMDataTypeIsObject(fieldType)) {
           LCIMAutocreatedArray *autoArray = oldValue;
@@ -359,7 +419,7 @@ void LCIMSetRetainedObjectIvarWithFieldInternal(LCIMMessage *self,
             gpbArray->_autocreator = nil;
           }
         }
-      } else { // GPBFieldTypeMap
+      } else { // LCIMFieldTypeMap
         // If the old map was autocreated by us, then clear it.
         if ((field.mapKeyDataType == GPBDataTypeString) &&
             LCIMDataTypeIsObject(fieldType)) {
@@ -518,9 +578,10 @@ void LCIMSetBoolIvarWithFieldInternal(LCIMMessage *self,
   LCIMSetHasIvar(self, (int32_t)(fieldDesc->offset), fieldDesc->number, value);
 
   // proto2: any value counts as having been set; proto3, it
-  // has to be a non zero value.
-  BOOL hasValue =
-    (syntax == GPBFileSyntaxProto2) || (value != (BOOL)0);
+  // has to be a non zero value or be in a oneof.
+  BOOL hasValue = ((syntax == GPBFileSyntaxProto2)
+                   || (value != (BOOL)0)
+                   || (field->containingOneof_ != NULL));
   LCIMSetHasIvarField(self, field, hasValue);
   LCIMBecomeVisibleToAutocreator(self);
 }
@@ -567,9 +628,10 @@ void LCIMSetInt32IvarWithFieldInternal(LCIMMessage *self,
   int32_t *typePtr = (int32_t *)&storage[field->description_->offset];
   *typePtr = value;
   // proto2: any value counts as having been set; proto3, it
-  // has to be a non zero value.
-  BOOL hasValue =
-    (syntax == GPBFileSyntaxProto2) || (value != (int32_t)0);
+  // has to be a non zero value or be in a oneof.
+  BOOL hasValue = ((syntax == GPBFileSyntaxProto2)
+                   || (value != (int32_t)0)
+                   || (field->containingOneof_ != NULL));
   LCIMSetHasIvarField(self, field, hasValue);
   LCIMBecomeVisibleToAutocreator(self);
 }
@@ -616,9 +678,10 @@ void LCIMSetUInt32IvarWithFieldInternal(LCIMMessage *self,
   uint32_t *typePtr = (uint32_t *)&storage[field->description_->offset];
   *typePtr = value;
   // proto2: any value counts as having been set; proto3, it
-  // has to be a non zero value.
-  BOOL hasValue =
-    (syntax == GPBFileSyntaxProto2) || (value != (uint32_t)0);
+  // has to be a non zero value or be in a oneof.
+  BOOL hasValue = ((syntax == GPBFileSyntaxProto2)
+                   || (value != (uint32_t)0)
+                   || (field->containingOneof_ != NULL));
   LCIMSetHasIvarField(self, field, hasValue);
   LCIMBecomeVisibleToAutocreator(self);
 }
@@ -665,9 +728,10 @@ void LCIMSetInt64IvarWithFieldInternal(LCIMMessage *self,
   int64_t *typePtr = (int64_t *)&storage[field->description_->offset];
   *typePtr = value;
   // proto2: any value counts as having been set; proto3, it
-  // has to be a non zero value.
-  BOOL hasValue =
-    (syntax == GPBFileSyntaxProto2) || (value != (int64_t)0);
+  // has to be a non zero value or be in a oneof.
+  BOOL hasValue = ((syntax == GPBFileSyntaxProto2)
+                   || (value != (int64_t)0)
+                   || (field->containingOneof_ != NULL));
   LCIMSetHasIvarField(self, field, hasValue);
   LCIMBecomeVisibleToAutocreator(self);
 }
@@ -714,9 +778,10 @@ void LCIMSetUInt64IvarWithFieldInternal(LCIMMessage *self,
   uint64_t *typePtr = (uint64_t *)&storage[field->description_->offset];
   *typePtr = value;
   // proto2: any value counts as having been set; proto3, it
-  // has to be a non zero value.
-  BOOL hasValue =
-    (syntax == GPBFileSyntaxProto2) || (value != (uint64_t)0);
+  // has to be a non zero value or be in a oneof.
+  BOOL hasValue = ((syntax == GPBFileSyntaxProto2)
+                   || (value != (uint64_t)0)
+                   || (field->containingOneof_ != NULL));
   LCIMSetHasIvarField(self, field, hasValue);
   LCIMBecomeVisibleToAutocreator(self);
 }
@@ -763,9 +828,10 @@ void LCIMSetFloatIvarWithFieldInternal(LCIMMessage *self,
   float *typePtr = (float *)&storage[field->description_->offset];
   *typePtr = value;
   // proto2: any value counts as having been set; proto3, it
-  // has to be a non zero value.
-  BOOL hasValue =
-    (syntax == GPBFileSyntaxProto2) || (value != (float)0);
+  // has to be a non zero value or be in a oneof.
+  BOOL hasValue = ((syntax == GPBFileSyntaxProto2)
+                   || (value != (float)0)
+                   || (field->containingOneof_ != NULL));
   LCIMSetHasIvarField(self, field, hasValue);
   LCIMBecomeVisibleToAutocreator(self);
 }
@@ -812,9 +878,10 @@ void LCIMSetDoubleIvarWithFieldInternal(LCIMMessage *self,
   double *typePtr = (double *)&storage[field->description_->offset];
   *typePtr = value;
   // proto2: any value counts as having been set; proto3, it
-  // has to be a non zero value.
-  BOOL hasValue =
-    (syntax == GPBFileSyntaxProto2) || (value != (double)0);
+  // has to be a non zero value or be in a oneof.
+  BOOL hasValue = ((syntax == GPBFileSyntaxProto2)
+                   || (value != (double)0)
+                   || (field->containingOneof_ != NULL));
   LCIMSetHasIvarField(self, field, hasValue);
   LCIMBecomeVisibleToAutocreator(self);
 }
@@ -889,22 +956,12 @@ void LCIMSetMessageGroupField(LCIMMessage *self,
 
 //%PDDM-EXPAND-END (4 expansions)
 
-// Only exists for public api, no core code should use this.
-id LCIMGetMessageRepeatedField(LCIMMessage *self, LCIMFieldDescriptor *field) {
-#if DEBUG
-  if (field.fieldType != GPBFieldTypeRepeated) {
-    [NSException raise:NSInvalidArgumentException
-                format:@"%@.%@ is not a repeated field.",
-                       [self class], field.name];
-  }
-#endif
-  return LCIMGetObjectIvarWithField(self, field);
-}
+// LCIMGetMessageRepeatedField is defined in LCIMMessage.m
 
 // Only exists for public api, no core code should use this.
 void LCIMSetMessageRepeatedField(LCIMMessage *self, LCIMFieldDescriptor *field, id array) {
-#if DEBUG
-  if (field.fieldType != GPBFieldTypeRepeated) {
+#if defined(DEBUG) && DEBUG
+  if (field.fieldType != LCIMFieldTypeRepeated) {
     [NSException raise:NSInvalidArgumentException
                 format:@"%@.%@ is not a repeated field.",
                        [self class], field.name];
@@ -942,10 +999,10 @@ void LCIMSetMessageRepeatedField(LCIMMessage *self, LCIMFieldDescriptor *field, 
     case GPBDataTypeString:
     case GPBDataTypeMessage:
     case GPBDataTypeGroup:
-      expectedClass = [NSMutableDictionary class];
+      expectedClass = [NSMutableArray class];
       break;
     case GPBDataTypeEnum:
-      expectedClass = [LCIMBoolArray class];
+      expectedClass = [LCIMEnumArray class];
       break;
   }
   if (array && ![array isKindOfClass:expectedClass]) {
@@ -957,7 +1014,7 @@ void LCIMSetMessageRepeatedField(LCIMMessage *self, LCIMFieldDescriptor *field, 
   GPBSetObjectIvarWithField(self, field, array);
 }
 
-#if DEBUG
+#if defined(DEBUG) && DEBUG
 static NSString *TypeToStr(GPBDataType dataType) {
   switch (dataType) {
     case GPBDataTypeBool:
@@ -991,23 +1048,13 @@ static NSString *TypeToStr(GPBDataType dataType) {
 }
 #endif
 
-// Only exists for public api, no core code should use this.
-id LCIMGetMessageMapField(LCIMMessage *self, LCIMFieldDescriptor *field) {
-#if DEBUG
-  if (field.fieldType != GPBFieldTypeMap) {
-    [NSException raise:NSInvalidArgumentException
-                format:@"%@.%@ is not a map<> field.",
-                       [self class], field.name];
-  }
-#endif
-  return LCIMGetObjectIvarWithField(self, field);
-}
+// LCIMGetMessageMapField is defined in LCIMMessage.m
 
 // Only exists for public api, no core code should use this.
 void LCIMSetMessageMapField(LCIMMessage *self, LCIMFieldDescriptor *field,
                            id dictionary) {
-#if DEBUG
-  if (field.fieldType != GPBFieldTypeMap) {
+#if defined(DEBUG) && DEBUG
+  if (field.fieldType != LCIMFieldTypeMap) {
     [NSException raise:NSInvalidArgumentException
                 format:@"%@.%@ is not a map<> field.",
                        [self class], field.name];
@@ -1066,7 +1113,15 @@ static void AppendStringEscaped(NSString *toPrint, NSMutableString *destStr) {
       case '\'': [destStr appendString:@"\\\'"]; break;
       case '\\': [destStr appendString:@"\\\\"]; break;
       default:
-        [destStr appendFormat:@"%C", aChar];
+        // This differs slightly from the C++ code in that the C++ doesn't
+        // generate UTF8; it looks at the string in UTF8, but escapes every
+        // byte > 0x7E.
+        if (aChar < 0x20) {
+          [destStr appendFormat:@"\\%d%d%d",
+                                (aChar / 64), ((aChar % 64) / 8), (aChar % 8)];
+        } else {
+          [destStr appendFormat:@"%C", aChar];
+        }
         break;
     }
   }
@@ -1133,6 +1188,8 @@ static void AppendTextFormatForMapMessageField(
       [toStr appendString:@"\n"];
 
       [toStr appendString:valueLine];
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wswitch-enum"
       switch (valueDataType) {
         case GPBDataTypeString:
           AppendStringEscaped(value, toStr);
@@ -1153,6 +1210,7 @@ static void AppendTextFormatForMapMessageField(
           NSCAssert(NO, @"Can't happen");
           break;
       }
+#pragma clang diagnostic pop
       [toStr appendString:@"\n"];
 
       [toStr appendString:msgEnd];
@@ -1174,6 +1232,8 @@ static void AppendTextFormatForMapMessageField(
       }
 
       [toStr appendString:valueLine];
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wswitch-enum"
       switch (valueDataType) {
         case GPBDataTypeString:
           AppendStringEscaped(valueObj, toStr);
@@ -1211,6 +1271,7 @@ static void AppendTextFormatForMapMessageField(
           [toStr appendString:valueObj];
           break;
       }
+#pragma clang diagnostic pop
       [toStr appendString:@"\n"];
 
       [toStr appendString:msgEnd];
@@ -1224,21 +1285,21 @@ static void AppendTextFormatForMessageField(LCIMMessage *message,
                                             NSString *lineIndent) {
   id arrayOrMap;
   NSUInteger count;
-  GPBFieldType fieldType = field.fieldType;
+  LCIMFieldType fieldType = field.fieldType;
   switch (fieldType) {
-    case GPBFieldTypeSingle:
+    case LCIMFieldTypeSingle:
       arrayOrMap = nil;
       count = (LCIMGetHasIvarField(message, field) ? 1 : 0);
       break;
 
-    case GPBFieldTypeRepeated:
+    case LCIMFieldTypeRepeated:
       // Will be NSArray or GPB*Array, type doesn't matter, they both
       // implement count.
       arrayOrMap = LCIMGetObjectIvarWithFieldNoAutocreate(message, field);
       count = [(NSArray *)arrayOrMap count];
       break;
 
-    case GPBFieldTypeMap: {
+    case LCIMFieldTypeMap: {
       // Will be GPB*Dictionary or NSMutableDictionary, type doesn't matter,
       // they both implement count.
       arrayOrMap = LCIMGetObjectIvarWithFieldNoAutocreate(message, field);
@@ -1268,7 +1329,7 @@ static void AppendTextFormatForMessageField(LCIMMessage *message,
     }
   }
 
-  if (fieldType == GPBFieldTypeMap) {
+  if (fieldType == LCIMFieldTypeMap) {
     AppendTextFormatForMapMessageField(arrayOrMap, field, toStr, lineIndent,
                                        fieldName, lineEnding);
     return;
@@ -1287,26 +1348,26 @@ static void AppendTextFormatForMessageField(LCIMMessage *message,
     // The value.
     switch (fieldDataType) {
 #define FIELD_CASE(GPBDATATYPE, CTYPE, REAL_TYPE, ...)                        \
-   case GPBDataType##GPBDATATYPE: {                                            \
+  case GPBDataType##GPBDATATYPE: {                                            \
     CTYPE v = (isRepeated ? [(LCIM##REAL_TYPE##Array *)array valueAtIndex:j]   \
                           : LCIMGetMessage##REAL_TYPE##Field(message, field)); \
-     [toStr appendFormat:__VA_ARGS__, v];                                      \
-     break;                                                                    \
-}
-            
-            FIELD_CASE(Int32, int32_t, Int32, @"%d")
-            FIELD_CASE(SInt32, int32_t, Int32, @"%d")
-            FIELD_CASE(SFixed32, int32_t, Int32, @"%d")
-            FIELD_CASE(UInt32, uint32_t, UInt32, @"%u")
-            FIELD_CASE(Fixed32, uint32_t, UInt32, @"%u")
-            FIELD_CASE(Int64, int64_t, Int64, @"%lld")
-            FIELD_CASE(SInt64, int64_t, Int64, @"%lld")
-            FIELD_CASE(SFixed64, int64_t, Int64, @"%lld")
-            FIELD_CASE(UInt64, uint64_t, UInt64, @"%llu")
-            FIELD_CASE(Fixed64, uint64_t, UInt64, @"%llu")
-            FIELD_CASE(Float, float, Float, @"%.*g", FLT_DIG)
-            FIELD_CASE(Double, double, Double, @"%.*lg", DBL_DIG)
-            
+    [toStr appendFormat:__VA_ARGS__, v];                                      \
+    break;                                                                    \
+  }
+
+      FIELD_CASE(Int32, int32_t, Int32, @"%d")
+      FIELD_CASE(SInt32, int32_t, Int32, @"%d")
+      FIELD_CASE(SFixed32, int32_t, Int32, @"%d")
+      FIELD_CASE(UInt32, uint32_t, UInt32, @"%u")
+      FIELD_CASE(Fixed32, uint32_t, UInt32, @"%u")
+      FIELD_CASE(Int64, int64_t, Int64, @"%lld")
+      FIELD_CASE(SInt64, int64_t, Int64, @"%lld")
+      FIELD_CASE(SFixed64, int64_t, Int64, @"%lld")
+      FIELD_CASE(UInt64, uint64_t, UInt64, @"%llu")
+      FIELD_CASE(Fixed64, uint64_t, UInt64, @"%llu")
+      FIELD_CASE(Float, float, Float, @"%.*g", FLT_DIG)
+      FIELD_CASE(Double, double, Double, @"%.*lg", DBL_DIG)
+
 #undef FIELD_CASE
 
       case GPBDataTypeEnum: {
@@ -1480,7 +1541,8 @@ static void AppendTextFormatForMessage(LCIMMessage *message,
   NSUInteger fieldCount = fieldsArray.count;
   const GPBExtensionRange *extensionRanges = descriptor.extensionRanges;
   NSUInteger extensionRangesCount = descriptor.extensionRangesCount;
-  NSArray *activeExtensions = [message sortedExtensionsInUse];
+  NSArray *activeExtensions = [[message extensionsCurrentlySet]
+      sortedArrayUsingSelector:@selector(compareByFieldNumber:)];
   for (NSUInteger i = 0, j = 0; i < fieldCount || j < extensionRangesCount;) {
     if (i == fieldCount) {
       AppendTextFormatForMessageExtensionRange(
@@ -1706,12 +1768,14 @@ NSString *LCIMDecodeTextFormatName(const uint8_t *decodeData, int32_t key,
   return result;
 }
 
-#pragma mark - GPBMessageSignatureProtocol
+#pragma clang diagnostic pop
+
+#pragma mark - LCIMMessageSignatureProtocol
 
 // A series of selectors that are used solely to get @encoding values
 // for them by the dynamic protobuf runtime code. An object using the protocol
 // needs to be declared for the protocol to be valid at runtime.
-@interface LCIMMessageSignatureProtocol : NSObject<GPBMessageSignatureProtocol>
+@interface LCIMMessageSignatureProtocol : NSObject<LCIMMessageSignatureProtocol>
 @end
 @implementation LCIMMessageSignatureProtocol
 @end

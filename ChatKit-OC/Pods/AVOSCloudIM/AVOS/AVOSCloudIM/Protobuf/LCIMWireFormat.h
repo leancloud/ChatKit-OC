@@ -35,37 +35,38 @@ CF_EXTERN_C_BEGIN
 NS_ASSUME_NONNULL_BEGIN
 
 typedef enum {
-  GPBWireFormatVarint = 0,
-  GPBWireFormatFixed64 = 1,
-  GPBWireFormatLengthDelimited = 2,
-  GPBWireFormatStartGroup = 3,
-  GPBWireFormatEndGroup = 4,
-  GPBWireFormatFixed32 = 5,
-} GPBWireFormat;
+  LCIMWireFormatVarint = 0,
+  LCIMWireFormatFixed64 = 1,
+  LCIMWireFormatLengthDelimited = 2,
+  LCIMWireFormatStartGroup = 3,
+  LCIMWireFormatEndGroup = 4,
+  LCIMWireFormatFixed32 = 5,
+} LCIMWireFormat;
 
 enum {
-  GPBWireFormatMessageSetItem = 1,
-  GPBWireFormatMessageSetTypeId = 2,
-  GPBWireFormatMessageSetMessage = 3
+  LCIMWireFormatMessageSetItem = 1,
+  LCIMWireFormatMessageSetTypeId = 2,
+  LCIMWireFormatMessageSetMessage = 3
 };
 
-uint32_t GPBWireFormatMakeTag(uint32_t fieldNumber, GPBWireFormat wireType)
+uint32_t LCIMWireFormatMakeTag(uint32_t fieldNumber, LCIMWireFormat wireType)
     __attribute__((const));
-GPBWireFormat GPBWireFormatGetTagWireType(uint32_t tag) __attribute__((const));
-uint32_t GPBWireFormatGetTagFieldNumber(uint32_t tag) __attribute__((const));
+LCIMWireFormat LCIMWireFormatGetTagWireType(uint32_t tag) __attribute__((const));
+uint32_t LCIMWireFormatGetTagFieldNumber(uint32_t tag) __attribute__((const));
+BOOL LCIMWireFormatIsValidTag(uint32_t tag) __attribute__((const));
 
-GPBWireFormat GPBWireFormatForType(GPBDataType dataType, BOOL isPacked)
+LCIMWireFormat LCIMWireFormatForType(GPBDataType dataType, BOOL isPacked)
     __attribute__((const));
 
-#define GPBWireFormatMessageSetItemTag \
-  (GPBWireFormatMakeTag(GPBWireFormatMessageSetItem, GPBWireFormatStartGroup))
-#define GPBWireFormatMessageSetItemEndTag \
-  (GPBWireFormatMakeTag(GPBWireFormatMessageSetItem, GPBWireFormatEndGroup))
-#define GPBWireFormatMessageSetTypeIdTag \
-  (GPBWireFormatMakeTag(GPBWireFormatMessageSetTypeId, GPBWireFormatVarint))
-#define GPBWireFormatMessageSetMessageTag               \
-  (GPBWireFormatMakeTag(GPBWireFormatMessageSetMessage, \
-                        GPBWireFormatLengthDelimited))
+#define LCIMWireFormatMessageSetItemTag \
+  (LCIMWireFormatMakeTag(LCIMWireFormatMessageSetItem, LCIMWireFormatStartGroup))
+#define LCIMWireFormatMessageSetItemEndTag \
+  (LCIMWireFormatMakeTag(LCIMWireFormatMessageSetItem, LCIMWireFormatEndGroup))
+#define LCIMWireFormatMessageSetTypeIdTag \
+  (LCIMWireFormatMakeTag(LCIMWireFormatMessageSetTypeId, LCIMWireFormatVarint))
+#define LCIMWireFormatMessageSetMessageTag               \
+  (LCIMWireFormatMakeTag(LCIMWireFormatMessageSetMessage, \
+                        LCIMWireFormatLengthDelimited))
 
 NS_ASSUME_NONNULL_END
 

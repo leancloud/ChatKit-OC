@@ -713,12 +713,12 @@ static NSString *const LCCKContactListViewControllerIdentifier = @"LCCKContactLi
 #pragma mark - UISearchDisplayDelegate
 
 // return YES to reload table. called when search string/option changes. convenience methods on top UISearchBar delegate methods
-- (BOOL)searchDisplayController:(UISearchDisplayController *)controller shouldReloadTableForSearchString:(nullable NSString *)searchString NS_DEPRECATED_IOS(3_0,8_0){
+- (BOOL)searchDisplayController:(UISearchDisplayController *)controller shouldReloadTableForSearchString:(nullable NSString *)searchString {
     [self filterContentForSearchText:searchString];
     return YES;
 }
 
-- (BOOL)searchDisplayController:(UISearchDisplayController *)controller shouldReloadTableForSearchScope:(NSInteger)searchOption NS_DEPRECATED_IOS(3_0,8_0){
+- (BOOL)searchDisplayController:(UISearchDisplayController *)controller shouldReloadTableForSearchScope:(NSInteger)searchOption {
     return YES;
 }
 

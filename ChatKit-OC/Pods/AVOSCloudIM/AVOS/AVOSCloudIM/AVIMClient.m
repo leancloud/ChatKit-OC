@@ -997,11 +997,12 @@ static BOOL AVIMClientHasInstantiated = NO;
     [self fetchConversationIfNeeded:conversation withBlock:^(AVIMConversation *conversation) {
         /* Update lastMessageAt if needed. */
         NSDate *messageSentAt = [NSDate dateWithTimeIntervalSince1970:(message.sendTimestamp / 1000.0)];
-
-        if (!conversation.lastMessageAt || [conversation.lastMessageAt compare:messageSentAt] == NSOrderedAscending) {
-            conversation.lastMessageAt = messageSentAt;
+        if (!message.transient) {
+            if (!conversation.lastMessageAt || [conversation.lastMessageAt compare:messageSentAt] == NSOrderedAscending) {
+                conversation.lastMessageAt = messageSentAt;
+            }
+            conversation.lastMessage = message;
         }
-
         [ws passMessage:message toConversation:conversation];
     }];
 }

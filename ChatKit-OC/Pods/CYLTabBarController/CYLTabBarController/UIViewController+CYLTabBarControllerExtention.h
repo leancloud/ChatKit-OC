@@ -2,7 +2,7 @@
 //  UIViewController+CYLTabBarControllerExtention.h
 //  CYLTabBarController
 //
-//  v1.8.0 Created by 微博@iOS程序犭袁 ( http://weibo.com/luohanchenyilong/ ) on 16/2/26.
+//  v1.9.0 Created by 微博@iOS程序犭袁 ( http://weibo.com/luohanchenyilong/ ) on 16/2/26.
 //  Copyright © 2016年 https://github.com/ChenYilong .All rights reserved.
 //
 
@@ -68,9 +68,17 @@ typedef void (^CYLPushOrPopCallback)(NSArray<__kindof UIViewController *> *viewC
                                                                                              注意：该属性在 Pop 行为时不起作用。
                                              *@param index Pop 改变 `TabBarController` 的 `selectedViewController` 属性。
                                                            注意：该属性在 Pop 行为时不起作用。
-                   */
+*/
 - (void)cyl_pushOrPopToViewController:(UIViewController *)viewController
                              animated:(BOOL)animated
                              callback:(CYLPushOrPopCallback)callback;
+
+/*!
+ * 如果正要 Push 的页面与当前栈顶的页面类型相同则取消  Push
+ * 这样做防止主界面卡顿时，导致一个 ViewController 被  Push 多次
+ */
+- (void)cyl_pushViewController:(UIViewController *)viewController animated:(BOOL)animated;
+
+- (UIViewController *)cyl_getViewControllerInsteadIOfNavigationController;
 
 @end

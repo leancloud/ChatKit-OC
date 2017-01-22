@@ -36,7 +36,7 @@ static LCIMFileDescriptor *LCIMSourceContextRoot_FileDescriptor(void) {
   // about thread safety of the singleton.
   static LCIMFileDescriptor *descriptor = NULL;
   if (!descriptor) {
-    GPBDebugCheckRuntimeVersion();
+    LCIM_DEBUG_CHECK_RUNTIME_VERSIONS();
     descriptor = [[LCIMFileDescriptor alloc] initWithPackage:@"google.protobuf"
                                                      syntax:GPBFileSyntaxProto3];
   }
@@ -51,7 +51,7 @@ static LCIMFileDescriptor *LCIMSourceContextRoot_FileDescriptor(void) {
 
 typedef struct LCIMSourceContext__storage_ {
   uint32_t _has_storage_[1];
-  NSString *fileName;
+  __unsafe_unretained NSString *fileName;
 } LCIMSourceContext__storage_;
 
 // This method is threadsafe because it is initially called
@@ -66,7 +66,7 @@ typedef struct LCIMSourceContext__storage_ {
         .number = LCIMSourceContext_FieldNumber_FileName,
         .hasIndex = 0,
         .offset = (uint32_t)offsetof(LCIMSourceContext__storage_, fileName),
-        .flags = GPBFieldOptional,
+        .flags = LCIMFieldOptional,
         .dataType = GPBDataTypeString,
       },
     };
@@ -77,7 +77,7 @@ typedef struct LCIMSourceContext__storage_ {
                                         fields:fields
                                     fieldCount:(uint32_t)(sizeof(fields) / sizeof(GPBMessageFieldDescription))
                                    storageSize:sizeof(LCIMSourceContext__storage_)
-                                         flags:0];
+                                         flags:LCIMDescriptorInitializationFlag_None];
     NSAssert(descriptor == nil, @"Startup recursed!");
     descriptor = localDescriptor;
   }

@@ -36,39 +36,6 @@
 #import "LCIMUtilities.h"
 #import "LCIMWireFormat.h"
 
-#pragma mark CFDictionaryKeyCallBacks
-
-// We use a custom dictionary here because our keys are numbers and
-// conversion back and forth from NSNumber was costing us performance.
-// If/when we move to C++ this could be done using a std::map and some
-// careful retain/release calls.
-
-static const void *GPBUnknownFieldSetKeyRetain(CFAllocatorRef allocator,
-                                               const void *value) {
-#pragma unused(allocator)
-  return value;
-}
-
-static void GPBUnknownFieldSetKeyRelease(CFAllocatorRef allocator,
-                                         const void *value) {
-#pragma unused(allocator)
-#pragma unused(value)
-}
-
-static CFStringRef GPBUnknownFieldSetCopyKeyDescription(const void *value) {
-  return CFStringCreateWithFormat(kCFAllocatorDefault, NULL, CFSTR("%d"),
-                                  (int)value);
-}
-
-static Boolean GPBUnknownFieldSetKeyEqual(const void *value1,
-                                          const void *value2) {
-  return value1 == value2;
-}
-
-static CFHashCode GPBUnknownFieldSetKeyHash(const void *value) {
-  return (CFHashCode)value;
-}
-
 #pragma mark Helpers
 
 static void checkNumber(int32_t number) {
@@ -92,6 +59,12 @@ static void CopyWorker(const void *key, const void *value, void *context) {
   [result addField:copied];
   [copied release];
 }
+
+// Direct access is use for speed, to avoid even internally declaring things
+// read/write, etc. The warning is enabled in the project to ensure code calling
+// protos can turn on -Wdirect-ivar-access without issues.
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdirect-ivar-access"
 
 - (id)copyWithZone:(NSZone *)zone {
   LCIMUnknownFieldSet *result = [[LCIMUnknownFieldSet allocWithZone:zone] init];
@@ -148,13 +121,13 @@ static void CopyWorker(const void *key, const void *value, void *context) {
 }
 
 - (NSArray *)sortedFields {
-  if (!fields_) return nil;
+  if (!fields_) return [NSArray array];
   size_t count = CFDictionaryGetCount(fields_);
   ssize_t keys[count];
   LCIMUnknownField *values[count];
   CFDictionaryGetKeysAndValues(fields_, (const void **)keys,
                                (const void **)values);
-  struct GPBFieldPair {
+  struct LCIMFieldPair {
     ssize_t key;
     LCIMUnknownField *value;
   } pairs[count];
@@ -162,10 +135,10 @@ static void CopyWorker(const void *key, const void *value, void *context) {
     pairs[i].key = keys[i];
     pairs[i].value = values[i];
   };
-  qsort_b(pairs, count, sizeof(struct GPBFieldPair),
+  qsort_b(pairs, count, sizeof(struct LCIMFieldPair),
           ^(const void *first, const void *second) {
-            const struct GPBFieldPair *a = first;
-            const struct GPBFieldPair *b = second;
+            const struct LCIMFieldPair *a = first;
+            const struct LCIMFieldPair *b = second;
             return (a->key > b->key) ? 1 : ((a->key == b->key) ? 0 : -1);
           });
   for (size_t i = 0; i < count; ++i) {
@@ -184,7 +157,7 @@ static void CopyWorker(const void *key, const void *value, void *context) {
   CFDictionaryGetKeysAndValues(fields_, (const void **)keys,
                                (const void **)values);
   if (count > 1) {
-    struct GPBFieldPair {
+    struct LCIMFieldPair {
       ssize_t key;
       LCIMUnknownField *value;
     } pairs[count];
@@ -193,10 +166,10 @@ static void CopyWorker(const void *key, const void *value, void *context) {
       pairs[i].key = keys[i];
       pairs[i].value = values[i];
     };
-    qsort_b(pairs, count, sizeof(struct GPBFieldPair),
+    qsort_b(pairs, count, sizeof(struct LCIMFieldPair),
             ^(const void *first, const void *second) {
-              const struct GPBFieldPair *a = first;
-              const struct GPBFieldPair *b = second;
+              const struct LCIMFieldPair *a = first;
+              const struct LCIMFieldPair *b = second;
               return (a->key > b->key) ? 1 : ((a->key == b->key) ? 0 : -1);
             });
     for (size_t i = 0; i < count; ++i) {
@@ -217,7 +190,7 @@ static void CopyWorker(const void *key, const void *value, void *context) {
   return description;
 }
 
-static void GPBUnknownFieldSetSerializedSize(const void *key, const void *value,
+static void LCIMUnknownFieldSetSerializedSize(const void *key, const void *value,
                                              void *context) {
 #pragma unused(key)
   LCIMUnknownField *field = value;
@@ -228,13 +201,13 @@ static void GPBUnknownFieldSetSerializedSize(const void *key, const void *value,
 - (size_t)serializedSize {
   size_t result = 0;
   if (fields_) {
-    CFDictionaryApplyFunction(fields_, GPBUnknownFieldSetSerializedSize,
+    CFDictionaryApplyFunction(fields_, LCIMUnknownFieldSetSerializedSize,
                               &result);
   }
   return result;
 }
 
-static void GPBUnknownFieldSetWriteAsMessageSetTo(const void *key,
+static void LCIMUnknownFieldSetWriteAsMessageSetTo(const void *key,
                                                   const void *value,
                                                   void *context) {
 #pragma unused(key)
@@ -245,12 +218,12 @@ static void GPBUnknownFieldSetWriteAsMessageSetTo(const void *key,
 
 - (void)writeAsMessageSetTo:(LCIMCodedOutputStream *)output {
   if (fields_) {
-    CFDictionaryApplyFunction(fields_, GPBUnknownFieldSetWriteAsMessageSetTo,
+    CFDictionaryApplyFunction(fields_, LCIMUnknownFieldSetWriteAsMessageSetTo,
                               output);
   }
 }
 
-static void GPBUnknownFieldSetSerializedSizeAsMessageSet(const void *key,
+static void LCIMUnknownFieldSetSerializedSizeAsMessageSet(const void *key,
                                                          const void *value,
                                                          void *context) {
 #pragma unused(key)
@@ -263,7 +236,7 @@ static void GPBUnknownFieldSetSerializedSizeAsMessageSet(const void *key,
   size_t result = 0;
   if (fields_) {
     CFDictionaryApplyFunction(
-        fields_, GPBUnknownFieldSetSerializedSizeAsMessageSet, &result);
+        fields_, LCIMUnknownFieldSetSerializedSizeAsMessageSet, &result);
   }
   return result;
 }
@@ -278,20 +251,16 @@ static void GPBUnknownFieldSetSerializedSizeAsMessageSet(const void *key,
 }
 
 + (BOOL)isFieldTag:(int32_t)tag {
-  return GPBWireFormatGetTagWireType(tag) != GPBWireFormatEndGroup;
+  return LCIMWireFormatGetTagWireType(tag) != LCIMWireFormatEndGroup;
 }
 
 - (void)addField:(LCIMUnknownField *)field {
   int32_t number = [field number];
   checkNumber(number);
   if (!fields_) {
-    CFDictionaryKeyCallBacks keyCallBacks = {
-        // See description above for reason for using custom dictionary.
-        0, GPBUnknownFieldSetKeyRetain, GPBUnknownFieldSetKeyRelease,
-        GPBUnknownFieldSetCopyKeyDescription, GPBUnknownFieldSetKeyEqual,
-        GPBUnknownFieldSetKeyHash,
-    };
-    fields_ = CFDictionaryCreateMutable(kCFAllocatorDefault, 0, &keyCallBacks,
+    // Use a custom dictionary here because the keys are numbers and conversion
+    // back and forth from NSNumber isn't worth the cost.
+    fields_ = CFDictionaryCreateMutable(kCFAllocatorDefault, 0, NULL,
                                         &kCFTypeDictionaryValueCallBacks);
   }
   ssize_t key = number;
@@ -311,7 +280,7 @@ static void GPBUnknownFieldSetSerializedSizeAsMessageSet(const void *key,
   return existing;
 }
 
-static void GPBUnknownFieldSetMergeUnknownFields(const void *key,
+static void LCIMUnknownFieldSetMergeUnknownFields(const void *key,
                                                  const void *value,
                                                  void *context) {
 #pragma unused(key)
@@ -336,7 +305,7 @@ static void GPBUnknownFieldSetMergeUnknownFields(const void *key,
 - (void)mergeUnknownFields:(LCIMUnknownFieldSet *)other {
   if (other && other->fields_) {
     CFDictionaryApplyFunction(other->fields_,
-                              GPBUnknownFieldSetMergeUnknownFields, self);
+                              LCIMUnknownFieldSetMergeUnknownFields, self);
   }
 }
 
@@ -353,27 +322,28 @@ static void GPBUnknownFieldSetMergeUnknownFields(const void *key,
 }
 
 - (BOOL)mergeFieldFrom:(int32_t)tag input:(LCIMCodedInputStream *)input {
-  int32_t number = GPBWireFormatGetTagFieldNumber(tag);
-  GPBCodedInputStreamState *state = &input->state_;
-  switch (GPBWireFormatGetTagWireType(tag)) {
-    case GPBWireFormatVarint: {
+  NSAssert(LCIMWireFormatIsValidTag(tag), @"Got passed an invalid tag");
+  int32_t number = LCIMWireFormatGetTagFieldNumber(tag);
+  LCIMCodedInputStreamState *state = &input->state_;
+  switch (LCIMWireFormatGetTagWireType(tag)) {
+    case LCIMWireFormatVarint: {
       LCIMUnknownField *field = [self mutableFieldForNumber:number create:YES];
       [field addVarint:LCIMCodedInputStreamReadInt64(state)];
       return YES;
     }
-    case GPBWireFormatFixed64: {
+    case LCIMWireFormatFixed64: {
       LCIMUnknownField *field = [self mutableFieldForNumber:number create:YES];
       [field addFixed64:LCIMCodedInputStreamReadFixed64(state)];
       return YES;
     }
-    case GPBWireFormatLengthDelimited: {
+    case LCIMWireFormatLengthDelimited: {
       NSData *data = LCIMCodedInputStreamReadRetainedBytes(state);
       LCIMUnknownField *field = [self mutableFieldForNumber:number create:YES];
       [field addLengthDelimited:data];
       [data release];
       return YES;
     }
-    case GPBWireFormatStartGroup: {
+    case LCIMWireFormatStartGroup: {
       LCIMUnknownFieldSet *unknownFieldSet = [[LCIMUnknownFieldSet alloc] init];
       [input readUnknownGroup:number message:unknownFieldSet];
       LCIMUnknownField *field = [self mutableFieldForNumber:number create:YES];
@@ -381,9 +351,9 @@ static void GPBUnknownFieldSetMergeUnknownFields(const void *key,
       [unknownFieldSet release];
       return YES;
     }
-    case GPBWireFormatEndGroup:
+    case LCIMWireFormatEndGroup:
       return NO;
-    case GPBWireFormatFixed32: {
+    case LCIMWireFormatFixed32: {
       LCIMUnknownField *field = [self mutableFieldForNumber:number create:YES];
       [field addFixed32:LCIMCodedInputStreamReadFixed32(state)];
       return YES;
@@ -419,5 +389,7 @@ static void GPBUnknownFieldSetMergeUnknownFields(const void *key,
     tags[i] = (int32_t)keys[i];
   }
 }
+
+#pragma clang diagnostic pop
 
 @end

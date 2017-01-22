@@ -116,7 +116,7 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
     do {
         /* If object is clean, ignore save request. */
         if (_peerId) {
-            [[LCCKConversationService sharedInstance] fecthConversationWithPeerId:self.peerId callback:^(AVIMConversation *conversation, NSError *error) {
+            [[LCCKConversationService sharedInstance] fetchConversationWithPeerId:self.peerId callback:^(AVIMConversation *conversation, NSError *error) {
                 //SDK没有好友观念，任何两个ID均可会话，请APP层自行处理好友关系。
                 [self refreshConversation:conversation isJoined:YES error:error];
             }];
@@ -124,7 +124,7 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
         }
         /* If object is clean, ignore save request. */
         if (_conversationId) {
-            [[LCCKConversationService sharedInstance] fecthConversationWithConversationId:self.conversationId callback:^(AVIMConversation *conversation, NSError *error) {
+            [[LCCKConversationService sharedInstance] fetchConversationWithConversationId:self.conversationId callback:^(AVIMConversation *conversation, NSError *error) {
                 if (error) {
                     //如果用户已经已经被踢出群，此时依然能拿到 Conversation 对象，不会报 4401 错误，需要单独判断。即使后期服务端在这种情况下返回error，这里依然能正确处理。
                     [self refreshConversation:conversation isJoined:NO error:error];
@@ -262,7 +262,9 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
 - (void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
     if (_conversation && (self.chatViewModel.avimTypedMessage.count > 0)) {
-        [[LCCKConversationService sharedInstance] updateConversationAsRead];
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
+            [[LCCKConversationService sharedInstance] updateConversationAsReadWithLastMessage:_conversation.lcck_lastMessage];
+        });
     }
     !self.viewDidDisappearBlock ?: self.viewDidDisappearBlock(self, animated);
 }

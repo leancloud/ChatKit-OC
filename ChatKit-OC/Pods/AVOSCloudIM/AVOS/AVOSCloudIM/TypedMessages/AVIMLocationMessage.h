@@ -32,7 +32,7 @@ NS_ASSUME_NONNULL_BEGIN
  @param longitude － 经度
  @param attributes － 用户附加属性
  */
-+ (instancetype)messageWithText:(NSString *)text
++ (instancetype)messageWithText:(nullable NSString *)text
                        latitude:(float)latitude
                       longitude:(float)longitude
                      attributes:(nullable NSDictionary *)attributes;

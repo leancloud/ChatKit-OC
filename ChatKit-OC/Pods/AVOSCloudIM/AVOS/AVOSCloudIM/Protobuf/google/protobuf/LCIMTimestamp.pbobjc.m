@@ -36,7 +36,7 @@ static LCIMFileDescriptor *GPBTimestampRoot_FileDescriptor(void) {
   // about thread safety of the singleton.
   static LCIMFileDescriptor *descriptor = NULL;
   if (!descriptor) {
-    LCIMDebugCheckRuntimeVersion();
+    LCIM_DEBUG_CHECK_RUNTIME_VERSIONS();
     descriptor = [[LCIMFileDescriptor alloc] initWithPackage:@"google.protobuf"
                                                      syntax:GPBFileSyntaxProto3];
   }
@@ -68,7 +68,7 @@ typedef struct LCIMTimestamp__storage_ {
         .number = GPBTimestamp_FieldNumber_Seconds,
         .hasIndex = 0,
         .offset = (uint32_t)offsetof(LCIMTimestamp__storage_, seconds),
-        .flags = GPBFieldOptional,
+        .flags = LCIMFieldOptional,
         .dataType = GPBDataTypeInt64,
       },
       {
@@ -77,7 +77,7 @@ typedef struct LCIMTimestamp__storage_ {
         .number = GPBTimestamp_FieldNumber_Nanos,
         .hasIndex = 1,
         .offset = (uint32_t)offsetof(LCIMTimestamp__storage_, nanos),
-        .flags = GPBFieldOptional,
+        .flags = LCIMFieldOptional,
         .dataType = GPBDataTypeInt32,
       },
     };

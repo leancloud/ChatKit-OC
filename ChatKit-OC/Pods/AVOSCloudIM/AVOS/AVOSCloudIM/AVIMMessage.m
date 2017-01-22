@@ -10,6 +10,9 @@
 #import "AVMPMessagePack.h"
 #import "AVIMMessageObject.h"
 #import "AVIMMessage_Internal.h"
+#import "AVIMConversation_Internal.h"
+#import "AVIMTypedMessage_Internal.h"
+
 /*
  {
  "cmd": "direct",
@@ -105,6 +108,38 @@
     } else {
         return AVIMMessageIOTypeIn;
     }
+}
+
+/*!
+ * 
+ "msg":"{"_lctype":-1,"_lctext":"1620318941"}",
+ "msg_from":"a"
+ "msg_mid":"2USGXPmbTEWjt9WnNRZpWQ",
+ "msg_timestamp":1480325615220,
+ */
++ (instancetype)parseMessageWithConversationId:(NSString *)conversationId result:(NSDictionary *)result {
+    id messageContent = result[KEY_LAST_MESSAGE];
+    if((!messageContent) || (messageContent == [NSNull null])) { return nil; }
+    
+    NSString *from = result[KEY_LAST_MESSAGE_FROM];
+    NSString *content = (NSString *)messageContent;
+    NSTimeInterval timestamp = [result[KEY_LAST_MESSAGE_TIMESTAMP] doubleValue];
+    NSString *messageId = result[KEY_LAST_MESSAGE_MID];
+    
+    AVIMMessage *message = nil;
+    AVIMTypedMessageObject *messageObject = [[AVIMTypedMessageObject alloc] initWithJSON:content];
+    if ([messageObject isValidTypedMessageObject]) {
+        message = [AVIMTypedMessage messageWithMessageObject:messageObject];
+    } else {
+        message = [[AVIMMessage alloc] init];
+    }
+    message.content = content;
+    message.sendTimestamp = timestamp;
+    message.conversationId = conversationId;
+    message.clientId = from;
+    message.messageId = messageId;
+    message.status = AVIMMessageStatusDelivered;
+    return message;
 }
 
 @end

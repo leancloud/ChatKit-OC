@@ -232,6 +232,12 @@ extern NSString *const kAVPushTargetPlatformWindowsPhone;
 - (BOOL)sendPush:(NSError **)error;
 
 /*!
+ An alias of `-[AVPush sendPush:]` methods that supports Swift exception.
+ @seealso `-[AVPush sendPush:]`
+ */
+- (BOOL)sendPushAndThrowsWithError:(NSError **)error;
+
+/*!
  Asynchronously send this push message.
  */
 - (void)sendPushInBackground;
@@ -334,6 +340,12 @@ extern NSString *const kAVPushTargetPlatformWindowsPhone;
  @return an NSSet containing all the channel names this device is subscribed to.
  */
 + (nullable NSSet *)getSubscribedChannels:(NSError **)error;
+
+/*!
+ An alias of `-[AVPush getSubscribedChannels:]` methods that supports Swift exception.
+ @seealso `-[AVPush getSubscribedChannels:]`
+ */
++ (nullable NSSet *)getSubscribedChannelsAndThrowsWithError:(NSError **)error;
 
 /*!
  Get all the channels that this device is subscribed to.

@@ -22,10 +22,14 @@
 
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
+#pragma clang diagnostic ignored "-Wdirect-ivar-access"
 
-#pragma mark - LCIMStructRoot
+#pragma mark - GPBStructRoot
 
 @implementation LCIMStructRoot
+
+// No extensions in the file and no imports, so no need to generate
+// +extensionRegistry.
 
 @end
 
@@ -36,7 +40,7 @@ static LCIMFileDescriptor *LCIMStructRoot_FileDescriptor(void) {
   // about thread safety of the singleton.
   static LCIMFileDescriptor *descriptor = NULL;
   if (!descriptor) {
-    GPBDebugCheckRuntimeVersion();
+    LCIM_DEBUG_CHECK_RUNTIME_VERSIONS();
     descriptor = [[LCIMFileDescriptor alloc] initWithPackage:@"google.protobuf"
                                                      syntax:GPBFileSyntaxProto3];
   }
@@ -45,7 +49,7 @@ static LCIMFileDescriptor *LCIMStructRoot_FileDescriptor(void) {
 
 #pragma mark - Enum GPBNullValue
 
-LCIMEnumDescriptor *GPBNullValue_EnumDescriptor(void) {
+LCIMEnumDescriptor *LCIMNullValue_EnumDescriptor(void) {
   static LCIMEnumDescriptor *descriptor = NULL;
   if (!descriptor) {
     static const char *valueNames =
@@ -58,7 +62,7 @@ LCIMEnumDescriptor *GPBNullValue_EnumDescriptor(void) {
                                        valueNames:valueNames
                                            values:values
                                             count:(uint32_t)(sizeof(values) / sizeof(int32_t))
-                                     enumVerifier:GPBNullValue_IsValidValue];
+                                     enumVerifier:LCIMNullValue_IsValidValue];
     if (!OSAtomicCompareAndSwapPtrBarrier(nil, worker, (void * volatile *)&descriptor)) {
       [worker release];
     }
@@ -66,7 +70,7 @@ LCIMEnumDescriptor *GPBNullValue_EnumDescriptor(void) {
   return descriptor;
 }
 
-BOOL GPBNullValue_IsValidValue(int32_t value__) {
+BOOL LCIMNullValue_IsValidValue(int32_t value__) {
   switch (value__) {
     case GPBNullValue_NullValue:
       return YES;
@@ -83,7 +87,7 @@ BOOL GPBNullValue_IsValidValue(int32_t value__) {
 
 typedef struct LCIMStruct__storage_ {
   uint32_t _has_storage_[1];
-  NSMutableDictionary *fields;
+  __unsafe_unretained NSMutableDictionary *fields;
 } LCIMStruct__storage_;
 
 // This method is threadsafe because it is initially called
@@ -98,7 +102,7 @@ typedef struct LCIMStruct__storage_ {
         .number = LCIMStruct_FieldNumber_Fields,
         .hasIndex = GPBNoHasBit,
         .offset = (uint32_t)offsetof(LCIMStruct__storage_, fields),
-        .flags = GPBFieldMapKeyString,
+        .flags = LCIMFieldMapKeyString,
         .dataType = GPBDataTypeMessage,
       },
     };
@@ -133,9 +137,9 @@ typedef struct LCIMStruct__storage_ {
 typedef struct LCIMValue__storage_ {
   uint32_t _has_storage_[2];
   GPBNullValue nullValue;
-  NSString *stringValue;
-  LCIMStruct *structValue;
-  LCIMListValue *listValue;
+  __unsafe_unretained NSString *stringValue;
+  __unsafe_unretained LCIMStruct *structValue;
+  __unsafe_unretained LCIMListValue *listValue;
   double numberValue;
 } LCIMValue__storage_;
 
@@ -147,11 +151,11 @@ typedef struct LCIMValue__storage_ {
     static GPBMessageFieldDescription fields[] = {
       {
         .name = "nullValue",
-        .dataTypeSpecific.enumDescFunc = GPBNullValue_EnumDescriptor,
+        .dataTypeSpecific.enumDescFunc = LCIMNullValue_EnumDescriptor,
         .number = GPBValue_FieldNumber_NullValue,
         .hasIndex = -1,
         .offset = (uint32_t)offsetof(LCIMValue__storage_, nullValue),
-        .flags = GPBFieldOptional | GPBFieldHasEnumDescriptor,
+        .flags = LCIMFieldOptional | LCIMFieldHasEnumDescriptor,
         .dataType = GPBDataTypeEnum,
       },
       {
@@ -160,7 +164,7 @@ typedef struct LCIMValue__storage_ {
         .number = GPBValue_FieldNumber_NumberValue,
         .hasIndex = -1,
         .offset = (uint32_t)offsetof(LCIMValue__storage_, numberValue),
-        .flags = GPBFieldOptional,
+        .flags = LCIMFieldOptional,
         .dataType = GPBDataTypeDouble,
       },
       {
@@ -169,7 +173,7 @@ typedef struct LCIMValue__storage_ {
         .number = GPBValue_FieldNumber_StringValue,
         .hasIndex = -1,
         .offset = (uint32_t)offsetof(LCIMValue__storage_, stringValue),
-        .flags = GPBFieldOptional,
+        .flags = LCIMFieldOptional,
         .dataType = GPBDataTypeString,
       },
       {
@@ -178,7 +182,7 @@ typedef struct LCIMValue__storage_ {
         .number = GPBValue_FieldNumber_BoolValue,
         .hasIndex = -1,
         .offset = 0,  // Stored in _has_storage_ to save space.
-        .flags = GPBFieldOptional,
+        .flags = LCIMFieldOptional,
         .dataType = GPBDataTypeBool,
       },
       {
@@ -187,7 +191,7 @@ typedef struct LCIMValue__storage_ {
         .number = GPBValue_FieldNumber_StructValue,
         .hasIndex = -1,
         .offset = (uint32_t)offsetof(LCIMValue__storage_, structValue),
-        .flags = GPBFieldOptional,
+        .flags = LCIMFieldOptional,
         .dataType = GPBDataTypeMessage,
       },
       {
@@ -196,7 +200,7 @@ typedef struct LCIMValue__storage_ {
         .number = GPBValue_FieldNumber_ListValue,
         .hasIndex = -1,
         .offset = (uint32_t)offsetof(LCIMValue__storage_, listValue),
-        .flags = GPBFieldOptional,
+        .flags = LCIMFieldOptional,
         .dataType = GPBDataTypeMessage,
       },
     };
@@ -225,19 +229,19 @@ typedef struct LCIMValue__storage_ {
 int32_t GPBValue_NullValue_RawValue(LCIMValue *message) {
   LCIMDescriptor *descriptor = [LCIMValue descriptor];
   LCIMFieldDescriptor *field = [descriptor fieldWithNumber:GPBValue_FieldNumber_NullValue];
-  return GPBGetMessageInt32Field(message, field);
+  return LCIMGetMessageInt32Field(message, field);
 }
 
 void SetGPBValue_NullValue_RawValue(LCIMValue *message, int32_t value) {
   LCIMDescriptor *descriptor = [LCIMValue descriptor];
   LCIMFieldDescriptor *field = [descriptor fieldWithNumber:GPBValue_FieldNumber_NullValue];
-  GPBSetInt32IvarWithFieldInternal(message, field, value, descriptor.file.syntax);
+  LCIMSetInt32IvarWithFieldInternal(message, field, value, descriptor.file.syntax);
 }
 
 void GPBValue_ClearKindOneOfCase(LCIMValue *message) {
   LCIMDescriptor *descriptor = [message descriptor];
   LCIMOneofDescriptor *oneof = descriptor->oneofs_[0];
-  GPBMaybeClearOneof(message, oneof, -1, 0);
+  LCIMMaybeClearOneof(message, oneof, -1, 0);
 }
 #pragma mark - GPBListValue
 
@@ -247,7 +251,7 @@ void GPBValue_ClearKindOneOfCase(LCIMValue *message) {
 
 typedef struct LCIMListValue__storage_ {
   uint32_t _has_storage_[1];
-  NSMutableArray *valuesArray;
+  __unsafe_unretained NSMutableArray *valuesArray;
 } LCIMListValue__storage_;
 
 // This method is threadsafe because it is initially called
@@ -262,7 +266,7 @@ typedef struct LCIMListValue__storage_ {
         .number = GPBListValue_FieldNumber_ValuesArray,
         .hasIndex = GPBNoHasBit,
         .offset = (uint32_t)offsetof(LCIMListValue__storage_, valuesArray),
-        .flags = GPBFieldRepeated,
+        .flags = LCIMFieldRepeated,
         .dataType = GPBDataTypeMessage,
       },
     };

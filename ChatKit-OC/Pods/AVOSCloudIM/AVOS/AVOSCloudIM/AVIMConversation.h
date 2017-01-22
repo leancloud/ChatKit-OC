@@ -57,6 +57,12 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong, readonly, nullable) NSDate       *updateAt;
 
 /**
+ *  The last message in this conversation.
+ *  @attention Getter method may query lastMessage from SQL, this may take a long time, be careful to use getter method in main thread.
+ */
+@property (nonatomic, strong, readonly, nullable) AVIMMessage  *lastMessage;
+
+/**
  *  The send timestamp of the last message in this conversation.
  */
 @property (nonatomic, strong, readonly, nullable) NSDate       *lastMessageAt;
@@ -266,7 +272,7 @@ NS_ASSUME_NONNULL_BEGIN
  @param callback 查询结果回调。
  @return None。
  */
-- (void)queryMessagesBeforeId:(NSString *)messageId
+- (void)queryMessagesBeforeId:(nullable NSString *)messageId
                     timestamp:(int64_t)timestamp
                         limit:(NSUInteger)limit
                      callback:(AVIMArrayResultBlock)callback;

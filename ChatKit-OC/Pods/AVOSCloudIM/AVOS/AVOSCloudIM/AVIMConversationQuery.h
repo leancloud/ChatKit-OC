@@ -20,6 +20,12 @@ extern NSString *const kAVIMKeyMember;
 extern NSString *const kAVIMKeyCreator;
 extern NSString *const kAVIMKeyConversationId;
 
+typedef NS_OPTIONS(uint64_t, AVIMConversationQueryOption) {
+    AVIMConversationQueryOptionNone = 0,
+    AVIMConversationQueryOptionCompact = 1 << 0, /**< 不返回成员列表 */
+    AVIMConversationQueryOptionWithMessage = 1 << 1, /**< 返回对话最近一条消息 */
+};
+
 @interface AVIMConversationQuery : NSObject
 
 /*!
@@ -41,6 +47,11 @@ extern NSString *const kAVIMKeyConversationId;
  设置缓存的过期时间，默认是 1 小时（1 * 60 * 60）
  */
 @property (nonatomic, assign) NSTimeInterval cacheMaxAge;
+
+/*!
+ * 查询条件
+ */
+@property (nonatomic, assign) AVIMConversationQueryOption option;
 
 /*!
  * Build an query that is the OR of the passed in queries.

@@ -713,6 +713,10 @@ NSString *LCStringFromDistanceUnit(AVQueryDistanceUnit unit) {
     return [self findObjectsWithBlock:NULL waitUntilDone:YES error:error];
 }
 
+- (NSArray *)findObjectsAndThrowsWithError:(NSError * _Nullable __autoreleasing *)error {
+    return [self findObjects:error];
+}
+
 -(void)queryWithBlock:(NSString *)path
            parameters:(NSDictionary *)parameters
                 block:(AVArrayResultBlock)resultBlock
@@ -841,6 +845,10 @@ NSString *LCStringFromDistanceUnit(AVQueryDistanceUnit unit) {
     return [self getFirstObjectWithBlock:NULL waitUntilDone:YES error:error];
 }
 
+- (AVObject *)getFirstObjectAndThrowsWithError:(NSError * _Nullable __autoreleasing *)error {
+    return [self getFirstObject:error];
+}
+
 /*!
  Gets an object asynchronously and calls the given block with the result.
 
@@ -938,6 +946,10 @@ NSString *LCStringFromDistanceUnit(AVQueryDistanceUnit unit) {
 - (NSInteger)countObjects:(NSError **)error
 {
     return [self countObjectsWithBlock:NULL waitUntilDone:YES error:error];
+}
+
+- (NSInteger)countObjectsAndThrowsWithError:(NSError * _Nullable __autoreleasing *)error {
+    return [self countObjects:error];
 }
 
 /*!

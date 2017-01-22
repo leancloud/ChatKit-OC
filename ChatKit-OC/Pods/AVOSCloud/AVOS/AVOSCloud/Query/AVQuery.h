@@ -540,6 +540,12 @@ typedef NS_ENUM(NSInteger, AVQueryDistanceUnit) {
 - (nullable NSArray *)findObjects:(NSError **)error;
 
 /*!
+ An alias of `-[AVQuery findObjects:]` methods that supports Swift exception.
+ @seealso `-[AVQuery findObjects:]`
+ */
+- (nullable NSArray *)findObjectsAndThrowsWithError:(NSError **)error;
+
+/*!
  Finds objects asynchronously and calls the given block with the results.
  @param block The block to execute. The block should have the following argument signature:(NSArray *objects, NSError *error) 
  */
@@ -582,6 +588,12 @@ typedef NS_ENUM(NSInteger, AVQueryDistanceUnit) {
 - (nullable AVObject *)getFirstObject:(NSError **)error;
 
 /*!
+ An alias of `-[AVQuery getFirstObject:]` methods that supports Swift exception.
+ @seealso `-[AVQuery getFirstObject:]`
+ */
+- (nullable AVObject *)getFirstObjectAndThrowsWithError:(NSError **)error;
+
+/*!
  Gets an object asynchronously and calls the given block with the result.
  
  This mutates the AVQuery.
@@ -617,6 +629,12 @@ typedef NS_ENUM(NSInteger, AVQueryDistanceUnit) {
  @return the number of AVObjects that match the query, or -1 if there is an error.
  */
 - (NSInteger)countObjects:(NSError **)error;
+
+/*!
+ An alias of `-[AVQuery countObjects:]` methods that supports Swift exception.
+ @seealso `-[AVQuery countObjects:]`
+ */
+- (NSInteger)countObjectsAndThrowsWithError:(NSError **)error;
 
 /*!
  Counts objects asynchronously and calls the given block with the counts.

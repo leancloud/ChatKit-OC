@@ -7,6 +7,7 @@
 //
 
 #import "AVIMKeyedConversation.h"
+@class AVIMMessage;
 
 @interface AVIMKeyedConversation ()
 
@@ -16,6 +17,7 @@
 @property (nonatomic, strong) NSDate       *createAt;
 @property (nonatomic, strong) NSDate       *updateAt;
 @property (nonatomic, strong) NSDate       *lastMessageAt;
+@property (nonatomic, strong) AVIMMessage  *lastMessage;
 @property (nonatomic, copy)   NSString     *name;
 @property (nonatomic, strong) NSArray      *members;
 @property (nonatomic, strong) NSDictionary *attributes;

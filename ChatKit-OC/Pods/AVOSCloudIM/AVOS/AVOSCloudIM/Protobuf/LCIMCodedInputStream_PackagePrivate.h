@@ -39,7 +39,7 @@
 @class LCIMUnknownFieldSet;
 @class LCIMFieldDescriptor;
 
-typedef struct GPBCodedInputStreamState {
+typedef struct LCIMCodedInputStreamState {
   const uint8_t *bytes;
   size_t bufferSize;
   size_t bufferPos;
@@ -51,11 +51,11 @@ typedef struct GPBCodedInputStreamState {
   size_t currentLimit;
   int32_t lastTag;
   NSUInteger recursionDepth;
-} GPBCodedInputStreamState;
+} LCIMCodedInputStreamState;
 
 @interface LCIMCodedInputStream () {
  @package
-  struct GPBCodedInputStreamState state_;
+  struct LCIMCodedInputStreamState state_;
   NSData *buffer_;
 }
 
@@ -79,36 +79,36 @@ typedef struct GPBCodedInputStreamState {
 
 CF_EXTERN_C_BEGIN
 
-int32_t LCIMCodedInputStreamReadTag(GPBCodedInputStreamState *state);
+int32_t LCIMCodedInputStreamReadTag(LCIMCodedInputStreamState *state);
 
-double LCIMCodedInputStreamReadDouble(GPBCodedInputStreamState *state);
-float LCIMCodedInputStreamReadFloat(GPBCodedInputStreamState *state);
-uint64_t LCIMCodedInputStreamReadUInt64(GPBCodedInputStreamState *state);
-uint32_t LCIMCodedInputStreamReadUInt32(GPBCodedInputStreamState *state);
-int64_t LCIMCodedInputStreamReadInt64(GPBCodedInputStreamState *state);
-int32_t LCIMCodedInputStreamReadInt32(GPBCodedInputStreamState *state);
-uint64_t LCIMCodedInputStreamReadFixed64(GPBCodedInputStreamState *state);
-uint32_t LCIMCodedInputStreamReadFixed32(GPBCodedInputStreamState *state);
-int32_t LCIMCodedInputStreamReadEnum(GPBCodedInputStreamState *state);
-int32_t LCIMCodedInputStreamReadSFixed32(GPBCodedInputStreamState *state);
-int64_t LCIMCodedInputStreamReadSFixed64(GPBCodedInputStreamState *state);
-int32_t LCIMCodedInputStreamReadSInt32(GPBCodedInputStreamState *state);
-int64_t LCIMCodedInputStreamReadSInt64(GPBCodedInputStreamState *state);
-BOOL LCIMCodedInputStreamReadBool(GPBCodedInputStreamState *state);
-NSString *LCIMCodedInputStreamReadRetainedString(GPBCodedInputStreamState *state)
+double LCIMCodedInputStreamReadDouble(LCIMCodedInputStreamState *state);
+float LCIMCodedInputStreamReadFloat(LCIMCodedInputStreamState *state);
+uint64_t LCIMCodedInputStreamReadUInt64(LCIMCodedInputStreamState *state);
+uint32_t LCIMCodedInputStreamReadUInt32(LCIMCodedInputStreamState *state);
+int64_t LCIMCodedInputStreamReadInt64(LCIMCodedInputStreamState *state);
+int32_t LCIMCodedInputStreamReadInt32(LCIMCodedInputStreamState *state);
+uint64_t LCIMCodedInputStreamReadFixed64(LCIMCodedInputStreamState *state);
+uint32_t LCIMCodedInputStreamReadFixed32(LCIMCodedInputStreamState *state);
+int32_t LCIMCodedInputStreamReadEnum(LCIMCodedInputStreamState *state);
+int32_t LCIMCodedInputStreamReadSFixed32(LCIMCodedInputStreamState *state);
+int64_t LCIMCodedInputStreamReadSFixed64(LCIMCodedInputStreamState *state);
+int32_t LCIMCodedInputStreamReadSInt32(LCIMCodedInputStreamState *state);
+int64_t LCIMCodedInputStreamReadSInt64(LCIMCodedInputStreamState *state);
+BOOL LCIMCodedInputStreamReadBool(LCIMCodedInputStreamState *state);
+NSString *LCIMCodedInputStreamReadRetainedString(LCIMCodedInputStreamState *state)
     __attribute((ns_returns_retained));
-NSData *LCIMCodedInputStreamReadRetainedBytes(GPBCodedInputStreamState *state)
+NSData *LCIMCodedInputStreamReadRetainedBytes(LCIMCodedInputStreamState *state)
     __attribute((ns_returns_retained));
 NSData *LCIMCodedInputStreamReadRetainedBytesNoCopy(
-    GPBCodedInputStreamState *state) __attribute((ns_returns_retained));
+    LCIMCodedInputStreamState *state) __attribute((ns_returns_retained));
 
-size_t LCIMCodedInputStreamPushLimit(GPBCodedInputStreamState *state,
+size_t LCIMCodedInputStreamPushLimit(LCIMCodedInputStreamState *state,
                                     size_t byteLimit);
-void LCIMCodedInputStreamPopLimit(GPBCodedInputStreamState *state,
+void LCIMCodedInputStreamPopLimit(LCIMCodedInputStreamState *state,
                                  size_t oldLimit);
-size_t LCIMCodedInputStreamBytesUntilLimit(GPBCodedInputStreamState *state);
-BOOL LCIMCodedInputStreamIsAtEnd(GPBCodedInputStreamState *state);
-void LCIMCodedInputStreamCheckLastTagWas(GPBCodedInputStreamState *state,
+size_t LCIMCodedInputStreamBytesUntilLimit(LCIMCodedInputStreamState *state);
+BOOL LCIMCodedInputStreamIsAtEnd(LCIMCodedInputStreamState *state);
+void LCIMCodedInputStreamCheckLastTagWas(LCIMCodedInputStreamState *state,
                                         int32_t value);
 
 CF_EXTERN_C_END

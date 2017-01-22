@@ -630,8 +630,7 @@ setLoadLatestMessagesHandler:^(LCCKConversationViewController *conversationContr
 + (void)lcck_exampleChangeGroupAvatarURLsForConversationId:(NSString *)conversationId
                                               shouldInsert:(BOOL)shouldInsert {
     [self lcck_showMessage:@"正在设置群头像"];
-    [[LCCKConversationService sharedInstance]
-     fecthConversationWithConversationId:conversationId
+    [[LCCKConversationService sharedInstance] fetchConversationWithConversationId:conversationId
      callback:^(AVIMConversation *conversation, NSError *error) {
          [conversation
           lcck_setObject:
@@ -692,7 +691,7 @@ setLoadLatestMessagesHandler:^(LCCKConversationViewController *conversationContr
     actionItemMore.backgroundColor = [UIColor colorWithRed:0.78f green:0.78f blue:0.8f alpha:1.0];
     UITableViewRowAction *actionItemDelete = [UITableViewRowAction
                                               rowActionWithStyle:UITableViewRowActionStyleDefault
-                                              title:LCCKLocalizedStrings(@"Delete")
+                                              title:@"删除"
                                               handler:^(UITableViewRowAction *action, NSIndexPath *indexPath) {
                                                   [[LCChatKit sharedInstance] deleteRecentConversationWithConversationId:conversation.conversationId];
                                               }];
@@ -767,6 +766,7 @@ typedef void (^UITableViewRowActionHandler)(UITableViewRowAction *action, NSInde
             rootViewController =
             [(UINavigationController *)rootViewController visibleViewController];
         }
+        [rootViewController dismissViewControllerAnimated:NO completion:nil];
         [rootViewController presentViewController:viewController animated:YES completion:nil];
     }
 }

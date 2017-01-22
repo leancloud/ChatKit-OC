@@ -58,6 +58,10 @@
     return [self findObjectsWithBlock:NULL waitUntilDone:YES error:error];
 }
 
+- (NSArray *)findObjectsAndThrowsWithError:(NSError * _Nullable __autoreleasing *)error {
+    return [self findObjects:error];
+}
+
 - (void)findInBackground:(AVArrayResultBlock)resultBlock {
     [self findObjectsWithBlock:resultBlock waitUntilDone:NO error:NULL];
 }

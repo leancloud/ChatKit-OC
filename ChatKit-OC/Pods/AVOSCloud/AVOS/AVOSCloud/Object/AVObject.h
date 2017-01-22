@@ -237,6 +237,12 @@ NS_ASSUME_NONNULL_BEGIN
 - (BOOL)save:(NSError **)error;
 
 /*!
+ An alias of `-[AVObject save:]` methods that supports Swift exception.
+ @seealso `-[AVObject save:]`
+ */
+- (BOOL)saveAndThrowsWithError:(NSError **)error;
+
+/*!
  * Saves the AVObject with option and sets an error if it occurs.
  * @param option Option for current save.
  * @param error  A pointer to an NSError that will be set if necessary.
@@ -394,6 +400,12 @@ NS_ASSUME_NONNULL_BEGIN
 - (BOOL)refresh:(NSError **)error;
 
 /*!
+ An alias of `-[AVObject refresh:]` methods that supports Swift exception.
+ @seealso `-[AVObject refresh:]`
+ */
+- (BOOL)refreshAndThrowsWithError:(NSError **)error;
+
+/*!
  Refreshes the AVObject asynchronously and executes the given callback block.
  @param block The block to execute. The block should have the following argument signature: (AVObject *object, NSError *error)
  */
@@ -429,6 +441,12 @@ NS_ASSUME_NONNULL_BEGIN
 - (BOOL)fetch:(NSError **)error;
 
 /*!
+ An alias of `-[AVObject fetch:]` methods that supports Swift exception.
+ @seealso `-[AVObject fetch:]`
+ */
+- (BOOL)fetchAndThrowsWithError:(NSError **)error;
+
+/*!
  Fetches the AVObject with the current data and specified keys from the server and sets an error if it occurs.
  @param keys Pointer to an NSArray that contains objects specified by the keys want to fetch.
  */
@@ -453,6 +471,12 @@ NS_ASSUME_NONNULL_BEGIN
  @param error Pointer to an NSError that will be set if necessary.
  */
 - (AVObject *)fetchIfNeeded:(NSError **)error;
+
+/*!
+ An alias of `-[AVObject fetchIfNeeded:]` methods that supports Swift exception.
+ @seealso `-[AVObject fetchIfNeeded:]`
+ */
+- (AVObject *)fetchIfNeededAndThrowsWithError:(NSError **)error;
 
 /*!
  Fetches the AVObject's data from the server if isDataAvailable is false.
@@ -586,6 +610,12 @@ NS_ASSUME_NONNULL_BEGIN
  @return whether the delete succeeded.
  */
 - (BOOL)delete:(NSError **)error;
+
+/*!
+ An alias of `-[AVObject delete:]` methods that supports Swift exception.
+ @seealso `-[AVObject delete:]`
+ */
+- (BOOL)deleteAndThrowsWithError:(NSError **)error;
 
 /*!
  Deletes the AVObject asynchronously.

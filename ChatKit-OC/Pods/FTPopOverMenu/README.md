@@ -16,13 +16,17 @@
 `FTPopOverMenu` is a pop over menu for `iOS` which is maybe the easiest one to use, supports both `portrait` and `landscape`. It can show from any `UIView`, any `UIBarButtonItem` and any `CGRect`. Simplest APIs, enable you to change the style in one line of code.
 
 
-## About Swift Version
+# About Swift Version
 
-FTPopOverMenu_Swift is now published. [Take a look at it now](https://github.com/liufengting/FTPopOverMenu_Swift). The swift version has same APIs with this OC version.
+`FTPopOverMenu_Swift` is now published. [Take a look at it now](https://github.com/liufengting/FTPopOverMenu_Swift). The swift version has same APIs with this OC version.
 
 # ScreenShots
 
 ![screenshots](https://raw.githubusercontent.com/liufengting/FTResourceRepo/master/Resource/FTPopOverMenu/screenshots.gif)
+
+## Recently UrbanHooker added round arrow support, I changed a little bit.
+
+![screenshots](https://raw.githubusercontent.com/liufengting/FTResourceRepo/master/Resource/FTPopOverMenu/FTPopOverMenuRoundArrow.png)
 
 # Installation
 
@@ -62,6 +66,7 @@ Do any of the following settings to set the style (Only set the ones you want to
     configuration.borderWidth = ...
     configuration.textAlignment = ...
     configuration.ignoreImageOriginalColor = ...;// set 'ignoreImageOriginalColor' to YES, images color will be same as textColor
+    configuration.allowRoundedArrow = ...// Default is 'NO', if sets to 'YES', the arrow will be drawn with round corner.
 ```
 
 

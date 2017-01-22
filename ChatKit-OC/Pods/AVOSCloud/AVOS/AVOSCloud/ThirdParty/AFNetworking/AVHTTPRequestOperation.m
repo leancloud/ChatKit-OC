@@ -371,10 +371,4 @@ didReceiveResponse:(NSURLResponse *)response
     [self.outputStream open];
 }
 
-#if LC_SSL_PINNING_ENABLED
-- (void)connection:(NSURLConnection *)connection willSendRequestForAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge {
-    [[LCSSLChallenger sharedInstance] acceptChallenge:challenge];
-}
-#endif
-
 @end

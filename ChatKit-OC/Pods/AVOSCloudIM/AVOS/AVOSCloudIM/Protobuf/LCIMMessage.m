@@ -44,13 +44,16 @@
 #import "LCIMUnknownFieldSet_PackagePrivate.h"
 #import "LCIMUtilities_PackagePrivate.h"
 
+// Direct access is use for speed, to avoid even internally declaring things
+// read/write, etc. The warning is enabled in the project to ensure code calling
+// protos can turn on -Wdirect-ivar-access without issues.
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdirect-ivar-access"
+
 NSString *const LCIMMessageErrorDomain =
     GPBNSStringifySymbol(LCIMMessageErrorDomain);
 
-#ifdef DEBUG
-NSString *const GPBExceptionMessageKey =
-    GPBNSStringifySymbol(LCIMExceptionMessage);
-#endif  // DEBUG
+NSString *const LCIMErrorReasonKey = @"Reason";
 
 static NSString *const kGPBDataCoderKey = @"GPBData";
 
@@ -95,20 +98,35 @@ static NSMutableDictionary *CloneExtensionMap(NSDictionary *extensionMap,
                                               NSZone *zone)
     __attribute__((ns_returns_retained));
 
+#ifdef DEBUG
 static NSError *MessageError(NSInteger code, NSDictionary *userInfo) {
   return [NSError errorWithDomain:LCIMMessageErrorDomain
                              code:code
                          userInfo:userInfo];
 }
+#endif
 
-static NSError *MessageErrorWithReason(NSInteger code, NSString *reason) {
-  NSDictionary *userInfo = nil;
-  if ([reason length]) {
-    userInfo = @{ @"Reason" : reason };
+static NSError *ErrorFromException(NSException *exception) {
+  NSError *error = nil;
+
+  if ([exception.name isEqual:LCIMCodedInputStreamException]) {
+    NSDictionary *exceptionInfo = exception.userInfo;
+    error = exceptionInfo[LCIMCodedInputStreamUnderlyingErrorKey];
   }
-  return MessageError(code, userInfo);
-}
 
+  if (!error) {
+    NSString *reason = exception.reason;
+    NSDictionary *userInfo = nil;
+    if ([reason length]) {
+      userInfo = @{ LCIMErrorReasonKey : reason };
+    }
+
+    error = [NSError errorWithDomain:LCIMMessageErrorDomain
+                                code:LCIMMessageErrorCodeOther
+                            userInfo:userInfo];
+  }
+  return error;
+}
 
 static void CheckExtension(LCIMMessage *self,
                            LCIMExtensionDescriptor *extension) {
@@ -648,7 +666,7 @@ void LCIMAutocreatedArrayModified(LCIMMessage *self, id array) {
   // When one of our autocreated arrays adds elements, make it visible.
   LCIMDescriptor *descriptor = [[self class] descriptor];
   for (LCIMFieldDescriptor *field in descriptor->fields_) {
-    if (field.fieldType == GPBFieldTypeRepeated) {
+    if (field.fieldType == LCIMFieldTypeRepeated) {
       id curArray = LCIMGetObjectIvarWithFieldNoAutocreate(self, field);
       if (curArray == array) {
         if (LCIMFieldDataTypeIsObject(field)) {
@@ -670,7 +688,7 @@ void LCIMAutocreatedDictionaryModified(LCIMMessage *self, id dictionary) {
   // When one of our autocreated dicts adds elements, make it visible.
   LCIMDescriptor *descriptor = [[self class] descriptor];
   for (LCIMFieldDescriptor *field in descriptor->fields_) {
-    if (field.fieldType == GPBFieldTypeMap) {
+    if (field.fieldType == LCIMFieldTypeMap) {
       id curDict = LCIMGetObjectIvarWithFieldNoAutocreate(self, field);
       if (curDict == dictionary) {
         if ((field.mapKeyDataType == GPBDataTypeString) &&
@@ -694,7 +712,7 @@ void LCIMClearMessageAutocreator(LCIMMessage *self) {
     return;
   }
 
-#if DEBUG && !defined(NS_BLOCK_ASSERTIONS)
+#if defined(DEBUG) && DEBUG && !defined(NS_BLOCK_ASSERTIONS)
   // Either the autocreator must have its "has" flag set to YES, or it must be
   // NO and not equal to ourselves.
   BOOL autocreatorHas =
@@ -816,8 +834,7 @@ static LCIMUnknownFieldSet *GetOrMakeUnknownFields(LCIMMessage *self) {
       [self release];
       self = nil;
       if (errorPtr) {
-        *errorPtr = MessageErrorWithReason(LCIMMessageErrorCodeMalformedData,
-                                           exception.reason);
+        *errorPtr = ErrorFromException(exception);
       }
     }
 #ifdef DEBUG
@@ -848,8 +865,7 @@ static LCIMUnknownFieldSet *GetOrMakeUnknownFields(LCIMMessage *self) {
       [self release];
       self = nil;
       if (errorPtr) {
-        *errorPtr = MessageErrorWithReason(LCIMMessageErrorCodeMalformedData,
-                                           exception.reason);
+        *errorPtr = ErrorFromException(exception);
       }
     }
 #ifdef DEBUG
@@ -891,7 +907,7 @@ static LCIMUnknownFieldSet *GetOrMakeUnknownFields(LCIMMessage *self) {
         // we also need to ensure all the messages as those need copying also.
         id newValue;
         if (LCIMFieldDataTypeIsMessage(field)) {
-          if (field.fieldType == GPBFieldTypeRepeated) {
+          if (field.fieldType == LCIMFieldTypeRepeated) {
             NSArray *existingArray = (NSArray *)value;
             NSMutableArray *newArray =
                 [[NSMutableArray alloc] initWithCapacity:existingArray.count];
@@ -925,7 +941,7 @@ static LCIMUnknownFieldSet *GetOrMakeUnknownFields(LCIMMessage *self) {
           }
         } else {
           // Not messages (but is a map/array)...
-          if (field.fieldType == GPBFieldTypeRepeated) {
+          if (field.fieldType == LCIMFieldTypeRepeated) {
             if (LCIMFieldDataTypeIsObject(field)) {
               // NSArray
               newValue = [value mutableCopyWithZone:zone];
@@ -1005,7 +1021,7 @@ static LCIMUnknownFieldSet *GetOrMakeUnknownFields(LCIMMessage *self) {
     if (LCIMFieldIsMapOrArray(field)) {
       id arrayOrMap = LCIMGetObjectIvarWithFieldNoAutocreate(self, field);
       if (arrayOrMap) {
-        if (field.fieldType == GPBFieldTypeRepeated) {
+        if (field.fieldType == LCIMFieldTypeRepeated) {
           if (LCIMFieldDataTypeIsObject(field)) {
             LCIMAutocreatedArray *autoArray = arrayOrMap;
             if (autoArray->_autocreator == self) {
@@ -1084,8 +1100,8 @@ static LCIMUnknownFieldSet *GetOrMakeUnknownFields(LCIMMessage *self) {
       }
     }
     if (LCIMFieldDataTypeIsMessage(field)) {
-      GPBFieldType fieldType = field.fieldType;
-      if (fieldType == GPBFieldTypeSingle) {
+      LCIMFieldType fieldType = field.fieldType;
+      if (fieldType == LCIMFieldTypeSingle) {
         if (field.isRequired) {
           LCIMMessage *message = LCIMGetMessageMessageField(self, field);
           if (!message.initialized) {
@@ -1102,14 +1118,14 @@ static LCIMUnknownFieldSet *GetOrMakeUnknownFields(LCIMMessage *self) {
             }
           }
         }
-      } else if (fieldType == GPBFieldTypeRepeated) {
+      } else if (fieldType == LCIMFieldTypeRepeated) {
         NSArray *array = LCIMGetObjectIvarWithFieldNoAutocreate(self, field);
         for (LCIMMessage *message in array) {
           if (!message.initialized) {
             return NO;
           }
         }
-      } else {  // fieldType == GPBFieldTypeMap
+      } else {  // fieldType == LCIMFieldTypeMap
         if (field.mapKeyDataType == GPBDataTypeString) {
           NSDictionary *map =
               LCIMGetObjectIvarWithFieldNoAutocreate(self, field);
@@ -1255,8 +1271,8 @@ static LCIMUnknownFieldSet *GetOrMakeUnknownFields(LCIMMessage *self) {
 
 - (void)writeField:(LCIMFieldDescriptor *)field
     toCodedOutputStream:(LCIMCodedOutputStream *)output {
-  GPBFieldType fieldType = field.fieldType;
-  if (fieldType == GPBFieldTypeSingle) {
+  LCIMFieldType fieldType = field.fieldType;
+  if (fieldType == LCIMFieldTypeSingle) {
     BOOL has = LCIMGetHasIvarField(self, field);
     if (!has) {
       return;
@@ -1268,17 +1284,17 @@ static LCIMUnknownFieldSet *GetOrMakeUnknownFields(LCIMMessage *self) {
 //%FIELD_CASE_FULL(TYPE, REAL_TYPE, REAL_TYPE)
 //%PDDM-DEFINE FIELD_CASE_FULL(TYPE, REAL_TYPE, ARRAY_TYPE)
 //%    case GPBDataType##TYPE:
-//%      if (fieldType == GPBFieldTypeRepeated) {
+//%      if (fieldType == LCIMFieldTypeRepeated) {
 //%        uint32_t tag = field.isPackable ? LCIMFieldTag(field) : 0;
-//%        GPB##ARRAY_TYPE##Array *array =
+//%        LCIM##ARRAY_TYPE##Array *array =
 //%            LCIMGetObjectIvarWithFieldNoAutocreate(self, field);
 //%        [output write##TYPE##Array:fieldNumber values:array tag:tag];
-//%      } else if (fieldType == GPBFieldTypeSingle) {
+//%      } else if (fieldType == LCIMFieldTypeSingle) {
 //%        [output write##TYPE:fieldNumber
-//%              TYPE$S  value:GPBGetMessage##REAL_TYPE##Field(self, field)];
-//%      } else {  // fieldType == GPBFieldTypeMap
+//%              TYPE$S  value:LCIMGetMessage##REAL_TYPE##Field(self, field)];
+//%      } else {  // fieldType == LCIMFieldTypeMap
 //%        // Exact type here doesn't matter.
-//%        LCIMInt32##ARRAY_TYPE##Dictionary *dict =
+//%        GPBInt32##ARRAY_TYPE##Dictionary *dict =
 //%            LCIMGetObjectIvarWithFieldNoAutocreate(self, field);
 //%        [dict writeToCodedOutputStream:output asField:field];
 //%      }
@@ -1286,15 +1302,15 @@ static LCIMUnknownFieldSet *GetOrMakeUnknownFields(LCIMMessage *self) {
 //%
 //%PDDM-DEFINE FIELD_CASE2(TYPE)
 //%    case GPBDataType##TYPE:
-//%      if (fieldType == GPBFieldTypeRepeated) {
+//%      if (fieldType == LCIMFieldTypeRepeated) {
 //%        NSArray *array = LCIMGetObjectIvarWithFieldNoAutocreate(self, field);
 //%        [output write##TYPE##Array:fieldNumber values:array];
-//%      } else if (fieldType == GPBFieldTypeSingle) {
+//%      } else if (fieldType == LCIMFieldTypeSingle) {
 //%        // LCIMGetObjectIvarWithFieldNoAutocreate() avoids doing the has check
 //%        // again.
 //%        [output write##TYPE:fieldNumber
 //%              TYPE$S  value:LCIMGetObjectIvarWithFieldNoAutocreate(self, field)];
-//%      } else {  // fieldType == GPBFieldTypeMap
+//%      } else {  // fieldType == LCIMFieldTypeMap
 //%        // Exact type here doesn't matter.
 //%        id dict = LCIMGetObjectIvarWithFieldNoAutocreate(self, field);
 //%        GPBDataType mapKeyDataType = field.mapKeyDataType;
@@ -1313,15 +1329,15 @@ static LCIMUnknownFieldSet *GetOrMakeUnknownFields(LCIMMessage *self) {
 // This block of code is generated, do not edit it directly.
 
     case GPBDataTypeBool:
-      if (fieldType == GPBFieldTypeRepeated) {
+      if (fieldType == LCIMFieldTypeRepeated) {
         uint32_t tag = field.isPackable ? LCIMFieldTag(field) : 0;
         LCIMBoolArray *array =
             LCIMGetObjectIvarWithFieldNoAutocreate(self, field);
         [output writeBoolArray:fieldNumber values:array tag:tag];
-      } else if (fieldType == GPBFieldTypeSingle) {
+      } else if (fieldType == LCIMFieldTypeSingle) {
         [output writeBool:fieldNumber
                     value:LCIMGetMessageBoolField(self, field)];
-      } else {  // fieldType == GPBFieldTypeMap
+      } else {  // fieldType == LCIMFieldTypeMap
         // Exact type here doesn't matter.
         LCIMInt32BoolDictionary *dict =
             LCIMGetObjectIvarWithFieldNoAutocreate(self, field);
@@ -1333,15 +1349,15 @@ static LCIMUnknownFieldSet *GetOrMakeUnknownFields(LCIMMessage *self) {
 // This block of code is generated, do not edit it directly.
 
     case GPBDataTypeFixed32:
-      if (fieldType == GPBFieldTypeRepeated) {
+      if (fieldType == LCIMFieldTypeRepeated) {
         uint32_t tag = field.isPackable ? LCIMFieldTag(field) : 0;
         LCIMUInt32Array *array =
             LCIMGetObjectIvarWithFieldNoAutocreate(self, field);
         [output writeFixed32Array:fieldNumber values:array tag:tag];
-      } else if (fieldType == GPBFieldTypeSingle) {
+      } else if (fieldType == LCIMFieldTypeSingle) {
         [output writeFixed32:fieldNumber
                        value:LCIMGetMessageUInt32Field(self, field)];
-      } else {  // fieldType == GPBFieldTypeMap
+      } else {  // fieldType == LCIMFieldTypeMap
         // Exact type here doesn't matter.
         LCIMInt32UInt32Dictionary *dict =
             LCIMGetObjectIvarWithFieldNoAutocreate(self, field);
@@ -1353,15 +1369,15 @@ static LCIMUnknownFieldSet *GetOrMakeUnknownFields(LCIMMessage *self) {
 // This block of code is generated, do not edit it directly.
 
     case GPBDataTypeSFixed32:
-      if (fieldType == GPBFieldTypeRepeated) {
+      if (fieldType == LCIMFieldTypeRepeated) {
         uint32_t tag = field.isPackable ? LCIMFieldTag(field) : 0;
         LCIMInt32Array *array =
             LCIMGetObjectIvarWithFieldNoAutocreate(self, field);
         [output writeSFixed32Array:fieldNumber values:array tag:tag];
-      } else if (fieldType == GPBFieldTypeSingle) {
+      } else if (fieldType == LCIMFieldTypeSingle) {
         [output writeSFixed32:fieldNumber
                         value:LCIMGetMessageInt32Field(self, field)];
-      } else {  // fieldType == GPBFieldTypeMap
+      } else {  // fieldType == LCIMFieldTypeMap
         // Exact type here doesn't matter.
         LCIMInt32Int32Dictionary *dict =
             LCIMGetObjectIvarWithFieldNoAutocreate(self, field);
@@ -1373,15 +1389,15 @@ static LCIMUnknownFieldSet *GetOrMakeUnknownFields(LCIMMessage *self) {
 // This block of code is generated, do not edit it directly.
 
     case GPBDataTypeFloat:
-      if (fieldType == GPBFieldTypeRepeated) {
+      if (fieldType == LCIMFieldTypeRepeated) {
         uint32_t tag = field.isPackable ? LCIMFieldTag(field) : 0;
         LCIMFloatArray *array =
             LCIMGetObjectIvarWithFieldNoAutocreate(self, field);
         [output writeFloatArray:fieldNumber values:array tag:tag];
-      } else if (fieldType == GPBFieldTypeSingle) {
+      } else if (fieldType == LCIMFieldTypeSingle) {
         [output writeFloat:fieldNumber
                      value:LCIMGetMessageFloatField(self, field)];
-      } else {  // fieldType == GPBFieldTypeMap
+      } else {  // fieldType == LCIMFieldTypeMap
         // Exact type here doesn't matter.
         LCIMInt32FloatDictionary *dict =
             LCIMGetObjectIvarWithFieldNoAutocreate(self, field);
@@ -1393,15 +1409,15 @@ static LCIMUnknownFieldSet *GetOrMakeUnknownFields(LCIMMessage *self) {
 // This block of code is generated, do not edit it directly.
 
     case GPBDataTypeFixed64:
-      if (fieldType == GPBFieldTypeRepeated) {
+      if (fieldType == LCIMFieldTypeRepeated) {
         uint32_t tag = field.isPackable ? LCIMFieldTag(field) : 0;
         LCIMUInt64Array *array =
             LCIMGetObjectIvarWithFieldNoAutocreate(self, field);
         [output writeFixed64Array:fieldNumber values:array tag:tag];
-      } else if (fieldType == GPBFieldTypeSingle) {
+      } else if (fieldType == LCIMFieldTypeSingle) {
         [output writeFixed64:fieldNumber
                        value:LCIMGetMessageUInt64Field(self, field)];
-      } else {  // fieldType == GPBFieldTypeMap
+      } else {  // fieldType == LCIMFieldTypeMap
         // Exact type here doesn't matter.
         LCIMInt32UInt64Dictionary *dict =
             LCIMGetObjectIvarWithFieldNoAutocreate(self, field);
@@ -1413,15 +1429,15 @@ static LCIMUnknownFieldSet *GetOrMakeUnknownFields(LCIMMessage *self) {
 // This block of code is generated, do not edit it directly.
 
     case GPBDataTypeSFixed64:
-      if (fieldType == GPBFieldTypeRepeated) {
+      if (fieldType == LCIMFieldTypeRepeated) {
         uint32_t tag = field.isPackable ? LCIMFieldTag(field) : 0;
         LCIMInt64Array *array =
             LCIMGetObjectIvarWithFieldNoAutocreate(self, field);
         [output writeSFixed64Array:fieldNumber values:array tag:tag];
-      } else if (fieldType == GPBFieldTypeSingle) {
+      } else if (fieldType == LCIMFieldTypeSingle) {
         [output writeSFixed64:fieldNumber
                         value:LCIMGetMessageInt64Field(self, field)];
-      } else {  // fieldType == GPBFieldTypeMap
+      } else {  // fieldType == LCIMFieldTypeMap
         // Exact type here doesn't matter.
         LCIMInt32Int64Dictionary *dict =
             LCIMGetObjectIvarWithFieldNoAutocreate(self, field);
@@ -1433,15 +1449,15 @@ static LCIMUnknownFieldSet *GetOrMakeUnknownFields(LCIMMessage *self) {
 // This block of code is generated, do not edit it directly.
 
     case GPBDataTypeDouble:
-      if (fieldType == GPBFieldTypeRepeated) {
+      if (fieldType == LCIMFieldTypeRepeated) {
         uint32_t tag = field.isPackable ? LCIMFieldTag(field) : 0;
         LCIMDoubleArray *array =
             LCIMGetObjectIvarWithFieldNoAutocreate(self, field);
         [output writeDoubleArray:fieldNumber values:array tag:tag];
-      } else if (fieldType == GPBFieldTypeSingle) {
+      } else if (fieldType == LCIMFieldTypeSingle) {
         [output writeDouble:fieldNumber
                       value:LCIMGetMessageDoubleField(self, field)];
-      } else {  // fieldType == GPBFieldTypeMap
+      } else {  // fieldType == LCIMFieldTypeMap
         // Exact type here doesn't matter.
         LCIMInt32DoubleDictionary *dict =
             LCIMGetObjectIvarWithFieldNoAutocreate(self, field);
@@ -1453,15 +1469,15 @@ static LCIMUnknownFieldSet *GetOrMakeUnknownFields(LCIMMessage *self) {
 // This block of code is generated, do not edit it directly.
 
     case GPBDataTypeInt32:
-      if (fieldType == GPBFieldTypeRepeated) {
+      if (fieldType == LCIMFieldTypeRepeated) {
         uint32_t tag = field.isPackable ? LCIMFieldTag(field) : 0;
         LCIMInt32Array *array =
             LCIMGetObjectIvarWithFieldNoAutocreate(self, field);
         [output writeInt32Array:fieldNumber values:array tag:tag];
-      } else if (fieldType == GPBFieldTypeSingle) {
+      } else if (fieldType == LCIMFieldTypeSingle) {
         [output writeInt32:fieldNumber
                      value:LCIMGetMessageInt32Field(self, field)];
-      } else {  // fieldType == GPBFieldTypeMap
+      } else {  // fieldType == LCIMFieldTypeMap
         // Exact type here doesn't matter.
         LCIMInt32Int32Dictionary *dict =
             LCIMGetObjectIvarWithFieldNoAutocreate(self, field);
@@ -1473,15 +1489,15 @@ static LCIMUnknownFieldSet *GetOrMakeUnknownFields(LCIMMessage *self) {
 // This block of code is generated, do not edit it directly.
 
     case GPBDataTypeInt64:
-      if (fieldType == GPBFieldTypeRepeated) {
+      if (fieldType == LCIMFieldTypeRepeated) {
         uint32_t tag = field.isPackable ? LCIMFieldTag(field) : 0;
         LCIMInt64Array *array =
             LCIMGetObjectIvarWithFieldNoAutocreate(self, field);
         [output writeInt64Array:fieldNumber values:array tag:tag];
-      } else if (fieldType == GPBFieldTypeSingle) {
+      } else if (fieldType == LCIMFieldTypeSingle) {
         [output writeInt64:fieldNumber
                      value:LCIMGetMessageInt64Field(self, field)];
-      } else {  // fieldType == GPBFieldTypeMap
+      } else {  // fieldType == LCIMFieldTypeMap
         // Exact type here doesn't matter.
         LCIMInt32Int64Dictionary *dict =
             LCIMGetObjectIvarWithFieldNoAutocreate(self, field);
@@ -1493,15 +1509,15 @@ static LCIMUnknownFieldSet *GetOrMakeUnknownFields(LCIMMessage *self) {
 // This block of code is generated, do not edit it directly.
 
     case GPBDataTypeSInt32:
-      if (fieldType == GPBFieldTypeRepeated) {
+      if (fieldType == LCIMFieldTypeRepeated) {
         uint32_t tag = field.isPackable ? LCIMFieldTag(field) : 0;
         LCIMInt32Array *array =
             LCIMGetObjectIvarWithFieldNoAutocreate(self, field);
         [output writeSInt32Array:fieldNumber values:array tag:tag];
-      } else if (fieldType == GPBFieldTypeSingle) {
+      } else if (fieldType == LCIMFieldTypeSingle) {
         [output writeSInt32:fieldNumber
                       value:LCIMGetMessageInt32Field(self, field)];
-      } else {  // fieldType == GPBFieldTypeMap
+      } else {  // fieldType == LCIMFieldTypeMap
         // Exact type here doesn't matter.
         LCIMInt32Int32Dictionary *dict =
             LCIMGetObjectIvarWithFieldNoAutocreate(self, field);
@@ -1513,15 +1529,15 @@ static LCIMUnknownFieldSet *GetOrMakeUnknownFields(LCIMMessage *self) {
 // This block of code is generated, do not edit it directly.
 
     case GPBDataTypeSInt64:
-      if (fieldType == GPBFieldTypeRepeated) {
+      if (fieldType == LCIMFieldTypeRepeated) {
         uint32_t tag = field.isPackable ? LCIMFieldTag(field) : 0;
         LCIMInt64Array *array =
             LCIMGetObjectIvarWithFieldNoAutocreate(self, field);
         [output writeSInt64Array:fieldNumber values:array tag:tag];
-      } else if (fieldType == GPBFieldTypeSingle) {
+      } else if (fieldType == LCIMFieldTypeSingle) {
         [output writeSInt64:fieldNumber
                       value:LCIMGetMessageInt64Field(self, field)];
-      } else {  // fieldType == GPBFieldTypeMap
+      } else {  // fieldType == LCIMFieldTypeMap
         // Exact type here doesn't matter.
         LCIMInt32Int64Dictionary *dict =
             LCIMGetObjectIvarWithFieldNoAutocreate(self, field);
@@ -1533,15 +1549,15 @@ static LCIMUnknownFieldSet *GetOrMakeUnknownFields(LCIMMessage *self) {
 // This block of code is generated, do not edit it directly.
 
     case GPBDataTypeUInt32:
-      if (fieldType == GPBFieldTypeRepeated) {
+      if (fieldType == LCIMFieldTypeRepeated) {
         uint32_t tag = field.isPackable ? LCIMFieldTag(field) : 0;
         LCIMUInt32Array *array =
             LCIMGetObjectIvarWithFieldNoAutocreate(self, field);
         [output writeUInt32Array:fieldNumber values:array tag:tag];
-      } else if (fieldType == GPBFieldTypeSingle) {
+      } else if (fieldType == LCIMFieldTypeSingle) {
         [output writeUInt32:fieldNumber
                       value:LCIMGetMessageUInt32Field(self, field)];
-      } else {  // fieldType == GPBFieldTypeMap
+      } else {  // fieldType == LCIMFieldTypeMap
         // Exact type here doesn't matter.
         LCIMInt32UInt32Dictionary *dict =
             LCIMGetObjectIvarWithFieldNoAutocreate(self, field);
@@ -1553,15 +1569,15 @@ static LCIMUnknownFieldSet *GetOrMakeUnknownFields(LCIMMessage *self) {
 // This block of code is generated, do not edit it directly.
 
     case GPBDataTypeUInt64:
-      if (fieldType == GPBFieldTypeRepeated) {
+      if (fieldType == LCIMFieldTypeRepeated) {
         uint32_t tag = field.isPackable ? LCIMFieldTag(field) : 0;
         LCIMUInt64Array *array =
             LCIMGetObjectIvarWithFieldNoAutocreate(self, field);
         [output writeUInt64Array:fieldNumber values:array tag:tag];
-      } else if (fieldType == GPBFieldTypeSingle) {
+      } else if (fieldType == LCIMFieldTypeSingle) {
         [output writeUInt64:fieldNumber
                       value:LCIMGetMessageUInt64Field(self, field)];
-      } else {  // fieldType == GPBFieldTypeMap
+      } else {  // fieldType == LCIMFieldTypeMap
         // Exact type here doesn't matter.
         LCIMInt32UInt64Dictionary *dict =
             LCIMGetObjectIvarWithFieldNoAutocreate(self, field);
@@ -1573,15 +1589,15 @@ static LCIMUnknownFieldSet *GetOrMakeUnknownFields(LCIMMessage *self) {
 // This block of code is generated, do not edit it directly.
 
     case GPBDataTypeEnum:
-      if (fieldType == GPBFieldTypeRepeated) {
+      if (fieldType == LCIMFieldTypeRepeated) {
         uint32_t tag = field.isPackable ? LCIMFieldTag(field) : 0;
         LCIMEnumArray *array =
             LCIMGetObjectIvarWithFieldNoAutocreate(self, field);
         [output writeEnumArray:fieldNumber values:array tag:tag];
-      } else if (fieldType == GPBFieldTypeSingle) {
+      } else if (fieldType == LCIMFieldTypeSingle) {
         [output writeEnum:fieldNumber
                     value:LCIMGetMessageInt32Field(self, field)];
-      } else {  // fieldType == GPBFieldTypeMap
+      } else {  // fieldType == LCIMFieldTypeMap
         // Exact type here doesn't matter.
         LCIMInt32EnumDictionary *dict =
             LCIMGetObjectIvarWithFieldNoAutocreate(self, field);
@@ -1593,15 +1609,15 @@ static LCIMUnknownFieldSet *GetOrMakeUnknownFields(LCIMMessage *self) {
 // This block of code is generated, do not edit it directly.
 
     case GPBDataTypeBytes:
-      if (fieldType == GPBFieldTypeRepeated) {
+      if (fieldType == LCIMFieldTypeRepeated) {
         NSArray *array = LCIMGetObjectIvarWithFieldNoAutocreate(self, field);
         [output writeBytesArray:fieldNumber values:array];
-      } else if (fieldType == GPBFieldTypeSingle) {
+      } else if (fieldType == LCIMFieldTypeSingle) {
         // LCIMGetObjectIvarWithFieldNoAutocreate() avoids doing the has check
         // again.
         [output writeBytes:fieldNumber
                      value:LCIMGetObjectIvarWithFieldNoAutocreate(self, field)];
-      } else {  // fieldType == GPBFieldTypeMap
+      } else {  // fieldType == LCIMFieldTypeMap
         // Exact type here doesn't matter.
         id dict = LCIMGetObjectIvarWithFieldNoAutocreate(self, field);
         GPBDataType mapKeyDataType = field.mapKeyDataType;
@@ -1617,15 +1633,15 @@ static LCIMUnknownFieldSet *GetOrMakeUnknownFields(LCIMMessage *self) {
 // This block of code is generated, do not edit it directly.
 
     case GPBDataTypeString:
-      if (fieldType == GPBFieldTypeRepeated) {
+      if (fieldType == LCIMFieldTypeRepeated) {
         NSArray *array = LCIMGetObjectIvarWithFieldNoAutocreate(self, field);
         [output writeStringArray:fieldNumber values:array];
-      } else if (fieldType == GPBFieldTypeSingle) {
+      } else if (fieldType == LCIMFieldTypeSingle) {
         // LCIMGetObjectIvarWithFieldNoAutocreate() avoids doing the has check
         // again.
         [output writeString:fieldNumber
                       value:LCIMGetObjectIvarWithFieldNoAutocreate(self, field)];
-      } else {  // fieldType == GPBFieldTypeMap
+      } else {  // fieldType == LCIMFieldTypeMap
         // Exact type here doesn't matter.
         id dict = LCIMGetObjectIvarWithFieldNoAutocreate(self, field);
         GPBDataType mapKeyDataType = field.mapKeyDataType;
@@ -1641,15 +1657,15 @@ static LCIMUnknownFieldSet *GetOrMakeUnknownFields(LCIMMessage *self) {
 // This block of code is generated, do not edit it directly.
 
     case GPBDataTypeMessage:
-      if (fieldType == GPBFieldTypeRepeated) {
+      if (fieldType == LCIMFieldTypeRepeated) {
         NSArray *array = LCIMGetObjectIvarWithFieldNoAutocreate(self, field);
         [output writeMessageArray:fieldNumber values:array];
-      } else if (fieldType == GPBFieldTypeSingle) {
+      } else if (fieldType == LCIMFieldTypeSingle) {
         // LCIMGetObjectIvarWithFieldNoAutocreate() avoids doing the has check
         // again.
         [output writeMessage:fieldNumber
                        value:LCIMGetObjectIvarWithFieldNoAutocreate(self, field)];
-      } else {  // fieldType == GPBFieldTypeMap
+      } else {  // fieldType == LCIMFieldTypeMap
         // Exact type here doesn't matter.
         id dict = LCIMGetObjectIvarWithFieldNoAutocreate(self, field);
         GPBDataType mapKeyDataType = field.mapKeyDataType;
@@ -1665,15 +1681,15 @@ static LCIMUnknownFieldSet *GetOrMakeUnknownFields(LCIMMessage *self) {
 // This block of code is generated, do not edit it directly.
 
     case GPBDataTypeGroup:
-      if (fieldType == GPBFieldTypeRepeated) {
+      if (fieldType == LCIMFieldTypeRepeated) {
         NSArray *array = LCIMGetObjectIvarWithFieldNoAutocreate(self, field);
         [output writeGroupArray:fieldNumber values:array];
-      } else if (fieldType == GPBFieldTypeSingle) {
+      } else if (fieldType == LCIMFieldTypeSingle) {
         // LCIMGetObjectIvarWithFieldNoAutocreate() avoids doing the has check
         // again.
         [output writeGroup:fieldNumber
                      value:LCIMGetObjectIvarWithFieldNoAutocreate(self, field)];
-      } else {  // fieldType == GPBFieldTypeMap
+      } else {  // fieldType == LCIMFieldTypeMap
         // Exact type here doesn't matter.
         id dict = LCIMGetObjectIvarWithFieldNoAutocreate(self, field);
         GPBDataType mapKeyDataType = field.mapKeyDataType;
@@ -1736,7 +1752,7 @@ static LCIMUnknownFieldSet *GetOrMakeUnknownFields(LCIMMessage *self) {
 }
 
 - (BOOL)hasExtension:(LCIMExtensionDescriptor *)extension {
-#if DEBUG
+#if defined(DEBUG) && DEBUG
   CheckExtension(self, extension);
 #endif  // DEBUG
   return nil != [extensionMap_ objectForKey:extension];
@@ -1759,11 +1775,6 @@ static LCIMUnknownFieldSet *GetOrMakeUnknownFields(LCIMMessage *self) {
       LCIMWriteExtensionValueToOutputStream(extension, value, output);
     }
   }
-}
-
-- (NSArray *)sortedExtensionsInUse {
-  return [[extensionMap_ allKeys]
-      sortedArrayUsingSelector:@selector(compareByFieldNumber:)];
 }
 
 - (void)setExtension:(LCIMExtensionDescriptor *)extension value:(id)value {
@@ -1870,7 +1881,7 @@ static LCIMUnknownFieldSet *GetOrMakeUnknownFields(LCIMMessage *self) {
 
 - (void)mergeDelimitedFromCodedInputStream:(LCIMCodedInputStream *)input
                          extensionRegistry:(LCIMExtensionRegistry *)extensionRegistry {
-  GPBCodedInputStreamState *state = &input->state_;
+  LCIMCodedInputStreamState *state = &input->state_;
   if (LCIMCodedInputStreamIsAtEnd(state)) {
     return;
   }
@@ -1922,8 +1933,7 @@ static LCIMUnknownFieldSet *GetOrMakeUnknownFields(LCIMMessage *self) {
   @catch (NSException *exception) {
     message = nil;
     if (errorPtr) {
-      *errorPtr = MessageErrorWithReason(LCIMMessageErrorCodeMalformedData,
-                                         exception.reason);
+      *errorPtr = ErrorFromException(exception);
     }
   }
 #ifdef DEBUG
@@ -1956,20 +1966,20 @@ static LCIMUnknownFieldSet *GetOrMakeUnknownFields(LCIMMessage *self) {
   uint32_t typeId = 0;
   NSData *rawBytes = nil;
   LCIMExtensionDescriptor *extension = nil;
-  GPBCodedInputStreamState *state = &input->state_;
+  LCIMCodedInputStreamState *state = &input->state_;
   while (true) {
     uint32_t tag = LCIMCodedInputStreamReadTag(state);
     if (tag == 0) {
       break;
     }
 
-    if (tag == GPBWireFormatMessageSetTypeIdTag) {
+    if (tag == LCIMWireFormatMessageSetTypeIdTag) {
       typeId = LCIMCodedInputStreamReadUInt32(state);
       if (typeId != 0) {
         extension = [extensionRegistry extensionForDescriptor:[self descriptor]
                                                   fieldNumber:typeId];
       }
-    } else if (tag == GPBWireFormatMessageSetMessageTag) {
+    } else if (tag == LCIMWireFormatMessageSetMessageTag) {
       rawBytes =
           [LCIMCodedInputStreamReadRetainedBytesNoCopy(state) autorelease];
     } else {
@@ -1979,7 +1989,7 @@ static LCIMUnknownFieldSet *GetOrMakeUnknownFields(LCIMMessage *self) {
     }
   }
 
-  [input checkLastTagWas:GPBWireFormatMessageSetItemEndTag];
+  [input checkLastTagWas:LCIMWireFormatMessageSetItemEndTag];
 
   if (rawBytes != nil && typeId != 0) {
     if (extension != nil) {
@@ -2001,15 +2011,15 @@ static LCIMUnknownFieldSet *GetOrMakeUnknownFields(LCIMMessage *self) {
 - (BOOL)parseUnknownField:(LCIMCodedInputStream *)input
         extensionRegistry:(LCIMExtensionRegistry *)extensionRegistry
                       tag:(uint32_t)tag {
-  GPBWireFormat wireType = GPBWireFormatGetTagWireType(tag);
-  int32_t fieldNumber = GPBWireFormatGetTagFieldNumber(tag);
+  LCIMWireFormat wireType = LCIMWireFormatGetTagWireType(tag);
+  int32_t fieldNumber = LCIMWireFormatGetTagFieldNumber(tag);
 
   LCIMDescriptor *descriptor = [self descriptor];
   LCIMExtensionDescriptor *extension =
       [extensionRegistry extensionForDescriptor:descriptor
                                     fieldNumber:fieldNumber];
   if (extension == nil) {
-    if (descriptor.wireFormat && GPBWireFormatMessageSetItemTag == tag) {
+    if (descriptor.wireFormat && LCIMWireFormatMessageSetItemTag == tag) {
       [self parseMessageSet:input extensionRegistry:extensionRegistry];
       return YES;
     }
@@ -2136,7 +2146,7 @@ static void MergeRepeatedPackedFieldFromCodedInputStream(
     LCIMMessage *self, LCIMFieldDescriptor *field, GPBFileSyntax syntax,
     LCIMCodedInputStream *input) {
   GPBDataType fieldDataType = LCIMGetFieldDataType(field);
-  GPBCodedInputStreamState *state = &input->state_;
+  LCIMCodedInputStreamState *state = &input->state_;
   id genericArray = GetOrCreateArrayIvarWithField(self, field, syntax);
   int32_t length = LCIMCodedInputStreamReadInt32(state);
   size_t limit = LCIMCodedInputStreamPushLimit(state, length);
@@ -2189,7 +2199,7 @@ static void MergeRepeatedPackedFieldFromCodedInputStream(
 static void MergeRepeatedNotPackedFieldFromCodedInputStream(
     LCIMMessage *self, LCIMFieldDescriptor *field, GPBFileSyntax syntax,
     LCIMCodedInputStream *input, LCIMExtensionRegistry *extensionRegistry) {
-  GPBCodedInputStreamState *state = &input->state_;
+  LCIMCodedInputStreamState *state = &input->state_;
   id genericArray = GetOrCreateArrayIvarWithField(self, field, syntax);
   switch (LCIMGetFieldDataType(field)) {
 #define CASE_REPEATED_NOT_PACKED_POD(NAME, TYPE, ARRAY_TYPE) \
@@ -2256,7 +2266,7 @@ static void MergeRepeatedNotPackedFieldFromCodedInputStream(
                 extensionRegistry:(LCIMExtensionRegistry *)extensionRegistry {
   LCIMDescriptor *descriptor = [self descriptor];
   GPBFileSyntax syntax = descriptor.file.syntax;
-  GPBCodedInputStreamState *state = &input->state_;
+  LCIMCodedInputStreamState *state = &input->state_;
   uint32_t tag = 0;
   NSUInteger startingIndex = 0;
   NSArray *fields = descriptor->fields_;
@@ -2264,18 +2274,21 @@ static void MergeRepeatedNotPackedFieldFromCodedInputStream(
   while (YES) {
     BOOL merged = NO;
     tag = LCIMCodedInputStreamReadTag(state);
+    if (tag == 0) {
+      break;  // Reached end.
+    }
     for (NSUInteger i = 0; i < numFields; ++i) {
       if (startingIndex >= numFields) startingIndex = 0;
       LCIMFieldDescriptor *fieldDescriptor = fields[startingIndex];
       if (LCIMFieldTag(fieldDescriptor) == tag) {
-        GPBFieldType fieldType = fieldDescriptor.fieldType;
-        if (fieldType == GPBFieldTypeSingle) {
+        LCIMFieldType fieldType = fieldDescriptor.fieldType;
+        if (fieldType == LCIMFieldTypeSingle) {
           MergeSingleFieldFromCodedInputStream(self, fieldDescriptor, syntax,
                                                input, extensionRegistry);
           // Well formed protos will only have a single field once, advance
           // the starting index to the next field.
           startingIndex += 1;
-        } else if (fieldType == GPBFieldTypeRepeated) {
+        } else if (fieldType == LCIMFieldTypeRepeated) {
           if (fieldDescriptor.isPackable) {
             MergeRepeatedPackedFieldFromCodedInputStream(
                 self, fieldDescriptor, syntax, input);
@@ -2286,7 +2299,7 @@ static void MergeRepeatedNotPackedFieldFromCodedInputStream(
             MergeRepeatedNotPackedFieldFromCodedInputStream(
                 self, fieldDescriptor, syntax, input, extensionRegistry);
           }
-        } else {  // fieldType == GPBFieldTypeMap
+        } else {  // fieldType == LCIMFieldTypeMap
           // GPB*Dictionary or NSDictionary, exact type doesn't matter at this
           // point.
           id map = GetOrCreateMapIvarWithField(self, fieldDescriptor, syntax);
@@ -2302,14 +2315,14 @@ static void MergeRepeatedNotPackedFieldFromCodedInputStream(
       }
     }  // for(i < numFields)
 
-    if (!merged) {
+    if (!merged && (tag != 0)) {
       // Primitive, repeated types can be packed on unpacked on the wire, and
       // are parsed either way.  The above loop covered tag in the preferred
       // for, so this need to check the alternate form.
       for (NSUInteger i = 0; i < numFields; ++i) {
         if (startingIndex >= numFields) startingIndex = 0;
         LCIMFieldDescriptor *fieldDescriptor = fields[startingIndex];
-        if ((fieldDescriptor.fieldType == GPBFieldTypeRepeated) &&
+        if ((fieldDescriptor.fieldType == LCIMFieldTypeRepeated) &&
             !LCIMFieldDataTypeIsObject(fieldDescriptor) &&
             (LCIMFieldAlternateTag(fieldDescriptor) == tag)) {
           BOOL alternateIsPacked = !fieldDescriptor.isPackable;
@@ -2372,8 +2385,8 @@ static void MergeRepeatedNotPackedFieldFromCodedInputStream(
   GPBFileSyntax syntax = descriptor.file.syntax;
 
   for (LCIMFieldDescriptor *field in descriptor->fields_) {
-    GPBFieldType fieldType = field.fieldType;
-    if (fieldType == GPBFieldTypeSingle) {
+    LCIMFieldType fieldType = field.fieldType;
+    if (fieldType == LCIMFieldTypeSingle) {
       int32_t hasIndex = LCIMFieldHasIndex(field);
       uint32_t fieldNumber = LCIMFieldNumber(field);
       if (!LCIMGetHasIvar(other, hasIndex, fieldNumber)) {
@@ -2438,7 +2451,7 @@ static void MergeRepeatedNotPackedFieldFromCodedInputStream(
           break;
         }
       } // switch()
-    } else if (fieldType == GPBFieldTypeRepeated) {
+    } else if (fieldType == LCIMFieldTypeRepeated) {
       // In the case of a list, they need to be appended, and there is no
       // _hasIvar to worry about setting.
       id otherArray =
@@ -2461,7 +2474,7 @@ static void MergeRepeatedNotPackedFieldFromCodedInputStream(
           [resultArray addValuesFromArray:otherArray];
         }
       }
-    } else {  // fieldType = GPBFieldTypeMap
+    } else {  // fieldType = LCIMFieldTypeMap
       // In the case of a map, they need to be merged, and there is no
       // _hasIvar to worry about setting.
       id otherDict = LCIMGetObjectIvarWithFieldNoAutocreate(other, field);
@@ -2557,7 +2570,7 @@ static void MergeRepeatedNotPackedFieldFromCodedInputStream(
 
 #pragma mark - isEqual: & hash Support
 
-- (BOOL)isEqual:(LCIMMessage *)other {
+- (BOOL)isEqual:(id)other {
   if (other == self) {
     return YES;
   }
@@ -2566,9 +2579,10 @@ static void MergeRepeatedNotPackedFieldFromCodedInputStream(
     return NO;
   }
 
+  LCIMMessage *otherMsg = other;
   LCIMDescriptor *descriptor = [[self class] descriptor];
   uint8_t *selfStorage = (uint8_t *)messageStorage_;
-  uint8_t *otherStorage = (uint8_t *)other->messageStorage_;
+  uint8_t *otherStorage = (uint8_t *)otherMsg->messageStorage_;
 
   for (LCIMFieldDescriptor *field in descriptor->fields_) {
     if (LCIMFieldIsMapOrArray(field)) {
@@ -2621,7 +2635,7 @@ static void MergeRepeatedNotPackedFieldFromCodedInputStream(
         case GPBDataTypeFixed32:
         case GPBDataTypeUInt32:
         case GPBDataTypeFloat: {
-          _GPBCompileAssert(sizeof(float) == sizeof(uint32_t), float_not_32_bits);
+          LCIMInternalCompileAssert(sizeof(float) == sizeof(uint32_t), float_not_32_bits);
           // These are all 32bit, signed/unsigned doesn't matter for equality.
           uint32_t *selfValPtr = (uint32_t *)&selfStorage[fieldOffset];
           uint32_t *otherValPtr = (uint32_t *)&otherStorage[fieldOffset];
@@ -2636,7 +2650,7 @@ static void MergeRepeatedNotPackedFieldFromCodedInputStream(
         case GPBDataTypeFixed64:
         case GPBDataTypeUInt64:
         case GPBDataTypeDouble: {
-          _GPBCompileAssert(sizeof(double) == sizeof(uint64_t), double_not_64_bits);
+          LCIMInternalCompileAssert(sizeof(double) == sizeof(uint64_t), double_not_64_bits);
           // These are all 64bit, signed/unsigned doesn't matter for equality.
           uint64_t *selfValPtr = (uint64_t *)&selfStorage[fieldOffset];
           uint64_t *otherValPtr = (uint64_t *)&otherStorage[fieldOffset];
@@ -2662,14 +2676,14 @@ static void MergeRepeatedNotPackedFieldFromCodedInputStream(
   }  // for(fields)
 
   // nil and empty are equal
-  if (extensionMap_.count != 0 || other->extensionMap_.count != 0) {
-    if (![extensionMap_ isEqual:other->extensionMap_]) {
+  if (extensionMap_.count != 0 || otherMsg->extensionMap_.count != 0) {
+    if (![extensionMap_ isEqual:otherMsg->extensionMap_]) {
       return NO;
     }
   }
 
   // nil and empty are equal
-  LCIMUnknownFieldSet *otherUnknowns = other->unknownFields_;
+  LCIMUnknownFieldSet *otherUnknowns = otherMsg->unknownFields_;
   if ([unknownFields_ countOfFields] != 0 ||
       [otherUnknowns countOfFields] != 0) {
     if (![unknownFields_ isEqual:otherUnknowns]) {
@@ -2733,7 +2747,7 @@ static void MergeRepeatedNotPackedFieldFromCodedInputStream(
         case GPBDataTypeFixed32:
         case GPBDataTypeUInt32:
         case GPBDataTypeFloat: {
-          _GPBCompileAssert(sizeof(float) == sizeof(uint32_t), float_not_32_bits);
+          LCIMInternalCompileAssert(sizeof(float) == sizeof(uint32_t), float_not_32_bits);
           // These are all 32bit, just mix it in.
           uint32_t *valPtr = (uint32_t *)&storage[fieldOffset];
           result = prime * result + *valPtr;
@@ -2745,7 +2759,7 @@ static void MergeRepeatedNotPackedFieldFromCodedInputStream(
         case GPBDataTypeFixed64:
         case GPBDataTypeUInt64:
         case GPBDataTypeDouble: {
-          _GPBCompileAssert(sizeof(double) == sizeof(uint64_t), double_not_64_bits);
+          LCIMInternalCompileAssert(sizeof(double) == sizeof(uint64_t), double_not_64_bits);
           // These are all 64bit, just mix what fits into an NSUInteger in.
           uint64_t *valPtr = (uint64_t *)&storage[fieldOffset];
           result = prime * result + (NSUInteger)(*valPtr);
@@ -2792,7 +2806,7 @@ static void MergeRepeatedNotPackedFieldFromCodedInputStream(
   return description;
 }
 
-#if DEBUG
+#if defined(DEBUG) && DEBUG
 
 // Xcode 5.1 added support for custom quick look info.
 // https://developer.apple.com/library/ios/documentation/IDEs/Conceptual/CustomClassDisplay_in_QuickLook/CH01-quick_look_for_custom_objects/CH01-quick_look_for_custom_objects.html#//apple_ref/doc/uid/TP40014001-CH2-SW1
@@ -2813,11 +2827,11 @@ static void MergeRepeatedNotPackedFieldFromCodedInputStream(
 
   // Fields.
   for (LCIMFieldDescriptor *fieldDescriptor in descriptor->fields_) {
-    GPBFieldType fieldType = fieldDescriptor.fieldType;
+    LCIMFieldType fieldType = fieldDescriptor.fieldType;
     GPBDataType fieldDataType = LCIMGetFieldDataType(fieldDescriptor);
 
     // Single Fields
-    if (fieldType == GPBFieldTypeSingle) {
+    if (fieldType == LCIMFieldTypeSingle) {
       BOOL selfHas = LCIMGetHasIvarField(self, fieldDescriptor);
       if (!selfHas) {
         continue;  // Nothing to do.
@@ -2861,7 +2875,7 @@ static void MergeRepeatedNotPackedFieldFromCodedInputStream(
       }
 
     // Repeated Fields
-    } else if (fieldType == GPBFieldTypeRepeated) {
+    } else if (fieldType == LCIMFieldTypeRepeated) {
       id genericArray =
           LCIMGetObjectIvarWithFieldNoAutocreate(self, fieldDescriptor);
       NSUInteger count = [genericArray count];
@@ -2925,7 +2939,7 @@ static void MergeRepeatedNotPackedFieldFromCodedInputStream(
       }
 
     // Map<> Fields
-    } else {  // fieldType == GPBFieldTypeMap
+    } else {  // fieldType == LCIMFieldTypeMap
       if (LCIMDataTypeIsObject(fieldDataType) &&
           (fieldDescriptor.mapKeyDataType == GPBDataTypeString)) {
         // If key type was string, then the map is an NSDictionary.
@@ -3098,7 +3112,7 @@ static void ResolveIvarSet(LCIMFieldDescriptor *field,
     } else {
       // map<>/repeated fields.
       if (sel == field->getSel_) {
-        if (field.fieldType == GPBFieldTypeRepeated) {
+        if (field.fieldType == LCIMFieldTypeRepeated) {
           result.impToAdd = imp_implementationWithBlock(^(id obj) {
             return GetArrayIvarWithField(obj, field);
           });
@@ -3182,3 +3196,35 @@ static void ResolveIvarSet(LCIMFieldDescriptor *field,
 }
 
 @end
+
+#pragma mark - Messages from LCIMUtilities.h but defined here for access to helpers.
+
+// Only exists for public api, no core code should use this.
+id LCIMGetMessageRepeatedField(LCIMMessage *self, LCIMFieldDescriptor *field) {
+#if defined(DEBUG) && DEBUG
+  if (field.fieldType != LCIMFieldTypeRepeated) {
+    [NSException raise:NSInvalidArgumentException
+                format:@"%@.%@ is not a repeated field.",
+     [self class], field.name];
+  }
+#endif
+  LCIMDescriptor *descriptor = [[self class] descriptor];
+  GPBFileSyntax syntax = descriptor.file.syntax;
+  return GetOrCreateArrayIvarWithField(self, field, syntax);
+}
+
+// Only exists for public api, no core code should use this.
+id LCIMGetMessageMapField(LCIMMessage *self, LCIMFieldDescriptor *field) {
+#if defined(DEBUG) && DEBUG
+  if (field.fieldType != LCIMFieldTypeMap) {
+    [NSException raise:NSInvalidArgumentException
+                format:@"%@.%@ is not a map<> field.",
+     [self class], field.name];
+  }
+#endif
+  LCIMDescriptor *descriptor = [[self class] descriptor];
+  GPBFileSyntax syntax = descriptor.file.syntax;
+  return GetOrCreateMapIvarWithField(self, field, syntax);
+}
+
+#pragma clang diagnostic pop

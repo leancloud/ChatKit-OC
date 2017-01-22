@@ -447,6 +447,7 @@ static uint16_t _searial_id = 0;
     NSDictionary *json = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:NULL];
     [command setObject:[NSMutableDictionary dictionaryWithDictionary:json] forKey:@"where"];
     [command setObject:self.convMessage.sort forKey:@"sort"];
+    [command setObject:@(self.convMessage.flag) forKey:@"option"];
     
     if (self.convMessage.hasSkip) {
         [command setObject:@(self.convMessage.skip) forKey:@"skip"];

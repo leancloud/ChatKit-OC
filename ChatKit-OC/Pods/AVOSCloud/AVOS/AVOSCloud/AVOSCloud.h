@@ -286,6 +286,12 @@ NS_ASSUME_NONNULL_BEGIN
 + (nullable NSDate *)getServerDate:(NSError **)error;
 
 /*!
+ An alias of `+[AVOSCloud getServerDate:]` methods that supports Swift exception.
+ @seealso `+[AVPush getServerDate:]`
+ */
++ (nullable NSDate *)getServerDateAndThrowsWithError:(NSError **)error;
+
+/*!
  * 异步地获取服务端时间。
  * @param block 回调结果。
  */

@@ -65,7 +65,7 @@ NS_ASSUME_NONNULL_BEGIN
  @param attachedFilePath － 本地文件路径。
  @param attributes － 用户附加属性。
  */
-+ (instancetype)messageWithText:(NSString *)text
++ (instancetype)messageWithText:(nullable NSString *)text
                attachedFilePath:(NSString *)attachedFilePath
                      attributes:(nullable NSDictionary *)attributes;
 
@@ -75,7 +75,7 @@ NS_ASSUME_NONNULL_BEGIN
  @param file － AVFile 对象。
  @param attributes － 用户附加属性。
  */
-+ (instancetype)messageWithText:(NSString *)text
++ (instancetype)messageWithText:(nullable NSString *)text
                            file:(AVFile *)file
                      attributes:(nullable NSDictionary *)attributes;
 

@@ -20,6 +20,7 @@
 #define LCIM_FIELD_CREATE_AT            @"create_at"
 #define LCIM_FIELD_UPDATE_AT            @"update_at"
 #define LCIM_FIELD_LAST_MESSAGE_AT      @"last_message_at"
+#define LCIM_FIELD_LAST_MESSAGE         @"last_message"
 #define LCIM_FIELD_MUTED                @"muted"
 #define LCIM_FIELD_EXPIRE_AT            @"expire_at"
 
@@ -49,9 +50,10 @@
         LCIM_FIELD_CREATE_AT            @", "                  \
         LCIM_FIELD_UPDATE_AT            @", "                  \
         LCIM_FIELD_LAST_MESSAGE_AT      @", "                  \
+        LCIM_FIELD_LAST_MESSAGE         @", " /* Version 2 */  \
         LCIM_FIELD_MUTED                @", " /* Version 1 */  \
         LCIM_FIELD_EXPIRE_AT                                   \
-    @") VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
+    @") VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
 
 #define LCIM_SQL_DELETE_CONVERSATION              \
     @"DELETE FROM " LCIM_TABLE_CONVERSATION @" "  \

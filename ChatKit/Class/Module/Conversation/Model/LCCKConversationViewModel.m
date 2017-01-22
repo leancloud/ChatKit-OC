@@ -39,6 +39,7 @@
 #import "NSMutableArray+LCCKMessageExtention.h"
 #import "LCCKAlertController.h"
 #import "NSObject+LCCKExtension.h"
+#import "AVIMMessage+LCCKExtension.h"
 
 #if __has_include(<CYLDeallocBlockExecutor/CYLDeallocBlockExecutor.h>)
 #import <CYLDeallocBlockExecutor/CYLDeallocBlockExecutor.h>
@@ -69,6 +70,8 @@
         self.parentConversationViewController = parentConversationViewController;
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveMessage:) name:LCCKNotificationMessageReceived object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(conversationInvalided:) name:LCCKNotificationCurrentConversationInvalided object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(messageStatusChanged:) name:LCCKNotificationMessageRead object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(messageStatusChanged:) name:LCCKNotificationMessageDelivered object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(backgroundImageChanged:) name:LCCKNotificationConversationViewControllerBackgroundImageDidChanged object:nil];
         __unsafe_unretained __typeof(self) weakSelf = self;
         [self cyl_executeAtDealloc:^{
@@ -111,9 +114,9 @@
     if (!userInfo) {
         return;
     }
-    __block NSArray<AVIMTypedMessage *> *messages = userInfo[LCCKDidReceiveMessagesUserInfoMessagesKey];
-    AVIMConversation *conversation = userInfo[LCCKDidReceiveMessagesUserInfoConversationKey];
-    BOOL isCurrentConversationMessage = [conversation.conversationId isEqualToString:self.parentConversationViewController.conversationId];
+    NSArray<AVIMTypedMessage *> *messages = userInfo[LCCKDidReceiveMessagesUserInfoMessagesKey];
+    AVIMConversation *conversation = userInfo[LCCKMessageNotifacationUserInfoConversationKey];
+    BOOL isCurrentConversationMessage = [self isCurrentConversationMessageForConversationId:conversation.conversationId];
     if (!isCurrentConversationMessage) {
         return;
     }
@@ -129,14 +132,32 @@
     });
 }
 
+- (void)messageStatusChanged:(NSNotification *)notification {
+    NSDictionary *userInfo = notification.object;
+    if (!userInfo) {
+        return;
+    }
+    AVIMConversation *conversation = userInfo[LCCKMessageNotifacationUserInfoConversationKey];
+    BOOL isCurrentConversationMessage = [self isCurrentConversationMessageForConversationId:conversation.conversationId];
+    if (!isCurrentConversationMessage) {
+        return;
+    }
+    AVIMMessage *message = userInfo[LCCKMessageNotifacationUserInfoMessageKey];
+//    int64_t readTimestamp = message.readTimestamp;
+//    int64_t deliveredTimestamp = message.deliveredTimestamp;
+//    BOOL isReadMessage = (readTimestamp > 0);
+//    BOOL isDeliveredMessage = (deliveredTimestamp > 0);
+    //TODO:
+    
+}
+
 - (void)backgroundImageChanged:(NSNotification *)notification {
     NSDictionary *userInfo = notification.object;
     if (!userInfo) {
         return;
     }
     NSString *userInfoConversationId = userInfo[LCCKNotificationConversationViewControllerBackgroundImageDidChangedUserInfoConversationIdKey];
-    NSString *conversationId = self.parentConversationViewController.conversationId;
-    BOOL isCurrentConversationMessage = [userInfoConversationId isEqualToString:conversationId];
+    BOOL isCurrentConversationMessage = [self isCurrentConversationMessageForConversationId:userInfoConversationId];
     if (!isCurrentConversationMessage) {
         return;
     }
@@ -587,6 +608,14 @@ fromTimestamp     |    toDate   |                |  上次上拉刷新顶端，�
 
 #pragma mark - Getters
 
+- (BOOL)isCurrentConversationMessageForConversationId:(NSString *)conversationId {
+    BOOL isCurrentConversationMessage = [conversationId isEqualToString:self.parentConversationViewController.conversationId];
+    if (isCurrentConversationMessage) {
+        return YES;
+    }
+    return NO;
+}
+
 - (NSUInteger)messageCount {
     return self.dataArray.count;
 }
@@ -614,7 +643,7 @@ fromTimestamp     |    toDate   |                |  上次上拉刷新顶端，�
                     self.parentConversationViewController.loadingMoreMessage = NO;
                 });
                 if (self.avimTypedMessage.count > 0) {
-                    [[LCCKConversationService sharedInstance] updateConversationAsRead];
+                    [[LCCKConversationService sharedInstance] updateConversationAsReadWithLastMessage:avimTypedMessages.lastObject];
                 }
             } else {
                 self.parentConversationViewController.loadingMoreMessage = NO;

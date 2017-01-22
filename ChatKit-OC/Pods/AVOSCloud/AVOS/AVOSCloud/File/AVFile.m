@@ -158,6 +158,10 @@ static NSMutableDictionary *downloadingMap = nil;
     return theResult;
 }
 
+- (BOOL)saveAndThrowsWithError:(NSError * _Nullable __autoreleasing *)error {
+    return [self save:error];
+}
+
 - (void)saveInBackground
 {
     [self saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {

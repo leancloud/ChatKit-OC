@@ -47,30 +47,30 @@
 // This CPP symbol can be defined to use imports that match up to the framework
 // imports needed when using CocoaPods.
 #if !defined(LCIM_USE_PROTOBUF_FRAMEWORK_IMPORTS)
-#define LCIM_USE_PROTOBUF_FRAMEWORK_IMPORTS 0
+ #define LCIM_USE_PROTOBUF_FRAMEWORK_IMPORTS 0
 #endif
 
 // Well-known proto types
 #if LCIM_USE_PROTOBUF_FRAMEWORK_IMPORTS
-#import <Protobuf/LCIMAny.pbobjc.h>
-#import <Protobuf/LCIMApi.pbobjc.h>
-#import <Protobuf/LCIMDuration.pbobjc.h>
-#import <Protobuf/LCIMEmpty.pbobjc.h>
-#import <Protobuf/LCIMFieldMask.pbobjc.h>
-#import <Protobuf/LCIMSourceContext.pbobjc.h>
-#import <Protobuf/LCIMStruct.pbobjc.h>
-#import <Protobuf/LCIMTimestamp.pbobjc.h>
-#import <Protobuf/LCIMType.pbobjc.h>
-#import <Protobuf/LCIMWrappers.pbobjc.h>
+ #import <Protobuf/LCIMAny.pbobjc.h>
+ #import <Protobuf/LCIMApi.pbobjc.h>
+ #import <Protobuf/LCIMDuration.pbobjc.h>
+ #import <Protobuf/LCIMEmpty.pbobjc.h>
+ #import <Protobuf/LCIMFieldMask.pbobjc.h>
+ #import <Protobuf/LCIMSourceContext.pbobjc.h>
+ #import <Protobuf/LCIMStruct.pbobjc.h>
+ #import <Protobuf/LCIMTimestamp.pbobjc.h>
+ #import <Protobuf/LCIMType.pbobjc.h>
+ #import <Protobuf/LCIMWrappers.pbobjc.h>
 #else
-#import "google/protobuf/LCIMAny.pbobjc.h"
-#import "google/protobuf/LCIMApi.pbobjc.h"
-#import "google/protobuf/LCIMDuration.pbobjc.h"
-#import "google/protobuf/LCIMEmpty.pbobjc.h"
-#import "google/protobuf/LCIMFieldMask.pbobjc.h"
-#import "google/protobuf/LCIMSourceContext.pbobjc.h"
-#import "google/protobuf/LCIMStruct.pbobjc.h"
-#import "google/protobuf/LCIMTimestamp.pbobjc.h"
-#import "google/protobuf/LCIMType.pbobjc.h"
-#import "google/protobuf/LCIMWrappers.pbobjc.h"
+ #import "google/protobuf/LCIMAny.pbobjc.h"
+ #import "google/protobuf/LCIMApi.pbobjc.h"
+ #import "google/protobuf/LCIMDuration.pbobjc.h"
+ #import "google/protobuf/LCIMEmpty.pbobjc.h"
+ #import "google/protobuf/LCIMFieldMask.pbobjc.h"
+ #import "google/protobuf/LCIMSourceContext.pbobjc.h"
+ #import "google/protobuf/LCIMStruct.pbobjc.h"
+ #import "google/protobuf/LCIMTimestamp.pbobjc.h"
+ #import "google/protobuf/LCIMType.pbobjc.h"
+ #import "google/protobuf/LCIMWrappers.pbobjc.h"
 #endif

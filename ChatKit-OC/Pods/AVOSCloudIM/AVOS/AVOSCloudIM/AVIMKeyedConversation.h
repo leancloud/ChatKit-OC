@@ -10,6 +10,7 @@
 
 @class AVIMClient;
 @class AVIMConversation;
+@class AVIMMessage;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -23,6 +24,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong, readonly, nullable) NSDate       *createAt;       // 创建时间
 @property (nonatomic, strong, readonly, nullable) NSDate       *updateAt;       // 最后更新时间
 @property (nonatomic, strong, readonly, nullable) NSDate       *lastMessageAt;  // 对话中最后一条消息的发送时间
+@property (nonatomic, strong, readonly, nullable) AVIMMessage  *lastMessage;  // 对话中最后一条消息的发送时间
 @property (nonatomic, copy,   readonly, nullable) NSString     *name;           // 对话名字
 @property (nonatomic, strong, readonly, nullable) NSArray      *members;        // 对话参与者列表
 @property (nonatomic, strong, readonly, nullable) NSDictionary *attributes;     // 自定义属性

@@ -36,7 +36,7 @@ static LCIMFileDescriptor *LCIMWrappersRoot_FileDescriptor(void) {
   // about thread safety of the singleton.
   static LCIMFileDescriptor *descriptor = NULL;
   if (!descriptor) {
-    GPBDebugCheckRuntimeVersion();
+    LCIM_DEBUG_CHECK_RUNTIME_VERSIONS();
     descriptor = [[LCIMFileDescriptor alloc] initWithPackage:@"google.protobuf"
                                                      syntax:GPBFileSyntaxProto3];
   }
@@ -66,7 +66,7 @@ typedef struct LCIMDoubleValue__storage_ {
         .number = LCIMDoubleValue_FieldNumber_Value,
         .hasIndex = 0,
         .offset = (uint32_t)offsetof(LCIMDoubleValue__storage_, value),
-        .flags = GPBFieldOptional,
+        .flags = LCIMFieldOptional,
         .dataType = GPBDataTypeDouble,
       },
     };
@@ -109,7 +109,7 @@ typedef struct LCIMFloatValue__storage_ {
         .number = LCIMFloatValue_FieldNumber_Value,
         .hasIndex = 0,
         .offset = (uint32_t)offsetof(LCIMFloatValue__storage_, value),
-        .flags = GPBFieldOptional,
+        .flags = LCIMFieldOptional,
         .dataType = GPBDataTypeFloat,
       },
     };
@@ -149,10 +149,10 @@ typedef struct LCIMInt64Value__storage_ {
       {
         .name = "value",
         .dataTypeSpecific.className = NULL,
-        .number = GPBInt64Value_FieldNumber_Value,
+        .number = LCIMFloatValue_FieldNumber_Value,
         .hasIndex = 0,
         .offset = (uint32_t)offsetof(LCIMInt64Value__storage_, value),
-        .flags = GPBFieldOptional,
+        .flags = LCIMFieldOptional,
         .dataType = GPBDataTypeInt64,
       },
     };
@@ -192,10 +192,10 @@ typedef struct LCIMUInt64Value__storage_ {
       {
         .name = "value",
         .dataTypeSpecific.className = NULL,
-        .number = GPBUInt64Value_FieldNumber_Value,
+        .number = LCIMUInt64Value_FieldNumber_Value,
         .hasIndex = 0,
         .offset = (uint32_t)offsetof(LCIMInt64Value__storage_, value),
-        .flags = GPBFieldOptional,
+        .flags = LCIMFieldOptional,
         .dataType = GPBDataTypeUInt64,
       },
     };
@@ -235,10 +235,10 @@ typedef struct LCIMInt32Value__storage_ {
       {
         .name = "value",
         .dataTypeSpecific.className = NULL,
-        .number = GPBInt32Value_FieldNumber_Value,
+        .number = LCIMInt32Value_FieldNumber_Value,
         .hasIndex = 0,
         .offset = (uint32_t)offsetof(LCIMInt32Value__storage_, value),
-        .flags = GPBFieldOptional,
+        .flags = LCIMFieldOptional,
         .dataType = GPBDataTypeInt32,
       },
     };
@@ -278,10 +278,10 @@ typedef struct LCIMUInt32Value__storage_ {
       {
         .name = "value",
         .dataTypeSpecific.className = NULL,
-        .number = GPBUInt32Value_FieldNumber_Value,
+        .number = LCIMUInt32Value_FieldNumber_Value,
         .hasIndex = 0,
         .offset = (uint32_t)offsetof(LCIMUInt32Value__storage_, value),
-        .flags = GPBFieldOptional,
+        .flags = LCIMFieldOptional,
         .dataType = GPBDataTypeUInt32,
       },
     };
@@ -320,10 +320,10 @@ typedef struct LCIMBoolValue__storage_ {
       {
         .name = "value",
         .dataTypeSpecific.className = NULL,
-        .number = GPBBoolValue_FieldNumber_Value,
+        .number = LCIMBoolValue_FieldNumber_Value,
         .hasIndex = 0,
         .offset = 1,  // Stored in _has_storage_ to save space.
-        .flags = GPBFieldOptional,
+        .flags = LCIMFieldOptional,
         .dataType = GPBDataTypeBool,
       },
     };
@@ -351,7 +351,7 @@ typedef struct LCIMBoolValue__storage_ {
 
 typedef struct LCIMStringValue__storage_ {
   uint32_t _has_storage_[1];
-  NSString *value;
+  __unsafe_unretained NSString *value;
 } LCIMStringValue__storage_;
 
 // This method is threadsafe because it is initially called
@@ -363,10 +363,10 @@ typedef struct LCIMStringValue__storage_ {
       {
         .name = "value",
         .dataTypeSpecific.className = NULL,
-        .number = GPBStringValue_FieldNumber_Value,
+        .number = LCIMStringValue_FieldNumber_Value,
         .hasIndex = 0,
         .offset = (uint32_t)offsetof(LCIMStringValue__storage_, value),
-        .flags = GPBFieldOptional,
+        .flags = LCIMFieldOptional,
         .dataType = GPBDataTypeString,
       },
     };
@@ -394,7 +394,7 @@ typedef struct LCIMStringValue__storage_ {
 
 typedef struct LCIMBytesValue__storage_ {
   uint32_t _has_storage_[1];
-  NSData *value;
+  __unsafe_unretained NSData *value;
 } LCIMBytesValue__storage_;
 
 // This method is threadsafe because it is initially called
@@ -406,10 +406,10 @@ typedef struct LCIMBytesValue__storage_ {
       {
         .name = "value",
         .dataTypeSpecific.className = NULL,
-        .number = GPBBytesValue_FieldNumber_Value,
+        .number = LCIMBytesValue_FieldNumber_Value,
         .hasIndex = 0,
         .offset = (uint32_t)offsetof(LCIMBytesValue__storage_, value),
-        .flags = GPBFieldOptional,
+        .flags = LCIMFieldOptional,
         .dataType = GPBDataTypeBytes,
       },
     };

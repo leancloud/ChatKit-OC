@@ -13,6 +13,22 @@
 @synthesize latitude = _latitude;
 @synthesize longitude = _longitude;
 
+- (instancetype)initWithCoder:(NSCoder *)aDecoder {
+    self = [super init];
+
+    if (self) {
+        _latitude = [aDecoder decodeDoubleForKey:@"latitude"];
+        _longitude = [aDecoder decodeDoubleForKey:@"longitude"];
+    }
+
+    return self;
+}
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+    [aCoder encodeDouble:_latitude forKey:@"latitude"];
+    [aCoder encodeDouble:_longitude forKey:@"longitude"];
+}
+
 - (id)copyWithZone:(NSZone *)zone
 {
     AVGeoPoint *point = [[[self class] allocWithZone:zone] init];

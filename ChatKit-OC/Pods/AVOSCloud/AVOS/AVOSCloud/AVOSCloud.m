@@ -388,6 +388,10 @@ static AVLogLevel avlogLevel = AVLogLevelDefault;
     return date;
 }
 
++ (NSDate *)getServerDateAndThrowsWithError:(NSError * _Nullable __autoreleasing *)error {
+    return [self getServerDate:error];
+}
+
 + (void)getServerDateWithBlock:(void (^)(NSDate *, NSError *))block {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         NSError *error = nil;

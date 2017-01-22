@@ -132,6 +132,12 @@ A LeanCloud Framework User Object that is a local representation of a user persi
 - (nullable NSArray<AVRole *> *)getRoles:(NSError **)error;
 
 /*!
+ An alias of `-[AVUser getRolesAndThrowsWithError:]` methods that supports Swift exception.
+ @seealso `-[AVUser getRolesAndThrowsWithError:]`
+ */
+- (nullable NSArray<AVRole *> *)getRolesAndThrowsWithError:(NSError **)error;
+
+/*!
  Asynchronously get roles which current user belongs to.
 
  @param block The callback for request.
@@ -144,6 +150,12 @@ A LeanCloud Framework User Object that is a local representation of a user persi
  @return whether the sign up was successful.
  */
 - (BOOL)signUp:(NSError **)error;
+
+/*!
+ An alias of `-[AVUser signUp:]` methods that supports Swift exception.
+ @seealso `-[AVUser signUp:]`
+ */
+- (BOOL)signUpAndThrowsWithError:(NSError **)error;
 
 /*!
  Signs up the user asynchronously. Make sure that password and username are set. This will also enforce that the username isn't already taken.

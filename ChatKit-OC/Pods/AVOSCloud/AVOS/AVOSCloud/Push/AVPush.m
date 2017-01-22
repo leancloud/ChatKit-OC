@@ -260,6 +260,10 @@ NSString *const kAVPushTargetPlatformWindowsPhone = @"wp";
     return [AVPush sendPushMessage:self wait:YES block:^(BOOL succeeded, NSError *error) {} error:error];
 }
 
+- (BOOL)sendPushAndThrowsWithError:(NSError * _Nullable __autoreleasing *)error {
+    return [self sendPush:error];
+}
+
 - (void)sendPushInBackground
 {
     [AVPush sendPushMessage:self wait:NO block:^(BOOL succeeded, NSError *error) {} error:nil];
@@ -417,6 +421,10 @@ NSString *const kAVPushTargetPlatformWindowsPhone = @"wp";
 {
     return [AVPush getSubscribedChannelsWithBlock:^(NSSet *channels, NSError *error) {
     } wait:YES error:error];
+}
+
++ (NSSet *)getSubscribedChannelsAndThrowsWithError:(NSError * _Nullable __autoreleasing *)error {
+    return [self getSubscribedChannels:error];
 }
 
 + (void)getSubscribedChannelsInBackgroundWithBlock:(AVSetResultBlock)block

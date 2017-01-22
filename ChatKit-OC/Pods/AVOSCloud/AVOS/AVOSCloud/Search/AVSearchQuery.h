@@ -94,6 +94,12 @@ NS_ASSUME_NONNULL_BEGIN
 - (nullable NSArray *)findObjects:(NSError **)error;
 
 /*!
+ An alias of `-[AVSearchQuery findObjects:]` methods that supports Swift exception.
+ @seealso `-[AVSearchQuery findObjects:]`
+ */
+- (nullable NSArray *)findObjectsAndThrowsWithError:(NSError **)error;
+
+/*!
  *  异步获取搜索结果，并回调block
  *  @param block 需要有这样的方法签名 (NSArray *objects, NSError *error)
  */

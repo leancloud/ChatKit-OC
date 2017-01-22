@@ -32,9 +32,14 @@
 // the static library. If these were compiled separately, the category methods
 // below would be stripped by the linker.
 
-#import "google/protobuf/LCIMTimestamp.pbobjc.m"
-#import "google/protobuf/LCIMDuration.pbobjc.m"
 #import "LCIMWellKnownTypes.h"
+
+#import "LCIMUtilities_PackagePrivate.h"
+
+NSString *const LCIMWellKnownTypesErrorDomain =
+    GPBNSStringifySymbol(LCIMWellKnownTypesErrorDomain);
+
+static NSString *kTypePrefixGoogleApisCom = @"type.googleapis.com/";
 
 static NSTimeInterval TimeIntervalSince1970FromSecondsAndNanos(int64_t seconds,
                                                                int32_t nanos) {
@@ -49,6 +54,30 @@ static int32_t SecondsAndNanosFromTimeIntervalSince1970(NSTimeInterval time,
   *outSeconds = (int64_t)seconds;
   return (int32_t)nanos;
 }
+
+static NSString *BuildTypeURL(NSString *typeURLPrefix, NSString *fullName) {
+  if (typeURLPrefix.length == 0) {
+    return fullName;
+  }
+
+  if ([typeURLPrefix hasSuffix:@"/"]) {
+    return [typeURLPrefix stringByAppendingString:fullName];
+  }
+
+  return [NSString stringWithFormat:@"%@/%@", typeURLPrefix, fullName];
+}
+
+static NSString *ParseTypeFromURL(NSString *typeURLString) {
+  NSRange range = [typeURLString rangeOfString:@"/" options:NSBackwardsSearch];
+  if ((range.location == NSNotFound) ||
+      (NSMaxRange(range) == typeURLString.length)) {
+    return nil;
+  }
+  NSString *result = [typeURLString substringFromIndex:range.location + 1];
+  return result;
+}
+
+#pragma mark - LCIMTimestamp
 
 @implementation LCIMTimestamp (LCIMWellKnownTypes)
 
@@ -89,6 +118,8 @@ static int32_t SecondsAndNanosFromTimeIntervalSince1970(NSTimeInterval time,
 
 @end
 
+#pragma mark - LCIMDuration
+
 @implementation LCIMDuration (LCIMWellKnownTypes)
 
 - (instancetype)initWithTimeIntervalSince1970:(NSTimeInterval)timeIntervalSince1970 {
@@ -112,6 +143,108 @@ static int32_t SecondsAndNanosFromTimeIntervalSince1970(NSTimeInterval time,
       SecondsAndNanosFromTimeIntervalSince1970(timeIntervalSince1970, &seconds);
   self.seconds = seconds;
   self.nanos = nanos;
+}
+
+@end
+
+#pragma mark - LCIMAny
+
+@implementation LCIMAny (LCIMWellKnownTypes)
+
++ (instancetype)anyWithMessage:(LCIMMessage *)message
+                         error:(NSError **)errorPtr {
+  return [self anyWithMessage:message
+                typeURLPrefix:kTypePrefixGoogleApisCom
+                        error:errorPtr];
+}
+
++ (instancetype)anyWithMessage:(LCIMMessage *)message
+                 typeURLPrefix:(NSString *)typeURLPrefix
+                         error:(NSError **)errorPtr {
+  return [[[self alloc] initWithMessage:message
+                          typeURLPrefix:typeURLPrefix
+                                  error:errorPtr] autorelease];
+}
+
+- (instancetype)initWithMessage:(LCIMMessage *)message
+                          error:(NSError **)errorPtr {
+  return [self initWithMessage:message
+                 typeURLPrefix:kTypePrefixGoogleApisCom
+                         error:errorPtr];
+}
+
+- (instancetype)initWithMessage:(LCIMMessage *)message
+                  typeURLPrefix:(NSString *)typeURLPrefix
+                          error:(NSError **)errorPtr {
+  self = [self init];
+  if (self) {
+    if (![self packWithMessage:message
+                 typeURLPrefix:typeURLPrefix
+                         error:errorPtr]) {
+      [self release];
+      self = nil;
+    }
+  }
+  return self;
+}
+
+- (BOOL)packWithMessage:(LCIMMessage *)message
+                  error:(NSError **)errorPtr {
+  return [self packWithMessage:message
+                 typeURLPrefix:kTypePrefixGoogleApisCom
+                         error:errorPtr];
+}
+
+- (BOOL)packWithMessage:(LCIMMessage *)message
+          typeURLPrefix:(NSString *)typeURLPrefix
+                  error:(NSError **)errorPtr {
+  NSString *fullName = [message descriptor].fullName;
+  if (fullName.length == 0) {
+    if (errorPtr) {
+      *errorPtr =
+          [NSError errorWithDomain:LCIMWellKnownTypesErrorDomain
+                              code:LCIMWellKnownTypesErrorCodeFailedToComputeTypeURL
+                          userInfo:nil];
+    }
+    return NO;
+  }
+  if (errorPtr) {
+    *errorPtr = nil;
+  }
+  self.typeURL = BuildTypeURL(typeURLPrefix, fullName);
+  self.value = message.data;
+  return YES;
+}
+
+- (LCIMMessage *)unpackMessageClass:(Class)messageClass
+                             error:(NSError **)errorPtr {
+  NSString *fullName = [messageClass descriptor].fullName;
+  if (fullName.length == 0) {
+    if (errorPtr) {
+      *errorPtr =
+          [NSError errorWithDomain:LCIMWellKnownTypesErrorDomain
+                              code:LCIMWellKnownTypesErrorCodeFailedToComputeTypeURL
+                      userInfo:nil];
+    }
+    return nil;
+  }
+
+  NSString *expectedFullName = ParseTypeFromURL(self.typeURL);
+  if ((expectedFullName == nil) || ![expectedFullName isEqual:fullName]) {
+    if (errorPtr) {
+      *errorPtr =
+          [NSError errorWithDomain:LCIMWellKnownTypesErrorDomain
+                              code:LCIMWellKnownTypesErrorCodeTypeURLMismatch
+                          userInfo:nil];
+    }
+    return nil;
+  }
+
+  // Any is proto3, which means no extensions, so this assumes anything put
+  // within an any also won't need extensions. A second helper could be added
+  // if needed.
+  return [messageClass parseFromData:self.value
+                               error:errorPtr];
 }
 
 @end

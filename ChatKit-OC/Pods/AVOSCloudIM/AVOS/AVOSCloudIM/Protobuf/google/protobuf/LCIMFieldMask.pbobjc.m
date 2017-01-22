@@ -36,7 +36,7 @@ static LCIMFileDescriptor *GPBFieldMaskRoot_FileDescriptor(void) {
   // about thread safety of the singleton.
   static LCIMFileDescriptor *descriptor = NULL;
   if (!descriptor) {
-    GPBDebugCheckRuntimeVersion();
+    LCIM_DEBUG_CHECK_RUNTIME_VERSIONS();
     descriptor = [[LCIMFileDescriptor alloc] initWithPackage:@"google.protobuf"
                                                      syntax:GPBFileSyntaxProto3];
   }
@@ -51,7 +51,7 @@ static LCIMFileDescriptor *GPBFieldMaskRoot_FileDescriptor(void) {
 
 typedef struct LCIMFieldMask__storage_ {
   uint32_t _has_storage_[1];
-  NSMutableArray *pathsArray;
+ __unsafe_unretained NSMutableArray *pathsArray;
 } LCIMFieldMask__storage_;
 
 // This method is threadsafe because it is initially called
@@ -66,7 +66,7 @@ typedef struct LCIMFieldMask__storage_ {
         .number = GPBFieldMask_FieldNumber_PathsArray,
         .hasIndex = GPBNoHasBit,
         .offset = (uint32_t)offsetof(LCIMFieldMask__storage_, pathsArray),
-        .flags = GPBFieldRepeated,
+        .flags = LCIMFieldRepeated,
         .dataType = GPBDataTypeString,
       },
     };

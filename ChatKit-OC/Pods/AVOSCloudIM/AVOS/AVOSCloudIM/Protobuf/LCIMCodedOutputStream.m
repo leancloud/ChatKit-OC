@@ -36,7 +36,7 @@
 #import "LCIMUnknownFieldSet_PackagePrivate.h"
 #import "LCIMUtilities_PackagePrivate.h"
 
-// Structure for containing state of a GPBCodedInputStream. Brought out into
+// Structure for containing state of a LCIMCodedInputStream. Brought out into
 // a struct so that we can inline several common functions instead of dealing
 // with overhead of ObjC dispatch.
 typedef struct GPBOutputBufferState {
@@ -115,13 +115,13 @@ static void GPBWriteInt32NoTag(GPBOutputBufferState *state, int32_t value) {
 
 static void GPBWriteUInt32(GPBOutputBufferState *state, int32_t fieldNumber,
                            uint32_t value) {
-  GPBWriteTagWithFormat(state, fieldNumber, GPBWireFormatVarint);
+  GPBWriteTagWithFormat(state, fieldNumber, LCIMWireFormatVarint);
   GPBWriteRawVarint32(state, value);
 }
 
 static void GPBWriteTagWithFormat(GPBOutputBufferState *state,
-                                  uint32_t fieldNumber, GPBWireFormat format) {
-  GPBWriteRawVarint32(state, GPBWireFormatMakeTag(fieldNumber, format));
+                                  uint32_t fieldNumber, LCIMWireFormat format) {
+  GPBWriteRawVarint32(state, LCIMWireFormatMakeTag(fieldNumber, format));
 }
 
 static void GPBWriteRawLittleEndian32(GPBOutputBufferState *state,
@@ -143,22 +143,6 @@ static void GPBWriteRawLittleEndian64(GPBOutputBufferState *state,
   GPBWriteRawByte(state, (int32_t)(value >> 48) & 0xFF);
   GPBWriteRawByte(state, (int32_t)(value >> 56) & 0xFF);
 }
-
-#if DEBUG && !defined(NS_BLOCK_ASSERTIONS)
-+ (void)load {
-  // This test exists to verify that CFStrings with embedded NULLs will work
-  // for us. If this Assert fails, all code below that depends on
-  // CFStringGetCStringPtr will NOT work properly on strings that contain
-  // embedded NULLs, and we do get that in some protobufs.
-  // Note that this will not be compiled in release.
-  // We didn't feel that just keeping it in a unit test was sufficient because
-  // the Protobuf unit tests are only run when somebody is actually working
-  // on protobufs.
-  CFStringRef zeroTest = CFSTR("Test\0String");
-  const char *cString = CFStringGetCStringPtr(zeroTest, kCFStringEncodingUTF8);
-  NSAssert(cString == NULL, @"Serious Error");
-}
-#endif  // DEBUG && !defined(NS_BLOCK_ASSERTIONS)
 
 - (void)dealloc {
   [self flush];
@@ -203,12 +187,18 @@ static void GPBWriteRawLittleEndian64(GPBOutputBufferState *state,
   return [[[self alloc] initWithData:data] autorelease];
 }
 
+// Direct access is use for speed, to avoid even internally declaring things
+// read/write, etc. The warning is enabled in the project to ensure code calling
+// protos can turn on -Wdirect-ivar-access without issues.
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdirect-ivar-access"
+
 - (void)writeDoubleNoTag:(double)value {
   GPBWriteRawLittleEndian64(&state_, LCIMConvertDoubleToInt64(value));
 }
 
 - (void)writeDouble:(int32_t)fieldNumber value:(double)value {
-  GPBWriteTagWithFormat(&state_, fieldNumber, GPBWireFormatFixed64);
+  GPBWriteTagWithFormat(&state_, fieldNumber, LCIMWireFormatFixed64);
   GPBWriteRawLittleEndian64(&state_, LCIMConvertDoubleToInt64(value));
 }
 
@@ -217,7 +207,7 @@ static void GPBWriteRawLittleEndian64(GPBOutputBufferState *state,
 }
 
 - (void)writeFloat:(int32_t)fieldNumber value:(float)value {
-  GPBWriteTagWithFormat(&state_, fieldNumber, GPBWireFormatFixed32);
+  GPBWriteTagWithFormat(&state_, fieldNumber, LCIMWireFormatFixed32);
   GPBWriteRawLittleEndian32(&state_, LCIMConvertFloatToInt32(value));
 }
 
@@ -226,7 +216,7 @@ static void GPBWriteRawLittleEndian64(GPBOutputBufferState *state,
 }
 
 - (void)writeUInt64:(int32_t)fieldNumber value:(uint64_t)value {
-  GPBWriteTagWithFormat(&state_, fieldNumber, GPBWireFormatVarint);
+  GPBWriteTagWithFormat(&state_, fieldNumber, LCIMWireFormatVarint);
   GPBWriteRawVarint64(&state_, value);
 }
 
@@ -235,7 +225,7 @@ static void GPBWriteRawLittleEndian64(GPBOutputBufferState *state,
 }
 
 - (void)writeInt64:(int32_t)fieldNumber value:(int64_t)value {
-  GPBWriteTagWithFormat(&state_, fieldNumber, GPBWireFormatVarint);
+  GPBWriteTagWithFormat(&state_, fieldNumber, LCIMWireFormatVarint);
   GPBWriteRawVarint64(&state_, value);
 }
 
@@ -244,7 +234,7 @@ static void GPBWriteRawLittleEndian64(GPBOutputBufferState *state,
 }
 
 - (void)writeInt32:(int32_t)fieldNumber value:(int32_t)value {
-  GPBWriteTagWithFormat(&state_, fieldNumber, GPBWireFormatVarint);
+  GPBWriteTagWithFormat(&state_, fieldNumber, LCIMWireFormatVarint);
   GPBWriteInt32NoTag(&state_, value);
 }
 
@@ -253,7 +243,7 @@ static void GPBWriteRawLittleEndian64(GPBOutputBufferState *state,
 }
 
 - (void)writeFixed64:(int32_t)fieldNumber value:(uint64_t)value {
-  GPBWriteTagWithFormat(&state_, fieldNumber, GPBWireFormatFixed64);
+  GPBWriteTagWithFormat(&state_, fieldNumber, LCIMWireFormatFixed64);
   GPBWriteRawLittleEndian64(&state_, value);
 }
 
@@ -262,7 +252,7 @@ static void GPBWriteRawLittleEndian64(GPBOutputBufferState *state,
 }
 
 - (void)writeFixed32:(int32_t)fieldNumber value:(uint32_t)value {
-  GPBWriteTagWithFormat(&state_, fieldNumber, GPBWireFormatFixed32);
+  GPBWriteTagWithFormat(&state_, fieldNumber, LCIMWireFormatFixed32);
   GPBWriteRawLittleEndian32(&state_, value);
 }
 
@@ -271,23 +261,19 @@ static void GPBWriteRawLittleEndian64(GPBOutputBufferState *state,
 }
 
 - (void)writeBool:(int32_t)fieldNumber value:(BOOL)value {
-  GPBWriteTagWithFormat(&state_, fieldNumber, GPBWireFormatVarint);
+  GPBWriteTagWithFormat(&state_, fieldNumber, LCIMWireFormatVarint);
   GPBWriteRawByte(&state_, (value ? 1 : 0));
 }
 
 - (void)writeStringNoTag:(const NSString *)value {
-  // If you are concerned about embedded NULLs see the test in
-  // +load above.
-  const char *quickString =
-      CFStringGetCStringPtr((CFStringRef)value, kCFStringEncodingUTF8);
-  size_t length = (quickString != NULL)
-                      ? strlen(quickString)
-                      : [value lengthOfBytesUsingEncoding:NSUTF8StringEncoding];
+  size_t length = [value lengthOfBytesUsingEncoding:NSUTF8StringEncoding];
   GPBWriteRawVarint32(&state_, (int32_t)length);
-
   if (length == 0) {
     return;
   }
+
+  const char *quickString =
+      CFStringGetCStringPtr((CFStringRef)value, kCFStringEncodingUTF8);
 
   // Fast path: Most strings are short, if the buffer already has space,
   // add to it directly.
@@ -304,7 +290,7 @@ static void GPBWriteRawLittleEndian64(GPBOutputBufferState *state,
                      maxLength:bufferBytesLeft
                     usedLength:&usedBufferLength
                       encoding:NSUTF8StringEncoding
-                       options:0
+                       options:(NSStringEncodingConversionOptions)0
                          range:NSMakeRange(0, [value length])
                 remainingRange:NULL];
     }
@@ -328,29 +314,29 @@ static void GPBWriteRawLittleEndian64(GPBOutputBufferState *state,
 }
 
 - (void)writeString:(int32_t)fieldNumber value:(NSString *)value {
-  GPBWriteTagWithFormat(&state_, fieldNumber, GPBWireFormatLengthDelimited);
+  GPBWriteTagWithFormat(&state_, fieldNumber, LCIMWireFormatLengthDelimited);
   [self writeStringNoTag:value];
 }
 
 - (void)writeGroupNoTag:(int32_t)fieldNumber value:(LCIMMessage *)value {
   [value writeToCodedOutputStream:self];
-  GPBWriteTagWithFormat(&state_, fieldNumber, GPBWireFormatEndGroup);
+  GPBWriteTagWithFormat(&state_, fieldNumber, LCIMWireFormatEndGroup);
 }
 
 - (void)writeGroup:(int32_t)fieldNumber value:(LCIMMessage *)value {
-  GPBWriteTagWithFormat(&state_, fieldNumber, GPBWireFormatStartGroup);
+  GPBWriteTagWithFormat(&state_, fieldNumber, LCIMWireFormatStartGroup);
   [self writeGroupNoTag:fieldNumber value:value];
 }
 
 - (void)writeUnknownGroupNoTag:(int32_t)fieldNumber
                          value:(const LCIMUnknownFieldSet *)value {
   [value writeToCodedOutputStream:self];
-  GPBWriteTagWithFormat(&state_, fieldNumber, GPBWireFormatEndGroup);
+  GPBWriteTagWithFormat(&state_, fieldNumber, LCIMWireFormatEndGroup);
 }
 
 - (void)writeUnknownGroup:(int32_t)fieldNumber
                     value:(LCIMUnknownFieldSet *)value {
-  GPBWriteTagWithFormat(&state_, fieldNumber, GPBWireFormatStartGroup);
+  GPBWriteTagWithFormat(&state_, fieldNumber, LCIMWireFormatStartGroup);
   [self writeUnknownGroupNoTag:fieldNumber value:value];
 }
 
@@ -360,7 +346,7 @@ static void GPBWriteRawLittleEndian64(GPBOutputBufferState *state,
 }
 
 - (void)writeMessage:(int32_t)fieldNumber value:(LCIMMessage *)value {
-  GPBWriteTagWithFormat(&state_, fieldNumber, GPBWireFormatLengthDelimited);
+  GPBWriteTagWithFormat(&state_, fieldNumber, LCIMWireFormatLengthDelimited);
   [self writeMessageNoTag:value];
 }
 
@@ -370,7 +356,7 @@ static void GPBWriteRawLittleEndian64(GPBOutputBufferState *state,
 }
 
 - (void)writeBytes:(int32_t)fieldNumber value:(NSData *)value {
-  GPBWriteTagWithFormat(&state_, fieldNumber, GPBWireFormatLengthDelimited);
+  GPBWriteTagWithFormat(&state_, fieldNumber, LCIMWireFormatLengthDelimited);
   [self writeBytesNoTag:value];
 }
 
@@ -387,7 +373,7 @@ static void GPBWriteRawLittleEndian64(GPBOutputBufferState *state,
 }
 
 - (void)writeEnum:(int32_t)fieldNumber value:(int32_t)value {
-  GPBWriteTagWithFormat(&state_, fieldNumber, GPBWireFormatVarint);
+  GPBWriteTagWithFormat(&state_, fieldNumber, LCIMWireFormatVarint);
   GPBWriteRawVarint32(&state_, value);
 }
 
@@ -396,7 +382,7 @@ static void GPBWriteRawLittleEndian64(GPBOutputBufferState *state,
 }
 
 - (void)writeSFixed32:(int32_t)fieldNumber value:(int32_t)value {
-  GPBWriteTagWithFormat(&state_, fieldNumber, GPBWireFormatFixed32);
+  GPBWriteTagWithFormat(&state_, fieldNumber, LCIMWireFormatFixed32);
   GPBWriteRawLittleEndian32(&state_, value);
 }
 
@@ -405,7 +391,7 @@ static void GPBWriteRawLittleEndian64(GPBOutputBufferState *state,
 }
 
 - (void)writeSFixed64:(int32_t)fieldNumber value:(int64_t)value {
-  GPBWriteTagWithFormat(&state_, fieldNumber, GPBWireFormatFixed64);
+  GPBWriteTagWithFormat(&state_, fieldNumber, LCIMWireFormatFixed64);
   GPBWriteRawLittleEndian64(&state_, value);
 }
 
@@ -414,7 +400,7 @@ static void GPBWriteRawLittleEndian64(GPBOutputBufferState *state,
 }
 
 - (void)writeSInt32:(int32_t)fieldNumber value:(int32_t)value {
-  GPBWriteTagWithFormat(&state_, fieldNumber, GPBWireFormatVarint);
+  GPBWriteTagWithFormat(&state_, fieldNumber, LCIMWireFormatVarint);
   GPBWriteRawVarint32(&state_, LCIMEncodeZigZag32(value));
 }
 
@@ -423,7 +409,7 @@ static void GPBWriteRawLittleEndian64(GPBOutputBufferState *state,
 }
 
 - (void)writeSInt64:(int32_t)fieldNumber value:(int64_t)value {
-  GPBWriteTagWithFormat(&state_, fieldNumber, GPBWireFormatVarint);
+  GPBWriteTagWithFormat(&state_, fieldNumber, LCIMWireFormatVarint);
   GPBWriteRawVarint64(&state_, LCIMEncodeZigZag64(value));
 }
 
@@ -436,7 +422,7 @@ static void GPBWriteRawLittleEndian64(GPBOutputBufferState *state,
 //%    __block size_t dataSize = 0;
 //%    [values enumerate##ACCESSOR_NAME##ValuesWithBlock:^(TYPE value, NSUInteger idx, BOOL *stop) {
 //%#pragma unused(idx, stop)
-//%      dataSize += GPBCompute##NAME##SizeNoTag(value);
+//%      dataSize += LCIMCompute##NAME##SizeNoTag(value);
 //%    }];
 //%    GPBWriteRawVarint32(&state_, tag);
 //%    GPBWriteRawVarint32(&state_, (int32_t)dataSize);
@@ -886,21 +872,21 @@ static void GPBWriteRawLittleEndian64(GPBOutputBufferState *state,
 
 - (void)writeMessageSetExtension:(int32_t)fieldNumber
                            value:(LCIMMessage *)value {
-  GPBWriteTagWithFormat(&state_, GPBWireFormatMessageSetItem,
-                        GPBWireFormatStartGroup);
-  GPBWriteUInt32(&state_, GPBWireFormatMessageSetTypeId, fieldNumber);
-  [self writeMessage:GPBWireFormatMessageSetMessage value:value];
-  GPBWriteTagWithFormat(&state_, GPBWireFormatMessageSetItem,
-                        GPBWireFormatEndGroup);
+  GPBWriteTagWithFormat(&state_, LCIMWireFormatMessageSetItem,
+                        LCIMWireFormatStartGroup);
+  GPBWriteUInt32(&state_, LCIMWireFormatMessageSetTypeId, fieldNumber);
+  [self writeMessage:LCIMWireFormatMessageSetMessage value:value];
+  GPBWriteTagWithFormat(&state_, LCIMWireFormatMessageSetItem,
+                        LCIMWireFormatEndGroup);
 }
 
 - (void)writeRawMessageSetExtension:(int32_t)fieldNumber value:(NSData *)value {
-  GPBWriteTagWithFormat(&state_, GPBWireFormatMessageSetItem,
-                        GPBWireFormatStartGroup);
-  GPBWriteUInt32(&state_, GPBWireFormatMessageSetTypeId, fieldNumber);
-  [self writeBytes:GPBWireFormatMessageSetMessage value:value];
-  GPBWriteTagWithFormat(&state_, GPBWireFormatMessageSetItem,
-                        GPBWireFormatEndGroup);
+  GPBWriteTagWithFormat(&state_, LCIMWireFormatMessageSetItem,
+                        LCIMWireFormatStartGroup);
+  GPBWriteUInt32(&state_, LCIMWireFormatMessageSetTypeId, fieldNumber);
+  [self writeBytes:LCIMWireFormatMessageSetMessage value:value];
+  GPBWriteTagWithFormat(&state_, LCIMWireFormatMessageSetItem,
+                        LCIMWireFormatEndGroup);
 }
 
 - (void)flush {
@@ -956,7 +942,7 @@ static void GPBWriteRawLittleEndian64(GPBOutputBufferState *state,
   }
 }
 
-- (void)writeTag:(uint32_t)fieldNumber format:(GPBWireFormat)format {
+- (void)writeTag:(uint32_t)fieldNumber format:(LCIMWireFormat)format {
   GPBWriteTagWithFormat(&state_, fieldNumber, format);
 }
 
@@ -980,6 +966,8 @@ static void GPBWriteRawLittleEndian64(GPBOutputBufferState *state,
 - (void)writeRawLittleEndian64:(int64_t)value {
   GPBWriteRawLittleEndian64(&state_, value);
 }
+
+#pragma clang diagnostic pop
 
 @end
 
@@ -1030,14 +1018,7 @@ size_t LCIMComputeBoolSizeNoTag(BOOL value) {
 }
 
 size_t LCIMComputeStringSizeNoTag(NSString *value) {
-  // If you are concerned about embedded NULLs see the test in
-  // +load above.
-  const char *quickString =
-      CFStringGetCStringPtr((CFStringRef)value, kCFStringEncodingUTF8);
-  NSUInteger length =
-      (quickString != NULL)
-          ? strlen(quickString)
-          : [value lengthOfBytesUsingEncoding:NSUTF8StringEncoding];
+  NSUInteger length = [value lengthOfBytesUsingEncoding:NSUTF8StringEncoding];
   return LCIMComputeRawVarint32SizeForInteger(length) + length;
 }
 
@@ -1166,21 +1147,21 @@ size_t LCIMComputeSInt64Size(int32_t fieldNumber, int64_t value) {
 
 size_t LCIMComputeMessageSetExtensionSize(int32_t fieldNumber,
                                          LCIMMessage *value) {
-  return LCIMComputeTagSize(GPBWireFormatMessageSetItem) * 2 +
-         LCIMComputeUInt32Size(GPBWireFormatMessageSetTypeId, fieldNumber) +
-         LCIMComputeMessageSize(GPBWireFormatMessageSetMessage, value);
+  return LCIMComputeTagSize(LCIMWireFormatMessageSetItem) * 2 +
+         LCIMComputeUInt32Size(LCIMWireFormatMessageSetTypeId, fieldNumber) +
+         LCIMComputeMessageSize(LCIMWireFormatMessageSetMessage, value);
 }
 
 size_t LCIMComputeRawMessageSetExtensionSize(int32_t fieldNumber,
                                             NSData *value) {
-  return LCIMComputeTagSize(GPBWireFormatMessageSetItem) * 2 +
-         LCIMComputeUInt32Size(GPBWireFormatMessageSetTypeId, fieldNumber) +
-         LCIMComputeBytesSize(GPBWireFormatMessageSetMessage, value);
+  return LCIMComputeTagSize(LCIMWireFormatMessageSetItem) * 2 +
+         LCIMComputeUInt32Size(LCIMWireFormatMessageSetTypeId, fieldNumber) +
+         LCIMComputeBytesSize(LCIMWireFormatMessageSetMessage, value);
 }
 
 size_t LCIMComputeTagSize(int32_t fieldNumber) {
   return LCIMComputeRawVarint32Size(
-      GPBWireFormatMakeTag(fieldNumber, GPBWireFormatVarint));
+      LCIMWireFormatMakeTag(fieldNumber, LCIMWireFormatVarint));
 }
 
 size_t LCIMComputeWireFormatTagSize(int field_number, GPBDataType dataType) {

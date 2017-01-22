@@ -675,6 +675,10 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
     return [self saveWithOption:nil error:error];
 }
 
+- (BOOL)saveAndThrowsWithError:(NSError * _Nullable __autoreleasing *)error {
+    return [self save:error];
+}
+
 - (BOOL)saveWithOption:(AVSaveOption *)option
                  error:(NSError *__autoreleasing *)error
 {
@@ -1355,6 +1359,10 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
     return [self refreshWithBlock:NULL keys:nil waitUntilDone:YES error:error];
 }
 
+- (BOOL)refreshAndThrowsWithError:(NSError * _Nullable __autoreleasing *)error {
+    return [self refresh:error];
+}
+
 - (void)refreshInBackgroundWithBlock:(AVObjectResultBlock)block {
     [self refreshWithBlock:block keys:nil waitUntilDone:NO error:NULL];
 }
@@ -1445,6 +1453,10 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
     return [self fetchWithKeys:nil error:error];
 }
 
+- (BOOL)fetchAndThrowsWithError:(NSError * _Nullable __autoreleasing *)error {
+    return [self fetch:error];
+}
+
 - (void)fetchWithKeys:(NSArray *)keys {
     [self fetchWithKeys:keys error:nil];
 }
@@ -1472,6 +1484,10 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
 - (AVObject *)fetchIfNeeded:(NSError **)error
 {
     return [self fetchIfNeededWithKeys:nil error:error];
+}
+
+- (AVObject *)fetchIfNeededAndThrowsWithError:(NSError * _Nullable __autoreleasing *)error {
+    return [self fetchIfNeeded:error];
 }
 
 - (AVObject *)fetchIfNeededWithKeys:(NSArray *)keys {
@@ -1702,6 +1718,10 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
         *error = blockError;
     }
     return blockError == nil;
+}
+
+- (BOOL)deleteAndThrowsWithError:(NSError * _Nullable __autoreleasing *)error {
+    return [self delete:error];
 }
 
 - (void)deleteInBackground

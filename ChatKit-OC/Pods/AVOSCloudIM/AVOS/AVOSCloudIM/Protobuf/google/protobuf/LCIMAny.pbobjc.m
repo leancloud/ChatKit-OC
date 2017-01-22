@@ -36,7 +36,7 @@ static LCIMFileDescriptor *LCIMAnyRoot_FileDescriptor(void) {
   // about thread safety of the singleton.
   static LCIMFileDescriptor *descriptor = NULL;
   if (!descriptor) {
-    GPBDebugCheckRuntimeVersion();
+    LCIMDebugCheckRuntimeVersion();
     descriptor = [[LCIMFileDescriptor alloc] initWithPackage:@"google.protobuf"
                                                      syntax:GPBFileSyntaxProto3];
   }
@@ -52,8 +52,8 @@ static LCIMFileDescriptor *LCIMAnyRoot_FileDescriptor(void) {
 
 typedef struct LCIMAny__storage_ {
   uint32_t _has_storage_[1];
-  NSString *typeURL;
-  NSData *value;
+  __unsafe_unretained NSString *typeURL;
+  __unsafe_unretained NSData *value;
 } LCIMAny__storage_;
 
 // This method is threadsafe because it is initially called
@@ -68,7 +68,7 @@ typedef struct LCIMAny__storage_ {
         .number = LCIMAny_FieldNumber_TypeURL,
         .hasIndex = 0,
         .offset = (uint32_t)offsetof(LCIMAny__storage_, typeURL),
-        .flags = GPBFieldOptional | GPBFieldTextFormatNameCustom,
+        .flags = LCIMFieldOptional | LCIMFieldTextFormatNameCustom,
         .dataType = GPBDataTypeString,
       },
       {
@@ -77,7 +77,7 @@ typedef struct LCIMAny__storage_ {
         .number = LCIMAny_FieldNumber_Value,
         .hasIndex = 1,
         .offset = (uint32_t)offsetof(LCIMAny__storage_, value),
-        .flags = GPBFieldOptional,
+        .flags = LCIMFieldOptional,
         .dataType = GPBDataTypeBytes,
       },
     };

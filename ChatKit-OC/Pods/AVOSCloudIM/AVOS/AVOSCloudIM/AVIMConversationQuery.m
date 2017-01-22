@@ -18,6 +18,7 @@
 #import "AVIMErrorUtil.h"
 #import "AVObjectUtils.h"
 #import "LCIMConversationCache.h"
+#import "AVIMMessage_Internal.h"
 
 NSString *const kAVIMKeyName = @"name";
 NSString *const kAVIMKeyMember = @"m";
@@ -26,13 +27,11 @@ NSString *const kAVIMKeyConversationId = @"objectId";
 
 @implementation AVIMConversationQuery
 
-+(NSDictionary *)dictionaryFromGeoPoint:(AVGeoPoint *)point
-{
++(NSDictionary *)dictionaryFromGeoPoint:(AVGeoPoint *)point {
     return @{ @"__type": @"GeoPoint", @"latitude": @(point.latitude), @"longitude": @(point.longitude) };
 }
 
-+(AVGeoPoint *)geoPointFromDictionary:(NSDictionary *)dict
-{
++(AVGeoPoint *)geoPointFromDictionary:(NSDictionary *)dict {
     AVGeoPoint * point = [[AVGeoPoint alloc]init];
     point.latitude = [[dict objectForKey:@"latitude"] doubleValue];
     point.longitude = [[dict objectForKey:@"longitude"] doubleValue];
@@ -348,6 +347,7 @@ NSString *const kAVIMKeyConversationId = @"objectId";
     jsonObjectMessage.data_p = [self whereString];
     command.where = jsonObjectMessage;
     command.sort = self.order;
+    command.flag = self.option;
 
     if (self.skip > 0) {
         command.skip = (uint32_t)self.skip;
@@ -358,6 +358,7 @@ NSString *const kAVIMKeyConversationId = @"objectId";
     } else {
         command.limit = 10;
     }
+    
     [genericCommand avim_addRequiredKeyWithCommand:command];
     return genericCommand;
 }
@@ -395,16 +396,20 @@ NSString *const kAVIMKeyConversationId = @"objectId";
 
         NSString *createdAt = dict[@"createdAt"];
         NSString *updatedAt = dict[@"updatedAt"];
-        NSDictionary *lastMessageAt = dict[@"lm"];
+        NSDictionary *lastMessageAt = dict[KEY_LAST_MESSAGE_AT];
 
         conversation.imClient = self.client;
-        conversation.conversationId = [dict objectForKey:@"objectId"];
+        NSString *conversationId = [dict objectForKey:@"objectId"];
+        conversation.conversationId = conversationId;
         conversation.name = [dict objectForKey:KEY_NAME];
         conversation.attributes = [AVIMConversation filterCustomAttributesFromDictionary:dict];
         conversation.creator = [dict objectForKey:@"c"];
         if (createdAt) conversation.createAt = [AVObjectUtils dateFromString:createdAt];
         if (updatedAt) conversation.updateAt = [AVObjectUtils dateFromString:updatedAt];
-        if (lastMessageAt) conversation.lastMessageAt = [AVObjectUtils dateFromDictionary:lastMessageAt];
+        if (lastMessageAt) {
+            conversation.lastMessageAt = [AVObjectUtils dateFromDictionary:lastMessageAt];
+            conversation.lastMessage = [AVIMMessage parseMessageWithConversationId:conversationId result:dict];
+        }
         conversation.members = [dict objectForKey:@"m"];
         conversation.muted = [[dict objectForKey:@"muted"] boolValue];
         conversation.transient = [[dict objectForKey:@"tr"] boolValue];

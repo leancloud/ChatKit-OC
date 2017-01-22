@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
+#define LC_SSL_PINNING_ENABLED 1
+
 @interface LCSSLChallenger : NSObject
 
 + (instancetype)sharedInstance;

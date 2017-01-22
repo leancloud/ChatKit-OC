@@ -23,27 +23,27 @@
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
 
-#pragma mark - GPBDurationRoot
+#pragma mark - LCIMDurationRoot
 
 @implementation LCIMDurationRoot
 
 @end
 
-#pragma mark - GPBDurationRoot_FileDescriptor
+#pragma mark - LCIMDurationRoot_FileDescriptor
 
-static LCIMFileDescriptor *GPBDurationRoot_FileDescriptor(void) {
+static LCIMFileDescriptor *LCIMDurationRoot_FileDescriptor(void) {
   // This is called by +initialize so there is no need to worry
   // about thread safety of the singleton.
   static LCIMFileDescriptor *descriptor = NULL;
   if (!descriptor) {
-    LCIMDebugCheckRuntimeVersion();
+    LCIM_DEBUG_CHECK_RUNTIME_VERSIONS();
     descriptor = [[LCIMFileDescriptor alloc] initWithPackage:@"google.protobuf"
                                                      syntax:GPBFileSyntaxProto3];
   }
   return descriptor;
 }
 
-#pragma mark - GPBDuration
+#pragma mark - LCIMDuration
 
 @implementation LCIMDuration
 
@@ -65,26 +65,26 @@ typedef struct LCIMDuration__storage_ {
       {
         .name = "seconds",
         .dataTypeSpecific.className = NULL,
-        .number = GPBDuration_FieldNumber_Seconds,
+        .number = LCIMDuration_FieldNumber_Seconds,
         .hasIndex = 0,
         .offset = (uint32_t)offsetof(LCIMDuration__storage_, seconds),
-        .flags = GPBFieldOptional,
+        .flags = LCIMFieldOptional,
         .dataType = GPBDataTypeInt64,
       },
       {
         .name = "nanos",
         .dataTypeSpecific.className = NULL,
-        .number = GPBDuration_FieldNumber_Nanos,
+        .number = LCIMDuration_FieldNumber_Seconds,
         .hasIndex = 1,
         .offset = (uint32_t)offsetof(LCIMDuration__storage_, nanos),
-        .flags = GPBFieldOptional,
+        .flags = LCIMFieldOptional,
         .dataType = GPBDataTypeInt32,
       },
     };
     LCIMDescriptor *localDescriptor =
         [LCIMDescriptor allocDescriptorForClass:[LCIMDuration class]
                                      rootClass:[LCIMDurationRoot class]
-                                          file:GPBDurationRoot_FileDescriptor()
+                                          file:LCIMDurationRoot_FileDescriptor()
                                         fields:fields
                                     fieldCount:(uint32_t)(sizeof(fields) / sizeof(GPBMessageFieldDescription))
                                    storageSize:sizeof(LCIMDuration__storage_)

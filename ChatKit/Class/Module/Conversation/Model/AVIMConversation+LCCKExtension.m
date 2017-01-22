@@ -11,15 +11,39 @@
 #import "LCCKUserSystemService.h"
 #import "LCCKSessionService.h"
 #import "LCCKUserDelegate.h"
+#import "NSDate+LCCKDateTools.h"
+#import "AVIMMessage+LCCKExtension.h"
 
 @implementation AVIMConversation (LCCKExtension)
 
 - (AVIMTypedMessage *)lcck_lastMessage {
-    return objc_getAssociatedObject(self, @selector(lcck_lastMessage));
+    AVIMTypedMessage *visiableLastMessage = nil;
+    AVIMTypedMessage *lastMessageFromCache = [self.lastMessage lcck_getValidTypedMessage];
+    id visiableForPartClientIds = [lastMessageFromCache.attributes
+                                   valueForKey:LCCKCustomMessageOnlyVisiableForPartClientIds];
+    BOOL isArray = [visiableForPartClientIds isKindOfClass:[NSArray class]];
+    BOOL isString = [visiableForPartClientIds isKindOfClass:[NSString class]];
+    if (!visiableForPartClientIds) {
+        visiableLastMessage = lastMessageFromCache;
+    } else if (isArray && ([(NSArray *)visiableForPartClientIds count] > 0)) {
+        BOOL visiableForCurrentClientId =
+        [visiableForPartClientIds containsObject:[LCChatKit sharedInstance].clientId];
+        if (visiableForCurrentClientId) {
+            visiableLastMessage = lastMessageFromCache;
+        }
+    } else if (isString && ([(NSString *)visiableForPartClientIds length] > 0)) {
+        if ([visiableForPartClientIds isEqualToString:[LCChatKit sharedInstance].clientId]) {
+            visiableLastMessage = lastMessageFromCache;
+        }
+    }
+    return visiableLastMessage;
 }
 
-- (void)setLcck_lastMessage:(AVIMTypedMessage *)lcck_lastMessage {
-    objc_setAssociatedObject(self, @selector(lcck_lastMessage), lcck_lastMessage, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+- (NSDate *)lcck_lastMessageAt {
+    NSDate *dateFromServer = self.lastMessageAt;
+    NSDate *dateFromCache = [NSDate dateWithTimeIntervalSince1970:self.lcck_lastMessage.sendTimestamp / 1000];
+    BOOL isServerLate = [dateFromServer lcck_isLaterThan:dateFromCache];
+    return isServerLate ? dateFromServer : dateFromCache;
 }
 
 - (NSInteger)lcck_unreadCount {

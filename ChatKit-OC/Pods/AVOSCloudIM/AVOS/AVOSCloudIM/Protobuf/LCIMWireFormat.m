@@ -33,46 +33,53 @@
 #import "LCIMUtilities_PackagePrivate.h"
 
 enum {
-  GPBWireFormatTagTypeBits = 3,
-  GPBWireFormatTagTypeMask = 7 /* = (1 << GPBWireFormatTagTypeBits) - 1 */,
+  LCIMWireFormatTagTypeBits = 3,
+  LCIMWireFormatTagTypeMask = 7 /* = (1 << LCIMWireFormatTagTypeBits) - 1 */,
 };
 
-uint32_t GPBWireFormatMakeTag(uint32_t fieldNumber, GPBWireFormat wireType) {
-  return (fieldNumber << GPBWireFormatTagTypeBits) | wireType;
+uint32_t LCIMWireFormatMakeTag(uint32_t fieldNumber, LCIMWireFormat wireType) {
+  return (fieldNumber << LCIMWireFormatTagTypeBits) | wireType;
 }
 
-GPBWireFormat GPBWireFormatGetTagWireType(uint32_t tag) {
-  return (GPBWireFormat)(tag & GPBWireFormatTagTypeMask);
+LCIMWireFormat LCIMWireFormatGetTagWireType(uint32_t tag) {
+  return (LCIMWireFormat)(tag & LCIMWireFormatTagTypeMask);
 }
 
-uint32_t GPBWireFormatGetTagFieldNumber(uint32_t tag) {
-  return LCIMLogicalRightShift32(tag, GPBWireFormatTagTypeBits);
+uint32_t LCIMWireFormatGetTagFieldNumber(uint32_t tag) {
+  return LCIMLogicalRightShift32(tag, LCIMWireFormatTagTypeBits);
 }
 
-GPBWireFormat GPBWireFormatForType(GPBDataType type, BOOL isPacked) {
+BOOL LCIMWireFormatIsValidTag(uint32_t tag) {
+  uint32_t formatBits = (tag & LCIMWireFormatTagTypeMask);
+  // The valid LCIMWireFormat* values are 0-5, anything else is not a valid tag.
+  BOOL result = (formatBits <= 5);
+  return result;
+}
+
+LCIMWireFormat LCIMWireFormatForType(GPBDataType type, BOOL isPacked) {
   if (isPacked) {
-    return GPBWireFormatLengthDelimited;
+    return LCIMWireFormatLengthDelimited;
   }
 
-  static const GPBWireFormat format[GPBDataType_Count] = {
-      GPBWireFormatVarint,           // GPBDataTypeBool
-      GPBWireFormatFixed32,          // GPBDataTypeFixed32
-      GPBWireFormatFixed32,          // GPBDataTypeSFixed32
-      GPBWireFormatFixed32,          // GPBDataTypeFloat
-      GPBWireFormatFixed64,          // GPBDataTypeFixed64
-      GPBWireFormatFixed64,          // GPBDataTypeSFixed64
-      GPBWireFormatFixed64,          // GPBDataTypeDouble
-      GPBWireFormatVarint,           // GPBDataTypeInt32
-      GPBWireFormatVarint,           // GPBDataTypeInt64
-      GPBWireFormatVarint,           // GPBDataTypeSInt32
-      GPBWireFormatVarint,           // GPBDataTypeSInt64
-      GPBWireFormatVarint,           // GPBDataTypeUInt32
-      GPBWireFormatVarint,           // GPBDataTypeUInt64
-      GPBWireFormatLengthDelimited,  // GPBDataTypeBytes
-      GPBWireFormatLengthDelimited,  // GPBDataTypeString
-      GPBWireFormatLengthDelimited,  // GPBDataTypeMessage
-      GPBWireFormatStartGroup,       // GPBDataTypeGroup
-      GPBWireFormatVarint            // GPBDataTypeEnum
+  static const LCIMWireFormat format[GPBDataType_Count] = {
+      LCIMWireFormatVarint,           // GPBDataTypeBool
+      LCIMWireFormatFixed32,          // GPBDataTypeFixed32
+      LCIMWireFormatFixed32,          // GPBDataTypeSFixed32
+      LCIMWireFormatFixed32,          // GPBDataTypeFloat
+      LCIMWireFormatFixed64,          // GPBDataTypeFixed64
+      LCIMWireFormatFixed64,          // GPBDataTypeSFixed64
+      LCIMWireFormatFixed64,          // GPBDataTypeDouble
+      LCIMWireFormatVarint,           // GPBDataTypeInt32
+      LCIMWireFormatVarint,           // GPBDataTypeInt64
+      LCIMWireFormatVarint,           // GPBDataTypeSInt32
+      LCIMWireFormatVarint,           // GPBDataTypeSInt64
+      LCIMWireFormatVarint,           // GPBDataTypeUInt32
+      LCIMWireFormatVarint,           // GPBDataTypeUInt64
+      LCIMWireFormatLengthDelimited,  // GPBDataTypeBytes
+      LCIMWireFormatLengthDelimited,  // GPBDataTypeString
+      LCIMWireFormatLengthDelimited,  // GPBDataTypeMessage
+      LCIMWireFormatStartGroup,       // GPBDataTypeGroup
+      LCIMWireFormatVarint            // GPBDataTypeEnum
   };
   return format[type];
 }

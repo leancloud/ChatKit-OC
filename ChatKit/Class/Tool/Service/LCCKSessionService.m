@@ -55,11 +55,11 @@ NSString *const LCCKSessionServiceErrorDomain = @"LCCKSessionServiceErrorDomain"
     _clientId = clientId;
     [[LCCKConversationService sharedInstance] setupDatabaseWithUserId:_clientId];
     //判断是否是第一次使用该appId
-    [[LCChatKit sharedInstance] lcck_isFirstLaunchToEvent:[LCChatKit sharedInstance].appId
-                                               evenUpdate:YES
-                                              firstLaunch:^BOOL(){
-                                                   return [[LCChatKit sharedInstance] removeAllCachedRecentConversations];
-                                              }];
+     [[LCChatKit sharedInstance] lcck_isFirstLaunchToEvent:[LCChatKit sharedInstance].appId
+                                                                           evenUpdate:YES
+                                                                          firstLaunch:^BOOL(){
+                                                                              return [[LCChatKit sharedInstance] removeAllCachedRecentConversations];
+                                                                          }];
     NSString *tag;
     if (!self.disableSingleSignOn) {
         tag = clientId;
@@ -76,7 +76,24 @@ NSString *const LCCKSessionServiceErrorDomain = @"LCCKSessionServiceErrorDomain"
     option.force = force;
     [_client openWithOption:option callback:^(BOOL succeeded, NSError *error) {
         [self updateConnectStatus];
-        !callback ?: callback(succeeded, error);
+        
+        BOOL isFirstLaunchForClientId = [[LCChatKit sharedInstance] lcck_isFirstLaunchToEvent:clientId
+                                                                                   evenUpdate:YES
+                                                                                  firstLaunch:^BOOL(){
+                                                                                      return YES;
+                                                                                  }];
+        if (succeeded && isFirstLaunchForClientId) {
+            [[LCCKConversationListService sharedInstance] fetchRelationConversationsFromServer:^(NSArray * _Nullable conversations, NSError * _Nullable error) {
+                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
+                    [[LCCKConversationService sharedInstance] insertRecentConversations:conversations shouldRefreshWhenFinished:NO];
+                    dispatch_async(dispatch_get_main_queue(),^{
+                        !callback ?: callback(succeeded, error);
+                    });
+                });
+            }];
+        } else {
+            !callback ?: callback(succeeded, error);
+        }
         if (error.code == 4111) {
             [self handleSingleSignOnError:error callback:^(BOOL succeeded, NSError *error) {
                 !callback ?: callback(succeeded, error);
@@ -228,11 +245,17 @@ NSString *const LCCKSessionServiceErrorDomain = @"LCCKSessionServiceErrorDomain"
  * 低版本如果不支持某自定义消息，该自定义消息会走该代理
  */
 - (void)conversation:(AVIMConversation *)conversation didReceiveCommonMessage:(AVIMMessage *)message {
+    if (!message.lcck_isValidMessage) {
+        return;
+    }
     AVIMTypedMessage *typedMessage = [message lcck_getValidTypedMessage];
     [self conversation:conversation didReceiveTypedMessage:typedMessage];
 }
 
 - (void)conversation:(AVIMConversation *)conversation didReceiveTypedMessage:(AVIMTypedMessage *)message {
+    if (!message.lcck_isValidMessage) {
+        return;
+    }
     if (!message.messageId) {
         LCCKLog(@"🔴类名与方法名：%@（在第%@行），描述：%@", @(__PRETTY_FUNCTION__), @(__LINE__), @"Receive Message , but MessageId is nil");
         return;
@@ -244,9 +267,22 @@ NSString *const LCCKSessionServiceErrorDomain = @"LCCKSessionServiceErrorDomain"
 }
 
 - (void)conversation:(AVIMConversation *)conversation messageDelivered:(AVIMMessage *)message {
-    if (message != nil) {
-        [[NSNotificationCenter defaultCenter] postNotificationName:LCCKNotificationMessageDelivered object:message];
+    [self didReceiveStatusMessage:message conversation:conversation];
+}
+
+- (void)conversation:(AVIMConversation *)conversation messageRead:(AVIMMessage *)message {
+    [self didReceiveStatusMessage:message conversation:conversation];
+}
+
+- (void)didReceiveStatusMessage:(AVIMMessage *)message conversation:(AVIMConversation *)conversation {
+    if (!message.lcck_isValidMessage) {
+        return;
     }
+    NSDictionary *userInfo = @{
+                               LCCKMessageNotifacationUserInfoConversationKey : conversation,
+                               LCCKMessageNotifacationUserInfoMessageKey : message,
+                               };
+    [[NSNotificationCenter defaultCenter] postNotificationName:LCCKNotificationMessageDelivered object:userInfo];
 }
 
 - (void)conversation:(AVIMConversation *)conversation didReceiveUnread:(NSInteger)unread {
@@ -259,7 +295,10 @@ NSString *const LCCKSessionServiceErrorDomain = @"LCCKSessionServiceErrorDomain"
             }
         }];
         [self playLoudReceiveSoundIfNeededForConversation:conversation];
-        [conversation markAsReadInBackground];
+        //        [conversation markAsReadInBackground];
+        //FIXME:
+//        [conversation markAsReadInBackgroundForMessage:conversation.lcck_lastMessage];
+
     };
     [self makeSureConversation:conversation isAvailableCallback:fetchedConversationCallback];
 }
@@ -290,7 +329,7 @@ NSString *const LCCKSessionServiceErrorDomain = @"LCCKSessionServiceErrorDomain"
 - (void)receiveMessage:(AVIMTypedMessage *)message conversation:(AVIMConversation *)conversation {
     if (message.mediaType > 0) {
         NSDictionary *userInfo = @{
-                                   LCCKDidReceiveMessagesUserInfoConversationKey : conversation,
+                                   LCCKMessageNotifacationUserInfoConversationKey : conversation,
                                    LCCKDidReceiveCustomMessageUserInfoMessageKey : message,
                                    };
         [[NSNotificationCenter defaultCenter] postNotificationName:LCCKNotificationCustomTransientMessageReceived object:userInfo];
@@ -310,11 +349,10 @@ NSString *const LCCKSessionServiceErrorDomain = @"LCCKSessionServiceErrorDomain"
             [self playLoudReceiveSoundIfNeededForConversation:conversation];
         }
         NSDictionary *userInfo = @{
-                                   LCCKDidReceiveMessagesUserInfoConversationKey : conversation,
+                                   LCCKMessageNotifacationUserInfoConversationKey : conversation,
                                    LCCKDidReceiveMessagesUserInfoMessagesKey : filterdMessages,
                                    };
         // - 通知相关页面接收到了消息：“当前对话页面”、“最近对话页面”；
-        
         [[NSNotificationCenter defaultCenter] postNotificationName:LCCKNotificationMessageReceived object:userInfo];
     };
     
@@ -354,6 +392,8 @@ NSString *const LCCKSessionServiceErrorDomain = @"LCCKSessionServiceErrorDomain"
  */
 - (void)playLoudReceiveSoundIfNeededForConversation:(AVIMConversation *)conversation {
     if ([LCCKConversationService sharedInstance].chatting) {
+        //FIXME:
+//        [conversation markAsReadInBackgroundForMessage:conversation.lcck_lastMessage];
         return;
     }
     if (conversation.muted) {

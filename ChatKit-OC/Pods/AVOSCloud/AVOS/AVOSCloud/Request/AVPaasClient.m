@@ -25,6 +25,7 @@
 #import "LCRouter.h"
 #import "SDMacros.h"
 #import "AVOSCloud_Internal.h"
+#import "LCSSLChallenger.h"
 
 #define MAX_LAG_TIME 5.0
 
@@ -66,18 +67,18 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
     NSMutableString *command = [NSMutableString stringWithString:@"curl -i -k"];
     
     [command appendCommandLineArgument:[NSString stringWithFormat:@"-X %@", [self HTTPMethod]]];
+
+    if ([[[self HTTPMethod] uppercaseString] isEqualToString:@"GET"])
+        [command appendCommandLineArgument:@"-G"];
+
     NSData *data = [self HTTPBody];
     if ([data length] > 0) {
         NSString *HTTPBodyString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-//        [HTTPBodyString replaceOccurrencesOfString:@"\\" withString:@"\\\\" options:0 range:NSMakeRange(0, [HTTPBodyString length])];
-//        [HTTPBodyString replaceOccurrencesOfString:@"`" withString:@"\\`" options:0 range:NSMakeRange(0, [HTTPBodyString length])];
-//        [HTTPBodyString replaceOccurrencesOfString:@"\"" withString:@"\\\"" options:0 range:NSMakeRange(0, [HTTPBodyString length])];
-//        [HTTPBodyString replaceOccurrencesOfString:@"$" withString:@"\\$" options:0 range:NSMakeRange(0, [HTTPBodyString length])];
         [command appendCommandLineArgument:[NSString stringWithFormat:@"-d '%@'", HTTPBodyString]];
     }
     
     NSString *acceptEncodingHeader = [[self allHTTPHeaderFields] valueForKey:@"Accept-Encoding"];
-    if ([acceptEncodingHeader rangeOfString:@"gzip"].location != NSNotFound) {
+    if (acceptEncodingHeader && [acceptEncodingHeader rangeOfString:@"gzip"].location != NSNotFound) {
         [command appendCommandLineArgument:@"--compressed"];
     }
     
@@ -91,12 +92,12 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
     for (id field in [self allHTTPHeaderFields]) {
         [command appendCommandLineArgument:[NSString stringWithFormat:@"-H %@", [NSString stringWithFormat:@"'%@: %@'", field, [[self valueForHTTPHeaderField:field] stringByReplacingOccurrencesOfString:@"\'" withString:@"\\\'"]]]];
     }
+
     if ([self URL].query.length > 0) {
-        // where={}&redirectClassNameForKey=child
         NSString *query = [self URL].query;
         NSArray *components = [query componentsSeparatedByString:@"&"];
         for (NSString *component in components) {
-            [command appendCommandLineArgument:[NSString stringWithFormat:@"--data-urlencode \'%@\'", [component stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding]]];
+            [command appendCommandLineArgument:[NSString stringWithFormat:@"--data-urlencode \'%@\'", component.stringByRemovingPercentEncoding]];
         }
     }
 
@@ -185,6 +186,17 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
             NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
             LCURLSessionManager *manager = [[LCURLSessionManager alloc] initWithSessionConfiguration:configuration];
             manager.completionQueue = _completionQueue;
+
+#if LC_SSL_PINNING_ENABLED
+            [manager setSessionDidReceiveAuthenticationChallengeBlock:
+            ^NSURLSessionAuthChallengeDisposition(NSURLSession * _Nonnull session,
+                                                  NSURLAuthenticationChallenge * _Nonnull challenge,
+                                                  NSURLCredential *__autoreleasing  _Nullable * _Nullable credential)
+            {
+                [[LCSSLChallenger sharedInstance] acceptChallenge:challenge];
+                return NSURLSessionAuthChallengeUseCredential;
+            }];
+#endif
 
             /* Remove all null value of result. */
             LCJSONResponseSerializer *responseSerializer = (LCJSONResponseSerializer *)manager.responseSerializer;
@@ -324,6 +336,7 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
     [request setValue:USER_AGENT forHTTPHeaderField:@"User-Agent"];
     [request setValue:@"application/json; charset=utf-8" forHTTPHeaderField:@"Content-Type"];
     [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+    [request setValue:@"gzip" forHTTPHeaderField:@"Accept-Encoding"];
 
     NSString *sessionToken = self.currentUser.sessionToken;
 
