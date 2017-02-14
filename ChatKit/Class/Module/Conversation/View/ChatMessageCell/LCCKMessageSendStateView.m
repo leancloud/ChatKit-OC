@@ -21,7 +21,6 @@ static void * const LCCKSendImageViewShouldShowIndicatorViewContext = (void*)&LC
 
 @property (nonatomic, weak) UIActivityIndicatorView *indicatorView;
 @property (nonatomic, assign, getter=shouldShowIndicatorView) BOOL showIndicatorView;
-@property (nonatomic, weak) UILabel *statusLabel;
 
 @end
 
@@ -32,7 +31,6 @@ static void * const LCCKSendImageViewShouldShowIndicatorViewContext = (void*)&LC
         UIActivityIndicatorView *indicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
         indicatorView.hidden = YES;
         [self addSubview:self.indicatorView = indicatorView];
-        [self statusLabel];
         // KVO注册监听
         [self addObserver:self forKeyPath:@"showIndicatorView" options:NSKeyValueObservingOptionNew context:LCCKSendImageViewShouldShowIndicatorViewContext];
         __unsafe_unretained __typeof(self) weakSelf = self;
@@ -45,40 +43,19 @@ static void * const LCCKSendImageViewShouldShowIndicatorViewContext = (void*)&LC
     return self;
 }
 
-- (UILabel *)statusLabel {
-    if (_statusLabel) {
-        return _statusLabel;
-    }
-    UILabel *label = [[UILabel alloc] init];
-    label.textAlignment = NSTextAlignmentCenter;
-    label.numberOfLines = 0;
-    label.backgroundColor = [UIColor redColor];
-    label.text = @"read";
-    label.font= [UIFont boldSystemFontOfSize:12];
-    label.textColor = [UIColor whiteColor];
-    [label sizeToFit];
-    label.layer.cornerRadius = 3.0;
-    label.clipsToBounds = YES;
-    [self addSubview:_statusLabel = label];
-    return _statusLabel;
-}
-
 - (void)showErrorIcon:(BOOL)showErrorIcon {
     if (showErrorIcon) {
         NSString *imageName = @"MessageSendFail";
         UIImage *image = [UIImage lcck_imageNamed:imageName bundleName:@"MessageBubble" bundleForClass:[self class]];
         [self setImage:image forState:UIControlStateNormal];
-        self.userInteractionEnabled = YES;
     } else {
         [self setImage:nil forState:UIControlStateNormal];
-        self.userInteractionEnabled = NO;
     }
 }
 
 - (void)layoutSubviews {
     [super layoutSubviews];
     self.indicatorView.frame = self.bounds;
-    self.statusLabel.center = CGPointMake(self.bounds.size.width * 0.5, self.bounds.size.height * 0.5);
 }
 
 #pragma mark - Setters
@@ -101,28 +78,10 @@ static void * const LCCKSendImageViewShouldShowIndicatorViewContext = (void*)&LC
             self.showIndicatorView = YES;
             break;
             
-            
-        case LCCKMessageSendStateDelivered:
-            self.showIndicatorView = NO;
-            [self showErrorIcon:NO];
-            self.statusLabel.text = LCCKLocalizedStrings(@"Delivered");
-            break;
-            
         case LCCKMessageSendStateFailed:
             self.showIndicatorView = NO;
-            [self showErrorIcon:YES];
-            self.statusLabel.hidden = YES;
-            
             break;
-            
-        case LCCKMessageSendStateRead:
-            self.showIndicatorView = NO;
-            [self showErrorIcon:NO];
-            self.statusLabel.text = LCCKLocalizedStrings(@"Read");
-            break;
-            
-        case LCCKMessageSendStateNone:
-        case LCCKMessageSendStateSent:
+        default:
             self.hidden = YES;
             break;
     }
@@ -167,16 +126,14 @@ static void * const LCCKSendImageViewShouldShowIndicatorViewContext = (void*)&LC
         if ([keyPath isEqualToString:@"showIndicatorView"]) {
             id newKey = change[NSKeyValueChangeNewKey];
             BOOL showIndicatorView = [newKey boolValue];
-            self.hidden = NO;
-            self.indicatorView.hidden = !showIndicatorView;
-
             if (showIndicatorView) {
+                self.hidden = NO;
+                self.indicatorView.hidden = NO;
                 [self showErrorIcon:NO];
-                self.statusLabel.hidden = YES;
             } else {
-                //不显示指示器时，让 error 和 status 控件都默认展示，开发时只需要控制隐藏。
+                self.hidden = NO;
+                self.indicatorView.hidden = YES;
                 [self showErrorIcon:YES];
-                self.statusLabel.hidden = NO;
             }
         }
     }
