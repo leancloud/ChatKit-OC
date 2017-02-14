@@ -3,5 +3,3 @@
 
 ## What I have done:
 
-<!--- Please mention me to merge with wechat:chenyilong1010 -->
-

@@ -2,7 +2,7 @@
 //  LCCKSessionService.h
 //  LeanCloudChatKit-iOS
 //
-//  v0.8.5 Created by ElonChan (wechat:chenyilong1010) on 16/3/1.
+//  v0.8.5 Created by ElonChan  on 16/3/1.
 //  Copyright © 2016年 LeanCloud. All rights reserved.
 //
 

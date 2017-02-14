@@ -2,7 +2,7 @@
 //  LCCKStatusView.m
 //  LeanCloudChatKit-iOS
 //
-//  v0.8.5 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/3/11.
+//  v0.8.5 Created by ElonChan on 16/3/11.
 //  Copyright © 2016年 LeanCloud. All rights reserved.
 //
 
