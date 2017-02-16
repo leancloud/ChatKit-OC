@@ -19,8 +19,6 @@
 @property (nonatomic, strong) MLLinkLabel *messageTextLabel;
 @property (nonatomic, copy, readonly) NSDictionary *textStyle;
 @property (nonatomic, strong) NSArray *expressionData;
-@property (nonatomic, strong) UIColor *conversationViewMessageLeftTextColor; /**< 左侧文本消息文字颜色 */
-@property (nonatomic, strong) UIColor *conversationViewMessageRightTextColor; /**< 右侧文本消息文字颜色 */
 @property (nonatomic, strong) UIColor *conversationViewMessageLinkColorLeft; /**< 左侧消息中链接文字颜色，如果没有该项，则使用统一的消息链接文字颜色 */
 @property (nonatomic, strong) UIColor *conversationViewMessageLinkColorRight; /**< 右侧消息中链接文字颜色，如果没有该项，则使用统一的消息链接文字颜色 */
 @property (nonatomic, strong) UIColor *conversationViewMessageLinkColor; /**< 右侧消息中链接文字颜色，如果没有该项，则使用统一的消息链接文字颜色 */
@@ -138,23 +136,7 @@
 
 + (AVIMMessageMediaType)classMediaType {
     return kAVIMMessageMediaTypeText;
-}
-
-- (UIColor *)conversationViewMessageLeftTextColor {
-    if (_conversationViewMessageLeftTextColor) {
-        return _conversationViewMessageLeftTextColor;
-    }
-    _conversationViewMessageLeftTextColor = [[LCCKSettingService sharedInstance] defaultThemeColorForKey:@"ConversationView-Message-Left-TextColor"];
-    return _conversationViewMessageLeftTextColor;
-}
-
-- (UIColor *)conversationViewMessageRightTextColor {
-    if (_conversationViewMessageRightTextColor) {
-        return _conversationViewMessageRightTextColor;
-    }
-    _conversationViewMessageRightTextColor = [[LCCKSettingService sharedInstance] defaultThemeColorForKey:@"ConversationView-Message-Right-TextColor"];
-    return _conversationViewMessageRightTextColor;
-}
+} 
 
 - (UIColor *)conversationViewMessageLinkColorLeft {
     if (_conversationViewMessageLinkColorLeft) {

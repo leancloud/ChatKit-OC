@@ -120,6 +120,9 @@
  */
 @property (nonatomic, assign) LCCKMessageReadState messageReadState;
 
+@property (nonatomic, strong) UIColor *conversationViewMessageLeftTextColor; /**< 左侧文本消息文字颜色 */
+@property (nonatomic, strong) UIColor *conversationViewMessageRightTextColor; /**< 右侧文本消息文字颜色 */
+
 #pragma mark - Public Methods
 
 - (void)setup;
