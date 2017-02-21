@@ -2,7 +2,7 @@
 //  LCCKServiceDefinition.h
 //  LeanCloudChatKit-iOS
 //
-//  v0.8.5 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/2/22.
+//  v0.8.5 Created by ElonChan on 16/2/22.
 //  Copyright © 2016年 LeanCloud. All rights reserved.
 //  All the Typedefine for all kinds of services.
 
@@ -295,7 +295,7 @@ typedef void(^LCCKHUDActionBlock)(__kindof UIViewController *viewController, UIV
 
 typedef CGFloat (^LCCKAvatarImageViewCornerRadiusBlock)(CGSize avatarImageViewSize);
 
-@property (nonatomic, assign) LCCKAvatarImageViewCornerRadiusBlock avatarImageViewCornerRadiusBlock;
+@property (nonatomic, copy) LCCKAvatarImageViewCornerRadiusBlock avatarImageViewCornerRadiusBlock;
 
 /*!
  *  设置对话列表和聊天界面头像ImageView的圆角弧度

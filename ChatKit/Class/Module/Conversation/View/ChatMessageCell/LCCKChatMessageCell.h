@@ -3,7 +3,7 @@
 //  LCCKChatExample
 //  LCCKChatMessageCell 是所有LCCKChatCell的父类
 //  提供了delegate,messageOwner,messageType属性
-//  v0.8.5 Created by ElonChan (微信向我报BUG:chenyilong1010) ( https://github.com/leancloud/ChatKit-OC ) on 15/11/13.
+//  v0.8.5 Created by ElonChan ( https://github.com/leancloud/ChatKit-OC ) on 15/11/13.
 //  Copyright © 2015年 https://LeanCloud.cn . All rights reserved.
 //
 
@@ -119,6 +119,9 @@
  *  消息阅读状态,当状态为LCCKMessageUnRead时,LCCKmessageReadStateImageView显示
  */
 @property (nonatomic, assign) LCCKMessageReadState messageReadState;
+
+@property (nonatomic, strong) UIColor *conversationViewMessageLeftTextColor; /**< 左侧文本消息文字颜色 */
+@property (nonatomic, strong) UIColor *conversationViewMessageRightTextColor; /**< 右侧文本消息文字颜色 */
 
 #pragma mark - Public Methods
 

@@ -1,9 +1,9 @@
 //
 //  NSObject+IsFirstLaunch.m
-//  ElonChan (wechat:chenyilong1010)
+//  ElonChan 
 //
 //  v0.8.5 Created by chenyilong on 15/6/15.
-//  Copyright © 2015年 ElonChan (wechat:chenyilong1010). All rights reserved.
+//  Copyright © 2015年 ElonChan . All rights reserved.
 //
 
 #import "NSObject+LCCKIsFirstLaunch.h"
