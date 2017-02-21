@@ -20,35 +20,35 @@ NSString *const LCCKUIServiceErrorDomain = @"LCCKUIServiceErrorDomain";
 @synthesize avatarImageViewCornerRadiusBlock = _avatarImageViewCornerRadiusBlock;
 
 - (void)setPreviewImageMessageBlock:(LCCKPreviewImageMessageBlock)previewImageMessageBlock {
-    _previewImageMessageBlock = previewImageMessageBlock;
+    _previewImageMessageBlock = [previewImageMessageBlock copy];
 }
 
 - (void)setPreviewLocationMessageBlock:(LCCKPreviewLocationMessageBlock)previewLocationMessageBlock {
-    _previewLocationMessageBlock = previewLocationMessageBlock;
+    _previewLocationMessageBlock = [previewLocationMessageBlock copy];
 }
 
 - (void)setOpenProfileBlock:(LCCKOpenProfileBlock)openProfileBlock {
-    _openProfileBlock = openProfileBlock;
+    _openProfileBlock = [openProfileBlock copy];
 }
 
 - (void)setShowNotificationBlock:(LCCKShowNotificationBlock)showNotificationBlock {
-    _showNotificationBlock = showNotificationBlock;
+    _showNotificationBlock = [showNotificationBlock copy];
 }
 
 - (void)setHUDActionBlock:(LCCKHUDActionBlock)HUDActionBlock {
-    _HUDActionBlock = HUDActionBlock;
+    _HUDActionBlock = [HUDActionBlock copy];
 }
 
 - (void)setUnreadCountChangedBlock:(LCCKUnreadCountChangedBlock)unreadCountChangedBlock {
-    _unreadCountChangedBlock = unreadCountChangedBlock;
+    _unreadCountChangedBlock = [unreadCountChangedBlock copy];
 }
 
 - (void)setAvatarImageViewCornerRadiusBlock:(LCCKAvatarImageViewCornerRadiusBlock)avatarImageViewCornerRadiusBlock {
-    _avatarImageViewCornerRadiusBlock = avatarImageViewCornerRadiusBlock;
+    _avatarImageViewCornerRadiusBlock = [avatarImageViewCornerRadiusBlock copy];
 }
 
 - (void)setLongPressMessageBlock:(LCCKLongPressMessageBlock)longPressMessageBlock {
-    _longPressMessageBlock = longPressMessageBlock;
+    _longPressMessageBlock = [longPressMessageBlock copy];
 }
 
 @end

@@ -295,7 +295,7 @@ typedef void(^LCCKHUDActionBlock)(__kindof UIViewController *viewController, UIV
 
 typedef CGFloat (^LCCKAvatarImageViewCornerRadiusBlock)(CGSize avatarImageViewSize);
 
-@property (nonatomic, assign) LCCKAvatarImageViewCornerRadiusBlock avatarImageViewCornerRadiusBlock;
+@property (nonatomic, copy) LCCKAvatarImageViewCornerRadiusBlock avatarImageViewCornerRadiusBlock;
 
 /*!
  *  设置对话列表和聊天界面头像ImageView的圆角弧度
