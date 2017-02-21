@@ -46,12 +46,14 @@ static void * const LCCKChatVoiceMessageCellVoiceMessageStateContext = (void*)&L
             make.right.equalTo(self.messageVoiceStatusImageView.mas_left).with.offset(-8);
             make.centerY.equalTo(self.messageContentView.mas_centerY);
         }];
+        self.messageVoiceSecondsLabel.textColor = self.conversationViewMessageRightTextColor;
         [self.messageIndicatorView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.center.equalTo(self.messageContentView);
             make.width.equalTo(@10);
             make.height.equalTo(@10);
         }];
     } else if (self.messageOwner == LCCKMessageOwnerTypeOther) {
+        self.messageVoiceSecondsLabel.textColor = self.conversationViewMessageLeftTextColor;
         [self.messageVoiceStatusImageView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.equalTo(self.messageContentView.mas_left).with.offset(12);
             make.centerY.equalTo(self.messageContentView.mas_centerY);
@@ -182,7 +184,7 @@ static void * const LCCKChatVoiceMessageCellVoiceMessageStateContext = (void*)&L
 - (UILabel *)messageVoiceSecondsLabel {
     if (!_messageVoiceSecondsLabel) {
         _messageVoiceSecondsLabel = [[UILabel alloc] init];
-        _messageVoiceSecondsLabel.font = [UIFont systemFontOfSize:14.0f];
+        _messageVoiceSecondsLabel.font = [LCCKSettingService sharedInstance].defaultThemeTextMessageFont;
         _messageVoiceSecondsLabel.text = @"0''";
     }
     return _messageVoiceSecondsLabel;

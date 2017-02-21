@@ -548,5 +548,22 @@ static CGFloat const LCCK_MSG_CELL_NICKNAME_FONT_SIZE = 12;
     _conversationViewSenderNameTextColor = [[LCCKSettingService sharedInstance] defaultThemeColorForKey:@"ConversationView-SenderName-TextColor"];
     return _conversationViewSenderNameTextColor;
 }
+
+- (UIColor *)conversationViewMessageRightTextColor {
+    if (_conversationViewMessageRightTextColor) {
+        return _conversationViewMessageRightTextColor;
+    }
+    _conversationViewMessageRightTextColor = [[LCCKSettingService sharedInstance] defaultThemeColorForKey:@"ConversationView-Message-Right-TextColor"];
+    return _conversationViewMessageRightTextColor;
+}
+
+- (UIColor *)conversationViewMessageLeftTextColor {
+    if (_conversationViewMessageLeftTextColor) {
+        return _conversationViewMessageLeftTextColor;
+    }
+    _conversationViewMessageLeftTextColor = [[LCCKSettingService sharedInstance] defaultThemeColorForKey:@"ConversationView-Message-Left-TextColor"];
+    return _conversationViewMessageLeftTextColor;
+}
+
 @end
 
