@@ -1,0 +1,11 @@
+approve_by_comment: true
+approve_regex: '^(Reviewed|Approved|LGTM)'
+reject_regex: '^Rejected'
+reset_on_push: false
+reviewers:
+  required: 1
+  members:
+    - ChenYilong
+    - tang3w
+    - jwfing
+  name: default 
