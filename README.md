@@ -1,10 +1,7 @@
 # ChatKit 快速入门 · iOS
 
 <p align="center">
-![enter image description here](https://img.shields.io/badge/pod-v0.8.5-brightgreen.svg)  ![enter image description here](https://img.shields.io/badge/platform-iOS%207.0%2B-ff69b5618733984.svg) 
-<a href="https://github.com/leancloud/ChatKit-OC/blob/master/LICENSE"><img src="https://img.shields.io/badge/license-MIT-green.svg?style=flat"></a>[ CocoaPods-Doc](http://cocoapods.org/pods/ChatKit) 
-[![git-brag-stats](https://labs.turbo.run/git-brag?user=leancloud&repo=ChatKit-OC&maxn=7)](https://github.com/turbo/git-brag)
-
+<a href=""><img src="https://img.shields.io/badge/pod-v0.8.11-brightgreen.svg"></a> <a href=""><img src="https://img.shields.io/badge/platform-iOS%207.0%2B-ff69b5618733984.svg"></a> <a href=""><img src="https://img.shields.io/badge/platform-iOS%207.0%2B-ff69b5618733984.svg"></a> <a href="https://github.com/leancloud/ChatKit-OC/blob/master/LICENSE"><img src="https://img.shields.io/badge/license-MIT-green.svg?style=flat">
 </a>
 
 在使用中有任何问题都可以提 issue，同时也欢迎提 PR。
@@ -528,3 +525,5 @@ Demo 中也是通过这个方式来兼容iOS7的。
 ![](http://ww2.sinaimg.cn/large/7853084cjw1f7y0ltdaprj20r20fiacf.jpg)
 
 在使用中有任何问题都可以到[我们的官方论坛](https://forum.leancloud.cn/c/jing-xuan-faq)提问题，会有专业工程师回复，平均响应时间在24小时内。
+
+
