@@ -59,7 +59,7 @@ git clone --depth=1 https://github.com/leancloud/ChatKit-OC
 - 推、拉展示本对话中的最新消息，需要对 LeanCloud 实时通信接口比较熟悉；
 
 最近联系人 | 语音消息，根据语音长度调整宽度 | 图片消息，尺寸自适应 
--------------|-------------|-------------|-------------
+-------------|-------------|-------------
 ![enter image description here](http://i63.tinypic.com/1zxqjns.jpg)|![enter image description here](http://i68.tinypic.com/2rx9sfq.jpg)  | ![enter image description here](http://i64.tinypic.com/aw87wl.jpg) 
 
  地理位置消息| 失败消息本地缓存，可重发 |上传图片，进度条提示 
