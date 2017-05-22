@@ -48,6 +48,7 @@
 #endif
 
 NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationViewControllerErrorDomain";
+NSString *const RNNotificationName = @"sendMessageToRNNotificationName";
 
 @interface LCCKConversationViewController () <LCCKChatBarDelegate, LCCKChatMessageCellDelegate, LCCKConversationViewModelDelegate, LCCKPhotoBrowserDelegate>
 
@@ -201,6 +202,7 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
         chatViewModel.delegate = self;
         _chatViewModel = chatViewModel;
     }
+    _chatViewModel.peerSex = self.peerSex;
     return _chatViewModel;
 }
 
@@ -286,6 +288,19 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
                                                      serverMessageId:nil];
         [self makeSureSendValidMessage:lcckMessage afterFetchedConversationShouldWithAssert:NO];
         [self.chatViewModel sendMessage:lcckMessage];
+        
+        NSLog(@"999999 %@ 99999 %@ 99999 %@ 99999 %@ 99999", self.user.avatarURL, self.user.userId, self.user.name, self.user.sex
+              );
+        
+        [[NSNotificationCenter defaultCenter] postNotificationName:RNNotificationName object:@{
+                                                                                               @"USER_SEX": self.peerSex,
+                                                                                               @"USER_ICON": self.peerIcon,
+                                                                                               @"USER_NAME": self.peerName,
+                                                                                               @"USER_ID": self.peerID,
+                                                                                               @"MESSAGE_TYPE": @"MESSAGE_TYPE_CHAT",
+                                                                                               @"CHAT_TIME": [NSString stringWithFormat:@"%f", LCCK_CURRENT_TIMESTAMP],
+                                                                                               @"CHAT_MESSAGE":[NSString stringWithFormat:@"%@", text]
+                                                                                               }];
     }
 }
 
@@ -319,6 +334,15 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
                                 ];
         [self makeSureSendValidMessage:message afterFetchedConversationShouldWithAssert:NO];
         [self.chatViewModel sendMessage:message];
+        [[NSNotificationCenter defaultCenter] postNotificationName:RNNotificationName object:@{
+                                                                                               @"USER_SEX": self.peerSex,
+                                                                                               @"USER_ICON": self.peerIcon,
+                                                                                               @"USER_NAME": self.peerName,
+                                                                                               @"USER_ID": self.peerID,
+                                                                                               @"MESSAGE_TYPE": @"MESSAGE_TYPE_CHAT",
+                                                                                               @"CHAT_TIME": [NSString stringWithFormat:@"%f", LCCK_CURRENT_TIMESTAMP],
+                                                                                               @"CHAT_MESSAGE":@"图片消息"
+                                                                                               }];
     } else {
         [self alert:@"write image to file error"];
     }
@@ -334,6 +358,15 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
                                                         timestamp:LCCK_CURRENT_TIMESTAMP
                                                   serverMessageId:nil];
     [self makeSureSendValidMessage:message afterFetchedConversationShouldWithAssert:NO];
+    [[NSNotificationCenter defaultCenter] postNotificationName:RNNotificationName object:@{
+                                                                                           @"USER_SEX": self.peerSex,
+                                                                                           @"USER_ICON": self.peerIcon,
+                                                                                           @"USER_NAME": self.peerName,
+                                                                                           @"USER_ID": self.peerID,
+                                                                                           @"MESSAGE_TYPE": @"MESSAGE_TYPE_CHAT",
+                                                                                           @"CHAT_TIME": [NSString stringWithFormat:@"%f", LCCK_CURRENT_TIMESTAMP],
+                                                                                           @"CHAT_MESSAGE":@"语音消息"
+                                                                                           }];
     [self.chatViewModel sendMessage:message];
 }
 
@@ -388,7 +421,7 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
                             @(__LINE__),
                             @"Remember to check if `isAvailable` is ture, making sure sending message after conversation has been fetched"];
         if (!withAssert) {
-            LCCKLog(@"🔴类名与方法名：%@（在第%@行），描述：%@", @(__PRETTY_FUNCTION__), @(__LINE__), reason);
+            LCCKLog(@"�类名与方法名：%@（在第%@行），描述：%@", @(__PRETTY_FUNCTION__), @(__LINE__), reason);
             return;
         }
         NSAssert(NO, reason);
@@ -564,7 +597,7 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
     if (conversation.createAt) {
         if (!conversation.imClient) {
             [conversation setValue:[LCCKSessionService sharedInstance].client forKey:@"imClient"];
-            LCCKLog(@"🔴类名与方法名：%@（在第%@行），描述：%@", @(__PRETTY_FUNCTION__), @(__LINE__), @"imClient is nil");
+            LCCKLog(@"�类名与方法名：%@（在第%@行），描述：%@", @(__PRETTY_FUNCTION__), @(__LINE__), @"imClient is nil");
         }
         BOOL hasDraft = (conversation.lcck_draft.length > 0);
         if (hasDraft) {

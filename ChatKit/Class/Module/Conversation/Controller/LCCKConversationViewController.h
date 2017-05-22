@@ -21,6 +21,13 @@ FOUNDATION_EXTERN NSString *const LCCKConversationViewControllerErrorDomain;
  */
 @property (nonatomic, copy, readonly) NSString *conversationId;
 
+
+@property (nonatomic, copy) NSString *peerIcon;
+@property (nonatomic, copy) NSString *peerName;
+@property (nonatomic, copy) NSString *peerID;
+@property (nonatomic, copy) NSString *peerSex;
+
+
 /*!
  *  @brief Id of the peer, single conversation should be initialized with this property.
  *  @details Initialization method is `-initWithPeerId:`.

@@ -47,12 +47,7 @@
 #import "CYLDeallocBlockExecutor.h"
 #endif
 
-#define LCCKLock() dispatch_semaphore_wait(self->_lcck_lock, DISPATCH_TIME_FOREVER)
-#define LCCKUnlock() dispatch_semaphore_signal(self->_lcck_lock)
-
-@interface LCCKConversationViewModel () {
-    dispatch_semaphore_t _lcck_lock;
-}
+@interface LCCKConversationViewModel ()
 
 @property (nonatomic, weak) LCCKConversationViewController *parentConversationViewController;
 @property (nonatomic, strong) NSMutableArray *dataArray;
@@ -70,7 +65,6 @@
 
 - (instancetype)initWithParentViewController:(LCCKConversationViewController *)parentConversationViewController {
     if (self = [super init]) {
-        _lcck_lock = dispatch_semaphore_create(1);
         _dataArray = [NSMutableArray array];
         _avimTypedMessage = [NSMutableArray array];
         self.parentConversationViewController = parentConversationViewController;
@@ -130,6 +124,8 @@
     if (currentConversation.muted == NO) {
         [[LCCKSoundManager defaultManager] playReceiveSoundIfNeed];
     }
+    
+    
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
         NSArray *lcckMessages = [NSMutableArray lcck_messagesWithAVIMMessages:messages];
         dispatch_async(dispatch_get_main_queue(),^{
@@ -236,9 +232,9 @@
 
 - (void)appendMessagesToDataArrayTrailing:(NSArray *)messages {
     if (messages.count > 0) {
-        LCCKLock();
-        [self.dataArray addObjectsFromArray:messages];
-        LCCKUnlock();
+        @synchronized (self) {
+            [self.dataArray addObjectsFromArray:messages];
+        }
     }
 }
 
@@ -482,11 +478,32 @@ fromTimestamp     |    toDate   |                |  上次上拉刷新顶端，�
         id<LCCKUserDelegate> sender = [[LCCKUserSystemService sharedInstance] fetchCurrentUser];
         message.sender = sender;
         message.ownerType = LCCKMessageOwnerTypeSelf;
+        
+        
         avimTypedMessage = [AVIMTypedMessage lcck_messageWithLCCKMessage:message];
+        
+        
+        
+        
     } else {
         avimTypedMessage = aMessage;
     }
+    
+    // 自定义消息格式
+    LCCKMessage *message = (LCCKMessage *)aMessage;
+    id<LCCKUserDelegate> currentUser = message.sender;
+    
+    NSLog(@"999999 %@ 99999 %@ 99999 %@ 99999 %@ 99999", currentUser.avatarURL, currentUser.userId, currentUser.name, currentUser.sex
+          );
+    
+    [avimTypedMessage lcck_setObject:currentUser.avatarURL.absoluteString forKey:@"USER_ICON"];
+    [avimTypedMessage lcck_setObject:currentUser.userId forKey:@"USER_ID"];
+    [avimTypedMessage lcck_setObject:currentUser.name forKey:@"USER_NAME"];
+    [avimTypedMessage lcck_setObject:currentUser.sex forKey:@"USER_SEX"];
+
+    
     [avimTypedMessage lcck_setObject:@([self.parentConversationViewController getConversationIfExists].lcck_type) forKey:LCCKCustomMessageConversationTypeKey];
+    
     [avimTypedMessage setValue:[LCCKSessionService sharedInstance].clientId forKey:@"clientId"];//for LCCKSendMessageHookBlock
     [self.avimTypedMessage addObject:avimTypedMessage];
     [self preloadMessageToTableView:aMessage callback:^{
@@ -597,7 +614,6 @@ fromTimestamp     |    toDate   |                |  上次上拉刷新顶端，�
     NSUInteger newLastMessageCout = self.dataArray.count;
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:self.dataArray.count - 1 inSection:0];
     [self.delegate messageSendStateChanged:LCCKMessageSendStateSending withProgress:0.0f forIndex:indexPath.row];
-    LCCKLock();
     NSMutableArray *indexPaths = [NSMutableArray arrayWithObject:indexPath];
     NSUInteger additionItemsCount = newLastMessageCout - oldLastMessageCount;
     if (additionItemsCount > 1) {
@@ -608,7 +624,6 @@ fromTimestamp     |    toDate   |                |  上次上拉刷新顶端，�
     }
     dispatch_async(dispatch_get_main_queue(),^{
         [self.parentConversationViewController.tableView insertRowsAtIndexPaths:[indexPaths copy] withRowAnimation:UITableViewRowAnimationNone];
-        LCCKUnlock();
         [self.parentConversationViewController scrollToBottomAnimated:YES];
         !callback ?: callback();
     });

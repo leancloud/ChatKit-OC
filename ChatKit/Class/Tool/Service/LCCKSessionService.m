@@ -257,7 +257,7 @@ NSString *const LCCKSessionServiceErrorDomain = @"LCCKSessionServiceErrorDomain"
         return;
     }
     if (!message.messageId) {
-        LCCKLog(@"🔴类名与方法名：%@（在第%@行），描述：%@", @(__PRETTY_FUNCTION__), @(__LINE__), @"Receive Message , but MessageId is nil");
+        LCCKLog(@"�类名与方法名：%@（在第%@行），描述：%@", @(__PRETTY_FUNCTION__), @(__LINE__), @"Receive Message , but MessageId is nil");
         return;
     }
     void (^fetchedConversationCallback)() = ^() {
@@ -310,7 +310,7 @@ NSString *const LCCKSessionServiceErrorDomain = @"LCCKSessionServiceErrorDomain"
                 !callback ?: callback();
                 return;
             }
-            LCCKLog(@"🔴类名与方法名：%@（在第%@行），描述：%@", @(__PRETTY_FUNCTION__), @(__LINE__), error);
+            LCCKLog(@"�类名与方法名：%@（在第%@行），描述：%@", @(__PRETTY_FUNCTION__), @(__LINE__), error);
         }];
     } else {
         !callback ?: callback();
@@ -354,6 +354,31 @@ NSString *const LCCKSessionServiceErrorDomain = @"LCCKSessionServiceErrorDomain"
                                    };
         // - 通知相关页面接收到了消息：“当前对话页面”、“最近对话页面”；
         [[NSNotificationCenter defaultCenter] postNotificationName:LCCKNotificationMessageReceived object:userInfo];
+        
+        
+        AVIMTypedMessage * userObj = userInfo[@"receivedMessages"][0];
+        NSDictionary * userInformation = userObj.attributes;
+        
+        NSString * finalMessage = @"";
+        
+        if (userObj.mediaType == kAVIMMessageMediaTypeText) {
+            finalMessage = userObj.text;
+        } else if (userObj.mediaType == kAVIMMessageMediaTypeAudio) {
+            finalMessage = @"语音消息";
+        } else {
+            finalMessage = @"图片消息";
+        }
+        
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"sendMessageToRNNotificationName" object:@{
+                                                                                                               @"USER_SEX": userInformation[@"USER_SEX"],
+                                                                                                               @"USER_ICON": userInformation[@"USER_ICON"],
+                                                                                                               @"USER_NAME": userInformation[@"USER_NAME"],
+                                                                                                               @"USER_ID": userInformation[@"USER_ID"],
+                                                                                                               @"MESSAGE_TYPE": @"MESSAGE_TYPE_CHAT",
+                                                                                                               @"CHAT_TIME": [NSString stringWithFormat:@"%f", LCCK_CURRENT_TIMESTAMP],
+                                                                                                               @"CHAT_MESSAGE":finalMessage
+                                                                                                               }];
+        
     };
     
     void(^filteredMessageCallback)(NSArray *originalMessages) = ^(NSArray *filterdMessages) {

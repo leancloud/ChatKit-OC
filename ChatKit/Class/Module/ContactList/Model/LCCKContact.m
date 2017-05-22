@@ -13,8 +13,10 @@
 @synthesize name = _name;
 @synthesize avatarURL = _avatarURL;
 @synthesize clientId = _clientId;
+@synthesize sex = _sex;
 
-- (instancetype)initWithUserId:(NSString *)userId name:(NSString *)name avatarURL:(NSURL *)avatarURL clientId:(NSString *)clientId {
+
+- (instancetype)initWithUserId:(NSString *)userId name:(NSString *)name avatarURL:(NSURL *)avatarURL clientId:(NSString *)clientId sex:(NSString *)sex {
     self = [super init];
     if (!self) {
         return nil;
@@ -23,11 +25,12 @@
     _name = name;
     _avatarURL = avatarURL;
     _clientId = clientId;
+    _sex = sex;
     return self;
 }
 
-+ (instancetype)userWithUserId:(NSString *)userId name:(NSString *)name avatarURL:(NSURL *)avatarURL clientId:(NSString *)clientId{
-    LCCKContact *user = [[LCCKContact alloc] initWithUserId:userId name:name avatarURL:avatarURL clientId:clientId];
++ (instancetype)userWithUserId:(NSString *)userId name:(NSString *)name avatarURL:(NSURL *)avatarURL clientId:(NSString *)clientId sex:(NSString *)sex {
+    LCCKContact *user = [[LCCKContact alloc] initWithUserId:userId name:name avatarURL:avatarURL clientId:clientId sex:sex];
     return user;
 }
 
@@ -36,6 +39,7 @@
                                        name:self.name
                                   avatarURL:self.avatarURL
                                    clientId:self.clientId
+                                           sex:self.sex
             ];
 }
 
@@ -44,6 +48,7 @@
     [aCoder encodeObject:self.name forKey:@"name"];
     [aCoder encodeObject:self.avatarURL forKey:@"avatarURL"];
     [aCoder encodeObject:self.clientId forKey:@"clientId"];
+    [aCoder encodeObject:self.sex forKey:@"sex"];
 }
 
 - (id)initWithCoder:(NSCoder *)aDecoder {
@@ -52,6 +57,7 @@
         _name = [aDecoder decodeObjectForKey:@"name"];
         _avatarURL = [aDecoder decodeObjectForKey:@"avatarURL"];
         _clientId = [aDecoder decodeObjectForKey:@"clientId"];
+        _sex = [aDecoder decodeObjectForKey:@"sex"];
     }
     return self;
 }
