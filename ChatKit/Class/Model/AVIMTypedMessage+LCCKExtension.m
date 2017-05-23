@@ -45,7 +45,7 @@
             break;
         }
     }
-    avimTypedMessage.sendTimestamp = LCCK_CURRENT_TIMESTAMP;
+    [avimTypedMessage setObject:@(LCCK_CURRENT_TIMESTAMP) forKey:@"sendTimestamp"];
     return avimTypedMessage;
 }
 

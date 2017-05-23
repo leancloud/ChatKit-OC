@@ -1,17 +1,17 @@
 PODS:
-  - AVOSCloud (3.10.0)
-  - AVOSCloudIM (3.10.0):
-    - AVOSCloud (= 3.10.0)
-    - AVOSCloudIM/_ARC (= 3.10.0)
-    - AVOSCloudIM/_NOARC (= 3.10.0)
-  - AVOSCloudIM/_ARC (3.10.0):
-    - AVOSCloud (= 3.10.0)
-    - AVOSCloudIM/_NOARC (= 3.10.0)
-  - AVOSCloudIM/_NOARC (3.10.0):
-    - AVOSCloud (= 3.10.0)
+  - AVOSCloud (5.0.0)
+  - AVOSCloudIM (5.0.0):
+    - AVOSCloud (= 5.0.0)
+    - AVOSCloudIM/_ARC (= 5.0.0)
+    - AVOSCloudIM/_NOARC (= 5.0.0)
+  - AVOSCloudIM/_ARC (5.0.0):
+    - AVOSCloud (= 5.0.0)
+    - AVOSCloudIM/_NOARC (= 5.0.0)
+  - AVOSCloudIM/_NOARC (5.0.0):
+    - AVOSCloud (= 5.0.0)
   - ChatKit (0.8.14):
-    - AVOSCloud (~> 3.10.0)
-    - AVOSCloudIM (~> 3.10.0)
+    - AVOSCloud (~> 5.0.0)
+    - AVOSCloudIM (~> 5.0.0)
     - CYLDeallocBlockExecutor (~> 1.1.2)
     - DACircularProgress (~> 2.3.1)
     - FDStackView (~> 1.0)
@@ -50,7 +50,7 @@ PODS:
     - SDWebImage/Core (= 3.8.2)
   - SDWebImage/Core (3.8.2)
   - TWMessageBarManager (1.8.1)
-  - UITableView+FDTemplateLayoutCell (1.5.beta)
+  - UITableView+FDTemplateLayoutCell (1.6)
 
 DEPENDENCIES:
   - ChatKit (from `../`)
@@ -67,9 +67,9 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  AVOSCloud: 839b30ac3b382ad56c957ed6dd28a0a537d33d67
-  AVOSCloudIM: 13c9cf14b42304f4243d01906c17b5ee8f5529db
-  ChatKit: 1b72678d33558aa789395d1b30ca483cdf519435
+  AVOSCloud: 45a804e86d8d62307faaff5b162ea7dd101d5e02
+  AVOSCloudIM: d8ba269556f461ec74c2fc267bbe71590bcf6eb1
+  ChatKit: a93a57bb309f17a582ad8b8abdba8320aaa3d018
   CYLDeallocBlockExecutor: ecf39e45dcead9e120f460df5668b8f5093d178e
   CYLTabBarController: 8d99fccf22866fe18c978c5ff863dc6051da45ff
   CYLTableViewRowAction: 66bd3f7478b46894ff40b74d892fc85aed41656b
@@ -89,7 +89,7 @@ SPEC CHECKSUMS:
   RedpacketLib: e15853d93ac35141a1247b6ad79d6acb731d8704
   SDWebImage: '098e97e6176540799c27e804c96653ee0833d13c'
   TWMessageBarManager: fd84e7948ba7968a2b5d9454859135761214ec56
-  UITableView+FDTemplateLayoutCell: 02b508ab1cb4cea16a8c17ac83d2cd1fd72124f9
+  UITableView+FDTemplateLayoutCell: 5c949b4a5059c404b442926c0e80f81d10a2d66f
 
 PODFILE CHECKSUM: 7d90ea9ead990467a4361ec54f56c20830ebe416
 
