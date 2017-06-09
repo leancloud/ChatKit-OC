@@ -502,6 +502,9 @@
 		9AC44E9D1E15154300619112 /* UITableView+FDTemplateLayoutCellDebug.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AC44D7D1E15154300619112 /* UITableView+FDTemplateLayoutCellDebug.m */; };
 		9AC44E9E1E15154300619112 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 9AC44D7E1E15154300619112 /* LICENSE */; };
 		9AC44E9F1E15154300619112 /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = 9AC44D7F1E15154300619112 /* README.md */; };
+		FAE19C971EEA8EE4003B95FE /* LCCKRecordAudioHUD.h in Headers */ = {isa = PBXBuildFile; fileRef = FAE19C951EEA8EE4003B95FE /* LCCKRecordAudioHUD.h */; };
+		FAE19C981EEA8EE4003B95FE /* LCCKRecordAudioHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = FAE19C961EEA8EE4003B95FE /* LCCKRecordAudioHUD.m */; };
+		FAE19C9E1EEA95CC003B95FE /* LCCKRecordAudioHUD.bundle in Resources */ = {isa = PBXBuildFile; fileRef = FAE19C9D1EEA95CC003B95FE /* LCCKRecordAudioHUD.bundle */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -1005,6 +1008,9 @@
 		9AC44D7E1E15154300619112 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		9AC44D7F1E15154300619112 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		A9601FCE9729A0FE4669D33E /* libPods-ChatKit.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ChatKit.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		FAE19C951EEA8EE4003B95FE /* LCCKRecordAudioHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKRecordAudioHUD.h; sourceTree = "<group>"; };
+		FAE19C961EEA8EE4003B95FE /* LCCKRecordAudioHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCKRecordAudioHUD.m; sourceTree = "<group>"; };
+		FAE19C9D1EEA95CC003B95FE /* LCCKRecordAudioHUD.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = LCCKRecordAudioHUD.bundle; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1276,6 +1282,8 @@
 				9AAFA1871E14FBA3006618E0 /* LCCKInputViewPluginTakePhoto.m */,
 				9AAFA1881E14FBA3006618E0 /* LCCKProgressHUD.h */,
 				9AAFA1891E14FBA3006618E0 /* LCCKProgressHUD.m */,
+				FAE19C951EEA8EE4003B95FE /* LCCKRecordAudioHUD.h */,
+				FAE19C961EEA8EE4003B95FE /* LCCKRecordAudioHUD.m */,
 			);
 			path = ChatBar;
 			sourceTree = "<group>";
@@ -1354,6 +1362,7 @@
 				9AAFA1B21E14FBA4006618E0 /* Other.bundle */,
 				9AAFA1B31E14FBA4006618E0 /* Placeholder.bundle */,
 				9AAFA1B41E14FBA4006618E0 /* VoiceMessageSource.bundle */,
+				FAE19C9D1EEA95CC003B95FE /* LCCKRecordAudioHUD.bundle */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -2137,6 +2146,7 @@
 				9AAFA21A1E14FBA4006618E0 /* NSMutableArray+LCCKMessageExtention.h in Headers */,
 				9AAFA2631E14FBA5006618E0 /* LCCKInputViewPluginTakePhoto.h in Headers */,
 				9AC44E6F1E15154300619112 /* POPSpringSolver.h in Headers */,
+				FAE19C971EEA8EE4003B95FE /* LCCKRecordAudioHUD.h in Headers */,
 				9AAFA24B1E14FBA4006618E0 /* LCCKFaceManager.h in Headers */,
 				9AAFA2D01E14FBA6006618E0 /* Mp3Recorder.h in Headers */,
 				9AAFA2B71E14FBA5006618E0 /* LCCKAlertController.h in Headers */,
@@ -2422,6 +2432,7 @@
 				9AAFA2871E14FBA5006618E0 /* MBProgressHUD.bundle in Resources */,
 				9AC44E181E15154300619112 /* ImageSelectedSmallOn@2x.png in Resources */,
 				9AAFA2821E14FBA5006618E0 /* ChatKeyboard.bundle in Resources */,
+				FAE19C9E1EEA95CC003B95FE /* LCCKRecordAudioHUD.bundle in Resources */,
 				9AC44E9E1E15154300619112 /* LICENSE in Resources */,
 				9AC44E0D1E15154300619112 /* ImageError@3x.png in Resources */,
 				9AC44E231E15154300619112 /* UIBarButtonItemArrowRight.png in Resources */,
@@ -2556,6 +2567,7 @@
 				9AC44DC51E15154300619112 /* ViewController+MASAdditions.m in Sources */,
 				9AAFA2D91E14FBA6006618E0 /* LCCKSwipeView.m in Sources */,
 				9AC44DCF1E15154300619112 /* MJRefreshBackFooter.m in Sources */,
+				FAE19C981EEA8EE4003B95FE /* LCCKRecordAudioHUD.m in Sources */,
 				9AC44E951E15154300619112 /* UIView+WebCacheOperation.m in Sources */,
 				9AC44E511E15154300619112 /* POPAnimationRuntime.mm in Sources */,
 				9AC44D9C1E15154300619112 /* FDTransformLayer.m in Sources */,
