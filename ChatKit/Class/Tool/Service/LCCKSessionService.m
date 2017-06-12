@@ -365,8 +365,14 @@ NSString *const LCCKSessionServiceErrorDomain = @"LCCKSessionServiceErrorDomain"
             finalMessage = userObj.text;
         } else if (userObj.mediaType == kAVIMMessageMediaTypeAudio) {
             finalMessage = @"语音消息";
-        } else {
+        } else if (userObj.mediaType == kAVIMMessageMediaTypeImage) {
             finalMessage = @"图片消息";
+        } else {
+            if (userObj.text != nil) {
+                finalMessage = userObj.text;
+            } else {
+                finalMessage = @"收到新消息";
+            }
         }
         
         [[NSNotificationCenter defaultCenter] postNotificationName:@"sendMessageToRNNotificationName" object:@{
