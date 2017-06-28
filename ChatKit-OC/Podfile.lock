@@ -1,17 +1,17 @@
 PODS:
-  - AVOSCloud (5.0.0)
-  - AVOSCloudIM (5.0.0):
-    - AVOSCloud (= 5.0.0)
-    - AVOSCloudIM/_ARC (= 5.0.0)
-    - AVOSCloudIM/_NOARC (= 5.0.0)
-  - AVOSCloudIM/_ARC (5.0.0):
-    - AVOSCloud (= 5.0.0)
-    - AVOSCloudIM/_NOARC (= 5.0.0)
-  - AVOSCloudIM/_NOARC (5.0.0):
-    - AVOSCloud (= 5.0.0)
-  - ChatKit (0.8.14):
-    - AVOSCloud (~> 5.0.0)
-    - AVOSCloudIM (~> 5.0.0)
+  - AVOSCloud (6.0.0)
+  - AVOSCloudIM (6.0.0):
+    - AVOSCloud (= 6.0.0)
+    - AVOSCloudIM/_ARC (= 6.0.0)
+    - AVOSCloudIM/_NOARC (= 6.0.0)
+  - AVOSCloudIM/_ARC (6.0.0):
+    - AVOSCloud (= 6.0.0)
+    - AVOSCloudIM/_NOARC (= 6.0.0)
+  - AVOSCloudIM/_NOARC (6.0.0):
+    - AVOSCloud (= 6.0.0)
+  - ChatKit (0.10.0):
+    - AVOSCloud (~> 6.0.0)
+    - AVOSCloudIM (~> 6.0.0)
     - CYLDeallocBlockExecutor (~> 1.1.2)
     - DACircularProgress (~> 2.3.1)
     - FDStackView (~> 1.0)
@@ -42,7 +42,7 @@ PODS:
     - DACircularProgress (~> 2.3)
     - MBProgressHUD (~> 0.9)
     - SDWebImage (!= 3.7.2, ~> 3.7)
-  - pop (1.0.9)
+  - pop (1.0.10)
   - RedPacketAlipay (15.0.2)
   - RedpacketLib (3.4.1):
     - RedPacketAlipay
@@ -67,9 +67,9 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  AVOSCloud: 45a804e86d8d62307faaff5b162ea7dd101d5e02
-  AVOSCloudIM: d8ba269556f461ec74c2fc267bbe71590bcf6eb1
-  ChatKit: a93a57bb309f17a582ad8b8abdba8320aaa3d018
+  AVOSCloud: 8dc39671000e93ae80e1341f43f11d1fa27240b1
+  AVOSCloudIM: dac1fb1350508c9ecc561a591396b30e944d7239
+  ChatKit: 6e2303fb3f8a5e66ab4147789272d43a6c5813fb
   CYLDeallocBlockExecutor: ecf39e45dcead9e120f460df5668b8f5093d178e
   CYLTabBarController: 8d99fccf22866fe18c978c5ff863dc6051da45ff
   CYLTableViewRowAction: 66bd3f7478b46894ff40b74d892fc85aed41656b
@@ -84,7 +84,7 @@ SPEC CHECKSUMS:
   MLLabel: df58127ce0bd1f87890ecc3232db77a85ce4cd97
   MLPAutoCompleteTextField: ba4d507bbff2bd4f139d4197814fc8dd39caf77e
   MWPhotoBrowser: 5836d7aa041dc05a13de380c246826578adc5ea5
-  pop: f667631a5108a2e60d9e8797c9b32ddaf2080bce
+  pop: 82ca6b068ce9278fd350fd9dd09482a0ce9492e6
   RedPacketAlipay: a5de6db2e2671fc9255d6d396be869e3ba2f0489
   RedpacketLib: e15853d93ac35141a1247b6ad79d6acb731d8704
   SDWebImage: '098e97e6176540799c27e804c96653ee0833d13c'
