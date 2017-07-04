@@ -359,6 +359,28 @@ NSString *const LCCKSessionServiceErrorDomain = @"LCCKSessionServiceErrorDomain"
         AVIMTypedMessage * userObj = userInfo[@"receivedMessages"][0];
         NSDictionary * userInformation = userObj.attributes;
         
+        NSString *userSex = userInformation[@"USER_SEX"];
+        NSString *userIcon = userInformation[@"USER_ICON"];
+        NSString *userName = userInformation[@"USER_NAME"];
+        NSString *userId = userInformation[@"USER_ID"];
+        
+        // TODO 未识别的时候是返回custom:1。然后数据全丢了。。。
+        if(userSex == nil) {
+            userSex = @"";
+        }
+        
+        if(userIcon == nil) {
+            userIcon = @"";
+        }
+        
+        if(userName == nil) {
+            userName = @"";
+        }
+        
+        if(userId == nil) {
+            userId = userObj.clientId;
+        }
+        
         NSString * finalMessage = @"";
         
         if (userObj.mediaType == kAVIMMessageMediaTypeText) {
@@ -376,11 +398,7 @@ NSString *const LCCKSessionServiceErrorDomain = @"LCCKSessionServiceErrorDomain"
         }
         
         [[NSNotificationCenter defaultCenter] postNotificationName:@"sendMessageToRNNotificationName" object:@{
-                                                                                                               @"USER_SEX": userInformation[@"USER_SEX"],
-                                                                                                               @"USER_ICON": userInformation[@"USER_ICON"],
-                                                                                                               @"USER_NAME": userInformation[@"USER_NAME"],
-                                                                                                               @"USER_ID": userInformation[@"USER_ID"],
-                                                                                                               @"MESSAGE_TYPE": @"MESSAGE_TYPE_CHAT",
+                                                                                                               @"USER_SEX": userSex,                                  @"USER_ICON": userIcon,                                  @"USER_NAME": userName,                                      @"USER_ID": userId, @"MESSAGE_TYPE": @"MESSAGE_TYPE_CHAT",
                                                                                                                @"CHAT_TIME": [NSString stringWithFormat:@"%f", LCCK_CURRENT_TIMESTAMP],
                                                                                                                @"CHAT_MESSAGE":finalMessage
                                                                                                                }];
