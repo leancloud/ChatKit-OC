@@ -86,9 +86,8 @@
     if (cTime > 1) {
         [self audio_PCMtoMP3];
     } else {
-        
         [_recorder deleteRecording];
-        
+        // 时长小于1调用failRecord
         if ([_delegate respondsToSelector:@selector(failRecord)]) {
             [_delegate failRecord];
         }

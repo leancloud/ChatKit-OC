@@ -73,7 +73,17 @@
     } else {
         self.centerLabel.textColor = [UIColor yellowColor];
     }
-    self.centerLabel.text = [NSString stringWithFormat:@"%.1f",second-0.1];
+    //修复录音时长恰好为1S时 提示中显示“-1”的问题
+    if (second>0) {
+        self.centerLabel.text = [NSString stringWithFormat:@"%.1f",second-0.1];
+    } else {
+        if (_timer) {
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"LCCKChatBarRecordVoiceOutTime" object:nil];
+            [_timer invalidate];
+            _timer = nil;
+        }
+    }
+    
     [UIView commitAnimations];
 }
 
@@ -128,7 +138,7 @@
             self.centerLabel.text = @"录音成功";
             break;
         case LCCKProgressShort:
-            self.centerLabel.text = @"时间太短,请重试";
+            self.centerLabel.text = @"时间太短";//文本过长 无法显示
             break;
         case LCCKProgressError:
             self.centerLabel.text = @"录音失败";

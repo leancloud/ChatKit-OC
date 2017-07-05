@@ -45,6 +45,7 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
 @property (assign, nonatomic) CGFloat oldTextViewHeight;
 @property (nonatomic, assign, getter=shouldAllowTextViewContentOffset) BOOL allowTextViewContentOffset;
 @property (nonatomic, assign, getter=isClosed) BOOL close;
+@property (nonatomic, assign) BOOL outTime;//是否超时
 
 #pragma mark - MessageInputView Customize UI
 ///=============================================================================
@@ -123,6 +124,8 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
 - (void)dealloc {
     self.delegate = nil;
     _faceView.delegate = nil;
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidEnterBackgroundNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"LCCKChatBarRecordVoiceOutTime" object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
 }
@@ -345,7 +348,8 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
 }
 
 - (void)failRecord {
-    [LCCKProgressHUD dismissWithProgressState:LCCKProgressError];
+    // 此回调在录音时长小于1时调用 应该提示Short而不是Error
+    [LCCKProgressHUD dismissWithProgressState:LCCKProgressShort];
 }
 
 - (void)beginConvert {
@@ -422,6 +426,26 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
     [self.textView becomeFirstResponder];
 }
 
+-(BOOL)JudgeAVAudioSession {
+    __block BOOL bCanRecord = YES;
+    AVAudioSession *audioSession = [AVAudioSession sharedInstance];
+    if ([audioSession respondsToSelector:@selector(requestRecordPermission:)])
+    {
+        [audioSession performSelector:@selector(requestRecordPermission:) withObject:^(BOOL granted)
+         {
+             if (granted)
+             {
+                 bCanRecord = YES;
+             }
+             else
+             {
+                 bCanRecord = NO;
+             }
+         }];
+    }
+    return bCanRecord;
+}
+
 #pragma mark - Private Methods
 
 - (void)keyboardWillHide:(NSNotification *)notification {
@@ -474,6 +498,7 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
 
 - (void)setup {
     self.close = NO;
+    self.outTime = NO;
     self.oldTextViewHeight = kLCCKChatBarTextViewFrameMinHeight;
     self.allowTextViewContentOffset = YES;
     self.MP3 = [[Mp3Recorder alloc] initWithDelegate:self];
@@ -494,6 +519,10 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
         make.left.and.right.and.top.equalTo(self.inputBarBackgroundView);
         make.height.mas_equalTo(.5f);
     }];
+    
+    //修复录音时点击Home键 在返回App后 仍然显示录音动效的问题
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appBecomeBackgroundCancelRecordVoice) name:UIApplicationDidEnterBackgroundNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appRecieveMsgFromRecordTimer) name:@"LCCKChatBarRecordVoiceOutTime" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     self.backgroundColor = self.messageInputViewBackgroundColor;
@@ -504,6 +533,7 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
  *  开始录音
  */
 - (void)startRecordVoice {
+    //FIXME:需要判断是否开启权限 不允许也会弹出录音的提示框
     [LCCKProgressHUD show];
     self.voiceRecordButton.highlighted = YES;
     [self.MP3 startRecord];
@@ -522,9 +552,12 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
  *  录音结束
  */
 - (void)confirmRecordVoice {
-    [self.MP3 stopRecord];
+    if (self.outTime == NO) {
+        [self.MP3 stopRecord];
+    } else {
+        self.outTime = NO;
+    }
 }
-
 /**
  *  更新录音显示状态,手指向上滑动后提示松开取消录音
  */
@@ -537,6 +570,26 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
  */
 - (void)updateContinueRecordVoice {
     [LCCKProgressHUD changeSubTitle:@"向上滑动取消录音"];
+}
+
+/**
+ *  进入后台 取消当前的录音
+ */
+- (void)appBecomeBackgroundCancelRecordVoice {
+    [self cancelRecordVoice];
+}
+
+/**
+ *  倒计时结束 完成当前的录音
+ */
+- (void)appRecieveMsgFromRecordTimer
+{
+    if (self.voiceRecordButton.highlighted == YES) {
+        self.voiceRecordButton.selected = NO;
+        self.voiceRecordButton.highlighted = NO;
+        [self.MP3 stopRecord];
+        self.outTime = YES;
+    }
 }
 
 - (void)setShowType:(LCCKFunctionViewShowType)showType {
