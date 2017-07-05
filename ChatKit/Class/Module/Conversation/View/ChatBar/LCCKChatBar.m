@@ -426,26 +426,6 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
     [self.textView becomeFirstResponder];
 }
 
--(BOOL)JudgeAVAudioSession {
-    __block BOOL bCanRecord = YES;
-    AVAudioSession *audioSession = [AVAudioSession sharedInstance];
-    if ([audioSession respondsToSelector:@selector(requestRecordPermission:)])
-    {
-        [audioSession performSelector:@selector(requestRecordPermission:) withObject:^(BOOL granted)
-         {
-             if (granted)
-             {
-                 bCanRecord = YES;
-             }
-             else
-             {
-                 bCanRecord = NO;
-             }
-         }];
-    }
-    return bCanRecord;
-}
-
 #pragma mark - Private Methods
 
 - (void)keyboardWillHide:(NSNotification *)notification {
