@@ -357,6 +357,9 @@ NSString *const LCCKSessionServiceErrorDomain = @"LCCKSessionServiceErrorDomain"
         
         
         AVIMTypedMessage * userObj = userInfo[@"receivedMessages"][0];
+        if(![userObj respondsToSelector:@selector(attributes)]) {
+            return;
+        }
         NSDictionary * userInformation = userObj.attributes;
         
         NSString *userSex = userInformation[@"USER_SEX"];
