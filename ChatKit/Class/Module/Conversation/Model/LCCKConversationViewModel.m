@@ -491,17 +491,19 @@ fromTimestamp     |    toDate   |                |  上次上拉刷新顶端，�
     
     // 自定义消息格式
     LCCKMessage *message = (LCCKMessage *)aMessage;
-    id<LCCKUserDelegate> currentUser = message.sender;
-    
-    NSLog(@"999999 %@ 99999 %@ 99999 %@ 99999 %@ 99999", currentUser.avatarURL, currentUser.userId, currentUser.name, currentUser.sex
-          );
-    
-    [avimTypedMessage lcck_setObject:currentUser.avatarURL.absoluteString forKey:@"USER_ICON"];
-    [avimTypedMessage lcck_setObject:currentUser.userId forKey:@"USER_ID"];
-    [avimTypedMessage lcck_setObject:currentUser.name forKey:@"USER_NAME"];
-    [avimTypedMessage lcck_setObject:currentUser.sex forKey:@"USER_SEX"];
 
-    
+    if([message respondsToSelector:@selector(sender)]) {
+        id<LCCKUserDelegate> currentUser = message.sender;
+        
+        NSLog(@"999999 %@ 99999 %@ 99999 %@ 99999 %@ 99999", currentUser.avatarURL, currentUser.userId, currentUser.name, currentUser.sex
+              );
+        
+        [avimTypedMessage lcck_setObject:currentUser.avatarURL.absoluteString forKey:@"USER_ICON"];
+        [avimTypedMessage lcck_setObject:currentUser.userId forKey:@"USER_ID"];
+        [avimTypedMessage lcck_setObject:currentUser.name forKey:@"USER_NAME"];
+        [avimTypedMessage lcck_setObject:currentUser.sex forKey:@"USER_SEX"];
+    }
+
     [avimTypedMessage lcck_setObject:@([self.parentConversationViewController getConversationIfExists].lcck_type) forKey:LCCKCustomMessageConversationTypeKey];
     
     [avimTypedMessage setValue:[LCCKSessionService sharedInstance].clientId forKey:@"clientId"];//for LCCKSendMessageHookBlock

@@ -367,7 +367,6 @@ NSString *const LCCKSessionServiceErrorDomain = @"LCCKSessionServiceErrorDomain"
         NSString *userName = userInformation[@"USER_NAME"];
         NSString *userId = userInformation[@"USER_ID"];
         
-        
         if(userSex == nil) {
             userSex = @"";
         }
