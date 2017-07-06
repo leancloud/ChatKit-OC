@@ -357,7 +357,32 @@ NSString *const LCCKSessionServiceErrorDomain = @"LCCKSessionServiceErrorDomain"
         
         
         AVIMTypedMessage * userObj = userInfo[@"receivedMessages"][0];
+        if(![userObj respondsToSelector:@selector(attributes)]) {
+            return;
+        }
         NSDictionary * userInformation = userObj.attributes;
+        
+        NSString *userSex = userInformation[@"USER_SEX"];
+        NSString *userIcon = userInformation[@"USER_ICON"];
+        NSString *userName = userInformation[@"USER_NAME"];
+        NSString *userId = userInformation[@"USER_ID"];
+        
+        
+        if(userSex == nil) {
+            userSex = @"";
+        }
+        
+        if(userIcon == nil) {
+            userIcon = @"";
+        }
+        
+        if(userName == nil) {
+            userName = @"";
+        }
+        
+        if(userId == nil) {
+            userId = userObj.clientId;
+        }
         
         NSString * finalMessage = @"";
         
@@ -365,21 +390,24 @@ NSString *const LCCKSessionServiceErrorDomain = @"LCCKSessionServiceErrorDomain"
             finalMessage = userObj.text;
         } else if (userObj.mediaType == kAVIMMessageMediaTypeAudio) {
             finalMessage = @"语音消息";
-        } else {
+        } else if (userObj.mediaType == kAVIMMessageMediaTypeImage) {
             finalMessage = @"图片消息";
+        } else {
+            if (userObj.text != nil) {
+                finalMessage = userObj.text;
+            } else {
+                finalMessage = @"收到新消息";
+            }
         }
         
         [[NSNotificationCenter defaultCenter] postNotificationName:@"sendMessageToRNNotificationName" object:@{
-                                                                                                               @"USER_SEX": userInformation[@"USER_SEX"],
-                                                                                                               @"USER_ICON": userInformation[@"USER_ICON"],
-                                                                                                               @"USER_NAME": userInformation[@"USER_NAME"],
-                                                                                                               @"USER_ID": userInformation[@"USER_ID"],
-                                                                                                               @"MESSAGE_TYPE": @"MESSAGE_TYPE_CHAT",
+                                                                                                               @"USER_SEX": userSex,                                  @"USER_ICON": userIcon,                                  @"USER_NAME": userName,                                      @"USER_ID": userId, @"MESSAGE_TYPE": @"MESSAGE_TYPE_CHAT",
                                                                                                                @"CHAT_TIME": [NSString stringWithFormat:@"%f", LCCK_CURRENT_TIMESTAMP],
                                                                                                                @"CHAT_MESSAGE":finalMessage
                                                                                                                }];
         
     };
+
     
     void(^filteredMessageCallback)(NSArray *originalMessages) = ^(NSArray *filterdMessages) {
         if (filterdMessages.count == 0) { return; }

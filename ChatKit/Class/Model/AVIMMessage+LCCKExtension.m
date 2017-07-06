@@ -33,6 +33,7 @@
     }
     NSString *messageText;
     NSDictionary *attr;
+    BOOL ibreakIntext = NO;
     if ([[self class] isSubclassOfClass:[AVIMMessage class]]) {
         //当存在无法识别的自定义消息，SDK会返回 AVIMMessage 类型
         AVIMMessage *message = self;
@@ -42,6 +43,10 @@
             NSString *customMessageDegradeKey = [json valueForKey:@"_lctext"];
             if (customMessageDegradeKey.length > 0) {
                 messageText = customMessageDegradeKey;
+                if ([json valueForKey:@"_lcattrs"] != nil) {
+                    attr = [json valueForKey:@"_lcattrs"];
+                }
+                ibreakIntext = YES;
                 break;
             }
             attr = [json valueForKey:@"_lcattrs"];
@@ -60,6 +65,9 @@
     [typedMessage setValue:@(self.sendTimestamp) forKey:@"sendTimestamp"];
     [typedMessage setValue:self.clientId forKey:@"clientId"];
     [typedMessage lcck_setObject:@(YES) forKey:LCCKCustomMessageIsCustomKey];
+    if (ibreakIntext) {
+        [typedMessage lcck_setObject:attr forKey:@"olCustom"];
+    }
     return typedMessage;
 }
 
