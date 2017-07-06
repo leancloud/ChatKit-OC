@@ -79,7 +79,12 @@ static NSString *const LCCKNotificationRecordNoPower = @"LCCKChatBarRecordVoiceN
 /**
  *  发送文本消息过长。通知界面提醒用户
  */
-static NSString *const LCCKNotificationTextOutLength = @"LCCKChatBarTextOutLength";
+static NSString *const LCCKNotificationTextLengthOut = @"LCCKChatBarTextLengthOut";
+
+/**
+ *  发送语音消息倒计时结束。通知UI停止动效
+ */
+static NSString *const LCCKNotificationRecordTimeOut = @"LCCKChatBarRecordVoiceTimeOut";
 
 /**
  *  未读数改变了。通知去服务器同步 installation 的badge

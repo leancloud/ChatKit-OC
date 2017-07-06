@@ -227,7 +227,7 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
     }];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userWillSendMsgWithoutPower) name:LCCKNotificationRecordNoPower object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(recieveNewMsgForOutLength) name:LCCKNotificationTextOutLength object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(recieveNewMsgForLengthOut) name:LCCKNotificationTextLengthOut object:nil];
 
     [self.chatViewModel setDefaultBackgroundImage];
     self.navigationItem.title = LCCKLocalizedStrings(@"Chat");//@"聊天";
@@ -419,14 +419,25 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
 }
 
 #pragma mark - Notification
+
 - (void)userWillSendMsgWithoutPower {
-    //FIXME:放开方法
-//    [self showWarning:@"需要开启麦克风权限"];
+    [self showWaring:@"需要开启麦克风权限"];
 }
 
-- (void)recieveNewMsgForOutLength {
-    //FIXME:放开方法
-//    [self showWarning:@"每次输入最多1000字~"];
+- (void)recieveNewMsgForLengthOut {
+    [self showWaring:@"每次输入最多1000字~"];
+}
+
+- (void)showWaring:(NSString *)message {
+    // 没有找到Toast 只能用弹框
+    LCCKAlertController *alert = [LCCKAlertController alertControllerWithTitle:nil
+                                                                       message:message
+                                                                preferredStyle:LCCKAlertControllerStyleAlert];
+    NSString *cancelActionTitle = LCCKLocalizedStrings(@"ok");
+    LCCKAlertAction *cancelAction = [LCCKAlertAction actionWithTitle:cancelActionTitle style:LCCKAlertActionStyleDefault
+                                                             handler:^(LCCKAlertAction * action) {}];
+    [alert addAction:cancelAction];
+    [alert showWithSender:nil controller:self animated:YES completion:NULL];
 }
 
 #pragma mark - UI init

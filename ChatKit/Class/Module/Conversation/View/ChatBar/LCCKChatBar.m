@@ -45,7 +45,7 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
 @property (assign, nonatomic) CGFloat oldTextViewHeight;
 @property (nonatomic, assign, getter=shouldAllowTextViewContentOffset) BOOL allowTextViewContentOffset;
 @property (nonatomic, assign, getter=isClosed) BOOL close;
-@property (nonatomic, assign) BOOL outTime;//是否超时
+@property (nonatomic, assign) BOOL isTimeOut;//是否超时
 
 #pragma mark - MessageInputView Customize UI
 ///=============================================================================
@@ -125,7 +125,7 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
     self.delegate = nil;
     _faceView.delegate = nil;
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidEnterBackgroundNotification object:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"LCCKChatBarRecordVoiceOutTime" object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:LCCKNotificationRecordTimeOut object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
 }
@@ -248,6 +248,19 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
 
 #pragma mark -
 #pragma mark - Private Methods
+
+- (BOOL)judgeAVAudioSession {
+    __block BOOL bCanRecord = YES;
+    AVAudioSession *audioSession = [AVAudioSession sharedInstance];
+    [audioSession requestRecordPermission:^(BOOL granted) {
+        if (granted) {
+            bCanRecord = YES;
+        } else {
+            bCanRecord = NO;
+        }
+    }];
+    return bCanRecord;
+}
 
 - (void)updateChatBarConstraintsIfNeeded {
     NSString *reason = [NSString stringWithFormat:@"🔴类名与方法名：%@（在第%@行），描述：%@", @(__PRETTY_FUNCTION__), @(__LINE__), @"Should update on main thread"];
@@ -478,7 +491,7 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
 
 - (void)setup {
     self.close = NO;
-    self.outTime = NO;
+    self.isTimeOut = NO;
     self.oldTextViewHeight = kLCCKChatBarTextViewFrameMinHeight;
     self.allowTextViewContentOffset = YES;
     self.MP3 = [[Mp3Recorder alloc] initWithDelegate:self];
@@ -502,7 +515,7 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
     
     //修复录音时点击Home键 在返回App后 仍然显示录音动效的问题
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appBecomeBackgroundCancelRecordVoice) name:UIApplicationDidEnterBackgroundNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appRecieveMsgFromRecordTimer) name:@"LCCKChatBarRecordVoiceOutTime" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appRecieveMsgFromRecordTimer) name:LCCKNotificationRecordTimeOut object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     self.backgroundColor = self.messageInputViewBackgroundColor;
@@ -514,28 +527,13 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
  */
 - (void)startRecordVoice {
     // 判断权限
-    if ([self JudgeAVAudioSession]) {
+    if ([self judgeAVAudioSession]) {
         [LCCKProgressHUD show];
         self.voiceRecordButton.highlighted = YES;
         [self.MP3 startRecord];
     } else {
         [[NSNotificationCenter defaultCenter] postNotificationName:LCCKNotificationRecordNoPower object:nil];
     }
-}
-
-- (BOOL)JudgeAVAudioSession {
-    __block BOOL bCanRecord = YES;
-    AVAudioSession *audioSession = [AVAudioSession sharedInstance];
-    if ([audioSession respondsToSelector:@selector(requestRecordPermission:)]) {
-        [audioSession performSelector:@selector(requestRecordPermission:) withObject:^(BOOL granted) {
-             if (granted) {
-                 bCanRecord = YES;
-             } else {
-                 bCanRecord = NO;
-             }
-         }];
-    }
-    return bCanRecord;
 }
 
 /**
@@ -551,10 +549,10 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
  *  录音结束
  */
 - (void)confirmRecordVoice {
-    if (self.outTime == NO) {
+    if (self.isTimeOut == NO) {
         [self.MP3 stopRecord];
     } else {
-        self.outTime = NO;
+        self.isTimeOut = NO;
     }
 }
 /**
@@ -587,7 +585,7 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
         self.voiceRecordButton.selected = NO;
         self.voiceRecordButton.highlighted = NO;
         [self.MP3 stopRecord];
-        self.outTime = YES;
+        self.isTimeOut = YES;
     }
 }
 
@@ -717,7 +715,7 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
         return;
     }
     if (text.length > 1000) {
-        [[NSNotificationCenter defaultCenter] postNotificationName:LCCKNotificationTextOutLength object:nil];
+        [[NSNotificationCenter defaultCenter] postNotificationName:LCCKNotificationTextLengthOut object:nil];
         return;
     }
     if (self.delegate && [self.delegate respondsToSelector:@selector(chatBar:sendMessage:)]) {

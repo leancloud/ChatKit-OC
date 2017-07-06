@@ -8,6 +8,7 @@
 
 #import "LCCKProgressHUD.h"
 #import "UIImage+LCCKExtension.h"
+#import "LCCKConstants.h"
 
 @interface LCCKProgressHUD ()
 
@@ -78,7 +79,7 @@
         self.centerLabel.text = [NSString stringWithFormat:@"%.1f",second-0.1];
     } else {
         if (_timer) {
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"LCCKChatBarRecordVoiceOutTime" object:nil];
+            [[NSNotificationCenter defaultCenter] postNotificationName:LCCKNotificationRecordTimeOut object:nil];
             [_timer invalidate];
             _timer = nil;
         }
