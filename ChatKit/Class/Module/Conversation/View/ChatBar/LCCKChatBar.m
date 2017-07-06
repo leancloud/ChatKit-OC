@@ -513,10 +513,29 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
  *  开始录音
  */
 - (void)startRecordVoice {
-    //FIXME:需要判断是否开启权限 不允许也会弹出录音的提示框
-    [LCCKProgressHUD show];
-    self.voiceRecordButton.highlighted = YES;
-    [self.MP3 startRecord];
+    // 判断权限
+    if ([self JudgeAVAudioSession]) {
+        [LCCKProgressHUD show];
+        self.voiceRecordButton.highlighted = YES;
+        [self.MP3 startRecord];
+    } else {
+        [[NSNotificationCenter defaultCenter] postNotificationName:LCCKNotificationRecordNoPower object:nil];
+    }
+}
+
+- (BOOL)JudgeAVAudioSession {
+    __block BOOL bCanRecord = YES;
+    AVAudioSession *audioSession = [AVAudioSession sharedInstance];
+    if ([audioSession respondsToSelector:@selector(requestRecordPermission:)]) {
+        [audioSession performSelector:@selector(requestRecordPermission:) withObject:^(BOOL granted) {
+             if (granted) {
+                 bCanRecord = YES;
+             } else {
+                 bCanRecord = NO;
+             }
+         }];
+    }
+    return bCanRecord;
 }
 
 /**
@@ -695,6 +714,10 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
  */
 - (void)sendTextMessage:(NSString *)text{
     if (!text || text.length == 0 || [text lcck_isSpace]) {
+        return;
+    }
+    if (text.length > 1000) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:LCCKNotificationTextOutLength object:nil];
         return;
     }
     if (self.delegate && [self.delegate respondsToSelector:@selector(chatBar:sendMessage:)]) {

@@ -185,6 +185,10 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
     }
 }
 
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
 #ifdef CYLDebugging
 - (BOOL)willDealloc {
     if (![super willDealloc]) {
@@ -221,6 +225,10 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
     [[LCCKUserSystemService sharedInstance] fetchCurrentUserInBackground:^(id<LCCKUserDelegate> user, NSError *error) {
         self.user = user;
     }];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userWillSendMsgWithoutPower) name:LCCKNotificationRecordNoPower object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(recieveNewMsgForOutLength) name:LCCKNotificationTextOutLength object:nil];
+
     [self.chatViewModel setDefaultBackgroundImage];
     self.navigationItem.title = LCCKLocalizedStrings(@"Chat");//@"聊天";
     !self.viewDidLoadBlock ?: self.viewDidLoadBlock(self);
@@ -408,6 +416,17 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
                                        reason:reason
                                      userInfo:nil];
     }
+}
+
+#pragma mark - Notification
+- (void)userWillSendMsgWithoutPower {
+    //FIXME:放开方法
+//    [self showWarning:@"需要开启麦克风权限"];
+}
+
+- (void)recieveNewMsgForOutLength {
+    //FIXME:放开方法
+//    [self showWarning:@"每次输入最多1000字~"];
 }
 
 #pragma mark - UI init

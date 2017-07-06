@@ -70,6 +70,17 @@ static NSString *const LCCKBadgeTextForNumberGreaterThanLimit = @"···";
 /// @name Notification Name
 ///=============================================================================
 
+
+/**
+ *  发送语音消息没有权限。通知界面提醒用户
+ */
+static NSString *const LCCKNotificationRecordNoPower = @"LCCKChatBarRecordVoiceNoPower";
+
+/**
+ *  发送文本消息过长。通知界面提醒用户
+ */
+static NSString *const LCCKNotificationTextOutLength = @"LCCKChatBarTextOutLength";
+
 /**
  *  未读数改变了。通知去服务器同步 installation 的badge
  */
