@@ -24,7 +24,7 @@ Pod::Spec.new do |s|
   s.dependency "FDStackView" , "~> 1.0"
   s.dependency "DACircularProgress" , "~> 2.3.1"
   s.dependency "MLLabel" , "~> 1.9.2"
-  s.dependency "MWPhotoBrowser", :git => 'git@github.com:YangHang/MWPhotoBrowser.git'
+  s.dependency "MWPhotoBrowser", "2.1.2" 
   s.dependency "CYLDeallocBlockExecutor", "~> 1.1.2"
 
 end
