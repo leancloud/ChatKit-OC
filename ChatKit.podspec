@@ -26,15 +26,4 @@ Pod::Spec.new do |s|
   s.dependency "MLLabel" , "~> 1.9.2"
   s.dependency "CYLDeallocBlockExecutor", "~> 1.1.2"
 
-  post_install do |installed|
-    installed.project.targets.each.do |target|
-	     if target.name == 'ChatKit'
-	        target.build_configurations.each do |config|
-	   	       header = config.build_settings['FRAMEWORK_SEARCH_PATHS']
-			       if header 
-		 	        config.build_settings['FRAMEWORK_SEARCH_PATHS'] += '$PODS_CONFIGURATION_BUILD_DIR/MBProgressHUD' 
-			       end
-  	     end
-     end
-  end
 end
