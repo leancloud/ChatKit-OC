@@ -413,10 +413,10 @@ NSString *const AVIMProtocolPROTOBUF2 = @"lc.protobuf.2";
 
             NSDictionary *cachedRouterInformation = [self cachedRouterInformation];
 
-            if (cachedRouterInformation) {
-                [self openConnectionForRouterInformation:cachedRouterInformation];
-                return;
-            }
+//            if (cachedRouterInformation) {
+//                [self openConnectionForRouterInformation:cachedRouterInformation];
+//                return;
+//            }
 
             NSString *appId = [AVOSCloud getApplicationId];
 
