@@ -292,6 +292,7 @@ NSString *const LCCKSessionServiceErrorDomain = @"LCCKSessionServiceErrorDomain"
         [conversation queryMessagesFromServerWithLimit:unread callback:^(NSArray *objects, NSError *error) {
             if (!error && (objects.count > 0)) {
                 [self receiveMessages:objects conversation:conversation isUnreadMessage:YES];
+                [conversation readInBackground];
             }
         }];
         [self playLoudReceiveSoundIfNeededForConversation:conversation];
@@ -335,6 +336,7 @@ NSString *const LCCKSessionServiceErrorDomain = @"LCCKSessionServiceErrorDomain"
         [[NSNotificationCenter defaultCenter] postNotificationName:LCCKNotificationCustomTransientMessageReceived object:userInfo];
     }
     [self receiveMessages:@[message] conversation:conversation isUnreadMessage:NO];
+    [conversation readInBackground];
 }
 
 - (void)receiveMessages:(NSArray<AVIMTypedMessage *> *)messages conversation:(AVIMConversation *)conversation isUnreadMessage:(BOOL)isUnreadMessage {
