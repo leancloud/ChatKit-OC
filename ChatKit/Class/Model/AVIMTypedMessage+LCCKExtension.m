@@ -15,7 +15,11 @@
 - (BOOL)lcck_isSupportThisCustomMessage {
     NSNumber *typeDictKey = @([(AVIMTypedMessage *)self mediaType]);
     Class class = [_typeDict objectForKey:typeDictKey];
-    return class;
+    if (class != nil) {
+        return true;
+    }else{
+        return false;
+    }
 }
 
 + (AVIMTypedMessage *)lcck_messageWithLCCKMessage:(LCCKMessage *)message {
