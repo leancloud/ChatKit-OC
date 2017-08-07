@@ -321,7 +321,7 @@ static CGFloat const LCCK_MSG_CELL_NICKNAME_FONT_SIZE = 12;
         //TODO:如果我正在群里聊天，这时有人进入群聊，需要异步获取头像等信息，模仿ConversationList的做法。
         [[LCCKUserSystemService sharedInstance] getCachedProfileIfExists:senderClientId name:&nickName avatarURL:&avatarURL error:&error];
         if (!nickName)  { nickName = senderClientId; }
-        self.message = nil;
+        self.message = message;
         sendStatus = (LCCKMessageSendState)[(AVIMTypedMessage *)message status];
     } else {
         self.message = message;
