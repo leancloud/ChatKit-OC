@@ -1,1 +1,0 @@
-../../../../../ChatKit/Class/Tool/LCCKSingleton.h

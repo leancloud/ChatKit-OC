@@ -1,1 +1,0 @@
-../../../AVOSCloud/AVOS/AVOSCloud/Query/AVCloudQueryResult.h

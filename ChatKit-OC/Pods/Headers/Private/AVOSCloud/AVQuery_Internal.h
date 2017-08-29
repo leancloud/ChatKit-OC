@@ -1,1 +1,0 @@
-../../../AVOSCloud/AVOS/AVOSCloud/Query/AVQuery_Internal.h

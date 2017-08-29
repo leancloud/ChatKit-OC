@@ -497,7 +497,11 @@ fromTimestamp     |    toDate   |                |  上次上拉刷新顶端，�
         
         NSLog(@"999999 %@ 99999 %@ 99999 %@ 99999 %@ 99999", currentUser.avatarURL, currentUser.userId, currentUser.name, currentUser.sex
               );
-        
+        if (currentUser.avatarURL.absoluteString != nil) {
+            [avimTypedMessage lcck_setObject:currentUser.avatarURL.absoluteString forKey:@"USER_ICON"];
+        } else {
+            [avimTypedMessage lcck_setObject:@"" forKey:@"USER_ICON"];
+        }
         [avimTypedMessage lcck_setObject:currentUser.avatarURL.absoluteString forKey:@"USER_ICON"];
         [avimTypedMessage lcck_setObject:currentUser.userId forKey:@"USER_ID"];
         [avimTypedMessage lcck_setObject:currentUser.name forKey:@"USER_NAME"];

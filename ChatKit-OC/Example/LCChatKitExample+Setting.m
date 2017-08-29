@@ -515,9 +515,10 @@ setLoadLatestMessagesHandler:^(LCCKConversationViewController *conversationContr
                  if (visiableForCurrentClientId) {
                      [filterMessages addObject:typedMessage];
                  } else {
-                     typedMessage.text = @"这是群定向消息，仅部分群成员可见";
-                     typedMessage.mediaType = kAVIMMessageMediaTypeText;
-                     [filterMessages addObject:typedMessage];
+                     AVIMTextMessage* otherMsg = [AVIMTextMessage messageWithText:@"这是群定向消息，仅部分群成员可见" attributes:typedMessage.attributes];
+//                     typedMessage.text = @"这是群定向消息，仅部分群成员可见";
+//                     typedMessage.mediaType = kAVIMMessageMediaTypeText;
+                     [filterMessages addObject:otherMsg];
                  }
              }
          }
