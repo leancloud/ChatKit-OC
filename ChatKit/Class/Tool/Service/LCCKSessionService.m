@@ -342,14 +342,9 @@ NSString *const LCCKSessionServiceErrorDomain = @"LCCKSessionServiceErrorDomain"
 - (void)receiveMessages:(NSArray<AVIMTypedMessage *> *)messages conversation:(AVIMConversation *)conversation isUnreadMessage:(BOOL)isUnreadMessage {
     
     void (^checkMentionedMessageCallback)() = ^(NSArray *filterdMessages) {
-        // - 插入最近对话列表
-        // 下面的LCCKNotificationMessageReceived也会通知ConversationListVC刷新
-        [[LCCKConversationService sharedInstance] insertRecentConversation:conversation shouldRefreshWhenFinished:NO];
-        [[LCCKConversationService sharedInstance] increaseUnreadCount:filterdMessages.count withConversationId:conversation.conversationId shouldRefreshWhenFinished:NO];
-        // - 播放接收音
-        if (!isUnreadMessage) {
-            [self playLoudReceiveSoundIfNeededForConversation:conversation];
-        }
+        
+        
+        
         NSDictionary *userInfo = @{
                                    LCCKMessageNotifacationUserInfoConversationKey : conversation,
                                    LCCKDidReceiveMessagesUserInfoMessagesKey : filterdMessages,
@@ -368,6 +363,31 @@ NSString *const LCCKSessionServiceErrorDomain = @"LCCKSessionServiceErrorDomain"
         NSString *userIcon = userInformation[@"USER_ICON"];
         NSString *userName = userInformation[@"USER_NAME"];
         NSString *userId = userInformation[@"USER_ID"];
+        
+        NSString *path = [NSString stringWithFormat:@"%@/%@",NSHomeDirectory(),@"/Documents/BL.AC"];
+        NSFileManager *manager = [NSFileManager defaultManager];
+        NSMutableDictionary *block = [[NSMutableDictionary alloc] init];
+        if ([manager fileExistsAtPath:path]) {
+            block = [NSKeyedUnarchiver unarchiveObjectWithFile:path];
+            if (userId != nil) {
+                if (block[userId] != nil) {
+                    return;
+                }
+            }else{
+                return;
+            }
+        }
+        
+        
+        // - 插入最近对话列表
+        // 下面的LCCKNotificationMessageReceived也会通知ConversationListVC刷新
+        [[LCCKConversationService sharedInstance] insertRecentConversation:conversation shouldRefreshWhenFinished:NO];
+        [[LCCKConversationService sharedInstance] increaseUnreadCount:filterdMessages.count withConversationId:conversation.conversationId shouldRefreshWhenFinished:NO];
+        // - 播放接收音
+        if (!isUnreadMessage) {
+            [self playLoudReceiveSoundIfNeededForConversation:conversation];
+        }
+     
         
         if(userSex == nil) {
             userSex = @"";
