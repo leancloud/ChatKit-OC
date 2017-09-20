@@ -369,12 +369,14 @@ NSString *const LCCKSessionServiceErrorDomain = @"LCCKSessionServiceErrorDomain"
         NSMutableDictionary *block = [[NSMutableDictionary alloc] init];
         if ([manager fileExistsAtPath:path]) {
             block = [NSKeyedUnarchiver unarchiveObjectWithFile:path];
-            if (userId != nil) {
-                if (block[userId] != nil) {
+            if (block != nil) {
+                if (userId != nil) {
+                    if (block[userId] != nil) {
+                        return;
+                    }
+                }else{
                     return;
                 }
-            }else{
-                return;
             }
         }
         
