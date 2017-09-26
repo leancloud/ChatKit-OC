@@ -343,15 +343,12 @@ NSString *const LCCKSessionServiceErrorDomain = @"LCCKSessionServiceErrorDomain"
     
     void (^checkMentionedMessageCallback)() = ^(NSArray *filterdMessages) {
         
-        
-        
         NSDictionary *userInfo = @{
                                    LCCKMessageNotifacationUserInfoConversationKey : conversation,
                                    LCCKDidReceiveMessagesUserInfoMessagesKey : filterdMessages,
                                    };
         // - 通知相关页面接收到了消息：“当前对话页面”、“最近对话页面”；
         [[NSNotificationCenter defaultCenter] postNotificationName:LCCKNotificationMessageReceived object:userInfo];
-        
         
         AVIMTypedMessage * userObj = userInfo[@"receivedMessages"][0];
         if(![userObj respondsToSelector:@selector(attributes)]) {
@@ -363,8 +360,7 @@ NSString *const LCCKSessionServiceErrorDomain = @"LCCKSessionServiceErrorDomain"
         NSString *userIcon = userInformation[@"USER_ICON"];
         NSString *userName = userInformation[@"USER_NAME"];
         NSString *userId = userInformation[@"USER_ID"];
-        
-        NSString *path = [NSString stringWithFormat:@"%@/%@",NSHomeDirectory(),@"/Documents/BL.AC"];
+        NSString *path = [NSString stringWithFormat:@"%@/Documents/%@.BL",NSHomeDirectory(),_clientId];
         NSFileManager *manager = [NSFileManager defaultManager];
         NSMutableDictionary *block = [[NSMutableDictionary alloc] init];
         if ([manager fileExistsAtPath:path]) {
@@ -381,15 +377,12 @@ NSString *const LCCKSessionServiceErrorDomain = @"LCCKSessionServiceErrorDomain"
         }
         
         
-        // - 插入最近对话列表
-        // 下面的LCCKNotificationMessageReceived也会通知ConversationListVC刷新
         [[LCCKConversationService sharedInstance] insertRecentConversation:conversation shouldRefreshWhenFinished:NO];
         [[LCCKConversationService sharedInstance] increaseUnreadCount:filterdMessages.count withConversationId:conversation.conversationId shouldRefreshWhenFinished:NO];
         // - 播放接收音
         if (!isUnreadMessage) {
             [self playLoudReceiveSoundIfNeededForConversation:conversation];
         }
-     
         
         if(userSex == nil) {
             userSex = @"";
@@ -411,32 +404,6 @@ NSString *const LCCKSessionServiceErrorDomain = @"LCCKSessionServiceErrorDomain"
         
         if (userObj.mediaType == kAVIMMessageMediaTypeText) {
             finalMessage = userObj.text;
-            NSDictionary *att = userInformation;
-            if (att != nil) {
-                NSLog(@"%@",att);
-                //判断type
-                NSString *type = att[@"MSG_TYPE"];
-                NSString *start = [NSString stringWithFormat:@"%f",[[att valueForKey:@"START_TIME"] doubleValue]];
-                NSString *ends = [NSString stringWithFormat:@"%f",[[att valueForKey:@"END_TIME"] doubleValue]];
-                if (start != nil && ends != nil) {
-                    NSTimeInterval currentInterval = [[NSDate date] timeIntervalSince1970];
-                    NSTimeInterval remainInterval =  (ends.doubleValue / 1000.0) - currentInterval;
-                    if (remainInterval > 0) { //现在的时间，小于封禁结束时间
-                        if ([type  isEqualToString: @"warning"]) {
-                            // 警告⚠️
-                        }else if ([type  isEqualToString: @"noplay_ever"]) {
-                            NSMutableDictionary *bloack = @{@"end":@"-1"}.mutableCopy;
-                            NSMutableDictionary *block = @{_clientId:bloack}.mutableCopy;
-                            [[NSUserDefaults standardUserDefaults] setObject:block forKey:@"NOPLAY"];
-                        }else{
-                            NSMutableDictionary *bloack = @{@"end":ends}.mutableCopy;
-                            NSMutableDictionary *block = @{_clientId:bloack}.mutableCopy;
-                            [[NSUserDefaults standardUserDefaults] setObject:block forKey:@"NOPLAY"];
-                        }
-                    }
-                }
-            }
-
         } else if (userObj.mediaType == kAVIMMessageMediaTypeAudio) {
             finalMessage = @"语音消息";
         } else if (userObj.mediaType == kAVIMMessageMediaTypeImage) {
