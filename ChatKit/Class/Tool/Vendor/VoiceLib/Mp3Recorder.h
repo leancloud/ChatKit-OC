@@ -12,6 +12,7 @@
 - (void)failRecord;
 - (void)beginConvert;
 - (void)endConvertWithMP3FileName:(NSString *)fileName;
+- (void)realTimeVolumeSize:(float)size timeLength:(NSTimeInterval)timeLength;
 @end
 
 @interface Mp3Recorder : NSObject

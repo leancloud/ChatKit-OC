@@ -36,7 +36,7 @@
 
 NSMutableDictionary const *LCCKChatMessageCellMediaTypeDict = nil;
 
-static CGFloat const kAvatarImageViewWidth = 50.f;
+static CGFloat const kAvatarImageViewWidth = 40.f;
 static CGFloat const kAvatarImageViewHeight = kAvatarImageViewWidth;
 static CGFloat const LCCKMessageSendStateViewWidthHeight = 30.f;
 static CGFloat const LCCKMessageSendStateViewLeftOrRightToMessageContentView = 2.f;
@@ -425,7 +425,11 @@ static CGFloat const LCCK_MSG_CELL_NICKNAME_FONT_SIZE = 12;
 
 - (UIImageView *)messageReadStateImageView {
     if (!_messageReadStateImageView) {
-        _messageReadStateImageView = [[UIImageView alloc] init];
+        _messageReadStateImageView = [[UIImageView alloc] initWithImage:({
+            NSString *imageName = @"VoiceMessage_Unread";
+            UIImage *image = [UIImage lcck_imageNamed:imageName bundleName:@"MessageBubble" bundleForClass:[self class]];
+            image;})
+                                      ];
     }
     return _messageReadStateImageView;
 }
