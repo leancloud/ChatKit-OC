@@ -9,6 +9,8 @@
 #import "LCCKChatBar.h"
 #import "LCCKChatMoreView.h"
 #import "LCCKChatFaceView.h"
+#import "AGEmojiKeyBoardView.h"
+
 #import "LCCKProgressHUD.h"
 #import "Mp3Recorder.h"
 #if __has_include(<Masonry/Masonry.h>)
@@ -24,7 +26,7 @@
 NSString *const kLCCKBatchDeleteTextPrefix = @"kLCCKBatchDeleteTextPrefix";
 NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
 
-@interface LCCKChatBar () <UITextViewDelegate, UINavigationControllerDelegate, Mp3RecorderDelegate, LCCKChatFaceViewDelegate>
+@interface LCCKChatBar () <UITextViewDelegate, UINavigationControllerDelegate, Mp3RecorderDelegate, LCCKChatFaceViewDelegate,AGEmojiKeyboardViewDelegate,AGEmojiKeyboardViewDataSource>
 
 @property (strong, nonatomic) Mp3Recorder *MP3;
 @property (nonatomic, strong) UIView *inputBarBackgroundView; /**< 输入栏目背景视图 */
@@ -34,6 +36,7 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
 @property (strong, nonatomic) UIButton *faceButton; /**< 表情按钮 */
 @property (strong, nonatomic) UIButton *moreButton; /**< 更多按钮 */
 @property (weak, nonatomic) LCCKChatFaceView *faceView; /**< 当前活跃的底部view,用来指向faceView */
+@property (weak, nonatomic) AGEmojiKeyboardView *emojiView; /**< 当前活跃的底部view,用来指向emojiView */
 @property (weak, nonatomic) LCCKChatMoreView *moreView; /**< 当前活跃的底部view,用来指向moreView */
 
 @property (assign, nonatomic, readonly) CGFloat bottomHeight;
@@ -107,12 +110,18 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
         make.edges.mas_equalTo(self.textView).insets(UIEdgeInsetsMake(voiceRecordButtoInsets, voiceRecordButtoInsets, voiceRecordButtoInsets, voiceRecordButtoInsets));
     }];
     
-    [self.faceView mas_makeConstraints:^(MASConstraintMaker *make) {
+//    [self.faceView mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.width.and.left.mas_equalTo(self);
+//        make.height.mas_equalTo(kFunctionViewHeight);
+//        make.top.mas_equalTo(self.mas_bottom);
+//    }];
+
+    [self.emojiView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.width.and.left.mas_equalTo(self);
         make.height.mas_equalTo(kFunctionViewHeight);
         make.top.mas_equalTo(self.mas_bottom);
     }];
-    
+
     [self.moreView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.width.and.left.mas_equalTo(self);
         make.height.mas_equalTo(kFunctionViewHeight);
@@ -123,6 +132,8 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
 - (void)dealloc {
     self.delegate = nil;
     _faceView.delegate = nil;
+//    self.emojiView.delegate = nil;
+//    self.emojiView.dataSource = nil;
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
 }
@@ -373,6 +384,62 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
     }
 }
 
+#pragma mark - AGEmojiKeyboardViewDelegate and AGEmojiKeyboardViewDataSource
+- (void)emojiKeyBoardView:(AGEmojiKeyboardView *)emojiKeyBoardView didUseEmoji:(NSString *)emoji {
+    if ([emoji isEqualToString:@"发送"]) {
+        NSString *text = self.textView.text;
+        if (!text || text.length == 0) {
+            return;
+        }
+        if (self.delegate && [self.delegate respondsToSelector:@selector(chatBar:sendMessage:)]) {
+            [self.delegate chatBar:self sendMessage:text];
+        }
+        self.textView.text = @"";
+        self.cachedText = @"";
+        self.showType = LCCKFunctionViewShowFace;
+    } else {
+        [self appendString:emoji beginInputing:NO];
+    }
+}
+
+- (void)emojiKeyBoardViewDidPressBackSpace:(AGEmojiKeyboardView *)emojiKeyBoardView {
+    NSString *chatText = self.textView.text;
+//    if (chatText.length >= 2) {
+////        [chatText.]
+//        NSString *subStr = [chatText substringFromIndex:chatText.length-2];
+//        if ([(DXFaceView *)self.faceView stringIsFace:subStr]) {
+//            self.textView.text = [chatText substringToIndex:chatText.length-2];
+//            return;
+//        }
+//    }
+//
+//    if (chatText.length > 0) {
+//        self.inputTextView.text = [chatText substringToIndex:chatText.length-1];
+//    }
+    if (chatText.length >= 2) {
+        self.textView.text = [chatText substringToIndex:chatText.length-2];
+        [self textViewDidChange:self.textView];
+    }
+}
+
+- (UIImage *)emojiKeyboardView:(AGEmojiKeyboardView *)emojiKeyboardView imageForSelectedCategory:(AGEmojiKeyboardViewCategoryImage)category {
+    UIImage *img = [UIImage imageNamed:@"[删除]"];
+    [img imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+    return img;
+}
+
+- (UIImage *)emojiKeyboardView:(AGEmojiKeyboardView *)emojiKeyboardView imageForNonSelectedCategory:(AGEmojiKeyboardViewCategoryImage)category {
+    UIImage *img = [UIImage imageNamed:@"[删除]"];
+    [img imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+    return img;
+}
+
+- (UIImage *)backSpaceButtonImageForEmojiKeyboardView:(AGEmojiKeyboardView *)emojiKeyboardView {
+    UIImage *img = [UIImage imageNamed:@"[删除]"];
+    [img imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+    return img;
+}
+
 #pragma mark - Public Methods
 
 - (void)close {
@@ -478,6 +545,7 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
     self.allowTextViewContentOffset = YES;
     self.MP3 = [[Mp3Recorder alloc] initWithDelegate:self];
     [self faceView];
+    [self emojiView];
     [self moreView];
     [self addSubview:self.inputBarBackgroundView];
     
@@ -597,26 +665,47 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
 }
 
 - (void)showFaceView:(BOOL)show {
+//    if (show) {
+//        self.faceView.hidden = NO;
+//        [UIView animateWithDuration:LCCKAnimateDuration animations:^{
+//            [self.faceView mas_updateConstraints:^(MASConstraintMaker *make) {
+//                make.top.mas_equalTo(self.superview.mas_bottom).offset(-kFunctionViewHeight);
+//            }];
+//            [self.faceView layoutIfNeeded];
+//        } completion:nil];
+//        
+//        [self.faceView mas_updateConstraints:^(MASConstraintMaker *make) {
+//            make.top.mas_equalTo(self.inputBarBackgroundView.mas_bottom);
+//        }];
+//    } else if (self.faceView.superview) {
+//        self.faceView.hidden = YES;
+//        [self.faceView mas_remakeConstraints:^(MASConstraintMaker *make) {
+//            make.width.and.left.mas_equalTo(self);
+//            make.height.mas_equalTo(kFunctionViewHeight);
+//            make.top.mas_equalTo(self.mas_bottom);
+//        }];
+//        [self.faceView layoutIfNeeded];
+//    }
     if (show) {
-        self.faceView.hidden = NO;
+        self.emojiView.hidden = NO;
         [UIView animateWithDuration:LCCKAnimateDuration animations:^{
-            [self.faceView mas_updateConstraints:^(MASConstraintMaker *make) {
+            [self.emojiView mas_updateConstraints:^(MASConstraintMaker *make) {
                 make.top.mas_equalTo(self.superview.mas_bottom).offset(-kFunctionViewHeight);
             }];
-            [self.faceView layoutIfNeeded];
+            [self.emojiView layoutIfNeeded];
         } completion:nil];
-        
-        [self.faceView mas_updateConstraints:^(MASConstraintMaker *make) {
+
+        [self.emojiView mas_updateConstraints:^(MASConstraintMaker *make) {
             make.top.mas_equalTo(self.inputBarBackgroundView.mas_bottom);
         }];
-    } else if (self.faceView.superview) {
-        self.faceView.hidden = YES;
-        [self.faceView mas_remakeConstraints:^(MASConstraintMaker *make) {
+    } else if (self.emojiView.superview) {
+        self.emojiView.hidden = YES;
+        [self.emojiView mas_remakeConstraints:^(MASConstraintMaker *make) {
             make.width.and.left.mas_equalTo(self);
             make.height.mas_equalTo(kFunctionViewHeight);
             make.top.mas_equalTo(self.mas_bottom);
         }];
-        [self.faceView layoutIfNeeded];
+        [self.emojiView layoutIfNeeded];
     }
 }
 
@@ -721,6 +810,17 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
     return _faceView;
 }
 
+- (AGEmojiKeyboardView *)emojiView {
+    if (!_emojiView) {
+        AGEmojiKeyboardView *emojiKeyboardView = [[AGEmojiKeyboardView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, 216) dataSource:self];
+        emojiKeyboardView.autoresizingMask = UIViewAutoresizingFlexibleHeight;
+        emojiKeyboardView.delegate = self;
+        emojiKeyboardView.hidden = YES;
+        [self addSubview:(_emojiView = emojiKeyboardView)];
+    }
+    return _emojiView;
+}
+
 - (LCCKChatMoreView *)moreView {
     if (!_moreView) {
         LCCKChatMoreView *moreView = [[LCCKChatMoreView alloc] init];
@@ -811,8 +911,13 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
 }
 
 - (CGFloat)bottomHeight {
-    if (self.faceView.superview || self.moreView.superview) {
-        return MAX(self.keyboardSize.height, MAX(self.faceView.frame.size.height, self.moreView.frame.size.height));
+//    if (self.faceView.superview || self.moreView.superview) {
+//        return MAX(self.keyboardSize.height, MAX(self.faceView.frame.size.height, self.moreView.frame.size.height));
+//    } else {
+//        return MAX(self.keyboardSize.height, CGFLOAT_MIN);
+//    }
+    if (self.emojiView.superview || self.moreView.superview) {
+        return MAX(self.keyboardSize.height, MAX(self.emojiView.frame.size.height, self.moreView.frame.size.height));
     } else {
         return MAX(self.keyboardSize.height, CGFLOAT_MIN);
     }
