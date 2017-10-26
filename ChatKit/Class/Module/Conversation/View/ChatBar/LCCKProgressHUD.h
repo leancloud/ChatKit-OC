@@ -16,6 +16,7 @@ typedef NS_ENUM(NSUInteger, LCCKProgressState){
     LCCKProgressSuccess /**< 成功 */,
     LCCKProgressError /**< 出错,失败 */,
     LCCKProgressShort /**< 时间太短失败 */,
+    LCCKProgressOverTime /**< 超时 */,
     LCCKProgressMessage /**< 自定义失败提示 */,
 };
 
@@ -59,5 +60,13 @@ typedef NS_ENUM(NSUInteger, LCCKProgressState){
  *  @param str 需要显示的文字
  */
 + (void)changeSubTitle:(NSString *)str;
+
+/**
+ *  修改音量图片和时间倒计时Label
+ *
+ *  @param volume 音量大小
+ *  @param timeLength 录音时长
+ */
++ (void)realtimeChangeVolumeImageView:(float)volume timeLength:(NSTimeInterval)timeLength;
 
 @end
