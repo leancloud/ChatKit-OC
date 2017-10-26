@@ -60,6 +60,8 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
 @property (nonatomic, strong) UIColor *messageInputViewRecordTextColor;
 //TODO:MessageInputView-Tint-Color
 
+@property (nonatomic, assign) CGFloat volumeTimeLength;
+
 @end
 
 @implementation LCCKChatBar
@@ -363,6 +365,14 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
     [LCCKProgressHUD changeSubTitle:@"正在转换..."];
 }
 
+- (void)realTimeVolumeSize:(float)size timeLength:(NSTimeInterval)timeLength {
+    [LCCKProgressHUD realtimeChangeVolumeImageView:size timeLength:timeLength];
+    self.volumeTimeLength = timeLength/10.0;
+    if (self.volumeTimeLength >= kLCCKVolumeMaxTimeLength) {
+        [self.MP3 stopRecord];
+    }
+}
+
 #pragma mark - LCCKChatFaceViewDelegate
 
 - (void)faceViewSendFace:(NSString *)faceName {
@@ -574,6 +584,7 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
 - (void)startRecordVoice {
     [LCCKProgressHUD show];
     self.voiceRecordButton.highlighted = YES;
+    self.volumeTimeLength = 0.0;
     [self.MP3 startRecord];
 }
 
@@ -581,7 +592,10 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
  *  取消录音
  */
 - (void)cancelRecordVoice {
-    [LCCKProgressHUD dismissWithMessage:@"取消录音"];
+    if (self.volumeTimeLength >= kLCCKVolumeMaxTimeLength) {
+        return;
+    }
+    [LCCKProgressHUD dismissWithMessage:@""];
     self.voiceRecordButton.highlighted = NO;
     [self.MP3 cancelRecord];
 }
@@ -590,6 +604,9 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
  *  录音结束
  */
 - (void)confirmRecordVoice {
+    if (self.volumeTimeLength >= kLCCKVolumeMaxTimeLength) {
+        return;
+    }
     [self.MP3 stopRecord];
 }
 
@@ -597,14 +614,20 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
  *  更新录音显示状态,手指向上滑动后提示松开取消录音
  */
 - (void)updateCancelRecordVoice {
-    [LCCKProgressHUD changeSubTitle:@"松开取消录音"];
+    if (self.volumeTimeLength >= kLCCKVolumeMaxTimeLength) {
+        return;
+    }
+    [LCCKProgressHUD changeSubTitle:@"松开手指,取消发送"];
 }
 
 /**
  *  更新录音状态,手指重新滑动到范围内,提示向上取消录音
  */
 - (void)updateContinueRecordVoice {
-    [LCCKProgressHUD changeSubTitle:@"向上滑动取消录音"];
+    if (self.volumeTimeLength >= kLCCKVolumeMaxTimeLength) {
+        return;
+    }
+    [LCCKProgressHUD changeSubTitle:@"手指上滑,取消发送"];
 }
 
 - (void)setShowType:(LCCKFunctionViewShowType)showType {

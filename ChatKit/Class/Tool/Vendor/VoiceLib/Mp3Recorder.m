@@ -18,6 +18,9 @@
 @interface Mp3Recorder()<AVAudioRecorderDelegate>
 @property (nonatomic, strong) AVAudioSession *session;
 @property (nonatomic, strong) AVAudioRecorder *recorder;
+//开启timer实时把音量大小数据传出去
+@property (strong, nonatomic) NSTimer *timer;
+@property (assign, nonatomic) NSTimeInterval seconds;
 @end
 
 @implementation Mp3Recorder
@@ -75,11 +78,16 @@
     [self setSesstion];
     [self setRecorder];
     [_recorder record];
+    self.seconds = 0;
+    [self timer];
 }
 
 
 - (void)stopRecord
 {
+    [self.timer invalidate];
+    self.timer = nil;
+    
     double cTime = _recorder.currentTime;
     [_recorder stop];
     
@@ -97,6 +105,9 @@
 
 - (void)cancelRecord
 {
+    [self.timer invalidate];
+    self.timer = nil;
+    
     [_recorder stop];
     [_recorder deleteRecording];
 }
@@ -176,6 +187,28 @@
     }
     
     
+}
+
+- (void)timerAction {
+    self.seconds++;
+    if (_delegate && [_delegate respondsToSelector:@selector(realTimeVolumeSize:timeLength:)]) {
+        [_recorder updateMeters];
+        [_delegate realTimeVolumeSize:[_recorder averagePowerForChannel:1] timeLength:self.seconds];
+    }
+}
+
+#pragma mark - Getters
+- (NSTimer *)timer{
+    if (_timer) {
+        [_timer invalidate];
+        _timer = nil;
+    }
+    _timer = [NSTimer scheduledTimerWithTimeInterval:0.1
+                                              target:self
+                                            selector:@selector(timerAction)
+                                            userInfo:nil
+                                             repeats:YES];
+    return _timer;
 }
 
 #pragma mark - Path Utils
