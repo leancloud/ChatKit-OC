@@ -14,6 +14,8 @@
 
 @interface LCCKMessage : NSObject <NSCoding, NSCopying, LCCKMessageDelegate>
 
+@property (nonatomic, strong) AVIMMessage *message;
+
 @property (nonatomic, copy, readonly) NSString *text;
 @property (nonatomic, copy, readonly) NSString *systemText;
 @property (nonatomic, strong, readwrite) UIImage *photo;
