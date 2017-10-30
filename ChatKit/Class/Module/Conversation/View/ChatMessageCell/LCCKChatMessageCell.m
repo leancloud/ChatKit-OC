@@ -314,19 +314,61 @@ static CGFloat const LCCK_MSG_CELL_NICKNAME_FONT_SIZE = 12;
 - (void)configureCellWithData:(id)message {
     NSString *nickName = nil;
     NSURL *avatarURL = nil;
+
+    NSString* payload = @"";
+    
+    if([message isKindOfClass: [AVIMMessage class]]) {
+        payload = ((AVIMMessage *)message).payload;
+    } else if([message isKindOfClass: [LCCKMessage class]]) {
+        payload = ((LCCKMessage *)message).message.payload == nil ? @"" : ((LCCKMessage *)message).message.payload;
+    }
+
+    NSData *data = [payload dataUsingEncoding:NSUTF8StringEncoding];
+    id orginData = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
+    id json = [orginData objectForKey:@"_lcattrs"];
+    
+    NSString *name = [json objectForKey: @"USER_NAME"];
+    if (name != nil) {
+        nickName = name;
+    }
+    NSString *icon = [json objectForKey: @"USER_ICON"];
+    NSURL *url = [NSURL URLWithString:icon];
+    avatarURL = url;
+    if(icon == nil || (icon != nil && [icon isEqualToString:@""])) {
+        avatarURL = self.message.sender.avatarURL;
+        NSLog(@"message::::%@---url::%@;;;payload::%@", self.message.text, avatarURL, self.message);
+    }
+    
     LCCKMessageSendState sendStatus;
     if ([message lcck_isCustomMessage]) {
         NSString *senderClientId = [(AVIMTypedMessage *)message clientId];
         NSError *error;
         //TODO:如果我正在群里聊天，这时有人进入群聊，需要异步获取头像等信息，模仿ConversationList的做法。
-        [[LCCKUserSystemService sharedInstance] getCachedProfileIfExists:senderClientId name:&nickName avatarURL:&avatarURL error:&error];
-        if (!nickName)  { nickName = senderClientId; }
+//        [[LCCKUserSystemService sharedInstance] getCachedProfileIfExists:senderClientId name:&nickName avatarURL:&avatarURL error:&error];
+//        if (!nickName)  {
+//            nickName = senderClientId;
+//            NSString *name = [json objectForKey: @"USER_NAME"];
+//            if (name != nil) {
+//                nickName = name;
+//            }
+//        }
         self.message = message;
         sendStatus = (LCCKMessageSendState)[(AVIMTypedMessage *)message status];
     } else {
         self.message = message;
-        nickName = self.message.localDisplayName;
-        avatarURL = self.message.sender.avatarURL;
+//        NSString *name = [json objectForKey: @"USER_NAME"];
+//        if (name != nil) {
+//            nickName = name;
+//        }
+//        if(!nickName) {
+//            nickName = self.message.localDisplayName;
+//        }
+//        NSString *icon = [json objectForKey: @"USER_ICON"];
+//        NSURL *url = [NSURL URLWithString:icon];
+//        avatarURL = url;
+//        if(!avatarURL) {
+//            avatarURL = self.message.sender.avatarURL;
+//        }
         sendStatus = self.message.sendStatus;
         //FIXME: SDK 暂不支持已读未读
         //        if ([(LCCKMessage *)message messageReadState]) {

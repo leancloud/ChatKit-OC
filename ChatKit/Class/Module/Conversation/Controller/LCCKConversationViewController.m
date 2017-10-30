@@ -203,6 +203,9 @@ NSString *const RNNotificationName = @"sendMessageToRNNotificationName";
         _chatViewModel = chatViewModel;
     }
     _chatViewModel.peerSex = self.peerSex;
+    _chatViewModel.peerIcon = self.peerIcon;
+    _chatViewModel.peerName = self.peerName;
+    _chatViewModel.peerID = self.peerID;
     return _chatViewModel;
 }
 
@@ -286,11 +289,18 @@ NSString *const RNNotificationName = @"sendMessageToRNNotificationName";
                                                               sender:self.user
                                                            timestamp:LCCK_CURRENT_TIMESTAMP
                                                      serverMessageId:nil];
-        [self makeSureSendValidMessage:lcckMessage afterFetchedConversationShouldWithAssert:NO];
-        [self.chatViewModel sendMessage:lcckMessage];
         
-        NSLog(@"999999 %@ 99999 %@ 99999 %@ 99999 %@ 99999", self.user.avatarURL, self.user.userId, self.user.name, self.user.sex
-              );
+//        AVIMTypedMessage* dataMessage = [AVIMTypedMessage lcck_messageWithLCCKMessage:lcckMessage];
+
+//        [dataMessage setObject:self.peerSex forKey:@"USER_SEX"];
+//        [dataMessage setObject:self.peerIcon forKey:@"USER_ICON"];
+//        [dataMessage setObject:self.peerName forKey:@"USER_NAME"];
+//        [dataMessage setObject:self.peerID forKey:@"USER_ID"];
+//        lcckMessage.message = dataMessage
+        
+        [self makeSureSendValidMessage:lcckMessage afterFetchedConversationShouldWithAssert:NO];
+
+        [self.chatViewModel sendMessage:lcckMessage];
         
         [[NSNotificationCenter defaultCenter] postNotificationName:RNNotificationName object:@{
                                                                                                @"USER_SEX": self.peerSex,

@@ -33,7 +33,10 @@ typedef void (^LCCKSendMessageSuccessFailedBlock)(NSString *messageUUID, NSError
 @property (nonatomic, assign, readonly) NSUInteger messageCount;
 
 
-@property (nonatomic, copy) NSString * peerSex;
+@property (nonatomic, copy) NSString *peerIcon;
+@property (nonatomic, copy) NSString *peerName;
+@property (nonatomic, copy) NSString *peerID;
+@property (nonatomic, copy) NSString *peerSex;
 
 @property (nonatomic, weak) id<LCCKConversationViewModelDelegate> delegate;
 

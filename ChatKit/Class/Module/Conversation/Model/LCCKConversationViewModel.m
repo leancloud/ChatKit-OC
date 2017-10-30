@@ -472,6 +472,11 @@ fromTimestamp     |    toDate   |                |  上次上拉刷新顶端，�
     AVIMTypedMessage *avimTypedMessage;
     if (![aMessage lcck_isCustomMessage]) {
         LCCKMessage *message = (LCCKMessage *)aMessage;
+
+        NSString *payload = message.message.payload == nil ? @"" : message.message.payload;
+        NSData *data = [payload dataUsingEncoding:NSUTF8StringEncoding];
+        id json = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
+
         message.conversationId = self.currentConversationId;
 
         message.sendStatus = LCCKMessageSendStateSending;
@@ -480,6 +485,22 @@ fromTimestamp     |    toDate   |                |  上次上拉刷新顶端，�
         message.ownerType = LCCKMessageOwnerTypeSelf;
         
         avimTypedMessage = [AVIMTypedMessage lcck_messageWithLCCKMessage:message];
+        
+        NSString *ICON_KEY = @"USER_ICON";
+        NSString *ID_KEY = @"USER_ID";
+        NSString *NAME_KEY = @"USER_NAME";
+        NSString *SEX_KEY = @"USER_SEX";
+        
+        NSString *ICON_VAL = [json objectForKey:ICON_KEY];
+        NSString *ID_VAL = [json objectForKey:ID_KEY];
+        NSString *NAME_VAL = [json objectForKey:NAME_KEY];
+        NSString *SEX_VAL = [json objectForKey:SEX_KEY];
+        
+        [avimTypedMessage lcck_setObject:(ICON_VAL == nil ? @"" : ICON_VAL) forKey:ICON_KEY];
+        [avimTypedMessage lcck_setObject:(ID_VAL == nil ? @"" : ID_VAL) forKey:ID_KEY];
+        [avimTypedMessage lcck_setObject:(NAME_VAL == nil ? @"" : NAME_VAL) forKey:NAME_KEY];
+        [avimTypedMessage lcck_setObject:(SEX_VAL == nil ? @"" : SEX_VAL) forKey:SEX_KEY];
+        
         message.message = avimTypedMessage;
         
     } else {
@@ -488,22 +509,6 @@ fromTimestamp     |    toDate   |                |  上次上拉刷新顶端，�
     
     // 自定义消息格式
     LCCKMessage *message = (LCCKMessage *)aMessage;
-
-    if([message respondsToSelector:@selector(sender)]) {
-        id<LCCKUserDelegate> currentUser = message.sender;
-        
-        NSLog(@"999999 %@ 99999 %@ 99999 %@ 99999 %@ 99999", currentUser.avatarURL, currentUser.userId, currentUser.name, currentUser.sex
-              );
-        if (currentUser.avatarURL.absoluteString != nil) {
-            [avimTypedMessage lcck_setObject:currentUser.avatarURL.absoluteString forKey:@"USER_ICON"];
-        } else {
-            [avimTypedMessage lcck_setObject:@"" forKey:@"USER_ICON"];
-        }
-        [avimTypedMessage lcck_setObject:currentUser.avatarURL.absoluteString forKey:@"USER_ICON"];
-        [avimTypedMessage lcck_setObject:currentUser.userId forKey:@"USER_ID"];
-        [avimTypedMessage lcck_setObject:currentUser.name forKey:@"USER_NAME"];
-        [avimTypedMessage lcck_setObject:currentUser.sex forKey:@"USER_SEX"];
-    }
 
     [avimTypedMessage lcck_setObject:@([self.parentConversationViewController getConversationIfExists].lcck_type) forKey:LCCKCustomMessageConversationTypeKey];
     
