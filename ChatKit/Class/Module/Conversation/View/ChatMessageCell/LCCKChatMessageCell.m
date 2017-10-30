@@ -334,9 +334,15 @@ static CGFloat const LCCK_MSG_CELL_NICKNAME_FONT_SIZE = 12;
     NSString *icon = [json objectForKey: @"USER_ICON"];
     NSURL *url = [NSURL URLWithString:icon];
     avatarURL = url;
-    if(icon == nil || (icon != nil && [icon isEqualToString:@""])) {
+    if(icon == nil
+       || (icon != nil && [icon isEqualToString:@""])) {
         avatarURL = self.message.sender.avatarURL;
-        NSLog(@"message::::%@---url::%@;;;payload::%@", self.message.text, avatarURL, self.message);
+    }
+    
+    if(avatarURL == nil
+       || (avatarURL != nil && [avatarURL.absoluteString isEqualToString:@""])) {
+        id<LCCKUserDelegate> defSender = [[LCCKUserSystemService sharedInstance] fetchCurrentUser];
+        avatarURL = defSender.avatarURL;
     }
     
     LCCKMessageSendState sendStatus;
