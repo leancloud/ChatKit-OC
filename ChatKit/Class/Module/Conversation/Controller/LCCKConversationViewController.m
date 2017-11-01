@@ -304,6 +304,7 @@ NSString *const RNNotificationName = @"sendMessageToRNNotificationName";
         
         [[NSNotificationCenter defaultCenter] postNotificationName:RNNotificationName object:@{
                                                                                                @"USER_SEX": self.peerSex,
+                                                                                               @"READ":@YES,
                                                                                                @"USER_ICON": self.peerIcon,
                                                                                                @"USER_NAME": self.peerName,
                                                                                                @"USER_ID": self.peerID,

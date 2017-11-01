@@ -12,6 +12,8 @@
 
 @interface LCCKConversationNavigationTitleView : UIView
 
+@property (nonatomic, strong) UILabel *conversationNameView;
+
 - (instancetype)initWithConversation:(AVIMConversation *)conversation navigationController:(UINavigationController *)navigationController;
 
 @end
