@@ -21,6 +21,8 @@ FOUNDATION_EXTERN NSString *const LCCKConversationViewControllerErrorDomain;
  */
 @property (nonatomic, copy, readonly) NSString *conversationId;
 
+// 消息的类型：私聊还是群聊
+@property (nonatomic, copy) NSString *messageType;
 
 @property (nonatomic, copy) NSString *peerIcon;
 @property (nonatomic, copy) NSString *peerName;

@@ -486,20 +486,25 @@ fromTimestamp     |    toDate   |                |  上次上拉刷新顶端，�
         
         avimTypedMessage = [AVIMTypedMessage lcck_messageWithLCCKMessage:message];
         
+        id<LCCKUserDelegate> defSender = [[LCCKUserSystemService sharedInstance] fetchCurrentUser];
+        
         NSString *ICON_KEY = @"USER_ICON";
         NSString *ID_KEY = @"USER_ID";
         NSString *NAME_KEY = @"USER_NAME";
         NSString *SEX_KEY = @"USER_SEX";
+        NSString *TYPE_KEY = @"MSG_TYPE";
         
-        NSString *ICON_VAL = [json objectForKey:ICON_KEY];
-        NSString *ID_VAL = [json objectForKey:ID_KEY];
-        NSString *NAME_VAL = [json objectForKey:NAME_KEY];
-        NSString *SEX_VAL = [json objectForKey:SEX_KEY];
+        NSString *ICON_VAL = defSender.avatarURL.absoluteString;
+        NSString *ID_VAL = defSender.clientId;
+        NSString *NAME_VAL = defSender.name;
+        NSString *SEX_VAL = defSender.sex;
+        NSString *TYPE_VAL = self.messageType;
         
         [avimTypedMessage lcck_setObject:(ICON_VAL == nil ? @"" : ICON_VAL) forKey:ICON_KEY];
         [avimTypedMessage lcck_setObject:(ID_VAL == nil ? @"" : ID_VAL) forKey:ID_KEY];
         [avimTypedMessage lcck_setObject:(NAME_VAL == nil ? @"" : NAME_VAL) forKey:NAME_KEY];
         [avimTypedMessage lcck_setObject:(SEX_VAL == nil ? @"" : SEX_VAL) forKey:SEX_KEY];
+        [avimTypedMessage lcck_setObject:(TYPE_VAL == nil ? @"" : TYPE_VAL) forKey:TYPE_KEY];
         
         message.message = avimTypedMessage;
         

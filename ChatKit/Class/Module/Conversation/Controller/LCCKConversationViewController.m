@@ -206,6 +206,7 @@ NSString *const RNNotificationName = @"sendMessageToRNNotificationName";
     _chatViewModel.peerIcon = self.peerIcon;
     _chatViewModel.peerName = self.peerName;
     _chatViewModel.peerID = self.peerID;
+    _chatViewModel.messageType = self.messageType;
     return _chatViewModel;
 }
 
@@ -302,16 +303,19 @@ NSString *const RNNotificationName = @"sendMessageToRNNotificationName";
 
         [self.chatViewModel sendMessage:lcckMessage];
         
-        [[NSNotificationCenter defaultCenter] postNotificationName:RNNotificationName object:@{
-                                                                                               @"USER_SEX": self.peerSex,
-                                                                                               @"READ":@YES,
-                                                                                               @"USER_ICON": self.peerIcon,
-                                                                                               @"USER_NAME": self.peerName,
-                                                                                               @"USER_ID": self.peerID,
-                                                                                               @"MESSAGE_TYPE": @"MESSAGE_TYPE_CHAT",
-                                                                                               @"CHAT_TIME": [NSString stringWithFormat:@"%f", LCCK_CURRENT_TIMESTAMP],
-                                                                                               @"CHAT_MESSAGE":[NSString stringWithFormat:@"%@", text]
-                                                                                               }];
+        [[NSNotificationCenter defaultCenter]
+         postNotificationName:RNNotificationName
+         object:@{
+           @"USER_SEX": self.peerSex,
+           @"READ":@YES,
+           @"MSG_TYPE": self.messageType,
+           @"USER_ICON": self.peerIcon,
+           @"USER_NAME": self.peerName,
+           @"USER_ID": self.peerID,
+           @"MESSAGE_TYPE": @"MESSAGE_TYPE_CHAT",
+           @"CHAT_TIME": [NSString stringWithFormat:@"%f", LCCK_CURRENT_TIMESTAMP],
+           @"CHAT_MESSAGE":[NSString stringWithFormat:@"%@", text]
+       }];
     }
 }
 
@@ -345,15 +349,19 @@ NSString *const RNNotificationName = @"sendMessageToRNNotificationName";
                                 ];
         [self makeSureSendValidMessage:message afterFetchedConversationShouldWithAssert:NO];
         [self.chatViewModel sendMessage:message];
-        [[NSNotificationCenter defaultCenter] postNotificationName:RNNotificationName object:@{
-                                                                                               @"USER_SEX": self.peerSex,
-                                                                                               @"USER_ICON": self.peerIcon,
-                                                                                               @"USER_NAME": self.peerName,
-                                                                                               @"USER_ID": self.peerID,
-                                                                                               @"MESSAGE_TYPE": @"MESSAGE_TYPE_CHAT",
-                                                                                               @"CHAT_TIME": [NSString stringWithFormat:@"%f", LCCK_CURRENT_TIMESTAMP],
-                                                                                               @"CHAT_MESSAGE":@"图片消息"
-                                                                                               }];
+        [[NSNotificationCenter defaultCenter]
+         postNotificationName:RNNotificationName
+         object:@{
+           @"USER_SEX": self.peerSex,
+           @"USER_ICON": self.peerIcon,
+           @"READ":@YES,
+           @"MSG_TYPE": self.messageType,
+           @"USER_NAME": self.peerName,
+           @"USER_ID": self.peerID,
+           @"MESSAGE_TYPE": @"MESSAGE_TYPE_CHAT",
+           @"CHAT_TIME": [NSString stringWithFormat:@"%f", LCCK_CURRENT_TIMESTAMP],
+           @"CHAT_MESSAGE":@"图片消息"
+       }];
     } else {
         [self alert:@"write image to file error"];
     }
@@ -369,15 +377,19 @@ NSString *const RNNotificationName = @"sendMessageToRNNotificationName";
                                                         timestamp:LCCK_CURRENT_TIMESTAMP
                                                   serverMessageId:nil];
     [self makeSureSendValidMessage:message afterFetchedConversationShouldWithAssert:NO];
-    [[NSNotificationCenter defaultCenter] postNotificationName:RNNotificationName object:@{
-                                                                                           @"USER_SEX": self.peerSex,
-                                                                                           @"USER_ICON": self.peerIcon,
-                                                                                           @"USER_NAME": self.peerName,
-                                                                                           @"USER_ID": self.peerID,
-                                                                                           @"MESSAGE_TYPE": @"MESSAGE_TYPE_CHAT",
-                                                                                           @"CHAT_TIME": [NSString stringWithFormat:@"%f", LCCK_CURRENT_TIMESTAMP],
-                                                                                           @"CHAT_MESSAGE":@"语音消息"
-                                                                                           }];
+    [[NSNotificationCenter defaultCenter]
+     postNotificationName:RNNotificationName
+     object:@{
+          @"USER_SEX": self.peerSex,
+          @"USER_ICON": self.peerIcon,
+          @"USER_NAME": self.peerName,
+          @"READ":@YES,
+          @"MSG_TYPE": self.messageType,
+          @"USER_ID": self.peerID,
+          @"MESSAGE_TYPE": @"MESSAGE_TYPE_CHAT",
+          @"CHAT_TIME": [NSString stringWithFormat:@"%f", LCCK_CURRENT_TIMESTAMP],
+          @"CHAT_MESSAGE":@"语音消息"
+    }];
     [self.chatViewModel sendMessage:message];
 }
 

@@ -360,6 +360,7 @@ NSString *const LCCKSessionServiceErrorDomain = @"LCCKSessionServiceErrorDomain"
         NSString *userIcon = userInformation[@"USER_ICON"];
         NSString *userName = userInformation[@"USER_NAME"];
         NSString *userId = userInformation[@"USER_ID"];
+        NSString *msgType = userInformation[@"MSG_TYPE"];
         NSString *path = [NSString stringWithFormat:@"%@/Documents/%@.BL",NSHomeDirectory(),_clientId];
         NSFileManager *manager = [NSFileManager defaultManager];
         NSMutableDictionary *block = [[NSMutableDictionary alloc] init];
@@ -400,6 +401,10 @@ NSString *const LCCKSessionServiceErrorDomain = @"LCCKSessionServiceErrorDomain"
             userId = userObj.clientId;
         }
         
+        if(msgType == nil) {
+            msgType = @"";
+        }
+        
         NSString * finalMessage = @"";
         
         if (userObj.mediaType == kAVIMMessageMediaTypeText) {
@@ -416,11 +421,17 @@ NSString *const LCCKSessionServiceErrorDomain = @"LCCKSessionServiceErrorDomain"
             }
         }
         
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"sendMessageToRNNotificationName" object:@{
-                                                                                                               @"USER_SEX": userSex,                                  @"USER_ICON": userIcon,                                  @"USER_NAME": userName,                                      @"USER_ID": userId, @"MESSAGE_TYPE": @"MESSAGE_TYPE_CHAT",
-                                                                                                               @"CHAT_TIME": [NSString stringWithFormat:@"%f", LCCK_CURRENT_TIMESTAMP],
-                                                                                                               @"CHAT_MESSAGE":finalMessage
-                                                                                                               }];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"sendMessageToRNNotificationName"
+            object:@{
+                   @"USER_SEX": userSex,
+                   @"USER_ICON": userIcon,
+                   @"USER_NAME": userName,
+                   @"USER_ID": userId,
+                   @"MESSAGE_TYPE": @"MESSAGE_TYPE_CHAT",
+                   @"MSG_TYPE": msgType,
+                  @"CHAT_TIME": [NSString stringWithFormat:@"%f", LCCK_CURRENT_TIMESTAMP],
+                   @"CHAT_MESSAGE":finalMessage
+           }];
         
     };
 
