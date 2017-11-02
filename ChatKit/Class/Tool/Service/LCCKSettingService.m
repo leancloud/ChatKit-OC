@@ -39,7 +39,9 @@ static BOOL LCCKAllLogsEnabled;
 }
 
 + (NSString *)ChatKitVersion {
-    return @"v0.8.5";
+    NSString *v = [NSBundle.mainBundle.infoDictionary objectForKey:@"CFBundleShortVersionString"];
+    NSString *version = [NSString stringWithFormat:@"v%@", v];
+    return version;
 }
 
 - (NSString *)tmpPath {
