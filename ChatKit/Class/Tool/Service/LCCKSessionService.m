@@ -359,6 +359,7 @@ NSString *const LCCKSessionServiceErrorDomain = @"LCCKSessionServiceErrorDomain"
         NSString *userSex = userInformation[@"USER_SEX"];
         NSString *userIcon = userInformation[@"USER_ICON"];
         NSString *userName = userInformation[@"USER_NAME"];
+        NSString *convId = userInformation[@"CONVERSATION_ID"];
         NSString *userId = userInformation[@"USER_ID"];
         NSString *msgType = userInformation[@"MSG_TYPE"];
         NSString *path = [NSString stringWithFormat:@"%@/Documents/%@.BL",NSHomeDirectory(),_clientId];
@@ -405,6 +406,10 @@ NSString *const LCCKSessionServiceErrorDomain = @"LCCKSessionServiceErrorDomain"
             msgType = @"";
         }
         
+        if(convId == nil) {
+            convId = @"";
+        }
+        
         NSString * finalMessage = @"";
         
         if (userObj.mediaType == kAVIMMessageMediaTypeText) {
@@ -427,6 +432,7 @@ NSString *const LCCKSessionServiceErrorDomain = @"LCCKSessionServiceErrorDomain"
                    @"USER_ICON": userIcon,
                    @"USER_NAME": userName,
                    @"USER_ID": userId,
+                   @"CONVERSATION_ID": convId,
                    @"MESSAGE_TYPE": @"MESSAGE_TYPE_CHAT",
                    @"MSG_TYPE": msgType,
                   @"CHAT_TIME": [NSString stringWithFormat:@"%f", LCCK_CURRENT_TIMESTAMP],
