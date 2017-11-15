@@ -9,7 +9,7 @@ PODS:
     - AVOSCloudIM/_NOARC (= 7.2.0)
   - AVOSCloudIM/_NOARC (7.2.0):
     - AVOSCloud (= 7.2.0)
-  - ChatKit (1.0.0):
+  - ChatKit (1.0.1):
     - AVOSCloud (~> 7.2.0)
     - AVOSCloudIM (~> 7.2.0)
     - CYLDeallocBlockExecutor (~> 1.1.2)
@@ -35,7 +35,7 @@ PODS:
   - FXForms (1.2.14)
   - Masonry (1.0.2)
   - MBProgressHUD (0.9.2)
-  - MJRefresh (3.1.12)
+  - MJRefresh (3.1.15)
   - MLLabel (1.9.2)
   - MLPAutoCompleteTextField (1.5)
   - MWPhotoBrowser (2.1.2):
@@ -69,7 +69,7 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   AVOSCloud: 9f09a2a734fe980685866feded7f6129141e9336
   AVOSCloudIM: a14d3ccf0808dff33160a3287c84aa7e3fa17995
-  ChatKit: b9c6a7a60848bbe16f4983188a2bec17570e0981
+  ChatKit: 04a6f1976f5ec281803479aa40f4a3f7cf29cb97
   CYLDeallocBlockExecutor: ecf39e45dcead9e120f460df5668b8f5093d178e
   CYLTabBarController: 8d99fccf22866fe18c978c5ff863dc6051da45ff
   CYLTableViewRowAction: 66bd3f7478b46894ff40b74d892fc85aed41656b
@@ -80,7 +80,7 @@ SPEC CHECKSUMS:
   FXForms: 724500c0c3f3eb3ba1004b3b83abcee55d3daf18
   Masonry: 7c429b56da9d4ee0bbb3ed77a5ea710d6a5df39e
   MBProgressHUD: 1569cf7ace17a8bac47aabfbb8580a49690386d1
-  MJRefresh: b96cdb21c4aa75a7b07654311ab2f315c497e806
+  MJRefresh: 9af70f5f9327a2cf87f0fb5929f35fcc2fa638ea
   MLLabel: df58127ce0bd1f87890ecc3232db77a85ce4cd97
   MLPAutoCompleteTextField: ba4d507bbff2bd4f139d4197814fc8dd39caf77e
   MWPhotoBrowser: 5836d7aa041dc05a13de380c246826578adc5ea5

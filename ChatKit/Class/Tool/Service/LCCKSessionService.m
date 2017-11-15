@@ -216,6 +216,13 @@ NSString *const LCCKSessionServiceErrorDomain = @"LCCKSessionServiceErrorDomain"
 
 // 除了 sdk 的上面三个回调调用了，还在 open client 的时候调用了，好统一处理
 - (void)updateConnectStatus {
+    /* for better UI presentation */
+    ///
+    if (_client.status == AVIMClientStatusPaused ||
+        _client.status == AVIMClientStatusResuming) {
+        return;
+    }
+    ///
     self.connect = _client.status == AVIMClientStatusOpened;
     [[NSNotificationCenter defaultCenter] postNotificationName:LCCKNotificationConnectivityUpdated object:@(self.connect)];
 }
