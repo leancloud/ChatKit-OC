@@ -713,6 +713,7 @@ NSString *const LCCKConversationServiceErrorDomain = @"LCCKConversationServiceEr
 }
 
 - (void)queryTypedMessagesWithConversation:(AVIMConversation *)conversation
+                                 messageId:(NSString *)messageId
                                  timestamp:(int64_t)timestamp
                                      limit:(NSInteger)limit
                                      block:(AVIMArrayResultBlock)block {
@@ -736,7 +737,10 @@ NSString *const LCCKConversationServiceErrorDomain = @"LCCKConversationServiceEr
             [conversation queryMessagesWithLimit:limit callback:callback];
         } else {
             //会先根据本地缓存判断是否有必要从服务端拉取，这个方法不能用于首次拉取
-            [conversation queryMessagesBeforeId:nil timestamp:timestamp limit:limit callback:callback];
+            [conversation queryMessagesBeforeId:messageId
+                                      timestamp:timestamp
+                                          limit:limit
+                                       callback:callback];
         }
     });
 }

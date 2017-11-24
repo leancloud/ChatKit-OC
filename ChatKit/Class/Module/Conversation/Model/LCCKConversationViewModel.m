@@ -637,31 +637,37 @@ fromTimestamp     |    toDate   |                |  上次上拉刷新顶端，�
 }
 
 - (void)loadMessagesFirstTimeWithCallback:(LCCKIdBoolResultBlock)callback {
-    [self queryAndCacheMessagesWithTimestamp:0 block:^(NSArray *avimTypedMessages, NSError *error) {
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
-            BOOL succeed = [self.parentConversationViewController filterAVIMError:error];
-            if (succeed) {
-                NSMutableArray *lcckSucceedMessags = [NSMutableArray lcck_messagesWithAVIMMessages:avimTypedMessages];
-                [self addMessagesFirstTime:lcckSucceedMessags];
-                NSMutableArray *allMessages = [NSMutableArray arrayWithArray:avimTypedMessages];
-                self.avimTypedMessage = allMessages;
-                dispatch_async(dispatch_get_main_queue(),^{
-                    [self.parentConversationViewController.tableView reloadData];
-                    [self.parentConversationViewController scrollToBottomAnimated:NO];
-                    self.parentConversationViewController.loadingMoreMessage = NO;
-                });
-                if (self.avimTypedMessage.count > 0) {
-                    [[LCCKConversationService sharedInstance] updateConversationAsReadWithLastMessage:avimTypedMessages.lastObject];
-                }
-            } else {
-                self.parentConversationViewController.loadingMoreMessage = NO;
-            }
-            !callback ?: callback(succeed, self.avimTypedMessage, error);
-        });
-    }];
+    [self queryAndCacheMessagesWithTimestamp:0
+                                   messageId:nil
+                                       block:^(NSArray *avimTypedMessages, NSError *error)
+     {
+         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
+             BOOL succeed = [self.parentConversationViewController filterAVIMError:error];
+             if (succeed) {
+                 NSMutableArray *lcckSucceedMessags = [NSMutableArray lcck_messagesWithAVIMMessages:avimTypedMessages];
+                 [self addMessagesFirstTime:lcckSucceedMessags];
+                 NSMutableArray *allMessages = [NSMutableArray arrayWithArray:avimTypedMessages];
+                 self.avimTypedMessage = allMessages;
+                 dispatch_async(dispatch_get_main_queue(),^{
+                     [self.parentConversationViewController.tableView reloadData];
+                     [self.parentConversationViewController scrollToBottomAnimated:NO];
+                     self.parentConversationViewController.loadingMoreMessage = NO;
+                 });
+                 if (self.avimTypedMessage.count > 0) {
+                     [[LCCKConversationService sharedInstance] updateConversationAsReadWithLastMessage:avimTypedMessages.lastObject];
+                 }
+             } else {
+                 self.parentConversationViewController.loadingMoreMessage = NO;
+             }
+             !callback ?: callback(succeed, self.avimTypedMessage, error);
+         });
+     }];
 }
 
-- (void)queryAndCacheMessagesWithTimestamp:(int64_t)timestamp block:(AVIMArrayResultBlock)block {
+- (void)queryAndCacheMessagesWithTimestamp:(int64_t)timestamp
+                                 messageId:(NSString *)messageId
+                                     block:(AVIMArrayResultBlock)block
+{
     if (self.parentConversationViewController.loadingMoreMessage) {
         return;
     }
@@ -670,45 +676,50 @@ fromTimestamp     |    toDate   |                |  上次上拉刷新顶端，�
     }
     self.parentConversationViewController.loadingMoreMessage = YES;
     [[LCCKConversationService sharedInstance] queryTypedMessagesWithConversation:self.currentConversation
+                                                                       messageId:messageId
                                                                        timestamp:timestamp
                                                                            limit:kLCCKOnePageSize
-                                                                           block:^(NSArray *avimTypedMessages, NSError *error) {
-                                                                               self.parentConversationViewController.shouldLoadMoreMessagesScrollToTop = YES;
-                                                                               if (avimTypedMessages.count == 0) {
-                                                                                   self.parentConversationViewController.loadingMoreMessage = NO;
-                                                                                   self.parentConversationViewController.shouldLoadMoreMessagesScrollToTop = NO;
-                                                                                   !block ?: block(avimTypedMessages, error);
-                                                                                   return;
-                                                                               }
-                                                                               [LCCKConversationService cacheFileTypeMessages:avimTypedMessages callback:^(BOOL succeeded, NSError *error) {
-                                                                                   if (avimTypedMessages.count < kLCCKOnePageSize) {
-                                                                                       self.parentConversationViewController.shouldLoadMoreMessagesScrollToTop = NO;
-                                                                                   }
-                                                                                   !block ?: block(avimTypedMessages, error);
-                                                                               }];
-                                                                           }];
+                                                                           block:^(NSArray *avimTypedMessages, NSError *error)
+     {
+         self.parentConversationViewController.shouldLoadMoreMessagesScrollToTop = YES;
+         if (avimTypedMessages.count == 0) {
+             self.parentConversationViewController.loadingMoreMessage = NO;
+             self.parentConversationViewController.shouldLoadMoreMessagesScrollToTop = NO;
+             !block ?: block(avimTypedMessages, error);
+             return;
+         }
+         [LCCKConversationService cacheFileTypeMessages:avimTypedMessages callback:^(BOOL succeeded, NSError *error) {
+             if (avimTypedMessages.count < kLCCKOnePageSize) {
+                 self.parentConversationViewController.shouldLoadMoreMessagesScrollToTop = NO;
+             }
+             !block ?: block(avimTypedMessages, error);
+         }];
+     }];
 }
 
 - (void)loadOldMessages {
     AVIMTypedMessage *msg = [self.avimTypedMessage lcck_messageAtIndex:0];
     int64_t timestamp = msg.sendTimestamp;
-    [self queryAndCacheMessagesWithTimestamp:timestamp block:^(NSArray *avimTypedMessages, NSError *error) {
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
-            if ([self.parentConversationViewController filterAVIMError:error]) {
-                NSMutableArray *lcckMessages = [[NSMutableArray lcck_messagesWithAVIMMessages:avimTypedMessages] mutableCopy];
-                NSMutableArray *newMessages = [NSMutableArray arrayWithArray:avimTypedMessages];
-                [newMessages addObjectsFromArray:self.avimTypedMessage];
-                self.avimTypedMessage = newMessages;
-                [self insertOldMessages:[self messagesWithLocalMessages:lcckMessages freshTimestamp:timestamp] completion: ^{
-                    self.parentConversationViewController.loadingMoreMessage = NO;
-                }];
-            } else {
-                dispatch_async(dispatch_get_main_queue(),^{
-                    self.parentConversationViewController.loadingMoreMessage = NO;
-                });
-            }
-        });
-    }];
+    [self queryAndCacheMessagesWithTimestamp:timestamp
+                                   messageId:msg.messageId
+                                       block:^(NSArray *avimTypedMessages, NSError *error)
+     {
+         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
+             if ([self.parentConversationViewController filterAVIMError:error]) {
+                 NSMutableArray *lcckMessages = [[NSMutableArray lcck_messagesWithAVIMMessages:avimTypedMessages] mutableCopy];
+                 NSMutableArray *newMessages = [NSMutableArray arrayWithArray:avimTypedMessages];
+                 [newMessages addObjectsFromArray:self.avimTypedMessage];
+                 self.avimTypedMessage = newMessages;
+                 [self insertOldMessages:[self messagesWithLocalMessages:lcckMessages freshTimestamp:timestamp] completion: ^{
+                     self.parentConversationViewController.loadingMoreMessage = NO;
+                 }];
+             } else {
+                 dispatch_async(dispatch_get_main_queue(),^{
+                     self.parentConversationViewController.loadingMoreMessage = NO;
+                 });
+             }
+         });
+     }];
 }
 
 - (void)insertOldMessages:(NSArray *)oldMessages completion:(void (^)())completion {
