@@ -1,5 +1,5 @@
 target 'ChatKit-OC' do
-  platform :ios , '7.0'
+  platform :ios , '8.0'
   inhibit_all_warnings!
 
   #=========================================================
@@ -12,7 +12,6 @@ target 'ChatKit-OC' do
   #=========================================================
 
   pod 'CYLTabBarController', '1.9.0'
-  pod 'CYLTableViewRowAction', '1.0.0'
   pod 'TWMessageBarManager', '1.8.1'
   pod 'MLPAutoCompleteTextField', '1.5'
   pod 'FTPopOverMenu', '1.3.2'

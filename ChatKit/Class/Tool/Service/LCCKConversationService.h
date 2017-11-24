@@ -71,7 +71,11 @@ FOUNDATION_EXTERN NSString *const LCCKConversationServiceErrorDomain;
       progressBlock:(AVProgressBlock)progressBlock
            callback:(LCCKBooleanResultBlock)block;
 
-- (void)queryTypedMessagesWithConversation:(AVIMConversation *)conversation timestamp:(int64_t)timestamp limit:(NSInteger)limit block:(LCCKArrayResultBlock)block;
+- (void)queryTypedMessagesWithConversation:(AVIMConversation *)conversation
+                                 messageId:(NSString *)messageId
+                                 timestamp:(int64_t)timestamp
+                                     limit:(NSInteger)limit
+                                     block:(LCCKArrayResultBlock)block;
 
 /**
  *  删除对话对应的UIProfile缓存，比如当用户信息发生变化时
