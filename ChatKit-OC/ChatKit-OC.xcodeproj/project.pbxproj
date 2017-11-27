@@ -50,13 +50,7 @@
 		9A562A3C1E03D52F00BB23DD /* LCCKSettingFooterTitleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A562A331E03D52F00BB23DD /* LCCKSettingFooterTitleView.m */; };
 		9A562A3D1E03D52F00BB23DD /* LCCKSettingHeaderTitleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A562A351E03D52F00BB23DD /* LCCKSettingHeaderTitleView.m */; };
 		9A7E2DE91D5F1040003A7312 /* LCCKContactManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A7E2DE81D5F1040003A7312 /* LCCKContactManager.m */; };
-		9AB37B2A1DC86A60000782F2 /* ChatKit 自定义样式.md in Sources */ = {isa = PBXBuildFile; fileRef = 9AB37B251DC86A60000782F2 /* ChatKit 自定义样式.md */; };
-		9AB37B2B1DC86A60000782F2 /* ChatKit 自定义业务.md in Sources */ = {isa = PBXBuildFile; fileRef = 9AB37B261DC86A60000782F2 /* ChatKit 自定义业务.md */; };
 		9AB37B2C1DC86A60000782F2 /* ChatKit.podspec in Resources */ = {isa = PBXBuildFile; fileRef = 9AB37B271DC86A60000782F2 /* ChatKit.podspec */; };
-		9AB37B2D1DC86A60000782F2 /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = 9AB37B281DC86A60000782F2 /* README.md */; };
-		9AB37B2E1DC86A60000782F2 /* REDPACKET.md in Sources */ = {isa = PBXBuildFile; fileRef = 9AB37B291DC86A60000782F2 /* REDPACKET.md */; };
-		9AB37B311DC86A6E000782F2 /* issue_template.md in Sources */ = {isa = PBXBuildFile; fileRef = 9AB37B2F1DC86A6E000782F2 /* issue_template.md */; };
-		9AB37B321DC86A6E000782F2 /* pull_request_template.md in Sources */ = {isa = PBXBuildFile; fileRef = 9AB37B301DC86A6E000782F2 /* pull_request_template.md */; };
 		9AC3A4901DF9B7B400F3405F /* LCCKSingleConversationDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AC3A48F1DF9B7B400F3405F /* LCCKSingleConversationDetailViewController.m */; };
 		9AC3A4931DF9B7D500F3405F /* LCCKGroupConversationDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AC3A4921DF9B7D500F3405F /* LCCKGroupConversationDetailViewController.m */; };
 		9AC3A4B81DF9BEE600F3405F /* LCCKUIUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AC3A4B31DF9BEE600F3405F /* LCCKUIUtility.m */; };
@@ -757,7 +751,7 @@
 		9A754D431CECAC3E000967F1 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0730;
+				LastUpgradeCheck = 0910;
 				ORGANIZATIONNAME = ElonChan;
 				TargetAttributes = {
 					9A754D4A1CECAC3E000967F1 = {
@@ -907,7 +901,7 @@
 				"${PODS_ROOT}/../../ChatKit/Class/Resources/VoiceMessageSource.bundle",
 				"${PODS_ROOT}/../../ChatKit/Class/Module/ContactList/View/LCCKContactCell.xib",
 				"${PODS_ROOT}/MJRefresh/MJRefresh/MJRefresh.bundle",
-				"$PODS_CONFIGURATION_BUILD_DIR/MWPhotoBrowser/MWPhotoBrowser.bundle",
+				$PODS_CONFIGURATION_BUILD_DIR/MWPhotoBrowser/MWPhotoBrowser.bundle,
 				"${PODS_ROOT}/RedPacketAlipay/AlipaySDK.bundle",
 				"${PODS_ROOT}/RedpacketLib/RedpacketStaticLib/resources/RedPacketResource.bundle",
 				"${PODS_ROOT}/TWMessageBarManager/Classes/Icons/icon-error.png",
@@ -1011,7 +1005,6 @@
 				9A53BE411D8BB19C00AAB118 /* LCChatKitExample.m in Sources */,
 				9A55EB351E00FC5A0079EB65 /* LCCKProfileNameEditViewController.m in Sources */,
 				9A562A381E03D52F00BB23DD /* LCCKSettingCell.m in Sources */,
-				9AB37B2D1DC86A60000782F2 /* README.md in Sources */,
 				9A562A371E03D52F00BB23DD /* LCCKSettingButtonCell.m in Sources */,
 				9AC3A4D41DF9C16A00F3405F /* NSDate+Utilities.m in Sources */,
 				9AC3A4CD1DF9C14500F3405F /* NSFileManager+LCCKExtension.m in Sources */,
@@ -1023,17 +1016,13 @@
 				9A2669CD1D6DA89100B66545 /* LCCKVCardView.m in Sources */,
 				9A47306A1CECAEC500AEB86F /* DEMODataSource.m in Sources */,
 				9A562A3B1E03D52F00BB23DD /* LCCKSettingItem.m in Sources */,
-				9AB37B321DC86A6E000782F2 /* pull_request_template.md in Sources */,
 				9A562A391E03D52F00BB23DD /* LCCKSettingSwitchCell.m in Sources */,
 				9A2669CB1D6DA89100B66545 /* LCCKInputViewPluginVCard.m in Sources */,
 				9A47306C1CECAEC500AEB86F /* LCCKMapViewController.m in Sources */,
-				9AB37B2A1DC86A60000782F2 /* ChatKit 自定义样式.md in Sources */,
-				9AB37B2B1DC86A60000782F2 /* ChatKit 自定义业务.md in Sources */,
 				9A4730621CECAEC500AEB86F /* LCCKUser.m in Sources */,
 				9A47306E1CECAEC500AEB86F /* LCCKUtil.m in Sources */,
 				9A53BE2F1D8BB13E00AAB118 /* RedpacketConfig.m in Sources */,
 				9A562A3C1E03D52F00BB23DD /* LCCKSettingFooterTitleView.m in Sources */,
-				9AB37B311DC86A6E000782F2 /* issue_template.md in Sources */,
 				9AC3A4E21DF9CE0300F3405F /* LCCKChatDetailHelper.m in Sources */,
 				9A53BE2C1D8BB13E00AAB118 /* AVIMTypedMessageRedPacketTaken.m in Sources */,
 				9A53BE2B1D8BB13E00AAB118 /* AVIMTypedMessageRedPacket.m in Sources */,
@@ -1058,7 +1047,6 @@
 				9AC3A4D71DF9C25200F3405F /* NSFileManager+Paths.m in Sources */,
 				9AC3A4DE1DF9C8BD00F3405F /* LCCKUserGroupItemCell.m in Sources */,
 				9A53BE351D8BB13E00AAB118 /* RedPacketInputViewPlugin.m in Sources */,
-				9AB37B2E1DC86A60000782F2 /* REDPACKET.md in Sources */,
 				9A2669C91D6DA89100B66545 /* LCCKVCardMessage.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1082,18 +1070,27 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
@@ -1116,7 +1113,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				PROVISIONING_PROFILE = "";
@@ -1129,18 +1126,27 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
@@ -1157,7 +1163,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
@@ -1202,8 +1208,6 @@
 					"\"$PODS_CONFIGURATION_BUILD_DIR/TWMessageBarManager\"",
 					"\"$PODS_CONFIGURATION_BUILD_DIR/UITableView+FDTemplateLayoutCell\"",
 					"\"$PODS_CONFIGURATION_BUILD_DIR/pop\"",
-					"\"$(SRCROOT)/../../RedpacketStaticLib\"/**",
-					"\"$(SRCROOT)/../../RedpacketStaticLib/AlipayLib\"/**",
 				);
 				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = com.chatkit.leancloud;
@@ -1249,8 +1253,6 @@
 					"\"$PODS_CONFIGURATION_BUILD_DIR/TWMessageBarManager\"",
 					"\"$PODS_CONFIGURATION_BUILD_DIR/UITableView+FDTemplateLayoutCell\"",
 					"\"$PODS_CONFIGURATION_BUILD_DIR/pop\"",
-					"\"$(SRCROOT)/../../RedpacketStaticLib\"/**",
-					"\"$(SRCROOT)/../../RedpacketStaticLib/AlipayLib\"/**",
 				);
 				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = com.chatkit.leancloud;
