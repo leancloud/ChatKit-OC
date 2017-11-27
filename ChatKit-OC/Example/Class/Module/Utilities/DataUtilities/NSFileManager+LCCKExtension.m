@@ -8,7 +8,7 @@
 
 #import "NSFileManager+LCCKExtension.h"
 
-@implementation NSFileManager (LCCKExtension)
+@implementation NSFileManager (LCCKExtension_)
 
 + (NSString *)lcck_pathUserSettingImage:(NSString *)imageName userId:(NSString *)userId {
     NSString *path = [NSString stringWithFormat:@"%@/User/%@/Setting/Images/", [NSFileManager documentsPath], userId];

@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "NSFileManager+Paths.h"
 
-@interface NSFileManager (LCCKExtension)
+@interface NSFileManager (LCCKExtension_)
 
 /**
  *  图片 — 设置

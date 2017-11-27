@@ -8,7 +8,7 @@
 
 #import "LCCKInputViewPluginConversationBackground.h"
 
-@interface LCCKInputViewPluginConversationBackground()<UIImagePickerControllerDelegate>
+@interface LCCKInputViewPluginConversationBackground()<UIImagePickerControllerDelegate, UINavigationControllerDelegate>
 
 @property (nonatomic, copy) LCCKIdResultBlock sendCustomMessageHandler;
 @property (nonatomic, copy) UIImagePickerController *pickerController;
