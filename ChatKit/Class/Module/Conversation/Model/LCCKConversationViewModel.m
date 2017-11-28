@@ -668,7 +668,7 @@ fromTimestamp     |    toDate   |                |  上次上拉刷新顶端，�
 }
 
 - (void)loadMessagesFirstTimeWithCallback:(LCCKIdBoolResultBlock)callback {
-    [self queryAndCacheMessagesWithTimestamp:0 block:^(NSArray *avimTypedMessages, NSError *error) {
+    [self queryAndCacheMessagesWithTimestamp:0 messageId:nil block:^(NSArray *avimTypedMessages, NSError *error) {
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
             BOOL succeed = [self.parentConversationViewController filterAVIMError:error];
             if (succeed) {
@@ -692,7 +692,7 @@ fromTimestamp     |    toDate   |                |  上次上拉刷新顶端，�
     }];
 }
 
-- (void)queryAndCacheMessagesWithTimestamp:(int64_t)timestamp block:(AVIMArrayResultBlock)block {
+- (void)queryAndCacheMessagesWithTimestamp:(int64_t)timestamp messageId:(NSString *)messageId block:(AVIMArrayResultBlock)block {
     if (self.parentConversationViewController.loadingMoreMessage) {
         return;
     }
@@ -701,6 +701,7 @@ fromTimestamp     |    toDate   |                |  上次上拉刷新顶端，�
     }
     self.parentConversationViewController.loadingMoreMessage = YES;
     [[LCCKConversationService sharedInstance] queryTypedMessagesWithConversation:self.currentConversation
+                                                                       messageId:messageId
                                                                        timestamp:timestamp
                                                                            limit:kLCCKOnePageSize
                                                                            block:^(NSArray *avimTypedMessages, NSError *error) {
@@ -723,7 +724,7 @@ fromTimestamp     |    toDate   |                |  上次上拉刷新顶端，�
 - (void)loadOldMessages {
     AVIMTypedMessage *msg = [self.avimTypedMessage lcck_messageAtIndex:0];
     int64_t timestamp = msg.sendTimestamp;
-    [self queryAndCacheMessagesWithTimestamp:timestamp block:^(NSArray *avimTypedMessages, NSError *error) {
+    [self queryAndCacheMessagesWithTimestamp:timestamp messageId:msg.messageId block:^(NSArray *avimTypedMessages, NSError *error) {
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
             if ([self.parentConversationViewController filterAVIMError:error]) {
                 NSMutableArray *lcckMessages = [[NSMutableArray lcck_messagesWithAVIMMessages:avimTypedMessages] mutableCopy];
