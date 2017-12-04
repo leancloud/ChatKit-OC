@@ -211,6 +211,7 @@
 		9AC3A4DC1DF9C8BD00F3405F /* LCCKUserGroupItemCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCKUserGroupItemCell.m; sourceTree = "<group>"; };
 		9AC3A4E01DF9CE0300F3405F /* LCCKChatDetailHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKChatDetailHelper.h; sourceTree = "<group>"; };
 		9AC3A4E11DF9CE0300F3405F /* LCCKChatDetailHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCKChatDetailHelper.m; sourceTree = "<group>"; };
+		D3D1667D1FD4EBB90019FDFF /* ChatKit.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; name = ChatKit.podspec; path = ../ChatKit.podspec; sourceTree = "<group>"; };
 		E55D34EC8F162DB5443587B0 /* Pods-ChatKit-OC.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChatKit-OC.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ChatKit-OC/Pods-ChatKit-OC.debug.xcconfig"; sourceTree = "<group>"; };
 		E7586C4E1D630681000C18B4 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
@@ -565,6 +566,7 @@
 			isa = PBXGroup;
 			children = (
 				9A4CBADB1DB87F2000E61C92 /* ChatKit-OC.entitlements */,
+				D3D1667D1FD4EBB90019FDFF /* ChatKit.podspec */,
 				9A4730281CECAEC500AEB86F /* Example */,
 				9A754D4C1CECAC3E000967F1 /* Products */,
 				578A4ED63A7AFF3EA27EF73A /* Frameworks */,
@@ -1193,7 +1195,6 @@
 					"\"$PODS_CONFIGURATION_BUILD_DIR/AVOSCloud\"",
 					"\"$PODS_CONFIGURATION_BUILD_DIR/AVOSCloudIM\"",
 					"\"$PODS_CONFIGURATION_BUILD_DIR/CYLTabBarController\"",
-					"\"$PODS_CONFIGURATION_BUILD_DIR/CYLTableViewRowAction\"",
 					"\"$PODS_CONFIGURATION_BUILD_DIR/ChatKit\"",
 					"\"$PODS_CONFIGURATION_BUILD_DIR/DACircularProgress\"",
 					"\"$PODS_CONFIGURATION_BUILD_DIR/FDStackView\"",
@@ -1238,7 +1239,6 @@
 					"\"$PODS_CONFIGURATION_BUILD_DIR/AVOSCloud\"",
 					"\"$PODS_CONFIGURATION_BUILD_DIR/AVOSCloudIM\"",
 					"\"$PODS_CONFIGURATION_BUILD_DIR/CYLTabBarController\"",
-					"\"$PODS_CONFIGURATION_BUILD_DIR/CYLTableViewRowAction\"",
 					"\"$PODS_CONFIGURATION_BUILD_DIR/ChatKit\"",
 					"\"$PODS_CONFIGURATION_BUILD_DIR/DACircularProgress\"",
 					"\"$PODS_CONFIGURATION_BUILD_DIR/FDStackView\"",
