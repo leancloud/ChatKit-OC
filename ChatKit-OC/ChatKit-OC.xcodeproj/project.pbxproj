@@ -50,7 +50,6 @@
 		9A562A3C1E03D52F00BB23DD /* LCCKSettingFooterTitleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A562A331E03D52F00BB23DD /* LCCKSettingFooterTitleView.m */; };
 		9A562A3D1E03D52F00BB23DD /* LCCKSettingHeaderTitleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A562A351E03D52F00BB23DD /* LCCKSettingHeaderTitleView.m */; };
 		9A7E2DE91D5F1040003A7312 /* LCCKContactManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A7E2DE81D5F1040003A7312 /* LCCKContactManager.m */; };
-		9AB37B2C1DC86A60000782F2 /* ChatKit.podspec in Resources */ = {isa = PBXBuildFile; fileRef = 9AB37B271DC86A60000782F2 /* ChatKit.podspec */; };
 		9AC3A4901DF9B7B400F3405F /* LCCKSingleConversationDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AC3A48F1DF9B7B400F3405F /* LCCKSingleConversationDetailViewController.m */; };
 		9AC3A4931DF9B7D500F3405F /* LCCKGroupConversationDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AC3A4921DF9B7D500F3405F /* LCCKGroupConversationDetailViewController.m */; };
 		9AC3A4B81DF9BEE600F3405F /* LCCKUIUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AC3A4B31DF9BEE600F3405F /* LCCKUIUtility.m */; };
@@ -180,7 +179,6 @@
 		9AAFE6571D48C863004A0309 /* zh-Hans-CN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans-CN"; path = "zh-Hans-CN.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
 		9AB37B251DC86A60000782F2 /* ChatKit 自定义样式.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = "ChatKit 自定义样式.md"; path = "../../../../../ChatKit 自定义样式.md"; sourceTree = "<group>"; };
 		9AB37B261DC86A60000782F2 /* ChatKit 自定义业务.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = "ChatKit 自定义业务.md"; path = "../../../../../ChatKit 自定义业务.md"; sourceTree = "<group>"; };
-		9AB37B271DC86A60000782F2 /* ChatKit.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = ChatKit.podspec; path = ../../../../../ChatKit.podspec; sourceTree = "<group>"; };
 		9AB37B281DC86A60000782F2 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../../../../../README.md; sourceTree = "<group>"; };
 		9AB37B291DC86A60000782F2 /* REDPACKET.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = REDPACKET.md; path = ../../../../../REDPACKET.md; sourceTree = "<group>"; };
 		9AB37B2F1DC86A6E000782F2 /* issue_template.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = issue_template.md; path = ../../../../../.github/issue_template.md; sourceTree = "<group>"; };
@@ -211,6 +209,7 @@
 		9AC3A4DC1DF9C8BD00F3405F /* LCCKUserGroupItemCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCKUserGroupItemCell.m; sourceTree = "<group>"; };
 		9AC3A4E01DF9CE0300F3405F /* LCCKChatDetailHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKChatDetailHelper.h; sourceTree = "<group>"; };
 		9AC3A4E11DF9CE0300F3405F /* LCCKChatDetailHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCKChatDetailHelper.m; sourceTree = "<group>"; };
+		D3D1667D1FD4EBB90019FDFF /* ChatKit.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; name = ChatKit.podspec; path = ../ChatKit.podspec; sourceTree = "<group>"; };
 		E55D34EC8F162DB5443587B0 /* Pods-ChatKit-OC.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChatKit-OC.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ChatKit-OC/Pods-ChatKit-OC.debug.xcconfig"; sourceTree = "<group>"; };
 		E7586C4E1D630681000C18B4 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
@@ -442,7 +441,6 @@
 				9AB37B301DC86A6E000782F2 /* pull_request_template.md */,
 				9AB37B251DC86A60000782F2 /* ChatKit 自定义样式.md */,
 				9AB37B261DC86A60000782F2 /* ChatKit 自定义业务.md */,
-				9AB37B271DC86A60000782F2 /* ChatKit.podspec */,
 				9AB37B281DC86A60000782F2 /* README.md */,
 				9AB37B291DC86A60000782F2 /* REDPACKET.md */,
 			);
@@ -565,6 +563,7 @@
 			isa = PBXGroup;
 			children = (
 				9A4CBADB1DB87F2000E61C92 /* ChatKit-OC.entitlements */,
+				D3D1667D1FD4EBB90019FDFF /* ChatKit.podspec */,
 				9A4730281CECAEC500AEB86F /* Example */,
 				9A754D4C1CECAC3E000967F1 /* Products */,
 				578A4ED63A7AFF3EA27EF73A /* Frameworks */,
@@ -791,7 +790,6 @@
 			files = (
 				9A4730711CECAEC500AEB86F /* LaunchScreen.storyboard in Resources */,
 				9A4730701CECAEC500AEB86F /* Assets.xcassets in Resources */,
-				9AB37B2C1DC86A60000782F2 /* ChatKit.podspec in Resources */,
 				9A2669CE1D6DA89100B66545 /* LCCKVCardView.xib in Resources */,
 				9A2669CA1D6DA89100B66545 /* calling_card_bg@2x.png in Resources */,
 				9A4730681CECAEC500AEB86F /* LCCKLoginViewController.xib in Resources */,
@@ -1193,7 +1191,6 @@
 					"\"$PODS_CONFIGURATION_BUILD_DIR/AVOSCloud\"",
 					"\"$PODS_CONFIGURATION_BUILD_DIR/AVOSCloudIM\"",
 					"\"$PODS_CONFIGURATION_BUILD_DIR/CYLTabBarController\"",
-					"\"$PODS_CONFIGURATION_BUILD_DIR/CYLTableViewRowAction\"",
 					"\"$PODS_CONFIGURATION_BUILD_DIR/ChatKit\"",
 					"\"$PODS_CONFIGURATION_BUILD_DIR/DACircularProgress\"",
 					"\"$PODS_CONFIGURATION_BUILD_DIR/FDStackView\"",
@@ -1238,7 +1235,6 @@
 					"\"$PODS_CONFIGURATION_BUILD_DIR/AVOSCloud\"",
 					"\"$PODS_CONFIGURATION_BUILD_DIR/AVOSCloudIM\"",
 					"\"$PODS_CONFIGURATION_BUILD_DIR/CYLTabBarController\"",
-					"\"$PODS_CONFIGURATION_BUILD_DIR/CYLTableViewRowAction\"",
 					"\"$PODS_CONFIGURATION_BUILD_DIR/ChatKit\"",
 					"\"$PODS_CONFIGURATION_BUILD_DIR/DACircularProgress\"",
 					"\"$PODS_CONFIGURATION_BUILD_DIR/FDStackView\"",
