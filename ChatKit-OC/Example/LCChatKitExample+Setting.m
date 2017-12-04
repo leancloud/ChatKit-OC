@@ -384,52 +384,61 @@ setLoadLatestMessagesHandler:^(LCCKConversationViewController *conversationContr
  *  强制重连
  */
 - (void)lcck_setupForceReconect {
-    [[LCChatKit sharedInstance] setForceReconnectSessionBlock:^(
-                                                                NSError *aError, BOOL granted,
-                                                                __kindof UIViewController *viewController,
-                                                                LCCKReconnectSessionCompletionHandler completionHandler) {
-        BOOL isSingleSignOnOffline = (aError.code == 4111);
-        if (isSingleSignOnOffline) {
-            // 一旦出现单点登录被踢错误，必须退出到登录界面重新登录
-            // - 退回登录页面
-            [[self class] lcck_clearLocalClientInfo];
-            LCCKLoginViewController *loginViewController = [[LCCKLoginViewController alloc] init];
-            [loginViewController setClientIDHandler:^(NSString *clientID) {
-                [LCCKUtil showProgressText:@"open client ..." duration:10.0f];
-                [LCChatKitExample invokeThisMethodAfterLoginSuccessWithClientId:clientID
-                                                                        success:^{
-                                                                            [LCCKUtil hideProgress];
-                                                                            LCCKTabBarControllerConfig *tabBarControllerConfig =
-                                                                            [[LCCKTabBarControllerConfig alloc] init];
-                                                                            [UIApplication sharedApplication].keyWindow.rootViewController =
-                                                                            tabBarControllerConfig.tabBarController;
-                                                                        }
-                                                                         failed:^(NSError *error) {
-                                                                             [LCCKUtil hideProgress];
-                                                                             NSLog(@"%@", error);
-                                                                         }];
-            }];
-            [[self class] lcck_tryPresentViewControllerViewController:loginViewController];
-            //completionHandler用来提示重连成功的HUD，此处可以不用执行
-            !completionHandler ?: completionHandler(YES, nil);
-            return;
-        }
-        
-        // - 用户允许重连请求，发起重连或强制登录
-        if (granted == YES) {
-            BOOL force = NO;
-            NSString *title = @"正在重连聊天服务...";
-            [[self class] lcck_showMessage:title toView:viewController.view];
-            [[LCChatKit sharedInstance] openWithClientId:[LCChatKit sharedInstance].clientId
-                                                   force:force
-                                                callback:^(BOOL succeeded, NSError *error) {
-                                                    [[self class] lcck_hideHUDForView:viewController.view];
-                                                    //completionHandler用来提示重连成功的HUD
-                                                    !completionHandler ?: completionHandler(succeeded, error);
-                                                }];
-            return;
-        }
-    }];
+    [[LCChatKit sharedInstance] setForceReconnectSessionBlock:
+     ^(NSError *aError, BOOL granted, __kindof UIViewController *viewController, LCCKReconnectSessionCompletionHandler completionHandler) {
+         
+         BOOL isSingleSignOnOffline = (aError.code == 4111);
+         
+         if (isSingleSignOnOffline) {
+             
+             // - 用户允许重连请求，发起重连或强制登录
+             if (granted == YES) {
+                 
+                 NSString *title = @"正在重连聊天服务...";
+                 
+                 // 从系统偏好读取用户已经保存的信息
+                 NSUserDefaults *defaultsGet = [NSUserDefaults standardUserDefaults];
+                 NSString *clientId = [defaultsGet stringForKey:LCCK_KEY_USERID];
+                 
+                 [[self class] lcck_showMessage:title toView:viewController.view];
+                 [[LCChatKit sharedInstance] openWithClientId:clientId
+                                                        force:granted
+                                                     callback:
+                  ^(BOOL succeeded, NSError *error) {
+                      [[self class] lcck_hideHUDForView:viewController.view];
+                      //completionHandler用来提示重连成功的HUD
+                      !completionHandler ?: completionHandler(succeeded, error);
+                  }];
+                 return;
+             }
+             
+             // 一旦出现单点登录被踢错误，必须退出到登录界面重新登录
+             // - 退回登录页面
+             [[self class] lcck_clearLocalClientInfo];
+             LCCKLoginViewController *loginViewController = [[LCCKLoginViewController alloc] init];
+             [loginViewController setClientIDHandler:^(NSString *clientID) {
+                 [LCCKUtil showProgressText:@"open client ..." duration:10.0f];
+                 [LCChatKitExample invokeThisMethodAfterLoginSuccessWithClientId:clientID
+                                                                         success:
+                  ^{
+                      [LCCKUtil hideProgress];
+                      LCCKTabBarControllerConfig *tabBarControllerConfig =
+                      [[LCCKTabBarControllerConfig alloc] init];
+                      [UIApplication sharedApplication].keyWindow.rootViewController =
+                      tabBarControllerConfig.tabBarController;
+                  }
+                                                                          failed:
+                  ^(NSError *error) {
+                      [LCCKUtil hideProgress];
+                      NSLog(@"%@", error);
+                  }];
+             }];
+             [[self class] lcck_tryPresentViewControllerViewController:loginViewController];
+             //completionHandler用来提示重连成功的HUD，此处可以不用执行
+             !completionHandler ?: completionHandler(YES, nil);
+             return;
+         }
+     }];
 }
 /**
  *  各个情况的hud提示设置
