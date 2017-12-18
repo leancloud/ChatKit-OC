@@ -834,7 +834,8 @@ NSString *const RNNotificationName = @"sendMessageToRNNotificationName";
     if ([messageCell.message lcck_isCustomMessage]) {
         id<LCCKUserDelegate> sender = [[LCCKUserSystemService sharedInstance] getProfileForUserId:self.conversation.lcck_peerId error:nil];
         if (sender != nil) {
-            !openProfileBlock ?: openProfileBlock(self.conversation.lcck_peerId, sender, self);
+            //!openProfileBlock ?: openProfileBlock(self.conversation.lcck_peerId, sender, self);
+            !openProfileBlock ?: openProfileBlock(((AVIMMessage *)messageCell.message).clientId, sender, self);
         }
     }else{
         !openProfileBlock ?: openProfileBlock(messageCell.message.senderId, messageCell.message.sender, self);
