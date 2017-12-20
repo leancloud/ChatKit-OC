@@ -207,6 +207,7 @@ NSString *const RNNotificationName = @"sendMessageToRNNotificationName";
     _chatViewModel.peerName = self.peerName;
     _chatViewModel.peerID = self.peerID;
     _chatViewModel.messageType = self.messageType;
+    _chatViewModel.messageFromApp = self.messageFromApp;
     return _chatViewModel;
 }
 
