@@ -362,6 +362,7 @@ NSString *const LCCKSessionServiceErrorDomain = @"LCCKSessionServiceErrorDomain"
         NSString *convId = userInformation[@"CONVERSATION_ID"];
         NSString *userId = userInformation[@"USER_ID"];
         NSString *msgType = userInformation[@"MSG_TYPE"];
+        NSString *fromApp = userInformation[@"APP"];
         NSString *path = [NSString stringWithFormat:@"%@/Documents/%@.BL",NSHomeDirectory(),_clientId];
         NSFileManager *manager = [NSFileManager defaultManager];
         NSMutableDictionary *block = [[NSMutableDictionary alloc] init];
@@ -384,6 +385,10 @@ NSString *const LCCKSessionServiceErrorDomain = @"LCCKSessionServiceErrorDomain"
         // - 播放接收音
         if (!isUnreadMessage) {
             [self playLoudReceiveSoundIfNeededForConversation:conversation];
+        }
+        
+        if(fromApp == nil) {
+            fromApp = @"";
         }
         
         if(userSex == nil) {
@@ -435,6 +440,7 @@ NSString *const LCCKSessionServiceErrorDomain = @"LCCKSessionServiceErrorDomain"
                    @"CONVERSATION_ID": convId,
                    @"MESSAGE_TYPE": @"MESSAGE_TYPE_CHAT",
                    @"MSG_TYPE": msgType,
+                   @"APP": fromApp,
                   @"CHAT_TIME": [NSString stringWithFormat:@"%f", LCCK_CURRENT_TIMESTAMP],
                    @"CHAT_MESSAGE":finalMessage
            }];

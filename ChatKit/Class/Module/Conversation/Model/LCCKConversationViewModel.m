@@ -494,6 +494,7 @@ fromTimestamp     |    toDate   |                |  上次上拉刷新顶端，�
         NSString *SEX_KEY = @"USER_SEX";
         NSString *TYPE_KEY = @"MSG_TYPE";
         NSString *CONV_KEY = @"CONVERSATION_ID";
+        NSString *APP_KEY = @"APP";
         
         NSString *ICON_VAL = defSender.avatarURL.absoluteString;
         NSString *ID_VAL = defSender.clientId;
@@ -501,6 +502,7 @@ fromTimestamp     |    toDate   |                |  上次上拉刷新顶端，�
         NSString *SEX_VAL = defSender.sex;
         NSString *TYPE_VAL = self.messageType;
         NSString *CONV_VAL = self.currentConversationId;
+        NSString *APP_VAL = self.messageFromApp;
         
         [avimTypedMessage lcck_setObject:(ICON_VAL == nil ? @"" : ICON_VAL) forKey:ICON_KEY];
         [avimTypedMessage lcck_setObject:(ID_VAL == nil ? @"" : ID_VAL) forKey:ID_KEY];
@@ -508,6 +510,7 @@ fromTimestamp     |    toDate   |                |  上次上拉刷新顶端，�
         [avimTypedMessage lcck_setObject:(SEX_VAL == nil ? @"" : SEX_VAL) forKey:SEX_KEY];
         [avimTypedMessage lcck_setObject:(TYPE_VAL == nil ? @"" : TYPE_VAL) forKey:TYPE_KEY];
         [avimTypedMessage lcck_setObject:(CONV_VAL == nil ? @"" : CONV_VAL) forKey:CONV_KEY];
+        [avimTypedMessage lcck_setObject:(APP_VAL == nil ? @"" : APP_VAL) forKey:APP_KEY];
         
         message.message = avimTypedMessage;
         

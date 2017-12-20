@@ -24,6 +24,9 @@ FOUNDATION_EXTERN NSString *const LCCKConversationViewControllerErrorDomain;
 // 消息的类型：私聊还是群聊
 @property (nonatomic, copy) NSString *messageType;
 
+// 消息的来源：狼人杀还是小语 werewolf | xiaoyu
+@property (nonatomic, copy) NSString *messageFromApp;
+
 @property (nonatomic, copy) NSString *peerIcon;
 @property (nonatomic, copy) NSString *peerName;
 @property (nonatomic, copy) NSString *peerID;
