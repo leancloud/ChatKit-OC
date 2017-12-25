@@ -151,20 +151,6 @@
     }
 }
 
-- (void)lcck_setObject:(id)object forKey:(NSString *)key callback:(LCCKBooleanResultBlock)callback {
-    AVIMConversationUpdateBuilder *updateBuilder = [self newUpdateBuilder] ;
-    updateBuilder.attributes = self.attributes;
-    [updateBuilder setObject:object forKey:key];
-    [self update:[updateBuilder dictionary] callback:callback];
-}
-
-- (void)lcck_removeObjectForKey:(NSString *)key callback:(LCCKBooleanResultBlock)callback {
-    AVIMConversationUpdateBuilder *updateBuilder = [self newUpdateBuilder] ;
-    updateBuilder.attributes = self.attributes;
-    [updateBuilder removeObjectForKey:key];
-    [self update:[updateBuilder dictionary] callback:callback];
-}
-
 - (void)lcck_setConversationWithMute:(BOOL)mute callback:(LCCKBooleanResultBlock)callback {
     if (mute) {
         [self muteWithCallback:^(BOOL succeeded, NSError * _Nullable error) {
