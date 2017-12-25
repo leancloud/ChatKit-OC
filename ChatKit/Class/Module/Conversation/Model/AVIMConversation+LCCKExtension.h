@@ -61,10 +61,6 @@
  */
 - (NSString *)lcck_title;
 
-- (void)lcck_setObject:(id)object forKey:(NSString *)key callback:(LCCKBooleanResultBlock)callback;
-
-- (void)lcck_removeObjectForKey:(NSString *)key callback:(LCCKBooleanResultBlock)callback;
-
 - (void)lcck_setConversationWithMute:(BOOL)mute callback:(LCCKBooleanResultBlock)callback;
 - (BOOL)lcck_isCreaterForCurrentUser;
 
