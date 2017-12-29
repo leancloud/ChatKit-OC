@@ -222,7 +222,7 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
         self.user = user;
     }];
     [self.chatViewModel setDefaultBackgroundImage];
-    self.navigationItem.title = LCCKLocalizedStrings(@"Chat");//@"聊天";
+
     !self.viewDidLoadBlock ?: self.viewDidLoadBlock(self);
 }
 
@@ -236,6 +236,9 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
     [super viewDidAppear:animated];
     [self.chatBar open];
     [self saveCurrentConversationInfoIfExists];
+    
+    [self setupNavigationItemTitleWithConversation:self.conversation];
+    
     !self.viewDidAppearBlock ?: self.viewDidAppearBlock(self, animated);
 }
 
@@ -266,6 +269,9 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
             [[LCCKConversationService sharedInstance] updateConversationAsReadWithLastMessage:_conversation.lcck_lastMessage];
         });
     }
+    
+    self.navigationItem.titleView = nil;
+    
     !self.viewDidDisappearBlock ?: self.viewDidDisappearBlock(self, animated);
 }
 
