@@ -899,7 +899,7 @@
 				"${PODS_ROOT}/../../ChatKit/Class/Resources/VoiceMessageSource.bundle",
 				"${PODS_ROOT}/../../ChatKit/Class/Module/ContactList/View/LCCKContactCell.xib",
 				"${PODS_ROOT}/MJRefresh/MJRefresh/MJRefresh.bundle",
-				$PODS_CONFIGURATION_BUILD_DIR/MWPhotoBrowser/MWPhotoBrowser.bundle,
+				"$PODS_CONFIGURATION_BUILD_DIR/MWPhotoBrowser/MWPhotoBrowser.bundle",
 				"${PODS_ROOT}/RedPacketAlipay/AlipaySDK.bundle",
 				"${PODS_ROOT}/RedpacketLib/RedpacketStaticLib/resources/RedPacketResource.bundle",
 				"${PODS_ROOT}/TWMessageBarManager/Classes/Icons/icon-error.png",
