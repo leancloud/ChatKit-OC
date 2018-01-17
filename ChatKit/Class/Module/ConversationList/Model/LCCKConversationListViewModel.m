@@ -124,6 +124,11 @@
     if (configureCellBlock) {
         configureCellBlock(cell, tableView, indexPath, conversation);
     }
+    
+    if ([self.conversationListViewController.delegate respondsToSelector:@selector(conversation:cell:tableView:cellForRowAtIndexPath:)]) {
+        [self.conversationListViewController.delegate conversation:conversation cell:cell tableView:tableView cellForRowAtIndexPath:indexPath];
+    }
+    
     return cell;
 }
 
@@ -201,6 +206,10 @@
 //    [conversation markAsReadInBackgroundForMessage:conversation.lcck_lastMessage];
 //    [self refreshIfNeeded];
     ![LCCKConversationListService sharedInstance].didSelectConversationsListCellBlock ?: [LCCKConversationListService sharedInstance].didSelectConversationsListCellBlock(indexPath, conversation, self.conversationListViewController);
+    
+    if ([self.conversationListViewController.delegate respondsToSelector:@selector(conversation:tableView:didSelectRowAtIndexPath:)]) {
+        [self.conversationListViewController.delegate conversation:conversation tableView:tableView didSelectRowAtIndexPath:indexPath];
+    }
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
