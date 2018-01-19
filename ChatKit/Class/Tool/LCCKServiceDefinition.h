@@ -459,12 +459,12 @@ typedef void(^LCCKDidSelectConversationsListCellBlock)(NSIndexPath *indexPath, A
 /*!
  *  选中某个对话后的回调
  */
-@property (nonatomic, copy) LCCKDidSelectConversationsListCellBlock didSelectConversationsListCellBlock;
+@property (nonatomic, copy) LCCKDidSelectConversationsListCellBlock didSelectConversationsListCellBlock __deprecated_msg("LCCKDidSelectConversationsListCellBlock is deprecated. Use <LCCKConversationListViewControllerDelegate> instead");
 
 /*!
  *  设置选中某个对话后的回调
  */
-- (void)setDidSelectConversationsListCellBlock:(LCCKDidSelectConversationsListCellBlock)didSelectConversationsListCellBlock;
+- (void)setDidSelectConversationsListCellBlock:(LCCKDidSelectConversationsListCellBlock)didSelectConversationsListCellBlock __deprecated_msg("LCCKDidSelectConversationsListCellBlock is deprecated. Use <LCCKConversationListViewControllerDelegate> instead");
 
 /*!
  *  删除某个对话后的回调

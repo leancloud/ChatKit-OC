@@ -120,10 +120,27 @@
             cell.badgeView.badgeText = conversation.lcck_badgeText;
         }
     }
+
+    
     LCCKConfigureCellBlock configureCellBlock = [[LCCKConversationListService sharedInstance] configureCellBlock];
-    if (configureCellBlock) {
+    
+    BOOL impDelegate = [self.conversationListViewController.delegate respondsToSelector:@selector(conversation:cell:tableView:cellForRowAtIndexPath:)];
+
+    // Delegate 与 Block 两种方式不能同时实现
+    if (configureCellBlock && impDelegate) {
+        [NSException raise:NSInternalInconsistencyException format:@"Block or Delegate choose one."];
+    }
+    // 调用 Delegate
+    else if (impDelegate){
+        
+        [self.conversationListViewController.delegate conversation:conversation cell:cell tableView:tableView cellForRowAtIndexPath:indexPath];
+
+    }
+    // 调用 Block
+    else if (configureCellBlock){
         configureCellBlock(cell, tableView, indexPath, conversation);
     }
+    
     return cell;
 }
 
@@ -196,11 +213,25 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     AVIMConversation *conversation = [self.dataArray objectAtIndex:indexPath.row];
-//    [conversation markAsReadInBackground];
-    //FIXME:
-//    [conversation markAsReadInBackgroundForMessage:conversation.lcck_lastMessage];
-//    [self refreshIfNeeded];
-    ![LCCKConversationListService sharedInstance].didSelectConversationsListCellBlock ?: [LCCKConversationListService sharedInstance].didSelectConversationsListCellBlock(indexPath, conversation, self.conversationListViewController);
+    
+    id didSelectBlock = [LCCKConversationListService sharedInstance].didSelectConversationsListCellBlock;
+    BOOL impDelegate = [self.conversationListViewController.delegate respondsToSelector:@selector(conversation:tableView:didSelectRowAtIndexPath:)];
+    
+    // Delegate 与 Block 两种方式不能同时实现
+    if (didSelectBlock && impDelegate) {
+        [NSException raise:NSInternalInconsistencyException format:@"Block or Delegate choose one."];
+        
+    }
+    // 调用 Delegate
+    else if (impDelegate){
+        
+        [self.conversationListViewController.delegate conversation:conversation tableView:tableView didSelectRowAtIndexPath:indexPath];
+        
+    }
+    // 调用 Block
+    else if (didSelectBlock){
+        !didSelectBlock ?: [LCCKConversationListService sharedInstance].didSelectConversationsListCellBlock(indexPath, conversation, self.conversationListViewController);
+    }
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {

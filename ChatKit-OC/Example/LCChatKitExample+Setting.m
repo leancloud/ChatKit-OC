@@ -638,34 +638,8 @@ setLoadLatestMessagesHandler:^(LCCKConversationViewController *conversationContr
 }
 
 + (void)lcck_exampleChangeGroupAvatarURLsForConversationId:(NSString *)conversationId
-                                              shouldInsert:(BOOL)shouldInsert {
-//    [self lcck_showMessage:@"正在设置群头像"];
-    [[LCCKConversationService sharedInstance] fetchConversationWithConversationId:conversationId
-     callback:^(AVIMConversation *conversation, NSError *error) {
-//         [conversation
-//          lcck_setObject:
-//          LCCKTestConversationGroupAvatarURLs[arc4random_uniform(
-//                                                                 (int)LCCKTestConversationGroupAvatarURLs.count -
-//                                                                 1)]
-//          forKey:LCCKConversationGroupAvatarURLKey
-//          callback:^(BOOL succeeded, NSError *error) {
-//              [self lcck_hideHUD];
-//              if (succeeded) {
-//                  [self lcck_showSuccess:@"设置群头像成功"];
-//                  if (shouldInsert) {
-//                      [[LCChatKit sharedInstance] insertRecentConversation:conversation];
-//                  }
-//                  [[NSNotificationCenter defaultCenter]
-//                   postNotificationName:
-//                   LCCKNotificationConversationListDataSourceUpdated
-//                   object:self];
-//              } else {
-//                  LCCKLog(@"系统对话请通过REST API修改，或者直接到控制台修改"
-//                          @"APP端不支持直接修改");
-//                  [self lcck_showError:@"设置群头像失败"];
-//              }
-//          }];
-     }];
+                                              shouldInsert:(BOOL)shouldInsert 
+{
 }
 
 /**
