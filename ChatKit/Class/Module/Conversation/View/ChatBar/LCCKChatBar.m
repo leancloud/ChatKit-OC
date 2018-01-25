@@ -9,13 +9,13 @@
 #import "LCCKChatBar.h"
 #import "LCCKChatMoreView.h"
 #import "LCCKChatFaceView.h"
-#import "LCCKProgressHUD.h"
+#import "LCCKRecordAudioHUD.h"
 #import "Mp3Recorder.h"
-#if __has_include(<Masonry/Masonry.h>)
-#import <Masonry/Masonry.h>
-#else
-#import "Masonry.h"
-#endif
+ #if __has_include(<Masonry/Masonry.h>)
+ #import <Masonry/Masonry.h>
+ #else
+ #import "Masonry.h"
+ #endif
 #import "LCCKUIService.h"
 #import "UIImage+LCCKExtension.h"
 #import "NSString+LCCKExtension.h"
@@ -333,25 +333,6 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
     });
 }
 
-#pragma mark - MP3RecordedDelegate
-
-- (void)endConvertWithMP3FileName:(NSString *)fileName {
-    if (fileName) {
-        [LCCKProgressHUD dismissWithProgressState:LCCKProgressSuccess];
-        [self sendVoiceMessage:fileName seconds:[LCCKProgressHUD seconds]];
-    } else {
-        [LCCKProgressHUD dismissWithProgressState:LCCKProgressError];
-    }
-}
-
-- (void)failRecord {
-    [LCCKProgressHUD dismissWithProgressState:LCCKProgressError];
-}
-
-- (void)beginConvert {
-    [LCCKProgressHUD changeSubTitle:@"正在转换..."];
-}
-
 #pragma mark - LCCKChatFaceViewDelegate
 
 - (void)faceViewSendFace:(NSString *)faceName {
@@ -422,7 +403,66 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
     [self.textView becomeFirstResponder];
 }
 
+#pragma mark - MP3RecordedDelegate
+- (void)averagePowerWithVolume:(CGFloat)volume {
+    [LCCKRecordAudioHUD changeVolume:volume];
+}
+
+- (void)endConvertWithMP3FileName:(NSString *)fileName {
+    if (fileName) {
+        [LCCKRecordAudioHUD dismissWithState:LCCKRecoderResultStateSuccess];
+        [self sendVoiceMessage:fileName seconds:[LCCKRecordAudioHUD seconds]];
+    } else {
+        [LCCKRecordAudioHUD dismissWithState:LCCKRecoderResultStateFail];
+    }
+}
+
+- (void)tooShortFailRecord {
+    [LCCKRecordAudioHUD dismissWithState:LCCKRecoderResultStateShort];
+}
+
 #pragma mark - Private Methods
+/**
+ *  开始录音
+ */
+- (void)startRecordVoice {
+    [LCCKRecordAudioHUD show];
+    self.voiceRecordButton.selected = YES;
+    [self.MP3 startRecord];
+}
+
+/**
+ *  取消录音
+ */
+- (void)cancelRecordVoice {
+    [LCCKRecordAudioHUD dismissWithState:LCCKRecoderResultStateCancel];
+    self.voiceRecordButton.selected = NO;
+    [self.MP3 cancelRecord];
+}
+
+/**
+ *  录音结束
+ */
+- (void)confirmRecordVoice {
+    self.voiceRecordButton.selected = NO;
+    [self.MP3 stopRecord];
+}
+
+/**
+ *  更新录音显示状态,手指向上滑动后提示松开取消录音
+ */
+- (void)updateCancelRecordVoice {
+    [LCCKRecordAudioHUD changeProgressState:LCCKRecordProgressStateOutSide];
+    [_voiceRecordButton setTitle:@"松开 取消" forState:UIControlStateSelected];
+}
+
+/**
+ *  更新录音状态,手指重新滑动到范围内,提示向上取消录音
+ */
+- (void)updateContinueRecordVoice {
+    [LCCKRecordAudioHUD changeProgressState:LCCKRecordProgressStateInSide];
+    [_voiceRecordButton setTitle:@"松开 结束" forState:UIControlStateSelected];
+}
 
 - (void)keyboardWillHide:(NSNotification *)notification {
     NSString *reason = [NSString stringWithFormat:@"🔴类名与方法名：%@（在第%@行），描述：%@", @(__PRETTY_FUNCTION__), @(__LINE__), @"Should update on main thread"];
@@ -496,47 +536,11 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
     }];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(confirmRecordVoice) name:kLCCKRecordAudioTooLong object:nil];
     self.backgroundColor = self.messageInputViewBackgroundColor;
     [self setupConstraints];
-}
-
-/**
- *  开始录音
- */
-- (void)startRecordVoice {
-    [LCCKProgressHUD show];
-    self.voiceRecordButton.highlighted = YES;
-    [self.MP3 startRecord];
-}
-
-/**
- *  取消录音
- */
-- (void)cancelRecordVoice {
-    [LCCKProgressHUD dismissWithMessage:@"取消录音"];
-    self.voiceRecordButton.highlighted = NO;
-    [self.MP3 cancelRecord];
-}
-
-/**
- *  录音结束
- */
-- (void)confirmRecordVoice {
-    [self.MP3 stopRecord];
-}
-
-/**
- *  更新录音显示状态,手指向上滑动后提示松开取消录音
- */
-- (void)updateCancelRecordVoice {
-    [LCCKProgressHUD changeSubTitle:@"松开取消录音"];
-}
-
-/**
- *  更新录音状态,手指重新滑动到范围内,提示向上取消录音
- */
-- (void)updateContinueRecordVoice {
-    [LCCKProgressHUD changeSubTitle:@"向上滑动取消录音"];
+    
+    [LCCKRecordAudioHUD instance];
 }
 
 - (void)setShowType:(LCCKFunctionViewShowType)showType {
@@ -650,7 +654,7 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
 
 - (void)showVoiceView:(BOOL)show {
     self.voiceButton.selected = show;
-    self.voiceRecordButton.selected = show;
+//    self.voiceRecordButton.selected = show;
     self.voiceRecordButton.hidden = !show;
     self.textView.hidden = !self.voiceRecordButton.hidden;
 }
@@ -773,10 +777,10 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
         UIImage *voiceRecordButtonNormalBackgroundImage = [[self imageInBundlePathForImageName:@"VoiceBtn_Black"] resizableImageWithCapInsets:edgeInsets resizingMode:UIImageResizingModeStretch];
         UIImage *voiceRecordButtonHighlightedBackgroundImage = [[self imageInBundlePathForImageName:@"VoiceBtn_BlackHL"] resizableImageWithCapInsets:edgeInsets resizingMode:UIImageResizingModeStretch];
         [_voiceRecordButton setBackgroundImage:voiceRecordButtonNormalBackgroundImage forState:UIControlStateNormal];
-        [_voiceRecordButton setBackgroundImage:voiceRecordButtonHighlightedBackgroundImage forState:UIControlStateHighlighted];
+        [_voiceRecordButton setBackgroundImage:voiceRecordButtonHighlightedBackgroundImage forState:UIControlStateSelected];
         _voiceRecordButton.titleLabel.font = [UIFont systemFontOfSize:14.0f];
         [_voiceRecordButton setTitle:@"按住 说话" forState:UIControlStateNormal];
-        [_voiceRecordButton setTitle:@"松开 结束" forState:UIControlStateHighlighted];
+        [_voiceRecordButton setTitle:@"松开 结束" forState:UIControlStateSelected];
         [_voiceRecordButton addTarget:self action:@selector(startRecordVoice) forControlEvents:UIControlEventTouchDown];
         [_voiceRecordButton addTarget:self action:@selector(cancelRecordVoice) forControlEvents:UIControlEventTouchUpOutside];
         [_voiceRecordButton addTarget:self action:@selector(confirmRecordVoice) forControlEvents:UIControlEventTouchUpInside];

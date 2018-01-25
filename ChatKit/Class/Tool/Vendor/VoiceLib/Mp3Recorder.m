@@ -18,6 +18,7 @@
 @interface Mp3Recorder()<AVAudioRecorderDelegate>
 @property (nonatomic, strong) AVAudioSession *session;
 @property (nonatomic, strong) AVAudioRecorder *recorder;
+@property (nonatomic, strong) NSTimer *timer;
 @end
 
 @implementation Mp3Recorder
@@ -53,6 +54,14 @@
         //NSLog(@"%@",recorderSetupError);
     }
     _recorder.meteringEnabled = YES;
+    if(_timer) {
+        [_timer invalidate];
+        _timer = nil;
+    }
+    _timer = [NSTimer scheduledTimerWithTimeInterval:0.2 target:self selector:@selector(levelTimerCallback:) userInfo:nil repeats:YES];
+    [[NSRunLoop currentRunLoop] addTimer:_timer forMode:NSRunLoopCommonModes];
+    
+    
     _recorder.delegate = self;
     [_recorder prepareToRecord];
 }
@@ -72,6 +81,8 @@
 
 - (void)startRecord
 {
+    if(_recorder && [_recorder isRecording]) return;
+
     [self setSesstion];
     [self setRecorder];
     [_recorder record];
@@ -80,6 +91,8 @@
 
 - (void)stopRecord
 {
+    if(!_recorder || ![_recorder isRecording] || !_timer) return;
+    
     double cTime = _recorder.currentTime;
     [_recorder stop];
     
@@ -88,17 +101,27 @@
     } else {
         
         [_recorder deleteRecording];
-        
-        if ([_delegate respondsToSelector:@selector(failRecord)]) {
-            [_delegate failRecord];
+        if(self.delegate && [self.delegate respondsToSelector:@selector(tooShortFailRecord)]) {
+            [self.delegate tooShortFailRecord];
         }
+    }
+    if(_timer) {
+        [_timer invalidate];
+        _timer = nil;
     }
 }
 
 - (void)cancelRecord
 {
+    if(!_recorder || ![_recorder isRecording] || !_timer) return;
+
     [_recorder stop];
     [_recorder deleteRecording];
+    if(_timer) {
+        [_timer invalidate];
+        _timer = nil;
+    }
+
 }
 
 - (void)deleteMp3Cache
@@ -127,9 +150,11 @@
     NSString *mp3FilePath = [[self mp3Path] stringByAppendingPathComponent:[self randomMP3FileName]];
 
     ////NSLog(@"MP3转换开始");
-    if (_delegate && [_delegate respondsToSelector:@selector(beginConvert)]) {
-        [_delegate beginConvert];
+    
+    if(self.delegate && [self.delegate respondsToSelector:@selector(beginConvert)]) {
+        [self.delegate beginConvert];
     }
+
     @try {
         int read, write;
         
@@ -169,8 +194,8 @@
     @finally {
         [[AVAudioSession sharedInstance] setCategory: AVAudioSessionCategoryPlayback error: nil];
         //NSLog(@"MP3转换结束");
-        if (_delegate && [_delegate respondsToSelector:@selector(endConvertWithMP3FileName:)]) {
-            [_delegate endConvertWithMP3FileName:mp3FilePath];
+        if (self.delegate && [self.delegate respondsToSelector:@selector(endConvertWithMP3FileName:)]) {
+            [self.delegate endConvertWithMP3FileName:mp3FilePath];
         }
         [self deleteCafCache];
     }
@@ -179,6 +204,45 @@
 }
 
 #pragma mark - Path Utils
+
+/* 该方法确实会随环境音量变化而变化，但具体分贝值是否准确暂时没有研究 */
+- (void)levelTimerCallback:(NSTimer *)timer {
+    [self.recorder updateMeters];
+    
+    float   level;                // The linear 0.0 .. 1.0 value we need.
+    float   minDecibels = -80.0f; // Or use -60dB, which I measured in a silent room.
+    float   decibels    = [self.recorder averagePowerForChannel:0];
+    
+    if (decibels < minDecibels)
+    {
+        level = 0.0f;
+    }
+    else if (decibels >= 0.0f)
+    {
+        level = 1.0f;
+    }
+    else
+    {
+        float   root            = 2.0f;
+        float   minAmp          = powf(10.0f, 0.05f * minDecibels);
+        float   inverseAmpRange = 1.0f / (1.0f - minAmp);
+        float   amp             = powf(10.0f, 0.05f * decibels);
+        float   adjAmp          = (amp - minAmp) * inverseAmpRange;
+        
+        level = powf(adjAmp, 1.0f / root);
+    }
+    
+    /* 
+     level 范围[0 ~ 1], 转为[0 ~120] 之间
+     */
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if(self.delegate && [self.delegate respondsToSelector:@selector(averagePowerWithVolume:)]) {
+            [self.delegate averagePowerWithVolume:level*120];
+        }
+    });
+}
+
 - (NSString *)cafPath {
     NSString *cafPath = [NSTemporaryDirectory() stringByAppendingPathComponent:@"tmp.caf"];
     return cafPath;
@@ -196,6 +260,14 @@
     NSTimeInterval timeInterval = [[NSDate date] timeIntervalSince1970];
     NSString *fileName = [NSString stringWithFormat:@"record_%.0f.mp3",timeInterval];
     return fileName;
+}
+
+- (void)dealloc
+{
+    if(_timer) {
+        [_timer invalidate];
+        _timer = nil;
+    }
 }
 
 @end
