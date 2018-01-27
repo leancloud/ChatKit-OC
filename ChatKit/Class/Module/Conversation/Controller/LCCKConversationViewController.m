@@ -314,6 +314,8 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
     UIImage *thumbnailPhoto = [representationImage lcck_imageByScalingAspectFill];
     if (error == nil) {
         LCCKMessage *message = [[LCCKMessage alloc] initWithPhoto:representationImage
+                                                       photoWidth:nil
+                                                      photoHeight:nil
                                                    thumbnailPhoto:thumbnailPhoto
                                                         photoPath:path
                                                      thumbnailURL:nil

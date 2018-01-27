@@ -10,9 +10,9 @@
 #import "UIImage+LCCKExtension.h"
 
 #if __has_include(<SDWebImage/UIImageView+WebCache.h>)
-    #import <SDWebImage/UIImageView+WebCache.h>
+#import <SDWebImage/UIImageView+WebCache.h>
 #else
-    #import "UIImageView+WebCache.h"
+#import "UIImageView+WebCache.h"
 #endif
 
 @interface LCCKChatImageMessageCell ()
@@ -92,15 +92,42 @@
             message.thumbnailPhoto = resizedImage;
             break;
         }
-
         // requied!
         if (message.originPhotoURL) {
-            [self.messageImageView  sd_setImageWithURL:message.originPhotoURL placeholderImage:[self imageInBundleForImageName:@"Placeholder_Image"]
+            UIImage *image = [self imageInBundleForImageName:@"Placeholder_Image"];
+            CGSize photoSize = CGSizeMake(message.photoWidth, message.photoHeight);
+            UIImage *newImage = [image lcck_imageByScalingAspectFillWithOriginSize:photoSize];
+            self.messageImageView.contentMode = UIViewContentModeScaleAspectFit;
+            
+            UIEdgeInsets edgeMessageBubbleCustomize;
+            if (message.ownerType == LCCKMessageOwnerTypeSelf) {
+                UIEdgeInsets rightEdgeMessageBubbleCustomize = [LCCKSettingService sharedInstance].rightHollowEdgeMessageBubbleCustomize;
+                edgeMessageBubbleCustomize = rightEdgeMessageBubbleCustomize;
+            } else {
+                UIEdgeInsets leftEdgeMessageBubbleCustomize = [LCCKSettingService sharedInstance].leftHollowEdgeMessageBubbleCustomize;
+                edgeMessageBubbleCustomize = leftEdgeMessageBubbleCustomize;
+            }
+            
+            if (message.ownerType == LCCKMessageOwnerTypeSelf) {
+                [self.messageImageView mas_updateConstraints:^(MASConstraintMaker *make) {
+                    make.edges.equalTo(self.messageContentView).with.insets(edgeMessageBubbleCustomize);
+                    make.height.mas_equalTo(newImage.size.height);
+                    make.width.mas_equalTo(newImage.size.width);
+                }];
+            }else {
+                [self.messageImageView mas_updateConstraints:^(MASConstraintMaker *make) {
+                    make.edges.equalTo(self.messageContentView).with.insets(edgeMessageBubbleCustomize);
+                    make.height.mas_equalTo(newImage.size.height);
+                    make.width.mas_equalTo(newImage.size.width);
+                }];
+            }
+            
+            [self.messageImageView  sd_setImageWithURL:message.originPhotoURL placeholderImage:newImage
                                              completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
                                                  dispatch_async(dispatch_get_main_queue(),^{
                                                      if (image){
                                                          message.photo = image;
-                                                         message.thumbnailPhoto = [image lcck_imageByScalingAspectFill];
+                                                         message.thumbnailPhoto = [image lcck_imageByScalingAspectFillWithOriginSize:photoSize];
                                                          if ([self.delegate respondsToSelector:@selector(fileMessageDidDownload:)]) {
                                                              [self.delegate fileMessageDidDownload:self];
                                                          }
@@ -114,6 +141,8 @@
         
     } while (NO);
 }
+
+
 
 - (UIImage *)imageInBundleForImageName:(NSString *)imageName {
     return ({
@@ -143,7 +172,7 @@
 
 - (void)removeProgressView {
     [self.messageProgressView removeFromSuperview];
-     [[self.messageProgressView subviews] makeObjectsPerformSelector:@selector(removeFromSuperview)];
+    [[self.messageProgressView subviews] makeObjectsPerformSelector:@selector(removeFromSuperview)];
     self.messageProgressView = nil;
     self.messageProgressLabel = nil;
 }
@@ -154,7 +183,7 @@
     if (!_messageImageView) {
         _messageImageView = [[UIImageView alloc] init];
         //FIXME:这一行可以不需要
-        _messageImageView.contentMode = UIViewContentModeScaleAspectFill;
+        _messageImageView.contentMode = UIViewContentModeScaleAspectFit;
     }
     return _messageImageView;
     
@@ -187,3 +216,4 @@
 }
 
 @end
+
