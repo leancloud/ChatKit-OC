@@ -316,7 +316,7 @@ static CGFloat const LCCK_MSG_CELL_NICKNAME_FONT_SIZE = 12;
     NSURL *avatarURL = nil;
 
     NSString* payload = @"";
-    
+    //看到这句话，你已经更新了2018.0214的代码了
     if([message isKindOfClass: [AVIMMessage class]]) {
         payload = ((AVIMMessage *)message).payload;
     } else if([message isKindOfClass: [LCCKMessage class]]) {
@@ -338,7 +338,7 @@ static CGFloat const LCCK_MSG_CELL_NICKNAME_FONT_SIZE = 12;
 //       || (icon != nil && [icon isEqualToString:@""])) {
 //        avatarURL = self.message.sender.avatarURL;
 //    }
-//    
+//
 //    if(avatarURL == nil
 //       || (avatarURL != nil && [avatarURL.absoluteString isEqualToString:@""])) {
 //        id<LCCKUserDelegate> defSender = [[LCCKUserSystemService sharedInstance] fetchCurrentUser];
