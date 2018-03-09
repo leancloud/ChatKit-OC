@@ -430,20 +430,24 @@ NSString *const LCCKSessionServiceErrorDomain = @"LCCKSessionServiceErrorDomain"
                 finalMessage = @"收到新消息";
             }
         }
-        
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"sendMessageToRNNotificationName"
-            object:@{
-                   @"USER_SEX": userSex,
-                   @"USER_ICON": userIcon,
-                   @"USER_NAME": userName,
-                   @"USER_ID": userId,
-                   @"CONVERSATION_ID": convId,
-                   @"MESSAGE_TYPE": @"MESSAGE_TYPE_CHAT",
-                   @"MSG_TYPE": msgType,
-                   @"APP": fromApp,
-                  @"CHAT_TIME": [NSString stringWithFormat:@"%f", LCCK_CURRENT_TIMESTAMP],
-                   @"CHAT_MESSAGE":finalMessage
-           }];
+        BOOL isTransient = userObj.transient;
+        if (isTransient) {
+            //暂态消息不回转发
+        }else{
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"sendMessageToRNNotificationName"
+                                                                object:@{
+                                                                         @"USER_SEX": userSex,
+                                                                         @"USER_ICON": userIcon,
+                                                                         @"USER_NAME": userName,
+                                                                         @"USER_ID": userId,
+                                                                         @"CONVERSATION_ID": convId,
+                                                                         @"MESSAGE_TYPE": @"MESSAGE_TYPE_CHAT",
+                                                                         @"MSG_TYPE": msgType,
+                                                                         @"APP": fromApp,
+                                                                         @"CHAT_TIME": [NSString stringWithFormat:@"%f", LCCK_CURRENT_TIMESTAMP],
+                                                                         @"CHAT_MESSAGE":finalMessage
+                                                                         }];
+        }
         
     };
 
