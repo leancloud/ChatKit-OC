@@ -430,6 +430,7 @@ NSString *const LCCKSessionServiceErrorDomain = @"LCCKSessionServiceErrorDomain"
                 finalMessage = @"收到新消息";
             }
         }
+        //edit by no02 20180309
         BOOL isTransient = userObj.transient;
         if (isTransient) {
             //暂态消息不回转发
