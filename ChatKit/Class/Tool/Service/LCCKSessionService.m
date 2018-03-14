@@ -384,7 +384,10 @@ NSString *const LCCKSessionServiceErrorDomain = @"LCCKSessionServiceErrorDomain"
         [[LCCKConversationService sharedInstance] increaseUnreadCount:filterdMessages.count withConversationId:conversation.conversationId shouldRefreshWhenFinished:NO];
         // - 播放接收音
         if (!isUnreadMessage) {
-            [self playLoudReceiveSoundIfNeededForConversation:conversation];
+            BOOL isTransient = userObj.transient;
+            if (isTransient == NO) {
+                [self playLoudReceiveSoundIfNeededForConversation:conversation];
+            }
         }
         
         if(fromApp == nil) {
