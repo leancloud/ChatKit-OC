@@ -401,7 +401,7 @@ static NSString *const LCCKContactListViewControllerIdentifier = @"LCCKContactLi
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    LCCKContactCell *cell = [tableView dequeueReusableCellWithIdentifier:LCCKContactListViewControllerIdentifier forIndexPath:indexPath];
+    LCCKContactCell *cell = [tableView cellForRowAtIndexPath:indexPath];
     NSString *clientId = [self currentClientIdAtIndexPath:indexPath tableView:tableView];
     if (self.mode == LCCKContactListModeSingleSelection) {
         if (clientId == self.selectedContact) {
