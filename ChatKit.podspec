@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = "ChatKit"
-  s.version      = "1.180326"
+  s.version      = "1.180613"
   s.summary      = "An IM App Framework, support sending text, pictures, audio, video, location messaging, managing address book, more interesting features."
   s.homepage     = "https://github.com/LeanCloud/ChatKit-OC"
   s.license      = { :type => 'MIT', :file => 'LICENSE' }
@@ -27,3 +27,5 @@ Pod::Spec.new do |s|
   s.dependency "CYLDeallocBlockExecutor", "~> 1.1.2"
 
 end
+
+# 使用的版本是 0.8.14
