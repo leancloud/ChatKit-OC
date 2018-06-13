@@ -56,13 +56,13 @@
 - (instancetype)initWithImageView:(UIImageView *)imageView {
     if (self = [super init]) {
         self.originImageView = imageView;
-        [imageView addObserver:self forKeyPath:@"image" options:NSKeyValueObservingOptionNew context:nil];
-        [imageView addObserver:self forKeyPath:@"contentMode" options:NSKeyValueObservingOptionNew context:nil];
-        __unsafe_unretained __typeof(self) weakSelf = self;
-        [self cyl_executeAtDealloc:^{
-            [weakSelf.originImageView removeObserver:weakSelf forKeyPath:@"image"];
-            [weakSelf.originImageView removeObserver:weakSelf forKeyPath:@"contentMode"];
-        }];
+//        [imageView addObserver:self forKeyPath:@"image" options:NSKeyValueObservingOptionNew context:nil];
+//        [imageView addObserver:self forKeyPath:@"contentMode" options:NSKeyValueObservingOptionNew context:nil];
+//        __unsafe_unretained __typeof(self) weakSelf = self;
+//        [self cyl_executeAtDealloc:^{
+//            [weakSelf.originImageView removeObserver:weakSelf forKeyPath:@"image"];
+//            [weakSelf.originImageView removeObserver:weakSelf forKeyPath:@"contentMode"];
+//        }];
     }
     return self;
 }
@@ -108,11 +108,9 @@
     }
     
     if ([image isKindOfClass:[UIImage class]]) {
-        image.lcck_cornerRadius = YES;
-        self.originImageView.image = image;
-    } else {
         dispatch_async(dispatch_get_main_queue(), ^{
-            [self updateImageView];
+            image.lcck_cornerRadius = YES;
+            self.originImageView.image = image;
         });
     }
 }

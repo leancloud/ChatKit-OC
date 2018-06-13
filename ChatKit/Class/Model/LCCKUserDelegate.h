@@ -31,6 +31,7 @@
  * @brief The user's id in LeanCloud SDK, it may be equal to `userId`.
  */
 @property (nonatomic, copy, readwrite) NSString *clientId;
+@property (nonatomic, copy, readwrite) NSString *sex;
 
 - (instancetype)initWithUserId:(NSString *)userId name:(NSString *)name avatarURL:(NSURL *)avatarURL clientId:(NSString *)clientId;
 + (instancetype)userWithUserId:(NSString *)userId name:(NSString *)name avatarURL:(NSURL *)avatarURL clientId:(NSString *)clientId;

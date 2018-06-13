@@ -504,9 +504,13 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
  *  开始录音
  */
 - (void)startRecordVoice {
-    [LCCKProgressHUD show];
-    self.voiceRecordButton.highlighted = YES;
-    [self.MP3 startRecord];
+    if (self.isGaming) {
+        _startVoiceWhenGaming();
+    }else{
+        [LCCKProgressHUD show];
+        self.voiceRecordButton.highlighted = YES;
+        [self.MP3 startRecord];
+    }
 }
 
 /**

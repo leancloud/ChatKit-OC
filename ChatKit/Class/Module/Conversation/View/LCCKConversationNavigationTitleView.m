@@ -28,7 +28,6 @@ static void * const LCCKConversationViewControllerMembersCountContext = (void*)&
 
 @interface LCCKConversationNavigationTitleView ()
 
-@property (nonatomic, strong) UILabel *conversationNameView;
 @property (nonatomic, strong) UILabel *membersCountView;
 @property (nonatomic, weak) UINavigationController *navigationController;
 @property (nonatomic, strong) UIStackView *containerView;
@@ -166,7 +165,7 @@ static void * const LCCKConversationViewControllerMembersCountContext = (void*)&
     if (conversationName.length == 0 || !conversationName) {
         conversationName = LCCKLocalizedStrings(@"Chat");
     }
-    self.conversationNameView.text = conversationName;
+    self.conversationNameView.text = @"";//conversationName;
     if (membersCountChanged) {
         NSUInteger membersCount = self.conversation.members.count;
         self.membersCountView.text = [NSString stringWithFormat:@"(%@)", @(membersCount)];

@@ -48,6 +48,8 @@ typedef NS_ENUM(NSUInteger, LCCKFunctionViewShowType){
  */
 @property (copy, nonatomic) NSString *cachedText;
 @property (nonatomic, assign) LCCKFunctionViewShowType showType;
+@property (nonatomic,assign) BOOL isGaming;
+@property (nonatomic,copy) void(^startVoiceWhenGaming)();
 
 /*!
  * 在 `-presentViewController:animated:completion:` 的completion回调中调用该方法，屏蔽来自其它 ViewController 的键盘通知事件。

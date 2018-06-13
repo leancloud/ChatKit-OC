@@ -15,7 +15,11 @@
 - (BOOL)lcck_isSupportThisCustomMessage {
     NSNumber *typeDictKey = @([(AVIMTypedMessage *)self mediaType]);
     Class class = [_typeDict objectForKey:typeDictKey];
-    return class;
+    if (class != nil) {
+        return true;
+    }else{
+        return false;
+    }
 }
 
 + (AVIMTypedMessage *)lcck_messageWithLCCKMessage:(LCCKMessage *)message {
@@ -45,7 +49,7 @@
             break;
         }
     }
-    avimTypedMessage.sendTimestamp = LCCK_CURRENT_TIMESTAMP;
+    [avimTypedMessage setObject:@(LCCK_CURRENT_TIMESTAMP) forKey:@"sendTimestamp"];
     return avimTypedMessage;
 }
 

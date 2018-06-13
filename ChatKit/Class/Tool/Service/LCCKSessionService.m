@@ -257,7 +257,7 @@ NSString *const LCCKSessionServiceErrorDomain = @"LCCKSessionServiceErrorDomain"
         return;
     }
     if (!message.messageId) {
-        LCCKLog(@"🔴类名与方法名：%@（在第%@行），描述：%@", @(__PRETTY_FUNCTION__), @(__LINE__), @"Receive Message , but MessageId is nil");
+        LCCKLog(@"�类名与方法名：%@（在第%@行），描述：%@", @(__PRETTY_FUNCTION__), @(__LINE__), @"Receive Message , but MessageId is nil");
         return;
     }
     void (^fetchedConversationCallback)() = ^() {
@@ -292,6 +292,7 @@ NSString *const LCCKSessionServiceErrorDomain = @"LCCKSessionServiceErrorDomain"
         [conversation queryMessagesFromServerWithLimit:unread callback:^(NSArray *objects, NSError *error) {
             if (!error && (objects.count > 0)) {
                 [self receiveMessages:objects conversation:conversation isUnreadMessage:YES];
+                [conversation readInBackground];
             }
         }];
         [self playLoudReceiveSoundIfNeededForConversation:conversation];
@@ -310,7 +311,7 @@ NSString *const LCCKSessionServiceErrorDomain = @"LCCKSessionServiceErrorDomain"
                 !callback ?: callback();
                 return;
             }
-            LCCKLog(@"🔴类名与方法名：%@（在第%@行），描述：%@", @(__PRETTY_FUNCTION__), @(__LINE__), error);
+            LCCKLog(@"�类名与方法名：%@（在第%@行），描述：%@", @(__PRETTY_FUNCTION__), @(__LINE__), error);
         }];
     } else {
         !callback ?: callback();
@@ -335,26 +336,125 @@ NSString *const LCCKSessionServiceErrorDomain = @"LCCKSessionServiceErrorDomain"
         [[NSNotificationCenter defaultCenter] postNotificationName:LCCKNotificationCustomTransientMessageReceived object:userInfo];
     }
     [self receiveMessages:@[message] conversation:conversation isUnreadMessage:NO];
+    [conversation readInBackground];
 }
 
 - (void)receiveMessages:(NSArray<AVIMTypedMessage *> *)messages conversation:(AVIMConversation *)conversation isUnreadMessage:(BOOL)isUnreadMessage {
     
     void (^checkMentionedMessageCallback)() = ^(NSArray *filterdMessages) {
-        // - 插入最近对话列表
-        // 下面的LCCKNotificationMessageReceived也会通知ConversationListVC刷新
-        [[LCCKConversationService sharedInstance] insertRecentConversation:conversation shouldRefreshWhenFinished:NO];
-        [[LCCKConversationService sharedInstance] increaseUnreadCount:filterdMessages.count withConversationId:conversation.conversationId shouldRefreshWhenFinished:NO];
-        // - 播放接收音
-        if (!isUnreadMessage) {
-            [self playLoudReceiveSoundIfNeededForConversation:conversation];
-        }
+        
         NSDictionary *userInfo = @{
                                    LCCKMessageNotifacationUserInfoConversationKey : conversation,
                                    LCCKDidReceiveMessagesUserInfoMessagesKey : filterdMessages,
                                    };
         // - 通知相关页面接收到了消息：“当前对话页面”、“最近对话页面”；
         [[NSNotificationCenter defaultCenter] postNotificationName:LCCKNotificationMessageReceived object:userInfo];
+        
+        AVIMTypedMessage * userObj = userInfo[@"receivedMessages"][0];
+        if(![userObj respondsToSelector:@selector(attributes)]) {
+            return;
+        }
+        NSDictionary * userInformation = userObj.attributes;
+        
+        NSString *userSex = userInformation[@"USER_SEX"];
+        NSString *userIcon = userInformation[@"USER_ICON"];
+        NSString *userName = userInformation[@"USER_NAME"];
+        NSString *convId = userInformation[@"CONVERSATION_ID"];
+        NSString *userId = userInformation[@"USER_ID"];
+        NSString *msgType = userInformation[@"MSG_TYPE"];
+        NSString *fromApp = userInformation[@"APP"];
+        NSString *path = [NSString stringWithFormat:@"%@/Documents/%@.BL",NSHomeDirectory(),_clientId];
+        NSFileManager *manager = [NSFileManager defaultManager];
+        NSMutableDictionary *block = [[NSMutableDictionary alloc] init];
+        if ([manager fileExistsAtPath:path]) {
+            block = [NSKeyedUnarchiver unarchiveObjectWithFile:path];
+            if (block != nil) {
+                if (userId != nil) {
+                    if (block[userId] != nil) {
+                        return;
+                    }
+                }else{
+                    return;
+                }
+            }
+        }
+        
+        
+        [[LCCKConversationService sharedInstance] insertRecentConversation:conversation shouldRefreshWhenFinished:NO];
+        [[LCCKConversationService sharedInstance] increaseUnreadCount:filterdMessages.count withConversationId:conversation.conversationId shouldRefreshWhenFinished:NO];
+        // - 播放接收音
+        if (!isUnreadMessage) {
+            BOOL isTransient = userObj.transient;
+            if (isTransient == NO) {
+                [self playLoudReceiveSoundIfNeededForConversation:conversation];
+            }
+        }
+        
+        if(fromApp == nil) {
+            fromApp = @"";
+        }
+        
+        if(userSex == nil) {
+            userSex = @"";
+        }
+        
+        if(userIcon == nil) {
+            userIcon = @"";
+        }
+        
+        if(userName == nil) {
+            userName = @"";
+        }
+        
+        if(userId == nil) {
+            userId = userObj.clientId;
+        }
+        
+        if(msgType == nil) {
+            msgType = @"";
+        }
+        
+        if(convId == nil) {
+            convId = @"";
+        }
+        
+        NSString * finalMessage = @"";
+        
+        if (userObj.mediaType == kAVIMMessageMediaTypeText) {
+            finalMessage = userObj.text;
+        } else if (userObj.mediaType == kAVIMMessageMediaTypeAudio) {
+            finalMessage = @"语音消息";
+        } else if (userObj.mediaType == kAVIMMessageMediaTypeImage) {
+            finalMessage = @"图片消息";
+        } else {
+            if (userObj.text != nil) {
+                finalMessage = userObj.text;
+            } else {
+                finalMessage = @"收到新消息";
+            }
+        }
+        //edit by no02 20180309
+        BOOL isTransient = userObj.transient;
+        if (isTransient) {
+            //暂态消息不回转发
+        }else{
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"sendMessageToRNNotificationName"
+                                                                object:@{
+                                                                         @"USER_SEX": userSex,
+                                                                         @"USER_ICON": userIcon,
+                                                                         @"USER_NAME": userName,
+                                                                         @"USER_ID": userId,
+                                                                         @"CONVERSATION_ID": convId,
+                                                                         @"MESSAGE_TYPE": @"MESSAGE_TYPE_CHAT",
+                                                                         @"MSG_TYPE": msgType,
+                                                                         @"APP": fromApp,
+                                                                         @"CHAT_TIME": [NSString stringWithFormat:@"%f", LCCK_CURRENT_TIMESTAMP],
+                                                                         @"CHAT_MESSAGE":finalMessage
+                                                                         }];
+        }
+        
     };
+
     
     void(^filteredMessageCallback)(NSArray *originalMessages) = ^(NSArray *filterdMessages) {
         if (filterdMessages.count == 0) { return; }
