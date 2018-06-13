@@ -1,1 +1,0 @@
-../../../AVOSCloudIM/AVOS/AVOSCloudIM/Protobuf/LCIMDescriptor_PackagePrivate.h
