@@ -745,38 +745,46 @@ NSString *const LCCKConversationServiceErrorDomain = @"LCCKConversationServiceEr
     });
 }
 
-+ (void)cacheFileTypeMessages:(NSArray<AVIMTypedMessage *> *)messages callback:(AVBooleanResultBlock)callback {
-    NSString *queueBaseLabel = [NSString stringWithFormat:@"com.chatkit.%@", NSStringFromClass([self class])];
-    const char *queueName = [[NSString stringWithFormat:@"%@.ForBarrier",queueBaseLabel] UTF8String];
-    dispatch_queue_t queue = dispatch_queue_create(queueName, DISPATCH_QUEUE_CONCURRENT);
-    
-    for (AVIMTypedMessage *message in messages) {
-        dispatch_async(queue, ^(void) {
++ (void)cacheFileTypeMessages:(NSArray<AVIMTypedMessage *> *)messages callback:(AVBooleanResultBlock)callback
+{
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        dispatch_group_t downloadGroup = dispatch_group_create();
+        for (AVIMTypedMessage *message in messages) {
+            dispatch_group_enter(downloadGroup);
             if (message.mediaType == kAVIMMessageMediaTypeImage || message.mediaType == kAVIMMessageMediaTypeAudio) {
                 AVFile *file = message.file;
-                if (file && file.isDataAvailable == NO) {
-                    NSError *error;
-                    // 下载到本地
-                    NSData *data = [file getData:&error];
-                    if (error || data == nil) {
-                        LCCKLog(@"download file error : %@", error);
-                    }
+                if (file) {
+                    [file downloadWithCompletionHandler:^(NSURL * _Nullable filePath, NSError * _Nullable error) {
+                        dispatch_group_leave(downloadGroup);
+                        if (error) { LCCKLog(@"download file error : %@", error); }
+                    }];
+                } else {
+                    dispatch_group_leave(downloadGroup);
                 }
             } else if (message.mediaType == kAVIMMessageMediaTypeVideo) {
                 NSString *path = [[LCCKSettingService sharedInstance] videoPathOfMessage:(AVIMVideoMessage *)message];
                 if (![[NSFileManager defaultManager] fileExistsAtPath:path]) {
-                    NSError *error;
-                    NSData *data = [message.file getData:&error];
-                    if (error) {
-                        LCCKLog(@"download file error : %@", error);
+                    AVFile *file = message.file;
+                    if (file) {
+                        [file downloadWithCompletionHandler:^(NSURL * _Nullable filePath, NSError * _Nullable error) {
+                            dispatch_group_leave(downloadGroup);
+                            if (error) {
+                                LCCKLog(@"download file error : %@", error);
+                            } else {
+                                [NSFileManager.defaultManager copyItemAtPath:filePath.path toPath:path error:nil];
+                            }
+                        }];
                     } else {
-                        [data writeToFile:path atomically:YES];
+                        dispatch_group_leave(downloadGroup);
                     }
+                } else {
+                    dispatch_group_leave(downloadGroup);
                 }
+            } else {
+                dispatch_group_leave(downloadGroup);
             }
-        });
-    }
-    dispatch_barrier_async(queue, ^{
+        }
+        dispatch_group_wait(downloadGroup, DISPATCH_TIME_FOREVER);
         dispatch_async(dispatch_get_main_queue(),^{
             !callback ?: callback(YES, nil);
         });

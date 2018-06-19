@@ -301,9 +301,9 @@
             NSString *duration = [NSString stringWithFormat:@"%.0f", audioMsg.duration];
             NSString *voicePath;
             NSFileManager *fileManager = [NSFileManager defaultManager];
-            NSString *pathForFile = audioMsg.file.localPath;
+            NSString *pathForFile = audioMsg.file.persistentCachePath;
             if ([fileManager fileExistsAtPath:pathForFile]){
-                voicePath = audioMsg.file.localPath;
+                voicePath = audioMsg.file.persistentCachePath;
             } else {
                 voicePath = audioMsg.file.url;
             }
@@ -322,11 +322,11 @@
         }
         case kAVIMMessageMediaTypeImage: {
             AVIMImageMessage *imageMsg = (AVIMImageMessage *)message;
-            NSString *pathForFile = imageMsg.file.localPath;
+            NSString *pathForFile = imageMsg.file.persistentCachePath;
             NSFileManager *fileManager = [NSFileManager defaultManager];
             NSString *imagePath;
             if ([fileManager fileExistsAtPath:pathForFile]){
-                imagePath = imageMsg.file.localPath;
+                imagePath = imageMsg.file.persistentCachePath;
             }
             lcckMessage = [[LCCKMessage alloc] initWithPhoto:nil thumbnailPhoto:nil photoPath:imagePath thumbnailURL:nil originPhotoURL:[NSURL URLWithString:imageMsg.file.url] senderId:senderId sender:sender timestamp:time serverMessageId:serverMessageId];
             break;

@@ -72,9 +72,7 @@ NSString *const LCCKSessionServiceErrorDomain = @"LCCKSessionServiceErrorDomain"
     if ([[LCChatKit sharedInstance] generateSignatureBlock]) {
         _client.signatureDataSource = self;
     }
-    AVIMClientOpenOption *option = [AVIMClientOpenOption new];
-    option.force = force;
-    [_client openWithOption:option callback:^(BOOL succeeded, NSError *error) {
+    [_client openWithOption:AVIMClientOpenOptionForceOpen callback:^(BOOL succeeded, NSError *error) {
         [self updateConnectStatus];
         
         BOOL isFirstLaunchForClientId = [[LCChatKit sharedInstance] lcck_isFirstLaunchToEvent:clientId
