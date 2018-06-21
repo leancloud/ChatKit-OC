@@ -700,23 +700,23 @@ typedef void (^UITableViewRowActionHandler)(UITableViewRowAction *action, NSInde
                           conversation:(AVIMConversation *)conversation
                             controller:(LCCKConversationListViewController *)controller {
     NSString *conversationId = conversation.conversationId;
-    if (conversation.lcck_unreadCount > 0) {
-        if (title) {
-            *title = @"标记为已读";
-        }
-        *handler = ^(UITableViewRowAction *action, NSIndexPath *indexPath) {
-            [controller.tableView setEditing:NO animated:YES];
-            [[LCChatKit sharedInstance] updateUnreadCountToZeroWithConversationId:conversationId];
-        };
-    } else {
-        if (title) {
-            *title = @"标记为未读";
-        }
-        *handler = ^(UITableViewRowAction *action, NSIndexPath *indexPath) {
-            [controller.tableView setEditing:NO animated:YES];
-            [[LCChatKit sharedInstance] increaseUnreadCountWithConversationId:conversationId];
-        };
+    if (title) {
+        *title = @"标记为已读";
     }
+    *handler = ^(UITableViewRowAction *action, NSIndexPath *indexPath) {
+        [controller.tableView setEditing:NO animated:YES];
+        [[LCChatKit sharedInstance] updateUnreadCountToZeroWithConversationId:conversationId];
+    };
+//    if (conversation.lcck_unreadCount > 0) {
+//    } else {
+//        if (title) {
+//            *title = @"标记为未读";
+//        }
+//        *handler = ^(UITableViewRowAction *action, NSIndexPath *indexPath) {
+//            [controller.tableView setEditing:NO animated:YES];
+//            [[LCChatKit sharedInstance] increaseUnreadCountWithConversationId:conversationId];
+//        };
+//    }
 }
 
 #pragma mark 页面跳转

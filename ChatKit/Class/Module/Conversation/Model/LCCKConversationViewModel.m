@@ -644,6 +644,8 @@ fromTimestamp     |    toDate   |                |  上次上拉刷新顶端，�
          dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
              BOOL succeed = [self.parentConversationViewController filterAVIMError:error];
              if (succeed) {
+                 [[self currentConversation] readInBackground];
+                 [[self currentConversation] setUnreadMessagesMentioned:false];
                  NSMutableArray *lcckSucceedMessags = [NSMutableArray lcck_messagesWithAVIMMessages:avimTypedMessages];
                  [self addMessagesFirstTime:lcckSucceedMessags];
                  NSMutableArray *allMessages = [NSMutableArray arrayWithArray:avimTypedMessages];
