@@ -21,7 +21,7 @@
 /**
  *  未读消息数，保存在了数据库。收消息的时候，更新数据库
  */
-@property (nonatomic, assign) NSInteger lcck_unreadCount;
+@property (nonatomic, assign, readonly) NSInteger lcck_unreadCount;
 
 /*!
  * 如果未读消息数未超出100，显示数字，否则显示省略号
@@ -32,7 +32,7 @@
  *  是否有人提到了你，配合 @ 功能。不能看最后一条消息。
  *  因为可能倒数第二条消息提到了你，所以维护一个标记。
  */
-@property (nonatomic, assign) BOOL lcck_mentioned;
+@property (nonatomic, assign, readonly) BOOL lcck_mentioned;
 
 /*!
  * 草稿

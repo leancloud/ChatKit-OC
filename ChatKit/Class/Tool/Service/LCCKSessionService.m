@@ -275,9 +275,9 @@ NSString *const LCCKSessionServiceErrorDomain = @"LCCKSessionServiceErrorDomain"
     [self didReceiveStatusMessage:message conversation:conversation];
 }
 
-- (void)conversation:(AVIMConversation *)conversation messageRead:(AVIMMessage *)message {
-    [self didReceiveStatusMessage:message conversation:conversation];
-}
+//- (void)conversation:(AVIMConversation *)conversation messageRead:(AVIMMessage *)message {
+//    [self didReceiveStatusMessage:message conversation:conversation];
+//}
 
 - (void)didReceiveStatusMessage:(AVIMMessage *)message conversation:(AVIMConversation *)conversation {
     if (!message.lcck_isValidMessage) {
@@ -290,24 +290,44 @@ NSString *const LCCKSessionServiceErrorDomain = @"LCCKSessionServiceErrorDomain"
     [[NSNotificationCenter defaultCenter] postNotificationName:LCCKNotificationMessageDelivered object:userInfo];
 }
 
-- (void)conversation:(AVIMConversation *)conversation didReceiveUnread:(NSInteger)unread {
-    if (unread <= 0) return;
-    LCCKLog(@"conversatoin:%@ didReceiveUnread:%@", conversation, @(unread));
-    void (^fetchedConversationCallback)() = ^() {
-        [conversation queryMessagesFromServerWithLimit:unread callback:^(NSArray *objects, NSError *error) {
-            if (!error && (objects.count > 0)) {
-                [self receiveMessages:objects conversation:conversation isUnreadMessage:YES];
-                [conversation readInBackground];
-            }
-        }];
-        [self playLoudReceiveSoundIfNeededForConversation:conversation];
-        //        [conversation markAsReadInBackground];
-        //FIXME:
-//        [conversation markAsReadInBackgroundForMessage:conversation.lcck_lastMessage];
-
-    };
-    [self makeSureConversation:conversation isAvailableCallback:fetchedConversationCallback];
+- (void)conversation:(AVIMConversation *)conversation didUpdateForKey:(AVIMConversationUpdatedKey)key
+{
+    NSString *currentConversationId = LCCKConversationService.sharedInstance.currentConversationId;
+    NSString *conversationId = conversation.conversationId;
+    if ([key isEqualToString:AVIMConversationUpdatedKeyUnreadMessagesCount]) {
+        if ([currentConversationId isEqualToString:conversationId]) {
+            // do nothing.
+        } else {
+            [LCCKConversationService.sharedInstance insertRecentConversation:conversation shouldRefreshWhenFinished:true];
+        }
+    }
+    if ([key isEqualToString:AVIMConversationUpdatedKeyUnreadMessagesMentioned]) {
+        if ([currentConversationId isEqualToString:conversationId]) {
+            // do nothing
+        } else {
+            [LCCKConversationService.sharedInstance insertRecentConversation:conversation shouldRefreshWhenFinished:true];
+        }
+    }
 }
+
+//- (void)conversation:(AVIMConversation *)conversation didReceiveUnread:(NSInteger)unread {
+//    if (unread <= 0) return;
+//    LCCKLog(@"conversatoin:%@ didReceiveUnread:%@", conversation, @(unread));
+//    void (^fetchedConversationCallback)() = ^() {
+//        [conversation queryMessagesFromServerWithLimit:unread callback:^(NSArray *objects, NSError *error) {
+//            if (!error && (objects.count > 0)) {
+//                [self receiveMessages:objects conversation:conversation isUnreadMessage:YES];
+//                [conversation readInBackground];
+//            }
+//        }];
+//        [self playLoudReceiveSoundIfNeededForConversation:conversation];
+//        //        [conversation markAsReadInBackground];
+//        //FIXME:
+////        [conversation markAsReadInBackgroundForMessage:conversation.lcck_lastMessage];
+//
+//    };
+//    [self makeSureConversation:conversation isAvailableCallback:fetchedConversationCallback];
+//}
 
 - (void)makeSureConversation:(AVIMConversation *)conversation isAvailableCallback:(LCCKVoidBlock)callback {
     if (!conversation.createAt && ![[LCCKConversationService sharedInstance] isRecentConversationExistWithConversationId:conversation.conversationId]) {
@@ -341,7 +361,7 @@ NSString *const LCCKSessionServiceErrorDomain = @"LCCKSessionServiceErrorDomain"
         [[NSNotificationCenter defaultCenter] postNotificationName:LCCKNotificationCustomTransientMessageReceived object:userInfo];
     }
     [self receiveMessages:@[message] conversation:conversation isUnreadMessage:NO];
-    [conversation readInBackground];
+//    [conversation readInBackground];
 }
 
 - (void)receiveMessages:(NSArray<AVIMTypedMessage *> *)messages conversation:(AVIMConversation *)conversation isUnreadMessage:(BOOL)isUnreadMessage {
@@ -350,7 +370,7 @@ NSString *const LCCKSessionServiceErrorDomain = @"LCCKSessionServiceErrorDomain"
         // - 插入最近对话列表
         // 下面的LCCKNotificationMessageReceived也会通知ConversationListVC刷新
         [[LCCKConversationService sharedInstance] insertRecentConversation:conversation shouldRefreshWhenFinished:NO];
-        [[LCCKConversationService sharedInstance] increaseUnreadCount:filterdMessages.count withConversationId:conversation.conversationId shouldRefreshWhenFinished:NO];
+//        [[LCCKConversationService sharedInstance] increaseUnreadCount:filterdMessages.count withConversationId:conversation.conversationId shouldRefreshWhenFinished:NO];
         // - 播放接收音
         if (!isUnreadMessage) {
             [self playLoudReceiveSoundIfNeededForConversation:conversation];
@@ -365,8 +385,11 @@ NSString *const LCCKSessionServiceErrorDomain = @"LCCKSessionServiceErrorDomain"
     
     void(^filteredMessageCallback)(NSArray *originalMessages) = ^(NSArray *filterdMessages) {
         if (filterdMessages.count == 0) { return; }
-        // - 在最近对话列表页时，检查是否有人@我
-        if (![[LCCKConversationService sharedInstance].currentConversationId isEqualToString:conversation.conversationId]) {
+        if ([LCCKConversationService.sharedInstance.currentConversationId isEqualToString:conversation.conversationId]) {
+            [conversation readInBackground];
+            conversation.unreadMessagesMentioned = false;
+            !checkMentionedMessageCallback ?: checkMentionedMessageCallback(filterdMessages);
+        } else {
             // 没有在聊天的时候才增加未读数和设置mentioned
             [self isMentionedByMessages:filterdMessages callback:^(BOOL succeeded, NSError *error) {
                 !checkMentionedMessageCallback ?: checkMentionedMessageCallback(filterdMessages);
@@ -376,8 +399,6 @@ NSString *const LCCKSessionServiceErrorDomain = @"LCCKSessionServiceErrorDomain"
                     // [[NSNotificationCenter defaultCenter] postNotificationName:LCCKNotificationUnreadsUpdated object:nil];
                 }
             }];
-        } else {
-            !checkMentionedMessageCallback ?: checkMentionedMessageCallback(filterdMessages);
         }
     };
     
@@ -442,7 +463,7 @@ NSString *const LCCKSessionServiceErrorDomain = @"LCCKSessionServiceErrorDomain"
         NSString *queueBaseLabel = [NSString stringWithFormat:@"com.chatkit.%@", NSStringFromClass([self class])];
         const char *queueName = [[NSString stringWithFormat:@"%@.%@.ForBarrier",queueBaseLabel, [[NSUUID UUID] UUIDString]] UTF8String];
         dispatch_queue_t queue = dispatch_queue_create(queueName, DISPATCH_QUEUE_CONCURRENT);
-        
+
         [messages enumerateObjectsUsingBlock:^(AVIMTypedMessage * _Nonnull message, NSUInteger idx, BOOL * _Nonnull stop) {
             if (![message isKindOfClass:[AVIMTextMessage class]]) {
                 return;
@@ -461,7 +482,7 @@ NSString *const LCCKSessionServiceErrorDomain = @"LCCKSessionServiceErrorDomain"
                 }
             });
         }];
-        
+
         dispatch_barrier_async(queue, ^{
             //最后一个也没有提及就callback
             NSError *error = nil;
@@ -479,7 +500,7 @@ NSString *const LCCKSessionServiceErrorDomain = @"LCCKSessionServiceErrorDomain"
                 !callback ?: callback(isMentioned, error);
             });
         });
-        
+
     }];
 }
 

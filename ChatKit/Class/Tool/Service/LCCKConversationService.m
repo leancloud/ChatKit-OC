@@ -264,7 +264,7 @@ NSString *const LCCKConversationServiceErrorDomain = @"LCCKConversationServiceEr
 
 - (void)updateUnreadCountToZeroWithConversationId:(NSString *)conversationId shouldRefreshWhenFinished:(BOOL)shouldRefreshWhenFinished {
     AVIMConversation *cachedConversation = [self.conversationDictionary objectForKey:conversationId];
-    cachedConversation.lcck_unreadCount = 0;
+    [cachedConversation readInBackground];
     dispatch_async(self.sqliteQueue, ^{
         [self.databaseQueue inDatabase:^(FMDatabase *db) {
             [db executeUpdate:LCCKConversationTableUpdateUnreadCountSQL  withArgumentsInArray:@[@0, conversationId]];
@@ -342,7 +342,7 @@ NSString *const LCCKConversationServiceErrorDomain = @"LCCKConversationServiceEr
 
 - (void)increaseUnreadCountWithConversationId:(NSString *)conversationId shouldRefreshWhenFinished:(BOOL)shouldRefreshWhenFinished {
     AVIMConversation *cachedConversation = [self.conversationDictionary objectForKey:conversationId];
-    cachedConversation.lcck_unreadCount += 1;
+//    cachedConversation.lcck_unreadCount += 1;
     dispatch_async(self.sqliteQueue, ^{
         [self.databaseQueue inDatabase:^(FMDatabase *db) {
             [db executeUpdate:LCCKConversationTableIncreaseOneUnreadCountSQL withArgumentsInArray:@[conversationId]];
@@ -354,7 +354,7 @@ NSString *const LCCKConversationServiceErrorDomain = @"LCCKConversationServiceEr
 }
 - (void)increaseUnreadCount:(NSUInteger)increaseUnreadCount withConversationId:(NSString *)conversationId shouldRefreshWhenFinished:(BOOL)shouldRefreshWhenFinished {
     AVIMConversation *cachedConversation = [self.conversationDictionary objectForKey:conversationId];
-    cachedConversation.lcck_unreadCount += increaseUnreadCount;
+//    cachedConversation.lcck_unreadCount += increaseUnreadCount;
     dispatch_async(self.sqliteQueue, ^{
         [self.databaseQueue inDatabase:^(FMDatabase *db) {
             [db executeUpdate:LCCKConversationTableIncreaseUnreadCountSQL withArgumentsInArray:@[@(increaseUnreadCount) ,conversationId]];
@@ -370,7 +370,7 @@ NSString *const LCCKConversationServiceErrorDomain = @"LCCKConversationServiceEr
 
 - (void)updateMentioned:(BOOL)mentioned conversationId:(NSString *)conversationId shouldRefreshWhenFinished:(BOOL)shouldRefreshWhenFinished {
     AVIMConversation *cachedConversation = [self.conversationDictionary objectForKey:conversationId];
-    cachedConversation.lcck_mentioned = mentioned;
+//    cachedConversation.lcck_mentioned = mentioned;
     dispatch_async(self.sqliteQueue, ^{
         [self.databaseQueue inDatabase:^(FMDatabase *db) {
             [db executeUpdate:LCCKConversationTableUpdateMentionedSQL withArgumentsInArray:@[@(mentioned), conversationId]];
@@ -409,8 +409,8 @@ NSString *const LCCKConversationServiceErrorDomain = @"LCCKConversationServiceEr
     BOOL mentioned = [resultSet boolForColumn:LCCKConversationTableKeyMentioned];
     NSString *draft = [resultSet stringForColumn:LCCKConversationTableKeyDraft];
     AVIMConversation *conversation = [self conversationFromData:data];
-    conversation.lcck_unreadCount = unreadCount;
-    conversation.lcck_mentioned = mentioned;
+//    conversation.lcck_unreadCount = unreadCount;
+//    conversation.lcck_mentioned = mentioned;
     conversation.lcck_draft = draft;
     [self pinIMClientToConversationIfNeeded:conversation];
     return conversation;
@@ -429,9 +429,9 @@ NSString *const LCCKConversationServiceErrorDomain = @"LCCKConversationServiceEr
     for (AVIMConversation *conversation in conversations) {
         AVIMConversation *cachedConversation = [self.conversationDictionary objectForKey:conversation.conversationId];
         if (cachedConversation) {
-            conversation.lcck_unreadCount = cachedConversation.lcck_unreadCount;
+//            conversation.lcck_unreadCount = cachedConversation.lcck_unreadCount;
             conversation.lcck_draft = [cachedConversation.lcck_draft copy];
-            conversation.lcck_mentioned = cachedConversation.lcck_mentioned;
+//            conversation.lcck_mentioned = cachedConversation.lcck_mentioned;
             [self.conversationDictionary setObject:conversation forKey:conversation.conversationId];
         }
     }
