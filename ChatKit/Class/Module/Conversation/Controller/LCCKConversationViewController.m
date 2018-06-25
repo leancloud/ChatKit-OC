@@ -185,6 +185,10 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
     }
 }
 
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
 #ifdef CYLDebugging
 - (BOOL)willDealloc {
     if (![super willDealloc]) {
@@ -221,6 +225,10 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
     [[LCCKUserSystemService sharedInstance] fetchCurrentUserInBackground:^(id<LCCKUserDelegate> user, NSError *error) {
         self.user = user;
     }];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userWillSendMsgWithoutPower) name:LCCKNotificationRecordNoPower object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(recieveNewMsgForLengthOut) name:LCCKNotificationTextLengthOut object:nil];
+
     [self.chatViewModel setDefaultBackgroundImage];
 
     !self.viewDidLoadBlock ?: self.viewDidLoadBlock(self);
@@ -414,6 +422,28 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
                                        reason:reason
                                      userInfo:nil];
     }
+}
+
+#pragma mark - Notification
+
+- (void)userWillSendMsgWithoutPower {
+    [self showWaring:@"需要开启麦克风权限"];
+}
+
+- (void)recieveNewMsgForLengthOut {
+    [self showWaring:@"每次输入最多1000字~"];
+}
+
+- (void)showWaring:(NSString *)message {
+    // 没有找到Toast 只能用弹框
+    LCCKAlertController *alert = [LCCKAlertController alertControllerWithTitle:nil
+                                                                       message:message
+                                                                preferredStyle:LCCKAlertControllerStyleAlert];
+    NSString *cancelActionTitle = LCCKLocalizedStrings(@"ok");
+    LCCKAlertAction *cancelAction = [LCCKAlertAction actionWithTitle:cancelActionTitle style:LCCKAlertActionStyleDefault
+                                                             handler:^(LCCKAlertAction * action) {}];
+    [alert addAction:cancelAction];
+    [alert showWithSender:nil controller:self animated:YES completion:NULL];
 }
 
 #pragma mark - UI init

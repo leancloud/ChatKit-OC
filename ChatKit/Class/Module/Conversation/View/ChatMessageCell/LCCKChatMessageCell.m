@@ -398,7 +398,9 @@ static CGFloat const LCCK_MSG_CELL_NICKNAME_FONT_SIZE = 12;
         if (avatarImageViewCornerRadiusBlock) {
             CGSize avatarImageViewSize = CGSizeMake(kAvatarImageViewWidth, kAvatarImageViewHeight);
             CGFloat avatarImageViewCornerRadius = avatarImageViewCornerRadiusBlock(avatarImageViewSize);
-            self.avatarImageView.lcck_cornerRadius = avatarImageViewCornerRadius;
+            //导致CPU消耗达到100% 暂时替换
+            self.avatarImageView.layer.cornerRadius = avatarImageViewCornerRadius;
+            self.avatarImageView.clipsToBounds = YES;
         }
         [self bringSubviewToFront:_avatarImageView];
     }
