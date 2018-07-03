@@ -242,6 +242,10 @@ typedef NSArray<LCCKMenuItem *> *(^LCCKLongPressMessageBlock)(LCCKMessage *messa
 #define LCCKLongPressMessageUserInfoKeyFromController    @"LCCKLongPressMessageUserInfoKeyFromController"
 /// 传递触发的UIView对象
 #define LCCKLongPressMessageUserInfoKeyFromView          @"LCCKLongPressMessageUserInfoKeyFromView"
+/// message owner
+#define LCCKLongPressMessageUserInfoKeyMessageOwner @"LCCKLongPressMessageUserInfoKeyMessageOwner"
+/// message cell
+#define LCCKLongPressMessageUserInfoKeyMessageCell @"LCCKLongPressMessageUserInfoKeyMessageCell"
 
 /*!
  *  ChatKit会在长按消息时，调用这个block

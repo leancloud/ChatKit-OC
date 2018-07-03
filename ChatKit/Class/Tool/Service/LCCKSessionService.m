@@ -310,6 +310,19 @@ NSString *const LCCKSessionServiceErrorDomain = @"LCCKSessionServiceErrorDomain"
     }
 }
 
+- (void)conversation:(AVIMConversation *)conversation messageHasBeenUpdated:(AVIMMessage *)message
+{
+    NSString *currentConversationId = LCCKConversationService.sharedInstance.currentConversationId;
+    NSString *conversationId = conversation.conversationId;
+    if ([currentConversationId isEqualToString:conversationId]) {
+        NSDictionary *userInfo = @{
+                                   LCCKMessageNotifacationUserInfoConversationKey : conversation,
+                                   LCCKMessageNotifacationUserInfoMessageKey : message,
+                                   };
+        [[NSNotificationCenter defaultCenter] postNotificationName:LCCKNotificationMessageModified object:userInfo];
+    }
+}
+
 //- (void)conversation:(AVIMConversation *)conversation didReceiveUnread:(NSInteger)unread {
 //    if (unread <= 0) return;
 //    LCCKLog(@"conversatoin:%@ didReceiveUnread:%@", conversation, @(unread));

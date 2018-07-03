@@ -339,29 +339,67 @@ setLoadLatestMessagesHandler:^(LCCKConversationViewController *conversationContr
 /**
  *  设置会话界面的长按操作
  */
-- (void)lcck_setupLongPressMessage {
-    [[LCChatKit sharedInstance] setLongPressMessageBlock:^NSArray<UIMenuItem *> *(
-                                                                                  LCCKMessage *message, NSDictionary *userInfo) {
-        LCCKMenuItem *copyItem = [[LCCKMenuItem alloc]
-                                  initWithTitle:LCCKLocalizedStrings(@"copy")
-                                  block:^{
-                                      UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
-                                      [pasteboard setString:[message text]];
-                                  }];
+- (void)lcck_setupLongPressMessage
+{
+    [LCChatKit.sharedInstance setLongPressMessageBlock:^NSArray<LCCKMenuItem *> *(LCCKMessage *message, NSDictionary *userInfo) {
         
-        LCCKConversationViewController *conversationViewController =
-        userInfo[LCCKLongPressMessageUserInfoKeyFromController];
-        //设置弹出的菜单选项和对应操作
-        LCCKMenuItem *transpondItem = [[LCCKMenuItem alloc]
-                                       initWithTitle:LCCKLocalizedStrings(@"transpond")
-                                       block:^{
-                                           [self lcck_transpondMessage:message
-                                          toConversationViewController:conversationViewController];
-                                       }];
-        NSArray *menuItems = [NSArray array];
-        if (message.mediaType == kAVIMMessageMediaTypeText) {
-            menuItems = @[ copyItem, transpondItem ];
+        NSMutableArray *menuItems = [NSMutableArray array];
+        AVIMMessageMediaType mediaType = message.mediaType;
+        BOOL isNormalMediaTypeMessage = ({
+            (mediaType == kAVIMMessageMediaTypeText ||
+             mediaType == kAVIMMessageMediaTypeImage ||
+             mediaType == kAVIMMessageMediaTypeAudio ||
+             mediaType == kAVIMMessageMediaTypeVideo ||
+             mediaType == kAVIMMessageMediaTypeLocation ||
+             mediaType == kAVIMMessageMediaTypeFile);
+        });
+        LCCKMessageOwnerType ownerType = [userInfo[LCCKLongPressMessageUserInfoKeyMessageOwner] unsignedIntegerValue];
+        LCCKConversationViewController *fromController = userInfo[LCCKLongPressMessageUserInfoKeyFromController];
+        LCCKChatMessageCell *messageCell = userInfo[LCCKLongPressMessageUserInfoKeyMessageCell];
+        
+        if (mediaType == kAVIMMessageMediaTypeText) {
+            LCCKMenuItem *copyItem = [[LCCKMenuItem alloc] initWithTitle:LCCKLocalizedStrings(@"copy") block:^{
+                UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
+                [pasteboard setString:[message text]];
+            }];
+            [menuItems addObject:copyItem];
+            if (fromController && ownerType == LCCKMessageOwnerTypeSelf) {
+                LCCKMenuItem *modifyItem = [[LCCKMenuItem alloc] initWithTitle:LCCKLocalizedStrings(@"modify") block:^{
+                    UIAlertController *alert = [UIAlertController alertControllerWithTitle:[NSString stringWithFormat:@"%@?", LCCKLocalizedStrings(@"modify")] message:nil preferredStyle:UIAlertControllerStyleAlert];
+                    [alert addAction:[UIAlertAction actionWithTitle:LCCKLocalizedStrings(@"cancel") style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {}]];
+                    [alert addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
+                        textField.text = messageCell.message.text;
+                    }];
+                    UIAlertAction *modifyAction = [UIAlertAction actionWithTitle:LCCKLocalizedStrings(@"modify") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                        LCCKMessage *oldMessage = messageCell.message;
+                        LCCKMessage *newMessage = [[LCCKMessage alloc] initWithText:alert.textFields[0].text senderId:oldMessage.senderId sender:oldMessage.sender timestamp:oldMessage.timestamp serverMessageId:oldMessage.serverMessageId];
+                        [fromController modifyMessage:messageCell newMessage:newMessage callback:^(BOOL succeeded, NSError *error) {
+                            if (succeeded) {
+                                LCCKLog(@"消息修改成功");
+                            }
+                        }];
+                    }];
+                    [alert addAction:modifyAction];
+                    [fromController presentViewController:alert animated:true completion:nil];
+                }];
+                [menuItems addObject:modifyItem];
+            }
         }
+        
+        if (fromController && isNormalMediaTypeMessage) {
+            LCCKMenuItem *transpondItem = [[LCCKMenuItem alloc] initWithTitle:LCCKLocalizedStrings(@"transpond") block:^{
+                [self lcck_transpondMessage:message toConversationViewController:fromController];
+            }];
+            [menuItems addObject:transpondItem];
+        }
+        
+        if (ownerType == LCCKMessageOwnerTypeSelf && isNormalMediaTypeMessage) {
+            LCCKMenuItem *recallItem = [[LCCKMenuItem alloc] initWithTitle:LCCKLocalizedStrings(@"recall") block:^{
+                LCCKLog(@"消息撤回成功");
+            }];
+            [menuItems addObject:recallItem];
+        }
+        
         return menuItems;
     }];
 }
@@ -761,8 +799,8 @@ typedef void (^UITableViewRowActionHandler)(UITableViewRowAction *action, NSInde
     [defaultsSet synchronize];
 }
 
-- (void)lcck_transpondMessage:(LCCKMessage *)message
- toConversationViewController:(LCCKConversationViewController *)conversationViewController {
+- (void)lcck_transpondMessage:(LCCKMessage *)message toConversationViewController:(LCCKConversationViewController *)conversationViewController
+{
     LCCKLog(@"消息转发");
 }
 

@@ -463,7 +463,8 @@ static CGFloat const LCCK_MSG_CELL_NICKNAME_FONT_SIZE = 12;
     return LCCKMessageOwnerTypeUnknown;
 }
 
-- (void)handleLongPress:(UILongPressGestureRecognizer *)longPressGes {
+- (void)handleLongPress:(UILongPressGestureRecognizer *)longPressGes
+{
     if (longPressGes.state == UIGestureRecognizerStateBegan) {
         CGPoint longPressPoint = [longPressGes locationInView:self.contentView];
         if (!CGRectContainsPoint(self.messageContentView.frame, longPressPoint)) {
@@ -480,22 +481,20 @@ static CGFloat const LCCK_MSG_CELL_NICKNAME_FONT_SIZE = 12;
         dispatch_after(when, dispatch_get_main_queue(), ^{
             [self becomeFirstResponder];
             LCCKLongPressMessageBlock longPressMessageBlock = [LCChatKit sharedInstance].longPressMessageBlock;
+            NSDictionary *userInfo = @{ LCCKLongPressMessageUserInfoKeyFromController: self.delegate,
+                                        LCCKLongPressMessageUserInfoKeyFromView: self.tableView,
+                                        LCCKLongPressMessageUserInfoKeyMessageOwner: @(self.messageOwner),
+                                        LCCKLongPressMessageUserInfoKeyMessageCell: self };
             NSArray *menuItems = [NSArray array];
-            NSDictionary *userInfo = @{
-                                       LCCKLongPressMessageUserInfoKeyFromController : self.delegate,
-                                       LCCKLongPressMessageUserInfoKeyFromView : self.tableView,
-                                       };
             if (longPressMessageBlock) {
                 menuItems = longPressMessageBlock(self.message, userInfo);
             } else {
-                LCCKMenuItem *copyItem = [[LCCKMenuItem alloc] initWithTitle:LCCKLocalizedStrings(@"copy")
-                                                                       block:^{
-                                                                           UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
-                                                                           [pasteboard setString:[self.message text]];
-                                                                       }];
-                //TODO:添加“转发”
+                LCCKMenuItem *copyItem = [[LCCKMenuItem alloc] initWithTitle:LCCKLocalizedStrings(@"copy") block:^{
+                    UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
+                    [pasteboard setString:[self.message text]];
+                }];
                 if (self.mediaType == kAVIMMessageMediaTypeText) {
-                    menuItems = @[ copyItem ];
+                    menuItems = @[copyItem];
                 }
             }
             UIMenuController *menuController = [UIMenuController sharedMenuController];
@@ -504,10 +503,7 @@ static CGFloat const LCCK_MSG_CELL_NICKNAME_FONT_SIZE = 12;
             UITableView *tableView = self.tableView;
             CGRect targetRect = [self convertRect:self.messageContentView.frame toView:tableView];
             [menuController setTargetRect:targetRect inView:tableView];
-            [[NSNotificationCenter defaultCenter] addObserver:self
-                                                     selector:@selector(handleMenuWillShowNotification:)
-                                                         name:UIMenuControllerWillShowMenuNotification
-                                                       object:nil];
+            [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleMenuWillShowNotification:) name:UIMenuControllerWillShowMenuNotification object:nil];
             [menuController setMenuVisible:YES animated:YES];
         });
     }
