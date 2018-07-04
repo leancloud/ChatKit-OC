@@ -318,11 +318,9 @@ NSString *const LCCKSessionServiceErrorDomain = @"LCCKSessionServiceErrorDomain"
     NSString *currentConversationId = LCCKConversationService.sharedInstance.currentConversationId;
     NSString *conversationId = conversation.conversationId;
     if ([currentConversationId isEqualToString:conversationId]) {
-        NSDictionary *userInfo = @{
-                                   LCCKMessageNotifacationUserInfoConversationKey : conversation,
-                                   LCCKMessageNotifacationUserInfoMessageKey : message,
-                                   };
-        [[NSNotificationCenter defaultCenter] postNotificationName:LCCKNotificationMessageModified object:userInfo];
+        NSDictionary *userInfo = @{ LCCKMessageNotifacationUserInfoConversationKey: conversation,
+                                    LCCKMessageNotifacationUserInfoMessageKey: message };
+        [[NSNotificationCenter defaultCenter] postNotificationName:LCCKNotificationMessageUpdated object:userInfo];
     }
 }
 

@@ -918,9 +918,9 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
     [self.chatViewModel modifyMessageForMessageCell:messageCell newMessage:newMessage callback:callback];
 }
 
-- (void)recallMessage:(LCCKChatMessageCell *)messageCell
+- (void)recallMessage:(LCCKChatMessageCell *)messageCell callback:(void (^)(BOOL, NSError *))callback
 {
-    [self.chatViewModel recallMessageForMessageCell:messageCell];
+    [self.chatViewModel recallMessageForMessageCell:messageCell callback:callback];
 }
 
 - (void)fileMessageDidDownload:(LCCKChatMessageCell *)messageCell {

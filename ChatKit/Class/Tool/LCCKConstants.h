@@ -82,7 +82,7 @@ static NSString *const LCCKNotificationMessageReceived = @"LCCKNotificationMessa
 /**
  *  消息被修改了，通知聊天页面和最近对话页面刷新
  */
-static NSString *const LCCKNotificationMessageModified = @"LCCKNotificationMessageModified";
+static NSString *const LCCKNotificationMessageUpdated = @"LCCKNotificationMessageUpdated";
 /**
  *  消息到来了，通知聊天页面和最近对话页面刷新
  */

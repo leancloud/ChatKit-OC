@@ -18,7 +18,7 @@ PODS:
     - FMDB (~> 2.6.2)
     - Masonry (~> 1.0.1)
     - MJRefresh (~> 3.1.9)
-    - MLLabel (~> 1.9.2)
+    - MLLabel (~> 1.10.5)
     - MWPhotoBrowser (~> 2.1.2)
     - pop (~> 1.0.9)
     - SDWebImage (~> 3.8.0)
@@ -35,7 +35,7 @@ PODS:
   - Masonry (1.0.2)
   - MBProgressHUD (0.9.2)
   - MJRefresh (3.1.15.3)
-  - MLLabel (1.9.2)
+  - MLLabel (1.10.5)
   - MLPAutoCompleteTextField (1.5)
   - MWPhotoBrowser (2.1.2):
     - DACircularProgress (~> 2.3)
@@ -91,7 +91,7 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   AVOSCloud: 855a0f1e3458f3ed99d8099e1f88e2ff8da127d2
   AVOSCloudIM: 006eac3a7b027b41e67d8ec4237543af41be902e
-  ChatKit: 0e380b61c6846a07f33d739f679b506b46d083d3
+  ChatKit: 4d928e62c1e448752962f8dbcbfa8221f9dfb2c7
   CYLDeallocBlockExecutor: ecf39e45dcead9e120f460df5668b8f5093d178e
   CYLTabBarController: 8d99fccf22866fe18c978c5ff863dc6051da45ff
   DACircularProgress: 4dd437c0fc3da5161cb289e07ac449493d41db71
@@ -102,7 +102,7 @@ SPEC CHECKSUMS:
   Masonry: 7c429b56da9d4ee0bbb3ed77a5ea710d6a5df39e
   MBProgressHUD: 1569cf7ace17a8bac47aabfbb8580a49690386d1
   MJRefresh: b48380ae2b927b46c4ef000de9adb8dc748e1df7
-  MLLabel: df58127ce0bd1f87890ecc3232db77a85ce4cd97
+  MLLabel: d76124055a2205e7f76878e62cd06ba925ba0c97
   MLPAutoCompleteTextField: ba4d507bbff2bd4f139d4197814fc8dd39caf77e
   MWPhotoBrowser: 5836d7aa041dc05a13de380c246826578adc5ea5
   pop: 82ca6b068ce9278fd350fd9dd09482a0ce9492e6

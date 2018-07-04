@@ -343,7 +343,6 @@ setLoadLatestMessagesHandler:^(LCCKConversationViewController *conversationContr
 {
     [LCChatKit.sharedInstance setLongPressMessageBlock:^NSArray<LCCKMenuItem *> *(LCCKMessage *message, NSDictionary *userInfo) {
         
-        NSMutableArray *menuItems = [NSMutableArray array];
         AVIMMessageMediaType mediaType = message.mediaType;
         BOOL isNormalMediaTypeMessage = ({
             (mediaType == kAVIMMessageMediaTypeText ||
@@ -356,6 +355,8 @@ setLoadLatestMessagesHandler:^(LCCKConversationViewController *conversationContr
         LCCKMessageOwnerType ownerType = [userInfo[LCCKLongPressMessageUserInfoKeyMessageOwner] unsignedIntegerValue];
         LCCKConversationViewController *fromController = userInfo[LCCKLongPressMessageUserInfoKeyFromController];
         LCCKChatMessageCell *messageCell = userInfo[LCCKLongPressMessageUserInfoKeyMessageCell];
+        
+        NSMutableArray *menuItems = [NSMutableArray array];
         
         if (mediaType == kAVIMMessageMediaTypeText) {
             LCCKMenuItem *copyItem = [[LCCKMenuItem alloc] initWithTitle:LCCKLocalizedStrings(@"copy") block:^{
@@ -393,9 +394,13 @@ setLoadLatestMessagesHandler:^(LCCKConversationViewController *conversationContr
             [menuItems addObject:transpondItem];
         }
         
-        if (ownerType == LCCKMessageOwnerTypeSelf && isNormalMediaTypeMessage) {
+        if (fromController && ownerType == LCCKMessageOwnerTypeSelf && isNormalMediaTypeMessage) {
             LCCKMenuItem *recallItem = [[LCCKMenuItem alloc] initWithTitle:LCCKLocalizedStrings(@"recall") block:^{
-                LCCKLog(@"消息撤回成功");
+                [fromController recallMessage:messageCell callback:^(BOOL succeeded, NSError *error) {
+                    if (succeeded) {
+                        LCCKLog(@"消息撤回成功");
+                    }
+                }];
             }];
             [menuItems addObject:recallItem];
         }

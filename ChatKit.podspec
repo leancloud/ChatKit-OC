@@ -23,7 +23,7 @@ Pod::Spec.new do |s|
   s.dependency "UITableView+FDTemplateLayoutCell" , "~> 1.5.beta"
   s.dependency "FDStackView" , "~> 1.0"
   s.dependency "DACircularProgress" , "~> 2.3.1"
-  s.dependency "MLLabel" , "~> 1.9.2"
+  s.dependency "MLLabel" , "~> 1.10.5"
   s.dependency "MWPhotoBrowser", "~> 2.1.2"
   s.dependency "CYLDeallocBlockExecutor", "~> 1.1.2"
 

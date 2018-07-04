@@ -75,7 +75,7 @@
         _avimTypedMessage = [NSMutableArray array];
         self.parentConversationViewController = parentConversationViewController;
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveMessage:) name:LCCKNotificationMessageReceived object:nil];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(messageModified:) name:LCCKNotificationMessageModified object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(messageUpdated:) name:LCCKNotificationMessageUpdated object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(conversationInvalided:) name:LCCKNotificationCurrentConversationInvalided object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(messageStatusChanged:) name:LCCKNotificationMessageRead object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(messageStatusChanged:) name:LCCKNotificationMessageDelivered object:nil];
@@ -139,7 +139,7 @@
     });
 }
 
-- (void)messageModified:(NSNotification *)notification
+- (void)messageUpdated:(NSNotification *)notification
 {
     NSDictionary *userInfo = notification.object;
     if (!userInfo) {
@@ -163,8 +163,14 @@
     for (int i = 0; i < self.dataArray; i++) {
         LCCKMessage *oldMessage = self.dataArray[i];
         if ([modifiedMessage.messageId isEqualToString:oldMessage.serverMessageId]) {
-            self.dataArray[i] = [LCCKMessage messageWithAVIMTypedMessage:modifiedMessage];
-            [self.parentConversationViewController.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:i inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
+            id lcckMessage = [LCCKMessage messageWithAVIMTypedMessage:modifiedMessage];
+            if (lcckMessage) {
+                self.dataArray[i] = lcckMessage;
+                [self.parentConversationViewController.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:i inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
+            } else if ([modifiedMessage isKindOfClass:AVIMRecalledMessage.class]) {
+                [self.dataArray removeObjectAtIndex:i];
+                [self.parentConversationViewController.tableView reloadData];
+            }
             break;
         }
     }
@@ -618,18 +624,42 @@ fromTimestamp     |    toDate   |                |  上次上拉刷新顶端，�
         AVIMTypedMessage *newTypedMessage = [AVIMTextMessage messageWithText:newMessage.text attributes:nil];
         [LCCKConversationService.sharedInstance.currentConversation updateMessage:oldTypedMessage toNewMessage:newTypedMessage callback:^(BOOL succeeded, NSError * _Nullable error) {
             if (succeeded) {
-                self.dataArray[indexPath.row] = [LCCKMessage messageWithAVIMTypedMessage:newTypedMessage];
                 self.avimTypedMessage[oldTypedMessageIndex] = newTypedMessage;
-                [self.parentConversationViewController.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+                id lcckMessage = [LCCKMessage messageWithAVIMTypedMessage:newTypedMessage];
+                if (lcckMessage) {
+                    self.dataArray[indexPath.row] = lcckMessage;
+                    [self.parentConversationViewController.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+                }
             }
             callback(succeeded, error);
         }];
     }
 }
 
-- (void)recallMessageForMessageCell:(LCCKChatMessageCell *)messageCell
+- (void)recallMessageForMessageCell:(LCCKChatMessageCell *)messageCell callback:(void (^)(BOOL, NSError *))callback
 {
-    
+    NSIndexPath *indexPath = messageCell.indexPath;
+    LCCKMessage *oldMessage = self.dataArray[indexPath.row];
+    int oldTypedMessageIndex = -1;
+    AVIMTypedMessage *oldTypedMessage = nil;
+    for (int i = 0; i < self.avimTypedMessage.count; i++) {
+        AVIMTypedMessage *item = self.avimTypedMessage[i];
+        if ([oldMessage.serverMessageId isEqualToString:item.messageId]) {
+            oldTypedMessageIndex = i;
+            oldTypedMessage = item;
+            break;
+        }
+    }
+    if (oldTypedMessage && oldTypedMessageIndex >= 0 && oldTypedMessageIndex < self.avimTypedMessage.count) {
+        [LCCKConversationService.sharedInstance.currentConversation recallMessage:oldTypedMessage callback:^(BOOL succeeded, NSError * _Nullable error, AVIMRecalledMessage * _Nullable recalledMessage) {
+            if (succeeded) {
+                [self.dataArray removeObjectAtIndex:indexPath.row];
+                self.avimTypedMessage[oldTypedMessageIndex] = recalledMessage;
+                [self.parentConversationViewController.tableView reloadData];
+            }
+            callback(succeeded, error);
+        }];
+    }
 }
 
 /*!

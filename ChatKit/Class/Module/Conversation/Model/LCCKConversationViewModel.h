@@ -57,7 +57,7 @@ typedef void (^LCCKSendMessageSuccessFailedBlock)(NSString *messageUUID, NSError
                          selectedMessageIndex:(NSNumber **)selectedMessageIndex;
 - (void)resendMessageForMessageCell:(LCCKChatMessageCell *)messageCell;
 - (void)modifyMessageForMessageCell:(LCCKChatMessageCell *)messageCell newMessage:(LCCKMessage *)newMessage callback:(void (^)(BOOL, NSError *))callback;
-- (void)recallMessageForMessageCell:(LCCKChatMessageCell *)messageCell;
+- (void)recallMessageForMessageCell:(LCCKChatMessageCell *)messageCell callback:(void (^)(BOOL, NSError *))callback;
 - (void)resetBackgroundImage;
 - (void)setDefaultBackgroundImage;
 
