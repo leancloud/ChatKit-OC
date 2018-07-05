@@ -331,17 +331,14 @@
             lcckMessage = [[LCCKMessage alloc] initWithPhoto:nil thumbnailPhoto:nil photoPath:imagePath thumbnailURL:nil originPhotoURL:[NSURL URLWithString:imageMsg.file.url] senderId:senderId sender:sender timestamp:time serverMessageId:serverMessageId];
             break;
         }
-            
-            //#import "AVIMEmotionMessage.h"
-            //        case kAVIMMessageMediaTypeEmotion: {
-            //            AVIMEmotionMessage *emotionMsg = (AVIMEmotionMessage *)message;
-            //            NSString *path = [[NSBundle mainBundle] pathForResource:emotionMsg.emotionPath ofType:@"gif"];
-            //            lcckMessage = [[LCCKMessage alloc] initWithEmotionPath:path sender:sender timestamp:time];
-            //            break;
-            //        }
         case kAVIMMessageMediaTypeVideo: {
-            //TODO:
-            break;
+            return nil;
+        }
+        case kAVIMMessageMediaTypeFile: {
+            return nil;
+        }
+        case kAVIMMessageMediaTypeRecalled: {
+            return nil;
         }
         default: {
             NSString *degradeContent;

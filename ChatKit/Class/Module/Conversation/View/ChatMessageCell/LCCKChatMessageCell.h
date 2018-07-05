@@ -49,6 +49,8 @@
 - (void)avatarImageViewLongPressed:(LCCKChatMessageCell *)messageCell;
 - (void)messageCell:(LCCKChatMessageCell *)messageCell didTapLinkText:(NSString *)linkText linkType:(MLLinkType)linkType;
 - (void)fileMessageDidDownload:(LCCKChatMessageCell *)messageCell;
+- (void)modifyMessage:(LCCKChatMessageCell *)messageCell newMessage:(LCCKMessage *)newMessage callback:(void (^)(BOOL, NSError *))callback;
+- (void)recallMessage:(LCCKChatMessageCell *)messageCell callback:(void (^)(BOOL, NSError *))callback;
 
 @end
 

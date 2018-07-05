@@ -913,6 +913,16 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
     [self.chatViewModel resendMessageForMessageCell:messageCell];
 }
 
+- (void)modifyMessage:(LCCKChatMessageCell *)messageCell newMessage:(LCCKMessage *)newMessage callback:(void (^)(BOOL, NSError *))callback
+{
+    [self.chatViewModel modifyMessageForMessageCell:messageCell newMessage:newMessage callback:callback];
+}
+
+- (void)recallMessage:(LCCKChatMessageCell *)messageCell callback:(void (^)(BOOL, NSError *))callback
+{
+    [self.chatViewModel recallMessageForMessageCell:messageCell callback:callback];
+}
+
 - (void)fileMessageDidDownload:(LCCKChatMessageCell *)messageCell {
     [self reloadAfterReceiveMessage];
 }
@@ -920,7 +930,6 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
 - (void)messageCell:(LCCKChatMessageCell *)messageCell didTapLinkText:(NSString *)linkText linkType:(MLLinkType)linkType {
     switch (linkType) {
         case MLLinkTypeURL: {
-            linkText =  [linkText lowercaseString];
             LCCKWebViewController *webViewController = [[LCCKWebViewController alloc] init];
             if (![linkText hasPrefix:@"http"]) {
                 linkText = [NSString stringWithFormat:@"http://%@", linkText];

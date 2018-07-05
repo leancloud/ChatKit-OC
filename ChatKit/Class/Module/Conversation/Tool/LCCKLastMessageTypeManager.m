@@ -50,6 +50,10 @@ static NSMutableDictionary *attributedStringCache = nil;
             title = [NSString stringWithFormat:@"[%@]",title];
             break;
             
+        case kAVIMMessageMediaTypeRecalled:
+            title = @"";
+            break;
+            
         default:
             title = [self titleForCustomMessage:message];
             break;
