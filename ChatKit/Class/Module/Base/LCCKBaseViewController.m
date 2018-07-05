@@ -112,7 +112,7 @@
 
 - (BOOL)alertAVIMError:(NSError *)error {
     if (error) {
-        if (error.code == kAVIMErrorConnectionLost) {
+        if (error.code == AVIMErrorCodeConnectionLost) {
             [self alert:@"未能连接聊天服务"];
         } else if ([error.domain isEqualToString:NSURLErrorDomain]) {
             [self alert:@"网络连接发生错误"];
