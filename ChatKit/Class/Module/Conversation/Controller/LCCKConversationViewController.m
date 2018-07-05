@@ -930,7 +930,6 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
 - (void)messageCell:(LCCKChatMessageCell *)messageCell didTapLinkText:(NSString *)linkText linkType:(MLLinkType)linkType {
     switch (linkType) {
         case MLLinkTypeURL: {
-            linkText =  [linkText lowercaseString];
             LCCKWebViewController *webViewController = [[LCCKWebViewController alloc] init];
             if (![linkText hasPrefix:@"http"]) {
                 linkText = [NSString stringWithFormat:@"http://%@", linkText];
