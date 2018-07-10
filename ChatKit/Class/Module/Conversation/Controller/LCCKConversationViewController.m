@@ -283,7 +283,8 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
 #pragma mark -
 #pragma mark - public Methods
 
-- (void)sendTextMessage:(NSString *)text {
+- (void)sendTextMessage:(NSString *)text mentionList:(NSArray<NSString *> *)mentionList
+{
     if ([text length] > 0 ) {
         LCCKMessage *lcckMessage = [[LCCKMessage alloc] initWithText:text
                                                             senderId:self.userId
@@ -291,7 +292,7 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
                                                            timestamp:LCCK_CURRENT_TIMESTAMP
                                                      serverMessageId:nil];
         [self makeSureSendValidMessage:lcckMessage afterFetchedConversationShouldWithAssert:NO];
-        [self.chatViewModel sendMessage:lcckMessage];
+        [self.chatViewModel sendMessage:lcckMessage mentionList:mentionList];
     }
 }
 
@@ -686,8 +687,8 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
 
 #pragma mark - LCCKChatBarDelegate
 
-- (void)chatBar:(LCCKChatBar *)chatBar sendMessage:(NSString *)message {
-    [self sendTextMessage:message];
+- (void)chatBar:(LCCKChatBar *)chatBar sendMessage:(NSString *)message mentionList:(NSArray<NSString *> *)mentionList {
+    [self sendTextMessage:message mentionList:mentionList];
 }
 
 - (void)chatBar:(LCCKChatBar *)chatBar sendVoice:(NSString *)voiceFileName seconds:(NSTimeInterval)seconds{
@@ -721,38 +722,14 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
             [self.chatBar open];
         }];
         if (peerId.length > 0) {
-            NSArray *peerNames = [[LCChatKit sharedInstance] getCachedProfilesIfExists:@[peerId] error:nil];
-            NSString *peerName;
-            @try {
-                id<LCCKUserDelegate> user = peerNames[0];
-                peerName = user.name ?: user.clientId;
-            } @catch (NSException *exception) {
-                peerName = peerId;
-            }
-            peerName = [NSString stringWithFormat:@"@%@ ", peerName];
-            [self.chatBar appendString:peerName];
+            [self.chatBar appendString:[NSString stringWithFormat:@"@%@ ", peerId] mentionList:@[peerId]];
         }
     }];
     [contactListViewController setSelectedContactsCallback:^(UIViewController *viewController, NSArray<NSString *> *peerIds) {
         if (peerIds.count > 0) {
-            NSArray<id<LCCKUserDelegate>> *peers = [[LCCKUserSystemService sharedInstance] getCachedProfilesIfExists:peerIds error:nil];
-            NSMutableArray *peerNames = [NSMutableArray arrayWithCapacity:peers.count];
-            [peers enumerateObjectsUsingBlock:^(id<LCCKUserDelegate>  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-                if (obj.name) {
-                    [peerNames addObject:obj.name];
-                } else {
-                    [peerNames addObject:obj.clientId];
-                }
-            }];
-            NSArray *realPeerNames;
-            if (peerNames.count > 0) {
-                realPeerNames = peerNames;
-            } else {
-                realPeerNames = peerIds;
-            }
-            NSString *peerName = [[realPeerNames valueForKey:@"description"] componentsJoinedByString:@" @"];
-            peerName = [NSString stringWithFormat:@"@%@ ", peerName];
-            [self.chatBar appendString:peerName];
+            NSString *peerString = [[peerIds valueForKey:@"description"] componentsJoinedByString:@" @"];
+            peerString = [NSString stringWithFormat:@"@%@ ", peerString];
+            [self.chatBar appendString:peerString mentionList:peerIds];
         }
     }];
     UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:contactListViewController];
