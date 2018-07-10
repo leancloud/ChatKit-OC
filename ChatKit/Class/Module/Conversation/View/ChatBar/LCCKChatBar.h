@@ -64,6 +64,7 @@ typedef NS_ENUM(NSUInteger, LCCKFunctionViewShowType){
  */
 - (void)appendString:(NSString *)string;
 - (void)appendString:(NSString *)string beginInputing:(BOOL)beginInputing;
+- (void)appendString:(NSString *)string mentionList:(NSArray<NSString *> *)mentionList;
 
 /**
  *  结束输入状态
@@ -115,7 +116,7 @@ typedef NS_ENUM(NSUInteger, LCCKFunctionViewShowType){
  *  @param chatBar
  *  @param message 需要发送的文字信息
  */
-- (void)chatBar:(LCCKChatBar *)chatBar sendMessage:(NSString *)message;
+- (void)chatBar:(LCCKChatBar *)chatBar sendMessage:(NSString *)message mentionList:(NSArray<NSString *> *)mentionList;
 
 /*!
  *  发送语音信息

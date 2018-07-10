@@ -452,8 +452,13 @@ fromTimestamp     |    toDate   |                |  上次上拉刷新顶端，�
 
 - (void)sendMessage:(id)message
 {
+    [self sendMessage:message mentionList:@[]];
+}
+
+- (void)sendMessage:(id)message mentionList:(NSArray<NSString *> *)mentionList
+{
     __weak __typeof(&*self) wself = self;
-    [self sendMessage:message progressBlock:^(NSInteger percentDone) {
+    [self sendMessage:message mentionList:mentionList progressBlock:^(NSInteger percentDone) {
         [self.delegate messageSendStateChanged:LCCKMessageSendStateSending
                                   withProgress:percentDone/100.f
                                       forIndex:[self.dataArray indexOfObject:message]];
@@ -486,10 +491,11 @@ fromTimestamp     |    toDate   |                |  上次上拉刷新顶端，�
             progressBlock:(AVProgressBlock)progressBlock
                   success:(LCCKBooleanResultBlock)success
                    failed:(LCCKBooleanResultBlock)failed {
-    [self sendMessage:aMessage progressBlock:progressBlock success:success failed:failed];
+    [self sendMessage:aMessage mentionList:@[] progressBlock:progressBlock success:success failed:failed];
 }
 
 - (void)sendMessage:(id)aMessage
+        mentionList:(NSArray<NSString *> *)mentionList
       progressBlock:(AVProgressBlock)progressBlock
             success:(LCCKBooleanResultBlock)success
              failed:(LCCKBooleanResultBlock)failed {
@@ -531,6 +537,9 @@ fromTimestamp     |    toDate   |                |  上次上拉刷新顶端，�
     }
     [avimTypedMessage lcck_setObject:@([self.parentConversationViewController getConversationIfExists].lcck_type) forKey:LCCKCustomMessageConversationTypeKey];
     [avimTypedMessage setValue:[LCCKSessionService sharedInstance].clientId forKey:@"clientId"];//for LCCKSendMessageHookBlock
+    if (mentionList.count > 0) {
+        avimTypedMessage.mentionList = mentionList;
+    }
     [self.avimTypedMessage addObject:avimTypedMessage];
     [self preloadMessageToTableView:aMessage callback:^{
         if (!self.currentConversationId || self.currentConversationId.length == 0) {
