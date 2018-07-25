@@ -62,7 +62,8 @@
 //    else {
         groupPost.subTitle = @"未设置";
 //    }
-    LCCKSettingGroup *group2 = LCCKCreateSettingGroup(nil, nil, (@[groupName, groupQR, groupPost]));
+    LCCKSettingItem *groupManagement = LCCKCreateSettingItem(@"群管理");
+    LCCKSettingGroup *group2 = LCCKCreateSettingGroup(nil, nil, (@[groupName, groupQR, groupPost, groupManagement]));
     
     LCCKSettingItem *screen = LCCKCreateSettingItem(@"消息免打扰");
     screen.type = LCCKSettingItemTypeSwitch;
