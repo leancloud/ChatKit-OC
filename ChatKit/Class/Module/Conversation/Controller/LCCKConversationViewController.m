@@ -283,6 +283,11 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
 #pragma mark -
 #pragma mark - public Methods
 
+- (void)sendTextMessage:(NSString *)text
+{
+    [self sendTextMessage:text mentionList:@[]];
+}
+
 - (void)sendTextMessage:(NSString *)text mentionList:(NSArray<NSString *> *)mentionList
 {
     if ([text length] > 0 ) {
