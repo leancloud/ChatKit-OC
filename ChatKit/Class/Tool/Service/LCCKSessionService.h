@@ -27,6 +27,8 @@ FOUNDATION_EXTERN NSString *const LCCKSessionServiceErrorDemain;
  */
 @property (nonatomic, assign, readonly) BOOL connect;
 
+@property (nonatomic, copy) void (^ memberInfoChangedBlock)(AVIMConversation *, NSString *, NSString *, AVIMConversationMemberRole);
+
 - (void)reconnectForViewController:(UIViewController *)reconnectForViewController callback:(LCCKBooleanResultBlock)aCallback;
 
 @end

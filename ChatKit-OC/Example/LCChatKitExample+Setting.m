@@ -41,6 +41,7 @@ static NSString *const LCCKAPPKEY = @"ye24iIK6ys8IvaISMC4Bs5WK";
     [self lcck_setupConversation];
     // 其他各种设置
     [self lcck_setupOther];
+    [self lcck_memberInfoChanged];
 }
 
 - (void)lcck_setupConversationsList {
@@ -807,6 +808,21 @@ typedef void (^UITableViewRowActionHandler)(UITableViewRowAction *action, NSInde
 - (void)lcck_transpondMessage:(LCCKMessage *)message toConversationViewController:(LCCKConversationViewController *)conversationViewController
 {
     LCCKLog(@"消息转发");
+}
+
+// MARK: - Member Info Changed
+
+- (void)lcck_memberInfoChanged
+{
+    [[LCChatKit sharedInstance] setMemberInfoChangedBlock:^(AVIMConversation *conversation, NSString *byClientId, NSString *clientId, AVIMConversationMemberRole role) {
+        NSString *roleString = @"Member";
+        if (role == AVIMConversationMemberRoleOwner) {
+            roleString = @"Owner";
+        } else if (role == AVIMConversationMemberRoleManager) {
+            roleString = @"Manager";
+        }
+        LCCKLog(@"conversation id: %@, by client id: %@, client id: %@, role: %@", conversation.conversationId, byClientId, clientId, roleString);
+    }];
 }
 
 /**

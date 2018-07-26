@@ -59,6 +59,8 @@ typedef void (^LCCKForceReconnectSessionBlock)(NSError *error, BOOL granted, __k
  */
 - (void)setForceReconnectSessionBlock:(LCCKForceReconnectSessionBlock)forceReconnectSessionBlock;
 
+- (void)setMemberInfoChangedBlock:(void (^)(AVIMConversation *conversation, NSString *byClientId, NSString *clientId, AVIMConversationMemberRole role))block;
+
 @end
 
 #pragma mark - LCCKUserSystemService

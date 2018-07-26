@@ -68,6 +68,8 @@
 		9AD665CE1D2277920040A4E3 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A0B721F1CED6644004FDACC /* CoreTelephony.framework */; };
 		9AD665CF1D22779A0040A4E3 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A0B72211CED664D004FDACC /* CoreLocation.framework */; };
 		9B4A5D37CF8F4BD2C4DC27F7 /* libPods-ChatKit-OC.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 386378C3D567179BB0942772 /* libPods-ChatKit-OC.a */; };
+		D3A7463521071EF800212948 /* LCCKGroupConversationManagementViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D3A7463421071EF800212948 /* LCCKGroupConversationManagementViewController.m */; };
+		D3A7463821072F9300212948 /* LCCKGroupConversationMemberInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D3A7463721072F9300212948 /* LCCKGroupConversationMemberInfoViewController.m */; };
 		E7586C4F1D630681000C18B4 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E7586C4E1D630681000C18B4 /* CoreMotion.framework */; };
 /* End PBXBuildFile section */
 
@@ -209,6 +211,10 @@
 		9AC3A4DC1DF9C8BD00F3405F /* LCCKUserGroupItemCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCKUserGroupItemCell.m; sourceTree = "<group>"; };
 		9AC3A4E01DF9CE0300F3405F /* LCCKChatDetailHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKChatDetailHelper.h; sourceTree = "<group>"; };
 		9AC3A4E11DF9CE0300F3405F /* LCCKChatDetailHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCKChatDetailHelper.m; sourceTree = "<group>"; };
+		D3A7463321071EF800212948 /* LCCKGroupConversationManagementViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LCCKGroupConversationManagementViewController.h; sourceTree = "<group>"; };
+		D3A7463421071EF800212948 /* LCCKGroupConversationManagementViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LCCKGroupConversationManagementViewController.m; sourceTree = "<group>"; };
+		D3A7463621072F9300212948 /* LCCKGroupConversationMemberInfoViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LCCKGroupConversationMemberInfoViewController.h; sourceTree = "<group>"; };
+		D3A7463721072F9300212948 /* LCCKGroupConversationMemberInfoViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LCCKGroupConversationMemberInfoViewController.m; sourceTree = "<group>"; };
 		D3D1667D1FD4EBB90019FDFF /* ChatKit.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; name = ChatKit.podspec; path = ../ChatKit.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		E55D34EC8F162DB5443587B0 /* Pods-ChatKit-OC.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChatKit-OC.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ChatKit-OC/Pods-ChatKit-OC.debug.xcconfig"; sourceTree = "<group>"; };
 		E7586C4E1D630681000C18B4 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
@@ -585,7 +591,6 @@
 			children = (
 				9AC3A4941DF9BB6700F3405F /* SettingViewController */,
 				9AC3A48A1DF9B72B00F3405F /* Controller */,
-				9AC3A48B1DF9B72B00F3405F /* Model */,
 				9AC3A48C1DF9B72B00F3405F /* Other */,
 				9AC3A48D1DF9B72B00F3405F /* View */,
 			);
@@ -601,15 +606,12 @@
 				9AC3A4921DF9B7D500F3405F /* LCCKGroupConversationDetailViewController.m */,
 				9A55EB331E00FC5A0079EB65 /* LCCKProfileNameEditViewController.h */,
 				9A55EB341E00FC5A0079EB65 /* LCCKProfileNameEditViewController.m */,
+				D3A7463321071EF800212948 /* LCCKGroupConversationManagementViewController.h */,
+				D3A7463421071EF800212948 /* LCCKGroupConversationManagementViewController.m */,
+				D3A7463621072F9300212948 /* LCCKGroupConversationMemberInfoViewController.h */,
+				D3A7463721072F9300212948 /* LCCKGroupConversationMemberInfoViewController.m */,
 			);
 			path = Controller;
-			sourceTree = "<group>";
-		};
-		9AC3A48B1DF9B72B00F3405F /* Model */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Model;
 			sourceTree = "<group>";
 		};
 		9AC3A48C1DF9B72B00F3405F /* Other */ = {
@@ -955,6 +957,7 @@
 				9A562A371E03D52F00BB23DD /* LCCKSettingButtonCell.m in Sources */,
 				9AC3A4D41DF9C16A00F3405F /* NSDate+Utilities.m in Sources */,
 				9AC3A4CD1DF9C14500F3405F /* NSFileManager+LCCKExtension.m in Sources */,
+				D3A7463821072F9300212948 /* LCCKGroupConversationMemberInfoViewController.m in Sources */,
 				9AC3A4931DF9B7D500F3405F /* LCCKGroupConversationDetailViewController.m in Sources */,
 				9A2669C81D6DA89100B66545 /* LCCKInputViewPluginConversationBackground.m in Sources */,
 				9A53BE371D8BB13E00AAB118 /* RedpacketTakenMessageCell.m in Sources */,
@@ -974,6 +977,7 @@
 				9A53BE2C1D8BB13E00AAB118 /* AVIMTypedMessageRedPacketTaken.m in Sources */,
 				9A53BE2B1D8BB13E00AAB118 /* AVIMTypedMessageRedPacket.m in Sources */,
 				9A562A3A1E03D52F00BB23DD /* LCCKSettingGroup.m in Sources */,
+				D3A7463521071EF800212948 /* LCCKGroupConversationManagementViewController.m in Sources */,
 				9A53BE361D8BB13E00AAB118 /* RedpacketMessageCell.m in Sources */,
 				9A4730691CECAEC500AEB86F /* DEMOCustomAutoCompleteObject.m in Sources */,
 				9AC3A4B91DF9BEE600F3405F /* UIColor+LCCKExtension.m in Sources */,

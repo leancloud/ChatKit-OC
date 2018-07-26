@@ -159,6 +159,7 @@ NSString *const LCCKSessionServiceErrorDomain = @"LCCKSessionServiceErrorDomain"
 
 - (void)imClientResumed:(AVIMClient *)imClient {
     [self updateConnectStatus];
+    [NSNotificationCenter.defaultCenter postNotificationName:LCCKNotificationSessionResumed object:nil];
 }
 
 - (void)handleSingleSignOnError:(NSError *)aError callback:(LCCKBooleanResultBlock)aCallback {
@@ -342,6 +343,13 @@ NSString *const LCCKSessionServiceErrorDomain = @"LCCKSessionServiceErrorDomain"
     [[NSNotificationCenter defaultCenter] postNotificationName:LCCKNotificationConversationInvalided object:clientId];
     if ([[LCCKConversationService sharedInstance].currentConversationId isEqualToString:conversation.conversationId]) {
         [[NSNotificationCenter defaultCenter] postNotificationName:LCCKNotificationCurrentConversationInvalided object:clientId];
+    }
+}
+
+- (void)conversation:(AVIMConversation *)conversation didMemberInfoUpdateBy:(NSString *)byClientId memberId:(NSString *)memberId role:(AVIMConversationMemberRole)role
+{
+    if (self.memberInfoChangedBlock) {
+        self.memberInfoChangedBlock(conversation, byClientId, memberId, role);
     }
 }
 

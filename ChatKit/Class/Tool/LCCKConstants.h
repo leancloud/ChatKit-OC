@@ -70,6 +70,8 @@ static NSString *const LCCKBadgeTextForNumberGreaterThanLimit = @"···";
 /// @name Notification Name
 ///=============================================================================
 
+static NSString * const LCCKNotificationSessionResumed = @"LCCKNotificationSessionResumed";
+
 /**
  *  未读数改变了。通知去服务器同步 installation 的badge
  */
