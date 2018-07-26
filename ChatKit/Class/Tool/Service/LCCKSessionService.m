@@ -345,6 +345,13 @@ NSString *const LCCKSessionServiceErrorDomain = @"LCCKSessionServiceErrorDomain"
     }
 }
 
+- (void)conversation:(AVIMConversation *)conversation didMemberInfoUpdateBy:(NSString *)byClientId memberId:(NSString *)memberId role:(AVIMConversationMemberRole)role
+{
+    if (self.memberInfoChangedBlock) {
+        self.memberInfoChangedBlock(conversation, byClientId, memberId, role);
+    }
+}
+
 #pragma mark - receive message handle
 
 - (void)receiveMessage:(AVIMTypedMessage *)message conversation:(AVIMConversation *)conversation {

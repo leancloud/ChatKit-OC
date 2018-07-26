@@ -140,6 +140,11 @@
     self.sessionService.disableSingleSignOn = disableSingleSignOn;
 }
 
+- (void)setMemberInfoChangedBlock:(void (^)(AVIMConversation *conversation, NSString *byClientId, NSString *clientId, AVIMConversationMemberRole role))block
+{
+    self.sessionService.memberInfoChangedBlock = block;
+}
+
 #pragma mark - LCCKUserSystemService
 ///=============================================================================
 /// @name LCCKUserSystemService

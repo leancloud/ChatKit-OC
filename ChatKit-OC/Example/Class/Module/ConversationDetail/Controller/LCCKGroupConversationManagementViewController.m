@@ -7,6 +7,7 @@
 //
 
 #import "LCCKGroupConversationManagementViewController.h"
+#import "LCCKGroupConversationMemberInfoViewController.h"
 
 @interface LCCKGroupConversationManagementViewController ()
 
@@ -23,7 +24,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 3;
+    return 1;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -33,18 +34,17 @@
     if (indexPath.row == 0) {
         cell.textLabel.text = @"群成员信息";
     }
-    else if (indexPath.row == 1) {
-        cell.textLabel.text = @"拉黑";
-    }
-    else if (indexPath.row == 2) {
-        cell.textLabel.text = @"禁言";
-    }
     return cell;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:true];
+    if (indexPath.row == 0) {
+        LCCKGroupConversationMemberInfoViewController *vc = [[LCCKGroupConversationMemberInfoViewController alloc] initWithStyle:UITableViewStyleGrouped];
+        vc.conversation = self.conversation;
+        [self.navigationController pushViewController:vc animated:true];
+    }
 }
 
 @end
