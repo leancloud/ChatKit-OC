@@ -80,6 +80,7 @@
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(messageStatusChanged:) name:LCCKNotificationMessageRead object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(messageStatusChanged:) name:LCCKNotificationMessageDelivered object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(backgroundImageChanged:) name:LCCKNotificationConversationViewControllerBackgroundImageDidChanged object:nil];
+        [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(refresh) name:LCCKNotificationSessionResumed object:nil];
         __unsafe_unretained __typeof(self) weakSelf = self;
         [self cyl_executeAtDealloc:^{
             [[NSNotificationCenter defaultCenter] removeObserver:weakSelf];
@@ -284,8 +285,14 @@
  * 与`-addMessages`方法的区别在于，第一次加载历史消息时需要查找最后一条消息之余还有没有消息。
  * 时间戳必须传0，后续方法会根据是否为了0，来判断是否是第一次进对话页面。
  */
-- (void)addMessagesFirstTime:(NSArray *)messages {
-    [self appendMessagesToDataArrayTrailing:[self messagesWithLocalMessages:messages freshTimestamp:0]];
+- (void)addMessagesFirstTime:(NSArray *)messages
+{
+    messages = [self messagesWithLocalMessages:messages freshTimestamp:0];
+    if (messages.count > 0) {
+        LCCKLock();
+        self.dataArray = messages.mutableCopy;
+        LCCKUnlock();
+    }
 }
 
 /**
@@ -742,6 +749,11 @@ fromTimestamp     |    toDate   |                |  上次上拉刷新顶端，�
 
 - (NSString *)currentConversationId {
     return self.currentConversation.conversationId;
+}
+
+- (void)refresh
+{
+    [self loadMessagesFirstTimeWithCallback:^(BOOL succeeded, id object, NSError *error) {}];
 }
 
 - (void)loadMessagesFirstTimeWithCallback:(LCCKIdBoolResultBlock)callback {

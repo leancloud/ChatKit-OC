@@ -159,6 +159,7 @@ NSString *const LCCKSessionServiceErrorDomain = @"LCCKSessionServiceErrorDomain"
 
 - (void)imClientResumed:(AVIMClient *)imClient {
     [self updateConnectStatus];
+    [NSNotificationCenter.defaultCenter postNotificationName:LCCKNotificationSessionResumed object:nil];
 }
 
 - (void)handleSingleSignOnError:(NSError *)aError callback:(LCCKBooleanResultBlock)aCallback {
