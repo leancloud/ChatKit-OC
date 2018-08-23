@@ -77,6 +77,21 @@
     return self;
 }
 
+- (NSString *)photoPath
+{
+    if (self->_photoPath) {
+        NSRange range = [self->_photoPath rangeOfString:@"/Library/Documentation/files/"];
+        if (range.location == NSNotFound) {
+            return self->_photoPath;
+        } else {
+            NSString *subPath = [self->_photoPath substringFromIndex:range.location];
+            return [NSHomeDirectory() stringByAppendingPathComponent:subPath];
+        }
+    } else {
+        return nil;
+    }
+}
+
 - (NSString *)messageId {
     if (_serverMessageId) {
         return _serverMessageId;
