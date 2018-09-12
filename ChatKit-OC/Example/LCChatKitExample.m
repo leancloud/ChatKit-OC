@@ -21,10 +21,8 @@
 #import "LCCKContactManager.h"
 #import "LCCKExampleConstants.h"
 #import "LCCKLoginViewController.h"
-#import "LCCKVCardMessageCell.h"
-
 #import "LCChatKitExample+Setting.h"
-#import "RedpacketConfig.h"
+
 
 @interface LCChatKitExample ()
 
@@ -37,23 +35,6 @@
 @implementation LCChatKitExample
 
 #pragma mark - SDK Life Control
-
-+ (void)invokeThisMethodInDidFinishLaunching {
-    // 如果APP是在国外使用，开启北美节点
-    // 必须在 APPID 初始化之前调用，否则走的是中国节点。
-    // [AVOSCloud setServiceRegion:AVServiceRegionUS];
-    // 启用未读消息
-    [AVIMClient setUnreadNotificationEnabled:true];
-    [AVIMClient setTimeoutIntervalInSeconds:20];
-    //添加输入框底部插件，如需更换图标标题，可子类化，然后调用 `+registerSubclass`
-    [LCCKInputViewPluginTakePhoto registerSubclass];
-    [LCCKInputViewPluginPickImage registerSubclass];
-    [LCCKInputViewPluginLocation registerSubclass];
-}
-
-+ (void)invokeThisMethodInDidRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
-    [AVOSCloud handleRemoteNotificationsWithDeviceToken:deviceToken];
-}
 
 + (void)invokeThisMethodBeforeLogoutSuccess:(LCCKVoidBlock)success failed:(LCCKErrorBlock)failed {
     //    [AVOSCloudIM handleRemoteNotificationsWithDeviceToken:nil];
@@ -82,7 +63,6 @@
                                         callback:^(BOOL succeeded, NSError *error) {
                                             if (succeeded) {
                                                 [self saveLocalClientInfo:clientId];
-                                                [[RedpacketConfig sharedConfig] lcck_setting];
                                                 !success ?: success();
                                             } else {
                                                 [LCCKUtil showNotificationWithTitle:@"登陆失败"
@@ -114,14 +94,6 @@
     }
 }
 
-+ (void)invokeThisMethodInApplicationWillResignActive:(UIApplication *)application {
-    [[LCChatKit sharedInstance] syncBadge];
-}
-
-+ (void)invokeThisMethodInApplicationWillTerminate:(UIApplication *)application {
-    [[LCChatKit sharedInstance] syncBadge];
-}
-
 #pragma -
 #pragma mark - init Method
 
@@ -130,8 +102,6 @@
  */
 - (void)exampleInit {
     [self lcck_setting];
-    [[RedpacketConfig sharedConfig] lcck_setting];
-
 }
 
 #pragma -
