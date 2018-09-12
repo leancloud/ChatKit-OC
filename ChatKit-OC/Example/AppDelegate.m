@@ -29,6 +29,10 @@
 #endif
 @end
 
+#warning TODO: CHANGE TO YOUR OWN AppId and AppKey
+static NSString *const LCCKAPPID = @"dYRQ8YfHRiILshUnfFJu2eQM-gzGzoHsz";
+static NSString *const LCCKAPPKEY = @"ye24iIK6ys8IvaISMC4Bs5WK";
+
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
@@ -52,6 +56,7 @@
     // 如果APP是在国外使用，开启北美节点
     // 必须在 APPID 初始化之前调用，否则走的是中国节点。
     // [AVOSCloud setServiceRegion:AVServiceRegionUS];
+    [LCChatKit setAppId:LCCKAPPID appKey:LCCKAPPKEY];
     // 启用未读消息
     [AVIMClient setUnreadNotificationEnabled:true];
     [AVIMClient setTimeoutIntervalInSeconds:20];
