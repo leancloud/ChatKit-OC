@@ -2,7 +2,7 @@
 //  LCChatKit.m
 //  LeanCloudChatKit-iOS
 //
-//  v0.8.5 Created by ElonChan (wechat:chenyilong1010) on 16/2/22.
+//  v0.8.5 Created by ElonChan  on 16/2/22.
 //  Copyright © 2016年 LeanCloud. All rights reserved.
 //
 
@@ -43,6 +43,7 @@
 @synthesize loadLatestMessagesHandler = _loadLatestMessagesHandler;
 @synthesize disableSingleSignOn = _disableSingleSignOn;
 @synthesize filterMessagesBlock = _filterMessagesBlock;
+@synthesize sendMessageHookBlock = _sendMessageHookBlock;
 
 #pragma mark -
 
@@ -137,6 +138,11 @@
 
 - (void)setDisableSingleSignOn:(BOOL)disableSingleSignOn {
     self.sessionService.disableSingleSignOn = disableSingleSignOn;
+}
+
+- (void)setMemberInfoChangedBlock:(void (^)(AVIMConversation *conversation, NSString *byClientId, NSString *clientId, AVIMConversationMemberRole role))block
+{
+    self.sessionService.memberInfoChangedBlock = block;
 }
 
 #pragma mark - LCCKUserSystemService
@@ -302,12 +308,12 @@
     [self.conversationService createConversationWithMembers:members type:type unique:unique callback:callback];
 }
 
-- (void)fecthConversationWithConversationId:(NSString *)conversationId callback:(AVIMConversationResultBlock)callback {
-    [self.conversationService fecthConversationWithConversationId:conversationId callback:callback];
+- (void)fetchConversationWithConversationId:(NSString *)conversationId callback:(AVIMConversationResultBlock)callback {
+    [self.conversationService fetchConversationWithConversationId:conversationId callback:callback];
 }
 
-- (void)fecthConversationWithPeerId:(NSString *)peerId callback:(AVIMConversationResultBlock)callback {
-    [self.conversationService fecthConversationWithPeerId:peerId callback:callback];
+- (void)fetchConversationWithPeerId:(NSString *)peerId callback:(AVIMConversationResultBlock)callback {
+    [self.conversationService fetchConversationWithPeerId:peerId callback:callback];
 }
 
 - (void)didReceiveRemoteNotification:(NSDictionary *)userInfo {

@@ -16,7 +16,18 @@
 
 @implementation AVIMMessage (LCCKExtension)
 
+- (BOOL)lcck_isValidMessage {
+    id messageToCheck = (id)self;
+    if (!messageToCheck || messageToCheck == [NSNull null]) {
+        return NO;
+    }
+    return YES;
+}
+
 - (AVIMTypedMessage *)lcck_getValidTypedMessage {
+    if (!self.lcck_isValidMessage) {
+        return nil;
+    }
     if ([self isKindOfClass:[AVIMTypedMessage class]]) {
         return (AVIMTypedMessage *)self;
     }

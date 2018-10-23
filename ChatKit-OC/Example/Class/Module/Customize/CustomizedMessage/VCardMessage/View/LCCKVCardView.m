@@ -2,17 +2,11 @@
 //  LCCKVCardView.m
 //  ChatKit-OC
 //
-//  v0.8.5 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/8/15.
-//  Copyright © 2016年 ElonChan (wechat:chenyilong1010). All rights reserved.
+//  v0.8.5 Created by ElonChan on 16/8/15.
+//  Copyright © 2016年 ElonChan . All rights reserved.
 //
 
 #import "LCCKVCardView.h"
-#if __has_include(<SDWebImage/UIImageView+WebCache.h>)
-#import <SDWebImage/UIImageView+WebCache.h>
-#else
-#import "UIImageView+WebCache.h"
-#endif
-
 #if __has_include(<ChatKit/LCChatKit.h>)
 #import <ChatKit/LCChatKit.h>
 #else
@@ -35,6 +29,7 @@
 }
 
 - (void)awakeFromNib {
+    [super awakeFromNib];
     [self setup];
 }
 

@@ -2,7 +2,7 @@
 //  LCCKBaseTableViewController.h
 //  LeanCloudChatKit-iOS
 //
-//  v0.8.5 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/3/9.
+//  v0.8.5 Created by ElonChan on 16/3/9.
 //  Copyright © 2016年 LeanCloud. All rights reserved.
 //
 
@@ -51,6 +51,17 @@
         tableView.dataSource = self;
         tableView.tableFooterView = [[UIView alloc] init];
         tableView.keyboardDismissMode = UIScrollViewKeyboardDismissModeOnDrag;
+        
+        /*
+         in iOS 11, estimating height is open in default.
+         if not close, the UITableView's `estimating height` will conflict with `FDTemplateLayoutCell`.
+         */
+        ///
+        tableView.estimatedRowHeight = 0;
+        tableView.estimatedSectionFooterHeight = 0;
+        tableView.estimatedSectionHeaderHeight = 0;
+        ///
+        
         [self.view addSubview:_tableView = tableView];
     }
     return _tableView;

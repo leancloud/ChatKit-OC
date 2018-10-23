@@ -2,7 +2,7 @@
 //  LCCKChatMessageCell.m
 //  LCCKChatExample
 //
-//  v0.8.5 Created by ElonChan (微信向我报BUG:chenyilong1010) ( https://github.com/leancloud/ChatKit-OC ) on 15/11/13.
+//  v0.8.5 Created by ElonChan ( https://github.com/leancloud/ChatKit-OC ) on 15/11/13.
 //  Copyright © 2015年 https://LeanCloud.cn . All rights reserved.
 //
 
@@ -463,7 +463,8 @@ static CGFloat const LCCK_MSG_CELL_NICKNAME_FONT_SIZE = 12;
     return LCCKMessageOwnerTypeUnknown;
 }
 
-- (void)handleLongPress:(UILongPressGestureRecognizer *)longPressGes {
+- (void)handleLongPress:(UILongPressGestureRecognizer *)longPressGes
+{
     if (longPressGes.state == UIGestureRecognizerStateBegan) {
         CGPoint longPressPoint = [longPressGes locationInView:self.contentView];
         if (!CGRectContainsPoint(self.messageContentView.frame, longPressPoint)) {
@@ -480,22 +481,20 @@ static CGFloat const LCCK_MSG_CELL_NICKNAME_FONT_SIZE = 12;
         dispatch_after(when, dispatch_get_main_queue(), ^{
             [self becomeFirstResponder];
             LCCKLongPressMessageBlock longPressMessageBlock = [LCChatKit sharedInstance].longPressMessageBlock;
+            NSDictionary *userInfo = @{ LCCKLongPressMessageUserInfoKeyFromController: self.delegate,
+                                        LCCKLongPressMessageUserInfoKeyFromView: self.tableView,
+                                        LCCKLongPressMessageUserInfoKeyMessageOwner: @(self.messageOwner),
+                                        LCCKLongPressMessageUserInfoKeyMessageCell: self };
             NSArray *menuItems = [NSArray array];
-            NSDictionary *userInfo = @{
-                                       LCCKLongPressMessageUserInfoKeyFromController : self.delegate,
-                                       LCCKLongPressMessageUserInfoKeyFromView : self.tableView,
-                                       };
             if (longPressMessageBlock) {
                 menuItems = longPressMessageBlock(self.message, userInfo);
             } else {
-                LCCKMenuItem *copyItem = [[LCCKMenuItem alloc] initWithTitle:LCCKLocalizedStrings(@"copy")
-                                                                       block:^{
-                                                                           UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
-                                                                           [pasteboard setString:[self.message text]];
-                                                                       }];
-                //TODO:添加“转发”
+                LCCKMenuItem *copyItem = [[LCCKMenuItem alloc] initWithTitle:LCCKLocalizedStrings(@"copy") block:^{
+                    UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
+                    [pasteboard setString:[self.message text]];
+                }];
                 if (self.mediaType == kAVIMMessageMediaTypeText) {
-                    menuItems = @[ copyItem ];
+                    menuItems = @[copyItem];
                 }
             }
             UIMenuController *menuController = [UIMenuController sharedMenuController];
@@ -504,10 +503,7 @@ static CGFloat const LCCK_MSG_CELL_NICKNAME_FONT_SIZE = 12;
             UITableView *tableView = self.tableView;
             CGRect targetRect = [self convertRect:self.messageContentView.frame toView:tableView];
             [menuController setTargetRect:targetRect inView:tableView];
-            [[NSNotificationCenter defaultCenter] addObserver:self
-                                                     selector:@selector(handleMenuWillShowNotification:)
-                                                         name:UIMenuControllerWillShowMenuNotification
-                                                       object:nil];
+            [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleMenuWillShowNotification:) name:UIMenuControllerWillShowMenuNotification object:nil];
             [menuController setMenuVisible:YES animated:YES];
         });
     }
@@ -548,5 +544,22 @@ static CGFloat const LCCK_MSG_CELL_NICKNAME_FONT_SIZE = 12;
     _conversationViewSenderNameTextColor = [[LCCKSettingService sharedInstance] defaultThemeColorForKey:@"ConversationView-SenderName-TextColor"];
     return _conversationViewSenderNameTextColor;
 }
+
+- (UIColor *)conversationViewMessageRightTextColor {
+    if (_conversationViewMessageRightTextColor) {
+        return _conversationViewMessageRightTextColor;
+    }
+    _conversationViewMessageRightTextColor = [[LCCKSettingService sharedInstance] defaultThemeColorForKey:@"ConversationView-Message-Right-TextColor"];
+    return _conversationViewMessageRightTextColor;
+}
+
+- (UIColor *)conversationViewMessageLeftTextColor {
+    if (_conversationViewMessageLeftTextColor) {
+        return _conversationViewMessageLeftTextColor;
+    }
+    _conversationViewMessageLeftTextColor = [[LCCKSettingService sharedInstance] defaultThemeColorForKey:@"ConversationView-Message-Left-TextColor"];
+    return _conversationViewMessageLeftTextColor;
+}
+
 @end
 

@@ -2,7 +2,7 @@
 //  LCCKSettingService.m
 //  LeanCloudChatKit-iOS
 //
-//  v0.8.5 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/2/23.
+//  v0.8.5 Created by ElonChan on 16/2/23.
 //  Copyright © 2016年 LeanCloud. All rights reserved.
 //
 
@@ -39,7 +39,9 @@ static BOOL LCCKAllLogsEnabled;
 }
 
 + (NSString *)ChatKitVersion {
-    return @"v0.8.5";
+    NSString *v = [NSBundle.mainBundle.infoDictionary objectForKey:@"CFBundleShortVersionString"];
+    NSString *version = [NSString stringWithFormat:@"v%@", v];
+    return version;
 }
 
 - (NSString *)tmpPath {

@@ -2,7 +2,7 @@
 //  AppDelegate.m
 //  LeanCloudChatKit-iOS
 //
-//  v0.8.5 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/2/2.
+//  v0.8.5 Created by ElonChan on 16/2/2.
 //  Copyright © 2016年 LeanCloud. All rights reserved.
 //
 
@@ -112,11 +112,14 @@
         [uncenter setDelegate:self];
         //iOS 10 使用以下方法注册，才能得到授权
         [uncenter requestAuthorizationWithOptions:(UNAuthorizationOptionAlert+UNAuthorizationOptionBadge+UNAuthorizationOptionSound)
-                                completionHandler:^(BOOL granted, NSError * _Nullable error) {
-                                    [[UIApplication sharedApplication] registerForRemoteNotifications];
-                                    //TODO:授权状态改变
-                                    NSLog(@"%@" , granted ? @"授权成功" : @"授权失败");
-                                }];
+                                completionHandler:^(BOOL granted, NSError * _Nullable error)
+         {
+             dispatch_async(dispatch_get_main_queue(), ^{
+                 [[UIApplication sharedApplication] registerForRemoteNotifications];
+             });
+             //TODO:授权状态改变
+             NSLog(@"%@" , granted ? @"授权成功" : @"授权失败");
+         }];
         // 获取当前的通知授权状态, UNNotificationSettings
         [uncenter getNotificationSettingsWithCompletionHandler:^(UNNotificationSettings * _Nonnull settings) {
             NSLog(@"%s\nline:%@\n-----\n%@\n\n", __func__, @(__LINE__), settings);
@@ -190,7 +193,8 @@
  */
 - (void)userNotificationCenter:(UNUserNotificationCenter *)center
 didReceiveNotificationResponse:(UNNotificationResponse *)response
-         withCompletionHandler:(void (^)())completionHandler {
+         withCompletionHandler:(void (^)(void))completionHandler
+{
     NSDictionary *userInfo = response.notification.request.content.userInfo;
     if([response.notification.request.trigger isKindOfClass:[UNPushNotificationTrigger class]]) {
         //TODO:处理远程推送内容

@@ -2,8 +2,8 @@
 //  AVIMConversation+LCCKExtension.h
 //  LeanCloudChatKit-iOS
 //
-//  v0.8.5 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/3/11.
-//  Copyright © 2016年 ElonChan (wechat:chenyilong1010). All rights reserved.
+//  v0.8.5 Created by ElonChan on 16/3/11.
+//  Copyright © 2016年 ElonChan . All rights reserved.
 //
 #import <AVOSCloudIM/AVIMConversation.h>
 #import "LCCKConversationService.h"
@@ -15,12 +15,13 @@
 /**
  *  最后一条消息。通过 SDK 的消息缓存找到的
  */
-@property (nonatomic, strong) AVIMTypedMessage *lcck_lastMessage;
+@property (nonatomic, strong, readonly) AVIMTypedMessage *lcck_lastMessage;
+@property (nonatomic, strong, readonly) NSDate *lcck_lastMessageAt;
 
 /**
  *  未读消息数，保存在了数据库。收消息的时候，更新数据库
  */
-@property (nonatomic, assign) NSInteger lcck_unreadCount;
+@property (nonatomic, assign, readonly) NSInteger lcck_unreadCount;
 
 /*!
  * 如果未读消息数未超出100，显示数字，否则显示省略号
@@ -31,7 +32,7 @@
  *  是否有人提到了你，配合 @ 功能。不能看最后一条消息。
  *  因为可能倒数第二条消息提到了你，所以维护一个标记。
  */
-@property (nonatomic, assign) BOOL lcck_mentioned;
+@property (nonatomic, assign, readonly) BOOL lcck_mentioned;
 
 /*!
  * 草稿
@@ -59,10 +60,6 @@
  *  对话的标题。如 兴趣群(30)
  */
 - (NSString *)lcck_title;
-
-- (void)lcck_setObject:(id)object forKey:(NSString *)key callback:(LCCKBooleanResultBlock)callback;
-
-- (void)lcck_removeObjectForKey:(NSString *)key callback:(LCCKBooleanResultBlock)callback;
 
 - (void)lcck_setConversationWithMute:(BOOL)mute callback:(LCCKBooleanResultBlock)callback;
 - (BOOL)lcck_isCreaterForCurrentUser;

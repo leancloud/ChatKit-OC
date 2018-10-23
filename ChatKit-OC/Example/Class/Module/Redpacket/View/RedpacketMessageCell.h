@@ -6,8 +6,11 @@
 //  Copyright © 2016年 云帐户. All rights reserved.
 //
 
-
-#import "LCCKChatMessageCell.h"
+#if __has_include(<ChatKit/LCChatKit.h>)
+#import <ChatKit/LCChatKit.h>
+#else
+#import "LCChatKit.h"
+#endif
 
 @interface RedpacketMessageCell : LCCKChatMessageCell<LCCKChatMessageCellSubclassing>
 

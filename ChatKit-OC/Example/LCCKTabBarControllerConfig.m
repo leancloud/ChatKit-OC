@@ -2,7 +2,7 @@
 //  LCChatKitExample.m
 //  LeanCloudChatKit-iOS
 //
-//  v0.8.5 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/2/24.
+//  v0.8.5 Created by ElonChan on 16/2/24.
 //  Copyright © 2016年 LeanCloud. All rights reserved.
 //
 
@@ -218,7 +218,7 @@
 
 - (void)showPopOverMenu:(UIBarButtonItem *)sender event:(UIEvent *)event {
     [FTPopOverMenu showFromEvent:event
-                        withMenu:@[ @"创建群聊" ]
+                   withMenuArray:@[ @"创建群聊" ]
                        doneBlock:^(NSInteger selectedIndex) {
                            if (selectedIndex == 0) {
                                [self createGroupConversation:sender];

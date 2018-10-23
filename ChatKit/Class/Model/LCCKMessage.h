@@ -2,7 +2,7 @@
 //  LCCKMessage.h
 //  LeanCloudChatKit-iOS
 //
-//  v0.8.5 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/3/21.
+//  v0.8.5 Created by ElonChan on 16/3/21.
 //  Copyright © 2016年 LeanCloud. All rights reserved.
 //
 
@@ -39,7 +39,7 @@
 @property (nonatomic, assign, readonly) AVIMMessageMediaType mediaType;
 //@property (nonatomic, assign) LCCKConversationType messageGroupType;
 @property (nonatomic, assign, readonly) LCCKMessageReadState messageReadState;
-@property (nonatomic, copy, readonly) NSString *serverMessageId;
+@property (nonatomic, copy, readwrite) NSString *serverMessageId;
 @property (nonatomic, assign) NSTimeInterval timestamp;
 
 /*!

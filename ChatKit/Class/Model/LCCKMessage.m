@@ -2,7 +2,7 @@
 //  LCCKMessage.m
 //  LeanCloudChatKit-iOS
 //
-//  v0.8.5 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/3/21.
+//  v0.8.5 Created by ElonChan on 16/3/21.
 //  Copyright © 2016年 LeanCloud. All rights reserved.
 //
 
@@ -75,6 +75,21 @@
         _mediaType = kAVIMMessageMediaTypeText;
     }
     return self;
+}
+
+- (NSString *)photoPath
+{
+    if (self->_photoPath) {
+        NSRange range = [self->_photoPath rangeOfString:@"/Library/Documentation/files/"];
+        if (range.location == NSNotFound) {
+            return self->_photoPath;
+        } else {
+            NSString *subPath = [self->_photoPath substringFromIndex:range.location];
+            return [NSHomeDirectory() stringByAppendingPathComponent:subPath];
+        }
+    } else {
+        return nil;
+    }
 }
 
 - (NSString *)messageId {
@@ -301,9 +316,9 @@
             NSString *duration = [NSString stringWithFormat:@"%.0f", audioMsg.duration];
             NSString *voicePath;
             NSFileManager *fileManager = [NSFileManager defaultManager];
-            NSString *pathForFile = audioMsg.file.localPath;
+            NSString *pathForFile = audioMsg.file.persistentCachePath;
             if ([fileManager fileExistsAtPath:pathForFile]){
-                voicePath = audioMsg.file.localPath;
+                voicePath = audioMsg.file.persistentCachePath;
             } else {
                 voicePath = audioMsg.file.url;
             }
@@ -322,26 +337,23 @@
         }
         case kAVIMMessageMediaTypeImage: {
             AVIMImageMessage *imageMsg = (AVIMImageMessage *)message;
-            NSString *pathForFile = imageMsg.file.localPath;
+            NSString *pathForFile = imageMsg.file.persistentCachePath;
             NSFileManager *fileManager = [NSFileManager defaultManager];
             NSString *imagePath;
             if ([fileManager fileExistsAtPath:pathForFile]){
-                imagePath = imageMsg.file.localPath;
+                imagePath = imageMsg.file.persistentCachePath;
             }
             lcckMessage = [[LCCKMessage alloc] initWithPhoto:nil thumbnailPhoto:nil photoPath:imagePath thumbnailURL:nil originPhotoURL:[NSURL URLWithString:imageMsg.file.url] senderId:senderId sender:sender timestamp:time serverMessageId:serverMessageId];
             break;
         }
-            
-            //#import "AVIMEmotionMessage.h"
-            //        case kAVIMMessageMediaTypeEmotion: {
-            //            AVIMEmotionMessage *emotionMsg = (AVIMEmotionMessage *)message;
-            //            NSString *path = [[NSBundle mainBundle] pathForResource:emotionMsg.emotionPath ofType:@"gif"];
-            //            lcckMessage = [[LCCKMessage alloc] initWithEmotionPath:path sender:sender timestamp:time];
-            //            break;
-            //        }
         case kAVIMMessageMediaTypeVideo: {
-            //TODO:
-            break;
+            return nil;
+        }
+        case kAVIMMessageMediaTypeFile: {
+            return nil;
+        }
+        case kAVIMMessageMediaTypeRecalled: {
+            return nil;
         }
         default: {
             NSString *degradeContent;

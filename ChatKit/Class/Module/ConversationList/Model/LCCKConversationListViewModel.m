@@ -2,7 +2,7 @@
 //  LCCKConversationListViewModel.m
 //  LeanCloudChatKit-iOS
 //
-//  v0.8.5 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/3/22.
+//  v0.8.5 Created by ElonChan on 16/3/22.
 //  Copyright © 2016年 LeanCloud. All rights reserved.
 //
 
@@ -58,6 +58,7 @@
     }
     // 当在其它 Tab 的时候，收到消息, badge 增加，所以需要一直监听
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refresh) name:LCCKNotificationMessageReceived object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refresh) name:LCCKNotificationMessageUpdated object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refresh) name:LCCKNotificationUnreadsUpdated object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refresh) name:LCCKNotificationConversationListDataSourceUpdated object:nil];
     __unsafe_unretained __typeof(self) weakSelf = self;
@@ -111,7 +112,7 @@
     cell.nameLabel.text = conversation.lcck_displayName;
     if (conversation.lcck_lastMessage) {
         cell.messageTextLabel.attributedText = [LCCKLastMessageTypeManager attributedStringWithMessage:conversation.lcck_lastMessage conversation:conversation userName:displayName];
-        cell.timestampLabel.text = [[NSDate dateWithTimeIntervalSince1970:conversation.lcck_lastMessage.sendTimestamp / 1000] lcck_timeAgoSinceNow];
+        cell.timestampLabel.text = [conversation.lcck_lastMessageAt lcck_timeAgoSinceNow];
     }
     if (conversation.lcck_unreadCount > 0) {
         if (conversation.muted) {
@@ -120,10 +121,27 @@
             cell.badgeView.badgeText = conversation.lcck_badgeText;
         }
     }
+
+    
     LCCKConfigureCellBlock configureCellBlock = [[LCCKConversationListService sharedInstance] configureCellBlock];
-    if (configureCellBlock) {
+    
+    BOOL impDelegate = [self.conversationListViewController.delegate respondsToSelector:@selector(conversation:cell:tableView:cellForRowAtIndexPath:)];
+
+    // Delegate 与 Block 两种方式不能同时实现
+    if (configureCellBlock && impDelegate) {
+        [NSException raise:NSInternalInconsistencyException format:@"Block or Delegate choose one."];
+    }
+    // 调用 Delegate
+    else if (impDelegate){
+        
+        [self.conversationListViewController.delegate conversation:conversation cell:cell tableView:tableView cellForRowAtIndexPath:indexPath];
+
+    }
+    // 调用 Block
+    else if (configureCellBlock){
         configureCellBlock(cell, tableView, indexPath, conversation);
     }
+    
     return cell;
 }
 
@@ -196,9 +214,25 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     AVIMConversation *conversation = [self.dataArray objectAtIndex:indexPath.row];
-    [conversation markAsReadInBackground];
-//    [self refreshIfNeeded];
-    ![LCCKConversationListService sharedInstance].didSelectConversationsListCellBlock ?: [LCCKConversationListService sharedInstance].didSelectConversationsListCellBlock(indexPath, conversation, self.conversationListViewController);
+    
+    id didSelectBlock = [LCCKConversationListService sharedInstance].didSelectConversationsListCellBlock;
+    BOOL impDelegate = [self.conversationListViewController.delegate respondsToSelector:@selector(conversation:tableView:didSelectRowAtIndexPath:)];
+    
+    // Delegate 与 Block 两种方式不能同时实现
+    if (didSelectBlock && impDelegate) {
+        [NSException raise:NSInternalInconsistencyException format:@"Block or Delegate choose one."];
+        
+    }
+    // 调用 Delegate
+    else if (impDelegate){
+        
+        [self.conversationListViewController.delegate conversation:conversation tableView:tableView didSelectRowAtIndexPath:indexPath];
+        
+    }
+    // 调用 Block
+    else if (didSelectBlock){
+        !didSelectBlock ?: [LCCKConversationListService sharedInstance].didSelectConversationsListCellBlock(indexPath, conversation, self.conversationListViewController);
+    }
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {

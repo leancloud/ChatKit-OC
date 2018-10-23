@@ -2,13 +2,13 @@
 //  LCCKContactListViewController.h
 //  LeanCloudChatKit-iOS
 //
-//  v0.8.5 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/2/22.
+//  v0.8.5 Created by ElonChan on 16/2/22.
 //  Copyright © 2016年 LeanCloud. All rights reserved.
 //
 
 #import "NSFileManager+LCCKExtension.h"
 
-@implementation NSFileManager (LCCKExtension)
+@implementation NSFileManager (LCCKExtension_)
 
 + (NSString *)lcck_pathUserSettingImage:(NSString *)imageName userId:(NSString *)userId {
     NSString *path = [NSString stringWithFormat:@"%@/User/%@/Setting/Images/", [NSFileManager documentsPath], userId];

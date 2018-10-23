@@ -2,7 +2,7 @@
 //  LCCKAVAudioPlayer.m
 //  LCCKChatExample
 //
-//  v0.8.5 Created by ElonChan (微信向我报BUG:chenyilong1010) ( https://github.com/leancloud/ChatKit-OC ) on 15/11/18.
+//  v0.8.5 Created by ElonChan ( https://github.com/leancloud/ChatKit-OC ) on 15/11/18.
 //  Copyright © 2015年 https://LeanCloud.cn . All rights reserved.
 //
 
@@ -39,8 +39,9 @@ NSString *const kLCCKAudioDataKey;
 
 + (void)initialize {
     //配置播放器配置
-    [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error: nil];
-    [[AVAudioSession sharedInstance] setDelegate:self];
+//    [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error: nil];
+    //FIXME: Delegate is deprecated
+//    [[AVAudioSession sharedInstance] setDelegate:self];
 }
 
 + (instancetype)sharePlayer{

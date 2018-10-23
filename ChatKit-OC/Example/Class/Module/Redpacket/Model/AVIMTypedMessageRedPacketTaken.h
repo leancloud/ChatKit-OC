@@ -5,10 +5,12 @@
 //  Created by YANG HONGBO on 2016-5-3.
 //  Copyright © 2016年 云帐户. All rights reserved.
 //
+#if __has_include(<ChatKit/LCChatKit.h>)
+#import <ChatKit/LCChatKit.h>
+#else
+#import "LCChatKit.h"
+#endif
 
-#import <AVOSCloudIM/AVIMTypedMessage.h>
-#import "AVIMTypedMessage+LCCKExtension.h"
-#import "LCCKConstants.h"
 #import "RedpacketMessageModel.h"
 
 @interface AVIMTypedMessageRedPacketTaken : AVIMTypedMessage<AVIMTypedMessageSubclassing>

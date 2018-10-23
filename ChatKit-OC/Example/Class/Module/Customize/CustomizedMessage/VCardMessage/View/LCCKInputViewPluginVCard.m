@@ -2,15 +2,18 @@
 //  LCCKInputViewPluginVCard.m
 //  ChatKit-OC
 //
-//  v0.8.5 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/8/12.
+//  v0.8.5 Created by ElonChan on 16/8/12.
 //  Copyright © 2016年 LeanCloud. All rights reserved.
 //
 
 #import "LCCKInputViewPluginVCard.h"
 #import "LCCKVCardMessage.h"
-#import "LCCKContactListViewController.h"
 #import "LCCKContactManager.h"
-
+#if __has_include(<ChatKit/LCChatKit.h>)
+#import <ChatKit/LCChatKit.h>
+#else
+#import "LCChatKit.h"
+#endif
 @implementation LCCKInputViewPluginVCard
 @synthesize inputViewRef = _inputViewRef;
 @synthesize sendCustomMessageHandler = _sendCustomMessageHandler;

@@ -2,7 +2,7 @@
 //  LCCKConversationViewController.m
 //  LCCKChatBarExample
 //
-//  v0.8.5 Created by ElonChan (微信向我报BUG:chenyilong1010) ( https://github.com/leancloud/ChatKit-OC ) on 15/11/20.
+//  v0.8.5 Created by ElonChan ( https://github.com/leancloud/ChatKit-OC ) on 15/11/20.
 //  Copyright © 2015年 https://LeanCloud.cn . All rights reserved.
 //
 
@@ -116,7 +116,7 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
     do {
         /* If object is clean, ignore save request. */
         if (_peerId) {
-            [[LCCKConversationService sharedInstance] fecthConversationWithPeerId:self.peerId callback:^(AVIMConversation *conversation, NSError *error) {
+            [[LCCKConversationService sharedInstance] fetchConversationWithPeerId:self.peerId callback:^(AVIMConversation *conversation, NSError *error) {
                 //SDK没有好友观念，任何两个ID均可会话，请APP层自行处理好友关系。
                 [self refreshConversation:conversation isJoined:YES error:error];
             }];
@@ -124,7 +124,7 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
         }
         /* If object is clean, ignore save request. */
         if (_conversationId) {
-            [[LCCKConversationService sharedInstance] fecthConversationWithConversationId:self.conversationId callback:^(AVIMConversation *conversation, NSError *error) {
+            [[LCCKConversationService sharedInstance] fetchConversationWithConversationId:self.conversationId callback:^(AVIMConversation *conversation, NSError *error) {
                 if (error) {
                     //如果用户已经已经被踢出群，此时依然能拿到 Conversation 对象，不会报 4401 错误，需要单独判断。即使后期服务端在这种情况下返回error，这里依然能正确处理。
                     [self refreshConversation:conversation isJoined:NO error:error];
@@ -222,7 +222,7 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
         self.user = user;
     }];
     [self.chatViewModel setDefaultBackgroundImage];
-    self.navigationItem.title = LCCKLocalizedStrings(@"Chat");//@"聊天";
+
     !self.viewDidLoadBlock ?: self.viewDidLoadBlock(self);
 }
 
@@ -236,6 +236,9 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
     [super viewDidAppear:animated];
     [self.chatBar open];
     [self saveCurrentConversationInfoIfExists];
+    
+    [self setupNavigationItemTitleWithConversation:self.conversation];
+    
     !self.viewDidAppearBlock ?: self.viewDidAppearBlock(self, animated);
 }
 
@@ -262,8 +265,13 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
 - (void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
     if (_conversation && (self.chatViewModel.avimTypedMessage.count > 0)) {
-        [[LCCKConversationService sharedInstance] updateConversationAsRead];
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
+            [[LCCKConversationService sharedInstance] updateConversationAsReadWithLastMessage:_conversation.lcck_lastMessage];
+        });
     }
+    
+    self.navigationItem.titleView = nil;
+    
     !self.viewDidDisappearBlock ?: self.viewDidDisappearBlock(self, animated);
 }
 
@@ -275,7 +283,13 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
 #pragma mark -
 #pragma mark - public Methods
 
-- (void)sendTextMessage:(NSString *)text {
+- (void)sendTextMessage:(NSString *)text
+{
+    [self sendTextMessage:text mentionList:@[]];
+}
+
+- (void)sendTextMessage:(NSString *)text mentionList:(NSArray<NSString *> *)mentionList
+{
     if ([text length] > 0 ) {
         LCCKMessage *lcckMessage = [[LCCKMessage alloc] initWithText:text
                                                             senderId:self.userId
@@ -283,7 +297,7 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
                                                            timestamp:LCCK_CURRENT_TIMESTAMP
                                                      serverMessageId:nil];
         [self makeSureSendValidMessage:lcckMessage afterFetchedConversationShouldWithAssert:NO];
-        [self.chatViewModel sendMessage:lcckMessage];
+        [self.chatViewModel sendMessage:lcckMessage mentionList:mentionList];
     }
 }
 
@@ -678,8 +692,8 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
 
 #pragma mark - LCCKChatBarDelegate
 
-- (void)chatBar:(LCCKChatBar *)chatBar sendMessage:(NSString *)message {
-    [self sendTextMessage:message];
+- (void)chatBar:(LCCKChatBar *)chatBar sendMessage:(NSString *)message mentionList:(NSArray<NSString *> *)mentionList {
+    [self sendTextMessage:message mentionList:mentionList];
 }
 
 - (void)chatBar:(LCCKChatBar *)chatBar sendVoice:(NSString *)voiceFileName seconds:(NSTimeInterval)seconds{
@@ -713,38 +727,14 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
             [self.chatBar open];
         }];
         if (peerId.length > 0) {
-            NSArray *peerNames = [[LCChatKit sharedInstance] getCachedProfilesIfExists:@[peerId] error:nil];
-            NSString *peerName;
-            @try {
-                id<LCCKUserDelegate> user = peerNames[0];
-                peerName = user.name ?: user.clientId;
-            } @catch (NSException *exception) {
-                peerName = peerId;
-            }
-            peerName = [NSString stringWithFormat:@"@%@ ", peerName];
-            [self.chatBar appendString:peerName];
+            [self.chatBar appendString:[NSString stringWithFormat:@"@%@ ", peerId] mentionList:@[peerId]];
         }
     }];
     [contactListViewController setSelectedContactsCallback:^(UIViewController *viewController, NSArray<NSString *> *peerIds) {
         if (peerIds.count > 0) {
-            NSArray<id<LCCKUserDelegate>> *peers = [[LCCKUserSystemService sharedInstance] getCachedProfilesIfExists:peerIds error:nil];
-            NSMutableArray *peerNames = [NSMutableArray arrayWithCapacity:peers.count];
-            [peers enumerateObjectsUsingBlock:^(id<LCCKUserDelegate>  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-                if (obj.name) {
-                    [peerNames addObject:obj.name];
-                } else {
-                    [peerNames addObject:obj.clientId];
-                }
-            }];
-            NSArray *realPeerNames;
-            if (peerNames.count > 0) {
-                realPeerNames = peerNames;
-            } else {
-                realPeerNames = peerIds;
-            }
-            NSString *peerName = [[realPeerNames valueForKey:@"description"] componentsJoinedByString:@" @"];
-            peerName = [NSString stringWithFormat:@"@%@ ", peerName];
-            [self.chatBar appendString:peerName];
+            NSString *peerString = [[peerIds valueForKey:@"description"] componentsJoinedByString:@" @"];
+            peerString = [NSString stringWithFormat:@"@%@ ", peerString];
+            [self.chatBar appendString:peerString mentionList:peerIds];
         }
     }];
     UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:contactListViewController];
@@ -905,6 +895,16 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
     [self.chatViewModel resendMessageForMessageCell:messageCell];
 }
 
+- (void)modifyMessage:(LCCKChatMessageCell *)messageCell newMessage:(LCCKMessage *)newMessage callback:(void (^)(BOOL, NSError *))callback
+{
+    [self.chatViewModel modifyMessageForMessageCell:messageCell newMessage:newMessage callback:callback];
+}
+
+- (void)recallMessage:(LCCKChatMessageCell *)messageCell callback:(void (^)(BOOL, NSError *))callback
+{
+    [self.chatViewModel recallMessageForMessageCell:messageCell callback:callback];
+}
+
 - (void)fileMessageDidDownload:(LCCKChatMessageCell *)messageCell {
     [self reloadAfterReceiveMessage];
 }
@@ -912,9 +912,8 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
 - (void)messageCell:(LCCKChatMessageCell *)messageCell didTapLinkText:(NSString *)linkText linkType:(MLLinkType)linkType {
     switch (linkType) {
         case MLLinkTypeURL: {
-            linkText =  [linkText lowercaseString];
             LCCKWebViewController *webViewController = [[LCCKWebViewController alloc] init];
-            if (![linkText hasPrefix:@"http"]) {
+            if (![NSURL URLWithString:linkText].scheme) {
                 linkText = [NSString stringWithFormat:@"http://%@", linkText];
             }
             webViewController.URL = [NSURL URLWithString:linkText];

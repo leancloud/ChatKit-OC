@@ -1,9 +1,9 @@
 //
 //  NSObject+IsFirstLaunch.h
-//  ElonChan (微信向我报BUG:chenyilong1010)
+//  ElonChan
 //
 //  v0.8.5 Created by chenyilong on 15/6/15.
-//  Copyright © 2015年 ElonChan (微信向我报BUG:chenyilong1010). All rights reserved.
+//  Copyright © 2015年 ElonChan. All rights reserved.
 //
 
 //=========== how to use ===========================
@@ -16,6 +16,8 @@
 //                                          }];
 //=========== then use like this ===========================
 //  if(isFirstTimeOpening) {} else {}
+
+#import <Foundation/Foundation.h>
 
 typedef BOOL (^LCCKFirstLaunchBlock)(void);
 

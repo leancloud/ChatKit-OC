@@ -2,11 +2,16 @@
 //  MBProgressHUD+LCCKHUD.h
 //  UberHackathon
 //
-//  v0.8.5 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/1/16.
+//  v0.8.5 Created by ElonChan on 16/1/16.
 //  Copyright © 2016年 微博@iOS程序犭袁. All rights reserved.
 //
 
-#import <MBProgressHUD/MBProgressHUD.h>
+
+#if __has_include(<ChatKit/LCChatKit.h>)
+#import <ChatKit/LCChatKit.h>
+#else
+#import "LCChatKit.h"
+#endif
 
 @interface NSObject (LCCKHUD)
 

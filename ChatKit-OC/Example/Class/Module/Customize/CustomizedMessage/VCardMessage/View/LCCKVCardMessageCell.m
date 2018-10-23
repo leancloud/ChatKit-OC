@@ -2,18 +2,18 @@
 //  LCCKVCardMessageCell.m
 //  ChatKit-OC
 //
-//  v0.8.5 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/8/10.
+//  v0.8.5 Created by ElonChan on 16/8/10.
 //  Copyright © 2016年 LeanCloud. All rights reserved.
 //
 
+#if __has_include(<ChatKit/LCChatKit.h>)
+#import <ChatKit/LCChatKit.h>
+#else
+#import "LCChatKit.h"
+#endif
+
 #import "LCCKVCardMessageCell.h"
 #import "LCCKVCardMessage.h"
-
-#if __has_include(<SDWebImage/UIImageView+WebCache.h>)
-#import <SDWebImage/UIImageView+WebCache.h>
-#else
-#import "UIImageView+WebCache.h"
-#endif
 #import "LCCKVCardView.h"
 
 @interface LCCKVCardMessageCell ()

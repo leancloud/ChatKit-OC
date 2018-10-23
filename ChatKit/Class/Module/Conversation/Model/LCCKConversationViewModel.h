@@ -2,7 +2,7 @@
 //  LCCKConversationViewModel.h
 //  LCCKChatExample
 //
-//  v0.8.5 Created by ElonChan (wechat:chenyilong1010) ( https://github.com/leancloud/ChatKit-OC ) on 15/11/18.
+//  v0.8.5 Created by ElonChan  ( https://github.com/leancloud/ChatKit-OC ) on 15/11/18.
 //  Copyright © 2015年 https://LeanCloud.cn . All rights reserved.
 //
 
@@ -43,6 +43,7 @@ typedef void (^LCCKSendMessageSuccessFailedBlock)(NSString *messageUUID, NSError
  *  发送一条消息,消息已经通过addMessage添加到LCCKConversationViewModel数组中了,此方法主要为了LCCKChatServer发送消息过程
  */
 - (void)sendMessage:(id)message;
+- (void)sendMessage:(id)message mentionList:(NSArray<NSString *> *)mentionList;
 - (void)sendCustomMessage:(AVIMTypedMessage *)customMessage;
 - (void)sendCustomMessage:(AVIMTypedMessage *)aMessage
             progressBlock:(AVProgressBlock)progressBlock
@@ -56,6 +57,8 @@ typedef void (^LCCKSendMessageSuccessFailedBlock)(NSString *messageUUID, NSError
                              allVisibleThumbs:(NSArray **)allVisibleThumbs
                          selectedMessageIndex:(NSNumber **)selectedMessageIndex;
 - (void)resendMessageForMessageCell:(LCCKChatMessageCell *)messageCell;
+- (void)modifyMessageForMessageCell:(LCCKChatMessageCell *)messageCell newMessage:(LCCKMessage *)newMessage callback:(void (^)(BOOL, NSError *))callback;
+- (void)recallMessageForMessageCell:(LCCKChatMessageCell *)messageCell callback:(void (^)(BOOL, NSError *))callback;
 - (void)resetBackgroundImage;
 - (void)setDefaultBackgroundImage;
 

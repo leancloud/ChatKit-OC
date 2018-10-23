@@ -2,9 +2,12 @@
 //  LCCKChatBar.h
 //  LCCKChatBarExample
 //
-//  v0.8.5 Created by ElonChan (微信向我报BUG:chenyilong1010) ( https://github.com/leancloud/ChatKit-OC ) on 15/8/17.
+//  v0.8.5 Created by ElonChan ( https://github.com/leancloud/ChatKit-OC ) on 15/8/17.
 //  Copyright (c) 2015年 https://LeanCloud.cn . All rights reserved.
 //
+#import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
+#import <MapKit/MapKit.h>
 
 static CGFloat const kChatBarBottomOffset = 8.f;
 static CGFloat const kChatBarTextViewBottomOffset = 6;
@@ -16,8 +19,6 @@ static CGFloat const kLCCKChatBarMinHeight = kLCCKChatBarTextViewFrameMinHeight 
 FOUNDATION_EXTERN NSString *const kLCCKBatchDeleteTextPrefix;
 FOUNDATION_EXTERN NSString *const kLCCKBatchDeleteTextSuffix;
 
-#import <UIKit/UIKit.h>
-#import <MapKit/MapKit.h>
 
 /**
  *  functionView 类型
@@ -63,6 +64,7 @@ typedef NS_ENUM(NSUInteger, LCCKFunctionViewShowType){
  */
 - (void)appendString:(NSString *)string;
 - (void)appendString:(NSString *)string beginInputing:(BOOL)beginInputing;
+- (void)appendString:(NSString *)string mentionList:(NSArray<NSString *> *)mentionList;
 
 /**
  *  结束输入状态
@@ -114,7 +116,7 @@ typedef NS_ENUM(NSUInteger, LCCKFunctionViewShowType){
  *  @param chatBar
  *  @param message 需要发送的文字信息
  */
-- (void)chatBar:(LCCKChatBar *)chatBar sendMessage:(NSString *)message;
+- (void)chatBar:(LCCKChatBar *)chatBar sendMessage:(NSString *)message mentionList:(NSArray<NSString *> *)mentionList;
 
 /*!
  *  发送语音信息

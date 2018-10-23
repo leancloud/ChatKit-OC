@@ -2,7 +2,7 @@
 //  LCCKConversationService.h
 //  LeanCloudChatKit-iOS
 //
-//  v0.8.5 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/3/1.
+//  v0.8.5 Created by ElonChan on 16/3/1.
 //  Copyright © 2016年 LeanCloud. All rights reserved.
 //
 
@@ -48,7 +48,7 @@ FOUNDATION_EXTERN NSString *const LCCKConversationServiceErrorDomain;
  *  @param conversationId   对话的 id
  *  @param callback
  */
-- (void)fecthConversationWithConversationId:(NSString *)conversationId callback:(LCCKConversationResultBlock)callback;
+- (void)fetchConversationWithConversationId:(NSString *)conversationId callback:(LCCKConversationResultBlock)callback;
 - (void)fetchConversationsWithConversationIds:(NSSet *)conversationIds callback:(LCCKArrayResultBlock)callback;
 
 /*!
@@ -57,27 +57,32 @@ FOUNDATION_EXTERN NSString *const LCCKConversationServiceErrorDomain;
  *  @param peerId   对方的 id
  *  @param callback
  */
-- (void)fecthConversationWithPeerId:(NSString *)peerId callback:(LCCKConversationResultBlock)callback;
+- (void)fetchConversationWithPeerId:(NSString *)peerId callback:(LCCKConversationResultBlock)callback;
 
 - (void)sendMessage:(AVIMTypedMessage*)message
        conversation:(AVIMConversation *)conversation
       progressBlock:(AVProgressBlock)progressBlock
            callback:(LCCKBooleanResultBlock)block;
 
+//FIXME:AVIMMessageSendOption-->AVIMMessageOption
 - (void)sendMessage:(AVIMTypedMessage*)message
        conversation:(AVIMConversation *)conversation
             options:(AVIMMessageSendOption)options
       progressBlock:(AVProgressBlock)progressBlock
            callback:(LCCKBooleanResultBlock)block;
 
-- (void)queryTypedMessagesWithConversation:(AVIMConversation *)conversation timestamp:(int64_t)timestamp limit:(NSInteger)limit block:(LCCKArrayResultBlock)block;
+- (void)queryTypedMessagesWithConversation:(AVIMConversation *)conversation
+                                 messageId:(NSString *)messageId
+                                 timestamp:(int64_t)timestamp
+                                     limit:(NSInteger)limit
+                                     block:(LCCKArrayResultBlock)block;
 
 /**
  *  删除对话对应的UIProfile缓存，比如当用户信息发生变化时
  *  @param  conversation 对话，可以是单聊，也可是群聊
  */
 - (void)removeCacheForConversationId:(NSString *)conversationID;
-- (void)updateConversationAsRead;
+- (void)updateConversationAsReadWithLastMessage:(__kindof AVIMMessage *)lastMessage;
 
 #pragma mark - 最近对话的本地缓存，最近对话将保存在本地数据库中
 ///=============================================================================
@@ -91,7 +96,8 @@ FOUNDATION_EXTERN NSString *const LCCKConversationServiceErrorDomain;
 - (void)setupDatabaseWithUserId:(NSString *)userId;
 
 - (void)insertRecentConversation:(AVIMConversation *)conversation shouldRefreshWhenFinished:(BOOL)shouldRefreshWhenFinished;
-
+- (void)insertRecentConversations:(NSArray<AVIMConversation *> *)conversations;
+- (void)insertRecentConversations:(NSArray<AVIMConversation *> *)conversations shouldRefreshWhenFinished:(BOOL)shouldRefreshWhenFinished;
 - (void)increaseUnreadCount:(NSUInteger)increaseUnreadCount withConversationId:(NSString *)conversationId shouldRefreshWhenFinished:(BOOL)shouldRefreshWhenFinished;
 /**
  *  更新 mentioned 值，当接收到消息发现 @了我的时候，设为 YES，进入聊天页面，设为 NO
@@ -184,5 +190,13 @@ FOUNDATION_EXTERN NSString *const LCCKConversationServiceErrorDomain;
 - (NSArray<LCCKMessage *> *)failedMessagesByMessageIds:(NSArray *)messageIds;
 
 + (void)cacheFileTypeMessages:(NSArray<AVIMTypedMessage *> *)messages callback:(AVBooleanResultBlock)callback;
+
+@end
+
+@interface LCCKConversationService (LCCKDeprecated)
+
+- (void)fecthConversationWithConversationId:(NSString *)conversationId callback:(LCCKConversationResultBlock)callback LCCK_DEPRECATED("deprecated after v0.8.11, use `-fetchConversationWithConversationId:callback:` instead");
+
+- (void)fecthConversationWithPeerId:(NSString *)peerId callback:(LCCKConversationResultBlock)callback LCCK_DEPRECATED("deprecated after v0.8.11, use `-fetchConversationWithPeerId:callback:` instead");
 
 @end

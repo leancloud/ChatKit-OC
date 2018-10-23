@@ -55,20 +55,8 @@ git clone --depth=1 https://github.com/leancloud/ChatKit-OC
 - 音视频消息的录制和发送，需要对系统以及 LeanCloud 实时通信 API 比较熟悉；
 - 推、拉展示本对话中的最新消息，需要对 LeanCloud 实时通信接口比较熟悉；
 
-我们在 ChatKit 中重点完成了这两个页面的开发，大家可以看看效果：
-
-![enter image description here](http://ww3.sinaimg.cn/large/64dfd849jw1f77b0oxnfqg20nl0l77wk.gif)
-
-![enter image description here](http://ww1.sinaimg.cn/large/64dfd849jw1f77b510x7dg20nl0l74r6.gif)
-
-![enter image description here](http://ww2.sinaimg.cn/mw690/64dfd849jw1f77b3wfkuyg20br0krqve.gif)
-
-![enter image description here](http://ww1.sinaimg.cn/mw690/64dfd849jw1f77azzgfmmg20bl0kl1ky.gif) 
-
-![](http://ww2.sinaimg.cn/large/801b780ajw1f7wnstpv7mg20bk0l27wh.gif)
-
 最近联系人 | 语音消息，根据语音长度调整宽度 | 图片消息，尺寸自适应 
--------------|-------------|-------------|-------------
+-------------|-------------|-------------
 ![enter image description here](http://i63.tinypic.com/1zxqjns.jpg)|![enter image description here](http://i68.tinypic.com/2rx9sfq.jpg)  | ![enter image description here](http://i64.tinypic.com/aw87wl.jpg) 
 
  地理位置消息| 失败消息本地缓存，可重发 |上传图片，进度条提示 
@@ -523,6 +511,9 @@ Demo 中也是通过这个方式来兼容iOS7的。
  ```
 
 ![](http://ww2.sinaimg.cn/large/7853084cjw1f7y0ltdaprj20r20fiacf.jpg)
+
+如果想获取推送的消息内容可以参考  [《 iOS 消息推送 点击app图标 app icon如何获取推送信息 leanCloud 点击app图标 获得推送消息》]( http://blog.csdn.net/zain_/article/details/50440096
+ ) 
 
 在使用中有任何问题都可以到[我们的官方论坛](https://forum.leancloud.cn/c/jing-xuan-faq)提问题，会有专业工程师回复，平均响应时间在24小时内。
 

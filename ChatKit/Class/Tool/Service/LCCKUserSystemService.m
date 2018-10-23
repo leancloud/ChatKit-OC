@@ -2,7 +2,7 @@
 //  LCCKUserSystemService.m
 //  ChatKit-iOS
 //
-//  v0.8.5 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/2/22.
+//  v0.8.5 Created by ElonChan on 16/2/22.
 //  Copyright © 2016年 LeanCloud. All rights reserved.
 //
 
@@ -22,13 +22,24 @@ NSString *const LCCKUserSystemServiceErrorDomain = @"LCCKUserSystemServiceErrorD
 @implementation LCCKUserSystemService
 @synthesize fetchProfilesBlock = _fetchProfilesBlock;
 
+- (instancetype)init
+{
+    self = [super init];
+    if (self) {
+        NSString *queueBaseLabel = [NSString stringWithFormat:@"com.ChatKit.%@", NSStringFromClass([self class])];
+        const char *queueName = [[NSString stringWithFormat:@"%@.ForIsolation",queueBaseLabel] UTF8String];
+        self->_isolationQueue = dispatch_queue_create(queueName, NULL);
+    }
+    return self;
+}
+
 - (void)setFetchProfilesBlock:(LCCKFetchProfilesBlock)fetchProfilesBlock {
     _fetchProfilesBlock = fetchProfilesBlock;
 }
 
 - (NSArray<id<LCCKUserDelegate>> *)getProfilesForUserIds:(NSArray<NSString *> *)userIds error:(NSError * __autoreleasing *)theError {
     __block NSArray<id<LCCKUserDelegate>> *blockUsers = [NSArray array];
-    if (!_fetchProfilesBlock) {
+    if (!_fetchProfilesBlock && [LCCKSessionService sharedInstance].connect) {
         // This enforces implementing `-setFetchProfilesBlock:`.
         NSString *reason = [NSString stringWithFormat:@"You must implement `-setFetchProfilesBlock:` to allow ChatKit to get user information by user clientId."];
         @throw [NSException exceptionWithName:NSGenericException
@@ -339,16 +350,6 @@ NSString *const LCCKUserSystemServiceErrorDomain = @"LCCKUserSystemServiceErrorD
         _cachedUsers = [[NSMutableDictionary alloc] init];
     }
     return _cachedUsers;
-}
-
-- (dispatch_queue_t)isolationQueue {
-    if (_isolationQueue) {
-        return _isolationQueue;
-    }
-    NSString *queueBaseLabel = [NSString stringWithFormat:@"com.ChatKit.%@", NSStringFromClass([self class])];
-    const char *queueName = [[NSString stringWithFormat:@"%@.ForIsolation",queueBaseLabel] UTF8String];
-    _isolationQueue = dispatch_queue_create(queueName, NULL);
-    return _isolationQueue;
 }
 
 #pragma mark -

@@ -2,7 +2,7 @@
 //  LCCKServiceDefinition.h
 //  LeanCloudChatKit-iOS
 //
-//  v0.8.5 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/2/22.
+//  v0.8.5 Created by ElonChan on 16/2/22.
 //  Copyright © 2016年 LeanCloud. All rights reserved.
 //  All the Typedefine for all kinds of services.
 
@@ -58,6 +58,8 @@ typedef void (^LCCKForceReconnectSessionBlock)(NSError *error, BOOL granted, __k
  * set how you want to force reconnect session. It is usually usefully for losing session because of single sign-on, or weak network.
  */
 - (void)setForceReconnectSessionBlock:(LCCKForceReconnectSessionBlock)forceReconnectSessionBlock;
+
+- (void)setMemberInfoChangedBlock:(void (^)(AVIMConversation *conversation, NSString *byClientId, NSString *clientId, AVIMConversationMemberRole role))block;
 
 @end
 
@@ -242,6 +244,10 @@ typedef NSArray<LCCKMenuItem *> *(^LCCKLongPressMessageBlock)(LCCKMessage *messa
 #define LCCKLongPressMessageUserInfoKeyFromController    @"LCCKLongPressMessageUserInfoKeyFromController"
 /// 传递触发的UIView对象
 #define LCCKLongPressMessageUserInfoKeyFromView          @"LCCKLongPressMessageUserInfoKeyFromView"
+/// message owner
+#define LCCKLongPressMessageUserInfoKeyMessageOwner @"LCCKLongPressMessageUserInfoKeyMessageOwner"
+/// message cell
+#define LCCKLongPressMessageUserInfoKeyMessageCell @"LCCKLongPressMessageUserInfoKeyMessageCell"
 
 /*!
  *  ChatKit会在长按消息时，调用这个block
@@ -295,7 +301,7 @@ typedef void(^LCCKHUDActionBlock)(__kindof UIViewController *viewController, UIV
 
 typedef CGFloat (^LCCKAvatarImageViewCornerRadiusBlock)(CGSize avatarImageViewSize);
 
-@property (nonatomic, assign) LCCKAvatarImageViewCornerRadiusBlock avatarImageViewCornerRadiusBlock;
+@property (nonatomic, copy) LCCKAvatarImageViewCornerRadiusBlock avatarImageViewCornerRadiusBlock;
 
 /*!
  *  设置对话列表和聊天界面头像ImageView的圆角弧度
@@ -459,12 +465,12 @@ typedef void(^LCCKDidSelectConversationsListCellBlock)(NSIndexPath *indexPath, A
 /*!
  *  选中某个对话后的回调
  */
-@property (nonatomic, copy) LCCKDidSelectConversationsListCellBlock didSelectConversationsListCellBlock;
+@property (nonatomic, copy) LCCKDidSelectConversationsListCellBlock didSelectConversationsListCellBlock __deprecated_msg("LCCKDidSelectConversationsListCellBlock is deprecated. Use <LCCKConversationListViewControllerDelegate> instead");
 
 /*!
  *  设置选中某个对话后的回调
  */
-- (void)setDidSelectConversationsListCellBlock:(LCCKDidSelectConversationsListCellBlock)didSelectConversationsListCellBlock;
+- (void)setDidSelectConversationsListCellBlock:(LCCKDidSelectConversationsListCellBlock)didSelectConversationsListCellBlock __deprecated_msg("LCCKDidSelectConversationsListCellBlock is deprecated. Use <LCCKConversationListViewControllerDelegate> instead");
 
 /*!
  *  删除某个对话后的回调

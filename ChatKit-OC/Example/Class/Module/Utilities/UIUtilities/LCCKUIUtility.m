@@ -2,14 +2,18 @@
 //  LCChatKit.h
 //  LeanCloudChatKit-iOS
 //
-//  v0.8.5 Created by ElonChan (微信向我报BUG:chenyilong1010) on 16/2/22.
+//  v0.8.5 Created by ElonChan on 16/2/22.
 //  Copyright © 2016年 LeanCloud. All rights reserved.
 //  Core class of LeanCloudChatKit
 
 
 #import "LCCKUIUtility.h"
-#import <UIImageView+WebCache.h>
-//#import "LCCKGroup.h"
+//#import <UIImageView+WebCache.h>
+#if __has_include(<ChatKit/LCChatKit.h>)
+#import <ChatKit/LCChatKit.h>
+#else
+#import "LCChatKit.h"
+#endif
 #import "NSFileManager+LCCKExtension.h"
 
 static UILabel *hLabel = nil;

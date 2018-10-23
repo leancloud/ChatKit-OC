@@ -2,7 +2,7 @@
 //  LCCKChatBar.m
 //  LCCKChatBarExample
 //
-//  v0.8.5 Created by ElonChan (微信向我报BUG:chenyilong1010) ( https://github.com/leancloud/ChatKit-OC ) on 15/8/17.
+//  v0.8.5 Created by ElonChan ( https://github.com/leancloud/ChatKit-OC ) on 15/8/17.
 //  Copyright (c) 2015年 https://LeanCloud.cn . All rights reserved.
 //
 
@@ -56,6 +56,8 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
 @property (nonatomic, strong) UIColor *messageInputViewTextFieldBackgroundColor;
 @property (nonatomic, strong) UIColor *messageInputViewRecordTextColor;
 //TODO:MessageInputView-Tint-Color
+
+@property (nonatomic, strong) NSMutableSet<NSString *> *mentionSet;
 
 @end
 
@@ -204,8 +206,8 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
     [self textViewDidChange:textView shouldCacheText:YES];
 }
 
-- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range deleteBatchOfTextWithPrefix:(NSString *)prefix
-          suffix:(NSString *)suffix {
+- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range deleteBatchOfTextWithPrefix:(NSString *)prefix suffix:(NSString *)suffix
+{
     NSString *substringOfText = [textView.text substringWithRange:range];
     if ([substringOfText isEqualToString:suffix]) {
         NSUInteger location = range.location;
@@ -226,7 +228,11 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
                 }
             }
         }
-        
+        if ([prefix isEqualToString:@"@"] && [suffix isEqualToString:@" "]) {
+            NSString *atPeerId = [textView.text substringWithRange:NSMakeRange(location, length)];
+            NSString *peerId = [[atPeerId substringToIndex:atPeerId.length - 1] substringFromIndex:1];
+            [self.mentionSet removeObject:peerId];
+        }
         textView.text = [textView.text stringByReplacingCharactersInRange:NSMakeRange(location, length) withString:@""];
         [textView setSelectedRange:NSMakeRange(location, 0)];
         [self textViewDidChange:self.textView];
@@ -362,8 +368,8 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
         if (!text || text.length == 0) {
             return;
         }
-        if (self.delegate && [self.delegate respondsToSelector:@selector(chatBar:sendMessage:)]) {
-            [self.delegate chatBar:self sendMessage:text];
+        if (self.delegate && [self.delegate respondsToSelector:@selector(chatBar:sendMessage:mentionList:)]) {
+            [self.delegate chatBar:self sendMessage:text mentionList:@[]];
         }
         self.textView.text = @"";
         self.cachedText = @"";
@@ -415,6 +421,12 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
 }
 
 - (void)appendString:(NSString *)string {
+    [self appendString:string beginInputing:YES];
+}
+
+- (void)appendString:(NSString *)string mentionList:(NSArray<NSString *> *)mentionList
+{
+    [self.mentionSet addObjectsFromArray:mentionList];
     [self appendString:string beginInputing:YES];
 }
 
@@ -498,6 +510,8 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     self.backgroundColor = self.messageInputViewBackgroundColor;
     [self setupConstraints];
+    
+    self.mentionSet = [NSMutableSet set];
 }
 
 /**
@@ -664,8 +678,10 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
     if (!text || text.length == 0 || [text lcck_isSpace]) {
         return;
     }
-    if (self.delegate && [self.delegate respondsToSelector:@selector(chatBar:sendMessage:)]) {
-        [self.delegate chatBar:self sendMessage:text];
+    NSArray<NSString *> *mentionList = self.mentionSet.allObjects;
+    [self.mentionSet removeAllObjects];
+    if (self.delegate && [self.delegate respondsToSelector:@selector(chatBar:sendMessage:mentionList:)]) {
+        [self.delegate chatBar:self sendMessage:text mentionList:mentionList];
     }
     self.textView.text = @"";
     self.cachedText = @"";

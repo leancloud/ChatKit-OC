@@ -2,7 +2,7 @@
 //  LCCKChatSystemMessageCell.m
 //  LCCKChatExample
 //
-//  v0.8.5 Created by ElonChan (微信向我报BUG:chenyilong1010) ( https://github.com/leancloud/ChatKit-OC ) on 15/11/17.
+//  v0.8.5 Created by ElonChan ( https://github.com/leancloud/ChatKit-OC ) on 15/11/17.
 //  Copyright © 2015年 https://LeanCloud.cn . All rights reserved.
 //
 
@@ -70,7 +70,6 @@
             CGFloat offsetLeftRight = 8;//8
             make.edges.equalTo(_systemmessageContentView).with.insets(UIEdgeInsetsMake(offsetTopBottom, offsetLeftRight, offsetTopBottom, offsetLeftRight));
         }];
-        systemMessageLabel.attributedText = [[NSAttributedString alloc] initWithString:@"2016-8-14" attributes:self.systemMessageStyle];
     }
     return _systemmessageContentView;
 }
@@ -86,7 +85,7 @@
         _systemMessageStyle = @{
                  NSFontAttributeName: font,
                  NSParagraphStyleAttributeName: style,
-                 NSForegroundColorAttributeName: [UIColor whiteColor]
+                 NSForegroundColorAttributeName: self.conversationViewTimeLineTextColor
                  };
     }
     return _systemMessageStyle;
