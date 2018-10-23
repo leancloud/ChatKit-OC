@@ -23,6 +23,8 @@
 #import "LCCKGroupConversationDetailViewController.h"
 #import "LCCKSingleConversationDetailViewController.h"
 
+#define __OPTIMIZE__
+
 @implementation LCChatKitExample (Setting)
 
 - (void)lcck_setting {
