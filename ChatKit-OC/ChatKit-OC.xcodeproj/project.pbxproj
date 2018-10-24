@@ -696,7 +696,7 @@
 			files = (
 			);
 			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-ChatKit-OC/Pods-ChatKit-OC-resources.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-ChatKit-OC/Pods-ChatKit-OC-resources.sh",
 				"${PODS_ROOT}/AVOSCloud/AVOS/AVOSCloud/AVOSCloud_Art.inc",
 				"${PODS_ROOT}/../../ChatKit/Class/Resources/BarButtonIcon.bundle",
 				"${PODS_ROOT}/../../ChatKit/Class/Resources/ChatKeyboard.bundle",
@@ -749,7 +749,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ChatKit-OC/Pods-ChatKit-OC-resources.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ChatKit-OC/Pods-ChatKit-OC-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		CDA6F8A69927C83B20C33EBD /* [CP] Check Pods Manifest.lock */ = {
