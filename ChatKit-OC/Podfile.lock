@@ -1,17 +1,17 @@
 PODS:
-  - AVOSCloud (11.4.0)
-  - AVOSCloudIM (11.4.0):
-    - AVOSCloud (= 11.4.0)
-    - AVOSCloudIM/_ARC (= 11.4.0)
-    - AVOSCloudIM/_NOARC (= 11.4.0)
-  - AVOSCloudIM/_ARC (11.4.0):
-    - AVOSCloud (= 11.4.0)
-    - AVOSCloudIM/_NOARC (= 11.4.0)
-  - AVOSCloudIM/_NOARC (11.4.0):
-    - AVOSCloud (= 11.4.0)
-  - ChatKit (2.3.2):
-    - AVOSCloud (~> 11.4.0)
-    - AVOSCloudIM (~> 11.4.0)
+  - AVOSCloud (11.4.4)
+  - AVOSCloudIM (11.4.4):
+    - AVOSCloud (= 11.4.4)
+    - AVOSCloudIM/_ARC (= 11.4.4)
+    - AVOSCloudIM/_NOARC (= 11.4.4)
+  - AVOSCloudIM/_ARC (11.4.4):
+    - AVOSCloud (= 11.4.4)
+    - AVOSCloudIM/_NOARC (= 11.4.4)
+  - AVOSCloudIM/_NOARC (11.4.4):
+    - AVOSCloud (= 11.4.4)
+  - ChatKit (2.3.3):
+    - AVOSCloud (~> 11.4.4)
+    - AVOSCloudIM (~> 11.4.4)
     - CYLDeallocBlockExecutor (~> 1.1.2)
     - DACircularProgress (~> 2.3.1)
     - FDStackView (~> 1.0)
@@ -41,7 +41,7 @@ PODS:
     - DACircularProgress (~> 2.3)
     - MBProgressHUD (~> 0.9)
     - "SDWebImage (!= 3.7.2, ~> 3.7)"
-  - pop (1.0.10)
+  - pop (1.0.12)
   - RedPacketAlipay (15.0.2)
   - RedpacketLib (3.4.1):
     - RedPacketAlipay
@@ -89,9 +89,9 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  AVOSCloud: 1968612949f44d5a79c8ccdd550ca2107bbfde02
-  AVOSCloudIM: f0a771a9438f39edaf6e67bf051194036b5f33ee
-  ChatKit: cbe8ad4b802b94ff6fbed57d5498fec71606c37b
+  AVOSCloud: c3d6ce6d387d7e40c7c0fe4087c6ad5192620f47
+  AVOSCloudIM: e3227ad97ee9d0f8ec059b0a17d8dc9c2ec0ba49
+  ChatKit: 07db0061b5e3760f5a958488487a1fe289a7b74e
   CYLDeallocBlockExecutor: ecf39e45dcead9e120f460df5668b8f5093d178e
   CYLTabBarController: 8d99fccf22866fe18c978c5ff863dc6051da45ff
   DACircularProgress: 4dd437c0fc3da5161cb289e07ac449493d41db71
@@ -105,7 +105,7 @@ SPEC CHECKSUMS:
   MLLabel: d76124055a2205e7f76878e62cd06ba925ba0c97
   MLPAutoCompleteTextField: ba4d507bbff2bd4f139d4197814fc8dd39caf77e
   MWPhotoBrowser: 5836d7aa041dc05a13de380c246826578adc5ea5
-  pop: 82ca6b068ce9278fd350fd9dd09482a0ce9492e6
+  pop: d582054913807fd11fd50bfe6a539d91c7e1a55a
   RedPacketAlipay: a5de6db2e2671fc9255d6d396be869e3ba2f0489
   RedpacketLib: e15853d93ac35141a1247b6ad79d6acb731d8704
   SDWebImage: 098e97e6176540799c27e804c96653ee0833d13c
@@ -114,4 +114,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 0c9077ef2ff9a92e0adcca86bcabd425df220379
 
-COCOAPODS: 1.5.3
+COCOAPODS: 1.6.0.beta.2
