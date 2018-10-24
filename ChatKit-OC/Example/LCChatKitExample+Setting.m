@@ -23,14 +23,11 @@
 #import "LCCKGroupConversationDetailViewController.h"
 #import "LCCKSingleConversationDetailViewController.h"
 
-#warning TODO: CHANGE TO YOUR OWN AppId and AppKey
-static NSString *const LCCKAPPID = @"dYRQ8YfHRiILshUnfFJu2eQM-gzGzoHsz";
-static NSString *const LCCKAPPKEY = @"ye24iIK6ys8IvaISMC4Bs5WK";
+#define __OPTIMIZE__
 
 @implementation LCChatKitExample (Setting)
 
 - (void)lcck_setting {
-    [self lcck_setupAppInfo];
     //设置用户体系
     [self lcck_setFetchProfiles];
     //设置签名机制
@@ -75,24 +72,6 @@ static NSString *const LCCKAPPKEY = @"ye24iIK6ys8IvaISMC4Bs5WK";
     //[self lcck_setupSendMessageHook];
     [self lcck_setupNotification];
     [self lcck_setupPreviewLocationMessage];
-}
-
-#pragma mark - leanCloud的app信息设置
-- (void)lcck_setupAppInfo {
-    // [[LCChatKit sharedInstance] setDisablePreviewUserId:YES];
-#ifndef __OPTIMIZE__
-    //        [LCChatKit setAllLogsEnabled:YES];
-    [[LCChatKit sharedInstance] setUseDevPushCerticate:YES];
-#endif
-    /**
-     * @attention 请区别 `[AVOSCloud setApplicationId:appId clientKey:appKey];` 与 `[LCChatKit setAppId:appId appKey:appKey];`。
-     两者功能并不相同，前者不能代替后者。即使你在 `-[AppDelegate
-     application:didFinishLaunchingWithOptions:]` 方法里已经设置过前者，也不能因此不调用后者。
-     前者为 LeanCloud-SDK 初始化，后者为 ChatKit
-     初始化。后者需要你在**每次**登录操作时调用一次，前者只需要你在程序启动时调用。
-     如果你使用了 LeanCloud-SDK 的其他功能，你可能要根据需要，这两个方法都使用到。
-     */
-    [LCChatKit setAppId:LCCKAPPID appKey:LCCKAPPKEY];
 }
 
 #pragma mark - 用户体系的设置

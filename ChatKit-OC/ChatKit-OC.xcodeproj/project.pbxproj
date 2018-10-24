@@ -7,13 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		9A2669C81D6DA89100B66545 /* LCCKInputViewPluginConversationBackground.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A2669B81D6DA89100B66545 /* LCCKInputViewPluginConversationBackground.m */; };
-		9A2669C91D6DA89100B66545 /* LCCKVCardMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A2669BD1D6DA89100B66545 /* LCCKVCardMessage.m */; };
-		9A2669CA1D6DA89100B66545 /* calling_card_bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9A2669BF1D6DA89100B66545 /* calling_card_bg@2x.png */; };
-		9A2669CB1D6DA89100B66545 /* LCCKInputViewPluginVCard.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A2669C21D6DA89100B66545 /* LCCKInputViewPluginVCard.m */; };
-		9A2669CC1D6DA89100B66545 /* LCCKVCardMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A2669C41D6DA89100B66545 /* LCCKVCardMessageCell.m */; };
-		9A2669CD1D6DA89100B66545 /* LCCKVCardView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A2669C61D6DA89100B66545 /* LCCKVCardView.m */; };
-		9A2669CE1D6DA89100B66545 /* LCCKVCardView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9A2669C71D6DA89100B66545 /* LCCKVCardView.xib */; };
 		9A4730621CECAEC500AEB86F /* LCCKUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A47302E1CECAEC500AEB86F /* LCCKUser.m */; };
 		9A4730671CECAEC500AEB86F /* LCCKLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A47303E1CECAEC500AEB86F /* LCCKLoginViewController.m */; };
 		9A4730681CECAEC500AEB86F /* LCCKLoginViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9A47303F1CECAEC500AEB86F /* LCCKLoginViewController.xib */; };
@@ -27,15 +20,6 @@
 		9A4730711CECAEC500AEB86F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9A4730561CECAEC500AEB86F /* LaunchScreen.storyboard */; };
 		9A4730731CECAEC500AEB86F /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A4730591CECAEC500AEB86F /* main.m */; };
 		9A4730751CECAEC500AEB86F /* NSObject+LCCKHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A47305E1CECAEC500AEB86F /* NSObject+LCCKHUD.m */; };
-		9A53BE2B1D8BB13E00AAB118 /* AVIMTypedMessageRedPacket.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A53BE0A1D8BB13E00AAB118 /* AVIMTypedMessageRedPacket.m */; };
-		9A53BE2C1D8BB13E00AAB118 /* AVIMTypedMessageRedPacketTaken.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A53BE0C1D8BB13E00AAB118 /* AVIMTypedMessageRedPacketTaken.m */; };
-		9A53BE2D1D8BB13E00AAB118 /* RedpacketCellResource.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 9A53BE0E1D8BB13E00AAB118 /* RedpacketCellResource.bundle */; };
-		9A53BE2E1D8BB13E00AAB118 /* AppDelegate+RedPacket.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A53BE111D8BB13E00AAB118 /* AppDelegate+RedPacket.m */; };
-		9A53BE2F1D8BB13E00AAB118 /* RedpacketConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A53BE131D8BB13E00AAB118 /* RedpacketConfig.m */; };
-		9A53BE341D8BB13E00AAB118 /* RedPacketChangeInputViewPlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A53BE241D8BB13E00AAB118 /* RedPacketChangeInputViewPlugin.m */; };
-		9A53BE351D8BB13E00AAB118 /* RedPacketInputViewPlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A53BE261D8BB13E00AAB118 /* RedPacketInputViewPlugin.m */; };
-		9A53BE361D8BB13E00AAB118 /* RedpacketMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A53BE281D8BB13E00AAB118 /* RedpacketMessageCell.m */; };
-		9A53BE371D8BB13E00AAB118 /* RedpacketTakenMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A53BE2A1D8BB13E00AAB118 /* RedpacketTakenMessageCell.m */; };
 		9A53BE401D8BB19C00AAB118 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A53BE391D8BB19C00AAB118 /* AppDelegate.m */; };
 		9A53BE411D8BB19C00AAB118 /* LCChatKitExample.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A53BE3B1D8BB19C00AAB118 /* LCChatKitExample.m */; };
 		9A53BE421D8BB19C00AAB118 /* LCChatKitExample+Setting.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A53BE3D1D8BB19C00AAB118 /* LCChatKitExample+Setting.m */; };
@@ -93,18 +77,6 @@
 		9A0B721D1CED6637004FDACC /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		9A0B721F1CED6644004FDACC /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
 		9A0B72211CED664D004FDACC /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
-		9A2669B71D6DA89100B66545 /* LCCKInputViewPluginConversationBackground.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKInputViewPluginConversationBackground.h; sourceTree = "<group>"; };
-		9A2669B81D6DA89100B66545 /* LCCKInputViewPluginConversationBackground.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCKInputViewPluginConversationBackground.m; sourceTree = "<group>"; };
-		9A2669BC1D6DA89100B66545 /* LCCKVCardMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKVCardMessage.h; sourceTree = "<group>"; };
-		9A2669BD1D6DA89100B66545 /* LCCKVCardMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCKVCardMessage.m; sourceTree = "<group>"; };
-		9A2669BF1D6DA89100B66545 /* calling_card_bg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "calling_card_bg@2x.png"; sourceTree = "<group>"; };
-		9A2669C11D6DA89100B66545 /* LCCKInputViewPluginVCard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKInputViewPluginVCard.h; sourceTree = "<group>"; };
-		9A2669C21D6DA89100B66545 /* LCCKInputViewPluginVCard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCKInputViewPluginVCard.m; sourceTree = "<group>"; };
-		9A2669C31D6DA89100B66545 /* LCCKVCardMessageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKVCardMessageCell.h; sourceTree = "<group>"; };
-		9A2669C41D6DA89100B66545 /* LCCKVCardMessageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCKVCardMessageCell.m; sourceTree = "<group>"; };
-		9A2669C51D6DA89100B66545 /* LCCKVCardView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKVCardView.h; sourceTree = "<group>"; };
-		9A2669C61D6DA89100B66545 /* LCCKVCardView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCKVCardView.m; sourceTree = "<group>"; };
-		9A2669C71D6DA89100B66545 /* LCCKVCardView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LCCKVCardView.xib; sourceTree = "<group>"; };
 		9A47302D1CECAEC500AEB86F /* LCCKUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKUser.h; sourceTree = "<group>"; };
 		9A47302E1CECAEC500AEB86F /* LCCKUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCKUser.m; sourceTree = "<group>"; };
 		9A47303D1CECAEC500AEB86F /* LCCKLoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKLoginViewController.h; sourceTree = "<group>"; };
@@ -130,23 +102,6 @@
 		9A47305D1CECAEC500AEB86F /* NSObject+LCCKHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+LCCKHUD.h"; sourceTree = "<group>"; };
 		9A47305E1CECAEC500AEB86F /* NSObject+LCCKHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+LCCKHUD.m"; sourceTree = "<group>"; };
 		9A4CBADB1DB87F2000E61C92 /* ChatKit-OC.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "ChatKit-OC.entitlements"; sourceTree = "<group>"; };
-		9A53BE091D8BB13E00AAB118 /* AVIMTypedMessageRedPacket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVIMTypedMessageRedPacket.h; sourceTree = "<group>"; };
-		9A53BE0A1D8BB13E00AAB118 /* AVIMTypedMessageRedPacket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVIMTypedMessageRedPacket.m; sourceTree = "<group>"; };
-		9A53BE0B1D8BB13E00AAB118 /* AVIMTypedMessageRedPacketTaken.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVIMTypedMessageRedPacketTaken.h; sourceTree = "<group>"; };
-		9A53BE0C1D8BB13E00AAB118 /* AVIMTypedMessageRedPacketTaken.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVIMTypedMessageRedPacketTaken.m; sourceTree = "<group>"; };
-		9A53BE0E1D8BB13E00AAB118 /* RedpacketCellResource.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = RedpacketCellResource.bundle; sourceTree = "<group>"; };
-		9A53BE101D8BB13E00AAB118 /* AppDelegate+RedPacket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "AppDelegate+RedPacket.h"; sourceTree = "<group>"; };
-		9A53BE111D8BB13E00AAB118 /* AppDelegate+RedPacket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "AppDelegate+RedPacket.m"; sourceTree = "<group>"; };
-		9A53BE121D8BB13E00AAB118 /* RedpacketConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RedpacketConfig.h; sourceTree = "<group>"; };
-		9A53BE131D8BB13E00AAB118 /* RedpacketConfig.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RedpacketConfig.m; sourceTree = "<group>"; };
-		9A53BE231D8BB13E00AAB118 /* RedPacketChangeInputViewPlugin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RedPacketChangeInputViewPlugin.h; sourceTree = "<group>"; };
-		9A53BE241D8BB13E00AAB118 /* RedPacketChangeInputViewPlugin.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RedPacketChangeInputViewPlugin.m; sourceTree = "<group>"; };
-		9A53BE251D8BB13E00AAB118 /* RedPacketInputViewPlugin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RedPacketInputViewPlugin.h; sourceTree = "<group>"; };
-		9A53BE261D8BB13E00AAB118 /* RedPacketInputViewPlugin.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RedPacketInputViewPlugin.m; sourceTree = "<group>"; };
-		9A53BE271D8BB13E00AAB118 /* RedpacketMessageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RedpacketMessageCell.h; sourceTree = "<group>"; };
-		9A53BE281D8BB13E00AAB118 /* RedpacketMessageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RedpacketMessageCell.m; sourceTree = "<group>"; };
-		9A53BE291D8BB13E00AAB118 /* RedpacketTakenMessageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RedpacketTakenMessageCell.h; sourceTree = "<group>"; };
-		9A53BE2A1D8BB13E00AAB118 /* RedpacketTakenMessageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RedpacketTakenMessageCell.m; sourceTree = "<group>"; };
 		9A53BE381D8BB19C00AAB118 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		9A53BE391D8BB19C00AAB118 /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		9A53BE3A1D8BB19C00AAB118 /* LCChatKitExample.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCChatKitExample.h; sourceTree = "<group>"; };
@@ -250,73 +205,6 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		9A2669B51D6DA89100B66545 /* Customize */ = {
-			isa = PBXGroup;
-			children = (
-				9A2669B61D6DA89100B66545 /* CustomizedConversationBackground */,
-				9A2669B91D6DA89100B66545 /* CustomizedMessage */,
-			);
-			path = Customize;
-			sourceTree = "<group>";
-		};
-		9A2669B61D6DA89100B66545 /* CustomizedConversationBackground */ = {
-			isa = PBXGroup;
-			children = (
-				9A2669B71D6DA89100B66545 /* LCCKInputViewPluginConversationBackground.h */,
-				9A2669B81D6DA89100B66545 /* LCCKInputViewPluginConversationBackground.m */,
-			);
-			path = CustomizedConversationBackground;
-			sourceTree = "<group>";
-		};
-		9A2669B91D6DA89100B66545 /* CustomizedMessage */ = {
-			isa = PBXGroup;
-			children = (
-				9A2669BA1D6DA89100B66545 /* VCardMessage */,
-			);
-			path = CustomizedMessage;
-			sourceTree = "<group>";
-		};
-		9A2669BA1D6DA89100B66545 /* VCardMessage */ = {
-			isa = PBXGroup;
-			children = (
-				9A2669BB1D6DA89100B66545 /* Model */,
-				9A2669BE1D6DA89100B66545 /* Resources */,
-				9A2669C01D6DA89100B66545 /* View */,
-			);
-			path = VCardMessage;
-			sourceTree = "<group>";
-		};
-		9A2669BB1D6DA89100B66545 /* Model */ = {
-			isa = PBXGroup;
-			children = (
-				9A2669BC1D6DA89100B66545 /* LCCKVCardMessage.h */,
-				9A2669BD1D6DA89100B66545 /* LCCKVCardMessage.m */,
-			);
-			path = Model;
-			sourceTree = "<group>";
-		};
-		9A2669BE1D6DA89100B66545 /* Resources */ = {
-			isa = PBXGroup;
-			children = (
-				9A2669BF1D6DA89100B66545 /* calling_card_bg@2x.png */,
-			);
-			path = Resources;
-			sourceTree = "<group>";
-		};
-		9A2669C01D6DA89100B66545 /* View */ = {
-			isa = PBXGroup;
-			children = (
-				9A2669C11D6DA89100B66545 /* LCCKInputViewPluginVCard.h */,
-				9A2669C21D6DA89100B66545 /* LCCKInputViewPluginVCard.m */,
-				9A2669C31D6DA89100B66545 /* LCCKVCardMessageCell.h */,
-				9A2669C41D6DA89100B66545 /* LCCKVCardMessageCell.m */,
-				9A2669C51D6DA89100B66545 /* LCCKVCardView.h */,
-				9A2669C61D6DA89100B66545 /* LCCKVCardView.m */,
-				9A2669C71D6DA89100B66545 /* LCCKVCardView.xib */,
-			);
-			path = View;
-			sourceTree = "<group>";
-		};
 		9A4730281CECAEC500AEB86F /* Example */ = {
 			isa = PBXGroup;
 			children = (
@@ -357,8 +245,6 @@
 			children = (
 				9AC3A4B01DF9BEE600F3405F /* Utilities */,
 				9AC3A4891DF9B72B00F3405F /* ConversationDetail */,
-				9A53BE071D8BB13E00AAB118 /* Redpacket */,
-				9A2669B51D6DA89100B66545 /* Customize */,
 				9A47303B1CECAEC500AEB86F /* Login */,
 				9A4730481CECAEC500AEB86F /* Main */,
 				9A4730541CECAEC500AEB86F /* Other */,
@@ -471,62 +357,6 @@
 				9A47305E1CECAEC500AEB86F /* NSObject+LCCKHUD.m */,
 			);
 			path = MBProgressHUD;
-			sourceTree = "<group>";
-		};
-		9A53BE071D8BB13E00AAB118 /* Redpacket */ = {
-			isa = PBXGroup;
-			children = (
-				9A53BE081D8BB13E00AAB118 /* Model */,
-				9A53BE0D1D8BB13E00AAB118 /* Resources */,
-				9A53BE0F1D8BB13E00AAB118 /* Tool */,
-				9A53BE221D8BB13E00AAB118 /* View */,
-			);
-			path = Redpacket;
-			sourceTree = "<group>";
-		};
-		9A53BE081D8BB13E00AAB118 /* Model */ = {
-			isa = PBXGroup;
-			children = (
-				9A53BE091D8BB13E00AAB118 /* AVIMTypedMessageRedPacket.h */,
-				9A53BE0A1D8BB13E00AAB118 /* AVIMTypedMessageRedPacket.m */,
-				9A53BE0B1D8BB13E00AAB118 /* AVIMTypedMessageRedPacketTaken.h */,
-				9A53BE0C1D8BB13E00AAB118 /* AVIMTypedMessageRedPacketTaken.m */,
-			);
-			path = Model;
-			sourceTree = "<group>";
-		};
-		9A53BE0D1D8BB13E00AAB118 /* Resources */ = {
-			isa = PBXGroup;
-			children = (
-				9A53BE0E1D8BB13E00AAB118 /* RedpacketCellResource.bundle */,
-			);
-			path = Resources;
-			sourceTree = "<group>";
-		};
-		9A53BE0F1D8BB13E00AAB118 /* Tool */ = {
-			isa = PBXGroup;
-			children = (
-				9A53BE101D8BB13E00AAB118 /* AppDelegate+RedPacket.h */,
-				9A53BE111D8BB13E00AAB118 /* AppDelegate+RedPacket.m */,
-				9A53BE121D8BB13E00AAB118 /* RedpacketConfig.h */,
-				9A53BE131D8BB13E00AAB118 /* RedpacketConfig.m */,
-			);
-			path = Tool;
-			sourceTree = "<group>";
-		};
-		9A53BE221D8BB13E00AAB118 /* View */ = {
-			isa = PBXGroup;
-			children = (
-				9A53BE231D8BB13E00AAB118 /* RedPacketChangeInputViewPlugin.h */,
-				9A53BE241D8BB13E00AAB118 /* RedPacketChangeInputViewPlugin.m */,
-				9A53BE251D8BB13E00AAB118 /* RedPacketInputViewPlugin.h */,
-				9A53BE261D8BB13E00AAB118 /* RedPacketInputViewPlugin.m */,
-				9A53BE271D8BB13E00AAB118 /* RedpacketMessageCell.h */,
-				9A53BE281D8BB13E00AAB118 /* RedpacketMessageCell.m */,
-				9A53BE291D8BB13E00AAB118 /* RedpacketTakenMessageCell.h */,
-				9A53BE2A1D8BB13E00AAB118 /* RedpacketTakenMessageCell.m */,
-			);
-			path = View;
 			sourceTree = "<group>";
 		};
 		9A562A241E03D52F00BB23DD /* SettingCells */ = {
@@ -790,10 +620,7 @@
 			files = (
 				9A4730711CECAEC500AEB86F /* LaunchScreen.storyboard in Resources */,
 				9A4730701CECAEC500AEB86F /* Assets.xcassets in Resources */,
-				9A2669CE1D6DA89100B66545 /* LCCKVCardView.xib in Resources */,
-				9A2669CA1D6DA89100B66545 /* calling_card_bg@2x.png in Resources */,
 				9A4730681CECAEC500AEB86F /* LCCKLoginViewController.xib in Resources */,
-				9A53BE2D1D8BB13E00AAB118 /* RedpacketCellResource.bundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -959,26 +786,16 @@
 				9AC3A4CD1DF9C14500F3405F /* NSFileManager+LCCKExtension.m in Sources */,
 				D3A7463821072F9300212948 /* LCCKGroupConversationMemberInfoViewController.m in Sources */,
 				9AC3A4931DF9B7D500F3405F /* LCCKGroupConversationDetailViewController.m in Sources */,
-				9A2669C81D6DA89100B66545 /* LCCKInputViewPluginConversationBackground.m in Sources */,
-				9A53BE371D8BB13E00AAB118 /* RedpacketTakenMessageCell.m in Sources */,
-				9A2669CC1D6DA89100B66545 /* LCCKVCardMessageCell.m in Sources */,
-				9A53BE2E1D8BB13E00AAB118 /* AppDelegate+RedPacket.m in Sources */,
-				9A2669CD1D6DA89100B66545 /* LCCKVCardView.m in Sources */,
 				9A47306A1CECAEC500AEB86F /* DEMODataSource.m in Sources */,
 				9A562A3B1E03D52F00BB23DD /* LCCKSettingItem.m in Sources */,
 				9A562A391E03D52F00BB23DD /* LCCKSettingSwitchCell.m in Sources */,
-				9A2669CB1D6DA89100B66545 /* LCCKInputViewPluginVCard.m in Sources */,
 				9A47306C1CECAEC500AEB86F /* LCCKMapViewController.m in Sources */,
 				9A4730621CECAEC500AEB86F /* LCCKUser.m in Sources */,
 				9A47306E1CECAEC500AEB86F /* LCCKUtil.m in Sources */,
-				9A53BE2F1D8BB13E00AAB118 /* RedpacketConfig.m in Sources */,
 				9A562A3C1E03D52F00BB23DD /* LCCKSettingFooterTitleView.m in Sources */,
 				9AC3A4E21DF9CE0300F3405F /* LCCKChatDetailHelper.m in Sources */,
-				9A53BE2C1D8BB13E00AAB118 /* AVIMTypedMessageRedPacketTaken.m in Sources */,
-				9A53BE2B1D8BB13E00AAB118 /* AVIMTypedMessageRedPacket.m in Sources */,
 				9A562A3A1E03D52F00BB23DD /* LCCKSettingGroup.m in Sources */,
 				D3A7463521071EF800212948 /* LCCKGroupConversationManagementViewController.m in Sources */,
-				9A53BE361D8BB13E00AAB118 /* RedpacketMessageCell.m in Sources */,
 				9A4730691CECAEC500AEB86F /* DEMOCustomAutoCompleteObject.m in Sources */,
 				9AC3A4B91DF9BEE600F3405F /* UIColor+LCCKExtension.m in Sources */,
 				9AC3A4901DF9B7B400F3405F /* LCCKSingleConversationDetailViewController.m in Sources */,
@@ -988,7 +805,6 @@
 				9AC3A4BA1DF9BEE600F3405F /* UIFont+LCCKExtension.m in Sources */,
 				9A53BE431D8BB19C00AAB118 /* LCCKTabBarControllerConfig.m in Sources */,
 				9A562A361E03D52F00BB23DD /* LCCKSettingViewController.m in Sources */,
-				9A53BE341D8BB13E00AAB118 /* RedPacketChangeInputViewPlugin.m in Sources */,
 				9AC3A4CC1DF9C14500F3405F /* NSDate+LCCKExtension.m in Sources */,
 				9A47306B1CECAEC500AEB86F /* LCCKLoginDataSource.m in Sources */,
 				9AC3A4B81DF9BEE600F3405F /* LCCKUIUtility.m in Sources */,
@@ -997,8 +813,6 @@
 				9AC3A4D31DF9C16A00F3405F /* NSDate+Extension.m in Sources */,
 				9AC3A4D71DF9C25200F3405F /* NSFileManager+Paths.m in Sources */,
 				9AC3A4DE1DF9C8BD00F3405F /* LCCKUserGroupItemCell.m in Sources */,
-				9A53BE351D8BB13E00AAB118 /* RedPacketInputViewPlugin.m in Sources */,
-				9A2669C91D6DA89100B66545 /* LCCKVCardMessage.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

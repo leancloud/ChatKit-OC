@@ -21,7 +21,7 @@
 		9AAFA2161E14FBA4006618E0 /* LCCKMessage.h in Headers */ = {isa = PBXBuildFile; fileRef = 9AAFA12C1E14FBA3006618E0 /* LCCKMessage.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9AAFA2171E14FBA4006618E0 /* LCCKMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AAFA12D1E14FBA3006618E0 /* LCCKMessage.m */; };
 		9AAFA2181E14FBA4006618E0 /* LCCKMessageDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 9AAFA12E1E14FBA3006618E0 /* LCCKMessageDelegate.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		9AAFA2191E14FBA4006618E0 /* LCCKUserDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 9AAFA12F1E14FBA3006618E0 /* LCCKUserDelegate.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		9AAFA2191E14FBA4006618E0 /* LCCKUserProfile.h in Headers */ = {isa = PBXBuildFile; fileRef = 9AAFA12F1E14FBA3006618E0 /* LCCKUserProfile.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9AAFA21A1E14FBA4006618E0 /* NSMutableArray+LCCKMessageExtention.h in Headers */ = {isa = PBXBuildFile; fileRef = 9AAFA1301E14FBA3006618E0 /* NSMutableArray+LCCKMessageExtention.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9AAFA21B1E14FBA4006618E0 /* NSMutableArray+LCCKMessageExtention.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AAFA1311E14FBA3006618E0 /* NSMutableArray+LCCKMessageExtention.m */; };
 		9AAFA21C1E14FBA4006618E0 /* NSObject+LCCKExtension.h in Headers */ = {isa = PBXBuildFile; fileRef = 9AAFA1321E14FBA3006618E0 /* NSObject+LCCKExtension.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -523,7 +523,7 @@
 		9AAFA12C1E14FBA3006618E0 /* LCCKMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKMessage.h; sourceTree = "<group>"; };
 		9AAFA12D1E14FBA3006618E0 /* LCCKMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCKMessage.m; sourceTree = "<group>"; };
 		9AAFA12E1E14FBA3006618E0 /* LCCKMessageDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKMessageDelegate.h; sourceTree = "<group>"; };
-		9AAFA12F1E14FBA3006618E0 /* LCCKUserDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKUserDelegate.h; sourceTree = "<group>"; };
+		9AAFA12F1E14FBA3006618E0 /* LCCKUserProfile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKUserProfile.h; sourceTree = "<group>"; };
 		9AAFA1301E14FBA3006618E0 /* NSMutableArray+LCCKMessageExtention.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSMutableArray+LCCKMessageExtention.h"; sourceTree = "<group>"; };
 		9AAFA1311E14FBA3006618E0 /* NSMutableArray+LCCKMessageExtention.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSMutableArray+LCCKMessageExtention.m"; sourceTree = "<group>"; };
 		9AAFA1321E14FBA3006618E0 /* NSObject+LCCKExtension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+LCCKExtension.h"; sourceTree = "<group>"; };
@@ -1089,7 +1089,7 @@
 				9AAFA12C1E14FBA3006618E0 /* LCCKMessage.h */,
 				9AAFA12D1E14FBA3006618E0 /* LCCKMessage.m */,
 				9AAFA12E1E14FBA3006618E0 /* LCCKMessageDelegate.h */,
-				9AAFA12F1E14FBA3006618E0 /* LCCKUserDelegate.h */,
+				9AAFA12F1E14FBA3006618E0 /* LCCKUserProfile.h */,
 				9AAFA1301E14FBA3006618E0 /* NSMutableArray+LCCKMessageExtention.h */,
 				9AAFA1311E14FBA3006618E0 /* NSMutableArray+LCCKMessageExtention.m */,
 				9AAFA1321E14FBA3006618E0 /* NSObject+LCCKExtension.h */,
@@ -2329,7 +2329,7 @@
 				9AC44E7D1E15154300619112 /* SDWebImageCompat.h in Headers */,
 				9AC44D891E15154300619112 /* DALabeledCircularProgressView.h in Headers */,
 				9AC44E741E15154300619112 /* TransformationMatrix.h in Headers */,
-				9AAFA2191E14FBA4006618E0 /* LCCKUserDelegate.h in Headers */,
+				9AAFA2191E14FBA4006618E0 /* LCCKUserProfile.h in Headers */,
 				9AC44DFD1E15154300619112 /* NSAttributedString+MLExpression.h in Headers */,
 				9AAFA2B91E14FBA5006618E0 /* LCCKCaptionView.h in Headers */,
 				9AAFA24A1E14FBA4006618E0 /* LCCKChatUntiles.h in Headers */,
