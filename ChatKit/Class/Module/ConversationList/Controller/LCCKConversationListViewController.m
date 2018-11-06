@@ -117,9 +117,9 @@
 }
 
 - (void)updateStatusView {
-    if (!self.shouldCheckSessionStatus) {
-        return;
-    }
+//    if (!self.shouldCheckSessionStatus) {
+//        return;
+//    }
     BOOL isConnected = [LCCKSessionService sharedInstance].connect;
     if (isConnected) {
         self.tableView.tableHeaderView = nil ;
