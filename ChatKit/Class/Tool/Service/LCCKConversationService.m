@@ -80,20 +80,53 @@ NSString *const LCCKConversationServiceErrorDomain = @"LCCKConversationServiceEr
 }
 
 - (void)fetchConversationsWithConversationIds:(NSSet *)conversationIds
-                                     callback:(LCCKArrayResultBlock)callback {
-    AVIMConversationQuery *query = [[LCCKSessionService sharedInstance].client conversationQuery];
-    [query whereKey:@"objectId" containedIn:[conversationIds allObjects]];
-    query.limit = conversationIds.count;
-    query.option = AVIMConversationQueryOptionWithMessage;
-    query.cacheMaxAge = kAVIMCachePolicyIgnoreCache;
-    [query findConversationsWithCallback: ^(NSArray *objects, NSError *error) {
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
-            [objects makeObjectsPerformSelector:@selector(lastMessage)];
-            dispatch_async(dispatch_get_main_queue(),^{
-                !callback ?: callback(objects, error);
+                                     callback:(LCCKArrayResultBlock)callback
+{
+    [self fetchConversationsWithConversationIds:[[conversationIds allObjects] mutableCopy]
+                                        results:[NSMutableArray array]
+                                       callback:callback];
+}
+
+- (void)fetchConversationsWithConversationIds:(NSMutableArray<NSString *> *)conversationIds
+                                      results:(NSMutableArray<AVIMConversation *> *)results
+                                     callback:(LCCKArrayResultBlock)callback
+{
+    if (conversationIds.count <= 100) {
+        AVIMConversationQuery *query = [[LCCKSessionService sharedInstance].client conversationQuery];
+        [query whereKey:@"objectId" containedIn:conversationIds];
+        query.limit = conversationIds.count;
+        query.option = AVIMConversationQueryOptionWithMessage;
+        query.cacheMaxAge = kAVIMCachePolicyIgnoreCache;
+        [query findConversationsWithCallback: ^(NSArray *objects, NSError *error) {
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
+                [objects makeObjectsPerformSelector:@selector(lastMessage)];
+                if (objects) {
+                    [results addObjectsFromArray:objects];
+                }
+                dispatch_async(dispatch_get_main_queue(),^{
+                    !callback ?: callback(results, nil);
+                });
             });
-        });
-    }];
+        }];
+    } else {
+        NSRange range = NSMakeRange(0, 100);
+        NSArray<NSString *> *ids = [conversationIds subarrayWithRange:range];
+        [conversationIds removeObjectsInRange:range];
+        AVIMConversationQuery *query = [[LCCKSessionService sharedInstance].client conversationQuery];
+        [query whereKey:@"objectId" containedIn:ids];
+        query.limit = ids.count;
+        query.option = AVIMConversationQueryOptionWithMessage;
+        query.cacheMaxAge = kAVIMCachePolicyIgnoreCache;
+        [query findConversationsWithCallback: ^(NSArray *objects, NSError *error) {
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
+                [objects makeObjectsPerformSelector:@selector(lastMessage)];
+                if (objects) {
+                    [results addObjectsFromArray:objects];
+                }
+                [self fetchConversationsWithConversationIds:conversationIds results:results callback:callback];
+            });
+        }];
+    }
 }
 
 - (void)fetchConversationWithPeerId:(NSString *)peerId callback:(AVIMConversationResultBlock)callback {
