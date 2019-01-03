@@ -74,6 +74,34 @@ NSString *const RNNotificationName = @"sendMessageToRNNotificationName";
 
 @implementation LCCKConversationViewController
 
+- (NSString *) peerIcon {
+    if (_peerIcon == nil) {
+        _peerIcon = @"";
+    }
+    return _peerIcon;
+}
+
+- (NSString *)peerName {
+    if (_peerName == nil) {
+        _peerName = @"";
+    }
+    return _peerName;
+}
+
+- (NSString *)peerID {
+    if (_peerID == nil) {
+        _peerID = @"";
+    }
+    return _peerID;
+}
+
+- (NSString *)peerSex {
+    if (_peerSex == nil) {
+        _peerSex = @"";
+    }
+    return _peerSex;
+}
+
 - (void)setFetchConversationHandler:(LCCKFetchConversationHandler)fetchConversationHandler {
     _fetchConversationHandler = fetchConversationHandler;
 }
