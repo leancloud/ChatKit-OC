@@ -712,7 +712,6 @@ fromTimestamp     |    toDate   |                |  上次上拉刷新顶端，�
     NSUInteger newLastMessageCout = self.dataArray.count;
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:self.dataArray.count - 1 inSection:0];
     [self.delegate messageSendStateChanged:LCCKMessageSendStateSending withProgress:0.0f forIndex:indexPath.row];
-    LCCKLock();
     NSMutableArray *indexPaths = [NSMutableArray arrayWithObject:indexPath];
     NSUInteger additionItemsCount = newLastMessageCout - oldLastMessageCount;
     if (additionItemsCount > 1) {
@@ -721,12 +720,17 @@ fromTimestamp     |    toDate   |                |  上次上拉刷新顶端，�
             [indexPaths addObject:indexPath];
         }
     }
-    dispatch_async(dispatch_get_main_queue(),^{
+    if (NSThread.isMainThread) {
         [self.parentConversationViewController.tableView insertRowsAtIndexPaths:[indexPaths copy] withRowAnimation:UITableViewRowAnimationNone];
-        LCCKUnlock();
         [self.parentConversationViewController scrollToBottomAnimated:YES];
         !callback ?: callback();
-    });
+    } else {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.parentConversationViewController.tableView insertRowsAtIndexPaths:[indexPaths copy] withRowAnimation:UITableViewRowAnimationNone];
+            [self.parentConversationViewController scrollToBottomAnimated:YES];
+            !callback ?: callback();
+        });
+    }
 }
 
 #pragma mark - Getters
