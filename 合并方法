@@ -1,0 +1,15 @@
+创建指定版本分支
+git checkout -b master_190222（新分支名） master（来源分支）
+合并远程URL到当前分支
+git pull git://github.com/leancloud/ChatKit-OC.git（远程分支） master（指定分支或者版本）
+
+比如：
+先从stable分支拉出一个stable_190222版本用于合并新代码：
+git checkout -b stable_190222 stable
+去leancloud看到发布了新的版本：
+https://github.com/leancloud/ChatKit-OC/releases
+v2.3.10 然后 提交的号是：cc714e918d952ea88d2bf6b044df819897690b1a
+合并：
+git pull git://github.com/leancloud/ChatKit-OC.git cc714e918d952ea88d2bf6b044df819897690b1a
+
+这样就合并完成了
