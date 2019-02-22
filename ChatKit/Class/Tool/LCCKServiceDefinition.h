@@ -59,6 +59,8 @@ typedef void (^LCCKForceReconnectSessionBlock)(NSError *error, BOOL granted, __k
  */
 - (void)setForceReconnectSessionBlock:(LCCKForceReconnectSessionBlock)forceReconnectSessionBlock;
 
+- (void)setMemberInfoChangedBlock:(void (^)(AVIMConversation *conversation, NSString *byClientId, NSString *clientId, AVIMConversationMemberRole role))block;
+
 @end
 
 #pragma mark - LCCKUserSystemService
@@ -242,6 +244,10 @@ typedef NSArray<LCCKMenuItem *> *(^LCCKLongPressMessageBlock)(LCCKMessage *messa
 #define LCCKLongPressMessageUserInfoKeyFromController    @"LCCKLongPressMessageUserInfoKeyFromController"
 /// 传递触发的UIView对象
 #define LCCKLongPressMessageUserInfoKeyFromView          @"LCCKLongPressMessageUserInfoKeyFromView"
+/// message owner
+#define LCCKLongPressMessageUserInfoKeyMessageOwner @"LCCKLongPressMessageUserInfoKeyMessageOwner"
+/// message cell
+#define LCCKLongPressMessageUserInfoKeyMessageCell @"LCCKLongPressMessageUserInfoKeyMessageCell"
 
 /*!
  *  ChatKit会在长按消息时，调用这个block
@@ -459,12 +465,12 @@ typedef void(^LCCKDidSelectConversationsListCellBlock)(NSIndexPath *indexPath, A
 /*!
  *  选中某个对话后的回调
  */
-@property (nonatomic, copy) LCCKDidSelectConversationsListCellBlock didSelectConversationsListCellBlock;
+@property (nonatomic, copy) LCCKDidSelectConversationsListCellBlock didSelectConversationsListCellBlock __deprecated_msg("LCCKDidSelectConversationsListCellBlock is deprecated. Use <LCCKConversationListViewControllerDelegate> instead");
 
 /*!
  *  设置选中某个对话后的回调
  */
-- (void)setDidSelectConversationsListCellBlock:(LCCKDidSelectConversationsListCellBlock)didSelectConversationsListCellBlock;
+- (void)setDidSelectConversationsListCellBlock:(LCCKDidSelectConversationsListCellBlock)didSelectConversationsListCellBlock __deprecated_msg("LCCKDidSelectConversationsListCellBlock is deprecated. Use <LCCKConversationListViewControllerDelegate> instead");
 
 /*!
  *  删除某个对话后的回调

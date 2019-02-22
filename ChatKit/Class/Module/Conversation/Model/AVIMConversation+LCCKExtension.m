@@ -46,9 +46,9 @@
     return isServerLate ? dateFromServer : dateFromCache;
 }
 
-- (NSInteger)lcck_unreadCount {
-    NSNumber *lcck_unreadCountObject = objc_getAssociatedObject(self, @selector(lcck_unreadCount));
-    return [lcck_unreadCountObject intValue];
+- (NSInteger)lcck_unreadCount
+{
+    return self.unreadMessagesCount;
 }
 
 - (NSString *)lcck_badgeText {
@@ -62,20 +62,20 @@
     return badgeText;
 }
 
-- (void)setLcck_unreadCount:(NSInteger)lcck_unreadCount {
-    NSNumber *lcck_unreadCountObject = [NSNumber numberWithInteger:lcck_unreadCount];
-    objc_setAssociatedObject(self, @selector(lcck_unreadCount), lcck_unreadCountObject, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+//- (void)setLcck_unreadCount:(NSInteger)lcck_unreadCount {
+//    NSNumber *lcck_unreadCountObject = [NSNumber numberWithInteger:lcck_unreadCount];
+//    objc_setAssociatedObject(self, @selector(lcck_unreadCount), lcck_unreadCountObject, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+//}
+
+- (BOOL)lcck_mentioned
+{
+    return self.unreadMessagesMentioned;
 }
 
-- (BOOL)lcck_mentioned {
-    NSNumber *lcck_mentionedObject = objc_getAssociatedObject(self, @selector(lcck_mentioned));
-    return [lcck_mentionedObject boolValue];
-}
-
-- (void)setLcck_mentioned:(BOOL)lcck_mentioned {
-    NSNumber *lcck_mentionedObject = [NSNumber numberWithBool:lcck_mentioned];
-    objc_setAssociatedObject(self, @selector(lcck_mentioned), lcck_mentionedObject, OBJC_ASSOCIATION_ASSIGN);
-}
+//- (void)setLcck_mentioned:(BOOL)lcck_mentioned {
+//    NSNumber *lcck_mentionedObject = [NSNumber numberWithBool:lcck_mentioned];
+//    objc_setAssociatedObject(self, @selector(lcck_mentioned), lcck_mentionedObject, OBJC_ASSOCIATION_ASSIGN);
+//}
 
 - (NSString *)lcck_draft {
     return objc_getAssociatedObject(self, @selector(lcck_draft));
@@ -149,20 +149,6 @@
         return [NSString stringWithFormat:@"%@(%ld)", displayName, (long)self.members.count];
         
     }
-}
-
-- (void)lcck_setObject:(id)object forKey:(NSString *)key callback:(LCCKBooleanResultBlock)callback {
-    AVIMConversationUpdateBuilder *updateBuilder = [self newUpdateBuilder] ;
-    updateBuilder.attributes = self.attributes;
-    [updateBuilder setObject:object forKey:key];
-    [self update:[updateBuilder dictionary] callback:callback];
-}
-
-- (void)lcck_removeObjectForKey:(NSString *)key callback:(LCCKBooleanResultBlock)callback {
-    AVIMConversationUpdateBuilder *updateBuilder = [self newUpdateBuilder] ;
-    updateBuilder.attributes = self.attributes;
-    [updateBuilder removeObjectForKey:key];
-    [self update:[updateBuilder dictionary] callback:callback];
 }
 
 - (void)lcck_setConversationWithMute:(BOOL)mute callback:(LCCKBooleanResultBlock)callback {

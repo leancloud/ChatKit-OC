@@ -21,7 +21,7 @@
 #import "AVIMConversation+LCCKExtension.h"
 #import "LCCKConversationViewController.h"
 #import "LCCKConversationListViewController.h"
-#import "LCCKMessage.h" 
+#import "LCCKMessage.h"
 #import "LCCKConversationListService.h"
 #import "AVIMMessage+LCCKExtension.h"
 
@@ -80,20 +80,53 @@ NSString *const LCCKConversationServiceErrorDomain = @"LCCKConversationServiceEr
 }
 
 - (void)fetchConversationsWithConversationIds:(NSSet *)conversationIds
-                                     callback:(LCCKArrayResultBlock)callback {
-    AVIMConversationQuery *query = [[LCCKSessionService sharedInstance].client conversationQuery];
-    [query whereKey:@"objectId" containedIn:[conversationIds allObjects]];
-    query.limit = conversationIds.count;
-    query.option = AVIMConversationQueryOptionWithMessage;
-    query.cacheMaxAge = kAVIMCachePolicyIgnoreCache;
-    [query findConversationsWithCallback: ^(NSArray *objects, NSError *error) {
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
-            [objects makeObjectsPerformSelector:@selector(lastMessage)];
-            dispatch_async(dispatch_get_main_queue(),^{
-                !callback ?: callback(objects, error);
+                                     callback:(LCCKArrayResultBlock)callback
+{
+    [self fetchConversationsWithConversationIds:[[conversationIds allObjects] mutableCopy]
+                                        results:[NSMutableArray array]
+                                       callback:callback];
+}
+
+- (void)fetchConversationsWithConversationIds:(NSMutableArray<NSString *> *)conversationIds
+                                      results:(NSMutableArray<AVIMConversation *> *)results
+                                     callback:(LCCKArrayResultBlock)callback
+{
+    if (conversationIds.count <= 100) {
+        AVIMConversationQuery *query = [[LCCKSessionService sharedInstance].client conversationQuery];
+        [query whereKey:@"objectId" containedIn:conversationIds];
+        query.limit = conversationIds.count;
+        query.option = AVIMConversationQueryOptionWithMessage;
+        query.cacheMaxAge = kAVIMCachePolicyIgnoreCache;
+        [query findConversationsWithCallback: ^(NSArray *objects, NSError *error) {
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
+                [objects makeObjectsPerformSelector:@selector(lastMessage)];
+                if (objects) {
+                    [results addObjectsFromArray:objects];
+                }
+                dispatch_async(dispatch_get_main_queue(),^{
+                    !callback ?: callback(results, nil);
+                });
             });
-        });
-    }];
+        }];
+    } else {
+        NSRange range = NSMakeRange(0, 100);
+        NSArray<NSString *> *ids = [conversationIds subarrayWithRange:range];
+        [conversationIds removeObjectsInRange:range];
+        AVIMConversationQuery *query = [[LCCKSessionService sharedInstance].client conversationQuery];
+        [query whereKey:@"objectId" containedIn:ids];
+        query.limit = ids.count;
+        query.option = AVIMConversationQueryOptionWithMessage;
+        query.cacheMaxAge = kAVIMCachePolicyIgnoreCache;
+        [query findConversationsWithCallback: ^(NSArray *objects, NSError *error) {
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
+                [objects makeObjectsPerformSelector:@selector(lastMessage)];
+                if (objects) {
+                    [results addObjectsFromArray:objects];
+                }
+                [self fetchConversationsWithConversationIds:conversationIds results:results callback:callback];
+            });
+        }];
+    }
 }
 
 - (void)fetchConversationWithPeerId:(NSString *)peerId callback:(AVIMConversationResultBlock)callback {
@@ -264,7 +297,7 @@ NSString *const LCCKConversationServiceErrorDomain = @"LCCKConversationServiceEr
 
 - (void)updateUnreadCountToZeroWithConversationId:(NSString *)conversationId shouldRefreshWhenFinished:(BOOL)shouldRefreshWhenFinished {
     AVIMConversation *cachedConversation = [self.conversationDictionary objectForKey:conversationId];
-    cachedConversation.lcck_unreadCount = 0;
+    [cachedConversation readInBackground];
     dispatch_async(self.sqliteQueue, ^{
         [self.databaseQueue inDatabase:^(FMDatabase *db) {
             [db executeUpdate:LCCKConversationTableUpdateUnreadCountSQL  withArgumentsInArray:@[@0, conversationId]];
@@ -342,7 +375,7 @@ NSString *const LCCKConversationServiceErrorDomain = @"LCCKConversationServiceEr
 
 - (void)increaseUnreadCountWithConversationId:(NSString *)conversationId shouldRefreshWhenFinished:(BOOL)shouldRefreshWhenFinished {
     AVIMConversation *cachedConversation = [self.conversationDictionary objectForKey:conversationId];
-    cachedConversation.lcck_unreadCount += 1;
+//    cachedConversation.lcck_unreadCount += 1;
     dispatch_async(self.sqliteQueue, ^{
         [self.databaseQueue inDatabase:^(FMDatabase *db) {
             [db executeUpdate:LCCKConversationTableIncreaseOneUnreadCountSQL withArgumentsInArray:@[conversationId]];
@@ -354,7 +387,7 @@ NSString *const LCCKConversationServiceErrorDomain = @"LCCKConversationServiceEr
 }
 - (void)increaseUnreadCount:(NSUInteger)increaseUnreadCount withConversationId:(NSString *)conversationId shouldRefreshWhenFinished:(BOOL)shouldRefreshWhenFinished {
     AVIMConversation *cachedConversation = [self.conversationDictionary objectForKey:conversationId];
-    cachedConversation.lcck_unreadCount += increaseUnreadCount;
+//    cachedConversation.lcck_unreadCount += increaseUnreadCount;
     dispatch_async(self.sqliteQueue, ^{
         [self.databaseQueue inDatabase:^(FMDatabase *db) {
             [db executeUpdate:LCCKConversationTableIncreaseUnreadCountSQL withArgumentsInArray:@[@(increaseUnreadCount) ,conversationId]];
@@ -370,7 +403,7 @@ NSString *const LCCKConversationServiceErrorDomain = @"LCCKConversationServiceEr
 
 - (void)updateMentioned:(BOOL)mentioned conversationId:(NSString *)conversationId shouldRefreshWhenFinished:(BOOL)shouldRefreshWhenFinished {
     AVIMConversation *cachedConversation = [self.conversationDictionary objectForKey:conversationId];
-    cachedConversation.lcck_mentioned = mentioned;
+//    cachedConversation.lcck_mentioned = mentioned;
     dispatch_async(self.sqliteQueue, ^{
         [self.databaseQueue inDatabase:^(FMDatabase *db) {
             [db executeUpdate:LCCKConversationTableUpdateMentionedSQL withArgumentsInArray:@[@(mentioned), conversationId]];
@@ -409,8 +442,8 @@ NSString *const LCCKConversationServiceErrorDomain = @"LCCKConversationServiceEr
     BOOL mentioned = [resultSet boolForColumn:LCCKConversationTableKeyMentioned];
     NSString *draft = [resultSet stringForColumn:LCCKConversationTableKeyDraft];
     AVIMConversation *conversation = [self conversationFromData:data];
-    conversation.lcck_unreadCount = unreadCount;
-    conversation.lcck_mentioned = mentioned;
+//    conversation.lcck_unreadCount = unreadCount;
+//    conversation.lcck_mentioned = mentioned;
     conversation.lcck_draft = draft;
     [self pinIMClientToConversationIfNeeded:conversation];
     return conversation;
@@ -429,9 +462,9 @@ NSString *const LCCKConversationServiceErrorDomain = @"LCCKConversationServiceEr
     for (AVIMConversation *conversation in conversations) {
         AVIMConversation *cachedConversation = [self.conversationDictionary objectForKey:conversation.conversationId];
         if (cachedConversation) {
-            conversation.lcck_unreadCount = cachedConversation.lcck_unreadCount;
+//            conversation.lcck_unreadCount = cachedConversation.lcck_unreadCount;
             conversation.lcck_draft = [cachedConversation.lcck_draft copy];
-            conversation.lcck_mentioned = cachedConversation.lcck_mentioned;
+//            conversation.lcck_mentioned = cachedConversation.lcck_mentioned;
             [self.conversationDictionary setObject:conversation forKey:conversation.conversationId];
         }
     }
@@ -737,7 +770,6 @@ NSString *const LCCKConversationServiceErrorDomain = @"LCCKConversationServiceEr
             [conversation queryMessagesWithLimit:limit callback:callback];
         } else {
             //会先根据本地缓存判断是否有必要从服务端拉取，这个方法不能用于首次拉取
-            [conversation queryMessagesBeforeId:nil timestamp:timestamp limit:limit callback:callback];
             [conversation queryMessagesBeforeId:messageId
                                       timestamp:timestamp
                                           limit:limit
@@ -746,38 +778,46 @@ NSString *const LCCKConversationServiceErrorDomain = @"LCCKConversationServiceEr
     });
 }
 
-+ (void)cacheFileTypeMessages:(NSArray<AVIMTypedMessage *> *)messages callback:(AVBooleanResultBlock)callback {
-    NSString *queueBaseLabel = [NSString stringWithFormat:@"com.chatkit.%@", NSStringFromClass([self class])];
-    const char *queueName = [[NSString stringWithFormat:@"%@.ForBarrier",queueBaseLabel] UTF8String];
-    dispatch_queue_t queue = dispatch_queue_create(queueName, DISPATCH_QUEUE_CONCURRENT);
-    
-    for (AVIMTypedMessage *message in messages) {
-        dispatch_async(queue, ^(void) {
++ (void)cacheFileTypeMessages:(NSArray<AVIMTypedMessage *> *)messages callback:(AVBooleanResultBlock)callback
+{
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        dispatch_group_t downloadGroup = dispatch_group_create();
+        for (AVIMTypedMessage *message in messages) {
+            dispatch_group_enter(downloadGroup);
             if (message.mediaType == kAVIMMessageMediaTypeImage || message.mediaType == kAVIMMessageMediaTypeAudio) {
                 AVFile *file = message.file;
-                if (file && file.isDataAvailable == NO) {
-                    NSError *error;
-                    // 下载到本地
-                    NSData *data = [file getData:&error];
-                    if (error || data == nil) {
-                        LCCKLog(@"download file error : %@", error);
-                    }
+                if (file) {
+                    [file downloadWithCompletionHandler:^(NSURL * _Nullable filePath, NSError * _Nullable error) {
+                        dispatch_group_leave(downloadGroup);
+                        if (error) { LCCKLog(@"download file error : %@", error); }
+                    }];
+                } else {
+                    dispatch_group_leave(downloadGroup);
                 }
             } else if (message.mediaType == kAVIMMessageMediaTypeVideo) {
                 NSString *path = [[LCCKSettingService sharedInstance] videoPathOfMessage:(AVIMVideoMessage *)message];
                 if (![[NSFileManager defaultManager] fileExistsAtPath:path]) {
-                    NSError *error;
-                    NSData *data = [message.file getData:&error];
-                    if (error) {
-                        LCCKLog(@"download file error : %@", error);
+                    AVFile *file = message.file;
+                    if (file) {
+                        [file downloadWithCompletionHandler:^(NSURL * _Nullable filePath, NSError * _Nullable error) {
+                            dispatch_group_leave(downloadGroup);
+                            if (error) {
+                                LCCKLog(@"download file error : %@", error);
+                            } else {
+                                [NSFileManager.defaultManager copyItemAtPath:filePath.path toPath:path error:nil];
+                            }
+                        }];
                     } else {
-                        [data writeToFile:path atomically:YES];
+                        dispatch_group_leave(downloadGroup);
                     }
+                } else {
+                    dispatch_group_leave(downloadGroup);
                 }
+            } else {
+                dispatch_group_leave(downloadGroup);
             }
-        });
-    }
-    dispatch_barrier_async(queue, ^{
+        }
+        dispatch_group_wait(downloadGroup, DISPATCH_TIME_FOREVER);
         dispatch_async(dispatch_get_main_queue(),^{
             !callback ?: callback(YES, nil);
         });

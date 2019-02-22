@@ -5,7 +5,7 @@ reset_on_push: false
 reviewers:
   required: 1
   members:
-    - ChenYilong
     - tang3w
     - jwfing
+    - zapcannon87
   name: default 

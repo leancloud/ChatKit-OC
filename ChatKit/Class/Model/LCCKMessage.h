@@ -41,7 +41,7 @@
 @property (nonatomic, assign, readonly) AVIMMessageMediaType mediaType;
 //@property (nonatomic, assign) LCCKConversationType messageGroupType;
 @property (nonatomic, assign, readonly) LCCKMessageReadState messageReadState;
-@property (nonatomic, copy, readonly) NSString *serverMessageId;
+@property (nonatomic, copy, readwrite) NSString *serverMessageId;
 @property (nonatomic, assign) NSTimeInterval timestamp;
 
 /*!

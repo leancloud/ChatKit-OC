@@ -29,11 +29,14 @@
 #endif
 @end
 
+#warning TODO: CHANGE TO YOUR OWN AppId and AppKey
+static NSString *const LCCKAPPID = @"dYRQ8YfHRiILshUnfFJu2eQM-gzGzoHsz";
+static NSString *const LCCKAPPKEY = @"ye24iIK6ys8IvaISMC4Bs5WK";
+
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     [self registerForRemoteNotification];
-    [LCChatKitExample invokeThisMethodInDidFinishLaunching];
     [self customizeNavigationBar];
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     LCCKLoginViewController *loginViewController = [[LCCKLoginViewController alloc] initWithNibName:NSStringFromClass([LCCKLoginViewController class]) bundle:[NSBundle mainBundle]];
@@ -50,6 +53,18 @@
         }];
     }];
     
+    // 如果APP是在国外使用，开启北美节点
+    // 必须在 APPID 初始化之前调用，否则走的是中国节点。
+    // [AVOSCloud setServiceRegion:AVServiceRegionUS];
+    [LCChatKit setAppId:LCCKAPPID appKey:LCCKAPPKEY];
+    // 启用未读消息
+    [AVIMClient setUnreadNotificationEnabled:true];
+    [AVIMClient setTimeoutIntervalInSeconds:20];
+    //添加输入框底部插件，如需更换图标标题，可子类化，然后调用 `+registerSubclass`
+    [LCCKInputViewPluginTakePhoto registerSubclass];
+    [LCCKInputViewPluginPickImage registerSubclass];
+    [LCCKInputViewPluginLocation registerSubclass];
+
     self.window.rootViewController = loginViewController;
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
@@ -57,7 +72,7 @@
 }
 
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
-    [LCChatKitExample invokeThisMethodInDidRegisterForRemoteNotificationsWithDeviceToken:deviceToken];
+    [AVOSCloud handleRemoteNotificationsWithDeviceToken:deviceToken];
 }
 
 - (void)customizeNavigationBar {
@@ -70,15 +85,30 @@
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application {
-    [LCChatKitExample invokeThisMethodInApplicationWillResignActive:application];
+    [[LCChatKit sharedInstance] syncBadge];
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application {
-    [LCChatKitExample invokeThisMethodInApplicationWillTerminate:application];
+    [[LCChatKit sharedInstance] syncBadge];
 }
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
-    [LCChatKitExample invokeThisMethodInApplication:application didReceiveRemoteNotification:userInfo];
+    if (application.applicationState == UIApplicationStateActive) {
+        // 应用在前台时收到推送，只能来自于普通的推送，而非离线消息推送
+    } else {
+        /*!
+         *  当使用 https://github.com/leancloud/leanchat-cloudcode 云代码更改推送内容的时候
+         {
+         aps = {
+         alert = "lcckkit : sdfsdf";
+         badge = 4;
+         sound = default;
+         };
+         convid = 55bae86300b0efdcbe3e742e;
+         }
+         */
+        [[LCChatKit sharedInstance] didReceiveRemoteNotification:userInfo];
+    }
 }
 
 - (BOOL)application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary<NSString *,id> *)options {
@@ -112,11 +142,14 @@
         [uncenter setDelegate:self];
         //iOS 10 使用以下方法注册，才能得到授权
         [uncenter requestAuthorizationWithOptions:(UNAuthorizationOptionAlert+UNAuthorizationOptionBadge+UNAuthorizationOptionSound)
-                                completionHandler:^(BOOL granted, NSError * _Nullable error) {
-                                    [[UIApplication sharedApplication] registerForRemoteNotifications];
-                                    //TODO:授权状态改变
-                                    NSLog(@"%@" , granted ? @"授权成功" : @"授权失败");
-                                }];
+                                completionHandler:^(BOOL granted, NSError * _Nullable error)
+         {
+             dispatch_async(dispatch_get_main_queue(), ^{
+                 [[UIApplication sharedApplication] registerForRemoteNotifications];
+             });
+             //TODO:授权状态改变
+             NSLog(@"%@" , granted ? @"授权成功" : @"授权失败");
+         }];
         // 获取当前的通知授权状态, UNNotificationSettings
         [uncenter getNotificationSettingsWithCompletionHandler:^(UNNotificationSettings * _Nonnull settings) {
             NSLog(@"%s\nline:%@\n-----\n%@\n\n", __func__, @(__LINE__), settings);
@@ -190,7 +223,8 @@
  */
 - (void)userNotificationCenter:(UNUserNotificationCenter *)center
 didReceiveNotificationResponse:(UNNotificationResponse *)response
-         withCompletionHandler:(void (^)())completionHandler {
+         withCompletionHandler:(void (^)(void))completionHandler
+{
     NSDictionary *userInfo = response.notification.request.content.userInfo;
     if([response.notification.request.trigger isKindOfClass:[UNPushNotificationTrigger class]]) {
         //TODO:处理远程推送内容

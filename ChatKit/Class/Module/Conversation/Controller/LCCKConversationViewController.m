@@ -257,7 +257,7 @@ NSString *const RNNotificationName = @"sendMessageToRNNotificationName";
         self.user = user;
     }];
     [self.chatViewModel setDefaultBackgroundImage];
-    self.navigationItem.title = LCCKLocalizedStrings(@"Chat");//@"聊天";
+
     !self.viewDidLoadBlock ?: self.viewDidLoadBlock(self);
 }
 
@@ -271,6 +271,9 @@ NSString *const RNNotificationName = @"sendMessageToRNNotificationName";
     [super viewDidAppear:animated];
     [self.chatBar open];
     [self saveCurrentConversationInfoIfExists];
+    
+    [self setupNavigationItemTitleWithConversation:self.conversation];
+    
     !self.viewDidAppearBlock ?: self.viewDidAppearBlock(self, animated);
 }
 
@@ -301,6 +304,9 @@ NSString *const RNNotificationName = @"sendMessageToRNNotificationName";
             [[LCCKConversationService sharedInstance] updateConversationAsReadWithLastMessage:_conversation.lcck_lastMessage];
         });
     }
+    
+    self.navigationItem.titleView = nil;
+    
     !self.viewDidDisappearBlock ?: self.viewDidDisappearBlock(self, animated);
 }
 
@@ -312,7 +318,13 @@ NSString *const RNNotificationName = @"sendMessageToRNNotificationName";
 #pragma mark -
 #pragma mark - public Methods
 
-- (void)sendTextMessage:(NSString *)text {
+- (void)sendTextMessage:(NSString *)text
+{
+    [self sendTextMessage:text mentionList:@[]];
+}
+
+- (void)sendTextMessage:(NSString *)text mentionList:(NSArray<NSString *> *)mentionList
+{
     if ([text length] > 0 ) {
         LCCKMessage *lcckMessage = [[LCCKMessage alloc] initWithText:text
                                                             senderId:self.userId
@@ -330,7 +342,7 @@ NSString *const RNNotificationName = @"sendMessageToRNNotificationName";
         
         [self makeSureSendValidMessage:lcckMessage afterFetchedConversationShouldWithAssert:NO];
 
-        [self.chatViewModel sendMessage:lcckMessage];
+        [self.chatViewModel sendMessage:lcckMessage mentionList:mentionList];
         
         [[NSNotificationCenter defaultCenter]
          postNotificationName:RNNotificationName
@@ -771,8 +783,8 @@ NSString *const RNNotificationName = @"sendMessageToRNNotificationName";
 
 #pragma mark - LCCKChatBarDelegate
 
-- (void)chatBar:(LCCKChatBar *)chatBar sendMessage:(NSString *)message {
-    [self sendTextMessage:message];
+- (void)chatBar:(LCCKChatBar *)chatBar sendMessage:(NSString *)message mentionList:(NSArray<NSString *> *)mentionList {
+    [self sendTextMessage:message mentionList:mentionList];
 }
 
 - (void)chatBar:(LCCKChatBar *)chatBar sendVoice:(NSString *)voiceFileName seconds:(NSTimeInterval)seconds{
@@ -806,38 +818,14 @@ NSString *const RNNotificationName = @"sendMessageToRNNotificationName";
             [self.chatBar open];
         }];
         if (peerId.length > 0) {
-            NSArray *peerNames = [[LCChatKit sharedInstance] getCachedProfilesIfExists:@[peerId] error:nil];
-            NSString *peerName;
-            @try {
-                id<LCCKUserDelegate> user = peerNames[0];
-                peerName = user.name ?: user.clientId;
-            } @catch (NSException *exception) {
-                peerName = peerId;
-            }
-            peerName = [NSString stringWithFormat:@"@%@ ", peerName];
-            [self.chatBar appendString:peerName];
+            [self.chatBar appendString:[NSString stringWithFormat:@"@%@ ", peerId] mentionList:@[peerId]];
         }
     }];
     [contactListViewController setSelectedContactsCallback:^(UIViewController *viewController, NSArray<NSString *> *peerIds) {
         if (peerIds.count > 0) {
-            NSArray<id<LCCKUserDelegate>> *peers = [[LCCKUserSystemService sharedInstance] getCachedProfilesIfExists:peerIds error:nil];
-            NSMutableArray *peerNames = [NSMutableArray arrayWithCapacity:peers.count];
-            [peers enumerateObjectsUsingBlock:^(id<LCCKUserDelegate>  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-                if (obj.name) {
-                    [peerNames addObject:obj.name];
-                } else {
-                    [peerNames addObject:obj.clientId];
-                }
-            }];
-            NSArray *realPeerNames;
-            if (peerNames.count > 0) {
-                realPeerNames = peerNames;
-            } else {
-                realPeerNames = peerIds;
-            }
-            NSString *peerName = [[realPeerNames valueForKey:@"description"] componentsJoinedByString:@" @"];
-            peerName = [NSString stringWithFormat:@"@%@ ", peerName];
-            [self.chatBar appendString:peerName];
+            NSString *peerString = [[peerIds valueForKey:@"description"] componentsJoinedByString:@" @"];
+            peerString = [NSString stringWithFormat:@"@%@ ", peerString];
+            [self.chatBar appendString:peerString mentionList:peerIds];
         }
     }];
     UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:contactListViewController];
@@ -1006,6 +994,16 @@ NSString *const RNNotificationName = @"sendMessageToRNNotificationName";
     [self.chatViewModel resendMessageForMessageCell:messageCell];
 }
 
+- (void)modifyMessage:(LCCKChatMessageCell *)messageCell newMessage:(LCCKMessage *)newMessage callback:(void (^)(BOOL, NSError *))callback
+{
+    [self.chatViewModel modifyMessageForMessageCell:messageCell newMessage:newMessage callback:callback];
+}
+
+- (void)recallMessage:(LCCKChatMessageCell *)messageCell callback:(void (^)(BOOL, NSError *))callback
+{
+    [self.chatViewModel recallMessageForMessageCell:messageCell callback:callback];
+}
+
 - (void)fileMessageDidDownload:(LCCKChatMessageCell *)messageCell {
     [self reloadAfterReceiveMessage];
 }
@@ -1013,9 +1011,8 @@ NSString *const RNNotificationName = @"sendMessageToRNNotificationName";
 - (void)messageCell:(LCCKChatMessageCell *)messageCell didTapLinkText:(NSString *)linkText linkType:(MLLinkType)linkType {
     switch (linkType) {
         case MLLinkTypeURL: {
-            linkText =  [linkText lowercaseString];
             LCCKWebViewController *webViewController = [[LCCKWebViewController alloc] init];
-            if (![linkText hasPrefix:@"http"]) {
+            if (![NSURL URLWithString:linkText].scheme) {
                 linkText = [NSString stringWithFormat:@"http://%@", linkText];
             }
             webViewController.URL = [NSURL URLWithString:linkText];
@@ -1085,9 +1082,9 @@ NSString *const RNNotificationName = @"sendMessageToRNNotificationName";
 }
 
 - (void)updateStatusView {
-    if (!self.shouldCheckSessionStatus) {
-        return;
-    }
+//    if (!self.shouldCheckSessionStatus) {
+//        return;
+//    }
     BOOL isConnected = [LCCKSessionService sharedInstance].connect;
     if (isConnected) {
         self.clientStatusView.hidden = YES;

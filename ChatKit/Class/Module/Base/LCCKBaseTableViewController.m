@@ -51,14 +51,17 @@
         tableView.dataSource = self;
         tableView.tableFooterView = [[UIView alloc] init];
         tableView.keyboardDismissMode = UIScrollViewKeyboardDismissModeOnDrag;
-
-        /*         in iOS 11, estimating height is open in default.
+        
+        /*
+         in iOS 11, estimating height is open in default.
          if not close, the UITableView's `estimating height` will conflict with `FDTemplateLayoutCell`.
          */
+        ///
         tableView.estimatedRowHeight = 0;
         tableView.estimatedSectionFooterHeight = 0;
         tableView.estimatedSectionHeaderHeight = 0;
-
+        ///
+        
         [self.view addSubview:_tableView = tableView];
     }
     return _tableView;

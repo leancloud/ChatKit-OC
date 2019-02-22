@@ -22,6 +22,17 @@ NSString *const LCCKUserSystemServiceErrorDomain = @"LCCKUserSystemServiceErrorD
 @implementation LCCKUserSystemService
 @synthesize fetchProfilesBlock = _fetchProfilesBlock;
 
+- (instancetype)init
+{
+    self = [super init];
+    if (self) {
+        NSString *queueBaseLabel = [NSString stringWithFormat:@"com.ChatKit.%@", NSStringFromClass([self class])];
+        const char *queueName = [[NSString stringWithFormat:@"%@.ForIsolation",queueBaseLabel] UTF8String];
+        self->_isolationQueue = dispatch_queue_create(queueName, NULL);
+    }
+    return self;
+}
+
 - (void)setFetchProfilesBlock:(LCCKFetchProfilesBlock)fetchProfilesBlock {
     _fetchProfilesBlock = fetchProfilesBlock;
 }
@@ -339,16 +350,6 @@ NSString *const LCCKUserSystemServiceErrorDomain = @"LCCKUserSystemServiceErrorD
         _cachedUsers = [[NSMutableDictionary alloc] init];
     }
     return _cachedUsers;
-}
-
-- (dispatch_queue_t)isolationQueue {
-    if (_isolationQueue) {
-        return _isolationQueue;
-    }
-    NSString *queueBaseLabel = [NSString stringWithFormat:@"com.ChatKit.%@", NSStringFromClass([self class])];
-    const char *queueName = [[NSString stringWithFormat:@"%@.ForIsolation",queueBaseLabel] UTF8String];
-    _isolationQueue = dispatch_queue_create(queueName, NULL);
-    return _isolationQueue;
 }
 
 #pragma mark -

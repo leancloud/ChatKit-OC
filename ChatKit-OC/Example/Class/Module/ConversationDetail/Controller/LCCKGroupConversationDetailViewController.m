@@ -14,6 +14,7 @@
 #import "LCCKProfileNameEditViewController.h"
 #import "CYLTabBarController.h"
 #import "LCCKUser.h"
+#import "LCCKGroupConversationManagementViewController.h"
 
 @interface LCCKGroupConversationDetailViewController ()<LCCKUserGroupCellDelegate, LCCKProfileNameEditViewControllerDelegate>
 
@@ -104,6 +105,11 @@
 //        LCCKActionSheet *actionSheet = [[LCCKActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"清空聊天记录" otherButtonTitles: nil];
 //        actionSheet.tag = TAG_EMPTY_CHAT_REC;
 //        [actionSheet show];
+    }
+    else if ([item.title isEqualToString:@"群管理"]) {
+        LCCKGroupConversationManagementViewController *vc = [[LCCKGroupConversationManagementViewController alloc] initWithStyle:UITableViewStyleGrouped];
+        vc.conversation = self.conversation;
+        [self.navigationController pushViewController:vc animated:true];
     }
 }
 

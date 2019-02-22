@@ -218,7 +218,7 @@
 
 - (void)showPopOverMenu:(UIBarButtonItem *)sender event:(UIEvent *)event {
     [FTPopOverMenu showFromEvent:event
-                        withMenu:@[ @"创建群聊" ]
+                   withMenuArray:@[ @"创建群聊" ]
                        doneBlock:^(NSInteger selectedIndex) {
                            if (selectedIndex == 0) {
                                [self createGroupConversation:sender];
