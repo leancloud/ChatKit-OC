@@ -595,13 +595,20 @@ fromTimestamp     |    toDate   |                |  上次上拉刷新顶端，�
 }
 
 - (void)sendLocalFeedbackTextMessge:(NSString *)localFeedbackTextMessge {
-    LCCKMessage *localFeedbackMessge = [LCCKMessage localFeedbackText:localFeedbackTextMessge];
-    [self appendMessagesToDataArrayTrailing:@[localFeedbackMessge]];
-    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:self.dataArray.count - 1 inSection:0];
-    dispatch_async(dispatch_get_main_queue(),^{
+    void (^operation)(void) = ^(void) {
+        LCCKMessage *localFeedbackMessge = [LCCKMessage localFeedbackText:localFeedbackTextMessge];
+        [self appendMessagesToDataArrayTrailing:@[localFeedbackMessge]];
+        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:self.dataArray.count - 1 inSection:0];
         [self.parentConversationViewController.tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
         [self.parentConversationViewController scrollToBottomAnimated:YES];
-    });
+    };
+    if ([NSThread isMainThread]) {
+        operation();
+    } else {
+        dispatch_async(dispatch_get_main_queue(),^{
+            operation();
+        });
+    }
 }
 
 - (void)resendMessageForMessageCell:(LCCKChatMessageCell *)messageCell {
