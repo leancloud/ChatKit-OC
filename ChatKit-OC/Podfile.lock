@@ -1,17 +1,17 @@
 PODS:
-  - AVOSCloud (11.4.9)
-  - AVOSCloudIM (11.4.9):
-    - AVOSCloud (= 11.4.9)
-    - AVOSCloudIM/_ARC (= 11.4.9)
-    - AVOSCloudIM/_NOARC (= 11.4.9)
-  - AVOSCloudIM/_ARC (11.4.9):
-    - AVOSCloud (= 11.4.9)
-    - AVOSCloudIM/_NOARC (= 11.4.9)
-  - AVOSCloudIM/_NOARC (11.4.9):
-    - AVOSCloud (= 11.4.9)
-  - ChatKit (2.3.10):
-    - AVOSCloud (~> 11.4.9)
-    - AVOSCloudIM (~> 11.4.9)
+  - AVOSCloud (11.5.1)
+  - AVOSCloudIM (11.5.1):
+    - AVOSCloud (= 11.5.1)
+    - AVOSCloudIM/_ARC (= 11.5.1)
+    - AVOSCloudIM/_NOARC (= 11.5.1)
+  - AVOSCloudIM/_ARC (11.5.1):
+    - AVOSCloud (= 11.5.1)
+    - AVOSCloudIM/_NOARC (= 11.5.1)
+  - AVOSCloudIM/_NOARC (11.5.1):
+    - AVOSCloud (= 11.5.1)
+  - ChatKit (2.3.11):
+    - AVOSCloud (~> 11.5.1)
+    - AVOSCloudIM (~> 11.5.1)
     - CYLDeallocBlockExecutor (~> 1.1.2)
     - DACircularProgress (~> 2.3.1)
     - FDStackView (~> 1.0)
@@ -89,9 +89,9 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  AVOSCloud: 1ad969db6e24c41ae1788d68698255d853883069
-  AVOSCloudIM: 712144be9ee5428c0bf895cf65954a0791b8364b
-  ChatKit: 408a313d5866cc5c69e059b1539cdaa0eccaa5f7
+  AVOSCloud: 3a337ec2290fe3b4411cd4098895323bc5a1133c
+  AVOSCloudIM: dd3ce21e697dd8af78645cee27c31d0e29121f14
+  ChatKit: 177fc3a1f7564142a0b0c77d64ffe8468fb5ccd2
   CYLDeallocBlockExecutor: ecf39e45dcead9e120f460df5668b8f5093d178e
   CYLTabBarController: 8d99fccf22866fe18c978c5ff863dc6051da45ff
   DACircularProgress: 4dd437c0fc3da5161cb289e07ac449493d41db71
@@ -114,4 +114,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 0c9077ef2ff9a92e0adcca86bcabd425df220379
 
-COCOAPODS: 1.6.0.beta.2
+COCOAPODS: 1.6.0
