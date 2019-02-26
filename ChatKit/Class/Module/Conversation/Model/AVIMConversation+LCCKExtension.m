@@ -116,9 +116,13 @@
     }
     if (self.members.count == 0) {
         return LCCKLocalizedStrings(@"SystemConversation");
+    } else if (self.members.count > 2) {
+        return LCCKLocalizedStrings(@"GroupConversation");
+    } else if (self.members.count == 2) {
+        return LCCKLocalizedStrings(@"SingleConversation");
+    } else {
+        return LCCKLocalizedStrings(@"");
     }
-    return LCCKLocalizedStrings(@"GroupConversation");
-    
 }
 
 - (NSString *)lcck_peerId {
