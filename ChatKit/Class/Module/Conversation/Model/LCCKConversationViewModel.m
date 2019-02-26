@@ -600,7 +600,7 @@ fromTimestamp     |    toDate   |                |  上次上拉刷新顶端，�
         [self appendMessagesToDataArrayTrailing:@[localFeedbackMessge]];
         NSIndexPath *indexPath = [NSIndexPath indexPathForRow:self.dataArray.count - 1 inSection:0];
         [self.parentConversationViewController.tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
-        [self.parentConversationViewController scrollToBottomAnimated:YES];
+        [self.parentConversationViewController scrollToBottomAnimated:NO];
     };
     if ([NSThread isMainThread]) {
         operation();
