@@ -600,7 +600,7 @@ fromTimestamp     |    toDate   |                |  上次上拉刷新顶端，�
         [self appendMessagesToDataArrayTrailing:@[localFeedbackMessge]];
         NSIndexPath *indexPath = [NSIndexPath indexPathForRow:self.dataArray.count - 1 inSection:0];
         [self.parentConversationViewController.tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
-        [self.parentConversationViewController scrollToBottomAnimated:NO];
+        [self.parentConversationViewController newScrollToBottomAnimated:YES];
     };
     if ([NSThread isMainThread]) {
         operation();
@@ -727,15 +727,16 @@ fromTimestamp     |    toDate   |                |  上次上拉刷新顶端，�
             [indexPaths addObject:indexPath];
         }
     }
-    if (NSThread.isMainThread) {
+    void(^operation)(void) = ^(void) {
         [self.parentConversationViewController.tableView insertRowsAtIndexPaths:[indexPaths copy] withRowAnimation:UITableViewRowAnimationNone];
-        [self.parentConversationViewController scrollToBottomAnimated:YES];
+        [self.parentConversationViewController newScrollToBottomAnimated:YES];
         !callback ?: callback();
+    };
+    if (NSThread.isMainThread) {
+        operation();
     } else {
         dispatch_async(dispatch_get_main_queue(), ^{
-            [self.parentConversationViewController.tableView insertRowsAtIndexPaths:[indexPaths copy] withRowAnimation:UITableViewRowAnimationNone];
-            [self.parentConversationViewController scrollToBottomAnimated:YES];
-            !callback ?: callback();
+            operation();
         });
     }
 }

@@ -139,6 +139,18 @@ static CGFloat const LCCKScrollViewInsetTop = 20.f;
     }
 }
 
+- (void)newScrollToBottomAnimated:(BOOL)animated {
+    if (!self.allowScrollToBottom) {
+        return;
+    }
+    NSInteger rows = [self.tableView numberOfRowsInSection:0];
+    if (rows > 0) {
+        [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:rows - 1 inSection:0]
+                              atScrollPosition:UITableViewScrollPositionBottom
+                                      animated:animated];
+    }
+}
+
 #pragma mark - Getters
 
 - (LCCKChatBar *)chatBar {
