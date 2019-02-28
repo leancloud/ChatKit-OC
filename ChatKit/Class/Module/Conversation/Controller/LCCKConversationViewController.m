@@ -102,6 +102,20 @@ NSString *const RNNotificationName = @"sendMessageToRNNotificationName";
     return _peerSex;
 }
 
+- (NSString *)messageType {
+    if (_messageType == nil) {
+        _messageType = @"";
+    }
+    return _messageType;
+}
+
+- (NSString *)messageFromApp {
+    if (_messageFromApp == nil) {
+        _messageFromApp = @"";
+    }
+    return _messageFromApp;
+}
+
 - (void)setFetchConversationHandler:(LCCKFetchConversationHandler)fetchConversationHandler {
     _fetchConversationHandler = fetchConversationHandler;
 }
