@@ -310,12 +310,18 @@ NSString *const LCCKSessionServiceErrorDomain = @"LCCKSessionServiceErrorDomain"
 
 - (void)conversation:(AVIMConversation *)conversation didUpdateForKey:(AVIMConversationUpdatedKey)key
 {
+    NSString *notificationName = @"AVIMConversationDidUpdateForKey";
     NSString *currentConversationId = LCCKConversationService.sharedInstance.currentConversationId;
     NSString *conversationId = conversation.conversationId;
     if ([key isEqualToString:AVIMConversationUpdatedKeyUnreadMessagesCount]) {
         if ([currentConversationId isEqualToString:conversationId]) {
             // do nothing.
         } else {
+            [[NSNotificationCenter defaultCenter] postNotificationName:notificationName
+                                                                object:@{
+                                                                         @"key": key,
+                                                                         @"conversation":conversation
+                                                                }];
             [LCCKConversationService.sharedInstance insertRecentConversation:conversation shouldRefreshWhenFinished:true];
         }
     }
@@ -323,6 +329,11 @@ NSString *const LCCKSessionServiceErrorDomain = @"LCCKSessionServiceErrorDomain"
         if ([currentConversationId isEqualToString:conversationId]) {
             // do nothing
         } else {
+            [[NSNotificationCenter defaultCenter] postNotificationName:notificationName
+                                                                object:@{
+                                                                         @"key": key,
+                                                                         @"conversation":conversation
+                                                                         }];
             [LCCKConversationService.sharedInstance insertRecentConversation:conversation shouldRefreshWhenFinished:true];
         }
     }
@@ -330,6 +341,11 @@ NSString *const LCCKSessionServiceErrorDomain = @"LCCKSessionServiceErrorDomain"
         if ([currentConversationId isEqualToString:conversationId]) {
             // do nothing
         } else {
+            [[NSNotificationCenter defaultCenter] postNotificationName:notificationName
+                                                                object:@{
+                                                                         @"key": key,
+                                                                         @"conversation":conversation
+                                                                         }];
             [LCCKConversationService.sharedInstance insertRecentConversation:conversation shouldRefreshWhenFinished:true];
         }
     }
