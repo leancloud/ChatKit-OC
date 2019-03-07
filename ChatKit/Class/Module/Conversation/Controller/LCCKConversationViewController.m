@@ -116,6 +116,34 @@ NSString *const RNNotificationName = @"sendMessageToRNNotificationName";
     return _messageFromApp;
 }
 
+- (NSString *)selfIcon {
+    if (_selfIcon == nil) {
+        _selfIcon = @"";
+    }
+    return _selfIcon;
+}
+
+- (NSString *)selfName {
+    if (_selfName == nil) {
+        _selfName = @"";
+    }
+    return _selfName;
+}
+
+- (NSString *)selfID {
+    if (_selfID == nil) {
+        _selfID = @"";
+    }
+    return _selfID;
+}
+
+- (NSString *)selfSex {
+    if (_selfSex == nil) {
+        _selfSex = @"";
+    }
+    return _selfSex;
+}
+
 - (void)setFetchConversationHandler:(LCCKFetchConversationHandler)fetchConversationHandler {
     _fetchConversationHandler = fetchConversationHandler;
 }
@@ -345,15 +373,6 @@ NSString *const RNNotificationName = @"sendMessageToRNNotificationName";
                                                               sender:self.user
                                                            timestamp:LCCK_CURRENT_TIMESTAMP
                                                      serverMessageId:nil];
-        
-//        AVIMTypedMessage* dataMessage = [AVIMTypedMessage lcck_messageWithLCCKMessage:lcckMessage];
-
-//        [dataMessage setObject:self.peerSex forKey:@"USER_SEX"];
-//        [dataMessage setObject:self.peerIcon forKey:@"USER_ICON"];
-//        [dataMessage setObject:self.peerName forKey:@"USER_NAME"];
-//        [dataMessage setObject:self.peerID forKey:@"USER_ID"];
-//        lcckMessage.message = dataMessage
-        
         [self makeSureSendValidMessage:lcckMessage afterFetchedConversationShouldWithAssert:NO];
 
         [self.chatViewModel sendMessage:lcckMessage mentionList:mentionList];

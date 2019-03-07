@@ -563,6 +563,8 @@ NSString *const LCCKSessionServiceErrorDomain = @"LCCKSessionServiceErrorDomain"
  * 如果是未读消息，会在 query 时播放一次，避免重复播放
  */
 - (void)playLoudReceiveSoundIfNeededForConversation:(AVIMConversation *)conversation {
+    // 当时进入退出的临时消息也会出现震动和声音（对方的手机）。所以这边把所有的声音和震动都关掉。
+    return;
     if ([LCCKConversationService sharedInstance].chatting) {
         return;
     }

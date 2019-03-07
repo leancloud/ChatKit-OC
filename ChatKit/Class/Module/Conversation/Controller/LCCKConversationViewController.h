@@ -27,10 +27,17 @@ FOUNDATION_EXTERN NSString *const LCCKConversationViewControllerErrorDomain;
 // 消息的来源：狼人杀还是小语 werewolf | xiaoyu
 @property (nonatomic, copy) NSString *messageFromApp;
 
+// 对方的信息
 @property (nonatomic, copy) NSString *peerIcon;
 @property (nonatomic, copy) NSString *peerName;
 @property (nonatomic, copy) NSString *peerID;
 @property (nonatomic, copy) NSString *peerSex;
+
+// 自己的信息
+@property (nonatomic, copy) NSString *selfIcon;
+@property (nonatomic, copy) NSString *selfName;
+@property (nonatomic, copy) NSString *selfID;
+@property (nonatomic, copy) NSString *selfSex;
 
 
 /*!
