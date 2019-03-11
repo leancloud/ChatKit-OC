@@ -491,20 +491,14 @@ NSString *const LCCKSessionServiceErrorDomain = @"LCCKSessionServiceErrorDomain"
             convId = @"";
         }
         
-        NSString * finalMessage = @"";
+        NSString * finalMessage = @"收到新消息";
         
-        if (userObj.mediaType == kAVIMMessageMediaTypeText) {
-            finalMessage = userObj.text;
-        } else if (userObj.mediaType == kAVIMMessageMediaTypeAudio) {
+        if (userObj.mediaType == kAVIMMessageMediaTypeAudio) {
             finalMessage = @"语音消息";
         } else if (userObj.mediaType == kAVIMMessageMediaTypeImage) {
             finalMessage = @"图片消息";
-        } else {
-            if (userObj.text != nil) {
-                finalMessage = userObj.text;
-            } else {
-                finalMessage = @"收到新消息";
-            }
+        } else if (userObj.text != nil) {
+            finalMessage = userObj.text;
         }
         //edit by no02 20180309
         BOOL isTransient = userObj.transient;
