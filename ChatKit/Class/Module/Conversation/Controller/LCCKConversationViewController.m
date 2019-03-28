@@ -367,6 +367,9 @@ NSString *const RNNotificationName = @"sendMessageToRNNotificationName";
 
 - (void)sendTextMessage:(NSString *)text mentionList:(NSArray<NSString *> *)mentionList
 {
+    if (self.conversationId == nil) {
+        return;
+    }
     if ([text length] > 0 ) {
         LCCKMessage *lcckMessage = [[LCCKMessage alloc] initWithText:text
                                                             senderId:self.userId
@@ -407,6 +410,9 @@ NSString *const RNNotificationName = @"sendMessageToRNNotificationName";
 }
 
 - (void)sendImageMessageData:(NSData *)imageData {
+    if (self.conversationId == nil) {
+        return;
+    }
     NSString *path = [[LCCKSettingService sharedInstance] tmpPath];
     NSError *error;
     [imageData writeToFile:path options:NSDataWritingAtomic error:&error];
@@ -446,6 +452,10 @@ NSString *const RNNotificationName = @"sendMessageToRNNotificationName";
 }
 
 - (void)sendVoiceMessageWithPath:(NSString *)voicePath time:(NSTimeInterval)recordingSeconds {
+
+    if (self.conversationId == nil) {
+        return;
+    }
 
     LCCKMessage *message = [[LCCKMessage alloc] initWithVoicePath:voicePath
                                                          voiceURL:nil
@@ -527,7 +537,8 @@ NSString *const RNNotificationName = @"sendMessageToRNNotificationName";
             LCCKLog(@"�类名与方法名：%@（在第%@行），描述：%@", @(__PRETTY_FUNCTION__), @(__LINE__), reason);
             return;
         }
-        NSAssert(NO, reason);
+//        NSAssert(NO, reason);
+        return;
     }
     if ([message isKindOfClass:[LCCKMessage class]]) {
         return;
