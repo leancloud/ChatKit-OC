@@ -513,6 +513,9 @@ NSString *const RNNotificationName = @"sendMessageToRNNotificationName";
             progressBlock:(AVProgressBlock)progressBlock
                   success:(LCCKBooleanResultBlock)success
                    failed:(LCCKBooleanResultBlock)failed {
+    if (!self.isAvailable) {
+        return;
+    }
     [self makeSureSendValidMessageAfterFetchedConversation:customMessage];
     [self.chatViewModel sendCustomMessage:customMessage progressBlock:progressBlock success:success failed:failed];
 }
