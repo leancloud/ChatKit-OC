@@ -51,7 +51,7 @@
 "requestForceSingleSignOnAuthorization" = "当前账号已在其它设备登录，请问是否强制登录？强制登录会踢掉当前已经登录的设备。";
 "unknownMessage" = "当前版本暂不支持查看此消息，请尝试升级APP查看";
 "unknownMessageType" = "未知消息类型";
-"SingleWelcomeMessage" = "我们已经是好友啦，一起来聊天吧！";
+"SingleWelcomeMessage" = "你好";
 "GroupWelcomeMessage" = "大家好";
 "GroupWelcomeMessageWithNickName" = "大家好，我是";
 "SingleConversation" = "单聊";

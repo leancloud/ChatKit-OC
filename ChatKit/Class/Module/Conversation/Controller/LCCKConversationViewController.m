@@ -505,6 +505,12 @@ NSString *const RNNotificationName = @"sendMessageToRNNotificationName";
 }
 
 - (void)sendCustomMessage:(AVIMTypedMessage *)customMessage {
+    if (self.conversationId == nil) {
+        return;
+    }
+    if (!self.isAvailable) {
+        return;
+    }
     [self makeSureSendValidMessageAfterFetchedConversation:customMessage];
     [self.chatViewModel sendCustomMessage:customMessage];
 }
@@ -513,6 +519,9 @@ NSString *const RNNotificationName = @"sendMessageToRNNotificationName";
             progressBlock:(AVProgressBlock)progressBlock
                   success:(LCCKBooleanResultBlock)success
                    failed:(LCCKBooleanResultBlock)failed {
+    if (self.conversationId == nil) {
+        return;
+    }
     if (!self.isAvailable) {
         return;
     }
