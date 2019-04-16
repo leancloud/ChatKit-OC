@@ -790,11 +790,11 @@ NSString *const RNNotificationName = @"sendMessageToRNNotificationName";
     }
     __weak __typeof(self) weakSelf = self;
     [self.chatViewModel loadMessagesFirstTimeWithCallback:^(BOOL succeeded, id object, NSError *error) {
-        dispatch_async(dispatch_get_main_queue(),^{
-            [weakSelf loadLatestMessagesHandler:succeeded error:error];
-            BOOL isFirstTimeMeet = (([object count] == 0) && succeeded);
-            [self sendWelcomeMessageIfNeeded:isFirstTimeMeet];
-        });
+//        dispatch_async(dispatch_get_main_queue(),^{
+//            [weakSelf loadLatestMessagesHandler:succeeded error:error];
+//            BOOL isFirstTimeMeet = (([object count] == 0) && succeeded);
+//            [self sendWelcomeMessageIfNeeded:isFirstTimeMeet];
+//        });
     }];
 }
 
