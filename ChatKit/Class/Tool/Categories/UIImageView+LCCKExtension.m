@@ -58,10 +58,13 @@
         self.originImageView = imageView;
         [imageView addObserver:self forKeyPath:@"image" options:NSKeyValueObservingOptionNew context:nil];
         [imageView addObserver:self forKeyPath:@"contentMode" options:NSKeyValueObservingOptionNew context:nil];
-        __unsafe_unretained __typeof(self) weakSelf = self;
+        __weak __typeof(self) weakSelf = self;
         [self cyl_executeAtDealloc:^{
-            [weakSelf.originImageView removeObserver:weakSelf forKeyPath:@"image"];
-            [weakSelf.originImageView removeObserver:weakSelf forKeyPath:@"contentMode"];
+            NSObject *ss = weakSelf;
+            if (ss) {
+                [weakSelf.originImageView removeObserver:ss forKeyPath:@"image"];
+                [weakSelf.originImageView removeObserver:ss forKeyPath:@"contentMode"];
+            }
         }];
     }
     return self;

@@ -61,9 +61,12 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refresh) name:LCCKNotificationMessageUpdated object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refresh) name:LCCKNotificationUnreadsUpdated object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refresh) name:LCCKNotificationConversationListDataSourceUpdated object:nil];
-    __unsafe_unretained __typeof(self) weakSelf = self;
+    __weak __typeof(self) weakSelf = self;
     [self cyl_executeAtDealloc:^{
-        [[NSNotificationCenter defaultCenter] removeObserver:weakSelf];
+        id ss = weakSelf;
+        if (ss) {
+            [[NSNotificationCenter defaultCenter] removeObserver:ss];
+        }
     }];
     _conversationListViewController = conversationListViewController;
     return self;

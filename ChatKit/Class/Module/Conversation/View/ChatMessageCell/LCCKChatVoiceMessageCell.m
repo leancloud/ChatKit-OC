@@ -88,9 +88,12 @@ static void * const LCCKChatVoiceMessageCellVoiceMessageStateContext = (void*)&L
     [self addGeneralView];
     self.voiceMessageState = LCCKVoiceMessageStateNormal;
     [[LCCKAVAudioPlayer sharePlayer]  addObserver:self forKeyPath:@"audioPlayerState" options:NSKeyValueObservingOptionNew context:LCCKChatVoiceMessageCellVoiceMessageStateContext];
-    __unsafe_unretained __typeof(self) weakSelf = self;
+    __weak __typeof(self) weakSelf = self;
     [self cyl_executeAtDealloc:^{
-        [[LCCKAVAudioPlayer sharePlayer] removeObserver:weakSelf forKeyPath:@"audioPlayerState"];
+        NSObject *ss = weakSelf;
+        if (ss) {
+            [[LCCKAVAudioPlayer sharePlayer] removeObserver:ss forKeyPath:@"audioPlayerState"];
+        }
     }];
 }
 

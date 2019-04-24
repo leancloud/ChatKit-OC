@@ -81,11 +81,14 @@ static void * const LCCKConversationViewControllerMembersCountContext = (void*)&
     [conversation addObserver:self forKeyPath:@"name" options:NSKeyValueObservingOptionNew context:LCCKConversationViewControllerNameContext];
     [conversation addObserver:self forKeyPath:@"members.@count" options:NSKeyValueObservingOptionNew context:LCCKConversationViewControllerMembersCountContext];
 
-    __unsafe_unretained __typeof(self) weakSelf = self;
+    __weak __typeof(self) weakSelf = self;
     [self cyl_executeAtDealloc:^{
-        [conversation removeObserver:weakSelf forKeyPath:@"muted"];
-        [conversation removeObserver:weakSelf forKeyPath:@"name"];
-        [conversation removeObserver:weakSelf forKeyPath:@"members.@count"];
+        NSObject *ss = weakSelf;
+        if (ss) {
+            [conversation removeObserver:ss forKeyPath:@"muted"];
+            [conversation removeObserver:ss forKeyPath:@"name"];
+            [conversation removeObserver:ss forKeyPath:@"members.@count"];
+        }
     }];
     
     [self.containerView layoutIfNeeded];//fix member count view won't display when conversationNameView is too long
