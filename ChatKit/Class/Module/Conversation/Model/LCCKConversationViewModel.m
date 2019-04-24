@@ -81,9 +81,12 @@
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(messageStatusChanged:) name:LCCKNotificationMessageDelivered object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(backgroundImageChanged:) name:LCCKNotificationConversationViewControllerBackgroundImageDidChanged object:nil];
         [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(refresh) name:LCCKNotificationSessionResumed object:nil];
-        __unsafe_unretained __typeof(self) weakSelf = self;
+        __weak __typeof(self) weakSelf = self;
         [self cyl_executeAtDealloc:^{
-            [[NSNotificationCenter defaultCenter] removeObserver:weakSelf];
+            id ss = weakSelf;
+            if (ss) {
+                [[NSNotificationCenter defaultCenter] removeObserver:ss];
+            }
         }];
     }
     return self;
