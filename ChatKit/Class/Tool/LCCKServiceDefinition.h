@@ -6,6 +6,7 @@
 //  Copyright © 2016年 LeanCloud. All rights reserved.
 //  All the Typedefine for all kinds of services.
 
+#import <CoreLocation/CoreLocation.h>
 #import <AVOSCloudIM/AVOSCloudIM.h>
 #import "LCCKConstants.h"
 #import "LCCKSingleton.h"
