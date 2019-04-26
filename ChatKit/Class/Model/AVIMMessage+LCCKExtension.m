@@ -65,7 +65,7 @@
     [typedMessage setValue:@(self.sendTimestamp) forKey:@"sendTimestamp"];
     [typedMessage setValue:self.clientId forKey:@"clientId"];
     [typedMessage lcck_setObject:@(YES) forKey:LCCKCustomMessageIsCustomKey];
-    if (ibreakIntext) {
+    if (ibreakIntext && attr != nil) {
         [typedMessage lcck_setObject:attr forKey:@"olCustom"];
     }
     return typedMessage;
