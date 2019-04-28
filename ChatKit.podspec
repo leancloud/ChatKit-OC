@@ -13,7 +13,7 @@ Pod::Spec.new do |s|
   s.resources    = 'ChatKit/Class/Resources/*', 'ChatKit/**/*.xib'
 
   s.requires_arc = true
-  s.dependency "AVOSCloud" , "~> 11.6.2"
+  s.dependency "AVOSCloud" , "~> 11.5.1"
   s.dependency "AVOSCloudIM", "~> 11.6.2"
   s.dependency "MJRefresh" , "~> 3.1.9"
   s.dependency "Masonry" , "~> 1.0.1"
