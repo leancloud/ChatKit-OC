@@ -1,23 +1,23 @@
 PODS:
-  - AVOSCloud (11.6.2)
-  - AVOSCloudIM (11.6.2):
-    - AVOSCloud (= 11.6.2)
-    - AVOSCloudIM/_ARC (= 11.6.2)
-    - AVOSCloudIM/_NOARC (= 11.6.2)
-  - AVOSCloudIM/_ARC (11.6.2):
-    - AVOSCloud (= 11.6.2)
-    - AVOSCloudIM/_NOARC (= 11.6.2)
-  - AVOSCloudIM/_NOARC (11.6.2):
-    - AVOSCloud (= 11.6.2)
-  - ChatKit (2.3.12):
-    - AVOSCloud (~> 11.6.2)
-    - AVOSCloudIM (~> 11.6.2)
+  - AVOSCloud (11.6.3)
+  - AVOSCloudIM (11.6.3):
+    - AVOSCloud (= 11.6.3)
+    - AVOSCloudIM/_ARC (= 11.6.3)
+    - AVOSCloudIM/_NOARC (= 11.6.3)
+  - AVOSCloudIM/_ARC (11.6.3):
+    - AVOSCloud (= 11.6.3)
+    - AVOSCloudIM/_NOARC (= 11.6.3)
+  - AVOSCloudIM/_NOARC (11.6.3):
+    - AVOSCloud (= 11.6.3)
+  - ChatKit (2.3.13):
+    - AVOSCloud (~> 11.6.3)
+    - AVOSCloudIM (~> 11.6.3)
     - CYLDeallocBlockExecutor (~> 1.1.2)
     - DACircularProgress (~> 2.3.1)
     - FDStackView (~> 1.0)
     - FMDB (~> 2.6.2)
     - Masonry (~> 1.0.1)
-    - MJRefresh (~> 3.1.9)
+    - MJRefresh (~> 3.1.17)
     - MLLabel (~> 1.10.5)
     - MWPhotoBrowser (~> 2.1.2)
     - pop (~> 1.0.9)
@@ -34,7 +34,7 @@ PODS:
   - FXForms (1.2.14)
   - Masonry (1.0.2)
   - MBProgressHUD (0.9.2)
-  - MJRefresh (3.1.16)
+  - MJRefresh (3.1.17)
   - MLLabel (1.10.5)
   - MLPAutoCompleteTextField (1.5)
   - MWPhotoBrowser (2.1.2):
@@ -89,9 +89,9 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  AVOSCloud: b5ddb67d1823e7af59b3fc14ddecf3cddf1f4bf1
-  AVOSCloudIM: b814dd9a3b9d1012bc11189f6639bf713474a5b2
-  ChatKit: 48d318c046da6c9af49e6f0beac32c5d096e4d13
+  AVOSCloud: 3148cbb1d05be4e479cffa206f147ef09a470fdf
+  AVOSCloudIM: 415ec613caa269f71aecc1439f0b27aec9174ec2
+  ChatKit: bd7b490b52b52717cd1a7470adc92eb2924d03a8
   CYLDeallocBlockExecutor: ecf39e45dcead9e120f460df5668b8f5093d178e
   CYLTabBarController: 8d99fccf22866fe18c978c5ff863dc6051da45ff
   DACircularProgress: 4dd437c0fc3da5161cb289e07ac449493d41db71
@@ -101,7 +101,7 @@ SPEC CHECKSUMS:
   FXForms: 724500c0c3f3eb3ba1004b3b83abcee55d3daf18
   Masonry: 7c429b56da9d4ee0bbb3ed77a5ea710d6a5df39e
   MBProgressHUD: 1569cf7ace17a8bac47aabfbb8580a49690386d1
-  MJRefresh: 7798e16e53a5ef7f332dd05b27664db4e29530fd
+  MJRefresh: ee5b68f639775462faba4db0fd243baf4d42c2cf
   MLLabel: d76124055a2205e7f76878e62cd06ba925ba0c97
   MLPAutoCompleteTextField: ba4d507bbff2bd4f139d4197814fc8dd39caf77e
   MWPhotoBrowser: 5836d7aa041dc05a13de380c246826578adc5ea5
@@ -114,4 +114,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 0c9077ef2ff9a92e0adcca86bcabd425df220379
 
-COCOAPODS: 1.7.0.beta.3
+COCOAPODS: 1.7.0.rc.2
