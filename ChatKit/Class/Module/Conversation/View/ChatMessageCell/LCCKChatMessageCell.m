@@ -392,13 +392,16 @@ static CGFloat const LCCK_MSG_CELL_NICKNAME_FONT_SIZE = 12;
 
 - (UIImageView *)avatarImageView {
     if (!_avatarImageView) {
-        _avatarImageView = [[UIImageView alloc] init];
-        _avatarImageView.contentMode = UIViewContentModeScaleAspectFit;
         LCCKAvatarImageViewCornerRadiusBlock avatarImageViewCornerRadiusBlock = [LCChatKit sharedInstance].avatarImageViewCornerRadiusBlock;
         if (avatarImageViewCornerRadiusBlock) {
+            _avatarImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, kAvatarImageViewWidth, kAvatarImageViewHeight)];
+            _avatarImageView.contentMode = UIViewContentModeScaleAspectFit;
             CGSize avatarImageViewSize = CGSizeMake(kAvatarImageViewWidth, kAvatarImageViewHeight);
             CGFloat avatarImageViewCornerRadius = avatarImageViewCornerRadiusBlock(avatarImageViewSize);
             self.avatarImageView.lcck_cornerRadius = avatarImageViewCornerRadius;
+        } else {
+            _avatarImageView = [[UIImageView alloc] init];
+            _avatarImageView.contentMode = UIViewContentModeScaleAspectFit;
         }
         [self bringSubviewToFront:_avatarImageView];
     }
