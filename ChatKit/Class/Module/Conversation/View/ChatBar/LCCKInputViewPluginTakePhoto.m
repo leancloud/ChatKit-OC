@@ -40,7 +40,7 @@
  * 插件名称
  */
 - (NSString *)pluginTitle {
-    return [NSBundle lcck_getLocalizedString:@"松开 结束" class:[self class]];
+    return [NSBundle lcck_getLocalizedString:@"拍照" class:[self class]];
 }
 
 /*!
