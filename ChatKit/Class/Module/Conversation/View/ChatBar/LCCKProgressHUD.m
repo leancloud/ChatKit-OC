@@ -46,9 +46,9 @@
 - (void)show {
     self.angle = 0.0f;
     self.seconds = 0;
-    self.subTitleLabel.text = @"向上滑动取消";
+    self.subTitleLabel.text = [NSBundle lcck_getLocalizedString:@"向上滑动取消" class:[self class]];
     self.centerLabel.text = @"60";
-    self.titleLabel.text = @"录音时间";
+    self.titleLabel.text = [NSBundle lcck_getLocalizedString:@"录音时间" class:[self class]];
     [self timer];
     dispatch_async(dispatch_get_main_queue(), ^{
         if(!self.superview)
@@ -125,13 +125,13 @@
 - (void)setProgressState:(LCCKProgressState)progressState {
     switch (progressState) {
         case LCCKProgressSuccess:
-            self.centerLabel.text = @"录音成功";
+            self.centerLabel.text = [NSBundle lcck_getLocalizedString:@"录音成功" class:[self class]];
             break;
         case LCCKProgressShort:
-            self.centerLabel.text = @"时间太短,请重试";
+            self.centerLabel.text = [NSBundle lcck_getLocalizedString:@"时间太短,请重试" class:[self class]];
             break;
         case LCCKProgressError:
-            self.centerLabel.text = @"录音失败";
+            self.centerLabel.text = [NSBundle lcck_getLocalizedString:@"录音失败" class:[self class]];
             break;
         case LCCKProgressMessage:
             break;
@@ -185,7 +185,7 @@
     if (!_titleLabel) {
         _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 150, 20)];
         _titleLabel.center = CGPointMake([[UIScreen mainScreen] bounds].size.width/2,[[UIScreen mainScreen] bounds].size.height/2 - 30);
-        _titleLabel.text = @"录音时间";
+        _titleLabel.text = [NSBundle lcck_getLocalizedString:@"录音时间" class:[self class]];
         _titleLabel.textAlignment = NSTextAlignmentCenter;
         _titleLabel.font = [UIFont boldSystemFontOfSize:18];
         _titleLabel.textColor = [UIColor whiteColor];
@@ -198,7 +198,7 @@
     if (!_subTitleLabel) {
         _subTitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 150, 20)];
         _subTitleLabel.center = CGPointMake([[UIScreen mainScreen] bounds].size.width/2,[[UIScreen mainScreen] bounds].size.height/2 + 30);
-        _subTitleLabel.text = @"向上滑动取消录音";
+        _subTitleLabel.text = [NSBundle lcck_getLocalizedString:@"向上滑动取消录音" class:[self class]];
         _subTitleLabel.textAlignment = NSTextAlignmentCenter;
         _subTitleLabel.font = [UIFont boldSystemFontOfSize:14];
         _subTitleLabel.textColor = [UIColor whiteColor];

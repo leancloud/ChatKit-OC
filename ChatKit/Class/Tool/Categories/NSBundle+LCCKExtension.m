@@ -33,4 +33,9 @@
     return bundle;
 }
 
++ (NSString *) lcck_getLocalizedString:(NSString *)key class:(Class)aClass {
+    NSBundle *bundle = [NSBundle lcck_bundleForName:@"Lan" class:aClass];
+    return NSLocalizedStringFromTableInBundle(key, nil, bundle, key);
+}
+
 @end

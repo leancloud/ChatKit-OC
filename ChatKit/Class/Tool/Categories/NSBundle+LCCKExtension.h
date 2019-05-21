@@ -11,5 +11,6 @@
 @interface NSBundle (LCCKExtension)
 
 + (NSBundle *)lcck_bundleForName:(NSString *)bundleName class:(Class)aClass;
++ (NSString *) lcck_getLocalizedString:(NSString *)key class:(Class)aClass;
 
 @end

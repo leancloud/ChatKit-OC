@@ -6,3 +6,12 @@
   Copyright © 2019 ElonChan. All rights reserved.
 */
 "按住 说话" = "press to speak";
+"松开 结束" = "release to end";
+"向上滑动取消" = "swipe up to cancel";
+"录音时间" = "recording time";
+"向上滑动取消录音" = "swipe up to cancel";
+"录音失败" = "recording failed";
+"时间太短,请重试" = "too short, try again";
+"录音成功" = "success";
+"照片" = "photo";
+"拍摄" = "shooting";

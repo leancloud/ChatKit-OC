@@ -40,7 +40,7 @@
  * 插件名称
  */
 - (NSString *)pluginTitle {
-    return @"照片";
+    return [NSBundle lcck_getLocalizedString:@"照片" class:[self class]];
 }
 
 /*!
