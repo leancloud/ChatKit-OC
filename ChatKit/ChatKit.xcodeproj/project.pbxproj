@@ -502,7 +502,7 @@
 		9AC44E9D1E15154300619112 /* UITableView+FDTemplateLayoutCellDebug.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AC44D7D1E15154300619112 /* UITableView+FDTemplateLayoutCellDebug.m */; };
 		9AC44E9E1E15154300619112 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 9AC44D7E1E15154300619112 /* LICENSE */; };
 		9AC44E9F1E15154300619112 /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = 9AC44D7F1E15154300619112 /* README.md */; };
-		A1E179802294166C00AB1B57 /* Lan.bundle in Resources */ = {isa = PBXBuildFile; fileRef = A1E1797F2294166C00AB1B57 /* Lan.bundle */; };
+		A16B478E229429CA00A222B8 /* Lan.bundle in Resources */ = {isa = PBXBuildFile; fileRef = A16B478D229429CA00A222B8 /* Lan.bundle */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -1005,7 +1005,7 @@
 		9AC44D7D1E15154300619112 /* UITableView+FDTemplateLayoutCellDebug.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITableView+FDTemplateLayoutCellDebug.m"; sourceTree = "<group>"; };
 		9AC44D7E1E15154300619112 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		9AC44D7F1E15154300619112 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
-		A1E1797F2294166C00AB1B57 /* Lan.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Lan.bundle; sourceTree = "<group>"; };
+		A16B478D229429CA00A222B8 /* Lan.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Lan.bundle; sourceTree = "<group>"; };
 		A9601FCE9729A0FE4669D33E /* libPods-ChatKit.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ChatKit.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -1050,7 +1050,6 @@
 		9A6060781CEC831800D14D73 = {
 			isa = PBXGroup;
 			children = (
-				A1E1797F2294166C00AB1B57 /* Lan.bundle */,
 				9AC44C3B1E15154200619112 /* Third-Lib-For-Debug */,
 				9AAFA1241E14FBA3006618E0 /* Class */,
 				9A6061C01CEC949E00D14D73 /* Info.plist */,
@@ -1346,6 +1345,7 @@
 		9AAFA1A91E14FBA3006618E0 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				A16B478D229429CA00A222B8 /* Lan.bundle */,
 				9AAFA1AA1E14FBA4006618E0 /* BarButtonIcon.bundle */,
 				9AAFA1AB1E14FBA4006618E0 /* ChatKeyboard.bundle */,
 				9AAFA1AC1E14FBA4006618E0 /* DateTools.bundle */,
@@ -2443,7 +2443,7 @@
 				9AAFA2811E14FBA5006618E0 /* BarButtonIcon.bundle in Resources */,
 				9AC44E1A1E15154300619112 /* PlayButtonOverlayLarge.png in Resources */,
 				9AC44DC71E15154300619112 /* LICENSE in Resources */,
-				A1E179802294166C00AB1B57 /* Lan.bundle in Resources */,
+				A16B478E229429CA00A222B8 /* Lan.bundle in Resources */,
 				9AC44E0B1E15154300619112 /* ImageError.png in Resources */,
 				9AC44E141E15154300619112 /* ImageSelectedSmallOff.png in Resources */,
 				9AC44E281E15154300619112 /* UIBarButtonItemGrid@3x.png in Resources */,

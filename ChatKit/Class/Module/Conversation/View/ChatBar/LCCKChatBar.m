@@ -811,7 +811,7 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
         [_voiceRecordButton setBackgroundImage:voiceRecordButtonNormalBackgroundImage forState:UIControlStateNormal];
         [_voiceRecordButton setBackgroundImage:voiceRecordButtonHighlightedBackgroundImage forState:UIControlStateHighlighted];
         _voiceRecordButton.titleLabel.font = [UIFont systemFontOfSize:14.0f];
-        [_voiceRecordButton setTitle:NSLocalizedStringFromTable([@"按住 说话", nil, nil) forState:UIControlStateNormal];
+        [_voiceRecordButton setTitle:NSLocalizedStringFromTable(@"按住 说话", nil, nil) forState:UIControlStateNormal];
         [_voiceRecordButton setTitle:@"松开 结束" forState:UIControlStateHighlighted];
         [_voiceRecordButton addTarget:self action:@selector(startRecordVoice) forControlEvents:UIControlEventTouchDown];
         [_voiceRecordButton addTarget:self action:@selector(cancelRecordVoice) forControlEvents:UIControlEventTouchUpOutside];
