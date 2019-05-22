@@ -2406,6 +2406,7 @@
 				en,
 				"zh-Hans",
 				"zh-Hant",
+				ar,
 			);
 			mainGroup = 9A6060781CEC831800D14D73;
 			productRefGroup = 9A6060831CEC831800D14D73 /* Products */;
