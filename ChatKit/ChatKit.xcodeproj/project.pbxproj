@@ -503,6 +503,7 @@
 		9AC44E9E1E15154300619112 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 9AC44D7E1E15154300619112 /* LICENSE */; };
 		9AC44E9F1E15154300619112 /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = 9AC44D7F1E15154300619112 /* README.md */; };
 		A16B478E229429CA00A222B8 /* Lan.bundle in Resources */ = {isa = PBXBuildFile; fileRef = A16B478D229429CA00A222B8 /* Lan.bundle */; };
+		A16B496122966BE500A222B8 /* EmojiLocalizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = A16B496322966BE500A222B8 /* EmojiLocalizable.strings */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -1006,6 +1007,10 @@
 		9AC44D7E1E15154300619112 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		9AC44D7F1E15154300619112 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		A16B478D229429CA00A222B8 /* Lan.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Lan.bundle; sourceTree = "<group>"; };
+		A16B496222966BE500A222B8 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/EmojiLocalizable.strings; sourceTree = "<group>"; };
+		A16B496422966BE800A222B8 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/EmojiLocalizable.strings"; sourceTree = "<group>"; };
+		A16B496522966BE900A222B8 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/EmojiLocalizable.strings"; sourceTree = "<group>"; };
+		A16B496622966BEA00A222B8 /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/EmojiLocalizable.strings; sourceTree = "<group>"; };
 		A9601FCE9729A0FE4669D33E /* libPods-ChatKit.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ChatKit.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -1357,6 +1362,7 @@
 				9AAFA1B21E14FBA4006618E0 /* Other.bundle */,
 				9AAFA1B31E14FBA4006618E0 /* Placeholder.bundle */,
 				9AAFA1B41E14FBA4006618E0 /* VoiceMessageSource.bundle */,
+				A16B496322966BE500A222B8 /* EmojiLocalizable.strings */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -2425,6 +2431,7 @@
 			files = (
 				9AAFA2841E14FBA5006618E0 /* Emoji.bundle in Resources */,
 				9AAFA2871E14FBA5006618E0 /* MBProgressHUD.bundle in Resources */,
+				A16B496122966BE500A222B8 /* EmojiLocalizable.strings in Resources */,
 				9AC44E181E15154300619112 /* ImageSelectedSmallOn@2x.png in Resources */,
 				9AAFA2821E14FBA5006618E0 /* ChatKeyboard.bundle in Resources */,
 				9AC44E9E1E15154300619112 /* LICENSE in Resources */,
@@ -2699,6 +2706,20 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		A16B496322966BE500A222B8 /* EmojiLocalizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				A16B496222966BE500A222B8 /* en */,
+				A16B496422966BE800A222B8 /* zh-Hans */,
+				A16B496522966BE900A222B8 /* zh-Hant */,
+				A16B496622966BEA00A222B8 /* ar */,
+			);
+			name = EmojiLocalizable.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		9A6060881CEC831800D14D73 /* Debug */ = {

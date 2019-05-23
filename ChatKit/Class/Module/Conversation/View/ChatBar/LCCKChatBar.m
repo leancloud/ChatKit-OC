@@ -375,7 +375,9 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
         self.cachedText = @"";
         self.showType = LCCKFunctionViewShowFace;
     } else {
-        [self appendString:faceName beginInputing:NO];
+        NSBundle *bundle = [NSBundle bundleForClass: [LCCKChatBar class]];
+        NSString *localFaceName = NSLocalizedStringFromTableInBundle(faceName,  @"EmojiLocalizable", bundle, @"");
+        [self appendString:localFaceName beginInputing:NO];
     }
 }
 

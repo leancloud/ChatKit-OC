@@ -130,9 +130,12 @@
         NSRange range = [match range];
         //获取原字符串中对应的值
         NSString *subStr = [text substringWithRange:range];
+        //因为输入框的时候把文字变成国际化的文案，所以现在要将国际化的文案变成原来name
+        NSBundle *bundle = [NSBundle bundleForClass: [LCCKFaceManager class]];
+        NSString *originImageName = NSLocalizedStringFromTableInBundle(subStr,  @"EmojiLocalizable", bundle, @"");
         NSMutableArray *emojiFaceArrays = [[LCCKFaceManager shareInstance] emojiFaceArrays];
         for (NSDictionary *dict in emojiFaceArrays) {
-            if ([dict[kFaceNameKey]  isEqualToString:subStr]) {
+            if ([dict[kFaceNameKey]  isEqualToString:originImageName]) {
                 //face[i][@"png"]就是我们要加载的图片
                 //新建文字附件来存放我们的图片,iOS7才新加的对象
                 NSTextAttachment *textAttachment = [[NSTextAttachment alloc] init];
