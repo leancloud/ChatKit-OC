@@ -1,3 +1,14 @@
+# 注意
+
+此项目已经**废弃**，以后不再维护。我们推出了基于 [Swift SDK](https://github.com/leancloud/swift-sdk) 的 Chat Demo。
+
+Chat Demo 位于 [swift-sdk-demo](https://github.com/leancloud/swift-sdk-demo) 项目中。
+
+如果您有任何问题，请联系 support@leancloud.rocks 。
+
+<details>
+<summary>以下为原 README 内容</summary>
+
 # ChatKit 快速入门 · iOS
 
 <p align="center">
@@ -516,5 +527,7 @@ Demo 中也是通过这个方式来兼容iOS7的。
  ) 
 
 在使用中有任何问题都可以到[我们的官方论坛](https://forum.leancloud.cn/c/jing-xuan-faq)提问题，会有专业工程师回复，平均响应时间在24小时内。
+
+</details>
 
 
