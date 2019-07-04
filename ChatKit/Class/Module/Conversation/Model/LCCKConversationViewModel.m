@@ -542,6 +542,7 @@ fromTimestamp     |    toDate   |                |  上次上拉刷新顶端，�
         message.sender = sender;
         message.ownerType = LCCKMessageOwnerTypeSelf;
         avimTypedMessage = [AVIMTypedMessage lcck_messageWithLCCKMessage:message];
+        message.message = avimTypedMessage;
     } else {
         avimTypedMessage = aMessage;
     }

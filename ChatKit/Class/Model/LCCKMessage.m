@@ -376,6 +376,7 @@
         lcckMessage.ownerType = LCCKMessageOwnerTypeOther;
     }
     lcckMessage.sendStatus = (LCCKMessageSendState)message.status;
+    lcckMessage.message = message;
 
     return lcckMessage;
 }
